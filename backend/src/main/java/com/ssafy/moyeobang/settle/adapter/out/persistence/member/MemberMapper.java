@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.settle.adapter.out.member;
+package com.ssafy.moyeobang.settle.adapter.out.persistence.member;
 
 import com.ssafy.moyeobang.settle.application.domain.member.Member;
 import com.ssafy.moyeobang.settle.application.domain.member.Member.MemberInfo;

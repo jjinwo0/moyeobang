@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.settle.adapter.out.account;
+package com.ssafy.moyeobang.settle.adapter.out.persistence.account;
 
 import com.ssafy.moyeobang.common.util.BaseEntity;
 import com.ssafy.moyeobang.settle.application.domain.account.Action;

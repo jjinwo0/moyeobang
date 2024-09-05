@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.settle.adapter.out.account;
+package com.ssafy.moyeobang.settle.adapter.out.persistence.account;
 
 import jakarta.persistence.*;
 import lombok.*;

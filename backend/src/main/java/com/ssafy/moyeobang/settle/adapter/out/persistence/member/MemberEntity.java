@@ -1,8 +1,8 @@
-package com.ssafy.moyeobang.settle.adapter.out.member;
+package com.ssafy.moyeobang.settle.adapter.out.persistence.member;
 
 import com.ssafy.moyeobang.common.util.BaseEntity;
-import com.ssafy.moyeobang.settle.adapter.out.account.AccountEntity;
-import com.ssafy.moyeobang.settle.adapter.out.account.MemberOrderHistory;
+import com.ssafy.moyeobang.settle.adapter.out.persistence.account.AccountEntity;
+import com.ssafy.moyeobang.settle.adapter.out.persistence.account.MemberOrderHistory;
 import com.ssafy.moyeobang.settle.application.domain.member.Gender;
 import com.ssafy.moyeobang.settle.application.domain.member.MemberType;
 import com.ssafy.moyeobang.settle.application.domain.member.Role;

@@ -1,7 +1,7 @@
-package com.ssafy.moyeobang.settle.adapter.out.account;
+package com.ssafy.moyeobang.settle.adapter.out.persistence.account;
 
 import com.ssafy.moyeobang.common.util.BaseEntity;
-import com.ssafy.moyeobang.settle.adapter.out.member.MemberEntity;
+import com.ssafy.moyeobang.settle.adapter.out.persistence.member.MemberEntity;
 import com.ssafy.moyeobang.settle.application.domain.account.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
