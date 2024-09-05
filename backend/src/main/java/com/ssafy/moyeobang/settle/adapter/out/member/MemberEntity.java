@@ -2,6 +2,7 @@ package com.ssafy.moyeobang.settle.adapter.out.member;
 
 import com.ssafy.moyeobang.common.util.BaseEntity;
 import com.ssafy.moyeobang.settle.adapter.out.account.AccountEntity;
+import com.ssafy.moyeobang.settle.adapter.out.account.MemberOrderHistory;
 import com.ssafy.moyeobang.settle.application.domain.member.Gender;
 import com.ssafy.moyeobang.settle.application.domain.member.MemberType;
 import com.ssafy.moyeobang.settle.application.domain.member.Role;
@@ -47,4 +48,7 @@ public class MemberEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<AccountEntity> accountEntities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MemberOrderHistory> memberOrderHistories = new ArrayList<>();
 }

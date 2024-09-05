@@ -5,6 +5,9 @@ import com.ssafy.moyeobang.settle.application.domain.account.Action;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -27,4 +30,7 @@ public class TransactionEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private AccountEntity accountEntity;
+
+    @OneToMany(mappedBy = "transactionEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<OrderEntity> orderEntities = new ArrayList<>();
 }
