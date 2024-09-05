@@ -19,6 +19,8 @@ public class TransactionEntity extends BaseEntity {
 
     private String title;
 
+    private Integer amount;
+
     @Enumerated(EnumType.STRING)
     private Action action;
 

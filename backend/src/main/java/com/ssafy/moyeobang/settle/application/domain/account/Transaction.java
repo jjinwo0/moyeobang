@@ -12,12 +12,14 @@ public class Transaction {
 
     private final String title;
 
-    private final Action action;
+    private final Money money;
 
     public static Transaction of(final Long id,
                                  final String title,
-                                 final Action action) {
+                                 final Money money) {
 
-        return new Transaction(id, title, action);
+        return new Transaction(id, title, money);
     }
+
+    public record Money (Integer amount, Action action) {}
 }

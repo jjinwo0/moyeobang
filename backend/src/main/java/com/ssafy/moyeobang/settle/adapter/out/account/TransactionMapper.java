@@ -1,17 +1,21 @@
 package com.ssafy.moyeobang.settle.adapter.out.account;
 
 import com.ssafy.moyeobang.settle.application.domain.account.Transaction;
+import com.ssafy.moyeobang.settle.application.domain.account.Transaction.Money;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TransactionMapper {
 
-    Transaction mapToDomain(final Transaction transaction) {
+    Transaction mapToDomain(final TransactionEntity transactionEntity) {
 
         return Transaction.of(
-                transaction.getId(),
-                transaction.getTitle(),
-                transaction.getAction()
+                transactionEntity.getId(),
+                transactionEntity.getTitle(),
+                new Money(
+                        transactionEntity.getAmount(),
+                        transactionEntity.getAction()
+                )
         );
     }
 
@@ -20,7 +24,8 @@ public class TransactionMapper {
         return TransactionEntity.builder()
                 .id(transaction.getId())
                 .title(transaction.getTitle())
-                .action(transaction.getAction())
+                .amount(transaction.getMoney().amount())
+                .action(transaction.getMoney().action())
                 .build();
     }
 }
