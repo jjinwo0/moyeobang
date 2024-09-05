@@ -1,6 +1,9 @@
 package com.ssafy.moyeobang.settle.adapter.out.member;
 
 import com.ssafy.moyeobang.settle.application.domain.member.Member;
+import com.ssafy.moyeobang.settle.application.domain.member.Member.MemberInfo;
+import com.ssafy.moyeobang.settle.application.domain.member.Member.MemberUnique;
+import com.ssafy.moyeobang.settle.application.domain.member.Member.PersonalInfo;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,28 +12,34 @@ public class MemberMapper {
     Member mapToDomain(MemberEntity memberEntity) {
 
         return Member.of(
-                memberEntity.getId(),
-                memberEntity.getEmail(),
-                memberEntity.getUsername(),
-                memberEntity.getNickname(),
-                memberEntity.getBirth(),
-                memberEntity.getGender(),
-                memberEntity.getAge(),
-                memberEntity.getMemberKey()
+                new MemberUnique(
+                        memberEntity.getId(),
+                        memberEntity.getMemberKey()
+                ),
+                new MemberInfo(
+                        memberEntity.getEmail(),
+                        memberEntity.getUsername(),
+                        memberEntity.getNickname()
+                ),
+                new PersonalInfo(
+                        memberEntity.getBirth(),
+                        memberEntity.getGender(),
+                        memberEntity.getAge()
+                )
         );
     }
 
     MemberEntity mapToEntity(Member member) {
 
         return MemberEntity.builder()
-                .id(member.getId())
-                .email(member.getEmail())
-                .username(member.getUsername())
-                .nickname(member.getNickname())
-                .birth(member.getBirth())
-                .gender(member.getGender())
-                .age(member.getAge())
-                .memberKey(member.getMemberKey())
+                .id(member.getMemberUnique().id())
+                .email(member.getMemberInfo().email())
+                .username(member.getMemberInfo().username())
+                .nickname(member.getMemberInfo().nickname())
+                .birth(member.getPersonalInfo().birth())
+                .gender(member.getPersonalInfo().gender())
+                .age(member.getPersonalInfo().age())
+                .memberKey(member.getMemberUnique().memberKey())
                 .build();
     }
 }
