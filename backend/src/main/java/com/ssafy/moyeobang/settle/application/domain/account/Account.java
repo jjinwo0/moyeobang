@@ -14,7 +14,9 @@ public class Account {
 
     private final AccountInfo info;
 
-    public static Account of(AccountNo no, Bank bank, AccountInfo info) {
+    public static Account of(final AccountNo no,
+                             final Bank bank,
+                             final AccountInfo info) {
 
         return new Account(no, bank, info);
     }

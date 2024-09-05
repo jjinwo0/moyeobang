@@ -21,7 +21,9 @@ public class Member {
 //
 //    private final Role role;
 
-    public static Member of(MemberUnique memberUnique, MemberInfo memberInfo, PersonalInfo personalInfo) {
+    public static Member of(final MemberUnique memberUnique,
+                            final MemberInfo memberInfo,
+                            final PersonalInfo personalInfo) {
 
         return new Member(
                 memberUnique,
