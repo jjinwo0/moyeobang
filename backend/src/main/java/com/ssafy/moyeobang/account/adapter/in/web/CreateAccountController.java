@@ -21,6 +21,6 @@ public class CreateAccountController {
 
     @PostMapping("/api/accounts")
     public ApiResult<CreateAccountResponse> createAccount(@RequestBody CreateAccountRequest request) {
-        return success(createAccountUseCase.createAccount(request.userId()));
+        return success(createAccountUseCase.createAccount(request.memberId()));
     }
 }

@@ -47,7 +47,7 @@ class CreateAccountControllerDocsTest extends RestDocsSupport {
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestFields(
-                                        fieldWithPath("userId").type(JsonFieldType.NUMBER)
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER)
                                                 .description("유저 id")
                                 ),
                                 responseFields(
