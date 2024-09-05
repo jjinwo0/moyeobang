@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.settle.application.domain;
+package com.ssafy.moyeobang.settle.application.domain.account;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class Account {
         return new Account(no, bank, info);
     }
 
-    public record AccountNo(String accountId) {}
+    public record AccountNo(Long id, String uuid) {}
 
     public record Bank(String bankCode, String bankName) {}
 

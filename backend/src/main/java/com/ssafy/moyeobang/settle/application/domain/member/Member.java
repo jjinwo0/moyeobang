@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.settle.application.domain;
+package com.ssafy.moyeobang.settle.application.domain.member;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

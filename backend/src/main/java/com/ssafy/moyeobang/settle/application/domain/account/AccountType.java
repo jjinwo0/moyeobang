@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.settle.application.domain;
+package com.ssafy.moyeobang.settle.application.domain.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

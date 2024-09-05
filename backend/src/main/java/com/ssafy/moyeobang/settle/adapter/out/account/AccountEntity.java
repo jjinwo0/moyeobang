@@ -1,8 +1,11 @@
-package com.ssafy.moyeobang.settle.adapter.out;
+package com.ssafy.moyeobang.settle.adapter.out.account;
 
-import com.ssafy.moyeobang.settle.application.domain.AccountType;
+import com.ssafy.moyeobang.common.util.BaseEntity;
+import com.ssafy.moyeobang.settle.adapter.out.member.MemberEntity;
+import com.ssafy.moyeobang.settle.application.domain.account.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
+
 
 @Entity
 @Getter
@@ -10,9 +13,10 @@ import lombok.*;
 @Table(name = "account")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AccountEntity {
+public class AccountEntity extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private Long id;
 
@@ -32,4 +36,8 @@ public class AccountEntity {
 
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private MemberEntity memberEntity;
 }

@@ -1,6 +1,6 @@
-package com.ssafy.moyeobang.settle.adapter.out;
+package com.ssafy.moyeobang.settle.adapter.out.member;
 
-import com.ssafy.moyeobang.settle.application.domain.Member;
+import com.ssafy.moyeobang.settle.application.domain.member.Member;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,6 +23,7 @@ public class MemberMapper {
     MemberEntity mapToEntity(Member member) {
 
         return MemberEntity.builder()
+                .id(member.getId())
                 .email(member.getEmail())
                 .username(member.getUsername())
                 .nickname(member.getNickname())
