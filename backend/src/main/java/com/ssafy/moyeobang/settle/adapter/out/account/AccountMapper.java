@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccountMapper {
 
-    Account mapToDomain(AccountEntity accountEntity) {
+    Account mapToDomain(final AccountEntity accountEntity) {
 
         return Account.of(
                 new Account.AccountNo(
@@ -27,7 +27,7 @@ public class AccountMapper {
         );
     }
 
-    AccountEntity mapToEntity(Account account) {
+    AccountEntity mapToEntity(final Account account) {
 
         return AccountEntity.builder()
                 .id(account.getNo().id())

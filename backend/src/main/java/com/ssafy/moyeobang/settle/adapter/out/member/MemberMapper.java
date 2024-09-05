@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberMapper {
 
-    Member mapToDomain(MemberEntity memberEntity) {
+    Member mapToDomain(final MemberEntity memberEntity) {
 
         return Member.of(
                 new MemberUnique(
@@ -29,7 +29,7 @@ public class MemberMapper {
         );
     }
 
-    MemberEntity mapToEntity(Member member) {
+    MemberEntity mapToEntity(final Member member) {
 
         return MemberEntity.builder()
                 .id(member.getMemberUnique().id())
