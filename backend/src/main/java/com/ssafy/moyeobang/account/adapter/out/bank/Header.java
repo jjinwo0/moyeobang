@@ -28,10 +28,6 @@ public class Header {
     private String userKey;
 
     public static Header withUserKey(String userKey, String apiName, LocalDateTime transmissionDateTime) {
-        String institutionTransactionUniqueNo = new BigInteger(130, new SecureRandom())
-                .toString(10)
-                .substring(0, 20);
-
         return Header.builder()
                 .apiName(apiName)
                 .transmissionDate(transmissionDateTime.format(dateFormatter))
@@ -39,10 +35,16 @@ public class Header {
                 .institutionCode("00100")
                 .fintechAppNo("001")
                 .apiServiceCode(apiName)
-                .institutionTransactionUniqueNo(institutionTransactionUniqueNo)
+                .institutionTransactionUniqueNo(generateRandomNumber())
                 .apiKey(API_KEY)
                 .userKey(userKey)
                 .build();
+    }
+
+    private static String generateRandomNumber() {
+        return new BigInteger(130, new SecureRandom())
+                .toString(10)
+                .substring(0, 20);
     }
 
     @Builder(access = AccessLevel.PRIVATE)

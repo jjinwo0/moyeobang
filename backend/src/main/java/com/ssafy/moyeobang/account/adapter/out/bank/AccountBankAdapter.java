@@ -12,9 +12,15 @@ import org.springframework.web.client.RestClient;
 
 @BankAdapter
 @RequiredArgsConstructor
-public class AccountBankApiAdapter implements CreateAccountPort {
+public class AccountBankAdapter implements CreateAccountPort {
 
     private final ObjectMapper objectMapper;
+
+    public static void main(String[] args) {
+        AccountBankAdapter accountBankAdapter = new AccountBankAdapter(new ObjectMapper());
+        String account = accountBankAdapter.createAccount("eea1652c-b5f3-4ef3-9aba-5360026f03b");
+        System.out.println(account);
+    }
 
     @Override
     public String createAccount(String memberKey) {
@@ -30,8 +36,7 @@ public class AccountBankApiAdapter implements CreateAccountPort {
                 .contentType(APPLICATION_JSON)
                 .body(createAccountRequest)
                 .retrieve()
-                .toEntity(String.class)
-                .getBody();
+                .body(String.class);
 
         try {
             return objectMapper.readTree(data)
