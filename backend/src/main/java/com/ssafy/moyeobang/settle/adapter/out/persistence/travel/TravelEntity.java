@@ -21,6 +21,9 @@ public class TravelEntity extends BaseEntity {
 
     private String title;
 
+    @OneToOne(mappedBy = "travelEntity", fetch = FetchType.LAZY)
+    private TravelAccountEntity travelAccountEntity;
+
     @OneToMany(mappedBy = "travelEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberTravel> memberTravels = new ArrayList<>();
 }
