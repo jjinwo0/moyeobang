@@ -3,6 +3,10 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+// tanstack 설정
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+
 function App() {
   const [count, setCount] = useState(0)
 
