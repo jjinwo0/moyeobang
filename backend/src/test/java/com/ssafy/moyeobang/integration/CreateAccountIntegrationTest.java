@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ssafy.moyeobang.account.adapter.in.web.request.CreateAccountRequest;
-import com.ssafy.moyeobang.account.adapter.out.persistence.account.AccountRepository;
-import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberJpaEntity;
+import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepository;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.support.IntegrationTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,12 +24,12 @@ public class CreateAccountIntegrationTest extends IntegrationTestSupport {
     private MemberRepository memberRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private TravelAccountRepository travelAccountRepository;
 
     @AfterEach
     void tearDown() {
         memberRepository.deleteAllInBatch();
-        accountRepository.deleteAllInBatch();
+        travelAccountRepository.deleteAllInBatch();
     }
 
     @DisplayName("여행 계좌 생성 통합 테스트")
