@@ -1,27 +1,32 @@
-package com.ssafy.moyeobang.account.adapter.out.bank;
+package com.ssafy.moyeobang.account.adapter.out;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.ssafy.moyeobang.account.adapter.out.persistence.account.AccountRepository;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberJpaEntity;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
-import com.ssafy.moyeobang.support.BankAdapterTestSupport;
+import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
 
-class AccountBankAdapterTest extends BankAdapterTestSupport {
+class AccountBankAdapterTest extends PersistenceAdapterTestSupport {
 
     @Autowired
     private AccountBankAdapter accountBankAdapter;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Autowired
     private MemberRepository memberRepository;
 
     @AfterEach
     void tearDown() {
+        accountRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
     }
 

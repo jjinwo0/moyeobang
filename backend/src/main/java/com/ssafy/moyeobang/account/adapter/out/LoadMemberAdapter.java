@@ -1,5 +1,7 @@
-package com.ssafy.moyeobang.account.adapter.out.persistence.member;
+package com.ssafy.moyeobang.account.adapter.out;
 
+import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberJpaEntity;
+import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.port.out.LoadMemberPort;
 import com.ssafy.moyeobang.account.error.MemberNotFoundException;
