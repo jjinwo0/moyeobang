@@ -2,8 +2,8 @@ package com.ssafy.moyeobang.settle.adapter.out.persistence.member;
 
 import com.ssafy.moyeobang.common.util.BaseEntity;
 import com.ssafy.moyeobang.settle.adapter.out.persistence.account.AccountEntity;
-import com.ssafy.moyeobang.settle.adapter.out.persistence.account.MemberOrderHistory;
-import com.ssafy.moyeobang.settle.adapter.out.persistence.travel.MemberTravel;
+import com.ssafy.moyeobang.settle.adapter.out.persistence.account.order.MemberOrderHistoryEntity;
+import com.ssafy.moyeobang.settle.adapter.out.persistence.travel.MemberTravelEntity;
 import com.ssafy.moyeobang.settle.application.domain.member.Gender;
 import com.ssafy.moyeobang.settle.application.domain.member.MemberType;
 import com.ssafy.moyeobang.settle.application.domain.member.Role;
@@ -51,8 +51,8 @@ public class MemberEntity extends BaseEntity {
     private List<AccountEntity> accountEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<MemberOrderHistory> memberOrderHistories = new ArrayList<>();
+    private List<MemberOrderHistoryEntity> memberOrderHistories = new ArrayList<>();
 
     @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<MemberTravel> memberTravels = new ArrayList<>();
+    private List<MemberTravelEntity> memberTravelEntities = new ArrayList<>();
 }
