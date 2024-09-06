@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Transaction {
@@ -14,13 +16,6 @@ public class Transaction {
 
     private final Money money;
 
-    private Transaction(Long id, Money money) {
-
-        this.id = id;
-        this.info = null;
-        this.money = money;
-    }
-
     public static Transaction of(final Long id,
                                  final Info info,
                                  final Money money) {
@@ -28,12 +23,7 @@ public class Transaction {
         return new Transaction(id, info, money);
     }
 
-    public static Transaction ofDeposit(final Long id, final Money money) {
-
-        return new Transaction(id, money);
-    }
-
-    public record Info (String title, String accountNumber) {}
+    public record Info (String title, Long accountId, String accountNumber, List<Long> orderList) {}
 
     public record Money (Integer amount, Action action) {}
 }
