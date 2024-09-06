@@ -1,6 +1,7 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.travel;
 
 import com.ssafy.moyeobang.common.util.BaseEntity;
+import com.ssafy.moyeobang.settle.adapter.out.persistence.account.TravelAccountEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,5 +26,5 @@ public class TravelEntity extends BaseEntity {
     private TravelAccountEntity travelAccountEntity;
 
     @OneToMany(mappedBy = "travelEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<MemberTravel> memberTravels = new ArrayList<>();
+    private List<MemberTravelEntity> memberTravelEntities = new ArrayList<>();
 }

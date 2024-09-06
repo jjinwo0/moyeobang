@@ -3,7 +3,6 @@ package com.ssafy.moyeobang.settle.adapter.out.persistence.travel;
 import com.ssafy.moyeobang.settle.application.domain.travel.Travel;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -12,7 +11,7 @@ public class TravelMapper {
 
     Travel mapToDomain(TravelEntity travelEntity) {
 
-        Map<Long, BigInteger> memberBalance = travelEntity.getMemberTravels().stream()
+        Map<Long, Integer> memberBalance = travelEntity.getMemberTravelEntities().stream()
                 .collect(
                         Collectors.toMap(
                                 t -> t.getMemberEntity().getId(),
