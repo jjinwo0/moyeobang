@@ -1,5 +1,6 @@
-package com.ssafy.moyeobang.settle.adapter.out.persistence.account;
+package com.ssafy.moyeobang.settle.adapter.out.persistence.account.order;
 
+import com.ssafy.moyeobang.settle.adapter.out.persistence.account.transaction.WithdrawEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,8 +25,8 @@ public class OrderEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_id")
-    private TransactionEntity transactionEntity;
+    private WithdrawEntity withdrawEntity;
 
     @OneToMany(mappedBy = "orderEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<MemberOrderHistory> memberOrderHistories = new ArrayList<>();
+    private List<MemberOrderHistoryEntity> memberOrderHistories = new ArrayList<>();
 }
