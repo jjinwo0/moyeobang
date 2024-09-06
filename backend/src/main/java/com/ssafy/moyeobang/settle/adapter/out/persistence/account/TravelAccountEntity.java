@@ -1,5 +1,6 @@
-package com.ssafy.moyeobang.settle.adapter.out.persistence.travel;
+package com.ssafy.moyeobang.settle.adapter.out.persistence.account;
 
+import com.ssafy.moyeobang.settle.adapter.out.persistence.travel.TravelEntity;
 import com.ssafy.moyeobang.settle.application.domain.account.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
