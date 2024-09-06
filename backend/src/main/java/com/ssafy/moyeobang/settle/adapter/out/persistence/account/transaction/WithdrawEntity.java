@@ -1,7 +1,7 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.account.transaction;
 
-import com.ssafy.moyeobang.settle.adapter.out.persistence.account.OrderEntity;
 import com.ssafy.moyeobang.settle.adapter.out.persistence.account.TravelAccountEntity;
+import com.ssafy.moyeobang.settle.adapter.out.persistence.account.order.OrderEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
