@@ -15,6 +15,8 @@ public class MemberOrderHistory {
     @Column(name = "member_order_history")
     private Long id;
 
+    private Integer amount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private MemberEntity memberEntity;
