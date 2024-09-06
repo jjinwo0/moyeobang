@@ -10,16 +10,30 @@ public class Transaction {
 
     private final Long id;
 
-    private final String title;
+    private final Info info;
 
     private final Money money;
 
+    private Transaction(Long id, Money money) {
+
+        this.id = id;
+        this.info = null;
+        this.money = money;
+    }
+
     public static Transaction of(final Long id,
-                                 final String title,
+                                 final Info info,
                                  final Money money) {
 
-        return new Transaction(id, title, money);
+        return new Transaction(id, info, money);
     }
+
+    public static Transaction ofDeposit(final Long id, final Money money) {
+
+        return new Transaction(id, money);
+    }
+
+    public record Info (String title, String accountNumber) {}
 
     public record Money (Integer amount, Action action) {}
 }
