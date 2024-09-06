@@ -1,28 +1,28 @@
 package com.ssafy.moyeobang.account.adapter.out;
 
 import com.ssafy.moyeobang.account.adapter.out.bank.BankRepository;
-import com.ssafy.moyeobang.account.adapter.out.persistence.account.AccountJpaEntity;
-import com.ssafy.moyeobang.account.adapter.out.persistence.account.AccountRepository;
+import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepository;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
+import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class AccountBankAdapter implements CreateAccountPort {
 
-    private final AccountRepository accountRepository;
+    private final TravelAccountRepository travelAccountRepository;
     private final BankRepository bankRepository;
 
     @Override
     public String createAccount(String memberKey) {
         String accountNumber = bankRepository.createAccount(memberKey);
 
-        AccountJpaEntity account = AccountJpaEntity.builder()
+        TravelAccountJpaEntity account = TravelAccountJpaEntity.builder()
                 .accountNumber(accountNumber)
                 .build();
 
-        accountRepository.save(account);
+        travelAccountRepository.save(account);
 
         return accountNumber;
     }

@@ -3,9 +3,9 @@ package com.ssafy.moyeobang.account.adapter.out;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.ssafy.moyeobang.account.adapter.out.persistence.account.AccountRepository;
-import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberJpaEntity;
+import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepository;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,14 +19,14 @@ class AccountBankAdapterTest extends PersistenceAdapterTestSupport {
     private AccountBankAdapter accountBankAdapter;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private TravelAccountRepository travelAccountRepository;
 
     @Autowired
     private MemberRepository memberRepository;
 
     @AfterEach
     void tearDown() {
-        accountRepository.deleteAllInBatch();
+        travelAccountRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
     }
 

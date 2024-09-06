@@ -2,9 +2,9 @@ package com.ssafy.moyeobang.account.adapter.out;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberJpaEntity;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
 import com.ssafy.moyeobang.account.application.domain.Member;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
