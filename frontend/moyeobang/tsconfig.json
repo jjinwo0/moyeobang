@@ -1,12 +1,16 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {"path": "./tsconfig.app.json"},
+    {"path": "./tsconfig.node.json"}
   ],
   "compilerOptions": {
-  "jsx": "react-jsx", // ts가 jsx처리하도록 설정
-  "jsxImportSource": "@emotion/react",  // emotion에서 jsx처리하도록 설정
-  "types": ["@emotion/react/types/css-prop"] // emotion의 css prop 타입 지원 추가
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["types/*"]
+    },
+    "jsx": "react-jsx", // ts가 jsx처리하도록 설정
+    "jsxImportSource": "@emotion/react", // emotion에서 jsx처리하도록 설정
+    "types": ["@emotion/react/types/css-prop"] // emotion의 css prop 타입 지원 추가
   }
 }
