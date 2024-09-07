@@ -22,8 +22,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-import App from './App'
-
 // Render the app
 const rootElement = document.getElementById('root')!; // 'root'에 맞게 수정
 if (!rootElement.innerHTML) {
@@ -32,7 +30,6 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-        {/* <App/> */}
         <ReactQueryDevtools initialIsOpen={false} /> {/* Devtools 추가 */}
       </QueryClientProvider>
     </StrictMode>
