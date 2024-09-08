@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
 
-class AccountBankAdapterTest extends PersistenceAdapterTestSupport {
+class TravelAccountBankAdapterTest extends PersistenceAdapterTestSupport {
 
     @Autowired
     private AccountBankAdapter accountBankAdapter;
