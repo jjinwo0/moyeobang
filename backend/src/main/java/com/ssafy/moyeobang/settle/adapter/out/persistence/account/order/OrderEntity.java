@@ -28,5 +28,5 @@ public class OrderEntity {
     private WithdrawEntity withdrawEntity;
 
     @OneToMany(mappedBy = "orderEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<MemberOrderHistoryEntity> memberOrderHistories = new ArrayList<>();
+    private List<MemberOrderHistoryEntity> memberOrderHistories;
 }

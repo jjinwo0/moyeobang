@@ -31,5 +31,5 @@ public class WithdrawEntity {
     private TravelAccountEntity travelAccountEntity;
 
     @OneToMany(mappedBy = "withdrawEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<OrderEntity> orderEntities = new ArrayList<>();
+    private List<OrderEntity> orderEntities;
 }
