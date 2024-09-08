@@ -80,3 +80,7 @@ bootJar {
 clean {
 	delete file('src/main/generated')
 }
+
+test {
+	useJUnitPlatform()
+}
