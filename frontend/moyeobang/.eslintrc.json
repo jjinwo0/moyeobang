@@ -1,24 +1,86 @@
+// export default {
+//   env: {
+//     browser: true,
+//     es2021: true,
+//   },
+//   extends: [
+//     "recommend",
+//     // "airbnb/hooks",
+//     "plugin:@typescript-eslint/recommended",
+//     "plugin:prettier/recommended",
+//     'plugin:@tanstack/query/recommended',
+//   ],
+//   parser: "@typescript-eslint/parser",
+//   parserOptions: {
+//     ecmaFeatures: {
+//       jsx: true,
+//     },
+//     ecmaVersion: "latest",
+//     sourceType: "module",
+//   },
+//   plugins: ["react", "@typescript-eslint", "simple-import-sort", "prettier", '@tanstack/query', "@emotion"],
+//   rules: {
+//     "prettier/prettier": "error",
+//     "import/extensions": "off",
+//     "import/no-unresolved": "off",
+//     "react/jsx-filename-extension": [1, { extensions: [".tsx"] }],
+//     "react/react-in-jsx-scope": "off",
+//     "simple-import-sort/imports": "error",
+//     "simple-import-sort/exports": "error",
+//     "@tanstack/query/exhaustive-deps": "error",
+//     "@tanstack/query/no-deprecated-options": "error",
+//     "@tanstack/query/prefer-query-object-syntax": "error",
+//     "@tanstack/query/stable-query-client": "error",
+//     "@emotion/jsx-import": "error"
+//   },
+// };
+
 {
-    "env": {
-        "browser": true,
-        "es2021": true
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended", // 기본 ESLint 추천 규칙
+    "plugin:@typescript-eslint/recommended", // TypeScript 추천 규칙
+    "plugin:react/recommended", // React 추천 규칙
+    "plugin:prettier/recommended" // Prettier와 통합
+  ],
+  "parser": "@typescript-eslint/parser", // TypeScript 파서 사용
+  "parserOptions": {
+    "ecmaVersion": "latest", // 최신 ECMAScript 문법 사용
+    "sourceType": "module", // ES 모듈 사용
+    "ecmaFeatures": {
+      "jsx": true // JSX 지원 (React)
     },
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 15,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react",
-        "@typescript-eslint"
-    ],
-    "rules": {
+    "project": "./tsconfig.json" // TypeScript 설정 파일 경로
+  },
+  "plugins": [
+    "react", // React 관련 ESLint 규칙
+    "@typescript-eslint", // TypeScript 관련 ESLint 규칙
+    "prettier", // Prettier 통합
+    "@emotion", // Emotion 플러그인 추가
+    "@tanstack/query"
+  ],
+  "rules": {
+    "prettier/prettier": "error", // Prettier 규칙 위반 시 오류 표시
+    "react/react-in-jsx-scope": "off", // React 17+에서는 React import 필요 없음
+    "react/prop-types": "off", // TypeScript 사용 시 PropTypes 사용 안 함
+    "@typescript-eslint/no-unused-vars": ["error"], // 사용되지 않는 변수 오류
+    "import/prefer-default-export": "off", // 기본 export 대신 named export 허용
+    "no-console": "warn", // console.log 사용 시 경고
+    "no-use-before-define": "off", // 정의 전에 변수 사용 허용
+    "@typescript-eslint/no-use-before-define": ["error"], // 정의 전에 변수 사용 금지
+    "@emotion/pkg-renaming": "error", // Emotion 패키지 이름 규칙 위반 시 오류
+    "@tanstack/query/exhaustive-deps": "error",
+    "@tanstack/query/no-deprecated-options": "error",
+    "@tanstack/query/prefer-query-object-syntax": "error",
+    "@tanstack/query/stable-query-client": "error",
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // 설치된 React 버전을 자동으로 감지
     }
+  }
 }
