@@ -33,7 +33,8 @@ public class TravelAccountJpaEntity extends BaseEntity {
     private TravelJpaEntity travel;
 
     @Builder
-    public TravelAccountJpaEntity(String accountNumber, TravelJpaEntity travel) {
+    public TravelAccountJpaEntity(Long id, String accountNumber, TravelJpaEntity travel) {
+        this.id = id;
         this.accountNumber = accountNumber;
         this.travel = travel;
     }

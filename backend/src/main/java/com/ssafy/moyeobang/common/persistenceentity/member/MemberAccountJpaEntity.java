@@ -35,7 +35,8 @@ public class MemberAccountJpaEntity extends BaseEntity {
     private MemberJpaEntity member;
 
     @Builder
-    public MemberAccountJpaEntity(String bankName, String accountNumber, MemberJpaEntity member) {
+    public MemberAccountJpaEntity(Long id, String bankName, String accountNumber, MemberJpaEntity member) {
+        this.id = id;
         this.bankName = bankName;
         this.accountNumber = accountNumber;
         this.member = member;

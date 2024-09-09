@@ -38,9 +38,23 @@ public class MemberTravelJpaEntity extends BaseEntity {
     private TravelJpaEntity travel;
 
     @Builder
-    public MemberTravelJpaEntity(long balance, MemberJpaEntity member, TravelJpaEntity travel) {
+    public MemberTravelJpaEntity(Long id,
+                                 long balance,
+                                 MemberJpaEntity member,
+                                 TravelJpaEntity travel) {
+        this.id = id;
         this.balance = balance;
         this.member = member;
         this.travel = travel;
+    }
+
+    public void addBalance(long amount) {
+
+        this.balance += amount;
+    }
+
+    public void subtractBalance(long amount) {
+
+        this.balance -= amount;
     }
 }
