@@ -1,10 +1,6 @@
 package com.ssafy.moyeobang.settle.application.service;
 
 import com.ssafy.moyeobang.common.annotation.UseCase;
-import com.ssafy.moyeobang.settle.adapter.out.persistence.account.order.OrderEntity;
-import com.ssafy.moyeobang.settle.application.domain.account.Account;
-import com.ssafy.moyeobang.settle.application.domain.account.Transaction;
-import com.ssafy.moyeobang.settle.application.domain.order.MemberOrderHistory;
 import com.ssafy.moyeobang.settle.application.domain.order.MemberOrderHistory.MappingInfo;
 import com.ssafy.moyeobang.settle.application.domain.order.Order;
 import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
@@ -13,8 +9,6 @@ import com.ssafy.moyeobang.settle.application.port.in.SettleUseCase;
 import com.ssafy.moyeobang.settle.application.port.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @UseCase
 @Transactional
