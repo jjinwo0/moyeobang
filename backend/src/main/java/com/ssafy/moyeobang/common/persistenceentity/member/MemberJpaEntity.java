@@ -37,8 +37,6 @@ public class MemberJpaEntity extends BaseEntity {
 
     private String memberKey;
 
-    private String memberAccountId;
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -55,7 +53,6 @@ public class MemberJpaEntity extends BaseEntity {
                            int age,
                            String profile,
                            String memberKey,
-                           String memberAccountId,
                            Gender gender,
                            LoginType memberType,
                            Role role) {
@@ -65,7 +62,6 @@ public class MemberJpaEntity extends BaseEntity {
         this.age = age;
         this.profile = profile;
         this.memberKey = memberKey;
-        this.memberAccountId = memberAccountId;
         this.gender = gender;
         this.memberType = memberType;
         this.role = role;
