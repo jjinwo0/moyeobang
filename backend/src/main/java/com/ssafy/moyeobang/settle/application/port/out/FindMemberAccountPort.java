@@ -2,7 +2,7 @@ package com.ssafy.moyeobang.settle.application.port.out;
 
 import com.ssafy.moyeobang.settle.application.domain.account.Account;
 
-public interface FindAccountPort {
+public interface FindMemberAccountPort {
 
-    Account findAccount(Long accountId);
+    Account findMemberAccount(Long accountId);
 }
