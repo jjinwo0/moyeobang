@@ -11,7 +11,7 @@ import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.port.in.SendMoneyCommand;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
-import com.ssafy.moyeobang.account.application.port.out.UpdateAccountStatePort;
+import com.ssafy.moyeobang.account.application.port.out.SendMoneyPort;
 import com.ssafy.moyeobang.account.error.InsufficientBalanceException;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
@@ -20,9 +20,9 @@ import org.junit.jupiter.api.Test;
 class SendMoneyServiceTest {
 
     private final LoadAccountPort loadAccountPort = mock(LoadAccountPort.class);
-    private final UpdateAccountStatePort updateAccountStatePort = mock(UpdateAccountStatePort.class);
+    private final SendMoneyPort sendMoneyPort = mock(SendMoneyPort.class);
 
-    private final SendMoneyService sendMoneyService = new SendMoneyService(loadAccountPort, updateAccountStatePort);
+    private final SendMoneyService sendMoneyService = new SendMoneyService(loadAccountPort, sendMoneyPort);
 
     @DisplayName("개인 계좌에서 모임 통장 계좌로 돈을 송금한다.")
     @Test

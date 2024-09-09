@@ -3,19 +3,20 @@ package com.ssafy.moyeobang.account.adapter.out;
 import com.ssafy.moyeobang.account.adapter.out.bank.BankRepository;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepository;
 import com.ssafy.moyeobang.account.application.domain.Account;
+import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
-import com.ssafy.moyeobang.account.application.port.out.UpdateAccountStatePort;
+import com.ssafy.moyeobang.account.application.port.out.SendMoneyPort;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class AccountBankAdapter implements CreateAccountPort, LoadAccountPort, UpdateAccountStatePort {
+public class AccountBankAdapter implements CreateAccountPort, LoadAccountPort, SendMoneyPort {
 
-    private final TravelAccountRepository travelAccountRepository;
     private final BankRepository bankRepository;
+    private final TravelAccountRepository travelAccountRepository;
 
     @Override
     public String createAccount(String memberKey) {
@@ -41,7 +42,7 @@ public class AccountBankAdapter implements CreateAccountPort, LoadAccountPort, U
     }
 
     @Override
-    public void updateActivities(Account account) {
+    public void sendMoney(String sourceAccount, String targetAccount, Money money) {
 
     }
 }
