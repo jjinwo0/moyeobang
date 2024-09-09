@@ -5,13 +5,13 @@ import viteLogo from '/vite.svg';
 import { css } from '@emotion/react';
 
 import '@/styles/App.css'
-import GeneralButton from './components/common/btn/GeneralButton';
+import Btn from './components/common/btn/Btn';
 
 
 function App() {
   return (
     <>
-    <GeneralButton buttonStyle={{style:'blue', size:'small'}}>확인</GeneralButton>
+    <Btn buttonStyle={{style:'blue', size:'small'}}>확인</Btn>
     </>
   );
 }

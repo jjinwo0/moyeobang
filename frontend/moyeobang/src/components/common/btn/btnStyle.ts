@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import styled from '@emotion/styled';
 import { colors } from '@/styles/colors';
 
 // 버튼 기본 스타일 정의

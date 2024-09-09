@@ -12,7 +12,7 @@ const StyledButton = styled.button<{
   ${({ size }) => sizeStyles[size]} // size에 따른 스타일 적용
 `;
 
-interface GeneralButtonProps {
+interface BtnProps {
   buttonStyle: {
     style: ButtonVariant; // ButtonVariant 타입으로 스타일 선택
     size: ButtonSize; // ButtonSize 타입으로 크기 선택
@@ -21,7 +21,7 @@ interface GeneralButtonProps {
 }
 
 // GeneralButton 컴포넌트
-const GeneralButton: React.FC<GeneralButtonProps> = ({ buttonStyle, children }) => {
+const Btn: React.FC<BtnProps> = ({ buttonStyle, children }) => {
   return (
     <StyledButton variant={buttonStyle.style} size={buttonStyle.size}>
       {children}
@@ -29,4 +29,4 @@ const GeneralButton: React.FC<GeneralButtonProps> = ({ buttonStyle, children }) 
   );
 };
 
-export default GeneralButton;
+export default Btn;
