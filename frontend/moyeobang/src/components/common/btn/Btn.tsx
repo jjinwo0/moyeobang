@@ -21,9 +21,9 @@ interface BtnProps {
 }
 
 // GeneralButton 컴포넌트
-const Btn: React.FC<BtnProps> = ({ buttonStyle, children }) => {
+const Btn: React.FC<BtnProps> = ({ buttonStyle, children, ...props }) => {
   return (
-    <StyledButton variant={buttonStyle.style} size={buttonStyle.size}>
+    <StyledButton variant={buttonStyle.style} size={buttonStyle.size} {...props} >
       {children}
     </StyledButton>
   );
