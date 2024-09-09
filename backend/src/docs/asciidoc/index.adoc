@@ -13,3 +13,4 @@ endif::[]
 == Account API
 
 include::api/account/create-account.adoc[]
+include::api/account/send-money.adoc[]
