@@ -1,6 +1,6 @@
 package com.ssafy.moyeobang.account.adapter.out;
 
-import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
+import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.port.out.LoadMemberPort;
 import com.ssafy.moyeobang.account.error.MemberNotFoundException;
@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoadMemberAdapter implements LoadMemberPort {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryInAccount memberRepository;
 
     @Override
     public Member loadMember(Long memberId) {

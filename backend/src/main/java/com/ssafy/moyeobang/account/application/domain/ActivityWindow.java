@@ -1,5 +1,6 @@
 package com.ssafy.moyeobang.account.application.domain;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,6 +10,10 @@ public class ActivityWindow {
 
     public ActivityWindow(List<Activity> activities) {
         this.activities = activities;
+    }
+
+    public static ActivityWindow empty() {
+        return new ActivityWindow(new ArrayList<>());
     }
 
     public void addActivity(Activity activity) {

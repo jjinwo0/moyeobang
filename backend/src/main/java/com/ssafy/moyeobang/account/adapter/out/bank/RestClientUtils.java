@@ -27,6 +27,14 @@ abstract class RestClientUtils {
         }
     }
 
+    public static void postWithoutResponse(String uri, Object request) {
+        restClient().post()
+                .uri(uri)
+                .contentType(APPLICATION_JSON)
+                .body(request)
+                .retrieve();
+    }
+
     public static <T> List<T> getResponseList(String uri, Object request, Class<T> clazz) {
         return MAPPER.convertValue(
                 post(uri, request).path("REC").path("list"),

@@ -35,4 +35,8 @@ public class Money {
     public boolean isPositiveOrZero() {
         return this.amount.compareTo(BigInteger.ZERO) >= 0;
     }
+
+    public long getAmount() {
+        return amount.longValue();
+    }
 }
