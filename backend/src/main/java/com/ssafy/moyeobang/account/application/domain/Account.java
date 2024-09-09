@@ -56,6 +56,10 @@ public class Account {
         );
     }
 
+    public Long getBalanceAsLong() {
+        return getBalance().getAmount();
+    }
+
     private boolean couldNotWithdraw(Money money) {
         return !Money.subtract(this.getBalance(), money)
                 .isPositiveOrZero();
