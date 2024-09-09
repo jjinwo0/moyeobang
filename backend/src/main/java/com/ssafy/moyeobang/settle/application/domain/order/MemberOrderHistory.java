@@ -10,11 +10,11 @@ public class MemberOrderHistory {
 
     private final Long id;
 
-    private final Integer amount;
+    private final long amount;
 
     private MappingInfo mappingInfo;
 
-    public static MemberOrderHistory of(Long id, Integer amount, MappingInfo mappingInfo) {
+    public static MemberOrderHistory of(Long id, Long amount, MappingInfo mappingInfo) {
 
         return new MemberOrderHistory(id, amount, mappingInfo);
     }

@@ -21,5 +21,5 @@ public class Order {
         return new Order(id, info, memberOrderHistories);
     }
 
-    public record OrderInfo(String title, Integer amount, Long transactionId) {}
+    public record OrderInfo(String title, long amount, Long transactionId) {}
 }
