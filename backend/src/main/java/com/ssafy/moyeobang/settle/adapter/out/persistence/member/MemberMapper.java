@@ -1,5 +1,6 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.member;
 
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.member.Member;
 import com.ssafy.moyeobang.settle.application.domain.member.Member.MemberInfo;
 import com.ssafy.moyeobang.settle.application.domain.member.Member.MemberUnique;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberMapper {
 
-    Member mapToDomain(final MemberEntity memberEntity) {
+    Member mapToDomain(final MemberJpaEntity memberEntity) {
 
         return Member.of(
                 new MemberUnique(
@@ -18,8 +19,7 @@ public class MemberMapper {
                 ),
                 new MemberInfo(
                         memberEntity.getEmail(),
-                        memberEntity.getUsername(),
-                        memberEntity.getNickname()
+                        memberEntity.getUsername()
                 ),
                 new PersonalInfo(
                         memberEntity.getBirth(),
@@ -29,13 +29,12 @@ public class MemberMapper {
         );
     }
 
-    MemberEntity mapToEntity(final Member member) {
+    MemberJpaEntity mapToEntity(final Member member) {
 
-        return MemberEntity.builder()
+        return MemberJpaEntity.builder()
                 .id(member.getMemberUnique().id())
                 .email(member.getMemberInfo().email())
                 .username(member.getMemberInfo().username())
-                .nickname(member.getMemberInfo().nickname())
                 .birth(member.getPersonalInfo().birth())
                 .gender(member.getPersonalInfo().gender())
                 .age(member.getPersonalInfo().age())
