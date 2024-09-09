@@ -6,12 +6,12 @@ import {TanStackRouterDevtools} from '@tanstack/router-devtools';
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="p-2 flex gap-2">
+      {/* <div className="p-2 flex gap-2">
         <Link to="/About" className="[&.active]:font-bold">
           About
         </Link>
       </div>
-      <hr />
+      <hr /> */}
       <Outlet />
       <TanStackRouterDevtools />
     </>
