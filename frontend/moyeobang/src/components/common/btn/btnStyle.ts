@@ -1,5 +1,5 @@
-import { css } from '@emotion/react';
-import { colors } from '@/styles/colors';
+import {css} from '@emotion/react';
+import {colors} from '@/styles/colors';
 
 // 버튼 기본 스타일 정의
 export const baseButtonStyle = css`
@@ -22,25 +22,35 @@ export const sizeStyles = {
   tiny: css`
     width: 40px;
     height: 20px;
-    font-size : 10px;
+    font-size: 10px;
   `,
   small: css`
     width: 80px;
     height: 35px;
-    font-size : 18px;
+    font-size: 18px;
   `,
   middle: css`
     width: 87px;
     height: 35px;
-    font-size : 18px;
+    font-size: 18px;
   `,
   big: css`
     width: 330px;
     height: 50px;
-    font-size : 20px;
+    font-size: 20px;
+  `,
+  middleSquare: css`
+    width: 140px;
+    height: 100px;
+    font-size: 18px;
+  `,
+  thinBig: css`
+    width: 330px;
+    height: 35px;
+    font-size: 18px;
+    font-family: 'medium';
   `,
 };
-
 
 // variant에 따른 스타일 설정
 export const variantStyles = {
@@ -51,16 +61,18 @@ export const variantStyles = {
   blueOutlined: css`
     background-color: transparent;
     color: ${colors.third};
-    border : 1px solid ${colors.third}
+    border: 1px solid ${colors.third};
   `,
   gray: css`
     background-color: ${colors.gray};
     color: ${colors.white};
   `,
-  red:css`
+  red: css`
     background-color: ${colors.customPink};
-    color: ${colors.white}
-  `
+    color: ${colors.white};
+  `,
+  greenBlue: css`
+    background-color: ${colors.customGreenBlue};
+    color: ${colors.white};
+  `,
 };
-
-
