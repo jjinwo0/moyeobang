@@ -2,8 +2,13 @@
 import {css} from '@emotion/react';
 import React from 'react';
 import {colors} from '@/styles/colors';
+import Btn from '../btn/Btn';
+import PublicDeposit from './PublicDeposit';
 
 const messageStyle = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed; /* 화면 하단에 고정 */
   box-sizing: border-box;
   background-color: white;
@@ -16,6 +21,7 @@ const messageStyle = css`
   margin-top: 6.8px;
   padding: 10px 8px;
   width: 100%;
+  max-width: 390px;
   z-index: 2000; /* Navbar 위에 나타나도록 z-index 설정 */
   text-align: center;
   bottom: 120px; /* Navbar 위에 위치하도록 조정 */
@@ -51,8 +57,32 @@ const messageStyle = css`
   }
 `;
 
+const btnLayout = css`
+  display: flex;
+  gap: 40px;
+`;
+
 const CalculatePopup = () => {
-  return <div css={messageStyle}></div>;
+  return (
+    <>
+      <div css={messageStyle}>
+        <div css={btnLayout}>
+          <Btn buttonStyle={{style: 'greenBlue', size: 'middleSquare'}}>
+            공금 요청해방
+          </Btn>
+          <Btn buttonStyle={{style: 'blue', size: 'middleSquare'}}>
+            개인 입금해방
+          </Btn>
+        </div>
+      </div>
+
+      <PublicDeposit
+        accumulatedMoney={50000}
+        tripName="아기 돼지 오형제"
+        budget="200000"
+      ></PublicDeposit>
+    </>
+  );
 };
 
 export default CalculatePopup;
