@@ -3,9 +3,9 @@ package com.ssafy.moyeobang.settle.adapter.out.persistence.account;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
+import com.ssafy.moyeobang.settle.adapter.out.persistence.member.MemberRepositoryInSettle;
 import com.ssafy.moyeobang.settle.application.domain.account.Account;
 import com.ssafy.moyeobang.settle.error.AccountNotFoundException;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
@@ -24,7 +24,7 @@ class MemberAccountPersistenceAdapterTest extends PersistenceAdapterTestSupport 
     private MemberAccountRepositoryInSettle repository;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberRepositoryInSettle memberRepository;
 
     @Autowired
     private AccountMapper mapper;
