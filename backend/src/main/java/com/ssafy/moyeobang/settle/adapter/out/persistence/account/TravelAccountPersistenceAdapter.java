@@ -17,7 +17,7 @@ public class TravelAccountPersistenceAdapter implements FindTravelAccountPort {
     @Override
     public Account findTravelAccount(Long travelAccountId) {
 
-        TravelAccountJpaEntity travelAccountEntity = travelAccountRepository.findById(travelAccountId)
+        TravelAccountJpaEntity travelAccountEntity = travelAccountRepository.findByIdWithTravel(travelAccountId)
                 .orElseThrow(() -> new AccountNotFoundException(
                         "Travel Account id[" + travelAccountId + "] 계좌 정보를 찾을 수 없습니다."));
 
