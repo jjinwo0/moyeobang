@@ -6,13 +6,14 @@ import com.google.firebase.messaging.Message;
 import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
 import com.ssafy.moyeobang.notification.adapter.out.redis.FCMTokenRedisAdapter;
+import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @UseCase
 @RequiredArgsConstructor
-public class FCMService implements NotificationService {
+public class FCMService implements NotificationUseCase {
 
     private final FCMTokenRedisAdapter redisAdapter;
 

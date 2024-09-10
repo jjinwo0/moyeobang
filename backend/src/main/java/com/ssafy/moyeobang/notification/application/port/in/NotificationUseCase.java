@@ -1,8 +1,8 @@
-package com.ssafy.moyeobang.notification.application.service;
+package com.ssafy.moyeobang.notification.application.port.in;
 
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
 
-public interface NotificationService {
+public interface NotificationUseCase {
 
     void sendNotification(NotificationPayload payload);
 }
