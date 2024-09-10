@@ -3,8 +3,8 @@ package com.ssafy.moyeobang.settle.adapter.out.persistence.account;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.account.Account;
-import com.ssafy.moyeobang.settle.application.error.AccountNotFoundException;
 import com.ssafy.moyeobang.settle.application.port.out.FindMemberAccountPort;
+import com.ssafy.moyeobang.settle.error.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
