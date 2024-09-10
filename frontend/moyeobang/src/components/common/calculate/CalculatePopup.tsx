@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react';
-import React from 'react';
+import React, { useState } from 'react';
 import {colors} from '@/styles/colors';
-import Btn from '../btn/Btn';
+import CalculateBtn from './CalculateBtn';
 import PublicDeposit from './PublicDeposit';
 
 const messageStyle = css`
@@ -57,30 +57,21 @@ const messageStyle = css`
   }
 `;
 
-const btnLayout = css`
-  display: flex;
-  gap: 40px;
-`;
 
 const CalculatePopup = () => {
+  const [showModal, setShowModal] = useState('publicDeposit')
   return (
     <>
       <div css={messageStyle}>
-        <div css={btnLayout}>
-          <Btn buttonStyle={{style: 'greenBlue', size: 'middleSquare'}}>
-            공금 요청해방
-          </Btn>
-          <Btn buttonStyle={{style: 'blue', size: 'middleSquare'}}>
-            개인 입금해방
-          </Btn>
-        </div>
+        {showModal==='calculateBtn'&&<CalculateBtn />}
+        {showModal==='publicDeposit'&&
+          <PublicDeposit
+            accumulatedMoney={50000}
+            tripName="아기 돼지 오형제"
+            budget="200000"
+          ></PublicDeposit>
+        }
       </div>
-
-      <PublicDeposit
-        accumulatedMoney={50000}
-        tripName="아기 돼지 오형제"
-        budget="200000"
-      ></PublicDeposit>
     </>
   );
 };
