@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, {useState} from 'react';
 import {css} from '@emotion/react';
-import {useState} from 'react';
 import navBar from '@/assets/icons/navBar.png';
 import travelLog from '@/assets/icons/travelLog.webp';
 import wallet from '@/assets/icons/wallet.png';
@@ -10,6 +9,7 @@ import coin from '@/assets/icons/coin.png';
 const footer = css`
   position: fixed;
   bottom: 0;
+  width: 100%;
   z-index: 1000;
 `;
 
@@ -19,9 +19,6 @@ const nav = css`
   background-image: url(${navBar});
   background-size: cover;
   background-repeat: no-repeat;
-  flex-shrink: 0;
-  box-sizing: border-box;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,28 +26,22 @@ const nav = css`
 `;
 
 const travel = (isSelected: boolean) => css`
-  // display: flex;
   align-items: center;
   p {
     font-family: 'semibold';
     font-size: 12px;
     margin-left: 5px;
-    color: ${isSelected
-      ? '#03A6FF'
-      : 'rgba(0, 0, 0, 0.6)'}; /* 선택된 경우 색상 변경 */
+    color: ${isSelected ? '#03A6FF' : 'rgba(0, 0, 0, 0.6)'};
   }
 `;
 
 const account = (isSelected: boolean) => css`
-  // display: flex;
   align-items: center;
   p {
     font-family: 'semibold';
     font-size: 12px;
     margin-left: 3px;
-    color: ${isSelected
-      ? '#03A6FF'
-      : 'rgba(0, 0, 0, 0.6)'}; /* 선택된 경우 색상 변경 */
+    color: ${isSelected ? '#03A6FF' : 'rgba(0, 0, 0, 0.6)'};
   }
 `;
 
@@ -76,12 +67,12 @@ const cal = css`
   }
 `;
 
-const Navbar = () => {
+const Navbar = ({onCalClick}: {onCalClick: () => void}) => {
   const [selectedItem, setSelectedItem] = useState<string | null>('travel');
 
   return (
     <div css={footer}>
-      <div css={cal}>
+      <div css={cal} onClick={onCalClick}>
         <img src={coin} width={35} height={35} />
         <p>정산</p>
       </div>
