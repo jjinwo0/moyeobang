@@ -1,17 +1,21 @@
-import HeaderContainer from "./HeaderContainer/HeaderContainer"
-import BackButton from "./ButtonIcon/BackButton"
-import { css } from "@emotion/react"
+
+import { headerStyle, backButtonHeaderStyle } from "./HeaderStyle";
+import BackButton from "./ButtonIcon/BackButton";
+import React from "react";
+
 
 export default function HeaderWithBackButton() {
 
-    const leftStyle = css`
-        display: flex;
-        gap:10px;
-        align-items:center;
-    `;
-
     return (
-        <div>hello</div>
-        
+        <nav 
+            css={[
+                headerStyle,
+                backButtonHeaderStyle
+            ]}
+        >
+            <div>
+            <BackButton />
+            </div>
+        </nav>
     )
 }

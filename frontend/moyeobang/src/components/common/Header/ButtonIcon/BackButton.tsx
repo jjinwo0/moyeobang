@@ -2,6 +2,7 @@ import { useRouter } from '@tanstack/react-router';
 import backImg from '@/assets/icons/backButton.png'
 
 import { css } from '@emotion/react';
+import React from 'react';
 
 const backButtonStyle = css`
     display:flex;
@@ -21,19 +22,23 @@ const backButtonImgStyle = css`
 
 export default function BackButton() {
 
-    const {router} = useRouter();
+    const router = useRouter();
 
     function handleBackButton() {
-        router.back()
+        if (window.history.length > 1) {
+            router.back();
+        } else {
+            router.navigate({ to: '/' });
+        }
     }
 
 
     return (
-        <button css={backButtonStyle}>
+        <button css={backButtonStyle} onClick={handleBackButton}>
             <img 
             css={backButtonImgStyle}
             src={backImg} 
-            onClick={handleBackButton}/>
+            />
         </button>
 
     )

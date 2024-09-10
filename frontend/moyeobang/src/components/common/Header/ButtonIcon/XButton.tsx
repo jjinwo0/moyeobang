@@ -15,16 +15,16 @@ const XButtonStyle = css`
 `;
 
 const XButtonImgStyle = css`
-    width: 28px;
-    height:28px;
+    width: 25px;
+    height:25px;
 `
 
 export default function XButton() {
 
-    const {router} = useRouter();
+    const router = useRouter();
 
     function handleXButton() {
-        router.navigate('/')
+        router.back()
     }
 
 

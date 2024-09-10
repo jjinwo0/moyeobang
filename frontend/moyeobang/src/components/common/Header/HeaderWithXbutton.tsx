@@ -1,19 +1,21 @@
-import HeaderContainer from "./HeaderContainer/HeaderContainer"
-import BackButton from "./ButtonIcon/BackButton"
-import { css } from "@emotion/react"
 
-export default function HeaderWithXbutton() {
+import { headerStyle,  closeButtonHeaderStyle} from "./HeaderStyle";
+import XButton from "./ButtonIcon/XButton";
+import React from "react";
 
-    const leftStyle = css`
-    
-    `;
+
+export default function HeaderWithXButton() {
 
     return (
-        <HeaderContainer>
-            <div css={leftStyle}>
-                <BackButton />
+        <nav 
+            css={[
+                headerStyle,
+                closeButtonHeaderStyle
+            ]}
+        >
+            <div>
+            <XButton />
             </div>
-        </HeaderContainer>
-        
+        </nav>
     )
 }
