@@ -1,6 +1,6 @@
 import React, {StrictMode} from 'react';
 import ReactDOM from 'react-dom/client';
-import '@/styles/index.css';
+import '@/styles/index.css'
 
 // Tanstack 설정
 import {RouterProvider, createRouter} from '@tanstack/react-router';
@@ -31,8 +31,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-        {/* <ReactQueryDevtools initialIsOpen={false} />  */}
-        {/* Devtools 추가 */}
+        <ReactQueryDevtools initialIsOpen={false} /> {/* Devtools 추가 */}
       </QueryClientProvider>
     </StrictMode>
   );
