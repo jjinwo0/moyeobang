@@ -3,6 +3,7 @@ package com.ssafy.moyeobang.settle.adapter.out.persistence.account;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.account.Account;
+import com.ssafy.moyeobang.settle.application.domain.account.Account.AccountInfo;
 import com.ssafy.moyeobang.settle.application.domain.account.Account.AccountNo;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,10 @@ public class AccountMapper {
                         entity.getId(),
                         entity.getAccountNumber()
                 ),
-                entity.getBankName()
+                new AccountInfo(
+                        entity.getMember().getUsername(),
+                        entity.getBankName()
+                )
         );
     }
 
@@ -29,7 +33,10 @@ public class AccountMapper {
                         entity.getId(),
                         entity.getAccountNumber()
                 ),
-                "싸피은행" // todo: 필드 추가 여부 논의 필요
+                new AccountInfo(
+                        entity.getTravel().getTitle(),
+                        "싸피은행"
+                ) // todo: 필드 추가 여부 논의 필요
         );
     }
 
@@ -37,7 +44,7 @@ public class AccountMapper {
 
         return MemberAccountJpaEntity.builder()
                 .accountNumber(account.getNo().accountNumber())
-                .bankName(account.getBankName())
+                .bankName(account.getInfo().bankName())
                 .build();
     }
 
