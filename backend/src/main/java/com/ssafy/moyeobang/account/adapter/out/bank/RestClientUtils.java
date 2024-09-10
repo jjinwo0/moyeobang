@@ -5,6 +5,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import org.springframework.web.client.RestClient;
 
 abstract class RestClientUtils {
@@ -24,6 +25,21 @@ abstract class RestClientUtils {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void postWithoutResponse(String uri, Object request) {
+        restClient().post()
+                .uri(uri)
+                .contentType(APPLICATION_JSON)
+                .body(request)
+                .retrieve();
+    }
+
+    public static <T> List<T> getResponseList(String uri, Object request, Class<T> clazz) {
+        return MAPPER.convertValue(
+                post(uri, request).path("REC").path("list"),
+                MAPPER.getTypeFactory().constructCollectionType(List.class, clazz)
+        );
     }
 
     private static RestClient restClient() {

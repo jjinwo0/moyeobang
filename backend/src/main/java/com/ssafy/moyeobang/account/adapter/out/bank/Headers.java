@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Header {
+public class Headers {
 
-    private static final String API_KEY = "e218423b4af644c6ad9f3ae58e27af3c";
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmmss");
 
@@ -27,8 +26,12 @@ public class Header {
     private String apiKey;
     private String userKey;
 
-    public static Header withUserKey(String userKey, String apiName, LocalDateTime transmissionDateTime) {
-        return Header.builder()
+    public static Headers withCommonUserKey(String apiName, LocalDateTime transmissionDateTime) {
+        return withUserKey("eea1652c-b5f3-4ef3-9aba-5360026f03b0", apiName, transmissionDateTime);
+    }
+
+    public static Headers withUserKey(String userKey, String apiName, LocalDateTime transmissionDateTime) {
+        return Headers.builder()
                 .apiName(apiName)
                 .transmissionDate(transmissionDateTime.format(dateFormatter))
                 .transmissionTime(transmissionDateTime.format(timeFormatter))
@@ -36,7 +39,7 @@ public class Header {
                 .fintechAppNo("001")
                 .apiServiceCode(apiName)
                 .institutionTransactionUniqueNo(generateRandomNumber())
-                .apiKey(API_KEY)
+                .apiKey("e218423b4af644c6ad9f3ae58e27af3c")
                 .userKey(userKey)
                 .build();
     }
@@ -48,15 +51,15 @@ public class Header {
     }
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Header(String apiName,
-                   String transmissionDate,
-                   String transmissionTime,
-                   String institutionCode,
-                   String fintechAppNo,
-                   String apiServiceCode,
-                   String institutionTransactionUniqueNo,
-                   String apiKey,
-                   String userKey) {
+    private Headers(String apiName,
+                    String transmissionDate,
+                    String transmissionTime,
+                    String institutionCode,
+                    String fintechAppNo,
+                    String apiServiceCode,
+                    String institutionTransactionUniqueNo,
+                    String apiKey,
+                    String userKey) {
         this.apiName = apiName;
         this.transmissionDate = transmissionDate;
         this.transmissionTime = transmissionTime;
