@@ -7,13 +7,14 @@ import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
 import com.ssafy.moyeobang.notification.adapter.out.redis.FCMTokenRedisAdapter;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
+import com.ssafy.moyeobang.notification.application.port.out.FCMTokenPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @UseCase
 @RequiredArgsConstructor
-public class FCMService implements NotificationUseCase {
+public class FCMService implements NotificationUseCase, FCMTokenPort {
 
     private final FCMTokenRedisAdapter redisAdapter;
 
@@ -35,11 +36,13 @@ public class FCMService implements NotificationUseCase {
         send(message);
     }
 
+    @Override
     public void saveToken(String email, String token) {
 
         redisAdapter.saveToken(email, token);
     }
 
+    @Override
     public void deleteToken(String email) {
 
         redisAdapter.deleteToken(email);
@@ -50,12 +53,14 @@ public class FCMService implements NotificationUseCase {
         ApiFuture<String> future = FirebaseMessaging.getInstance().sendAsync(message);
     }
 
-    private String getToken(String email) {
+    @Override
+    public String getToken(String email) {
 
         return redisAdapter.getToken(email);
     }
 
-    private boolean hasKey(String email) {
+    @Override
+    public boolean hasKey(String email) {
 
         return redisAdapter.hasKey(email);
     }
