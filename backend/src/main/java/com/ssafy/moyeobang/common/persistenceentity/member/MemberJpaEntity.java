@@ -47,8 +47,7 @@ public class MemberJpaEntity extends BaseEntity {
     private Role role;
 
     @Builder
-    public MemberJpaEntity(Long id,
-                           String email,
+    public MemberJpaEntity(String email,
                            String username,
                            String birth,
                            int age,
@@ -57,7 +56,6 @@ public class MemberJpaEntity extends BaseEntity {
                            Gender gender,
                            LoginType memberType,
                            Role role) {
-        this.id = id;
         this.email = email;
         this.username = username;
         this.birth = birth;

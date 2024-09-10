@@ -38,8 +38,7 @@ public class MemberOrderHistoryJpaEntity extends BaseEntity {
     private OrderJpaEntity order;
 
     @Builder
-    public MemberOrderHistoryJpaEntity(Long id, long amount, MemberJpaEntity member, OrderJpaEntity order) {
-        this.id = id;
+    public MemberOrderHistoryJpaEntity(long amount, MemberJpaEntity member, OrderJpaEntity order) {
         this.amount = amount;
         this.member = member;
         this.order = order;

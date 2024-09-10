@@ -39,8 +39,7 @@ public class DepositJpaEntity extends BaseEntity {
     private MemberJpaEntity member;
 
     @Builder
-    public DepositJpaEntity(Long id, long amount, TravelAccountJpaEntity travelAccount, MemberJpaEntity member) {
-        this.id = id;
+    public DepositJpaEntity(long amount, TravelAccountJpaEntity travelAccount, MemberJpaEntity member) {
         this.amount = amount;
         this.travelAccount = travelAccount;
         this.member = member;
