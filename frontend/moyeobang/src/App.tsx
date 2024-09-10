@@ -8,9 +8,15 @@ import { css } from '@emotion/react';
 import '@/styles/App.css'
 
 
+const test = css`
+  font-family: regular;
+  font-size:24px;
+`;
+
 function App() {
   return (
     <>
+    gkdjlfjlk
     </>
   );
 }

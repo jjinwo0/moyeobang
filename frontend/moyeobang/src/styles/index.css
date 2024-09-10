@@ -15,9 +15,7 @@
   -moz-osx-font-smoothing: grayscale;
 } */
 
-html,
-body {
-  width: 100%; /* max-width를 사용하면 여유 공간 때문에 스크롤 발생 */
+html, body {
   max-width: 390px;
   height: 100vh;
   margin: 0 auto;
