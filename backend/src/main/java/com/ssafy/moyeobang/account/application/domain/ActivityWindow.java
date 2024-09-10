@@ -20,28 +20,21 @@ public class ActivityWindow {
         this.activities.add(activity);
     }
 
-    public Money calculateBalance() {
-        Money depositBalance = getDepositBalance();
-        Money withdrawalBalance = getWithdrawalBalance();
-
-        return Money.add(depositBalance, withdrawalBalance.negate());
-    }
-
-    public List<Activity> getActivities() {
-        return Collections.unmodifiableList(activities);
-    }
-
-    private Money getDepositBalance() {
+    public Money getDepositBalance() {
         return activities.stream()
                 .filter(Activity::isDeposit)
                 .map(Activity::getMoney)
                 .reduce(Money.ZERO, Money::add);
     }
 
-    private Money getWithdrawalBalance() {
+    public Money getWithdrawalBalance() {
         return activities.stream()
                 .filter(Activity::isWithdrawal)
                 .map(Activity::getMoney)
                 .reduce(Money.ZERO, Money::add);
+    }
+
+    public List<Activity> getActivities() {
+        return Collections.unmodifiableList(activities);
     }
 }

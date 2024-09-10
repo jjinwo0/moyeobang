@@ -7,18 +7,18 @@ import com.ssafy.moyeobang.account.error.InsufficientBalanceException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@Getter
 @AllArgsConstructor(access = PRIVATE)
 public class Account {
 
-    @Getter
     private final String accountNumber;
-    private final Money baselineBalance;
+    private final Money balance;
     private final ActivityWindow activityWindow;
 
     public static Account of(String accountNumber,
-                             Money baselineBalance,
+                             Money balance,
                              ActivityWindow activityWindow) {
-        return new Account(accountNumber, baselineBalance, activityWindow);
+        return new Account(accountNumber, balance, activityWindow);
     }
 
     public void deposit(Account sourceAccount, Money money) {
@@ -49,15 +49,12 @@ public class Account {
         activityWindow.addActivity(activity);
     }
 
-    public Money getBalance() {
-        return Money.add(
-                this.baselineBalance,
-                this.activityWindow.calculateBalance()
-        );
+    public Money getDepositAmount() {
+        return activityWindow.getDepositBalance();
     }
 
-    public Long getBalanceAsLong() {
-        return getBalance().getAmount();
+    public Money getWithdrawAmount() {
+        return activityWindow.getWithdrawalBalance();
     }
 
     private boolean couldNotWithdraw(Money money) {

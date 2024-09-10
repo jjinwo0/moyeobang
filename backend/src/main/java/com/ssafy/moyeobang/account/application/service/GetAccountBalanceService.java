@@ -19,6 +19,10 @@ public class GetAccountBalanceService implements GetAccountBalanceQuery {
     public GetAccountBalanceResponse getAccountBalance(String accountNumber) {
         Account account = loadAccountPort.loadTravelAccount(accountNumber);
 
-        return null;
+        return new GetAccountBalanceResponse(
+                account.getBalance(),
+                account.getDepositAmount(),
+                account.getWithdrawAmount()
+        );
     }
 }
