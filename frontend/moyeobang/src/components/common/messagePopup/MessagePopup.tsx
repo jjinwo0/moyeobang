@@ -2,7 +2,7 @@
 import {css} from '@emotion/react';
 import React from 'react';
 
-const tooltipStyle = css`
+const messageStyle = css`
   background-color: white;
   border: #6f6f6f solid 1.5px;
   border-radius: 5px;
@@ -47,7 +47,7 @@ const tooltipStyle = css`
 `;
 
 const MessagePopup = ({message}: {message: string}) => {
-  return <div css={tooltipStyle}>{message}</div>;
+  return <div css={messageStyle}>{message}</div>;
 };
 
 export default MessagePopup;
