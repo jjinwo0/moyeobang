@@ -5,9 +5,6 @@ import { headerStyle, twoIconsHeaderStyle } from "./HeaderStyle";
 import React from "react";
 import { css } from "@emotion/react";
 
-const twoButtons = css`
-    
-`;
 
 const QRImageStyle = css`
 width: 40px;
@@ -19,8 +16,15 @@ const AlramImageStyle = css`
     height: 40px;
 `;
 
+interface HeaderWithAlarmAndQRProps {
+    onQRClick: () => void;
+    onAlarmClick: () => void;
+}
 
-export default function HeaderWithAlarmAndQR() {
+export default function HeaderWithAlarmAndQR({
+    onQRClick,
+    onAlarmClick
+    } : HeaderWithAlarmAndQRProps) {
 
     return (
         <nav 
@@ -30,18 +34,17 @@ export default function HeaderWithAlarmAndQR() {
         ]}
     >
         <ul>
-            <Link to='/'>
-                <img 
-                src={QRImage} 
-                css={QRImageStyle}
-                alt="" />
-            </Link>
-            <Link to='/'>
-                <img 
-                src={bellImage} 
-                css={AlramImageStyle}
-                alt="" />
-            </Link>
+            <img 
+            src={QRImage} 
+            css={QRImageStyle}
+            onClick={onQRClick}
+            alt="" />
+
+            <img 
+            src={bellImage} 
+            css={AlramImageStyle}
+            onClick={onAlarmClick}
+            alt="" />
         </ul>
         </nav>
         
