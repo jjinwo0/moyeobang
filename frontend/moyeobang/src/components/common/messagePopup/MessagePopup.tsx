@@ -46,7 +46,7 @@ const messageStyle = css`
   }
 `;
 
-const MessagePopup = ({message}: {message: string}) => {
+const MessagePopup = ({message}: {message: string | JSX.Element}) => {
   return <div css={messageStyle}>{message}</div>;
 };
 
