@@ -1,7 +1,6 @@
 package com.ssafy.moyeobang.account.application.domain;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ActivityWindow {
@@ -20,6 +19,22 @@ public class ActivityWindow {
         this.activities.add(activity);
     }
 
+    public Money getNewActivityBalance() {
+        Money deposit = activities.stream()
+                .filter(Activity::isNew)
+                .filter(Activity::isDeposit)
+                .map(Activity::getMoney)
+                .reduce(Money.ZERO, Money::add);
+
+        Money withdrawal = activities.stream()
+                .filter(Activity::isNew)
+                .filter(Activity::isWithdrawal)
+                .map(Activity::getMoney)
+                .reduce(Money.ZERO, Money::add);
+
+        return Money.add(deposit, withdrawal.negate());
+    }
+
     public Money getDepositBalance() {
         return activities.stream()
                 .filter(Activity::isDeposit)
@@ -32,9 +47,5 @@ public class ActivityWindow {
                 .filter(Activity::isWithdrawal)
                 .map(Activity::getMoney)
                 .reduce(Money.ZERO, Money::add);
-    }
-
-    public List<Activity> getActivities() {
-        return Collections.unmodifiableList(activities);
     }
 }

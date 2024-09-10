@@ -1,6 +1,6 @@
 package com.ssafy.moyeobang.account.application.service;
 
-import static com.ssafy.moyeobang.account.application.domain.ActivityWindow.empty;
+import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -8,8 +8,11 @@ import static org.mockito.Mockito.mock;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountBalanceResponse;
 import com.ssafy.moyeobang.account.application.domain.Account;
+import com.ssafy.moyeobang.account.application.domain.Activity;
+import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +26,13 @@ class GetAccountBalanceServiceTest {
     @Test
     void getAccountBalance() {
         //given
-        Account account = Account.of("111", Money.of(10000), empty());
+        Activity activity1 = createActivity("333", "111", 10000L);
+        Activity activity2 = createActivity("111", "222", 5000L);
+        Activity activity3 = createActivity("111", "333", 2000L);
+
+        ActivityWindow activityWindow = new ActivityWindow(List.of(activity1, activity2, activity3));
+
+        Account account = Account.of("111", Money.ZERO, activityWindow);
 
         given(loadAccountPort.loadTravelAccount(any(String.class)))
                 .willReturn(account);
@@ -33,7 +42,11 @@ class GetAccountBalanceServiceTest {
 
         //then
         assertThat(response)
-                .extracting("accountNumber", "balance")
-                .containsExactlyInAnyOrder("111", 10000L);
+                .extracting("currentBalance", "totalAmount", "totalSpent", "usagePercentage")
+                .containsExactly(3000L, 10000L, 7000L, 70.0);
+    }
+
+    private Activity createActivity(String sourceAccountNumber, String targetAccountNumber, Long amount) {
+        return new Activity("111", sourceAccountNumber, targetAccountNumber, now(), Money.of(amount));
     }
 }

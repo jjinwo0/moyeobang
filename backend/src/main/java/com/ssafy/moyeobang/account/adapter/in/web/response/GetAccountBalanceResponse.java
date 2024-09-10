@@ -14,7 +14,7 @@ public record GetAccountBalanceResponse(Long currentBalance,
                 currentBalance.getAmount(),
                 totalAmount.getAmount(),
                 totalSpent.getAmount(),
-                (double) totalSpent.getAmount() / totalAmount.getAmount()
+                (double) totalSpent.getAmount() / totalAmount.getAmount() * 100
         );
     }
 }
