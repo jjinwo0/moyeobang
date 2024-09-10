@@ -1,11 +1,14 @@
 package com.ssafy.moyeobang.account.adapter.out.bank.response;
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record TransactionHistoryResponse(Long transactionUniqueNo,
-                                         LocalDate transactionDate,
-                                         LocalTime transactionTime,
+                                         @JsonFormat(shape = STRING, pattern = "yyyyMMdd") LocalDate transactionDate,
+                                         @JsonFormat(shape = STRING, pattern = "HHmmss") LocalTime transactionTime,
                                          String transactionType,
                                          String transactionTypeName,
                                          String transactionAccountNo,

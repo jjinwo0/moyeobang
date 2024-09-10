@@ -93,7 +93,8 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         Account account = bankAccountAdapter.loadMemberAccount(member.getId());
 
         //then
-        assertThat(account.getAccountNumber()).isEqualTo(memberAccount.getAccountNumber());
+        assertThat(account).extracting("accountNumber", "balance")
+                .containsExactly(memberAccount.getAccountNumber(), Money.of(50000));
     }
 
     @DisplayName("싸피 뱅크 API를 활용하여 여행 모임 계좌 정보를 조회한다.")
@@ -112,7 +113,8 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         Account account = bankAccountAdapter.loadTravelAccount(travelAccount.getAccountNumber());
 
         //then
-        assertThat(account.getAccountNumber()).isEqualTo(travelAccount.getAccountNumber());
+        assertThat(account).extracting("accountNumber", "balance")
+                .containsExactly(travelAccount.getAccountNumber(), Money.ZERO);
     }
 
     @DisplayName("싸피 뱅크 API를 활용하여 개인 계좌에서 여행 모임 계좌로 돈을 송금한다.")
