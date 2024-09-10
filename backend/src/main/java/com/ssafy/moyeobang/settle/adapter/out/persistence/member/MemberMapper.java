@@ -32,7 +32,6 @@ public class MemberMapper {
     MemberJpaEntity mapToEntity(final Member member) {
 
         return MemberJpaEntity.builder()
-                .id(member.getMemberUnique().id())
                 .email(member.getMemberInfo().email())
                 .username(member.getMemberInfo().username())
                 .birth(member.getPersonalInfo().birth())

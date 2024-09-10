@@ -28,7 +28,6 @@ public class OrderMapper {
     OrderJpaEntity mapToEntity(final Order order, final WithdrawJpaEntity withdrawEntity) {
 
         return OrderJpaEntity.builder()
-                .id(order.getId())
                 .title(order.getOrderInfo().title())
                 .amount(order.getOrderInfo().amount())
                 .withdraw(withdrawEntity)

@@ -23,23 +23,11 @@ public class MemberTravelMapper {
     }
 
     MemberTravelJpaEntity mapToEntity(final MemberTravel domain,
-                                   final MemberJpaEntity member,
-                                   final TravelJpaEntity travel) {
+                                      final MemberJpaEntity member,
+                                      final TravelJpaEntity travel) {
 
         return MemberTravelJpaEntity.builder()
-                .id(domain.getId())
                 .balance(domain.getBalance())
-                .member(member)
-                .travel(travel)
-                .build();
-    }
-
-    MemberTravelJpaEntity createEntity(Integer balance,
-                                       MemberJpaEntity member,
-                                       TravelJpaEntity travel) {
-
-        return MemberTravelJpaEntity.builder()
-                .balance(balance)
                 .member(member)
                 .travel(travel)
                 .build();

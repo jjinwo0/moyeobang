@@ -29,7 +29,6 @@ public class MemberOrderHistoryMapper {
     ) {
 
         return MemberOrderHistoryJpaEntity.builder()
-                .id(memberOrderHistory.getId())
                 .amount(memberOrderHistory.getAmount())
                 .member(memberEntity)
                 .order(orderEntity)

@@ -36,7 +36,6 @@ public class AccountMapper {
     MemberAccountJpaEntity mapToEntity(final Account account) {
 
         return MemberAccountJpaEntity.builder()
-                .id(account.getNo().id())
                 .accountNumber(account.getNo().accountNumber())
                 .bankName(account.getBankName())
                 .build();
@@ -46,7 +45,6 @@ public class AccountMapper {
 
         // todo: 여행명 처리 어떻게 할지 정해야 함
         return TravelAccountJpaEntity.builder()
-                .id(account.getNo().id())
                 .accountNumber(account.getNo().accountNumber())
                 .build();
     }
