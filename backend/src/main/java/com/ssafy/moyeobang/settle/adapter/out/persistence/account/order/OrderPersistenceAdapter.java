@@ -6,9 +6,9 @@ import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.settle.adapter.out.persistence.account.transaction.TransactionPersistenceAdapter;
 import com.ssafy.moyeobang.settle.application.domain.order.Order;
 import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
-import com.ssafy.moyeobang.settle.application.error.OrderNotFoundException;
 import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
 import com.ssafy.moyeobang.settle.application.port.out.FindOrderPort;
+import com.ssafy.moyeobang.settle.error.OrderNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
