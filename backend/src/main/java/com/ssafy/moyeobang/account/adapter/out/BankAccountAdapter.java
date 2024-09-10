@@ -7,6 +7,7 @@ import com.ssafy.moyeobang.account.adapter.out.persistence.account.MemberAccount
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositRepositoryInAccount;
 import com.ssafy.moyeobang.account.application.domain.Account;
+import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
@@ -27,6 +28,8 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
 
     private final MemberAccountRepositoryInAccount memberAccountRepository;
     private final TravelAccountRepositoryInAccount travelAccountRepository;
+
+    private final ActivityMapper activityMapper;
 
     @Override
     public String createAccount(String memberKey) {
@@ -56,14 +59,17 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
 
     @Override
     public Account loadTravelAccount(String accountNumber) {
-        TravelAccountJpaEntity account = getTravelAccount(accountNumber);
+        Long balance = bankApiClient.getBalance(accountNumber);
 
-        Long balance = bankApiClient.getBalance(account.getAccountNumber());
+        ActivityWindow activityWindow = activityMapper.mapToActivityWindow(
+                bankApiClient.getTransactionHistories(accountNumber),
+                accountNumber
+        );
 
         return Account.of(
-                account.getAccountNumber(),
+                accountNumber,
                 Money.of(balance),
-                empty()
+                activityWindow
         );
     }
 

@@ -1,13 +1,24 @@
 package com.ssafy.moyeobang.account.adapter.out.bank.response;
 
-public record TransactionHistoryResponse(String transactionUniqueNo,
-                                         String transactionDate,
-                                         String transactionTime,
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public record TransactionHistoryResponse(Long transactionUniqueNo,
+                                         LocalDate transactionDate,
+                                         LocalTime transactionTime,
                                          String transactionType,
                                          String transactionTypeName,
                                          String transactionAccountNo,
-                                         String transactionBalance,
+                                         Long transactionBalance,
                                          String transactionAfterBalance,
                                          String transactionSummary,
                                          String transactionMemo) {
+
+    public boolean isDeposit() {
+        return transactionType.equals("입금(이체)");
+    }
+
+    public boolean isWithdrawal() {
+        return transactionType.equals("출금(이체)");
+    }
 }

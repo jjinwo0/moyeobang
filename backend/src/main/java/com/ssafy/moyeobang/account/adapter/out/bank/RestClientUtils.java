@@ -35,7 +35,7 @@ abstract class RestClientUtils {
                 .retrieve();
     }
 
-    public static <T> List<T> getResponseList(String uri, Object request, Class<T> clazz) {
+    public static <T> List<T> postConvertResponseToList(String uri, Object request, Class<T> clazz) {
         return MAPPER.convertValue(
                 post(uri, request).path("REC").path("list"),
                 MAPPER.getTypeFactory().constructCollectionType(List.class, clazz)

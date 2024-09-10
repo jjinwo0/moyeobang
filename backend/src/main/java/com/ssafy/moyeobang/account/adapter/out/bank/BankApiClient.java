@@ -1,6 +1,7 @@
 package com.ssafy.moyeobang.account.adapter.out.bank;
 
 import static com.ssafy.moyeobang.account.adapter.out.bank.RestClientUtils.post;
+import static com.ssafy.moyeobang.account.adapter.out.bank.RestClientUtils.postConvertResponseToList;
 import static com.ssafy.moyeobang.account.adapter.out.bank.RestClientUtils.postWithoutResponse;
 import static java.time.LocalDateTime.now;
 
@@ -8,6 +9,9 @@ import com.ssafy.moyeobang.account.adapter.out.bank.request.CreateAccountRequest
 import com.ssafy.moyeobang.account.adapter.out.bank.request.DepositRequest;
 import com.ssafy.moyeobang.account.adapter.out.bank.request.GetBalanceRequest;
 import com.ssafy.moyeobang.account.adapter.out.bank.request.SendMoneyRequest;
+import com.ssafy.moyeobang.account.adapter.out.bank.request.TransactionHistoryRequest;
+import com.ssafy.moyeobang.account.adapter.out.bank.response.TransactionHistoryResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -60,5 +64,18 @@ public class BankApiClient {
                 .path("REC")
                 .path("accountBalance")
                 .asLong();
+    }
+
+    public List<TransactionHistoryResponse> getTransactionHistories(String accountNumber) {
+        TransactionHistoryRequest request = new TransactionHistoryRequest(
+                Headers.withCommonUserKey("inquireTransactionHistoryList", now()),
+                accountNumber
+        );
+
+        return postConvertResponseToList(
+                "/demandDeposit/inquireTransactionHistoryList",
+                request,
+                TransactionHistoryResponse.class
+        );
     }
 }
