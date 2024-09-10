@@ -35,7 +35,6 @@ public class TransactionMapper {
     WithdrawJpaEntity mapToWithdrawEntity(final Transaction transaction, final TravelAccountJpaEntity entity) {
 
         return WithdrawJpaEntity.builder()
-                .id(transaction.getId())
                 .title(transaction.getInfo().title())
                 .targetAccountNumber(transaction.getInfo().accountNumber())
                 .amount(transaction.getMoney().amount())
@@ -63,7 +62,6 @@ public class TransactionMapper {
     DepositJpaEntity mapToDepositEntity(final Transaction transaction, final TravelAccountJpaEntity entity) {
 
         return DepositJpaEntity.builder()
-                .id(transaction.getId())
                 .amount(transaction.getMoney().amount())
                 .travelAccount(entity)
                 .build();
