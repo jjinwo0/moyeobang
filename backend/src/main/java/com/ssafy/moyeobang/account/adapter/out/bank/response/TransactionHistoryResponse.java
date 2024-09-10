@@ -18,10 +18,10 @@ public record TransactionHistoryResponse(Long transactionUniqueNo,
                                          String transactionMemo) {
 
     public boolean isDeposit() {
-        return transactionType.equals("입금(이체)");
+        return transactionTypeName.equals("입금(이체)");
     }
 
     public boolean isWithdrawal() {
-        return transactionType.equals("출금(이체)");
+        return transactionTypeName.equals("출금(이체)");
     }
 }

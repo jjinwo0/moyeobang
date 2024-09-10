@@ -25,8 +25,11 @@ public class TravelJpaEntity extends BaseEntity {
 
     private String title;
 
+    private String travelKey;
+
     @Builder
-    public TravelJpaEntity(String title) {
+    public TravelJpaEntity(String title, String travelKey) {
         this.title = title;
+        this.travelKey = travelKey;
     }
 }
