@@ -1,9 +1,14 @@
 // Size 타입 정의
-type ButtonSize = 'tiny' | 'small' | 'middle' | 'big';
+type ButtonSize =
+  | 'tiny'
+  | 'small'
+  | 'middle'
+  | 'big'
+  | 'middleSquare'
+  | 'thinBig';
 
 // Variant 타입 정의 (Button 스타일에 맞게 정의)
-type ButtonVariant = 'blue' | 'blueOutlined' | 'gray' | 'red';
-
+type ButtonVariant = 'blue' | 'blueOutlined' | 'gray' | 'red' | 'greenBlue';
 
 interface Blue {
   buttonStyle: {
@@ -32,5 +37,3 @@ interface Red {
     size: ButtonSize;
   };
 }
-
-type ButtonStyle = Blue | BlueOutlined | Gray | Red;
