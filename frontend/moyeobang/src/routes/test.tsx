@@ -3,6 +3,8 @@ import React from 'react';
 import {createFileRoute} from '@tanstack/react-router';
 import Btn from '@/components/common/btn/Btn';
 import TwoBtn from '@/components/common/btn/TwoBtn';
+import '@/styles/fonts.css';
+
 
 export const Route = createFileRoute('/test')({
   component: Test,
@@ -27,6 +29,10 @@ function Test() {
         작은 버튼
       </Btn>
       <TwoBtn leftText='예정 진행' rightText='지난 여행'></TwoBtn>
+      
     </>
   );
 }
+
+
+

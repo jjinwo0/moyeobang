@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as TestImport } from './routes/test'
+import { Route as GroupAccountImport } from './routes/groupAccount'
 import { Route as AboutImport } from './routes/About'
 
 // Create Virtual Routes
@@ -24,6 +25,11 @@ const IndexLazyImport = createFileRoute('/')()
 
 const TestRoute = TestImport.update({
   path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GroupAccountRoute = GroupAccountImport.update({
+  path: '/groupAccount',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -55,6 +61,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/groupAccount': {
+      id: '/groupAccount'
+      path: '/groupAccount'
+      fullPath: '/groupAccount'
+      preLoaderRoute: typeof GroupAccountImport
+      parentRoute: typeof rootRoute
+    }
     '/test': {
       id: '/test'
       path: '/test'
@@ -70,12 +83,14 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/About': typeof AboutRoute
+  '/groupAccount': typeof GroupAccountRoute
   '/test': typeof TestRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/About': typeof AboutRoute
+  '/groupAccount': typeof GroupAccountRoute
   '/test': typeof TestRoute
 }
 
@@ -83,27 +98,30 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/About': typeof AboutRoute
+  '/groupAccount': typeof GroupAccountRoute
   '/test': typeof TestRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/About' | '/test'
+  fullPaths: '/' | '/About' | '/groupAccount' | '/test'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/About' | '/test'
-  id: '__root__' | '/' | '/About' | '/test'
+  to: '/' | '/About' | '/groupAccount' | '/test'
+  id: '__root__' | '/' | '/About' | '/groupAccount' | '/test'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AboutRoute: typeof AboutRoute
+  GroupAccountRoute: typeof GroupAccountRoute
   TestRoute: typeof TestRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AboutRoute: AboutRoute,
+  GroupAccountRoute: GroupAccountRoute,
   TestRoute: TestRoute,
 }
 
@@ -121,6 +139,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/About",
+        "/groupAccount",
         "/test"
       ]
     },
@@ -129,6 +148,9 @@ export const routeTree = rootRoute
     },
     "/About": {
       "filePath": "About.tsx"
+    },
+    "/groupAccount": {
+      "filePath": "groupAccount.tsx"
     },
     "/test": {
       "filePath": "test.tsx"
