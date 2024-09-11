@@ -1,14 +1,13 @@
 import {css} from '@emotion/react';
-import React from 'react';
+import React, {useState} from 'react';
 import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
-
 import {colors} from '@/styles/colors';
-
 import LabeledInput from '../common/Inputs/LabeledInput';
 import LocationInput from '../common/Inputs/LocationInput';
 import QuizInput from '../common/Inputs/QuizInput';
-
+import AuthVerification from './AuthVerification';
 import Btn from '../common/btn/Btn';
+import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 
 interface CreateTravelProps {
   onClose: () => void; // 모달을 닫는 함수
@@ -77,7 +76,20 @@ const btnContainerStyle = css`
   margin-right: 10px;
 `;
 
+const photoStyle = css`
+  font-family: 'regular';
+  align-self: flex-start; /* 사진 글씨를 왼쪽으로 정렬 */
+  margin-left: 15px;
+  margin-top: 10px;
+`;
+
 function CreateTravel({onClose}: CreateTravelProps) {
+  const [step, setStep] = useState<number>(1);
+
+  const handleNextClick = () => {
+    setStep(2); // "다음" 버튼 클릭 시 2단계(본인 인증)로 전환
+  };
+
   const handleXClick = () => {
     onClose();
   };
@@ -91,36 +103,53 @@ function CreateTravel({onClose}: CreateTravelProps) {
           <span css={titleBlue}>만들어방</span>
         </div>
 
-        <div css={travelStyle}>
-          {/* 여기에 여행 이름, 기간, 장소 입력란을 묶어서 간격을 늘림 */}
-          <div css={inputsContainerStyle}>
-            <LabeledInput
-              label="여행이름"
-              placeholder="여행 이름을 입력하세요"
-            />
-            <LabeledInput
-              label="여행기간"
-              placeholder="여행 기간을 선택하세요"
-            />
-            <LocationInput
-              label="여행장소"
-              placeholder="여행 장소를 검색하세요"
-            />
-          </div>
-          {/* 퀴즈 입력란은 다른 입력란들과 간격이 유지되도록 분리 */}
-          <div css={quizStyle}>
-            <QuizInput
-              title="초대퀴즈"
-              label="Q"
-              placeholder="김훈민의 별명은?"
-            />
-            <QuizInput label="A" placeholder="김훈남민" />
-          </div>
-        </div>
+        {step === 1 ? (
+          <>
+            <div css={travelStyle}>
+              {/* 여기에 여행 이름, 기간, 장소 입력란을 묶어서 간격을 늘림 */}
+              <div css={inputsContainerStyle}>
+                <LabeledInput
+                  label="여행이름"
+                  placeholder="여행 이름을 입력하세요"
+                />
+                <LabeledInput
+                  label="여행기간"
+                  placeholder="여행 기간을 선택하세요"
+                />
+                <LocationInput
+                  label="여행장소"
+                  placeholder="여행 장소를 검색하세요"
+                />
+              </div>
+              {/* 퀴즈 입력란은 다른 입력란들과 간격이 유지되도록 분리 */}
+              <div css={quizStyle}>
+                <QuizInput
+                  title="초대퀴즈"
+                  label="Q"
+                  placeholder="김훈민의 별명은?"
+                />
+                <QuizInput label="A" placeholder="김훈남민" />
+              </div>
 
-        <div css={btnContainerStyle}>
-          <Btn buttonStyle={{style: 'blue', size: 'small'}}>다음</Btn>
-        </div>
+              <div css={photoStyle}>
+                <span>사진</span>
+                <img src={addTravelPhoto} width={24} height={24} />
+              </div>
+            </div>
+
+            <div css={btnContainerStyle}>
+              {/* onClick 이벤트를 추가하여 handleNextClick 함수 호출 */}
+              <Btn
+                buttonStyle={{style: 'blue', size: 'small'}}
+                onClick={handleNextClick}
+              >
+                다음
+              </Btn>
+            </div>
+          </>
+        ) : (
+          <AuthVerification />
+        )}
       </div>
     </div>
   );
