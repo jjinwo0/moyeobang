@@ -2,7 +2,7 @@ package com.ssafy.moyeobang.account.adapter.out;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
+import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
@@ -17,7 +17,7 @@ class LoadMemberAdapterTest extends PersistenceAdapterTestSupport {
     private LoadMemberAdapter loadMemberAdapter;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberRepositoryInAccount memberRepository;
 
     @AfterEach
     void tearDown() {

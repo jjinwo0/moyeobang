@@ -1,0 +1,12 @@
+[[send-money]]
+=== 공금 입금
+
+==== HTTP Request
+
+include::{snippets}/send-money/http-request.adoc[]
+include::{snippets}/send-money/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/send-money/http-response.adoc[]
+include::{snippets}/send-money/response-fields.adoc[]

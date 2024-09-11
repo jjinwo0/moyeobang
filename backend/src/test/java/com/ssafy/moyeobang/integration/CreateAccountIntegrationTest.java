@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ssafy.moyeobang.account.adapter.in.web.request.CreateAccountRequest;
-import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepository;
-import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepository;
+import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.support.IntegrationTestSupport;
 import org.junit.jupiter.api.AfterEach;
@@ -21,10 +21,10 @@ public class CreateAccountIntegrationTest extends IntegrationTestSupport {
     private int port;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberRepositoryInAccount memberRepository;
 
     @Autowired
-    private TravelAccountRepository travelAccountRepository;
+    private TravelAccountRepositoryInAccount travelAccountRepository;
 
     @AfterEach
     void tearDown() {
