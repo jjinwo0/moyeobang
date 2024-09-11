@@ -51,13 +51,21 @@ public class Account {
 
     public Money getBalance() {
         return Money.add(
-                this.baselineBalance,
-                this.activityWindow.calculateBalance()
+                baselineBalance,
+                activityWindow.getNewActivityBalance()
         );
     }
 
+    public Money getDepositAmount() {
+        return activityWindow.getDepositBalance();
+    }
+
+    public Money getWithdrawAmount() {
+        return activityWindow.getWithdrawalBalance();
+    }
+
     private boolean couldNotWithdraw(Money money) {
-        return !Money.subtract(this.getBalance(), money)
+        return !Money.subtract(baselineBalance, money)
                 .isPositiveOrZero();
     }
 }

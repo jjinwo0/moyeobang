@@ -1,12 +1,11 @@
 package com.ssafy.moyeobang.account.adapter.out;
 
-import static com.ssafy.moyeobang.account.application.domain.ActivityWindow.empty;
-
 import com.ssafy.moyeobang.account.adapter.out.bank.BankApiClient;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.MemberAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositRepositoryInAccount;
 import com.ssafy.moyeobang.account.application.domain.Account;
+import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
@@ -28,6 +27,8 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
     private final MemberAccountRepositoryInAccount memberAccountRepository;
     private final TravelAccountRepositoryInAccount travelAccountRepository;
 
+    private final ActivityMapper activityMapper;
+
     @Override
     public String createAccount(String memberKey) {
         String accountNumber = bankApiClient.createAccount(memberKey);
@@ -47,23 +48,31 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
 
         Long balance = bankApiClient.getBalance(account.getAccountNumber());
 
+        ActivityWindow activityWindow = activityMapper.mapToActivityWindow(
+                bankApiClient.getTransactionHistories(account.getAccountNumber()),
+                account.getAccountNumber()
+        );
+
         return Account.of(
                 account.getAccountNumber(),
                 Money.of(balance),
-                empty()
+                activityWindow
         );
     }
 
     @Override
     public Account loadTravelAccount(String accountNumber) {
-        TravelAccountJpaEntity account = getTravelAccount(accountNumber);
+        Long balance = bankApiClient.getBalance(accountNumber);
 
-        Long balance = bankApiClient.getBalance(account.getAccountNumber());
+        ActivityWindow activityWindow = activityMapper.mapToActivityWindow(
+                bankApiClient.getTransactionHistories(accountNumber),
+                accountNumber
+        );
 
         return Account.of(
-                account.getAccountNumber(),
+                accountNumber,
                 Money.of(balance),
-                empty()
+                activityWindow
         );
     }
 

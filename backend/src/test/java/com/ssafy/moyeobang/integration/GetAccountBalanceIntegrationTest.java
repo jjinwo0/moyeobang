@@ -1,40 +1,39 @@
-package com.ssafy.moyeobang.account.adapter.out;
+package com.ssafy.moyeobang.integration;
 
+import static com.ssafy.moyeobang.integration.RestClientUtils.get;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.ssafy.moyeobang.account.adapter.out.BankAccountAdapter;
 import com.ssafy.moyeobang.account.adapter.out.bank.BankApiClient;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.MemberAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.travel.TravelRepositoryInAccount;
-import com.ssafy.moyeobang.account.application.domain.Account;
-import com.ssafy.moyeobang.account.application.domain.Money;
+import com.ssafy.moyeobang.account.application.port.in.SendMoneyCommand;
+import com.ssafy.moyeobang.account.application.port.in.SendMoneyUseCase;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
-import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
+import com.ssafy.moyeobang.support.IntegrationTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
-class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
+public class GetAccountBalanceIntegrationTest extends IntegrationTestSupport {
 
-    @Autowired
-    private BankAccountAdapter bankAccountAdapter;
+    @LocalServerPort
+    private int port;
 
     @Autowired
     private BankApiClient bankApiClient;
 
     @Autowired
-    private TravelRepositoryInAccount travelRepository;
-
-    @Autowired
-    private TravelAccountRepositoryInAccount travelAccountRepository;
+    private BankAccountAdapter bankAccountAdapter;
 
     @Autowired
     private MemberRepositoryInAccount memberRepository;
@@ -43,83 +42,29 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
     private MemberAccountRepositoryInAccount memberAccountRepository;
 
     @Autowired
+    private TravelRepositoryInAccount travelRepository;
+
+    @Autowired
+    private TravelAccountRepositoryInAccount travelAccountRepository;
+
+    @Autowired
     private DepositRepositoryInAccount depositRepository;
+
+    @Autowired
+    private SendMoneyUseCase sendMoneyUseCase;
 
     @AfterEach
     void tearDown() {
         depositRepository.deleteAllInBatch();
-        memberAccountRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
         travelAccountRepository.deleteAllInBatch();
         travelRepository.deleteAllInBatch();
+        memberAccountRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
     }
 
-    @DisplayName("방장의 유저 키를 이용해 싸피 뱅크 모임 통장 계좌를 생성한다.")
+    @DisplayName("모임 통장 공금 잔액 조회 통합 테스트")
     @Test
-    void createAccount() {
-        //given
-        MemberJpaEntity member = createMember();
-        memberRepository.save(member);
-
-        //when
-        String accountNumber = bankAccountAdapter.createAccount(member.getMemberKey());
-
-        //then
-        assertThat(accountNumber).hasSize(16);
-    }
-
-    @DisplayName("잘못된 유저 키를 이용할 경우 계좌를 생성하지 못하고 예외가 발생한다.")
-    @Test
-    void createAccountWithWrongMemberKey() {
-        //given
-        MemberJpaEntity member = createMemberWithWrongMemberKey();
-        memberRepository.save(member);
-
-        //when & then
-        assertThatThrownBy(() -> bankAccountAdapter.createAccount(member.getMemberKey()))
-                .isInstanceOf(HttpClientErrorException.class);
-    }
-
-    @DisplayName("싸피 뱅크 API를 활용하여 개인 계좌 정보를 조회한다.")
-    @Test
-    void loadMemberAccount() {
-        //given
-        MemberJpaEntity member = createMember();
-        memberRepository.save(member);
-
-        MemberAccountJpaEntity memberAccount = createMemberAccountWithInitialDeposit50000(member);
-
-        //when
-        Account account = bankAccountAdapter.loadMemberAccount(member.getId());
-
-        //then
-        assertThat(account).extracting("accountNumber", "balance")
-                .containsExactly(memberAccount.getAccountNumber(), Money.of(50000));
-    }
-
-    @DisplayName("싸피 뱅크 API를 활용하여 여행 모임 계좌 정보를 조회한다.")
-    @Test
-    void loadTravelAccount() {
-        //given
-        MemberJpaEntity member = createMember();
-        memberRepository.save(member);
-
-        TravelJpaEntity travel = createTravel();
-        travelRepository.save(travel);
-
-        TravelAccountJpaEntity travelAccount = createTravelAccount(member, travel);
-
-        //when
-        Account account = bankAccountAdapter.loadTravelAccount(travelAccount.getAccountNumber());
-
-        //then
-        assertThat(account).extracting("accountNumber", "balance")
-                .containsExactly(travelAccount.getAccountNumber(), Money.ZERO);
-    }
-
-    @DisplayName("싸피 뱅크 API를 활용하여 개인 계좌에서 여행 모임 계좌로 돈을 송금한다.")
-    @Test
-    void sendMoney() {
+    void getAccountBalance() {
         //given
         MemberJpaEntity member = createMember();
         memberRepository.save(member);
@@ -130,16 +75,17 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         MemberAccountJpaEntity memberAccount = createMemberAccountWithInitialDeposit50000(member);
         TravelAccountJpaEntity travelAccount = createTravelAccount(member, travel);
 
+        SendMoneyCommand command = new SendMoneyCommand(member.getId(), travelAccount.getAccountNumber(), 50000L);
+        sendMoneyUseCase.sendMoney(command);
+
         //when
-        bankAccountAdapter.sendMoney(
-                memberAccount.getAccountNumber(),
-                travelAccount.getAccountNumber(),
-                Money.of(10000)
-        );
+        JsonNode response = get(port, "/api/accounts/" + travelAccount.getAccountNumber() + "/balance");
 
         //then
-        assertThat(bankApiClient.getBalance(memberAccount.getAccountNumber())).isEqualTo(40000L);
-        assertThat(bankApiClient.getBalance(travelAccount.getAccountNumber())).isEqualTo(10000L);
+        assertThat(response.path("data").path("currentBalance").asLong()).isEqualTo(50000L);
+        assertThat(response.path("data").path("totalAmount").asLong()).isEqualTo(50000L);
+        assertThat(response.path("data").path("totalSpent").asLong()).isEqualTo(0L);
+        assertThat(response.path("data").path("usagePercentage").asDouble()).isEqualTo(0.0);
     }
 
     private MemberAccountJpaEntity createMemberAccountWithInitialDeposit50000(MemberJpaEntity member) {
@@ -161,12 +107,6 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
     private MemberJpaEntity createMember() {
         return MemberJpaEntity.builder()
                 .memberKey("eea1652c-b5f3-4ef3-9aba-5360026f03b0")
-                .build();
-    }
-
-    private MemberJpaEntity createMemberWithWrongMemberKey() {
-        return MemberJpaEntity.builder()
-                .memberKey("wrong member key")
                 .build();
     }
 

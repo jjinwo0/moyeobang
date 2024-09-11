@@ -8,4 +8,8 @@ public record TransactionHistoryRequest(Headers Header,
                                         String endDate,
                                         String transactionType,
                                         String orderByType) {
+
+    public TransactionHistoryRequest(Headers Header, String accountNo) {
+        this(Header, accountNo, "20240101", "20241231", "A", "DESC");
+    }
 }
