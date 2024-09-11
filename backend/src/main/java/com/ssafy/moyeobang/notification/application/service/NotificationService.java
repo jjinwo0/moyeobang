@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @UseCase
 @RequiredArgsConstructor
-public class NotificationService implements NotificationUseCase, FCMTokenPort {
+public class NotificationService implements NotificationUseCase {
 
     private final NotificationAdapter adapter;
 
@@ -26,12 +26,12 @@ public class NotificationService implements NotificationUseCase, FCMTokenPort {
         /*
         회원가입 했을 때, 주어지는 FCM 토큰이 있고 이것이 담겨있다고 가정
          */
-        if (!hasKey(payload.email())) {
+        if (!adapter.hasKey(payload.email())) {
             log.warn("["+payload.email()+"] 에 해당하는 FCM 토큰이 없습니다.");
             return;
         }
 
-        String token = getToken(payload.email());
+        String token = adapter.getToken(payload.email());
 
         Message message = Message.builder()
                 .putData("title", payload.title())
@@ -54,17 +54,5 @@ public class NotificationService implements NotificationUseCase, FCMTokenPort {
                 log.error("알림 전달 실패: ", e);
             }
         }, Executors.newSingleThreadExecutor());
-    }
-
-    @Override
-    public String getToken(String email) {
-
-        return adapter.getToken(email);
-    }
-
-    @Override
-    public boolean hasKey(String email) {
-
-        return adapter.hasKey(email);
     }
 }
