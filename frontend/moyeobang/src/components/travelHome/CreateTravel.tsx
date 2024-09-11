@@ -7,6 +7,7 @@ import LocationInput from '../common/Inputs/LocationInput';
 import QuizInput from '../common/Inputs/QuizInput';
 import AuthVerification from './AuthVerification';
 import Btn from '../common/btn/Btn';
+import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 
 interface CreateTravelProps {
   onClose: () => void; // 모달을 닫는 함수
@@ -75,6 +76,13 @@ const btnContainerStyle = css`
   margin-right: 10px;
 `;
 
+const photoStyle = css`
+  font-family: 'regular';
+  align-self: flex-start; /* 사진 글씨를 왼쪽으로 정렬 */
+  margin-left: 15px;
+  margin-top: 10px;
+`;
+
 function CreateTravel({onClose}: CreateTravelProps) {
   const [step, setStep] = useState<number>(1);
 
@@ -121,6 +129,11 @@ function CreateTravel({onClose}: CreateTravelProps) {
                   placeholder="김훈민의 별명은?"
                 />
                 <QuizInput label="A" placeholder="김훈남민" />
+              </div>
+
+              <div css={photoStyle}>
+                <span>사진</span>
+                <img src={addTravelPhoto} width={24} height={24} />
               </div>
             </div>
 
