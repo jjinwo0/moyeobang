@@ -57,22 +57,25 @@ const messageStyle = css`
     z-index: 0;
   }
 `;
+const totalAmount: TotalAmount = 1000;
+const travelName: TravelName = '아기돼지오형제';
+const budget: number = 100000;
 
 const CalculatePopup = () => {
-  const [showModal, setShowModal] = useState('publicDeposit');
+  const [showModal, setShowModal] = useState('calculateBtn');
   return (
     <>
       <div css={messageStyle}>
-        {showModal === 'calculateBtn' && <CalculateBtn />}
+        {showModal === 'calculateBtn' && <CalculateBtn setShowModal={setShowModal} />}
         {showModal === 'publicDeposit' && (
           <PublicDeposit
-            accumulatedMoney={50000}
-            tripName="아기 돼지 오형제"
-            budget="200000"
+            totalAmount={totalAmount}
+            travelName={travelName}
+            budget={budget}
           ></PublicDeposit>
         )}
         {showModal === 'personalDeposit' && (
-          <PersonalDeposit tripName="아기 돼지 오형제"></PersonalDeposit>
+          <PersonalDeposit travelName={travelName}></PersonalDeposit>
         )}
       </div>
     </>

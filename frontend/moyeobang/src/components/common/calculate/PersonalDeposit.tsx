@@ -4,11 +4,6 @@ import Btn from '../btn/Btn';
 import {bluefont, colors} from '@/styles/colors';
 import {css} from '@emotion/react';
 
-// 특정 받아오는 요소들, 여행 관련된 정보들
-interface PersonalDepositProps {
-  tripName: string; // 여행 이름은 문자열
-}
-
 const basicLayout = css`
   display: flex;
   gap: 10px;
@@ -28,7 +23,7 @@ const moneyInputStyle = css`
   font-family: 'medium';
   font-size: 20px;
   color: ${colors.gray};
-  max-width: 50%;
+  max-width: 120px;
 
   &:focus {
     outline: none;
@@ -43,24 +38,46 @@ const proposal = css`
   width: 100%;
 `;
 
-const PublicDeposit: React.FC<PersonalDepositProps> = ({tripName}) => {
-  const [value, setValue] = useState<number>(0);
+const PersonalDeposit: React.FC<{travelName: TravelName}> = ({travelName}) => {
+  const [value, setValue] = useState<number | string>(0);
+  const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
+  const handleFocus = () => {
+    if (!focused) {
+      setValue(''); // 처음 클릭 시 입력 필드의 값을 비움
+      setFocused(true); // 입력 필드가 클릭되었음을 표시
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value); // 사용자가 입력한 값을 업데이트
+  };
+
+  const handleOnclick = () => {
+    // api로 개인 입금 시키기
+    setValue(0);
+  };
 
   return (
     <div css={basicLayout}>
-      <div>{tripName}을 위해</div>
+      <div>{travelName} 을/를 위해</div>
       <div css={proposal}>
         <input
           css={moneyInputStyle}
           type="text"
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={handleChange}
+          onFocus={handleFocus}
         />
         <div>원 입금해방</div>
       </div>
-      <Btn buttonStyle={{style: 'blue', size: 'thinBig'}}>개인 입금 하기</Btn>
+      <Btn
+        buttonStyle={{style: 'blue', size: 'thinBig'}}
+        onClick={handleOnclick}
+      >
+        개인 입금 하기
+      </Btn>
     </div>
   );
 };
 
-export default PublicDeposit;
+export default PersonalDeposit;

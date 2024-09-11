@@ -4,21 +4,39 @@ import React from 'react';
 import {colors} from '@/styles/colors';
 import Btn from '../btn/Btn';
 
-const CalculateBtn = ()=>{
-    const btnLayout = css`
+const btnLayout = css`
   display: flex;
   gap: 40px;
 `;
-    return (
-        <div css={btnLayout}>
-          <Btn buttonStyle={{style: 'greenBlue', size: 'middleSquare'}}>
-            공금 요청해방
-          </Btn>
-          <Btn buttonStyle={{style: 'blue', size: 'middleSquare'}}>
-            개인 입금해방
-          </Btn>
-        </div>
-    )
+
+interface CalculateBtnProps {
+  setShowModal: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default CalculateBtn
+const CalculateBtn: React.FC<CalculateBtnProps> = ({ setShowModal }) => {
+  const handlePublicDeposit = () => {
+    setShowModal('publicDeposit');
+  };
+
+  const handlePersonalDeposit = () => {
+    setShowModal('personalDeposit');
+  };
+  return (
+    <div css={btnLayout}>
+      <Btn
+        buttonStyle={{style: 'greenBlue', size: 'middleSquare'}}
+        onClick={handlePublicDeposit}
+      >
+        공금 요청해방
+      </Btn>
+      <Btn
+        buttonStyle={{style: 'blue', size: 'middleSquare'}}
+        onClick={handlePersonalDeposit}
+      >
+        개인 입금해방
+      </Btn>
+    </div>
+  );
+};
+
+export default CalculateBtn;
