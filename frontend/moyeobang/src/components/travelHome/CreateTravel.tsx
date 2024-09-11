@@ -1,72 +1,129 @@
-import {useQuery} from '@tanstack/react-query';
-import axios from 'axios';
-import React, {useState} from 'react';
+import {css} from '@emotion/react';
+import React from 'react';
+import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
 
-// Define the response type for the Google API results
-interface CityResult {
-  formatted_address: string;
+import {colors} from '@/styles/colors';
+
+import LabeledInput from '../common/Inputs/LabeledInput';
+import LocationInput from '../common/Inputs/LocationInput';
+import QuizInput from '../common/Inputs/QuizInput';
+
+import Btn from '../common/btn/Btn';
+
+interface CreateTravelProps {
+  onClose: () => void; // 모달을 닫는 함수
 }
 
-// Google Places API에서 도시 정보를 가져오는 함수
-const fetchCityData = async (cityName: string): Promise<CityResult[]> => {
-  const APIKey = 'AIzaSyCrWnDsyD0g1eRejtNBG39RU0OwkZseKMY'; // Google API 키를 여기에 추가하세요
-  const response = await axios.get(
-    `https://maps.googleapis.com/maps/api/geocode/json`,
-    {
-      params: {
-        address: cityName,
-        key: APIKey,
-      },
-    }
-  );
-  return response.data.results; // 도시 정보 반환
-};
+const modalStyle = css`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+`;
 
-const CreateTravel: React.FC = () => {
-  const [cityInput, setCityInput] = useState<string>(''); // 입력값 관리
-  const [cityName, setCityName] = useState<string>(''); // 검색된 도시 이름 관리
+const contentStyle = css`
+  padding: 20px;
+  flex-grow: 1; /* 남는 공간을 차지하게 만듦 */
+  display: flex;
+  flex-direction: column;
+`;
 
-  // 도시 검색 쿼리
-  const {data, error, isLoading} = useQuery<CityResult[]>({
-    queryKey: ['cityData', cityName], // 쿼리 키
-    queryFn: () => fetchCityData(cityName), // 쿼리 함수
-    enabled: !!cityName, // cityName이 있을 때만 실행
-  });
+const titleStyle = css`
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+  font-family: 'bold';
+  font-size: 24px;
+`;
 
-  // 폼 제출 시 입력값을 설정
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (cityInput.trim()) {
-      setCityName(cityInput); // 입력된 도시로 검색 실행
-      setCityInput(''); // 입력 필드 초기화
-    }
+const titleBlue = css`
+  color: ${colors.fifth};
+`;
+
+const travelStyle = css`
+  font-family: 'regular';
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  flex-grow: 1; /* 여행 관련 입력란들이 남는 공간을 차지하고 버튼을 아래로 밀어냄 */
+`;
+
+const inputsContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* 입력란들 사이의 간격을 30px로 설정 */
+`;
+
+const quizStyle = css`
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 퀴즈 입력란들 사이의 간격을 20px로 설정 */
+  margin-top: 10px;
+`;
+
+const btnContainerStyle = css`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto; /* 버튼을 아래로 배치 */
+  margin-bottom: 45px;
+  margin-right: 10px;
+`;
+
+function CreateTravel({onClose}: CreateTravelProps) {
+  const handleXClick = () => {
+    onClose();
   };
 
   return (
-    <div>
-      <h1>City Search</h1>
-      {/* 입력 폼 */}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={cityInput}
-          onChange={e => setCityInput(e.target.value)} // 입력값 상태 업데이트
-          placeholder="도시 이름을 입력하세요"
-        />
-        <button type="submit">검색</button>
-      </form>
-      {/* 검색 결과 출력 */}
-      {isLoading && <div>Loading...</div>}
-      {error && <div>Error occurred!</div>}
-      {data && (
-        <ul>
-          {data.map((result: CityResult, index: number) => (
-            <li key={index}>{result.formatted_address}</li>
-          ))}
-        </ul>
-      )}
+    <div css={modalStyle}>
+      <HeaderWithXButton onXClick={handleXClick} />
+      <div css={contentStyle}>
+        <div css={titleStyle}>
+          <span>여행</span>
+          <span css={titleBlue}>만들어방</span>
+        </div>
+
+        <div css={travelStyle}>
+          {/* 여기에 여행 이름, 기간, 장소 입력란을 묶어서 간격을 늘림 */}
+          <div css={inputsContainerStyle}>
+            <LabeledInput
+              label="여행이름"
+              placeholder="여행 이름을 입력하세요"
+            />
+            <LabeledInput
+              label="여행기간"
+              placeholder="여행 기간을 선택하세요"
+            />
+            <LocationInput
+              label="여행장소"
+              placeholder="여행 장소를 검색하세요"
+            />
+          </div>
+          {/* 퀴즈 입력란은 다른 입력란들과 간격이 유지되도록 분리 */}
+          <div css={quizStyle}>
+            <QuizInput
+              title="초대퀴즈"
+              label="Q"
+              placeholder="김훈민의 별명은?"
+            />
+            <QuizInput label="A" placeholder="김훈남민" />
+          </div>
+        </div>
+
+        <div css={btnContainerStyle}>
+          <Btn buttonStyle={{style: 'blue', size: 'small'}}>다음</Btn>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 export default CreateTravel;
