@@ -16,6 +16,7 @@ type StartDate = string;
 type EndDate = string;
 type QuizQuestion = string;
 type QuizAnswer = string;
+
 type CurrentBalance = number;
 type TotalAmount = number;
 type TotalSpent = number;
@@ -70,6 +71,7 @@ interface TransactionRecords {
   createdAt: CreatedAt;
 }
 
+
 // 여행 목록 관련 정보
 interface Travel {
   travelId: TravelId;
@@ -95,3 +97,4 @@ interface PersonalAccountBalance {
   personalUsagePercentage: PersonalUsagePercentage;
   needsAdditionalDeposit?: NeedsAdditionalDeposit;
 }
+
