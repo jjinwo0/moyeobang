@@ -1,9 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react';
-import React from 'react';
+import React, {useState} from 'react';
 import {colors} from '@/styles/colors';
+import CalculateBtn from './CalculateBtn';
+import PublicDeposit from './PublicDeposit';
+import PersonalDeposit from './PersonalDeposit';
 
 const messageStyle = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed; /* 화면 하단에 고정 */
   box-sizing: border-box;
   background-color: white;
@@ -16,6 +22,7 @@ const messageStyle = css`
   margin-top: 6.8px;
   padding: 10px 8px;
   width: 100%;
+  max-width: 390px;
   z-index: 2000; /* Navbar 위에 나타나도록 z-index 설정 */
   text-align: center;
   bottom: 120px; /* Navbar 위에 위치하도록 조정 */
@@ -50,9 +57,29 @@ const messageStyle = css`
     z-index: 0;
   }
 `;
+const totalAmount: TotalAmount = 1000;
+const travelName: TravelName = '아기돼지오형제';
+const budget: number = 100000;
 
 const CalculatePopup = () => {
-  return <div css={messageStyle}></div>;
+  const [showModal, setShowModal] = useState('calculateBtn');
+  return (
+    <>
+      <div css={messageStyle}>
+        {showModal === 'calculateBtn' && <CalculateBtn setShowModal={setShowModal} />}
+        {showModal === 'publicDeposit' && (
+          <PublicDeposit
+            totalAmount={totalAmount}
+            travelName={travelName}
+            budget={budget}
+          ></PublicDeposit>
+        )}
+        {showModal === 'personalDeposit' && (
+          <PersonalDeposit travelName={travelName}></PersonalDeposit>
+        )}
+      </div>
+    </>
+  );
 };
 
 export default CalculatePopup;
