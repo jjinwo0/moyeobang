@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {colors} from '@/styles/colors';
 import CalculateBtn from './CalculateBtn';
 import PublicDeposit from './PublicDeposit';
+import PersonalDeposit from './PersonalDeposit';
 
 const messageStyle = css`
   display: flex;
@@ -57,20 +58,22 @@ const messageStyle = css`
   }
 `;
 
-
 const CalculatePopup = () => {
-  const [showModal, setShowModal] = useState('publicDeposit')
+  const [showModal, setShowModal] = useState('publicDeposit');
   return (
     <>
       <div css={messageStyle}>
-        {showModal==='calculateBtn'&&<CalculateBtn />}
-        {showModal==='publicDeposit'&&
+        {showModal === 'calculateBtn' && <CalculateBtn />}
+        {showModal === 'publicDeposit' && (
           <PublicDeposit
             accumulatedMoney={50000}
             tripName="아기 돼지 오형제"
             budget="200000"
           ></PublicDeposit>
-        }
+        )}
+        {showModal === 'personalDeposit' && (
+          <PersonalDeposit tripName="아기 돼지 오형제"></PersonalDeposit>
+        )}
       </div>
     </>
   );

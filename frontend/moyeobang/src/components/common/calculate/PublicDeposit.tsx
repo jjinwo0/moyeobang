@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, {useState} from 'react';
 import Btn from '../btn/Btn';
 import {bluefont, colors} from '@/styles/colors';
 import {css} from '@emotion/react';
@@ -8,7 +8,7 @@ import {css} from '@emotion/react';
 interface PublicDepositProps {
   accumulatedMoney: number; // 숫자로 된 금액
   tripName: string; // 여행 이름은 문자열
-  budget: string; // 예산도 문자열로 받는다고 가정 (사용자가 입력할 값이므로)
+  budget: number; //
 }
 
 const basicLayout = css`
@@ -39,6 +39,10 @@ const moneyInputStyle = css`
   font-size: 20px;
   color: ${colors.gray};
   max-width: 50%;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const proposal = css`
@@ -47,13 +51,14 @@ const proposal = css`
   align-items: center;
   gap: 5px;
   width: 100%;
-`
+`;
 
-const PublicDeposit: React.FC<PublicDepositProps> = ({
+const PersonalDeposit: React.FC<PublicDepositProps> = ({
   accumulatedMoney,
   tripName,
   budget,
 }) => {
+  const [value, setValue] = useState<number>(budget);
   return (
     <div css={basicLayout}>
       <div css={accumulatedMoneyLayout}>
@@ -62,12 +67,17 @@ const PublicDeposit: React.FC<PublicDepositProps> = ({
       </div>
       <div>{tripName}을 위해</div>
       <div css={proposal}>
-        <input css={moneyInputStyle} type="text" value={budget} />원
-        <div>공금을 요청해방</div>
+        <input
+          css={moneyInputStyle}
+          type="text"
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+        <div>원 공금을 요청해방</div>
       </div>
       <Btn buttonStyle={{style: 'blue', size: 'thinBig'}}>공금 입금 요청</Btn>
     </div>
   );
 };
 
-export default PublicDeposit;
+export default PersonalDeposit;
