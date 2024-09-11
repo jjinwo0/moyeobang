@@ -48,6 +48,8 @@ public class MemberJpaEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String FCMToken;
+
     @Builder
     public MemberJpaEntity(String email,
                            String username,
@@ -58,7 +60,8 @@ public class MemberJpaEntity extends BaseEntity {
                            String memberAccountId,
                            Gender gender,
                            LoginType memberType,
-                           Role role) {
+                           Role role,
+                           String FCMToken) {
         this.email = email;
         this.username = username;
         this.birth = birth;
@@ -69,6 +72,7 @@ public class MemberJpaEntity extends BaseEntity {
         this.gender = gender;
         this.memberType = memberType;
         this.role = role;
+        this.FCMToken = FCMToken;
     }
 }
 
