@@ -18,15 +18,17 @@
     "@tanstack/react-query-devtools": "^5.55.0",
     "@tanstack/react-router": "^1.56.1",
     "@vitejs/plugin-react": "^4.3.1",
+    "qrcode.react": "^4.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-qr-code": "^2.0.15",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.12.0",
+    "@emotion/eslint-plugin": "^11.12.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@emotion/eslint-plugin": "^11.12.0",
     "@eslint/js": "^9.10.0",
     "@tanstack/eslint-plugin-query": "^5.53.0",
     "@tanstack/router-devtools": "^1.56.3",

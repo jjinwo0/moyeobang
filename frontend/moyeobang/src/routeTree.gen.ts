@@ -13,98 +13,195 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as GroupAccountImport } from './routes/groupAccount'
-import { Route as AboutImport } from './routes/About'
+import { Route as LayoutImport } from './routes/_layout'
+import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
+import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
+import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
+import { Route as LayoutProtectedLayoutGroupAccountIndexImport } from './routes/_layout/_protected/_layout/groupAccount/index'
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute('/')()
+const LayoutProtectedLayoutHomeIndexLazyImport = createFileRoute(
+  '/_layout/_protected/_layout/_Home/',
+)()
 
 // Create/Update Routes
 
-const GroupAccountRoute = GroupAccountImport.update({
-  path: '/groupAccount',
+const LayoutRoute = LayoutImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AboutRoute = AboutImport.update({
-  path: '/About',
-  getParentRoute: () => rootRoute,
+const LayoutProtectedRoute = LayoutProtectedImport.update({
+  id: '/_protected',
+  getParentRoute: () => LayoutRoute,
 } as any)
 
-const IndexLazyRoute = IndexLazyImport.update({
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+const LayoutEntranceIndexRoute = LayoutEntranceIndexImport.update({
+  path: '/entrance/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutProtectedLayoutRoute = LayoutProtectedLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => LayoutProtectedRoute,
+} as any)
+
+const LayoutProtectedLayoutHomeIndexLazyRoute =
+  LayoutProtectedLayoutHomeIndexLazyImport.update({
+    path: '/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_layout/_protected/_layout/_Home/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const LayoutProtectedLayoutGroupAccountIndexRoute =
+  LayoutProtectedLayoutGroupAccountIndexImport.update({
+    path: '/groupAccount/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/About': {
-      id: '/About'
-      path: '/About'
-      fullPath: '/About'
-      preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
+    '/_layout/_protected': {
+      id: '/_layout/_protected'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutProtectedImport
+      parentRoute: typeof LayoutImport
     }
-    '/groupAccount': {
-      id: '/groupAccount'
+    '/_layout/_protected/_layout': {
+      id: '/_layout/_protected/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutProtectedLayoutImport
+      parentRoute: typeof LayoutProtectedImport
+    }
+    '/_layout/entrance/': {
+      id: '/_layout/entrance/'
+      path: '/entrance'
+      fullPath: '/entrance'
+      preLoaderRoute: typeof LayoutEntranceIndexImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/_protected/_layout/groupAccount/': {
+      id: '/_layout/_protected/_layout/groupAccount/'
       path: '/groupAccount'
       fullPath: '/groupAccount'
-      preLoaderRoute: typeof GroupAccountImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutProtectedLayoutGroupAccountIndexImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
+    '/_layout/_protected/_layout/_Home/': {
+      id: '/_layout/_protected/_layout/_Home/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutProtectedLayoutHomeIndexLazyImport
+      parentRoute: typeof LayoutProtectedLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface LayoutProtectedLayoutRouteChildren {
+  LayoutProtectedLayoutGroupAccountIndexRoute: typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  LayoutProtectedLayoutHomeIndexLazyRoute: typeof LayoutProtectedLayoutHomeIndexLazyRoute
+}
+
+const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
+  LayoutProtectedLayoutGroupAccountIndexRoute:
+    LayoutProtectedLayoutGroupAccountIndexRoute,
+  LayoutProtectedLayoutHomeIndexLazyRoute:
+    LayoutProtectedLayoutHomeIndexLazyRoute,
+}
+
+const LayoutProtectedLayoutRouteWithChildren =
+  LayoutProtectedLayoutRoute._addFileChildren(
+    LayoutProtectedLayoutRouteChildren,
+  )
+
+interface LayoutProtectedRouteChildren {
+  LayoutProtectedLayoutRoute: typeof LayoutProtectedLayoutRouteWithChildren
+}
+
+const LayoutProtectedRouteChildren: LayoutProtectedRouteChildren = {
+  LayoutProtectedLayoutRoute: LayoutProtectedLayoutRouteWithChildren,
+}
+
+const LayoutProtectedRouteWithChildren = LayoutProtectedRoute._addFileChildren(
+  LayoutProtectedRouteChildren,
+)
+
+interface LayoutRouteChildren {
+  LayoutProtectedRoute: typeof LayoutProtectedRouteWithChildren
+  LayoutEntranceIndexRoute: typeof LayoutEntranceIndexRoute
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutProtectedRoute: LayoutProtectedRouteWithChildren,
+  LayoutEntranceIndexRoute: LayoutEntranceIndexRoute,
+}
+
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '/About': typeof AboutRoute
-  '/groupAccount': typeof GroupAccountRoute
+  '': typeof LayoutProtectedLayoutRouteWithChildren
+  '/entrance': typeof LayoutEntranceIndexRoute
+  '/groupAccount': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '/About': typeof AboutRoute
-  '/groupAccount': typeof GroupAccountRoute
+  '': typeof LayoutProtectedRouteWithChildren
+  '/entrance': typeof LayoutEntranceIndexRoute
+  '/groupAccount': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
-  '/About': typeof AboutRoute
-  '/groupAccount': typeof GroupAccountRoute
+  '/_layout': typeof LayoutRouteWithChildren
+  '/_layout/_protected': typeof LayoutProtectedRouteWithChildren
+  '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
+  '/_layout/entrance/': typeof LayoutEntranceIndexRoute
+  '/_layout/_protected/_layout/groupAccount/': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/About' | '/groupAccount'
+  fullPaths: '' | '/entrance' | '/groupAccount' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/About' | '/groupAccount'
-  id: '__root__' | '/' | '/About' | '/groupAccount'
+  to: '' | '/entrance' | '/groupAccount' | '/'
+  id:
+    | '__root__'
+    | '/_layout'
+    | '/_layout/_protected'
+    | '/_layout/_protected/_layout'
+    | '/_layout/entrance/'
+    | '/_layout/_protected/_layout/groupAccount/'
+    | '/_layout/_protected/_layout/_Home/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
-  AboutRoute: typeof AboutRoute
-  GroupAccountRoute: typeof GroupAccountRoute
+  LayoutRoute: typeof LayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
-  AboutRoute: AboutRoute,
-  GroupAccountRoute: GroupAccountRoute,
+  LayoutRoute: LayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -119,19 +216,42 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/About",
-        "/groupAccount"
+        "/_layout"
       ]
     },
-    "/": {
-      "filePath": "index.lazy.tsx"
+    "/_layout": {
+      "filePath": "_layout.tsx",
+      "children": [
+        "/_layout/_protected",
+        "/_layout/entrance/"
+      ]
     },
-    "/About": {
-      "filePath": "About.tsx"
+    "/_layout/_protected": {
+      "filePath": "_layout/_protected.tsx",
+      "parent": "/_layout",
+      "children": [
+        "/_layout/_protected/_layout"
+      ]
     },
-    "/groupAccount": {
-      "filePath": "groupAccount.tsx"
+    "/_layout/_protected/_layout": {
+      "filePath": "_layout/_protected/_layout.tsx",
+      "parent": "/_layout/_protected",
+      "children": [
+        "/_layout/_protected/_layout/groupAccount/",
+        "/_layout/_protected/_layout/_Home/"
+      ]
+    },
+    "/_layout/entrance/": {
+      "filePath": "_layout/entrance/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/_protected/_layout/groupAccount/": {
+      "filePath": "_layout/_protected/_layout/groupAccount/index.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/_Home/": {
+      "filePath": "_layout/_protected/_layout/_Home/index.lazy.tsx",
+      "parent": "/_layout/_protected/_layout"
     }
   }
 }

@@ -12,7 +12,7 @@ export const headerStyle = css`
   padding: 0 10px;
   perspective: 0;
   z-index: 9999;
-  background-color: white;
+  background-color: transparent;
   box-sizing: border-box;
 `;
 
