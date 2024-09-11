@@ -15,6 +15,7 @@ const layoutStyle = css`
     height:100%;
     display:flex;
     flex-direction:column;
+    align-items: center;
     z-index: 2;
 `;
 
@@ -43,7 +44,6 @@ export default function PayModal({onXClick} : QRPayProps) {
             onLeftClick={handleLeft}
             onRightClick={handleRight}
             />
-            qrmodal
             {activeComponenet==='left' ? 
             (
                 <QrPay />
