@@ -6,6 +6,7 @@ import {colors} from '@/styles/colors';
 import bangbang from '@/assets/icons/bangBang.png';
 import sadBangbang from '@/assets/icons/sadBangbang.png';
 import TwoBtn from '@/components/common/btn/TwoBtn'; // TwoBtn 컴포넌트 임포트
+import plusButton from '@/assets/icons/plusButton.png';
 
 const data = [
   {
@@ -49,7 +50,7 @@ const descriptionStyle = css`
   margin-top: 100px;
   margin-left: 30px;
   margin-right: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 35px;
   white-space: nowrap;
 `;
 
@@ -87,14 +88,14 @@ const profileImageStyle = css`
 `;
 
 const buttonStyle = css`
-  margin-top: 10px;
+  margin-top: 45px;
 `;
 
 const noTravelStyle = css`
   display: flex;
   align-items: center; /* 세로축 정렬을 중앙으로 설정 */
   margin-top: 130px;
-  margin-left: 15px;
+  margin-left: 5px;
 `;
 
 const noTravelTextStyle = css`
@@ -107,6 +108,15 @@ const sadIconStyle = css`
   width: 40px;
   height: 40px;
   margin-left: 5px; /* 텍스트와 아이콘 사이의 간격 추가 */
+`;
+
+const plusStyle = css`
+  position: fixed; /* 또는 absolute, 부모 요소에 따라 다름 */
+  bottom: 48px; /* 하단에서 25px 위 */
+  right: 25px; /* 오른쪽에서 25px 떨어진 위치 */
+  width: 48px;
+  height: 48px;
+  z-index: 999; /* 다른 요소 위에 위치하도록 설정 */
 `;
 
 const TravelHome = () => {
@@ -193,11 +203,15 @@ const TravelHome = () => {
           ))
         ) : (
           <div css={noTravelStyle}>
-            <span css={noTravelTextStyle}>지난 여행이 없습니다</span>
+            <span css={noTravelTextStyle}>
+              {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이 없습니다
+            </span>
             <img src={sadBangbang} css={sadIconStyle} />
           </div>
         )}
       </div>
+
+      <img src={plusButton} css={plusStyle} />
     </>
   );
 };

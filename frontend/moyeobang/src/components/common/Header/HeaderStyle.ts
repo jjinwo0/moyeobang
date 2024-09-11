@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import {css} from '@emotion/react';
 
 export const headerStyle = css`
   position: fixed;
@@ -7,7 +7,7 @@ export const headerStyle = css`
   right: 0;
   display: flex;
   align-items: center;
-  max-width:390px;
+  max-width: 390px;
   height: 50px;
   padding: 0 10px;
   perspective: 0;
