@@ -23,13 +23,13 @@ export default function QrPay() {
     `;
 
     return (
-        <div>
+        <>
             <div css={qrContainerStyle}>
             <QRCode value={'333-333-333'} css={QRStyle}/>
             </div>
 
             <PayCard />
 
-        </div>
+        </>
     )
 }

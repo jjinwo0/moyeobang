@@ -22,34 +22,34 @@ interface ParticipantsInfo {
     profileImage : ProfileImage
 }
  
-// 정산 전
-interface TransactionRecords {
-    transactionId : TransactionId
-    place : Place
-    details : OrderItems[]
-    totalAmount : TotalAmount
-    participants : ParticipantsInfo[]
-    splitMethod : SplitMethod
-    settled : Settled
-    createdAt : CreatedAt
-}
+// // 정산 전
+// interface TransactionRecords {
+//     transactionId : TransactionId
+//     place : Place
+//     details : OrderItems[]
+//     totalAmount : TotalAmount
+//     participants : ParticipantsInfo[]
+//     splitMethod : SplitMethod
+//     settled : Settled
+//     createdAt : CreatedAt
+// }
 
-interface SettledItemInfo {
-    orderItemTitle : OrderItemTitle
-    orderItemAmount : OrderItemAmount
-    participants : ParticipantsInfo[]
-}
+// interface SettledItemInfo {
+//     orderItemTitle : OrderItemTitle
+//     orderItemAmount : OrderItemAmount
+//     participants : ParticipantsInfo[]
+// }
 
-type SettledItemsInfo = SettledItemInfo[]
+// type SettledItemsInfo = SettledItemInfo[]
 
-// 정산 후
-interface TransactionRecords {
-    transactionId : TransactionId
-    place : Place
-    details : OrderItems[]
-    totalAmount : TotalAmount
-    participants : SettledItemInfo[]
-    splitMethod : SplitMethod
-    settled : Settled
-    createdAt : CreatedAt
-}
+// // 정산 후
+// interface TransactionRecords {
+//     transactionId : TransactionId
+//     place : Place
+//     details : OrderItems[]
+//     totalAmount : TotalAmount
+//     participants : SettledItemInfo[]
+//     splitMethod : SplitMethod
+//     settled : Settled
+//     createdAt : CreatedAt
+// }

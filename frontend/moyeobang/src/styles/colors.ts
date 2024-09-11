@@ -12,6 +12,7 @@ export const colors = {
   customGreenBlue:'#84CFE9',
   gray : '#B9B9B9',
   strongGray : '#6F6F6F',
+  lightGray: '#EFEFEF',
   lightBlack : 'rgba(0, 0, 0, 0.7)',
   white : '#FFFFFF',
 
