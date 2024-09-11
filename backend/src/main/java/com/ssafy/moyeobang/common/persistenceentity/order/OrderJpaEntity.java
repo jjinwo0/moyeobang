@@ -29,14 +29,14 @@ public class OrderJpaEntity extends BaseEntity {
 
     private String title;
 
-    private long amount;
+    private int amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "withdraw_id")
     private WithdrawJpaEntity withdraw;
 
     @Builder
-    public OrderJpaEntity(String title, long amount, WithdrawJpaEntity withdraw) {
+    public OrderJpaEntity(String title, int amount, WithdrawJpaEntity withdraw) {
         this.title = title;
         this.amount = amount;
         this.withdraw = withdraw;
