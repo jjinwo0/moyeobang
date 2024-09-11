@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 export const colors = {
   black : '#000000',
   first : '#AFFFFF',
@@ -16,4 +17,8 @@ export const colors = {
   lightBlack : 'rgba(0, 0, 0, 0.7)',
   white : '#FFFFFF',
 
-}
+};
+
+export const bluefont = css`
+  color: ${colors.fifth};
+`;
