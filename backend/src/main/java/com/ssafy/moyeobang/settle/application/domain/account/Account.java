@@ -10,20 +10,17 @@ public class Account {
 
     private final AccountNo no;
 
-    private final Bank bank;
-
     private final AccountInfo info;
 
     public static Account of(final AccountNo no,
-                             final Bank bank,
                              final AccountInfo info) {
 
-        return new Account(no, bank, info);
+        return new Account(no, info);
     }
 
-    public record AccountNo(Long id, String uuid) {}
+    public record AccountNo(Long id, String accountNumber) {
+    }
 
-    public record Bank(String bankCode, String bankName) {}
-
-    public record AccountInfo(Long typeCode, String typeName, String name, String description, AccountType accountType) {}
+    public record AccountInfo(String accountName, String bankName) {
+    }
 }

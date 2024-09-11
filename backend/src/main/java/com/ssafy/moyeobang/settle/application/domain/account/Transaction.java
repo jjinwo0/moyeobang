@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Getter
@@ -25,5 +26,5 @@ public class Transaction {
 
     public record Info (String title, Long accountId, String accountNumber, List<Long> orderList) {}
 
-    public record Money (Integer amount, Action action) {}
+    public record Money (long amount, Action action) {}
 }

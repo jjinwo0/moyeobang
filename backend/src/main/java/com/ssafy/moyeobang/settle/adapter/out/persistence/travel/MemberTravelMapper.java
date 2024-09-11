@@ -1,6 +1,8 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.travel;
 
-import com.ssafy.moyeobang.settle.adapter.out.persistence.member.MemberEntity;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.travel.MemberTravel;
 import com.ssafy.moyeobang.settle.application.domain.travel.MemberTravel.MappingInfo;
 import org.springframework.stereotype.Component;
@@ -8,34 +10,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberTravelMapper {
 
-    MemberTravel mapToDomain(final MemberTravelEntity entity) {
+    MemberTravel mapToDomain(final MemberTravelJpaEntity memberTravelJpaEntity) {
 
         return MemberTravel.of(
-                entity.getId(),
-                entity.getBalance(),
+                memberTravelJpaEntity.getId(),
+                memberTravelJpaEntity.getBalance(),
                 new MappingInfo(
-                        entity.getMemberEntity().getId(),
-                        entity.getTravelEntity().getId()
+                        memberTravelJpaEntity.getMember().getId(),
+                        memberTravelJpaEntity.getTravel().getId()
                 )
         );
     }
 
-    MemberTravelEntity mapToEntity(final MemberTravel domain, final MemberEntity member, final TravelEntity travel) {
+    MemberTravelJpaEntity mapToEntity(final MemberTravel domain,
+                                      final MemberJpaEntity member,
+                                      final TravelJpaEntity travel) {
 
-        return MemberTravelEntity.builder()
-                .id(domain.getId())
+        return MemberTravelJpaEntity.builder()
                 .balance(domain.getBalance())
-                .memberEntity(member)
-                .travelEntity(travel)
-                .build();
-    }
-
-    MemberTravelEntity createEntity(Integer balance, MemberEntity member, TravelEntity travel) {
-
-        return MemberTravelEntity.builder()
-                .balance(balance)
-                .memberEntity(member)
-                .travelEntity(travel)
+                .member(member)
+                .travel(travel)
                 .build();
     }
 }

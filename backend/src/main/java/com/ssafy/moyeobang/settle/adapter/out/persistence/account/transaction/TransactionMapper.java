@@ -1,7 +1,9 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.account.transaction;
 
-import com.ssafy.moyeobang.settle.adapter.out.persistence.account.TravelAccountEntity;
-import com.ssafy.moyeobang.settle.adapter.out.persistence.account.order.OrderEntity;
+import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.account.Action;
 import com.ssafy.moyeobang.settle.application.domain.account.Transaction;
 import com.ssafy.moyeobang.settle.application.domain.account.Transaction.Info;
@@ -11,16 +13,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class TransactionMapper {
 
-    Transaction mapToWithdrawDomain(final WithdrawEntity withdrawEntity) {
+    Transaction mapToWithdrawDomain(final WithdrawJpaEntity withdrawEntity) {
 
         return Transaction.of(
                 withdrawEntity.getId(),
                 new Info(
                         withdrawEntity.getTitle(),
-                        withdrawEntity.getTravelAccountEntity().getId(),
+                        withdrawEntity.getTravelAccount().getId(),
                         withdrawEntity.getTargetAccountNumber(),
-                        withdrawEntity.getOrderEntities().stream()
-                                .map(OrderEntity::getId)
+                        withdrawEntity.getOrderJpaEntities().stream()
+                                .map(OrderJpaEntity::getId)
                                 .toList()
                 ),
                 new Money(
@@ -30,25 +32,24 @@ public class TransactionMapper {
         );
     }
 
-    WithdrawEntity mapToWithdrawEntity(final Transaction transaction, final TravelAccountEntity entity) {
+    WithdrawJpaEntity mapToWithdrawEntity(final Transaction transaction, final TravelAccountJpaEntity entity) {
 
-        return WithdrawEntity.builder()
-                .id(transaction.getId())
+        return WithdrawJpaEntity.builder()
                 .title(transaction.getInfo().title())
                 .targetAccountNumber(transaction.getInfo().accountNumber())
                 .amount(transaction.getMoney().amount())
-                .travelAccountEntity(entity)
+                .travelAccount(entity)
                 .build();
     }
 
-    Transaction mapToDepositDomain(final DepositEntity depositEntity) {
+    Transaction mapToDepositDomain(final DepositJpaEntity depositEntity) {
 
         return Transaction.of(
                 depositEntity.getId(),
                 new Info(
                         null,
-                        depositEntity.getTravelAccountEntity().getId(),
-                        null,
+                        depositEntity.getTravelAccount().getId(),
+                        depositEntity.getTravelAccount().getAccountNumber(),
                         null
                 ),
                 new Money(
@@ -58,12 +59,11 @@ public class TransactionMapper {
         );
     }
 
-    DepositEntity mapToDepositEntity(final Transaction transaction, final TravelAccountEntity entity) {
+    DepositJpaEntity mapToDepositEntity(final Transaction transaction, final TravelAccountJpaEntity entity) {
 
-        return DepositEntity.builder()
-                .id(transaction.getId())
+        return DepositJpaEntity.builder()
                 .amount(transaction.getMoney().amount())
-                .travelAccountEntity(entity)
+                .travelAccount(entity)
                 .build();
     }
 }

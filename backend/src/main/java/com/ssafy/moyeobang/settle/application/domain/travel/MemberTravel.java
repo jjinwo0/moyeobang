@@ -10,11 +10,11 @@ public class MemberTravel {
 
     private Long id;
 
-    private Integer balance;
+    private long balance;
 
     private MappingInfo mappingInfo;
 
-    public static MemberTravel of (Long id, Integer balance, MappingInfo mappingInfo) {
+    public static MemberTravel of (Long id, long balance, MappingInfo mappingInfo) {
 
         return new MemberTravel(id, balance, mappingInfo);
     }

@@ -1,6 +1,8 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.account.order;
 
-import com.ssafy.moyeobang.settle.adapter.out.persistence.account.transaction.WithdrawEntity;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberOrderHistoryJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.order.Order;
 import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
 import org.springframework.stereotype.Component;
@@ -8,37 +10,36 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderMapper {
 
-    Order mapToDomain(final OrderEntity orderEntity) {
+    Order mapToDomain(final OrderJpaEntity orderEntity) {
 
         return Order.of(
                 orderEntity.getId(),
                 new OrderInfo(
                         orderEntity.getTitle(),
                         orderEntity.getAmount(),
-                        orderEntity.getWithdrawEntity().getId()
+                        orderEntity.getWithdraw().getId()
                 ),
-                orderEntity.getMemberOrderHistories().stream()
-                        .map(MemberOrderHistoryEntity::getId)
+                orderEntity.getMemberOrderHistoryJpaEntities().stream()
+                        .map(MemberOrderHistoryJpaEntity::getId)
                         .toList()
         );
     }
 
-    OrderEntity mapToEntity(final Order order, final WithdrawEntity entity) {
+    OrderJpaEntity mapToEntity(final Order order, final WithdrawJpaEntity withdrawEntity) {
 
-        return OrderEntity.builder()
-                .id(order.getId())
+        return OrderJpaEntity.builder()
                 .title(order.getOrderInfo().title())
                 .amount(order.getOrderInfo().amount())
-                .withdrawEntity(entity)
+                .withdraw(withdrawEntity)
                 .build();
     }
 
-    OrderEntity createEntityByInfo(final OrderInfo orderInfo, final WithdrawEntity entity) {
+    OrderJpaEntity createEntityByInfo(final OrderInfo orderInfo, final WithdrawJpaEntity withdrawEntity) {
 
-        return OrderEntity.builder()
+        return OrderJpaEntity.builder()
                 .title(orderInfo.title())
                 .amount(orderInfo.amount())
-                .withdrawEntity(entity)
+                .withdraw(withdrawEntity)
                 .build();
     }
 }

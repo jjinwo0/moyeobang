@@ -15,9 +15,9 @@ public class Travel {
 
     private String title;
 
-    private Map<Long, Integer> memberBalanceMap;
+    private Map<Long, Long> memberBalanceMap;
 
-    public static Travel of(Long id, String title, Map<Long, Integer> memberBalance) {
+    public static Travel of(Long id, String title, Map<Long, Long> memberBalance) {
 
         return new Travel(id, title, memberBalance);
     }

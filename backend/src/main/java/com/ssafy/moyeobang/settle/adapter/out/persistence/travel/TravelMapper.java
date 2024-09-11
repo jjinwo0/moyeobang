@@ -1,20 +1,20 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.travel;
 
+import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.travel.Travel;
-import org.springframework.stereotype.Component;
-
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TravelMapper {
 
-    Travel mapToDomain(TravelEntity travelEntity) {
+    Travel mapToDomain(TravelJpaEntity travelEntity) {
 
-        Map<Long, Integer> memberBalance = travelEntity.getMemberTravelEntities().stream()
+        Map<Long, Long> memberBalance = travelEntity.getMemberTravelJpaEntities().stream()
                 .collect(
                         Collectors.toMap(
-                                t -> t.getMemberEntity().getId(),
+                                t -> t.getMember().getId(),
                                 t -> t.getBalance()
                         )
                 );
@@ -26,10 +26,9 @@ public class TravelMapper {
         );
     }
 
-    TravelEntity mapToEntity(Travel travel) {
+    TravelJpaEntity mapToEntity(Travel travel) {
 
-        return TravelEntity.builder()
-                .id(travel.getId())
+        return TravelJpaEntity.builder()
                 .title(travel.getTitle())
                 .build();
     }
