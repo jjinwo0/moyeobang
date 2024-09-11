@@ -6,7 +6,6 @@ import com.google.firebase.messaging.Message;
 import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
 import com.ssafy.moyeobang.notification.adapter.out.NotificationAdapter;
-import com.ssafy.moyeobang.notification.adapter.out.redis.FCMTokenRedisAdapter;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import com.ssafy.moyeobang.notification.application.port.out.FCMTokenPort;
 import lombok.RequiredArgsConstructor;
