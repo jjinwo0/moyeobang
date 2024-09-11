@@ -17,6 +17,7 @@ import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
+import { Route as LayoutProtectedLayoutTravelLogIndexImport } from './routes/_layout/_protected/_layout/travelLog/index'
 import { Route as LayoutProtectedLayoutGroupAccountIndexImport } from './routes/_layout/_protected/_layout/groupAccount/index'
 
 // Create Virtual Routes
@@ -56,6 +57,12 @@ const LayoutProtectedLayoutHomeIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+
+const LayoutProtectedLayoutTravelLogIndexRoute =
+  LayoutProtectedLayoutTravelLogIndexImport.update({
+    path: '/travelLog/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
 
 const LayoutProtectedLayoutGroupAccountIndexRoute =
   LayoutProtectedLayoutGroupAccountIndexImport.update({
@@ -102,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProtectedLayoutGroupAccountIndexImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
+    '/_layout/_protected/_layout/travelLog/': {
+      id: '/_layout/_protected/_layout/travelLog/'
+      path: '/travelLog'
+      fullPath: '/travelLog'
+      preLoaderRoute: typeof LayoutProtectedLayoutTravelLogIndexImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
     '/_layout/_protected/_layout/_Home/': {
       id: '/_layout/_protected/_layout/_Home/'
       path: '/'
@@ -116,12 +130,15 @@ declare module '@tanstack/react-router' {
 
 interface LayoutProtectedLayoutRouteChildren {
   LayoutProtectedLayoutGroupAccountIndexRoute: typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  LayoutProtectedLayoutTravelLogIndexRoute: typeof LayoutProtectedLayoutTravelLogIndexRoute
   LayoutProtectedLayoutHomeIndexLazyRoute: typeof LayoutProtectedLayoutHomeIndexLazyRoute
 }
 
 const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
   LayoutProtectedLayoutGroupAccountIndexRoute:
     LayoutProtectedLayoutGroupAccountIndexRoute,
+  LayoutProtectedLayoutTravelLogIndexRoute:
+    LayoutProtectedLayoutTravelLogIndexRoute,
   LayoutProtectedLayoutHomeIndexLazyRoute:
     LayoutProtectedLayoutHomeIndexLazyRoute,
 }
@@ -160,6 +177,7 @@ export interface FileRoutesByFullPath {
   '': typeof LayoutProtectedLayoutRouteWithChildren
   '/entrance': typeof LayoutEntranceIndexRoute
   '/groupAccount': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/travelLog': typeof LayoutProtectedLayoutTravelLogIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
 }
 
@@ -167,6 +185,7 @@ export interface FileRoutesByTo {
   '': typeof LayoutProtectedRouteWithChildren
   '/entrance': typeof LayoutEntranceIndexRoute
   '/groupAccount': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/travelLog': typeof LayoutProtectedLayoutTravelLogIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
 }
 
@@ -177,14 +196,15 @@ export interface FileRoutesById {
   '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
   '/_layout/_protected/_layout/groupAccount/': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/_layout/_protected/_layout/travelLog/': typeof LayoutProtectedLayoutTravelLogIndexRoute
   '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/entrance' | '/groupAccount' | '/'
+  fullPaths: '' | '/entrance' | '/groupAccount' | '/travelLog' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/entrance' | '/groupAccount' | '/'
+  to: '' | '/entrance' | '/groupAccount' | '/travelLog' | '/'
   id:
     | '__root__'
     | '/_layout'
@@ -192,6 +212,7 @@ export interface FileRouteTypes {
     | '/_layout/_protected/_layout'
     | '/_layout/entrance/'
     | '/_layout/_protected/_layout/groupAccount/'
+    | '/_layout/_protected/_layout/travelLog/'
     | '/_layout/_protected/_layout/_Home/'
   fileRoutesById: FileRoutesById
 }
@@ -238,6 +259,7 @@ export const routeTree = rootRoute
       "parent": "/_layout/_protected",
       "children": [
         "/_layout/_protected/_layout/groupAccount/",
+        "/_layout/_protected/_layout/travelLog/",
         "/_layout/_protected/_layout/_Home/"
       ]
     },
@@ -247,6 +269,10 @@ export const routeTree = rootRoute
     },
     "/_layout/_protected/_layout/groupAccount/": {
       "filePath": "_layout/_protected/_layout/groupAccount/index.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/travelLog/": {
+      "filePath": "_layout/_protected/_layout/travelLog/index.tsx",
       "parent": "/_layout/_protected/_layout"
     },
     "/_layout/_protected/_layout/_Home/": {
