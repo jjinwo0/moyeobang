@@ -81,13 +81,13 @@ class GetAccountMemberBalanceServiceTest {
         );
 
         //then
-        assertThat(accountMemberBalance1).extracting("currentBalance", "totalAmount", "totalSpent")
+        assertThat(accountMemberBalance1).extracting("personalCurrentBalance", "personalTotalAmount", "personalTotalSpent")
                 .containsExactly(40000L, 100000L, 60000L);
 
-        assertThat(accountMemberBalance2).extracting("currentBalance", "totalAmount", "totalSpent")
+        assertThat(accountMemberBalance2).extracting("personalCurrentBalance", "personalTotalAmount", "personalTotalSpent")
                 .containsExactly(40000L, 100000L, 60000L);
 
-        assertThat(accountMemberBalance3).extracting("currentBalance", "totalAmount", "totalSpent")
+        assertThat(accountMemberBalance3).extracting("personalCurrentBalance", "personalTotalAmount", "personalTotalSpent")
                 .containsExactly(80000L, 100000L, 20000L);
     }
 

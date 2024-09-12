@@ -4,7 +4,6 @@
 ==== HTTP Request
 
 include::{snippets}/get-account-balance/http-request.adoc[]
-include::{snippets}/get-account-balance/request-fields.adoc[]
 
 ==== HTTP Response
 

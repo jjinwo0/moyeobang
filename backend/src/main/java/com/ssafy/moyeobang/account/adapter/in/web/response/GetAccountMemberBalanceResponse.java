@@ -3,10 +3,10 @@ package com.ssafy.moyeobang.account.adapter.in.web.response;
 import com.ssafy.moyeobang.account.application.domain.Money;
 
 public record GetAccountMemberBalanceResponse(SimpleUserProfile simpleUserProfile,
-                                              Long currentBalance,
-                                              Long totalAmount,
-                                              Long totalSpent,
-                                              Double usagePercentage,
+                                              Long personalCurrentBalance,
+                                              Long personalTotalAmount,
+                                              Long personalTotalSpent,
+                                              Double personalUsagePercentage,
                                               Boolean needsAdditionalDeposit) {
 
     public GetAccountMemberBalanceResponse(Long memberId,
