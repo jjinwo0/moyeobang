@@ -35,7 +35,8 @@ public class NotificationService implements NotificationUseCase {
         List<Member> findMemberList = loadMemberInTravelPort
                 .findMemberIdByMemberTravelEntity(travelId);
 
-        findMemberList.stream()
+        // 알림 비동기 전달
+        findMemberList.parallelStream()
                 .forEach(member -> {
 
                     if (!tokenPort.hasKey(member.getEmail())) {
