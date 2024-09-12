@@ -1,6 +1,7 @@
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import sadBangbang from '@/assets/icons/sadBangbang.png';
+import React from 'react';
 
 const noTravelContainerStyle = css`
   display: flex;
