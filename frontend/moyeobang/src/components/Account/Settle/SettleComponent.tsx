@@ -7,28 +7,8 @@ import SettleCard from "./SettleCard";
 import { useState, useEffect } from "react";
 import refreshImage from '@/assets/icons/refresh.png';
 import { setDate } from "date-fns";
-import { css } from "@emotion/react";
-import { colors } from "@/styles/colors";
-import { layoutStyle, textLayoutStyle, balance, time, refresh, place, settleListLayoutStyle, nButtonStyle, buttonLayoutStyle } from "./settlePage";
+import { layoutStyle, textLayoutStyle, balance, time, refresh, place, allButtonStyle, allRefreshLayoutStyle, settleListLayoutStyle, nButtonStyle, buttonLayoutStyle } from "./settlePage";
 
-
-const allButtonStyle = (isAll: boolean) => css`
-    button {
-    height:100%;
-    font-family:'semibold';
-    background-color: ${ isAll ? colors.white : colors.fourth};
-    border-radius: 15px;
-    border: solid 2px ${colors.fourth};
-    color: ${ isAll ? colors.fourth : colors.white};
-
-`;
-
-const allRefreshLayoutStyle = css`
-    display: flex;
-    flex-direction:row;
-    justify-content:space-between;
-
-`;
 
 const dummyData : ParticipantsInfo[] = [
     {   
@@ -78,6 +58,7 @@ export default function SettleComponent() {
     const [ initialSettle, setInitialSettle] = useState<CustomSettle[]>([]);
     const [ remainAmount, setRemainAmount ] = useState<number>(totalAmount);
     const [ isAll, setIsAll ] = useState<boolean>(true);
+    const [ canSettle, setCanSettle ] = useState<boolean>(false);
 
     // 초기 데이터 설정
     useEffect(()=> {
@@ -92,6 +73,15 @@ export default function SettleComponent() {
         setRemainAmount(totalAmount);
     }, [])
 
+    useEffect(() => {
+        if ( remainAmount===0 ){
+            setCanSettle(true);
+        } else {
+            setCanSettle(false);
+        }
+    }, [remainAmount])
+
+    // 정산하기 버튼
     function handleSettle() {
         const info = settleData
         .filter(user => user.amount > 0) // 금액이 있는 유저
@@ -155,6 +145,7 @@ export default function SettleComponent() {
                 {...user, isDecided:true}
             )
         )
+        setCanSettle(true);
     }
 
     function toggleAll() {
@@ -209,11 +200,19 @@ export default function SettleComponent() {
                 <button onClick={handleDivide}>1/N</button>
             </div>
             <div css={buttonLayoutStyle}>
+                { canSettle ? 
             <Btn 
             buttonStyle={{ size:'big', style:'blue'}}
             onClick={handleSettle}
             >정산하기
+            </Btn> :
+            <Btn 
+            buttonStyle={{ size:'big', style:'gray'}}
+            onClick={handleSettle}
+            >정산하기
             </Btn>
+            
+            }
             </div>
         </div>
     )
