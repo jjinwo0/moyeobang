@@ -64,12 +64,12 @@ interface TravelCardProps {
   place: string[];
 }
 
-const TravelCard: React.FC<TravelCardProps> = ({
+export default function TravelCard({
   title,
   startDate,
   endDate,
   place,
-}) => {
+}: TravelCardProps) {
   return (
     <div css={cardStyle}>
       <div css={overlayStyle}>
@@ -82,6 +82,4 @@ const TravelCard: React.FC<TravelCardProps> = ({
       </div>
     </div>
   );
-};
-
-export default TravelCard;
+}

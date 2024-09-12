@@ -56,14 +56,14 @@ const nickNameTextContainer = css`
 `;
 
 const nickNameStyle = css`
-  font-family: 'bold';
-  font-size: 32px;
-  margin-bottom: 15px;
+  font-family: 'surround';
+  font-size: 34px;
+  margin-bottom: 10px;
 `;
 
 const textStyle = css`
   font-family: 'surround';
-  font-size: 32px;
+  font-size: 34px;
   display: inline-block;
 `;
 
