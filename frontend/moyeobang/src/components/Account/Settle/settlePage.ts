@@ -44,6 +44,23 @@ export const refresh = css`
     
 `;
 
+export const allButtonStyle = (isAll: boolean) => css`
+    button {
+    height:100%;
+    font-family:'semibold';
+    background-color: ${ isAll ? colors.white : colors.fourth};
+    border-radius: 15px;
+    border: solid 2px ${colors.fourth};
+    color: ${ isAll ? colors.fourth : colors.white};
+
+`;
+
+export const allRefreshLayoutStyle = css`
+    display: flex;
+    flex-direction:row;
+    justify-content:space-between;
+
+`;
 export const settleListLayoutStyle = css`
     /* margin: 10px 0; */
     width:100%;
