@@ -95,7 +95,7 @@ export default function SettleCard({
         <div css={layoutStyle}>
             <div
             css={checkStyle}
-            onClick={handleCheck}
+            onClick={ !isDecided ? handleCheck : undefined}
             >
             { isChecked ? 
             <img src={check} alt="full" /> :
@@ -112,6 +112,7 @@ export default function SettleCard({
                     value={amount}
                     onChange={handleChange}
                     disabled={!isChecked}
+                    readOnly={isDecided}
                     />
                     <span>원</span>
                 </div> 

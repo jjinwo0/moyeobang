@@ -7,8 +7,28 @@ import SettleCard from "./SettleCard";
 import { useState, useEffect } from "react";
 import refreshImage from '@/assets/icons/refresh.png';
 import { setDate } from "date-fns";
+import { css } from "@emotion/react";
+import { colors } from "@/styles/colors";
 import { layoutStyle, textLayoutStyle, balance, time, refresh, place, settleListLayoutStyle, nButtonStyle, buttonLayoutStyle } from "./settlePage";
 
+
+const allButtonStyle = (isAll: boolean) => css`
+    button {
+    height:100%;
+    font-family:'semibold';
+    background-color: ${ isAll ? colors.white : colors.fourth};
+    border-radius: 15px;
+    border: solid 2px ${colors.fourth};
+    color: ${ isAll ? colors.fourth : colors.white};
+
+`;
+
+const allRefreshLayoutStyle = css`
+    display: flex;
+    flex-direction:row;
+    justify-content:space-between;
+
+`;
 
 const dummyData : ParticipantsInfo[] = [
     {   
@@ -80,6 +100,12 @@ export default function SettleComponent() {
             memberId: user.participantsInfo.memberId,
             splitMethod: 'custom'
         }) )
+        
+        const SpendData = {
+            'title' : '장소명',
+            'info' : info,
+        }
+        console.log(SpendData)
     }
 
 
@@ -91,8 +117,14 @@ export default function SettleComponent() {
         ))
 
         const currentTotal = updateData.reduce((total, user) => total + (user.amount>0? user.amount : 0), 0); 
-        const remainingAmount = totalAmount - currentTotal
-        setRemainAmount(remainingAmount)
+        const remainAmount = totalAmount - currentTotal
+        // 남은 금액이 음수가 되버리면 지금 넣을수 있는 최대값으로 넣어주기!
+        if ( remainAmount<0 ) {
+            setRemainAmount(0);
+            updateUser.amount = updateUser.amount + remainAmount;
+        } else{
+            setRemainAmount(remainAmount)
+        }
 
         setSettleData(prevData =>
             prevData.map(user => 
@@ -119,8 +151,8 @@ export default function SettleComponent() {
         setSettleData(prevData =>
             prevData.map(user => 
                 user.isChecked && user.amount==0 ? 
-                {...user, amount: Math.ceil( remainingAmount / checkedCount )} :
-                user
+                {...user, amount: Math.ceil( remainingAmount / checkedCount), isDecided:true} :
+                {...user, isDecided:true}
             )
         )
     }
@@ -144,7 +176,8 @@ export default function SettleComponent() {
                 <div css={place}>컴포즈 커피</div>
                 <div css={balance}>총 금액 : {totalAmount} 원 / 남은 금액 : {remainAmount} 원</div>
                 <div css={time}>2024-09-12 16:20</div>
-                <div onClick = {toggleAll}>
+                <div css={allRefreshLayoutStyle}>
+                <div css={allButtonStyle(isAll)} onClick = {toggleAll}>
                     { isAll ? <button>전체 해제</button> : 
                     <button>전체 선택</button>
                 }
@@ -154,6 +187,7 @@ export default function SettleComponent() {
                 onClick={handleRefresh}
                 src={refreshImage} 
                 alt="" />
+                </div>
                 </div>
             </div>
             <div css={settleListLayoutStyle}>

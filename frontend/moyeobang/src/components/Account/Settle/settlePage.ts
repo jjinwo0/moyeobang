@@ -44,6 +44,15 @@ export const refresh = css`
     
 `;
 
+// export const allButton = css`
+
+//     button {
+//         font-family: 'semibold'
+//         background=color: ${colors.white};
+//     }
+
+// `;
+
 export const settleListLayoutStyle = css`
     /* margin: 10px 0; */
     width:100%;
