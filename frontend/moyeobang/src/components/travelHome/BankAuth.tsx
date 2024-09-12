@@ -26,9 +26,10 @@ const textStyle = css`
 
 interface BankAuthProps {
   onClose: () => void;
+  onVerify: () => void; // 인증 완료 시 호출할 콜백 함수
 }
 
-export default function BankAuth({onClose}: BankAuthProps) {
+export default function BankAuth({onClose, onVerify}: BankAuthProps) {
   const [isBankConnected, setIsBankConnected] = useState<boolean>(false); // 상태 추가
 
   const handleBankIconClick = () => {
@@ -36,18 +37,16 @@ export default function BankAuth({onClose}: BankAuthProps) {
   };
 
   return (
-    <>
-      <div css={modalStyle}>
-        <HeaderWithXButton onXClick={onClose} />
-        <div css={textStyle}>본인인증</div>
+    <div css={modalStyle}>
+      <HeaderWithXButton onXClick={onClose} />
+      <div css={textStyle}>본인인증</div>
 
-        {/* 상태에 따라 다른 컴포넌트를 렌더링 */}
-        {!isBankConnected ? (
-          <BankConnection onBankIconClick={handleBankIconClick} />
-        ) : (
-          <CertificationOne onClose={onClose} />
-        )}
-      </div>
-    </>
+      {/* 상태에 따라 다른 컴포넌트를 렌더링 */}
+      {!isBankConnected ? (
+        <BankConnection onBankIconClick={handleBankIconClick} />
+      ) : (
+        <CertificationOne onClose={onClose} onVerify={onVerify} />
+      )}
+    </div>
   );
 }

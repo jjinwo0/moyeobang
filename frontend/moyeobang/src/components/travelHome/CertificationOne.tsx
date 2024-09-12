@@ -3,22 +3,20 @@ import {css} from '@emotion/react';
 import LineInput from '../common/Inputs/LineInput';
 import Btn from '../common/btn/Btn';
 import certificationExample from '@/assets/icons/certificationExample.png';
-// import deleteCircle from '@/assets/icons/deleteCircle.png';
 
 const containerStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* 부모 요소에서 왼쪽 정렬 */
-  width: 100%; /* 부모 요소의 전체 너비 사용 */
-  padding: 5px; /* 양쪽 패딩 추가 */
+  align-items: flex-start;
+  width: 100%;
+  padding: 5px;
   margin-bottom: 30px;
 `;
 
 const descriptionStyle = css`
   font-family: 'regular';
   font-size: 18px;
-  /* margin-bottom: 50px; */
-  text-align: left; /* 텍스트가 왼쪽에 정렬되도록 설정 */
+  text-align: left;
   margin-left: 30px;
   margin-bottom: 10px;
 `;
@@ -29,10 +27,11 @@ const lineContainerStyle = css`
   flex-direction: column;
   margin-bottom: 30px;
 `;
+
 const linStyle = css`
   width: 100%;
   border: none;
-  border-bottom: 2px solid black; /* 밑줄 스타일 */
+  border-bottom: 2px solid black;
   padding: 8px 0;
   font-size: 24px;
   font-family: 'semibold';
@@ -63,12 +62,18 @@ const exampleStyle = css`
 
 interface CertificationOneProps {
   onClose: () => void;
+  onVerify: () => void; // 인증 완료 시 호출할 함수
 }
 
-export default function CertificationOne({onClose}: CertificationOneProps) {
+export default function CertificationOne({
+  onClose,
+  onVerify,
+}: CertificationOneProps) {
   const handleCertification = () => {
-    onClose();
+    onClose(); // 모달 닫기
+    onVerify(); // 부모에게 인증 완료 알리기
   };
+
   return (
     <>
       <div css={containerStyle}>
@@ -101,9 +106,6 @@ export default function CertificationOne({onClose}: CertificationOneProps) {
             인증번호 확인
           </Btn>
         </div>
-        {/* <div css={finishStyle}>
-          <Btn buttonStyle={{style: 'gray', size: 'small'}}>완료</Btn>
-        </div> */}
       </div>
     </>
   );

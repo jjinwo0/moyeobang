@@ -223,6 +223,7 @@ export default function AuthVerification() {
   ]); // 각 약관의 체크 상태
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 추가
 
   // 체크박스 클릭 시 이미지 토글
   const handleCheckToggle = (index: number) => {
@@ -244,7 +245,18 @@ export default function AuthVerification() {
 
   const handlecloseModal = () => {
     setShowModal(false);
+    setIsVerified(true);
   };
+
+  const handleCompleteClick = () => {
+    if (isVerified && isAllTermsAgreed) {
+      setShowModal(false); // 완료 버튼이 파란색일 때만 모달 닫기
+    } else {
+      alert('본인 인증 및 약관 동의를 모두 완료해야 합니다.');
+    }
+  };
+
+  const isAllTermsAgreed = termsChecked.every(checked => checked); // 모든 이용약관 동의 됐는지 확인 하기 위해 every 메서드 사용
 
   return (
     <>
@@ -252,7 +264,7 @@ export default function AuthVerification() {
         <div css={authStyle}>
           <p>본인 인증</p>
           <Btn
-            buttonStyle={{style: 'blue', size: 'big'}}
+            buttonStyle={{style: isVerified ? 'gray' : 'blue', size: 'big'}}
             onClick={handleShowModal}
           >
             본인인증 하러 가기
@@ -300,11 +312,21 @@ export default function AuthVerification() {
         </div>
 
         <div css={completeStyle}>
-          <Btn buttonStyle={{style: 'gray', size: 'small'}}>완료</Btn>
+          <Btn
+            buttonStyle={{
+              style: isVerified && isAllTermsAgreed ? 'blue' : 'gray',
+              size: 'small',
+            }}
+            onClick={handleCompleteClick} // 완료 클릭 시 처리
+          >
+            완료
+          </Btn>
         </div>
       </div>
 
-      {showModal && <BankAuth onClose={handlecloseModal} />}
+      {showModal && (
+        <BankAuth onClose={handlecloseModal} onVerify={handlecloseModal} />
+      )}
     </>
   );
 }
