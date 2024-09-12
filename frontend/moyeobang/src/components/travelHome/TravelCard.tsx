@@ -2,6 +2,8 @@ import {css} from '@emotion/react';
 import defalutSky from '@/assets/images/defaultSky.jpg';
 import React from 'react';
 import {colors} from '@/styles/colors';
+import settingIcon from '@/assets/icons/settingIcon.png';
+import {useRouter, useNavigate} from '@tanstack/react-router';
 
 const cardStyle = css`
   display: flex;
@@ -57,6 +59,17 @@ const locationStyle = css`
   font-family: 'semibold';
 `;
 
+const settingIconStyle = css`
+  position: absolute; /* 부모 요소 안에서 절대 위치 */
+  top: 16px; /* 위쪽으로 16px 간격 */
+  right: 16px; /* 오른쪽으로 16px 간격 */
+  z-index: 100;
+  img {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
 interface TravelCardProps {
   title: string;
   startDate: string;
@@ -70,16 +83,26 @@ export default function TravelCard({
   endDate,
   place,
 }: TravelCardProps) {
+  const navigate = useNavigate();
+  const goSettingPage = () => {
+    console.log('세팅페이지');
+    navigate({to: '/profile'}); // 직접 navigate 호출
+  };
   return (
-    <div css={cardStyle}>
-      <div css={overlayStyle}>
-        <h2 css={titleStyle}>{title}</h2>
-        <p css={participantsStyle}>n 명과 함께</p>
-        <p css={dateStyle}>
-          {startDate} ~ {endDate}
-        </p>
-        <p css={locationStyle}>{place.join(', ')}</p>
+    <>
+      <div css={cardStyle}>
+        <div css={overlayStyle}>
+          <h2 css={titleStyle}>{title}</h2>
+          <p css={participantsStyle}>n 명과 함께</p>
+          <p css={dateStyle}>
+            {startDate} ~ {endDate}
+          </p>
+          <p css={locationStyle}>{place.join(', ')}</p>
+        </div>
+        <div css={settingIconStyle}>
+          <img src={settingIcon} onClick={goSettingPage} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

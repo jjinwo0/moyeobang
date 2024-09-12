@@ -17,7 +17,7 @@ export const headerStyle = css`
 
 export const backButtonHeaderStyle = css`
   ${headerStyle}
-  background-color: white;
+  background-color: transparent;
   justify-content: flex-start;
 `;
 

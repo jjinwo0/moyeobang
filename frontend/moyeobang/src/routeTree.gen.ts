@@ -17,6 +17,7 @@ import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
+import { Route as LayoutProtectedLayoutProfileIndexImport } from './routes/_layout/_protected/_layout/profile/index'
 import { Route as LayoutProtectedLayoutGroupAccountIndexImport } from './routes/_layout/_protected/_layout/groupAccount/index'
 import { Route as LayoutProtectedLayoutGroupAccountReceiptIndexImport } from './routes/_layout/_protected/_layout/groupAccount/receipt/index'
 import { Route as LayoutProtectedLayoutGroupAccountDetailIndexImport } from './routes/_layout/_protected/_layout/groupAccount/detail/index'
@@ -59,6 +60,12 @@ const LayoutProtectedLayoutHomeIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+
+const LayoutProtectedLayoutProfileIndexRoute =
+  LayoutProtectedLayoutProfileIndexImport.update({
+    path: '/profile/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
 
 const LayoutProtectedLayoutGroupAccountIndexRoute =
   LayoutProtectedLayoutGroupAccountIndexImport.update({
@@ -123,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProtectedLayoutGroupAccountIndexImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
+    '/_layout/_protected/_layout/profile/': {
+      id: '/_layout/_protected/_layout/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof LayoutProtectedLayoutProfileIndexImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
     '/_layout/_protected/_layout/_Home/': {
       id: '/_layout/_protected/_layout/_Home/'
       path: '/'
@@ -158,6 +172,7 @@ declare module '@tanstack/react-router' {
 
 interface LayoutProtectedLayoutRouteChildren {
   LayoutProtectedLayoutGroupAccountIndexRoute: typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  LayoutProtectedLayoutProfileIndexRoute: typeof LayoutProtectedLayoutProfileIndexRoute
   LayoutProtectedLayoutHomeIndexLazyRoute: typeof LayoutProtectedLayoutHomeIndexLazyRoute
   LayoutProtectedLayoutGroupAccountCaculateIndexRoute: typeof LayoutProtectedLayoutGroupAccountCaculateIndexRoute
   LayoutProtectedLayoutGroupAccountDetailIndexRoute: typeof LayoutProtectedLayoutGroupAccountDetailIndexRoute
@@ -167,6 +182,8 @@ interface LayoutProtectedLayoutRouteChildren {
 const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
   LayoutProtectedLayoutGroupAccountIndexRoute:
     LayoutProtectedLayoutGroupAccountIndexRoute,
+  LayoutProtectedLayoutProfileIndexRoute:
+    LayoutProtectedLayoutProfileIndexRoute,
   LayoutProtectedLayoutHomeIndexLazyRoute:
     LayoutProtectedLayoutHomeIndexLazyRoute,
   LayoutProtectedLayoutGroupAccountCaculateIndexRoute:
@@ -211,6 +228,7 @@ export interface FileRoutesByFullPath {
   '': typeof LayoutProtectedLayoutRouteWithChildren
   '/entrance': typeof LayoutEntranceIndexRoute
   '/groupAccount': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/profile': typeof LayoutProtectedLayoutProfileIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/groupAccount/caculate': typeof LayoutProtectedLayoutGroupAccountCaculateIndexRoute
   '/groupAccount/detail': typeof LayoutProtectedLayoutGroupAccountDetailIndexRoute
@@ -221,6 +239,7 @@ export interface FileRoutesByTo {
   '': typeof LayoutProtectedRouteWithChildren
   '/entrance': typeof LayoutEntranceIndexRoute
   '/groupAccount': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/profile': typeof LayoutProtectedLayoutProfileIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/groupAccount/caculate': typeof LayoutProtectedLayoutGroupAccountCaculateIndexRoute
   '/groupAccount/detail': typeof LayoutProtectedLayoutGroupAccountDetailIndexRoute
@@ -234,6 +253,7 @@ export interface FileRoutesById {
   '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
   '/_layout/_protected/_layout/groupAccount/': typeof LayoutProtectedLayoutGroupAccountIndexRoute
+  '/_layout/_protected/_layout/profile/': typeof LayoutProtectedLayoutProfileIndexRoute
   '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/_layout/_protected/_layout/groupAccount/caculate/': typeof LayoutProtectedLayoutGroupAccountCaculateIndexRoute
   '/_layout/_protected/_layout/groupAccount/detail/': typeof LayoutProtectedLayoutGroupAccountDetailIndexRoute
@@ -246,6 +266,7 @@ export interface FileRouteTypes {
     | ''
     | '/entrance'
     | '/groupAccount'
+    | '/profile'
     | '/'
     | '/groupAccount/caculate'
     | '/groupAccount/detail'
@@ -255,6 +276,7 @@ export interface FileRouteTypes {
     | ''
     | '/entrance'
     | '/groupAccount'
+    | '/profile'
     | '/'
     | '/groupAccount/caculate'
     | '/groupAccount/detail'
@@ -266,6 +288,7 @@ export interface FileRouteTypes {
     | '/_layout/_protected/_layout'
     | '/_layout/entrance/'
     | '/_layout/_protected/_layout/groupAccount/'
+    | '/_layout/_protected/_layout/profile/'
     | '/_layout/_protected/_layout/_Home/'
     | '/_layout/_protected/_layout/groupAccount/caculate/'
     | '/_layout/_protected/_layout/groupAccount/detail/'
@@ -315,6 +338,7 @@ export const routeTree = rootRoute
       "parent": "/_layout/_protected",
       "children": [
         "/_layout/_protected/_layout/groupAccount/",
+        "/_layout/_protected/_layout/profile/",
         "/_layout/_protected/_layout/_Home/",
         "/_layout/_protected/_layout/groupAccount/caculate/",
         "/_layout/_protected/_layout/groupAccount/detail/",
@@ -327,6 +351,10 @@ export const routeTree = rootRoute
     },
     "/_layout/_protected/_layout/groupAccount/": {
       "filePath": "_layout/_protected/_layout/groupAccount/index.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/profile/": {
+      "filePath": "_layout/_protected/_layout/profile/index.tsx",
       "parent": "/_layout/_protected/_layout"
     },
     "/_layout/_protected/_layout/_Home/": {
