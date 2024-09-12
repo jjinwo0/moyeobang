@@ -4,7 +4,9 @@ import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
+import com.ssafy.moyeobang.settle.adapter.in.web.request.CustomSettleRequest;
 import com.ssafy.moyeobang.settle.adapter.in.web.request.SettleRequest;
+import com.ssafy.moyeobang.settle.application.port.in.CustomSettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleUseCase;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,22 @@ public class SettleController {
                                 item.participants()
                         ))
                 )
+        );
+    }
+
+    @PostMapping("/{transactionId}/settle/custom")
+    public ApiResult<Boolean> customSettle(@PathVariable("transactionId") Long transactionId,
+                                           @RequestBody CustomSettleRequest request) {
+
+        return success(request.customSettleInfos().stream()
+                .allMatch(info -> settleUseCase.customBalanceSettle(
+                        new CustomSettleCommand(
+                                transactionId,
+                                request.title(),
+                                info.amount(),
+                                info.memberId()
+                        )
+                ))
         );
     }
 }

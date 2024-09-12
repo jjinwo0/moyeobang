@@ -4,9 +4,12 @@ import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.settle.application.domain.order.MemberOrderHistory.MappingInfo;
 import com.ssafy.moyeobang.settle.application.domain.order.Order;
 import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
+import com.ssafy.moyeobang.settle.application.port.in.CustomSettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleUseCase;
-import com.ssafy.moyeobang.settle.application.port.out.*;
+import com.ssafy.moyeobang.settle.application.port.out.CreateMemberOrderHistoryPort;
+import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
+import com.ssafy.moyeobang.settle.application.port.out.UpdateMemberTravelPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +48,34 @@ public class SettleService implements SettleUseCase {
             updateMemberTravelPort
                     .decreaseMemberTravelAmount(command.amount(), id, order.getId());
         });
+
+        return true;
+    }
+
+    // todo: 입력 양식만 다를 뿐 사실상 boiler code
+    @Override
+    public boolean customBalanceSettle(CustomSettleCommand command) {
+
+        Order order = createOrderPort.createOrder(
+                new OrderInfo(
+                        command.title(),
+                        command.amount(),
+                        command.transactionId()
+                )
+        );
+
+        createMemberOrderHistoryPort.createMemberOrderHistory(
+                command.amount(),
+                new MappingInfo(
+                        command.memberId(),
+                        order.getId())
+        );
+
+        updateMemberTravelPort.decreaseMemberTravelAmount(
+                command.amount(),
+                command.memberId(),
+                order.getId()
+        );
 
         return true;
     }
