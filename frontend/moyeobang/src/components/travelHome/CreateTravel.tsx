@@ -9,6 +9,7 @@ import AuthVerification from './AuthVerification';
 import Btn from '../common/btn/Btn';
 import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import calendarIcon from '@/assets/icons/calendar.png';
+import useModalStore from '@/store/useModalStore';
 
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
@@ -119,6 +120,7 @@ const photoStyle = (selectedImage: string | null) => css`
 `;
 
 export default function CreateTravel({onClose}: CreateTravelProps) {
+  const {closeModal} = useModalStore();
   const [step, setStep] = useState<number>(1);
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
@@ -261,7 +263,7 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
             </div>
           </>
         ) : (
-          <AuthVerification />
+          <AuthVerification onClose={closeModal} />
         )}
       </div>
     </div>

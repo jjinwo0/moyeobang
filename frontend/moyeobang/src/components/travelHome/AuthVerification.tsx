@@ -212,7 +212,11 @@ const completeStyle = css`
   margin-right: 10px;
 `;
 
-export default function AuthVerification() {
+interface AuthVerificationProps {
+  onClose: () => void;
+}
+
+export default function AuthVerification({onClose}: AuthVerificationProps) {
   // 각 체크박스의 상태 관리
   const [allChecked, setAllChecked] = useState<boolean>(false); // 전체 동의 상태
   const [termsChecked, setTermsChecked] = useState<boolean[]>([
@@ -250,7 +254,7 @@ export default function AuthVerification() {
 
   const handleCompleteClick = () => {
     if (isVerified && isAllTermsAgreed) {
-      setShowModal(false); // 완료 버튼이 파란색일 때만 모달 닫기
+      onClose(); // 완료 버튼이 파란색일 때만 모달 닫기
     } else {
       alert('본인 인증 및 약관 동의를 모두 완료해야 합니다.');
     }

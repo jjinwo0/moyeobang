@@ -38,7 +38,33 @@ interface ParticipantsInfo {
   nickname: Nickname;
   profileImage: ProfileImage;
 }
- 
+
+// 여행 목록 관련 정보
+interface Travel {
+  travelId: TravelId;
+  travelName: TravelName;
+  startDate: StartDate;
+  endDate: EndDate;
+  travelPlaceList: TravelPlaceList;
+  quizQuestion: QuizQuestion;
+  quizAnswer: QuizAnswer;
+}
+
+// 모임 통장 공금 잔액 조회
+interface GroupAccountBalance {
+  currentBalance: CurrentBalance;
+  totalAmount: TotalAmount;
+  totalSpent: TotalSpent;
+}
+
+// 모임 통장 개인 잔액 조회
+interface PersonalAccountBalance {
+  personalCurrentBalance: PersonalCurrentBalance;
+  personalTotalAmount: PersonalTotalAmount;
+  personalUsagePercentage: PersonalUsagePercentage;
+  needsAdditionalDeposit?: NeedsAdditionalDeposit;
+}
+
 // // 정산 전
 // interface TransactionRecords {
 //     transactionId : TransactionId
