@@ -20,8 +20,7 @@ interface BtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
 
-// GeneralButton 컴포넌트
-const Btn: React.FC<BtnProps> = ({buttonStyle, children, ...props}) => {
+export default function Btn({buttonStyle, children, ...props}: BtnProps) {
   return (
     <StyledButton
       variant={buttonStyle.style}
@@ -31,6 +30,4 @@ const Btn: React.FC<BtnProps> = ({buttonStyle, children, ...props}) => {
       {children}
     </StyledButton>
   );
-};
-
-export default Btn;
+}

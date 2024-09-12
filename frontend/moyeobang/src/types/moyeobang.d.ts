@@ -1,15 +1,14 @@
+type Id = number;
 type ProfileImage = string;
 type TransactionId = number;
 type Place = string;
 type OrderItemTitle = string;
 type OrderItemAmount = number;
 type TotalAmount = number;
-type MemberId = number;
 type Nickname = string;
 type SplitMethod = string;
 type Settled = boolean; // 정산완료여부
 type CreatedAt = string;
-type TravelId = number;
 type TravelName = string;
 type TravelPlaceList = Place[];
 type StartDate = string;
@@ -28,20 +27,30 @@ type PersonalTotalSpent = number;
 type PersonalUsagePercentage = number;
 type NeedsAdditionalDeposit = boolean;
 
+type ScheduleTitle = string;
+type Location = string;
+type PredictedBudget = number;
+type Completion = string;
+type Schedules = [];
+type scheduleTitle = string;
+type Amount = number;
+type PaymentTime = string;
+type Details = string;
+
 interface OrderItems {
   orderItemTitle: OrderItemTitle;
   orderItemAmount: OrderItemAmount;
 }
 
 interface ParticipantsInfo {
-  memberId: MemberId;
+  memberId: Id;
   nickname: Nickname;
   profileImage: ProfileImage;
 }
 
 // 정산 전
 interface TransactionRecords {
-  transactionId: TransactionId;
+  transactionId: Id;
   place: Place;
   details: OrderItems[];
   totalAmount: TotalAmount;
@@ -61,7 +70,7 @@ type SettledItemsInfo = SettledItemInfo[];
 
 // 정산 후
 interface TransactionRecords {
-  transactionId: TransactionId;
+  transactionId: Id;
   place: Place;
   details: OrderItems[];
   totalAmount: TotalAmount;
@@ -71,10 +80,9 @@ interface TransactionRecords {
   createdAt: CreatedAt;
 }
 
-
 // 여행 목록 관련 정보
 interface Travel {
-  travelId: TravelId;
+  travelId: Id;
   travelName: TravelName;
   startDate: StartDate;
   endDate: EndDate;
@@ -98,3 +106,42 @@ interface PersonalAccountBalance {
   needsAdditionalDeposit?: NeedsAdditionalDeposit;
 }
 
+// 여행 일정 조회
+// schedules 상세 타입 지정
+// MatchedTransaction 지정
+interface MatchedTransaction {
+  transactionId: Id;
+  amount: number;
+  paymentTime: string;
+  details: string;
+}
+
+// 1. schedule type 지정
+interface Schedules {
+  [dayId: number]: (PlusSelfSchedule | PaidAutoSchedule)[];
+}
+
+// 1) 추가된 일정
+interface PlusSelfSchedule {
+  scheduleId: Id;
+  scheduleTitle: ScheduleTitle;
+  location: Location;
+  scheduleTitle: StarteTime;
+  predictedBudget: PredictedBudget;
+  completion: Completion;
+  matchedTransaction: MatchedTransaction | null;
+}
+
+// 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
+interface PaidAutoSchedule {
+  transactionId: Id;
+  amount: Amount;
+  paymentTime: PaymentTime;
+  details: Details;
+}
+
+// 2. 실제 여행 일정 조회 data 타입 지정
+interface TravelLog {
+  travelId: Id;
+  schedules: Schedules;
+}

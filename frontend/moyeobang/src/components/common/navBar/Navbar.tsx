@@ -5,6 +5,7 @@ import navBar from '@/assets/icons/navBar.png';
 import travelLog from '@/assets/icons/travelLog.webp';
 import wallet from '@/assets/icons/wallet.png';
 import coin from '@/assets/icons/coin.png';
+import CalculatePopup from '../calculate/CalculatePopup';
 
 const footer = css`
   position: fixed;
@@ -66,34 +67,39 @@ const cal = css`
     color: rgba(0, 0, 0, 0.6);
   }
 `;
-
-const Navbar = ({onCalClick}: {onCalClick: () => void}) => {
+// {onCalClick}: {onCalClick: () => void}
+export default function Navbar() {
   const [selectedItem, setSelectedItem] = useState<string | null>('travel');
-
+  const [showModal, setShowModal] = useState<string | boolean>(false);
+  const onCalClick = () => {
+    setShowModal(!showModal);
+  };
   return (
-    <div css={footer}>
-      <div css={cal} onClick={onCalClick}>
-        <img src={coin} width={35} height={35} />
-        <p>정산</p>
-      </div>
-      <div css={nav}>
-        <div
-          css={travel(selectedItem === 'travel')}
-          onClick={() => setSelectedItem('travel')}
-        >
-          <img src={travelLog} width={50} height={50} alt="여행 기록" />
-          <p>여행기록</p>
+    <>
+      <div css={footer}>
+        <div css={cal} onClick={onCalClick}>
+          <img src={coin} width={35} height={35} />
+          <p>정산</p>
         </div>
-        <div
-          css={account(selectedItem === 'account')}
-          onClick={() => setSelectedItem('account')}
-        >
-          <img src={wallet} width={50} height={50} />
-          <p>모임통장</p>
+        <div css={nav}>
+          <div
+            css={travel(selectedItem === 'travel')}
+            onClick={() => setSelectedItem('travel')}
+          >
+            <img src={travelLog} width={50} height={50} alt="여행 기록" />
+            <p>여행기록</p>
+          </div>
+          <div
+            css={account(selectedItem === 'account')}
+            onClick={() => setSelectedItem('account')}
+          >
+            <img src={wallet} width={50} height={50} />
+            <p>모임통장</p>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
 
-export default Navbar;
+      {showModal && <CalculatePopup></CalculatePopup>}
+    </>
+  );
+}

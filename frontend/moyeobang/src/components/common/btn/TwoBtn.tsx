@@ -44,12 +44,12 @@ interface BtnProps {
   onRightClick?: () => void; // 오른쪽 버튼 클릭 핸들러
 }
 
-const TwoBtn: React.FC<BtnProps> = ({
+export default function TwoBtn({
   leftText,
   rightText,
   onLeftClick,
   onRightClick,
-}) => {
+}: BtnProps) {
   const [activeButton, setActiveButton] = useState<'left' | 'right'>('left'); // 기본값은 'left'
   const onLeftHandler = () => {
     setActiveButton('left');
@@ -74,9 +74,7 @@ const TwoBtn: React.FC<BtnProps> = ({
       </StyledDiv>
     </ButtonContainer>
   );
-};
-
-export default TwoBtn;
+}
 
 {
   /* <TwoBtn
