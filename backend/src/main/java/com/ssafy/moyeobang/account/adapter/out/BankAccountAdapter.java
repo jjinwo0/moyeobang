@@ -4,9 +4,11 @@ import com.ssafy.moyeobang.account.adapter.out.bank.BankApiClient;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.MemberAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.order.OrderQueryRepositoryInAccount;
 import com.ssafy.moyeobang.account.application.domain.Account;
 import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
+import com.ssafy.moyeobang.account.application.domain.Settles;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.SendMoneyPort;
@@ -26,8 +28,10 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
 
     private final MemberAccountRepositoryInAccount memberAccountRepository;
     private final TravelAccountRepositoryInAccount travelAccountRepository;
+    private final OrderQueryRepositoryInAccount orderQueryRepository;
 
     private final ActivityMapper activityMapper;
+    private final SettleMapper settleMapper;
 
     @Override
     public String createAccount(String memberKey) {
@@ -43,25 +47,7 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
     }
 
     @Override
-    public Account loadMemberAccount(Long memberId) {
-        MemberAccountJpaEntity account = getMemberAccount(memberId);
-
-        Long balance = bankApiClient.getBalance(account.getAccountNumber());
-
-        ActivityWindow activityWindow = activityMapper.mapToActivityWindow(
-                bankApiClient.getTransactionHistories(account.getAccountNumber()),
-                account.getAccountNumber()
-        );
-
-        return Account.of(
-                account.getAccountNumber(),
-                Money.of(balance),
-                activityWindow
-        );
-    }
-
-    @Override
-    public Account loadTravelAccount(String accountNumber) {
+    public Account loadAccount(String accountNumber) {
         Long balance = bankApiClient.getBalance(accountNumber);
 
         ActivityWindow activityWindow = activityMapper.mapToActivityWindow(
@@ -69,10 +55,15 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
                 accountNumber
         );
 
+        Settles settles = settleMapper.mapToSettles(
+                orderQueryRepository.findBy(accountNumber)
+        );
+
         return Account.of(
                 accountNumber,
                 Money.of(balance),
-                activityWindow
+                activityWindow,
+                settles
         );
     }
 
@@ -89,11 +80,6 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
                 memberAccount.getAccountNumber(),
                 money.getAmount()
         );
-    }
-
-    private MemberAccountJpaEntity getMemberAccount(Long memberId) {
-        return memberAccountRepository.findByMemberId(memberId)
-                .orElseThrow(AccountNotFoundException::new);
     }
 
     private MemberAccountJpaEntity getMemberAccount(String accountNumber) {
