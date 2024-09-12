@@ -40,8 +40,8 @@ public class OrderJpaEntity extends BaseEntity {
     @JoinColumn(name = "withdraw_id")
     private WithdrawJpaEntity withdraw;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<MemberOrderHistoryJpaEntity> memberOrderHistories;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MemberOrderHistoryJpaEntity> memberOrderHistoryJpaEntities = new ArrayList<>();
 
     @Builder
     public OrderJpaEntity(String title, long amount, WithdrawJpaEntity withdraw) {
