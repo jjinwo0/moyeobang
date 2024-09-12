@@ -1,7 +1,6 @@
 @import './reset.css';
 @import './fonts.css';
 
-
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -17,9 +16,10 @@
   -moz-osx-font-smoothing: grayscale;
 } */
 
-html, body {
-  max-width: 390px;
+html,
+body {
   width: 100%;
+  max-width: 390px;
   height: 100vh;
   margin: 0 auto;
   font-family: 'medium';
