@@ -4,5 +4,5 @@ import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPaylo
 
 public interface NotificationUseCase {
 
-    void sendNotification(NotificationPayload payload);
+    void sendNotification(Long travelId, NotificationPayload payload);
 }

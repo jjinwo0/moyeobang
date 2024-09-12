@@ -5,41 +5,51 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
-import com.ssafy.moyeobang.notification.adapter.out.NotificationAdapter;
+import com.ssafy.moyeobang.notification.application.domain.Member;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import com.ssafy.moyeobang.notification.application.port.out.FCMTokenPort;
+import com.ssafy.moyeobang.notification.application.port.out.LoadMemberInTravelPort;
+import java.util.List;
+import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.Executors;
 
 @Slf4j
 @UseCase
 @RequiredArgsConstructor
 public class NotificationService implements NotificationUseCase {
 
-    private final NotificationAdapter adapter;
+    private final FCMTokenPort tokenPort;
+
+    private final LoadMemberInTravelPort loadMemberInTravelPort;
 
     @Override
-    public void sendNotification(NotificationPayload payload) {
+    public void sendNotification(Long travelId, NotificationPayload payload) {
 
         /*
         회원가입 했을 때, 주어지는 FCM 토큰이 있고 이것이 담겨있다고 가정
          */
-        if (!adapter.hasKey(payload.email())) {
-            log.warn("["+payload.email()+"] 에 해당하는 FCM 토큰이 없습니다.");
-            return;
-        }
+        List<Member> findMemberList = loadMemberInTravelPort
+                .findMemberIdByMemberTravelEntity(travelId);
 
-        String token = adapter.getToken(payload.email());
+        findMemberList.stream()
+                .forEach(member -> {
 
-        Message message = Message.builder()
-                .putData("title", payload.title())
-                .putData("content", payload.body())
-                .setToken(token)
-                .build();
+                    if (!tokenPort.hasKey(member.getEmail())) {
+                        log.warn("[" + member.getEmail() + "] 에 해당하는 FCM 토큰이 없습니다.");
+                        return;
+                    }
 
-        send(message);
+                    String token = tokenPort.getToken(member.getEmail());
+
+                    Message message = Message.builder()
+                            .putData("title", payload.title())
+                            .putData("content", "공금 " + payload.amount() + "원 입금을 요청했어요.")
+                            .setToken(token)
+                            .build();
+
+                    send(message);
+                });
     }
 
     private void send(Message message) {

@@ -1,16 +1,16 @@
 package com.ssafy.moyeobang.notification.adapter.out;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
-import com.ssafy.moyeobang.notification.adapter.out.persistence.MemberRepository;
+import com.ssafy.moyeobang.notification.adapter.out.persistence.MemberRepositoryInNotification;
 import com.ssafy.moyeobang.notification.application.port.out.FCMTokenPort;
 import com.ssafy.moyeobang.notification.error.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class NotificationAdapter implements FCMTokenPort {
+public class NotificationMemberAdapter implements FCMTokenPort {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryInNotification memberRepository;
 
     @Override
     public String getToken(String email) {
