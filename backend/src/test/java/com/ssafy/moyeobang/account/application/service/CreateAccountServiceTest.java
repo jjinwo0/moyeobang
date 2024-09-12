@@ -27,7 +27,14 @@ class CreateAccountServiceTest {
     void createAccount() {
         //given
         given(loadMemberPort.loadMember(any(Long.class)))
-                .willReturn(new Member("eea1652c-b5f3-4ef3-9aba-5360026f03b0"));
+                .willReturn(
+                        new Member(
+                                1L,
+                                "김두열",
+                                "https://profile-image.url",
+                                "eea1652c-b5f3-4ef3-9aba-5360026f03b0",
+                                "0016174648358792")
+                );
 
         given(createAccountPort.createAccount(any(String.class)))
                 .willReturn("0016174648358792");

@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Settle {
 
-    private final Map<Member, Money> moneys;
+    private final Map<Long, Money> moneys;
 
     public Money getAmountFor(Member member) {
-        return moneys.get(member);
+        return moneys.getOrDefault(member.getId(), Money.ZERO);
     }
 }

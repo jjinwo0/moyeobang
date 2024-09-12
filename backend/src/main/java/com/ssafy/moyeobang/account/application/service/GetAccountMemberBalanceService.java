@@ -20,7 +20,7 @@ public class GetAccountMemberBalanceService implements GetAccountMemberBalanceQu
 
     @Override
     public GetAccountMemberBalanceResponse getAccountMemberBalance(String accountNumber, Long memberId) {
-        Account account = loadAccountPort.loadTravelAccount(accountNumber);
+        Account account = loadAccountPort.loadAccount(accountNumber);
 
         Member member = loadMemberPort.loadMember(memberId);
 

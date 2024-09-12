@@ -18,8 +18,9 @@ public class Account {
 
     public static Account of(String accountNumber,
                              Money baselineBalance,
-                             ActivityWindow activityWindow) {
-        return new Account(accountNumber, baselineBalance, activityWindow, null);
+                             ActivityWindow activityWindow,
+                             Settles settles) {
+        return new Account(accountNumber, baselineBalance, activityWindow, settles);
     }
 
     public void deposit(Account sourceAccount, Money money) {

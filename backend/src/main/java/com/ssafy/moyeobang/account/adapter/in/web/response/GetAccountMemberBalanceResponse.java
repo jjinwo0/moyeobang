@@ -1,9 +1,7 @@
 package com.ssafy.moyeobang.account.adapter.in.web.response;
 
 import com.ssafy.moyeobang.account.application.domain.Money;
-import lombok.Getter;
 
-@Getter
 public record GetAccountMemberBalanceResponse(SimpleUserProfile simpleUserProfile,
                                               Long currentBalance,
                                               Long totalAmount,

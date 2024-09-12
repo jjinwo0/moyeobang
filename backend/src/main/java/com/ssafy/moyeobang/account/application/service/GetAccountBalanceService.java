@@ -17,7 +17,7 @@ public class GetAccountBalanceService implements GetAccountBalanceQuery {
 
     @Override
     public GetAccountBalanceResponse getAccountBalance(String accountNumber) {
-        Account account = loadAccountPort.loadTravelAccount(accountNumber);
+        Account account = loadAccountPort.loadAccount(accountNumber);
 
         return new GetAccountBalanceResponse(
                 account.getBalance(),

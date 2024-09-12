@@ -90,7 +90,7 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         MemberAccountJpaEntity memberAccount = createMemberAccountWithInitialDeposit50000(member);
 
         //when
-        Account account = bankAccountAdapter.loadMemberAccount(member.getId());
+        Account account = bankAccountAdapter.loadAccount(memberAccount.getAccountNumber());
 
         //then
         assertThat(account).extracting("accountNumber", "balance")
@@ -99,7 +99,7 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
 
     @DisplayName("싸피 뱅크 API를 활용하여 여행 모임 계좌 정보를 조회한다.")
     @Test
-    void loadTravelAccount() {
+    void loadAccount() {
         //given
         MemberJpaEntity member = createMember();
         memberRepository.save(member);
@@ -110,7 +110,7 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         TravelAccountJpaEntity travelAccount = createTravelAccount(member, travel);
 
         //when
-        Account account = bankAccountAdapter.loadTravelAccount(travelAccount.getAccountNumber());
+        Account account = bankAccountAdapter.loadAccount(travelAccount.getAccountNumber());
 
         //then
         assertThat(account).extracting("accountNumber", "balance")
