@@ -28,4 +28,8 @@ public class Activity {
     public boolean isWithdrawal() {
         return ownerAccountNumber.equals(sourceAccountNumber);
     }
+
+    public boolean verifyDepositBy(String sourceAccountNumber) {
+        return sourceAccountNumber.equals(this.sourceAccountNumber);
+    }
 }

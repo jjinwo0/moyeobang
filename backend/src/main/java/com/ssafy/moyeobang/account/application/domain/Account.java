@@ -14,11 +14,12 @@ public class Account {
     private final String accountNumber;
     private final Money baselineBalance;
     private final ActivityWindow activityWindow;
+    private final Settles settles;
 
     public static Account of(String accountNumber,
                              Money baselineBalance,
                              ActivityWindow activityWindow) {
-        return new Account(accountNumber, baselineBalance, activityWindow);
+        return new Account(accountNumber, baselineBalance, activityWindow, null);
     }
 
     public void deposit(Account sourceAccount, Money money) {
@@ -56,12 +57,27 @@ public class Account {
         );
     }
 
+    public Money getBalanceFor(Member member) {
+        return Money.add(
+                getDepositAmountFor(member),
+                getWithdrawAmountFor(member).negate()
+        );
+    }
+
     public Money getDepositAmount() {
         return activityWindow.getDepositBalance();
     }
 
+    public Money getDepositAmountFor(Member member) {
+        return activityWindow.getDepositBalanceFor(member.getAccountNumber());
+    }
+
     public Money getWithdrawAmount() {
         return activityWindow.getWithdrawalBalance();
+    }
+
+    public Money getWithdrawAmountFor(Member member) {
+        return settles.getAmountFor(member);
     }
 
     private boolean couldNotWithdraw(Money money) {

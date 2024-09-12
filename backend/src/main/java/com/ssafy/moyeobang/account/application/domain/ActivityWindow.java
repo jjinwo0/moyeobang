@@ -1,34 +1,25 @@
 package com.ssafy.moyeobang.account.application.domain;
 
-import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ActivityWindow {
 
     private final List<Activity> activities;
-
-    public ActivityWindow(List<Activity> activities) {
-        this.activities = activities;
-    }
-
-    public static ActivityWindow empty() {
-        return new ActivityWindow(new ArrayList<>());
-    }
 
     public void addActivity(Activity activity) {
         this.activities.add(activity);
     }
 
     public Money getNewActivityBalance() {
-        Money deposit = activities.stream()
+        Money deposit = getDepositActivities().stream()
                 .filter(Activity::isNew)
-                .filter(Activity::isDeposit)
                 .map(Activity::getMoney)
                 .reduce(Money.ZERO, Money::add);
 
-        Money withdrawal = activities.stream()
+        Money withdrawal = getWithdrawalActivities().stream()
                 .filter(Activity::isNew)
-                .filter(Activity::isWithdrawal)
                 .map(Activity::getMoney)
                 .reduce(Money.ZERO, Money::add);
 
@@ -36,16 +27,33 @@ public class ActivityWindow {
     }
 
     public Money getDepositBalance() {
-        return activities.stream()
-                .filter(Activity::isDeposit)
+        return getDepositActivities().stream()
+                .map(Activity::getMoney)
+                .reduce(Money.ZERO, Money::add);
+    }
+
+    public Money getDepositBalanceFor(String accountNumber) {
+        return getDepositActivities().stream()
+                .filter(activity -> activity.verifyDepositBy(accountNumber))
                 .map(Activity::getMoney)
                 .reduce(Money.ZERO, Money::add);
     }
 
     public Money getWithdrawalBalance() {
-        return activities.stream()
-                .filter(Activity::isWithdrawal)
+        return getWithdrawalActivities().stream()
                 .map(Activity::getMoney)
                 .reduce(Money.ZERO, Money::add);
+    }
+
+    private List<Activity> getDepositActivities() {
+        return activities.stream()
+                .filter(Activity::isDeposit)
+                .toList();
+    }
+
+    private List<Activity> getWithdrawalActivities() {
+        return activities.stream()
+                .filter(Activity::isWithdrawal)
+                .toList();
     }
 }
