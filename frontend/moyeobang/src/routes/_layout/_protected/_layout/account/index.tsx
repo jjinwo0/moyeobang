@@ -2,14 +2,14 @@ import { createFileRoute } from '@tanstack/react-router'
 import { css } from '@emotion/react'
 import { useState } from "react";
 import Navbar from "@/components/common/navBar/Navbar";
-import ProfileImage from "@/components/groupAccount/Main/ProfileImage";
-import AllImage from "@/components/groupAccount/Main/AllImage";
+import ProfileImage from "@/components/Account/Main/ProfileImage";
+import AllImage from "@/components/Account/Main/AllImage";
 import React from 'react';
-import AccountCard from '@/components/groupAccount/Main/AccountCard';
-import TransactionCard from '@/components/groupAccount/Main/Transaction/TransactionCard.tsx';
+import AccountCard from '@/components/Account/Main/AccountCard';
+import TransactionCard from '@/components/Account/Main/Transaction/TransactionCard';
 import { profileData, transactionsData } from "@/data/data";
 
-export const Route = createFileRoute('/_layout/_protected/_layout/groupAccount/')({
+export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
 })
 

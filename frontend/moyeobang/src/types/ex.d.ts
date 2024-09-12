@@ -1,3 +1,5 @@
+import { Split } from "@tanstack/react-router"
+
 type IsDeposit = boolean
 type TotalBalance = number
 
@@ -35,3 +37,9 @@ interface AfterTransactionRecords {
     totalBalance : TotalBalance
     createdAt : CreatedAt
 }
+
+// interface CustomSettle {
+//     amount : number
+//     memberId: MemberId
+//     splitMethod: SplitMethod
+// }
