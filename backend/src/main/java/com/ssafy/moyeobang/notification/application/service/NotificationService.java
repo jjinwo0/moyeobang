@@ -10,6 +10,7 @@ import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import com.ssafy.moyeobang.notification.application.port.out.FCMTokenPort;
 import com.ssafy.moyeobang.notification.application.port.out.LoadMemberInTravelPort;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ public class NotificationService implements NotificationUseCase {
     private final FCMTokenPort tokenPort;
 
     private final LoadMemberInTravelPort loadMemberInTravelPort;
+
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public void sendNotification(Long travelId, NotificationPayload payload) {
@@ -63,6 +66,6 @@ public class NotificationService implements NotificationUseCase {
             } catch (Exception e) {
                 log.error("알림 전달 실패: ", e);
             }
-        }, Executors.newSingleThreadExecutor());
+        }, executor);
     }
 }
