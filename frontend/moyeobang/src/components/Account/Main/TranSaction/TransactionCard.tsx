@@ -4,6 +4,8 @@ import {ko} from 'date-fns/locale';
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
 import SmallProfileImage from "./SmallProfileImgae";
+import { Link } from "@tanstack/react-router";
+
 import { layout, 
     upContainer, 
     textContainer, 
@@ -20,7 +22,7 @@ import { layout,
 type TransactionCardProps = TransactionRecords
 
 export default function TransactionCard({
-    // transactionId,
+    transactionId,
     place,
     // details,
     amount,
@@ -33,7 +35,9 @@ export default function TransactionCard({
     } : TransactionCardProps) {
 
     return(
-        <div css={layout}>
+        <Link 
+        to={`/account/detail/${transactionId}`}
+        css={layout}>
             <div css={upContainer}>
                 <div css={textContainer} >
                     <div css={time} >{format(createdAt, 'yyyy-MM-dd HH:mm', {locale: ko})}</div>
@@ -58,6 +62,6 @@ export default function TransactionCard({
             </div>
 
         
-        </div>
+        </Link>
     )
 }

@@ -22,3 +22,4 @@ export const colors = {
 export const bluefont = css`
   color: ${colors.fifth};
 `;
+ 
