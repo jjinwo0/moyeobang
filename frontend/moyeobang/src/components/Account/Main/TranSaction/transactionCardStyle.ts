@@ -5,10 +5,17 @@ export const layout = css`
     width:330px;
     height: 115px;
     border-top: solid 1px ${colors.lightGray};
-    padding: 10px 20px;
+    padding: 15px 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+
+    text-decoration: none; 
+    color: inherit; 
+    &:hover {
+        text-decoration: none; 
+        color: inherit; 
+    }
 `;
 
 export const upContainer = css`
@@ -45,6 +52,7 @@ export const carousel = css`
     justify-content: flex-start;
     flex-direction: row;
     gap: 5px;
+    padding: 1px 0;
 
     overflow-x: auto;
 

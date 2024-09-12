@@ -5,8 +5,8 @@ import { colors } from '@/styles/colors';
 export interface ProfileImageProps {
     memberId? : MemberId
     profileImage? : ProfileImage
-    isSelected : boolean
-    onClick : (memberId : MemberId | null) => void
+    isSelected? : boolean
+    onClick? : (memberId : MemberId | null) => void
 }
 
 export default function ProfileImage({
@@ -49,7 +49,7 @@ export default function ProfileImage({
     `; 
 
     function handleClick() {
-        if (memberId) {
+        if (onClick && memberId !== undefined) {
             onClick(memberId)
         }
 

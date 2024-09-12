@@ -11,7 +11,7 @@ export const headerStyle = css`
   height: 50px;
   padding: 0 10px;
   perspective: 0;
-  z-index: 10;
+  z-index: 2;
   box-sizing: border-box;
 `;
 
@@ -25,12 +25,12 @@ export const closeButtonHeaderStyle = css`
   ${headerStyle}
   background-color: white;
   justify-content: flex-end;
-  z-index: 10;
+  z-index: 2;
 `;
 
 export const twoIconsHeaderStyle = css`
   ${headerStyle}
   background-color: transparent;
   justify-content: flex-end;
-  z-index: 10;
+  z-index: 2;
 `;

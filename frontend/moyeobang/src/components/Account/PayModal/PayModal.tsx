@@ -49,7 +49,7 @@ export default function PayModal({onXClick} : QRPayProps) {
                 <QrPay />
             ) :
             (
-              <QRScan />  
+              <QRScan onClose={onXClick}/>  
             )
             }
         </div>
