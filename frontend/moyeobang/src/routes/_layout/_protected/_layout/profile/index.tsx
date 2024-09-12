@@ -3,6 +3,7 @@ import {css} from '@emotion/react';
 import HeaderWithBackButton from '@/components/common/Header/HeaderWithBackButton';
 import skyBackground from '@/assets/images/skyBackground.jpg';
 import {colors} from '@/styles/colors';
+import React from 'react';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/profile/')({
   component: profile,
@@ -28,6 +29,7 @@ const contentStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center; /* Center children horizontally */
+  z-index: 2;
 `;
 const profileStyle = css`
   width: 130px;
@@ -55,6 +57,16 @@ const nicknameStyle = css`
   margin-bottom: 80px;
   margin-top: 10px;
 `;
+const blurStyle = css`
+  position: absolute; /* Make sure it covers the entire background */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white */
+  backdrop-filter: blur(10px); /* Apply the blur effect */
+  z-index: 1; /* Ensure it’s above the background but below other content */
+`;
 
 export default function profile() {
   return (
@@ -68,6 +80,7 @@ export default function profile() {
           <div css={boxStyle}></div>
           <div css={boxStyle}></div>
         </div>
+        <div css={blurStyle}></div>
       </div>
     </>
   );
