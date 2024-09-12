@@ -10,6 +10,7 @@ import TwoBtn from '@/components/common/btn/TwoBtn'; // TwoBtn 컴포넌트 임�
 import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel';
 import useModalStore from '@/store/useModalStore';
+import NoTravel from '@/components/travelHome/NoTravel';
 
 const data: Travel[] = [
   {
@@ -151,6 +152,10 @@ function Index() {
     isTodayInTrip(trip.startDate, trip.endDate)
   );
 
+  //여행이 하나도 없을 때
+  const noTripsAvailable =
+    !currentTrip && upcomingTrips.length === 0 && pastTrips.length === 0;
+
   // const openModal = () => {
   //   setModalOpen(true);
   // };
@@ -172,50 +177,57 @@ function Index() {
         <img src={bangbang} css={profileImageStyle} />
       </div>
 
-      {/* 현재 진행 중인 여행이 있을 경우 표시 */}
-      {currentTrip && (
-        <div css={containerStyle}>
-          <TravelCard
-            key={currentTrip.travelId}
-            title={currentTrip.travelName}
-            startDate={currentTrip.startDate}
-            endDate={currentTrip.endDate}
-            place={currentTrip.travelPlaceList}
-          />
-        </div>
-      )}
+      {noTripsAvailable ? (
+        <NoTravel />
+      ) : (
+        <>
+          {/* 현재 진행 중인 여행이 있을 경우 표시 */}
+          {currentTrip && (
+            <div css={containerStyle}>
+              <TravelCard
+                key={currentTrip.travelId}
+                title={currentTrip.travelName}
+                startDate={currentTrip.startDate}
+                endDate={currentTrip.endDate}
+                place={currentTrip.travelPlaceList}
+              />
+            </div>
+          )}
 
-      {/* TwoBtn 컴포넌트 사용, 왼쪽엔 예정여행, 오른쪽엔 지난 여행 */}
-      <div css={buttonStyle}>
-        <TwoBtn
-          leftText="예정여행"
-          rightText="지난 여행"
-          onLeftClick={() => setActiveTab('upcoming')}
-          onRightClick={() => setActiveTab('past')}
-        />
-      </div>
-
-      {/* 여행 카드 리스트 */}
-      <div css={containerStyle}>
-        {tripsToDisplay.length > 0 ? (
-          tripsToDisplay.map(item => (
-            <TravelCard
-              key={item.travelId}
-              title={item.travelName}
-              startDate={item.startDate}
-              endDate={item.endDate}
-              place={item.travelPlaceList}
+          {/* TwoBtn 컴포넌트 사용, 왼쪽엔 예정여행, 오른쪽엔 지난 여행 */}
+          <div css={buttonStyle}>
+            <TwoBtn
+              leftText="예정여행"
+              rightText="지난 여행"
+              onLeftClick={() => setActiveTab('upcoming')}
+              onRightClick={() => setActiveTab('past')}
             />
-          ))
-        ) : (
-          <div css={noTravelStyle}>
-            <span css={noTravelTextStyle}>
-              {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이 없습니다
-            </span>
-            <img src={sadBangbang} css={sadIconStyle} />
           </div>
-        )}
-      </div>
+
+          {/* 여행 카드 리스트 */}
+          <div css={containerStyle}>
+            {tripsToDisplay.length > 0 ? (
+              tripsToDisplay.map(item => (
+                <TravelCard
+                  key={item.travelId}
+                  title={item.travelName}
+                  startDate={item.startDate}
+                  endDate={item.endDate}
+                  place={item.travelPlaceList}
+                />
+              ))
+            ) : (
+              <div css={noTravelStyle}>
+                <span css={noTravelTextStyle}>
+                  {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이
+                  없습니다
+                </span>
+                <img src={sadBangbang} css={sadIconStyle} />
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
       <img src={plusButton} css={plusStyle} onClick={openModal} />
 
