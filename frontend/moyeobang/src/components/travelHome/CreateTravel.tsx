@@ -9,6 +9,7 @@ import AuthVerification from './AuthVerification';
 import Btn from '../common/btn/Btn';
 import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import calendarIcon from '@/assets/icons/calendar.png';
+import useModalStore from '@/store/useModalStore';
 
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
@@ -97,7 +98,8 @@ const btnContainerStyle = css`
   margin-right: 10px;
 `;
 
-const photoStyle = css`
+// 사진 스타일을 동적으로 설정하는 함수로 변경
+const photoStyle = (selectedImage: string | null) => css`
   font-family: 'regular';
   align-self: flex-start; /* 사진 글씨를 왼쪽으로 정렬 */
   margin-left: 15px;
@@ -107,15 +109,18 @@ const photoStyle = css`
   align-items: center; /* 텍스트와 이미지를 수평으로 맞춤 */
 
   img {
-    width: 30px;
-    height: 30px;
+    width: ${selectedImage
+      ? '100px'
+      : '30px'}; /* 선택된 이미지가 있으면 100px로 크기 확대 */
+    height: ${selectedImage ? '100px' : '30px'};
     margin-left: 10px;
     cursor: pointer; /* 클릭 가능하게 설정 */
     object-fit: cover; /* 이미지 크기에 맞게 조정 */
   }
 `;
 
-function CreateTravel({onClose}: CreateTravelProps) {
+export default function CreateTravel({onClose}: CreateTravelProps) {
+  const {closeModal} = useModalStore();
   const [step, setStep] = useState<number>(1);
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
@@ -232,7 +237,7 @@ function CreateTravel({onClose}: CreateTravelProps) {
                 <QuizInput label="A" placeholder="김훈민" />
               </div>
 
-              <div css={photoStyle}>
+              <div css={photoStyle(selectedImage)}>
                 <span>사진</span>
                 <img
                   src={selectedImage || addTravelPhoto}
@@ -258,11 +263,9 @@ function CreateTravel({onClose}: CreateTravelProps) {
             </div>
           </>
         ) : (
-          <AuthVerification />
+          <AuthVerification onClose={closeModal} />
         )}
       </div>
     </div>
   );
 }
-
-export default CreateTravel;

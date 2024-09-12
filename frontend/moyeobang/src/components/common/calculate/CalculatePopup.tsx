@@ -61,12 +61,14 @@ const totalAmount: TotalAmount = 1000;
 const travelName: TravelName = '아기돼지오형제';
 const budget: number = 100000;
 
-const CalculatePopup = () => {
+export default function CalculatePopup() {
   const [showModal, setShowModal] = useState('calculateBtn');
   return (
     <>
       <div css={messageStyle}>
-        {showModal === 'calculateBtn' && <CalculateBtn setShowModal={setShowModal} />}
+        {showModal === 'calculateBtn' && (
+          <CalculateBtn setShowModal={setShowModal} />
+        )}
         {showModal === 'publicDeposit' && (
           <PublicDeposit
             totalAmount={totalAmount}
@@ -80,6 +82,4 @@ const CalculatePopup = () => {
       </div>
     </>
   );
-};
-
-export default CalculatePopup;
+}

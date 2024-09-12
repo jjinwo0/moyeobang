@@ -47,10 +47,10 @@ const selectedDayStyle = css`
   border-radius: 4px;
 `;
 
-const CustomCalendar: React.FC<CustomCalendarProps> = ({
+export default function CustomCalendar({
   onSelectRange,
   onClose,
-}) => {
+}: CustomCalendarProps) {
   // 현재 선택한 월을 관리하는 상태
   const [currentMonth, setCurrentMonth] = useState<Dayjs>(dayjs());
 
@@ -151,6 +151,4 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
       </div>
     </div>
   );
-};
-
-export default CustomCalendar;
+}

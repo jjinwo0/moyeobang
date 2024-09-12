@@ -46,8 +46,10 @@ const messageStyle = css`
   }
 `;
 
-const MessagePopup = ({message}: {message: string | JSX.Element}) => {
+export default function MessagePopup({
+  message,
+}: {
+  message: string | JSX.Element;
+}) {
   return <div css={messageStyle}>{message}</div>;
-};
-
-export default MessagePopup;
+}

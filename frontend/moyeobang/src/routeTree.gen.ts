@@ -18,6 +18,9 @@ import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
 import { Route as LayoutProtectedLayoutGroupAccountIndexImport } from './routes/_layout/_protected/_layout/groupAccount/index'
+import { Route as LayoutProtectedLayoutGroupAccountReceiptIndexImport } from './routes/_layout/_protected/_layout/groupAccount/receipt/index'
+import { Route as LayoutProtectedLayoutGroupAccountDetailIndexImport } from './routes/_layout/_protected/_layout/groupAccount/detail/index'
+import { Route as LayoutProtectedLayoutGroupAccountCaculateIndexImport } from './routes/_layout/_protected/_layout/groupAccount/caculate/index'
 
 // Create Virtual Routes
 
@@ -60,6 +63,24 @@ const LayoutProtectedLayoutHomeIndexLazyRoute =
 const LayoutProtectedLayoutGroupAccountIndexRoute =
   LayoutProtectedLayoutGroupAccountIndexImport.update({
     path: '/groupAccount/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
+
+const LayoutProtectedLayoutGroupAccountReceiptIndexRoute =
+  LayoutProtectedLayoutGroupAccountReceiptIndexImport.update({
+    path: '/groupAccount/receipt/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
+
+const LayoutProtectedLayoutGroupAccountDetailIndexRoute =
+  LayoutProtectedLayoutGroupAccountDetailIndexImport.update({
+    path: '/groupAccount/detail/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
+
+const LayoutProtectedLayoutGroupAccountCaculateIndexRoute =
+  LayoutProtectedLayoutGroupAccountCaculateIndexImport.update({
+    path: '/groupAccount/caculate/',
     getParentRoute: () => LayoutProtectedLayoutRoute,
   } as any)
 
@@ -109,6 +130,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProtectedLayoutHomeIndexLazyImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
+    '/_layout/_protected/_layout/groupAccount/caculate/': {
+      id: '/_layout/_protected/_layout/groupAccount/caculate/'
+      path: '/groupAccount/caculate'
+      fullPath: '/groupAccount/caculate'
+      preLoaderRoute: typeof LayoutProtectedLayoutGroupAccountCaculateIndexImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
+    '/_layout/_protected/_layout/groupAccount/detail/': {
+      id: '/_layout/_protected/_layout/groupAccount/detail/'
+      path: '/groupAccount/detail'
+      fullPath: '/groupAccount/detail'
+      preLoaderRoute: typeof LayoutProtectedLayoutGroupAccountDetailIndexImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
+    '/_layout/_protected/_layout/groupAccount/receipt/': {
+      id: '/_layout/_protected/_layout/groupAccount/receipt/'
+      path: '/groupAccount/receipt'
+      fullPath: '/groupAccount/receipt'
+      preLoaderRoute: typeof LayoutProtectedLayoutGroupAccountReceiptIndexImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
   }
 }
 
@@ -117,6 +159,9 @@ declare module '@tanstack/react-router' {
 interface LayoutProtectedLayoutRouteChildren {
   LayoutProtectedLayoutGroupAccountIndexRoute: typeof LayoutProtectedLayoutGroupAccountIndexRoute
   LayoutProtectedLayoutHomeIndexLazyRoute: typeof LayoutProtectedLayoutHomeIndexLazyRoute
+  LayoutProtectedLayoutGroupAccountCaculateIndexRoute: typeof LayoutProtectedLayoutGroupAccountCaculateIndexRoute
+  LayoutProtectedLayoutGroupAccountDetailIndexRoute: typeof LayoutProtectedLayoutGroupAccountDetailIndexRoute
+  LayoutProtectedLayoutGroupAccountReceiptIndexRoute: typeof LayoutProtectedLayoutGroupAccountReceiptIndexRoute
 }
 
 const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
@@ -124,6 +169,12 @@ const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
     LayoutProtectedLayoutGroupAccountIndexRoute,
   LayoutProtectedLayoutHomeIndexLazyRoute:
     LayoutProtectedLayoutHomeIndexLazyRoute,
+  LayoutProtectedLayoutGroupAccountCaculateIndexRoute:
+    LayoutProtectedLayoutGroupAccountCaculateIndexRoute,
+  LayoutProtectedLayoutGroupAccountDetailIndexRoute:
+    LayoutProtectedLayoutGroupAccountDetailIndexRoute,
+  LayoutProtectedLayoutGroupAccountReceiptIndexRoute:
+    LayoutProtectedLayoutGroupAccountReceiptIndexRoute,
 }
 
 const LayoutProtectedLayoutRouteWithChildren =
@@ -161,6 +212,9 @@ export interface FileRoutesByFullPath {
   '/entrance': typeof LayoutEntranceIndexRoute
   '/groupAccount': typeof LayoutProtectedLayoutGroupAccountIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
+  '/groupAccount/caculate': typeof LayoutProtectedLayoutGroupAccountCaculateIndexRoute
+  '/groupAccount/detail': typeof LayoutProtectedLayoutGroupAccountDetailIndexRoute
+  '/groupAccount/receipt': typeof LayoutProtectedLayoutGroupAccountReceiptIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -168,6 +222,9 @@ export interface FileRoutesByTo {
   '/entrance': typeof LayoutEntranceIndexRoute
   '/groupAccount': typeof LayoutProtectedLayoutGroupAccountIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
+  '/groupAccount/caculate': typeof LayoutProtectedLayoutGroupAccountCaculateIndexRoute
+  '/groupAccount/detail': typeof LayoutProtectedLayoutGroupAccountDetailIndexRoute
+  '/groupAccount/receipt': typeof LayoutProtectedLayoutGroupAccountReceiptIndexRoute
 }
 
 export interface FileRoutesById {
@@ -178,13 +235,30 @@ export interface FileRoutesById {
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
   '/_layout/_protected/_layout/groupAccount/': typeof LayoutProtectedLayoutGroupAccountIndexRoute
   '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
+  '/_layout/_protected/_layout/groupAccount/caculate/': typeof LayoutProtectedLayoutGroupAccountCaculateIndexRoute
+  '/_layout/_protected/_layout/groupAccount/detail/': typeof LayoutProtectedLayoutGroupAccountDetailIndexRoute
+  '/_layout/_protected/_layout/groupAccount/receipt/': typeof LayoutProtectedLayoutGroupAccountReceiptIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/entrance' | '/groupAccount' | '/'
+  fullPaths:
+    | ''
+    | '/entrance'
+    | '/groupAccount'
+    | '/'
+    | '/groupAccount/caculate'
+    | '/groupAccount/detail'
+    | '/groupAccount/receipt'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/entrance' | '/groupAccount' | '/'
+  to:
+    | ''
+    | '/entrance'
+    | '/groupAccount'
+    | '/'
+    | '/groupAccount/caculate'
+    | '/groupAccount/detail'
+    | '/groupAccount/receipt'
   id:
     | '__root__'
     | '/_layout'
@@ -193,6 +267,9 @@ export interface FileRouteTypes {
     | '/_layout/entrance/'
     | '/_layout/_protected/_layout/groupAccount/'
     | '/_layout/_protected/_layout/_Home/'
+    | '/_layout/_protected/_layout/groupAccount/caculate/'
+    | '/_layout/_protected/_layout/groupAccount/detail/'
+    | '/_layout/_protected/_layout/groupAccount/receipt/'
   fileRoutesById: FileRoutesById
 }
 
@@ -238,7 +315,10 @@ export const routeTree = rootRoute
       "parent": "/_layout/_protected",
       "children": [
         "/_layout/_protected/_layout/groupAccount/",
-        "/_layout/_protected/_layout/_Home/"
+        "/_layout/_protected/_layout/_Home/",
+        "/_layout/_protected/_layout/groupAccount/caculate/",
+        "/_layout/_protected/_layout/groupAccount/detail/",
+        "/_layout/_protected/_layout/groupAccount/receipt/"
       ]
     },
     "/_layout/entrance/": {
@@ -251,6 +331,18 @@ export const routeTree = rootRoute
     },
     "/_layout/_protected/_layout/_Home/": {
       "filePath": "_layout/_protected/_layout/_Home/index.lazy.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/groupAccount/caculate/": {
+      "filePath": "_layout/_protected/_layout/groupAccount/caculate/index.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/groupAccount/detail/": {
+      "filePath": "_layout/_protected/_layout/groupAccount/detail/index.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/groupAccount/receipt/": {
+      "filePath": "_layout/_protected/_layout/groupAccount/receipt/index.tsx",
       "parent": "/_layout/_protected/_layout"
     }
   }

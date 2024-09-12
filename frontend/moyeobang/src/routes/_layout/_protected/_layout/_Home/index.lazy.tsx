@@ -9,6 +9,7 @@ import sadBangbang from '@/assets/icons/sadBangbang.png';
 import TwoBtn from '@/components/common/btn/TwoBtn'; // TwoBtn 컴포넌트 임포트
 import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel';
+import useModalStore from '@/store/useModalStore';
 
 const data: Travel[] = [
   {
@@ -56,14 +57,14 @@ const nickNameTextContainer = css`
 `;
 
 const nickNameStyle = css`
-  font-family: 'bold';
-  font-size: 32px;
-  margin-bottom: 15px;
+  font-family: 'surround';
+  font-size: 34px;
+  margin-bottom: 10px;
 `;
 
 const textStyle = css`
   font-family: 'surround';
-  font-size: 32px;
+  font-size: 34px;
   display: inline-block;
 `;
 
@@ -115,8 +116,9 @@ const plusStyle = css`
   z-index: 999; /* 다른 요소 위에 위치하도록 설정 */
 `;
 function Index() {
+  const {isModalOpen, openModal, closeModal} = useModalStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  // const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   // 현재 날짜와 여행 날짜를 비교하여 예정된 여행과 지난 여행을 구분
   const formatDateString = (dateString: string) => {
@@ -149,13 +151,13 @@ function Index() {
     isTodayInTrip(trip.startDate, trip.endDate)
   );
 
-  const openModal = () => {
-    setModalOpen(true);
-  };
+  // const openModal = () => {
+  //   setModalOpen(true);
+  // };
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  // const closeModal = () => {
+  //   setModalOpen(false);
+  // };
 
   return (
     <>
