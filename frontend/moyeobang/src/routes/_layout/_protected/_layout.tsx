@@ -4,6 +4,7 @@ import React from 'react';
 import {css} from '@emotion/react';
 import {useState} from 'react';
 import PayModal from '@/components/Account/PayModal/PayModal';
+import NotificationModal from '@/components/notification/NotificationModal';
 
 export const Route = createFileRoute('/_layout/_protected/_layout')({
   component: Header,
@@ -26,7 +27,7 @@ export default function Header() {
     pathname.startsWith('/account/detail/') ||
     pathname === '/profile';
   function handleAlarmClick() {
-    setIsAlarmOpen(true);
+    setIsAlarmOpen(prev => !prev);
   }
 
   function handleQRClick() {
@@ -42,13 +43,14 @@ export default function Header() {
         />
       )}
       <div css={layoutStyle}>
-        {isQROpen ? (
-          <PayModal onXClick={handleQRClick} />
-        ) : (
-          <>
-            <Outlet />
-          </>
-        )}
+        {/* QR 모달이 열리면 PayModal만 렌더링하고 Outlet은 렌더링하지 않음 */}
+        {isQROpen && <PayModal onXClick={handleQRClick} />}
+
+        {/* Alarm 모달이 열리면 NotificationModal만 렌더링하고 Outlet은 렌더링하지 않음 */}
+        {isAlarmOpen && <NotificationModal onXClick={handleAlarmClick} />}
+
+        {/* QR 또는 Alarm 모달이 열리지 않았을 때만 Outlet 렌더링 */}
+        {!isQROpen && !isAlarmOpen && <Outlet />}
       </div>
     </>
   );
