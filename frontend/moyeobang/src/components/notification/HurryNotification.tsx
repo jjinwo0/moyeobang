@@ -1,7 +1,6 @@
 import {css} from '@emotion/react';
 import React from 'react';
 import siren from '@/assets/icons/siren.webp';
-import Btn from '../common/btn/Btn';
 
 const containerStyle = css`
   width: 100%;
@@ -28,12 +27,6 @@ const textStyle = css`
   font-family: 'regular';
   font-size: 18px;
   margin-left: 5px; /* 제목과 텍스트 사이의 간격 */
-`;
-
-const buttonContainerStyle = css`
-  display: flex; /* 버튼들을 가로로 배치 */
-  gap: 10px; /* 버튼 사이 간격 추가 */
-  margin-top: 10px; /* 텍스트와 버튼 사이 간격 추가 */
 `;
 
 const timeStyle = css`

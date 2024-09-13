@@ -43,8 +43,6 @@ const timeStyle = css`
 
 const travelName: string = '아기돼지오형제';
 
-const nickName: Nickname = '훈민';
-
 export default function PublicRequest() {
   return (
     <div css={containerStyle}>
