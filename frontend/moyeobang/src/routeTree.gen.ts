@@ -18,6 +18,7 @@ import { Route as PosIndexImport } from './routes/pos/index'
 import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
+import { Route as LayoutProtectedLayoutQuizIndexImport } from './routes/_layout/_protected/_layout/quiz/index'
 import { Route as LayoutProtectedLayoutProfileIndexImport } from './routes/_layout/_protected/_layout/profile/index'
 import { Route as LayoutProtectedLayoutAccountIndexImport } from './routes/_layout/_protected/_layout/account/index'
 import { Route as LayoutProtectedLayoutAccountSettleIndexImport } from './routes/_layout/_protected/_layout/account/settle/index'
@@ -86,6 +87,12 @@ const LayoutProtectedLayoutHomeIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+
+const LayoutProtectedLayoutQuizIndexRoute =
+  LayoutProtectedLayoutQuizIndexImport.update({
+    path: '/quiz/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
 
 const LayoutProtectedLayoutProfileIndexRoute =
   LayoutProtectedLayoutProfileIndexImport.update({
@@ -180,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof LayoutProtectedLayoutProfileIndexImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
+    '/_layout/_protected/_layout/quiz/': {
+      id: '/_layout/_protected/_layout/quiz/'
+      path: '/quiz'
+      fullPath: '/quiz'
+      preLoaderRoute: typeof LayoutProtectedLayoutQuizIndexImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
     '/_layout/_protected/_layout/_Home/': {
@@ -306,6 +320,7 @@ const LayoutProtectedLayoutAccountSettledReceiptRouteWithChildren =
 interface LayoutProtectedLayoutRouteChildren {
   LayoutProtectedLayoutAccountIndexRoute: typeof LayoutProtectedLayoutAccountIndexRoute
   LayoutProtectedLayoutProfileIndexRoute: typeof LayoutProtectedLayoutProfileIndexRoute
+  LayoutProtectedLayoutQuizIndexRoute: typeof LayoutProtectedLayoutQuizIndexRoute
   LayoutProtectedLayoutHomeIndexLazyRoute: typeof LayoutProtectedLayoutHomeIndexLazyRoute
   LayoutProtectedLayoutAccountDetailRoute: typeof LayoutProtectedLayoutAccountDetailRouteWithChildren
   LayoutProtectedLayoutAccountSettledReceiptRoute: typeof LayoutProtectedLayoutAccountSettledReceiptRouteWithChildren
@@ -317,6 +332,7 @@ const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
     LayoutProtectedLayoutAccountIndexRoute,
   LayoutProtectedLayoutProfileIndexRoute:
     LayoutProtectedLayoutProfileIndexRoute,
+  LayoutProtectedLayoutQuizIndexRoute: LayoutProtectedLayoutQuizIndexRoute,
   LayoutProtectedLayoutHomeIndexLazyRoute:
     LayoutProtectedLayoutHomeIndexLazyRoute,
   LayoutProtectedLayoutAccountDetailRoute:
@@ -363,6 +379,7 @@ export interface FileRoutesByFullPath {
   '/entrance': typeof LayoutEntranceIndexRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/profile': typeof LayoutProtectedLayoutProfileIndexRoute
+  '/quiz': typeof LayoutProtectedLayoutQuizIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/account/detail': typeof LayoutProtectedLayoutAccountDetailLayoutRouteWithChildren
   '/account/settledReceipt': typeof LayoutProtectedLayoutAccountSettledReceiptLayoutRouteWithChildren
@@ -377,6 +394,7 @@ export interface FileRoutesByTo {
   '/entrance': typeof LayoutEntranceIndexRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/profile': typeof LayoutProtectedLayoutProfileIndexRoute
+  '/quiz': typeof LayoutProtectedLayoutQuizIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/account/detail': typeof LayoutProtectedLayoutAccountDetailLayoutRouteWithChildren
   '/account/settledReceipt': typeof LayoutProtectedLayoutAccountSettledReceiptLayoutIndexRoute
@@ -393,6 +411,7 @@ export interface FileRoutesById {
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
   '/_layout/_protected/_layout/account/': typeof LayoutProtectedLayoutAccountIndexRoute
   '/_layout/_protected/_layout/profile/': typeof LayoutProtectedLayoutProfileIndexRoute
+  '/_layout/_protected/_layout/quiz/': typeof LayoutProtectedLayoutQuizIndexRoute
   '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/_layout/_protected/_layout/account/detail': typeof LayoutProtectedLayoutAccountDetailRouteWithChildren
   '/_layout/_protected/_layout/account/detail/_layout': typeof LayoutProtectedLayoutAccountDetailLayoutRouteWithChildren
@@ -411,6 +430,7 @@ export interface FileRouteTypes {
     | '/entrance'
     | '/account'
     | '/profile'
+    | '/quiz'
     | '/'
     | '/account/detail'
     | '/account/settledReceipt'
@@ -424,6 +444,7 @@ export interface FileRouteTypes {
     | '/entrance'
     | '/account'
     | '/profile'
+    | '/quiz'
     | '/'
     | '/account/detail'
     | '/account/settledReceipt'
@@ -438,6 +459,7 @@ export interface FileRouteTypes {
     | '/_layout/entrance/'
     | '/_layout/_protected/_layout/account/'
     | '/_layout/_protected/_layout/profile/'
+    | '/_layout/_protected/_layout/quiz/'
     | '/_layout/_protected/_layout/_Home/'
     | '/_layout/_protected/_layout/account/detail'
     | '/_layout/_protected/_layout/account/detail/_layout'
@@ -498,6 +520,7 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/_protected/_layout/account/",
         "/_layout/_protected/_layout/profile/",
+        "/_layout/_protected/_layout/quiz/",
         "/_layout/_protected/_layout/_Home/",
         "/_layout/_protected/_layout/account/detail",
         "/_layout/_protected/_layout/account/settledReceipt",
@@ -514,6 +537,10 @@ export const routeTree = rootRoute
     },
     "/_layout/_protected/_layout/profile/": {
       "filePath": "_layout/_protected/_layout/profile/index.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/quiz/": {
+      "filePath": "_layout/_protected/_layout/quiz/index.tsx",
       "parent": "/_layout/_protected/_layout"
     },
     "/_layout/_protected/_layout/_Home/": {
