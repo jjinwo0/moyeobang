@@ -1,9 +1,11 @@
 import {css} from '@emotion/react';
 import defalutSky from '@/assets/images/defaultSky.jpg';
-import React from 'react';
+import React, {useState} from 'react';
 import {colors} from '@/styles/colors';
 import settingIcon from '@/assets/icons/settingIcon.png';
 import {useRouter, useNavigate} from '@tanstack/react-router';
+import Btn from '../common/btn/Btn';
+import ExitTravel from './ExitTravel';
 
 const cardStyle = css`
   display: flex;
@@ -70,6 +72,18 @@ const settingIconStyle = css`
   }
 `;
 
+const settingButtonStyle = css`
+  display: flex;
+  z-index: 10;
+  flex-direction: column;
+  align-self: flex-end;
+  margin-top: 20px;
+`;
+
+const exitModalStyle = css`
+  z-index: 20;
+`;
+
 interface TravelCardProps {
   title: string;
   startDate: string;
@@ -83,7 +97,19 @@ export default function TravelCard({
   endDate,
   place,
 }: TravelCardProps) {
+  const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
+  const [exitModal, setExitModal] = useState<boolean>(false);
   const navigate = useNavigate();
+  const clickSettingButton = () => {
+    setSettingButtonClick(prev => !prev);
+  };
+  const handleExitModalOpen = () => {
+    setExitModal(true);
+  };
+
+  const closeExitModalOpen = () => {
+    setExitModal(false);
+  };
   const goSettingPage = () => {
     console.log('세팅페이지');
     navigate({to: '/profile'}); // 직접 navigate 호출
@@ -100,9 +126,31 @@ export default function TravelCard({
           <p css={locationStyle}>{place.join(', ')}</p>
         </div>
         <div css={settingIconStyle}>
-          <img src={settingIcon} onClick={goSettingPage} />
+          <img src={settingIcon} onClick={clickSettingButton} />
         </div>
+
+        {settingButtonClick && (
+          <div css={settingButtonStyle}>
+            <Btn
+              buttonStyle={{style: 'blue', size: 'small'}}
+              onClick={goSettingPage}
+            >
+              수정
+            </Btn>
+            <Btn
+              buttonStyle={{style: 'red', size: 'small'}}
+              onClick={handleExitModalOpen}
+            >
+              나가기
+            </Btn>
+          </div>
+        )}
       </div>
+      {exitModal && (
+        <div css={exitModalStyle}>
+          <ExitTravel travelTitle={title} onClose={closeExitModalOpen} />
+        </div>
+      )}
     </>
   );
 }
