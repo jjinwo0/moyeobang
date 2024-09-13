@@ -6,7 +6,7 @@ type OrderItemAmount = number;
 type TotalAmount = number;
 type MemberId = number;
 type Nickname = string;
-type SplitMethod = string;
+// type SplitMethod = string;
 type Settled = boolean; // 정산완료여부
 type CreatedAt = string;
 type TravelId = number;
@@ -33,7 +33,7 @@ interface OrderItems {
   orderItemAmount: OrderItemAmount;
 }
 
-interface ParticipantsInfo {
+interface ParticipantInfo {
   memberId: MemberId;
   nickname: Nickname;
   profileImage: ProfileImage;

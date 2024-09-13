@@ -4,7 +4,7 @@ import check from '@/assets/icons/blueCheck.png';
 import type {ChangeEvent} from 'react';
 import { useState } from "react";
 import { css } from "@emotion/react";
-import ProfileImage from "../Main/ProfileImage";
+import ProfileImage from "../ProfileImage/ProfileImage";
 import { colors } from "@/styles/colors";
 
 const layoutStyle = css`

@@ -3,7 +3,7 @@ import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
-import SmallProfileImage from "./SmallProfileImgae";
+import SmallProfileImage from "../ProfileImage/SmallProfileImage";
 import { Link } from "@tanstack/react-router";
 
 import { layout, 
