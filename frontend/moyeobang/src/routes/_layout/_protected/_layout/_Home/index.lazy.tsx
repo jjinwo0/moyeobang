@@ -1,7 +1,6 @@
 import {createLazyFileRoute} from '@tanstack/react-router';
 import React, {useState} from 'react';
 import {css} from '@emotion/react';
-// import HeaderWithAlarmAndQR from '@/components/common/Header/HeaderWithAlarmAndQR';
 import TravelCard from '@/components/travelHome/TravelCard';
 import {colors} from '@/styles/colors';
 import bangbang from '@/assets/icons/bangBang.png';
@@ -114,55 +113,53 @@ const plusStyle = css`
   right: 25px; /* 오른쪽에서 25px 떨어진 위치 */
   width: 48px;
   height: 48px;
-  z-index: 999; /* 다른 요소 위에 위치하도록 설정 */
+  z-index: 100; /* 다른 요소 위에 위치하도록 설정 */
 `;
+
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  // const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
-  // 현재 날짜와 여행 날짜를 비교하여 예정된 여행과 지난 여행을 구분
+  // 날짜에서 시간 부분을 제거하는 함수
+  const normalizeDate = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  };
+
   const formatDateString = (dateString: string) => {
     // "YYYYMMDD"를 "YYYY-MM-DD"로 변환
     return `${dateString.slice(0, 4)}-${dateString.slice(4, 6)}-${dateString.slice(6, 8)}`;
   };
 
-  const today = new Date();
+  const today = normalizeDate(new Date());
 
   // 날짜를 변환한 후 비교
   const upcomingTrips = data.filter(
-    item => new Date(formatDateString(item.startDate)) >= today
+    item => normalizeDate(new Date(formatDateString(item.startDate))) > today
   );
   const pastTrips = data.filter(
-    item => new Date(formatDateString(item.endDate)) < today
+    item => normalizeDate(new Date(formatDateString(item.endDate))) < today
+  );
+  const currentTrips = data.filter(
+    item =>
+      normalizeDate(new Date(formatDateString(item.startDate))) <= today &&
+      normalizeDate(new Date(formatDateString(item.endDate))) >= today
   );
 
   // activeTab에 따라 표시할 여행 결정
-  const tripsToDisplay = activeTab === 'upcoming' ? upcomingTrips : pastTrips;
+  let tripsToDisplay;
+  if (activeTab === 'upcoming') {
+    tripsToDisplay = upcomingTrips;
+  } else if (activeTab === 'past') {
+    tripsToDisplay = pastTrips;
+  } else {
+    tripsToDisplay = currentTrips; // 필요에 따라 현재 진행 중인 여행
+  }
 
-  // 현재 날짜가 여행 기간 내에 있는지 확인하는 함수
-  const isTodayInTrip = (startDate: string, endDate: string) => {
-    const start = new Date(formatDateString(startDate));
-    const end = new Date(formatDateString(endDate));
-    return today >= start && today <= end;
-  };
-
-  // 현재 날짜가 포함된 여행 찾기
-  const currentTrip = data.find(trip =>
-    isTodayInTrip(trip.startDate, trip.endDate)
-  );
-
-  //여행이 하나도 없을 때
+  // 여행이 하나도 없을 때
   const noTripsAvailable =
-    !currentTrip && upcomingTrips.length === 0 && pastTrips.length === 0;
-
-  // const openModal = () => {
-  //   setModalOpen(true);
-  // };
-
-  // const closeModal = () => {
-  //   setModalOpen(false);
-  // };
+    currentTrips.length === 0 &&
+    upcomingTrips.length === 0 &&
+    pastTrips.length === 0;
 
   return (
     <>
@@ -182,15 +179,17 @@ function Index() {
       ) : (
         <>
           {/* 현재 진행 중인 여행이 있을 경우 표시 */}
-          {currentTrip && (
+          {currentTrips.length > 0 && (
             <div css={containerStyle}>
-              <TravelCard
-                key={currentTrip.travelId}
-                title={currentTrip.travelName}
-                startDate={currentTrip.startDate}
-                endDate={currentTrip.endDate}
-                place={currentTrip.travelPlaceList}
-              />
+              {currentTrips.map(trip => (
+                <TravelCard
+                  key={trip.travelId}
+                  title={trip.travelName}
+                  startDate={trip.startDate}
+                  endDate={trip.endDate}
+                  place={trip.travelPlaceList}
+                />
+              ))}
             </div>
           )}
 

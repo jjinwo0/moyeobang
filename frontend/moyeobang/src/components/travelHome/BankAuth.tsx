@@ -31,9 +31,15 @@ interface BankAuthProps {
 
 export default function BankAuth({onClose, onVerify}: BankAuthProps) {
   const [isBankConnected, setIsBankConnected] = useState<boolean>(false); // 상태 추가
+  const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 관리
 
   const handleBankIconClick = () => {
     setIsBankConnected(true); // 클릭 시 상태를 true로 변경하여 컴포넌트 전환
+  };
+
+  const handleCertificationComplete = () => {
+    setIsVerified(true); // 인증 완료 상태로 설정
+    onVerify(); // 부모 컴포넌트에 인증 완료 알림
   };
 
   return (
@@ -45,7 +51,10 @@ export default function BankAuth({onClose, onVerify}: BankAuthProps) {
       {!isBankConnected ? (
         <BankConnection onBankIconClick={handleBankIconClick} />
       ) : (
-        <CertificationOne onClose={onClose} onVerify={onVerify} />
+        <CertificationOne
+          onClose={onClose} // 모달 닫기
+          onVerify={handleCertificationComplete} // 인증 완료 시 호출
+        />
       )}
     </div>
   );
