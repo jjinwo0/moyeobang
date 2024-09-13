@@ -248,8 +248,12 @@ export default function AuthVerification({onClose}: AuthVerificationProps) {
   };
 
   const handlecloseModal = () => {
-    setShowModal(false);
-    setIsVerified(true);
+    setShowModal(false); // 모달을 닫기만 하고 인증 상태는 변경하지 않음
+  };
+
+  const handleVerificationComplete = () => {
+    setIsVerified(true); // 인증 완료 시에만 인증 상태를 변경
+    setShowModal(false); // 인증 완료 후 모달 닫기
   };
 
   const handleCompleteClick = () => {
@@ -329,7 +333,10 @@ export default function AuthVerification({onClose}: AuthVerificationProps) {
       </div>
 
       {showModal && (
-        <BankAuth onClose={handlecloseModal} onVerify={handlecloseModal} />
+        <BankAuth
+          onClose={handlecloseModal}
+          onVerify={handleVerificationComplete}
+        />
       )}
     </>
   );
