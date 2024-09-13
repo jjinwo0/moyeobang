@@ -1,7 +1,7 @@
 import {css} from '@emotion/react';
 import React from 'react';
-import siren from '@/assets/icons/siren.webp';
 import Btn from '../common/btn/Btn';
+import bangBang from '@/assets/icons/bangBang.png';
 
 const containerStyle = css`
   width: 100%;
@@ -49,16 +49,11 @@ export default function PublicRequest() {
   return (
     <div css={containerStyle}>
       <div css={contentStyle}>
-        <img src={siren} alt="Notification Icon" />
+        <img src={bangBang} alt="Notification Icon" />
         <div>
           <p css={timeStyle}>2024.09.03 13:10</p>
           <span css={titleStyle}>{travelName}</span>
-          <span css={textStyle}>
-            에서 <span css={titleStyle}>{nickName}</span>님의 몫이
-            300,000원(20%) 밖에 남지 않았어요!
-            <br />
-            개인입금을 통해 통장에 돈을 채워주세요!
-          </span>
+          <span css={textStyle}>에서 300,000원을 공금 요청했어요.</span>
           <div css={buttonContainerStyle}>
             <Btn buttonStyle={{style: 'red', size: 'tiny'}}>취소</Btn>
             <Btn buttonStyle={{style: 'blue', size: 'tiny'}}>수락</Btn>

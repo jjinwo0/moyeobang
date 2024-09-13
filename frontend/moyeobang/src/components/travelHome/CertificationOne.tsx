@@ -70,7 +70,7 @@ export default function CertificationOne({
   onVerify,
 }: CertificationOneProps) {
   const handleCertification = () => {
-    onClose(); // 모달 닫기
+    // 인증번호 확인을 눌렀을 때만 인증 완료 처리
     onVerify(); // 부모에게 인증 완료 알리기
   };
 
@@ -101,7 +101,7 @@ export default function CertificationOne({
         <div css={btnStyle}>
           <Btn
             buttonStyle={{style: 'blue', size: 'big'}}
-            onClick={handleCertification}
+            onClick={handleCertification} // 인증 번호 확인 클릭 시 호출
           >
             인증번호 확인
           </Btn>
