@@ -1,6 +1,5 @@
 type Id = number;
 type ProfileImage = string;
-type TransactionId = number;
 type Place = string;
 type OrderItemTitle = string;
 type OrderItemAmount = number;
@@ -28,11 +27,11 @@ type PersonalUsagePercentage = number;
 type NeedsAdditionalDeposit = boolean;
 
 type ScheduleTitle = string;
-type Location = string;
+type ScheduleLocation = string;
 type PredictedBudget = number;
 type Completion = string;
 type Schedules = [];
-type scheduleTitle = string;
+type scheduleTime = string;
 type Amount = number;
 type PaymentTime = string;
 type Details = string;
@@ -125,8 +124,8 @@ interface Schedules {
 interface PlusSelfSchedule {
   scheduleId: Id;
   scheduleTitle: ScheduleTitle;
-  location: Location;
-  scheduleTitle: StarteTime;
+  scheduleLocation: ScheduleLocation;
+  scheduleTime: scheduleTime;
   predictedBudget: PredictedBudget;
   completion: Completion;
   matchedTransaction: MatchedTransaction | null;
@@ -134,7 +133,7 @@ interface PlusSelfSchedule {
 
 // 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
 interface PaidAutoSchedule {
-  transactionId: Id;
+  transactionId: Id | null;
   amount: Amount;
   paymentTime: PaymentTime;
   details: Details;
