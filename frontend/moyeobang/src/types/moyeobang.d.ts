@@ -30,15 +30,13 @@ type NeedsAdditionalDeposit = boolean;
 
 type Latitude = number;
 type Longitude = number;
-type RestaurantPercent = number;
-type CafePercent = number;
-type ShoppingPercent = number;
-type SouvenirPercent = number;
+type CategoryPercent = number;
 type ParticipantName = string;
 type ParticipantAmount = number;
 type ConsumptionTag = string;
 type ImgUrl = string;
 type LocationName = string;
+type CategoryName = string;
 
 interface OrderItems {
   orderItemTitle: OrderItemTitle;
@@ -115,10 +113,8 @@ interface TravelLocation {
 }
 
 interface ConsumptionCategory {
-  restaurant: RestaurantPercent; // 퍼센트 (예: 40%)
-  cafe: CafePercent;
-  shopping: ShoppingPercent;
-  souvenir: SouvenirPercent;
+  categoryName: CategoryName;
+  percent: CategoryPercent;
 }
 
 interface ParticipantConsumption {
@@ -135,7 +131,7 @@ interface TravelSummary {
   locationList: TravelLocation[]; // 여행 장소들의 위도, 경도 리스트
   totalAmount: TotalAmount; // 전체 예산
   amountUsed: TotalUsed; // 총 사용 금액
-  consumptionCategory: ConsumptionCategory; // 소비 카테고리
+  consumptionCategory: ConsumptionCategory[]; // 소비 카테고리
   consumptionTag: ConsumptionTag[]; // 소비 태그 (문구는 프론트에서 정함)
   participantsConsumption: ParticipantConsumption[]; // 참가자별 소비 금액
   imgSummary: ImgSummary[]; // 이미지와 장소 이름 리스트

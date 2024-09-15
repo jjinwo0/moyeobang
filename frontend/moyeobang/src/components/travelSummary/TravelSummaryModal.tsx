@@ -6,7 +6,7 @@ import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
 import ConsumptionSummary from './ConsumptionSummary';
 import ImgSummary from './ImgSummary';
 
-const TravelSummary: TravelSummary = {
+const travelSummary: TravelSummary = {
   locationList: [
     {
       latitude: 33.431441,
@@ -15,12 +15,12 @@ const TravelSummary: TravelSummary = {
   ],
   totalAmount: 1000000, //전체 예산
   amountUsed: 950000, // 총 사용 금액(여행 끝나고)
-  consumptionCategory: {
-    restaurant: 40, //퍼센트
-    cafe: 25,
-    shopping: 25,
-    souvenir: 10,
-  },
+  consumptionCategory: [
+    {categoryName: '음식점', percent: 40},
+    {categoryName: '카페', percent: 25},
+    {categoryName: '마트', percent: 25},
+    {categoryName: '기념품', percent: 10},
+  ],
   consumptionTag: [
     '맛집탐방 했나방',
     '카페인 중독인가방',
@@ -121,8 +121,8 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
   const [currentSlide, setCurrentSlide] = useState(0); // 슬라이드 상태
   const slideCount = 2; // 슬라이드 개수
   const slides = [
-    <ConsumptionSummary travelData={TravelSummary} />,
-    <ImgSummary travelImg={TravelSummary.imgSummary} />,
+    <ConsumptionSummary travelData={travelSummary} />,
+    <ImgSummary travelImg={travelSummary.imgSummary} />,
   ]; // 슬라이드에 표시할 컴포넌트들
 
   let startX = 0; // 터치 시작 위치
