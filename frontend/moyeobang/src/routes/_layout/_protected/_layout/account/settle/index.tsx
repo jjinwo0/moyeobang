@@ -2,11 +2,11 @@ import { createFileRoute,useRouter } from '@tanstack/react-router'
 import HeaderWithXButton from '@/components/common/Header/HeaderWithXbutton'
 import { css } from '@emotion/react'
 import TwoBtn from '@/components/common/btn/TwoBtn';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
 import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
-
+import { useLocation } from '@tanstack/react-router';
 export const Route = createFileRoute('/_layout/_protected/_layout/account/settle/')({
   component: Settle
 })  
@@ -22,12 +22,24 @@ const layoutStyle = css`
   gap: 20px;
 `;
 
-// 정산페이지 (영수증인지 직접 입력인지)
+// LocationState 타입 정의
+interface LocationState {
+  active?: string; // active 속성이 있을 수 있는 타입 지정
+}
 
+// 정산페이지 (영수증인지 직접 입력인지)
 export default function Settle() {
 
   // const navigate = useNavigate();
   const {history} = useRouter()
+  const location = useLocation();
+  const state = location.state as LocationState || null;
+
+  useEffect(()=>{
+    if (state?.active) {
+      setActiveComponent(state.active);
+    }
+  }, [location.state])
 
   const [activeComponent, setActiveComponent] = useState<string>('left')
 

@@ -1,15 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 import React from 'react'
 import { css } from '@emotion/react'
+import { useNavigate } from '@tanstack/react-router'
 import TransactionDetailDefaultCard from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import { TransactionDetailDefaultCardProps } from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import Btn from '@/components/common/btn/Btn'
 import { detailDataByCustomAfterSettle, detailDataByEqualAfterSettle, detailDataByEqualBeforeSettle } from '@/data/data'
+import { SplitMethod } from '@/types/ex'
 
 // const dataByCustomAfterSettle = detailDataByCustomAfterSettle;
 // const dataByEqualAfterSettle = detailDataByEqualAfterSettle;
 // const dataByEqualBeforeSettle = detailDataByEqualBeforeSettle;
-const data = detailDataByCustomAfterSettle
+const data = detailDataByEqualBeforeSettle;
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -30,6 +32,21 @@ export const Route = createFileRoute('/_layout/_protected/_layout/account/detail
 
 export default function TransactionDetail() {
   const { transactionId } = Route.useParams()
+  const navigate = useNavigate({from:'/account/detail'});
+
+  function handleSettle() {
+    navigate({to:'/account/settle'})
+  }
+
+  function handleUpdate() {
+    // 영수증 정산일때
+    if ( data.splitMethod === "equal") {
+      navigate({to: '/account/resultByReceipt'})
+    } else {
+      // 직접 정산일때
+      navigate({to: '/account/settle', state: { active :'right'} as any})
+    }
+  }
 
   return (
     <div css={layoutStyle}>
@@ -43,6 +60,9 @@ export default function TransactionDetail() {
         />
         {data.settled} / 
         {data.splitMethod}
+        { !data.settled && data.splitMethod ==='equal' &&
+          <div>정산전</div>
+        }
         { data.settled && data.splitMethod ==='equal' &&
           <div>영수증 정산됨.</div>
         }
@@ -50,8 +70,17 @@ export default function TransactionDetail() {
           <div>직접 정산됨.</div>
         }
         <div css={buttonLayoutStyle}>
-        { data.settled ? <Btn buttonStyle={{ size:'big', style:'blue'}}>정산 수정하기</Btn> :
-          <Btn buttonStyle={{ size:'big', style:'blue'}}>정산 하러가기</Btn>
+        { data.settled ? (
+        <Btn 
+        buttonStyle={{ size:'big', style:'blue'}}
+        onClick={handleUpdate}
+        >정산 수정하기</Btn> 
+        ) : (
+          <Btn 
+          buttonStyle={{ size:'big', style:'blue'}}
+          onClick={handleSettle}
+          >정산 하러가기</Btn>
+        )
           }
         </div>
     </div>

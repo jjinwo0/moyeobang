@@ -5,6 +5,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
+import { useNavigate } from "@tanstack/react-router";
 
 
 const api_url:string = "/api/custom/v1/34393/8f13443da4a5bb3449e36dac1ddda218c4f02d27884df6cd85905363c5603a72/general"
@@ -60,8 +61,9 @@ export default function SettleByReceiptComponent() {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
-    const [ocrResult, setOcrResult] = useState(null);
+    const [ocrResult, setOcrResult] = useState<string[]>([]);
     const [error, setError] = useState<string>('');
+    const navigate = useNavigate({from: '/account/settle'});
 
     // Base64 데이터를 Blob 파일로 변환
     const base64ToFile = (base64Data: string, filename: string) => {
@@ -78,7 +80,7 @@ export default function SettleByReceiptComponent() {
     function handleCapture() {
         try {
             const imageSrc = webcamRef.current?.getScreenshot();
-            console.log(9999, imageSrc)
+            // console.log(9999, imageSrc)
             if (imageSrc) {
                 const imageFile = base64ToFile(imageSrc, 'receipt.jpeg')
                 setImageSrc(imageSrc)
@@ -94,7 +96,7 @@ export default function SettleByReceiptComponent() {
 
         const formData = new FormData()
         const requestJson = {
-            version: "V1",
+            version: "V2",
             requestId: uuidv4(), // 고유한 문자열 변환!
             timestamp: new Date().getTime(),
             lang: "ko",
@@ -118,7 +120,15 @@ export default function SettleByReceiptComponent() {
                 }
             });
 
-            setOcrResult(response.data); // OCR 결과
+            console.log(121212, response.data)
+
+            // 영수증 텍스트 리스트 추출
+            const receiptTexts: string[] = response.data.images.fields.map((field) => field.inferText);
+
+
+            setOcrResult(receiptTexts); // OCR 결과
+            navigate({to:'/account/resultByReceipt', state: {data: receiptTexts}})
+
         } catch(error) {
             console.log(error)
             setError("OCR처리 중 오류가 발생했습니다.")
@@ -128,27 +138,20 @@ export default function SettleByReceiptComponent() {
 
     return (
         <div css={layoutStyle}>
-            <div css={cameraStyle}>
-            { imageSrc ? (
-                <img 
-                src={imageSrc} 
-                alt="capture_img" 
-                />
-            ) : ( 
-                <Webcam 
-                ref={webcamRef} 
-                screenshotFormat="image/jpeg"
-                videoConstraints={{ facingMode: "environment" }} // 모바일 후면 적용
-                />
-            )}
-            </div>
-            <div css={buttonStyle}>
-                <button onClick={handleCapture}/>
-            </div>
-
-            {ocrResult && 
-            <div>ocr결과 : {JSON.stringify(ocrResult)}</div>
-            }
+                <div css={cameraStyle}>
+                {imageSrc ? (
+                    <img src={imageSrc} alt="capture_img" />
+                ) : (
+                    <Webcam 
+                    ref={webcamRef} 
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={{ facingMode: "environment" }} // 모바일 후면 카메라 사용
+                    />
+                )}
+                </div>
+                <div css={buttonStyle}>
+                <button onClick={handleCapture}>촬영</button>
+                </div>
 
             {error &&
             <div>오류 : {error}</div>

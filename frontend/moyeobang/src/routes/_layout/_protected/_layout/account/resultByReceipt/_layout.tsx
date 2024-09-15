@@ -3,7 +3,7 @@ import HeaderWithBackButton from '@/components/common/Header/HeaderWithBackButto
 import React from 'react';
 
 
-export const Route = createFileRoute('/_layout/_protected/_layout/account/settledReceipt/_layout')({
+export const Route = createFileRoute('/_layout/_protected/_layout/account/resultByReceipt/_layout')({
   component: CalculateLayout
 })
 
