@@ -10,7 +10,7 @@ import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
-import TravelSummaryModal from '@/components/travelSummary/TravelSummaryModal';
+import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
 
 const data: Travel[] = [
