@@ -49,7 +49,7 @@ const inputStyle = (isDecided: boolean) =>  css`
     }
 `;
 
-export interface SettleCardProps {
+export interface SettleCardByCustomProps {
     profileImage : ProfileImage;
     memberId: MemberId;
     nickname: Nickname;
@@ -59,7 +59,7 @@ export interface SettleCardProps {
     onUpdate?: (updateUser : {memberId: MemberId; amount:number, isChecked:boolean}) => void;
 }
 
-export default function SettleCard({
+export default function SettleCardByCustom({
     memberId,
     profileImage,
     nickname,
@@ -67,7 +67,7 @@ export default function SettleCard({
     isChecked,
     isDecided,
     onUpdate,
-    }:SettleCardProps) {
+    }:SettleCardByCustomProps) {
 
     function handleChange(event: ChangeEvent<HTMLInputElement>) {
 

@@ -4,13 +4,16 @@ import { css } from '@emotion/react'
 import TwoBtn from '@/components/common/btn/TwoBtn';
 import React from 'react';
 import { useState } from 'react';
-import SettleComponent from '@/components/Account/Settle/SettleComponent';
+import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
+import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/settle/')({
   component: Settle
 })  
 
 const layoutStyle = css`
+  width:100%;
+  height:100%;
   margin-top:50px;
   display:flex;
   flex-direction: column;
@@ -51,10 +54,10 @@ export default function Settle() {
     onRightClick={handleRight}
     />
     { activeComponent==='left' && 
-    <div>left</div>
+    <SettleByReceiptComponent />
     }
     { activeComponent==='right' && 
-    <SettleComponent />
+    <SettleByCustomComponent />
     }
   </div>
   </>

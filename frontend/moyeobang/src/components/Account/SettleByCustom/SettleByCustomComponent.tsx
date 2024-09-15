@@ -1,7 +1,7 @@
 import React from "react"
 import Btn from "@/components/common/btn/Btn"
 import profileImage from '@/assets/images/profile.jpg'
-import SettleCard from "./SettleCard";
+import SettleCard from "./SettleCardByCustom";
 // import FinalModal from "../../FinalModal/FinalModal";
 // import Backdrop from "../../FinalModal/Backdrop/Backdrop";
 import { useState, useEffect } from "react";
@@ -53,7 +53,7 @@ export interface CustomSettle {
 // 총 결제 금액 가져와야함!
 const totalAmount : number = 60000;
 
-export default function SettleComponent() {
+export default function SettleByCustomComponent() {
     const [ settleData , setSettleData ] = useState<CustomSettle[]>([]);
     const [ initialSettle, setInitialSettle] = useState<CustomSettle[]>([]);
     const [ remainAmount, setRemainAmount ] = useState<number>(totalAmount);

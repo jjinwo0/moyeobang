@@ -1,13 +1,13 @@
 import { css } from "@emotion/react";
-import React, { useEffect } from "react";
+import React from "react";
 import type {HTMLAttributes, PropsWithChildren} from "react";
 import {useRef, useState} from "react";
 import Backdrop from "./Backdrop/Backdrop";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { colors } from "@/styles/colors";
 import Btn from "../common/btn/Btn";
-import SettleCard from "../Account/Settle/SettleCard";
-import { CustomSettle } from "../Account/Settle/SettleComponent";
+import SettleCard from "../Account/SettleByCustom/SettleCardByCustom";
+import { CustomSettle } from "../Account/SettleByCustom/SettleByCustomComponent";
 
 const modalContainerStyle = (isExpanded: boolean) => css`
     background-color: ${colors.white};
