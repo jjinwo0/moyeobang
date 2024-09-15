@@ -10,6 +10,8 @@ import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
+import TravelSummaryModal from '@/components/travelSummary/TravelSummaryModal';
+import useTravelStore from '@/store/useTravelStore';
 
 const data: Travel[] = [
   {
@@ -118,7 +120,9 @@ const plusStyle = css`
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
+  const {setTravelData} = useTravelStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -160,6 +164,20 @@ function Index() {
     currentTrips.length === 0 &&
     upcomingTrips.length === 0 &&
     pastTrips.length === 0;
+
+  const handleTravelSummary = (travel: Travel) => {
+    setTravelData(
+      travel.travelName,
+      travel.startDate,
+      travel.endDate,
+      travel.travelPlaceList
+    ); // 상태 저장
+    setTravelSummaryModal(true);
+  };
+
+  const closeTravelSummary = () => {
+    setTravelSummaryModal(false);
+  };
 
   return (
     <>
@@ -213,6 +231,11 @@ function Index() {
                   startDate={item.startDate}
                   endDate={item.endDate}
                   place={item.travelPlaceList}
+                  onClick={
+                    activeTab === 'past'
+                      ? () => handleTravelSummary(item)
+                      : undefined
+                  }
                 />
               ))
             ) : (
@@ -231,6 +254,10 @@ function Index() {
       <img src={plusButton} css={plusStyle} onClick={openModal} />
 
       {isModalOpen && <CreateTravel onClose={closeModal} />}
+
+      {travelSummaryModal && (
+        <TravelSummaryModal onClose={closeTravelSummary} />
+      )}
     </>
   );
 }

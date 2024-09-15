@@ -89,6 +89,7 @@ interface TravelCardProps {
   startDate: string;
   endDate: string;
   place: string[];
+  onClick?: () => void;
 }
 
 export default function TravelCard({
@@ -96,6 +97,7 @@ export default function TravelCard({
   startDate,
   endDate,
   place,
+  onClick,
 }: TravelCardProps) {
   const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
   const [exitModal, setExitModal] = useState<boolean>(false);
@@ -116,7 +118,7 @@ export default function TravelCard({
   };
   return (
     <>
-      <div css={cardStyle}>
+      <div css={cardStyle} onClick={onClick}>
         <div css={overlayStyle}>
           <h2 css={titleStyle}>{title}</h2>
           <p css={participantsStyle}>n 명과 함께</p>
