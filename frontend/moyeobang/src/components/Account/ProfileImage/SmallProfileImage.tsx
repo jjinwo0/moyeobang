@@ -2,14 +2,14 @@ import { css } from '@emotion/react'
 import React from 'react';
 import { colors } from '@/styles/colors';
 
-const profileContainerStyle = css`
+const profileContainerStyle = (cm : number) => css`
     flex-shrink: 0;
     display: flex;
     text-align:center;
     align-items:center;
     justify-content:center;
-    width: 40px;
-    height: 40px;
+    width: ${cm}px;
+    height: ${cm}px;
     padding: 3px;
     box-sizing: border-box;
     border-radius: 50%;
@@ -31,15 +31,20 @@ const profileStyle = css`
     box-sizing: border-box;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     cursor: pointer;
+    object-fit: cover;         
+    object-position: center;
 `; 
 
-export default function SmallProfileImage({
-        profileImage
-        } : {profileIamge : ProfileImage} ) {
+interface SmallProfileImageProps {
+    profileImage : ProfileImage;
+    px? : number;
+}
+
+export default function SmallProfileImage({profileImage, px=40} : SmallProfileImageProps ) {
 
     return (
         <div 
-        css={profileContainerStyle}
+        css={profileContainerStyle(px)}
         >
             <img 
             src={profileImage}

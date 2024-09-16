@@ -6,10 +6,12 @@ import { v4 as uuidv4 } from "uuid";
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
 import { useNavigate } from "@tanstack/react-router";
-
+import { extractItems } from "@/utils/receiptParser";
+// import openAI from 'openai';
 
 const api_url:string = "/api/custom/v1/34393/8f13443da4a5bb3449e36dac1ddda218c4f02d27884df6cd85905363c5603a72/general"
 const secret_key:string = "UEVXbkNCTGFYRGtGUlFUTWhWR3NXUmdNU0dUUkV3ZVM="
+const open_ai_key:string="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"
 
 const layoutStyle = css`
     width:100%;
@@ -61,7 +63,7 @@ export default function SettleByReceiptComponent() {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
-    const [ocrResult, setOcrResult] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const navigate = useNavigate({from: '/account/settle'});
 
@@ -106,11 +108,13 @@ export default function SettleByReceiptComponent() {
                     name:"receipt.jpg"
                 }
             ],
-            // enableTableDetection: true //문서 내 표(Table) 영역을 자동 인식 후 글자(Text)와 함께 구조화된 형태로 제공.
         };
 
         formData.append("message", JSON.stringify(requestJson));
         formData.append("file", imageFile)
+
+        setIsLoading(true);
+
         // axios.post(url, data, config) config: 헤더 정보
         try {
             const response = await axios.post(api_url, formData, {
@@ -120,21 +124,59 @@ export default function SettleByReceiptComponent() {
                 }
             });
 
-            console.log(121212, response.data)
-
             // 영수증 텍스트 리스트 추출
-            const receiptTexts: string[] = response.data.images.fields.map((field) => field.inferText);
+            const receiptTexts: string[] = response.data.images[0].fields.map((field: any) => field.inferText);
+            analyzeReceipt(receiptTexts.join(" "));
+            } catch(error) {
+                console.error(error);
+                setError('OCR 처리 중 오류가 발생했습니다.')
+            } finally {
+                setIsLoading(false);
+            }
+        }
 
+    async function analyzeReceipt(stringResult:string) {
+        try {
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method:"POST",
+                headers: {
+                    "Content-Type":"application/json",
+                    Authorization: `Bearer ${open_ai_key}`,
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a helpful assistant that extracts data from receipts and outputs it in JSON format. Please extract information such as approval number, address, place name, time separately, and present product names, quantities, and prices in a table format.",
+                        },
+                        {
+                            role: "user",
+                            content: `Here is the receipt text: ${stringResult}. Please extract the approval number, address, place name, and time separately. Also, output product names, quantities, and prices in a table format.`,
+                        },
+                    ],
+                })
+            });
 
-            setOcrResult(receiptTexts); // OCR 결과
-            navigate({to:'/account/resultByReceipt', state: {data: receiptTexts}})
+            const data = await response.json();
+            const message = data.choices[0].message.content;
+
+            const parsedData=JSON.parse(message);
+
+            // 이걸 이제 back에 POST로 보내주면 됨. 
+            //성공시! 받은 transactionId를 이용해 결과 수정페이지로 이동
+            const results = extractItems(parsedData) 
+
+            console.log(results)
+            // 성공시 받은 transactionId로 결과 페이지로 이동
+            const transactionId = 1;
+            navigate({ to: `/account/resultByReceipt${transactionId}`});
 
         } catch(error) {
             console.log(error)
-            setError("OCR처리 중 오류가 발생했습니다.")
+            setError("영수증 처리 중 오류가 발생했습니다.")
         }
-    }
-
+    } 
 
     return (
         <div css={layoutStyle}>
@@ -152,10 +194,10 @@ export default function SettleByReceiptComponent() {
                 <div css={buttonStyle}>
                 <button onClick={handleCapture}>촬영</button>
                 </div>
+            
+            {isLoading && <div>처리 중...</div>}
 
-            {error &&
-            <div>오류 : {error}</div>
-            }
+            {error && <div>오류 : {error}</div>}
 
         </div>
     )

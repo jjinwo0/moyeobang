@@ -3,15 +3,15 @@ import React from 'react'
 import { css } from '@emotion/react'
 import { useNavigate } from '@tanstack/react-router'
 import TransactionDetailDefaultCard from '@/components/Account/Detail/TransactionDetailDefaultCard'
-import { TransactionDetailDefaultCardProps } from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import Btn from '@/components/common/btn/Btn'
 import { detailDataByCustomAfterSettle, detailDataByEqualAfterSettle, detailDataByEqualBeforeSettle } from '@/data/data'
-import { SplitMethod } from '@/types/ex'
+import { colors } from '@/styles/colors'
+import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
 
 // const dataByCustomAfterSettle = detailDataByCustomAfterSettle;
 // const dataByEqualAfterSettle = detailDataByEqualAfterSettle;
 // const dataByEqualBeforeSettle = detailDataByEqualBeforeSettle;
-const data = detailDataByEqualBeforeSettle;
+const data = detailDataByEqualAfterSettle;
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -24,6 +24,30 @@ const layoutStyle = css`
 const buttonLayoutStyle=css`
   position:fixed;
   bottom:30px;
+`;
+
+const layoutByReceiptStyle=css`
+  display:flex;
+  flex-direction:column;
+`;
+
+const columnStyle=css`
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+  padding: 10px 5px;
+  border-top: solid 3px ${colors.lightGray};
+  font-family:'semibold';
+  font-size:20px;
+`;
+
+const listStyle=css`
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+  height:100%;
+  padding: 0 5px;
 `;
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/detail/_layout/$transactionId')({
@@ -41,7 +65,7 @@ export default function TransactionDetail() {
   function handleUpdate() {
     // 영수증 정산일때
     if ( data.splitMethod === "equal") {
-      navigate({to: '/account/resultByReceipt'})
+      navigate({to: `/account/resultByReceipt/${transactionId}`})
     } else {
       // 직접 정산일때
       navigate({to: '/account/settle', state: { active :'right'} as any})
@@ -64,7 +88,14 @@ export default function TransactionDetail() {
           <div>정산전</div>
         }
         { data.settled && data.splitMethod ==='equal' &&
-          <div>영수증 정산됨.</div>
+          <div css={layoutByReceiptStyle}>
+            <div css={columnStyle}><div>상품명</div><div>수량</div><div>금액</div></div>
+            <div css={listStyle}>
+            {data.details.map((detail, index) => (
+              <DetailCardByReceipt key={index} {...detail}/>
+            ))}
+            </div>
+          </div>
         }
         { data.settled && data.splitMethod ==='custom' &&
           <div>직접 정산됨.</div>

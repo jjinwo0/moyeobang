@@ -67,7 +67,7 @@ export default function groupAccount() {
     } else {
         setSelectedMember(null)
     }
-}   
+  }  
 
   return (
     <>

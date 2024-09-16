@@ -28,10 +28,10 @@ type PersonalTotalSpent = number;
 type PersonalUsagePercentage = number;
 type NeedsAdditionalDeposit = boolean;
 
-interface OrderItems {
-  orderItemTitle: OrderItemTitle;
-  orderItemAmount: OrderItemAmount;
-}
+// interface OrderItems {
+//   orderItemTitle: OrderItemTitle;
+//   orderItemAmount: OrderItemAmount;
+// }
 
 interface ParticipantInfo {
   memberId: MemberId;
