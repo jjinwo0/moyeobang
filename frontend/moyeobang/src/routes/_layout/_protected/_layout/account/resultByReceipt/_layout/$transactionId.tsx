@@ -53,7 +53,7 @@ const middleContainerStyle=css`
   box-sizing:border-box;
   width:100%;
   max-width: 100%;
-  height:540px;
+  height:515px;
   gap:20px;
   overflow-y:auto;
   padding-bottom: 20px;
@@ -123,12 +123,12 @@ export default function settledReceipt() {
   return (
     <div css={layoutStyle}>
           <div css={upContainerStyle} >
-          {transactionId}의 수정페이지 (확인용)
             <div css={titleStyle}>{dummyData.place}</div>
             <div css={amountStyle}>{dummyData.amount}원</div>
             <div css={timeStyle}>{format(dummyData.createdAt,'yyyy-MM-dd HH:mm', {locale: ko})}</div>
           </div>
           <div css={middleContainerStyle}>
+            {/* {transactionId}의 수정페이지 (확인용) */}
             {dummyData.details.map((detail, index) => (
               <UpdateCardByReceipt 
               key={index}

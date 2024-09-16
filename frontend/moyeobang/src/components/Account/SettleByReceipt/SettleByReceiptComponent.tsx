@@ -7,6 +7,7 @@ import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
 import { useNavigate } from "@tanstack/react-router";
 import { extractItems } from "@/utils/receiptParser";
+import FailByReceipt from "./FailByReceipt";
 // import openAI from 'openai';
 
 const api_url:string = "/api/custom/v1/34393/8f13443da4a5bb3449e36dac1ddda218c4f02d27884df6cd85905363c5603a72/general"
@@ -160,17 +161,33 @@ export default function SettleByReceiptComponent() {
 
             const data = await response.json();
             const message = data.choices[0].message.content;
+            console.log(message)
 
-            const parsedData=JSON.parse(message);
+            // JSON 문자열 파싱
+            let parsedData;
+            try {
+                parsedData = JSON.parse(message);
+            } catch (parseError) {
+                console.error("JSON 파싱 오류:", parseError);
+                setError("영수증 처리 중 오류가 발생했습니다.");
+                return;
+            }
+
+            // extractItems를 통해 데이터 변환
+            if (parsedData && parsedData.products) {
+                const results = extractItems(parsedData); 
+                console.log(results);
+            
 
             // 이걸 이제 back에 POST로 보내주면 됨. 
             //성공시! 받은 transactionId를 이용해 결과 수정페이지로 이동
-            const results = extractItems(parsedData) 
+            const transactionId :TransactionId = 1; // 실제 값으로 대체
+            navigate({ to: `/account/resultByReceipt/${transactionId}` });
+            } else {
+                console.error('정보없음');
+                setError("영수증 처리 중 오류가 발생했습니다.");
+            }
 
-            console.log(results)
-            // 성공시 받은 transactionId로 결과 페이지로 이동
-            const transactionId = 1;
-            navigate({ to: `/account/resultByReceipt${transactionId}`});
 
         } catch(error) {
             console.log(error)
@@ -197,7 +214,7 @@ export default function SettleByReceiptComponent() {
             
             {isLoading && <div>처리 중...</div>}
 
-            {error && <div>오류 : {error}</div>}
+            {error && <FailByReceipt/>}
 
         </div>
     )
