@@ -7,11 +7,12 @@ import Btn from '@/components/common/btn/Btn'
 import { detailDataByCustomAfterSettle, detailDataByEqualAfterSettle, detailDataByEqualBeforeSettle } from '@/data/data'
 import { colors } from '@/styles/colors'
 import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
+import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
 
 // const dataByCustomAfterSettle = detailDataByCustomAfterSettle;
 // const dataByEqualAfterSettle = detailDataByEqualAfterSettle;
 // const dataByEqualBeforeSettle = detailDataByEqualBeforeSettle;
-const data = detailDataByEqualAfterSettle;
+const data = detailDataByCustomAfterSettle;
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -19,16 +20,12 @@ const layoutStyle = css`
   flex-direction:column;
   gap:15px;
   padding: 10px 30px;
+  height:100%;
 `;
 
 const buttonLayoutStyle=css`
   position:fixed;
   bottom:30px;
-`;
-
-const layoutByReceiptStyle=css`
-  display:flex;
-  flex-direction:column;
 `;
 
 const columnStyle=css`
@@ -40,13 +37,14 @@ const columnStyle=css`
   border-top: solid 3px ${colors.lightGray};
   font-family:'semibold';
   font-size:20px;
+  padding-bottom:0px;
 `;
 
 const listStyle=css`
   display:flex;
   flex-direction:column;
   overflow-y:auto;
-  height:100%;
+  height:370px;
   padding: 0 5px;
 `;
 
@@ -82,23 +80,31 @@ export default function TransactionDetail() {
             acceptedNumber={data.amount}
             adress={data.adress}
         />
-        {data.settled} / 
-        {data.splitMethod}
+        {data.settled} / {data.splitMethod}
         { !data.settled && data.splitMethod ==='equal' &&
-          <div>정산전</div>
-        }
-        { data.settled && data.splitMethod ==='equal' &&
-          <div css={layoutByReceiptStyle}>
-            <div css={columnStyle}><div>상품명</div><div>수량</div><div>금액</div></div>
-            <div css={listStyle}>
-            {data.details.map((detail, index) => (
-              <DetailCardByReceipt key={index} {...detail}/>
-            ))}
-            </div>
+          <div>
+            정산전.
           </div>
         }
+        { data.settled && data.splitMethod ==='equal' &&
+          <>
+            <div css={columnStyle}><div>상품명</div><div>수량</div><div>금액</div></div>
+              <div css={listStyle}>
+                {data.details.map((detail, index) => (
+                  <DetailCardByReceipt key={index} {...detail}/>
+                ))}
+              </div>
+          </>
+        }
         { data.settled && data.splitMethod ==='custom' &&
-          <div>직접 정산됨.</div>
+          <>
+            <div css={columnStyle}><div>프로필</div><div>정산자</div><div>정산금액</div></div>
+              <div css={listStyle}>
+                {data.details.map((detail, index) => (
+                  <DetailCardByCustom key={index} {...detail.participant} amount={detail.amount}/>
+                ))}
+              </div>
+          </>
         }
         <div css={buttonLayoutStyle}>
         { data.settled ? (

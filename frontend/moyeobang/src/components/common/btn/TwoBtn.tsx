@@ -42,6 +42,7 @@ interface BtnProps {
   rightText: React.ReactNode; // 오른쪽 버튼에 들어갈 텍스트
   onLeftClick?: () => void; // 왼쪽 버튼 클릭 핸들러
   onRightClick?: () => void; // 오른쪽 버튼 클릭 핸들러
+  defaultActive?:'left' | 'right';
 }
 
 const TwoBtn: React.FC<BtnProps> = ({
@@ -49,8 +50,9 @@ const TwoBtn: React.FC<BtnProps> = ({
   rightText,
   onLeftClick,
   onRightClick,
+  defaultActive='left',
 }) => {
-  const [activeButton, setActiveButton] = useState<'left' | 'right'>('left'); // 기본값은 'left'
+  const [activeButton, setActiveButton] = useState<'left' | 'right'>(defaultActive); // 기본값은 'left'
   const onLeftHandler = () => {
     setActiveButton('left');
     if (onLeftClick) {

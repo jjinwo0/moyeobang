@@ -52,7 +52,7 @@ const profileListStyle = css`
 export default function DetailCardByReceipt({orderItemTitle, orderItemAmount, orderItemQuantity, participants}:SettledItemInfo) {
 
     return (
-        <>
+        <div>
             <div css={itemContainerStyle}>
                 <div css={titleBoxStyle}>{orderItemTitle}</div>
                 <div css={quantityBoxStyle}>{orderItemQuantity}개</div>
@@ -67,6 +67,6 @@ export default function DetailCardByReceipt({orderItemTitle, orderItemAmount, or
                     />
                 ))}
             </div>
-        </>
+        </div>
     )
 }

@@ -334,7 +334,25 @@ export const detailDataByEqualAfterSettle = {
              "profileImage": profileImageUrl
           }
          ]
-        }
+        },
+        {
+          orderItemId:4,
+         "orderItemTitle": "카라멜마끼아또",
+         orderItemQuantity:2,
+         "orderItemAmount": 9000,
+         "participants": [
+           {
+             "memberId": 1,
+             "nickname": "김훈민",
+             "profileImage": profileImageUrl
+           },
+           {
+             "memberId": 2,
+             "nickname": "이수민",
+             "profileImage": profileImageUrl
+           }
+         ]
+       },
      ]
          ,
       "splitMethod": "equal",  // 정산 방식
@@ -372,6 +390,22 @@ export const detailDataByCustomAfterSettle = {
             "profileImage": profileImageUrl
           },
           "amount" : 24000
+        },
+        {
+          "participant" : {
+            "memberId": 4,
+            "nickname": "김두열",
+            "profileImage": profileImageUrl
+          },
+          "amount" : 2300
+        },
+        {
+          "participant" : {
+            "memberId": 5,
+            "nickname": "박진우",
+            "profileImage": profileImageUrl
+          },
+          "amount" : 2000
         }
       ],
       "splitMethod": "custom",  // 정산 방식

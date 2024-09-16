@@ -161,7 +161,6 @@ export default function SettleByReceiptComponent() {
 
             const data = await response.json();
             const message = data.choices[0].message.content;
-            console.log(message)
 
             // JSON 문자열 파싱
             let parsedData;
@@ -209,7 +208,7 @@ export default function SettleByReceiptComponent() {
                 )}
                 </div>
                 <div css={buttonStyle}>
-                <button onClick={handleCapture}>촬영</button>
+                <button onClick={handleCapture}/>
                 </div>
             
             {isLoading && <div>처리 중...</div>}

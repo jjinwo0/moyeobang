@@ -35,13 +35,10 @@ export default function Settle() {
   const location = useLocation();
   const state = location.state as LocationState || null;
 
-  useEffect(()=>{
-    if (state?.active) {
-      setActiveComponent(state.active);
-    }
-  }, [location.state])
 
-  const [activeComponent, setActiveComponent] = useState<string>('left')
+  const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
+    state?.active === 'right' ? 'right' : 'left'
+    );
 
   function handleLeft() {
     setActiveComponent('left')
@@ -64,6 +61,7 @@ export default function Settle() {
     rightText='직접 입력'
     onLeftClick={handleLeft}
     onRightClick={handleRight}
+    defaultActive={activeComponent}
     />
     { activeComponent==='left' && 
     <SettleByReceiptComponent />
