@@ -9,6 +9,7 @@ import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
 import Btn from '@/components/common/btn/Btn';
 import { OrderItemId, OrderItemQuantity} from '@/types/ex';
+import { colors } from '@/styles/colors';
 const dummyData = detailDataByEqualAfterSettle;
 const chData = extractItems(chatData);
 
@@ -65,12 +66,16 @@ const middleContainerStyle=css`
 `;
 
 const buttonContainerStyle=css`
+  position:fixed;
+  bottom:30px;
+  background-color: ${colors.white};
   width:100%;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   gap:20px;
+  padding-top: 10px;
 `;
 
 export default function settledReceipt() {
@@ -112,8 +117,16 @@ export default function settledReceipt() {
     amount:OrderItemAmount
     participants:ParticipantInfo[]
   }) {
-    console.log(itemId, title, quantity, amount, participants)
-
+    // console.log('업데이트확인',itemId, title, quantity, amount, participants)
+    const updatedData = dummyData.details.map((detail) => 
+      detail.orderItemId===itemId ? (
+        { ...detail, 
+          orderItemAmount:amount, 
+          orderItemQuantity:quantity, 
+          orderItemTitle:title, 
+          participants:participants}) : detail
+    )
+    console.log(updatedData) // 이거 이용해서 데이터 변환해서 PUT으로 보내기
   }
 
   function handleRestart(){
@@ -128,7 +141,6 @@ export default function settledReceipt() {
             <div css={timeStyle}>{format(dummyData.createdAt,'yyyy-MM-dd HH:mm', {locale: ko})}</div>
           </div>
           <div css={middleContainerStyle}>
-            {/* {transactionId}의 수정페이지 (확인용) */}
             {dummyData.details.map((detail, index) => (
               <UpdateCardByReceipt 
               key={index}

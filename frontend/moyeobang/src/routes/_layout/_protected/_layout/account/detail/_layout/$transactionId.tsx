@@ -12,7 +12,7 @@ import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
 // const dataByCustomAfterSettle = detailDataByCustomAfterSettle;
 // const dataByEqualAfterSettle = detailDataByEqualAfterSettle;
 // const dataByEqualBeforeSettle = detailDataByEqualBeforeSettle;
-const data = detailDataByCustomAfterSettle;
+const data = detailDataByEqualAfterSettle;
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -46,6 +46,10 @@ const listStyle=css`
   overflow-y:auto;
   height:370px;
   padding: 0 5px;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/detail/_layout/$transactionId')({

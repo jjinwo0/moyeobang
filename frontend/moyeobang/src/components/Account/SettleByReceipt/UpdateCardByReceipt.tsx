@@ -117,7 +117,7 @@ interface UpdateCardByReceiptProps {
     participants:ParticipantInfo[]
 }
 
-// 해당 계좌의 회원들 다 가져와야함.
+// 해당 계좌의 회원들 다 가져와야함. profileData GET요청
 export default function UpdateCardByReceipt({
     onChange,
     itemId,
@@ -131,6 +131,7 @@ export default function UpdateCardByReceipt({
     const [quantity, setQuantity]=useState(itemQuantity);
     const [amount, setAmount]=useState(itemAmount);
     const [selectedParticipants, setSelectedParticipants] = useState(participants);
+    const participantsCount:number = profileData.length
 
     const [isOpen, setIsOpen] = useState(false);
     const [isAll, setIsAll] = useState(false);
@@ -200,6 +201,11 @@ export default function UpdateCardByReceipt({
                 participants: selectedParticipants,
             });
         }
+
+        if ( selectedParticipants.length === participantsCount) {
+            setIsAll(true);
+        }
+
     }, [title, quantity, amount, selectedParticipants]);
 
     return (
