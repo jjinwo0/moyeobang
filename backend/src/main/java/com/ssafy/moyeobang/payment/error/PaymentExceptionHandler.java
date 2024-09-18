@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.payment.application.error;
+package com.ssafy.moyeobang.payment.error;
 
 import static com.ssafy.moyeobang.common.util.ApiUtils.error;
 
