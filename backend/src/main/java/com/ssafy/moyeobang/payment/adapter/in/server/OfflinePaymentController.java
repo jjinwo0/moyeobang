@@ -1,10 +1,11 @@
 package com.ssafy.moyeobang.payment.adapter.in.server;
 
+import static com.ssafy.moyeobang.common.util.ApiUtils.error;
+import static com.ssafy.moyeobang.common.util.ApiUtils.success;
+
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
-import com.ssafy.moyeobang.common.util.ApiUtils;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
-import com.ssafy.moyeobang.payment.application.error.InsufficientBalanceException;
 import com.ssafy.moyeobang.payment.application.port.in.OfflinePaymentUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,11 @@ public class OfflinePaymentController {
     private final OfflinePaymentUseCase offlinePaymentUseCase;
 
     @PostMapping("/confirm")
-    public ApiResult<?> confirmPayment(@RequestBody OfflinePaymentRequest request) throws InsufficientBalanceException {
+    public ApiResult<?> confirmPayment(@RequestBody OfflinePaymentRequest request) {
         boolean paymentSuccess = offlinePaymentUseCase.confirmPayment(request);
         if (paymentSuccess) {
-            return ApiUtils.success("Payment successful");
+            return success("Success");
         }
-        return ApiUtils.error("Payment failed", HttpStatus.BAD_REQUEST);
+        return error("Fail", HttpStatus.BAD_REQUEST);
     }
 }

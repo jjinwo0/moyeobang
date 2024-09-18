@@ -3,12 +3,13 @@ package com.ssafy.moyeobang.payment.adapter.in.server.request;
 import java.util.List;
 
 public record OfflinePaymentRequest(
-        String title,
-        Integer amount,
-        String senderAccountNumber,
-        String receiverAccountNumber,
+        String paymentRequestId,
+        String placeId,
+        String placeName,
+        String placeAddress,
         Float latitude,
         Float longitude,
-        String paymentSessionId,
-        List<OrderRequest> orders) {
+        Integer amount,
+        String targetAccountNumber,
+        List<OrderItem> orderItems) {
 }
