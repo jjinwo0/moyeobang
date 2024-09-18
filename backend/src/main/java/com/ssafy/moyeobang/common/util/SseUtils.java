@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.payment.adapter.out.sse;
+package com.ssafy.moyeobang.common.util;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Slf4j
 @Component
-public class SseEmitters {
+public class SseUtils {
 
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 

@@ -1,7 +1,7 @@
 package com.ssafy.moyeobang.payment.application.service;
 
 import com.ssafy.moyeobang.common.annotation.UseCase;
-import com.ssafy.moyeobang.payment.adapter.out.sse.SseEmitters;
+import com.ssafy.moyeobang.common.util.SseUtils;
 import com.ssafy.moyeobang.payment.application.port.in.SseUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequiredArgsConstructor
 public class SseService implements SseUseCase {
 
-    private final SseEmitters sseEmitters;
+    private final SseUtils sseEmitters;
 
     @Override
     public SseEmitter connect(String transactionId) {
