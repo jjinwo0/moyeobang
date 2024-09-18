@@ -35,6 +35,7 @@ type scheduleTime = string;
 type Amount = number;
 type PaymentTime = string;
 type Details = string;
+type Memo = string;
 
 interface OrderItems {
   orderItemTitle: OrderItemTitle;
@@ -128,6 +129,7 @@ interface PlusSelfSchedule {
   scheduleTime: scheduleTime;
   predictedBudget: PredictedBudget;
   completion: Completion;
+  memo: Memo;
   matchedTransaction: MatchedTransaction | null;
 }
 
