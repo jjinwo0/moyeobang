@@ -1,7 +1,10 @@
 package com.ssafy.moyeobang.payment.application.port.out;
 
-import com.ssafy.moyeobang.payment.application.domain.Withdraw;
+
+import com.ssafy.moyeobang.payment.application.domain.Money;
+import com.ssafy.moyeobang.payment.application.domain.Store;
+import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 
 public interface ProcessPaymentPort {
-    void saveWithdraw(Withdraw withdraw);
+    void processPayment(TravelAccount travelAccount, Store store, Money paymentRequestMoney);
 }
