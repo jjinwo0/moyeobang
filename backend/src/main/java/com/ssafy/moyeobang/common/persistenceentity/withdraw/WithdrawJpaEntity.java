@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,33 +34,49 @@ public class WithdrawJpaEntity extends BaseEntity {
 
     private String title;
 
-    private Float latitude;
+    private Double latitude;
 
-    private Float longitude;
+    private Double longitude;
 
-    private int amount;
+    private long amount;
+
+    private long balanceSnapshot;
 
     private String targetAccountNumber;
+
+    private String placeId;
+
+    private String placeName;
+
+    private String placeAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_account_id")
     private TravelAccountJpaEntity travelAccount;
 
-    @OneToMany(mappedBy = "withdraw", cascade = CascadeType.ALL)
-    private List<OrderJpaEntity> orders;
+    @OneToMany(mappedBy = "withdraw", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<OrderJpaEntity> orderJpaEntities = new ArrayList<>();
 
     @Builder
     public WithdrawJpaEntity(String title,
-                             Float latitude,
-                             Float longitude,
-                             int amount,
+                             Double latitude,
+                             Double longitude,
+                             long amount,
+                             long balanceSnapshot,
                              String targetAccountNumber,
-                             TravelAccountJpaEntity travelAccount) {
+                             TravelAccountJpaEntity travelAccount,
+                             String placeId,
+                             String placeName,
+                             String placeAddress) {
         this.title = title;
         this.latitude = latitude;
         this.longitude = longitude;
         this.amount = amount;
+        this.balanceSnapshot = balanceSnapshot;
         this.targetAccountNumber = targetAccountNumber;
         this.travelAccount = travelAccount;
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.placeAddress = placeAddress;
     }
 }
