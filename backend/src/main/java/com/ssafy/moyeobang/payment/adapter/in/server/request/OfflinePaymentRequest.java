@@ -7,9 +7,10 @@ public record OfflinePaymentRequest(
         String placeId,
         String placeName,
         String placeAddress,
-        Float latitude,
-        Float longitude,
-        Integer amount,
+        Double latitude,
+        Double longitude,
+        long amount,
+        String sourceAccountNumber,
         String targetAccountNumber,
-        List<OrderItem> orderItems) {
+        List<OrderItemRequest> orderItems) {
 }
