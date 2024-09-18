@@ -1,8 +1,11 @@
 package com.ssafy.moyeobang.payment.application.service;
 
 import com.ssafy.moyeobang.common.annotation.UseCase;
-import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
+import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 import com.ssafy.moyeobang.payment.application.port.in.OfflinePaymentUseCase;
+import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
+import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.SsePort;
 import lombok.RequiredArgsConstructor;
 
@@ -11,21 +14,21 @@ import lombok.RequiredArgsConstructor;
 public class OfflinePaymentService implements OfflinePaymentUseCase {
 
     private final SsePort ssePort;
+    private final ProcessPaymentPort processPaymentPort;
+    private final LoadTravelAccountPort loadTravelAccountPort;
 
     @Override
-    public boolean confirmPayment(OfflinePaymentRequest request) {
-        boolean paymentSuccess = processPayment(request);
-        if (paymentSuccess) {
-            ssePort.sendPaymentSuccess(request.paymentRequestId(), "Payment successfully");
-        } else {
-            ssePort.sendPaymentFailure(request.paymentRequestId(), "Payment failed");
+    public boolean confirmPayment(PaymentCommand command) {
+        TravelAccount travelAccount = loadTravelAccountPort.loadTravelAccount(command.travelAccountNumber());
+
+        boolean canPayment = !travelAccount.couldNotWithdraw(command.paymentRequestMoney());
+
+        if (!canPayment) {
+            ssePort.sendPaymentFailure(command.paymentRequestId(), "Payment failed");
+            return false;
         }
-        return paymentSuccess;
-    }
-
-
-    private boolean processPayment(OfflinePaymentRequest request) {
-
+        processPaymentPort.processPayment(travelAccount, command.store(), command.paymentRequestMoney());
+        ssePort.sendPaymentSuccess(command.paymentRequestId(), "Payment successfully");
         return true;
     }
 }
