@@ -13,7 +13,6 @@ const backdropStyle = css`
 `;
 
 
-
 type BackdropProps = PropsWithChildren<HTMLAttributes<HTMLDivElement>>
 
 export default function Backdrop({children,...props}:BackdropProps){

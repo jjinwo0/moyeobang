@@ -25,7 +25,8 @@ export default function Header() {
     pathname === '/account/receipt' ||
     pathname === '/account/calculate' ||
     pathname.startsWith('/account/detail/') ||
-    pathname === '/profile';
+    pathname === '/profile' ||
+    pathname.startsWith('/account/resultByReceipt/');
   function handleAlarmClick() {
     setIsAlarmOpen(prev => !prev);
   }

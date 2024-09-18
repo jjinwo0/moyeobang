@@ -2,15 +2,18 @@ import { createFileRoute,useRouter } from '@tanstack/react-router'
 import HeaderWithXButton from '@/components/common/Header/HeaderWithXbutton'
 import { css } from '@emotion/react'
 import TwoBtn from '@/components/common/btn/TwoBtn';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
-import SettleComponent from '@/components/Account/Settle/SettleComponent';
-
+import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
+import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
+import { useLocation } from '@tanstack/react-router';
 export const Route = createFileRoute('/_layout/_protected/_layout/account/settle/')({
   component: Settle
 })  
 
 const layoutStyle = css`
+  width:100%;
+  height:100%;
   margin-top:50px;
   display:flex;
   flex-direction: column;
@@ -19,14 +22,23 @@ const layoutStyle = css`
   gap: 20px;
 `;
 
-// 정산페이지 (영수증인지 직접 입력인지)
+// LocationState 타입 정의
+interface LocationState {
+  active?: string; // active 속성이 있을 수 있는 타입 지정
+}
 
+// 정산페이지 (영수증인지 직접 입력인지)
 export default function Settle() {
 
   // const navigate = useNavigate();
   const {history} = useRouter()
+  const location = useLocation();
+  const state = location.state as LocationState || null;
 
-  const [activeComponent, setActiveComponent] = useState<string>('left')
+
+  const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
+    state?.active === 'right' ? 'right' : 'left'
+    );
 
   function handleLeft() {
     setActiveComponent('left')
@@ -49,12 +61,13 @@ export default function Settle() {
     rightText='직접 입력'
     onLeftClick={handleLeft}
     onRightClick={handleRight}
+    defaultActive={activeComponent}
     />
     { activeComponent==='left' && 
-    <div>left</div>
+    <SettleByReceiptComponent />
     }
     { activeComponent==='right' && 
-    <SettleComponent />
+    <SettleByCustomComponent />
     }
   </div>
   </>

@@ -4,6 +4,8 @@ type IsDeposit = boolean;
 type TotalBalance = number;
 type Adress = string;
 type SplitMethod = "equal" | "custom";
+type OrderItemQuantity = number;
+type OrderItemId = number;
 
 interface ParticipantInfo {
     memberId: MemberId;
@@ -25,22 +27,31 @@ interface TransactionRecords {
     createdAt : CreatedAt
 }
 
+interface OrderItems {
+    orderItemId: OrderItemId;
+    orderItemTitle: OrderItemTitle;
+    orderItemQuantity : OrderItemquantity;
+    orderItemAmount: OrderItemAmount;
+  }
+
 // 영수증 정산
 interface SettledItemInfo {
-    orderItemTitle : OrderItemTitle
-    orderItemAmount : OrderItemAmount
-    participants : ParticipantInfo[]
+    orderItemId: OrderItemId;
+    orderItemTitle : OrderItemTitle;
+    orderItemAmount : OrderItemAmount;
+    orderItemQuantity : OrderItemQuantity;
+    participants : ParticipantInfo[];
 }
 
 // 직접 정산 -> 정산된 사람들
 interface SettledParticipantInfo {
-    participant: ParticipantInfo
-    amount:number
+    participant: ParticipantInfo;
+    amount:number;
 }
 
 // 공통 타입 정의
 interface BaseTransactionDetail {
-    transactionId: TransactionId;
+    transactionId?: TransactionId;
     place: string;
     adress: string;
     totalAmount: number;
@@ -56,11 +67,11 @@ interface TransactionDetailByEqualBeforeSettle extends BaseTransactionDetail  {
     settled: Settled; // 정산 전
 }
   
-// 정산 완료 (N분의 1)
+// 정산 완료 영수증 (N분의 1)
 interface TransactionDetailByEqualAfterSettle extends BaseTransactionDetail  {
-    description: SettledItemInfo[];
-    splitMethod: SplitMethod; // 정산 방식: N분의 1
-    settled: Settled; // 정산 완료
+    details: SettledItemInfo[];
+    splitMethod?: SplitMethod; // 정산 방식: N분의 1
+    settled?: Settled; // 정산 완료
 }
   
 // 정산 완료 (직접 정산)
