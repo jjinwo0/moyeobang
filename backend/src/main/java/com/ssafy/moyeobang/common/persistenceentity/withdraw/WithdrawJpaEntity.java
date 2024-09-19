@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -47,8 +48,8 @@ public class WithdrawJpaEntity extends BaseEntity {
     @JoinColumn(name = "travel_account_id")
     private TravelAccountJpaEntity travelAccount;
 
-    @OneToMany(mappedBy = "withdraw", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<OrderJpaEntity> orders;
+    @OneToMany(mappedBy = "withdraw", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<OrderJpaEntity> orderJpaEntities = new ArrayList<>();
 
     @Builder
     private WithdrawJpaEntity(String title,

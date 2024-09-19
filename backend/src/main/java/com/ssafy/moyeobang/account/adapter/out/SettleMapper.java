@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toMap;
 
 import com.ssafy.moyeobang.account.application.domain.Settle;
 import com.ssafy.moyeobang.account.application.domain.Settles;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberOrderHistoryJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,10 @@ public class SettleMapper {
     }
 
     private Map<Long, Long> getPaymentHistory(OrderJpaEntity order) {
-        return order.getMemberOrderHistories().stream()
+        return order.getMemberOrderHistoryJpaEntities().stream()
                 .collect(toMap(
                                 history -> history.getMember().getId(),
-                                history -> history.getAmount()
+                                MemberOrderHistoryJpaEntity::getAmount
                         )
                 );
     }

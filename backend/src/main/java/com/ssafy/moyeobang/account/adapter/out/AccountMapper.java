@@ -79,7 +79,7 @@ public class AccountMapper {
     }
 
     private Transaction mapToWithdrawal(WithdrawJpaEntity withdrawal, Members members) {
-        List<Settle> settles = withdrawal.getOrders().stream()
+        List<Settle> settles = withdrawal.getOrderJpaEntities().stream()
                 .map(OrderJpaEntity::getSettle)
                 .map(settle -> mapToSettle(settle, members))
                 .toList();
