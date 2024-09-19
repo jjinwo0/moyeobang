@@ -114,7 +114,7 @@ export default function SettleByReceiptComponent({transactionId} : {transactionI
         formData.append("message", JSON.stringify(requestJson));
         formData.append("file", imageFile)
 
-        setIsLoading(true);
+        setIsLoading(true); // 영수증 인식 시작!
 
         // axios.post(url, data, config) config: 헤더 정보
         try {
