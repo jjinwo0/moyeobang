@@ -6,6 +6,7 @@ import {colors} from '@/styles/colors';
 import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
 import ConsumptionSummary from './ConsumptionSummary';
 import ImgSummary from './ImgSummary';
+import MapComponent from './MapComponent'; // 지도 컴포넌트 임포트
 
 const travelSummary: TravelSummary = {
   locationList: [
@@ -67,6 +68,11 @@ const modalContentStyle = css`
   padding: 20px;
   flex-grow: 1;
   text-align: center;
+
+  p {
+    font-family: 'semibold';
+    font-size: 13px;
+  }
 `;
 
 const titleStyle = css`
@@ -100,14 +106,20 @@ const travelPlaceStyle = css`
 `;
 
 const modalTitleStyle = css`
-  margin-top: 50px;
+  margin-top: 40px;
   margin-bottom: 20px;
+`;
+
+const mapContainerStyle = css`
+  margin: 20px 0;
 `;
 
 const dotContainerStyle = css`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 0; /* 불필요한 마진을 없앰 */
+  /* margin-top: 20px; */
+  /* margin-bottom: 10px; */
 `;
 
 const dotStyle = (isActive: boolean) => css`
@@ -131,6 +143,16 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
     <ImgSummary travelImg={travelSummary.imgSummary} />,
   ]; // 슬라이드에 표시할 컴포넌트들
 
+  // 지도에서 스와이프 이벤트를 막기 위한 함수
+  const stopSwipePropagation = (e: React.TouchEvent | React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // 지도에서 터치 이벤트 자체를 차단하는 함수
+  const preventTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault(); // 터치 이벤트 자체를 막음
+  };
+
   // Swipeable 설정
   const handlers = useSwipeable({
     onSwipedLeft: () =>
@@ -144,20 +166,33 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
   return (
     <div css={modalOverlayStyle}>
       <HeaderWithXButton onXClick={onClose} />
-      <div css={modalContentStyle} {...handlers}>
+      <div css={modalContentStyle}>
         <div css={modalTitleStyle}>
           <div css={titleStyle}>
             <span css={travelNameStyle}>{travelName}</span>
             <span css={blackTextStyle}>의</span>
           </div>
           <span css={travelPlaceStyle}>{travelPlaceList.join(', ')}</span>
-          <span css={blackTextStyle}>여행 요약</span>
+          <span css={blackTextStyle}> 여행 요약</span>
         </div>
 
         <p>{`${startDate} ~ ${endDate}`}</p>
 
+        {/* 첫 번째 슬라이드일 때만 지도 보여주기 */}
+        {currentSlide === 0 && (
+          <div
+            css={mapContainerStyle}
+            onTouchStart={stopSwipePropagation} // 이벤트 전파 차단
+            onTouchMove={preventTouchMove} // 터치 이벤트 차단
+          >
+            <MapComponent locationList={travelSummary.locationList} />
+          </div>
+        )}
+
         {/* 슬라이드 영역 */}
-        <div css={slideStyle}>{slides[currentSlide]}</div>
+        <div css={slideStyle} {...handlers}>
+          {slides[currentSlide]}
+        </div>
 
         {/* 동그라미로 슬라이드 위치 표시 */}
         <div css={dotContainerStyle}>

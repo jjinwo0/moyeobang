@@ -7,8 +7,9 @@ const podiumContainerStyle = css`
   display: flex;
   justify-content: center;
   align-items: flex-end; /* 아래쪽에 정렬 */
-  height: 150px;
-  margin-top: 20px;
+  height: 120px;
+  margin-top: 40px;
+  /* margin-bottom: 0; */
 `;
 
 const podiumStyle = (rank: number) => css`

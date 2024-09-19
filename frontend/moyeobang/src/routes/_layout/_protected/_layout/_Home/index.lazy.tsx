@@ -19,7 +19,7 @@ const data: Travel[] = [
     travelName: '여행제목1',
     startDate: '20240910',
     endDate: '20240913',
-    travelPlaceList: ['강원도 춘천시', '제주도 서귀포시'],
+    travelPlaceList: ['제주도'],
     quizQuestion: '김훈민의 발사이즈는?',
     quizAnswer: '235',
   },

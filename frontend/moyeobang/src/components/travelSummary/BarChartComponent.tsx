@@ -14,7 +14,7 @@ import {colors} from '@/styles/colors';
 
 const chartContainerStyle = css`
   width: 100%;
-  height: 200px; /* 차트 높이 낮추기 */
+  height: 160px; /* 차트 높이 낮추기 */
   // height: 100%;
 `;
 
@@ -59,7 +59,7 @@ export function BarChartComponent({totalAmount, amountUsed}: BarChartProps) {
 
   return (
     <div css={chartContainerStyle}>
-      <ResponsiveContainer width="100%" height={200}>
+      <ResponsiveContainer width="100%" height={160}>
         {' '}
         {/* 차트 높이 조정 */}
         <BarChart data={chartData}>
@@ -77,7 +77,7 @@ export function BarChartComponent({totalAmount, amountUsed}: BarChartProps) {
             tickLine={false} // X축 틱 라인 숨기기
           />
           {/* Y축 추가하여 totalAmount에 맞춰 범위 설정 */}
-          <YAxis domain={[0, totalAmount * 1.1]} hide={true} />{' '}
+          <YAxis domain={[0, totalAmount * 1.3]} hide={true} />{' '}
           {/* 범위를 1.1배로 줄여서 그래프를 조금 낮춤 */}
           <Tooltip />
           <Bar dataKey="value" barSize={35} radius={[8, 8, 8, 8]}>

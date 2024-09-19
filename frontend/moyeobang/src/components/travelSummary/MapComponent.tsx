@@ -1,0 +1,44 @@
+import React from 'react';
+import {GoogleMap, Marker, useJsApiLoader} from '@react-google-maps/api';
+import {css} from '@emotion/react';
+
+const mapContainerStyle = css`
+  width: 300px;
+  height: 130px;
+`;
+
+// 구글 맵에 표시할 기본 중심 좌표 (제주도 예시)
+const center = {
+  lat: 33.431441,
+  lng: 126.874237,
+};
+
+interface MapProps {
+  locationList: {latitude: number; longitude: number}[];
+}
+
+export default function MapComponent({locationList}: MapProps) {
+  const {isLoaded} = useJsApiLoader({
+    googleMapsApiKey: 'AIzaSyCrWnDsyD0g1eRejtNBG39RU0OwkZseKMY', // Google API Key를 여기에 넣으세요
+  });
+
+  if (!isLoaded) {
+    return <div>Loading...</div>; // API 로드 중일 때
+  }
+
+  return (
+    <GoogleMap
+      mapContainerStyle={{width: '330px', height: '150px'}}
+      center={center}
+      zoom={10}
+    >
+      {/* 마커 표시 */}
+      {locationList.map((location, index) => (
+        <Marker
+          key={index}
+          position={{lat: location.latitude, lng: location.longitude}}
+        />
+      ))}
+    </GoogleMap>
+  );
+}
