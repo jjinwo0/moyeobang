@@ -10,6 +10,7 @@ import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.Store;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
+import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.error.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -34,18 +35,22 @@ public class BankAccountAdapter implements LoadTravelAccountPort, ProcessPayment
     }
 
     @Override
-    public void processPayment(TravelAccount travelAccount, Store store, Money paymentRequestMoney) {
+    public PaymentResult processPayment(TravelAccount travelAccount, Store store, Money paymentRequestMoney) {
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(travelAccount.getAccountNumber());
 
         WithdrawJpaEntity withdraw = createPaymentWithdraw(travelAccountEntity, store,
                 Money.subtract(travelAccount.getBalance(), paymentRequestMoney).getAmount(), paymentRequestMoney);
-        withdrawRepository.save(withdraw);
+
+        WithdrawJpaEntity savedWithdraw = withdrawRepository.save(withdraw);
 
         bankApiClient.payment(
                 travelAccount.getAccountNumber(),
                 store.getStoreAccountNumber(),
                 paymentRequestMoney.getAmount()
         );
+
+        return new PaymentResult(savedWithdraw.getId(), savedWithdraw.getAmount(), savedWithdraw.getPlaceAddress(),
+                savedWithdraw.getPlaceName(), savedWithdraw.getCreateTime());
     }
 
     private TravelAccountJpaEntity getTravelAccount(String accountNumber) {
