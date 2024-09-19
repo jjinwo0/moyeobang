@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useSwipeable} from 'react-swipeable';
 import useTravelStore from '@/store/useTravelStore';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
@@ -13,8 +14,9 @@ const travelSummary: TravelSummary = {
       longitude: 126.874237, // 여행 장소들 위도,경도
     },
   ],
-  totalAmount: 1000000, //전체 예산
+  totalAmount: 1000000, // 전체 예산
   amountUsed: 950000, // 총 사용 금액(여행 끝나고)
+  amountComparison: 900000,
   consumptionCategory: [
     {categoryName: '음식점', percent: 40},
     {categoryName: '카페', percent: 25},
@@ -116,6 +118,10 @@ const dotStyle = (isActive: boolean) => css`
   margin: 0 5px;
 `;
 
+const slideStyle = css`
+  max-width: 390px;
+`;
+
 export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
   const {travelName, startDate, endDate, travelPlaceList} = useTravelStore();
   const [currentSlide, setCurrentSlide] = useState(0); // 슬라이드 상태
@@ -125,39 +131,20 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
     <ImgSummary travelImg={travelSummary.imgSummary} />,
   ]; // 슬라이드에 표시할 컴포넌트들
 
-  let startX = 0; // 터치 시작 위치
-  let endX = 0; // 터치 종료 위치
-
-  // 터치 시작 이벤트
-  const handleTouchStart = (e: React.TouchEvent) => {
-    startX = e.touches[0].clientX;
-  };
-
-  // 터치 이동 이벤트
-  const handleTouchMove = (e: React.TouchEvent) => {
-    endX = e.touches[0].clientX;
-  };
-
-  // 터치 종료 이벤트
-  const handleTouchEnd = () => {
-    if (startX - endX > 50) {
-      // 왼쪽으로 스와이프
-      setCurrentSlide(prevSlide => (prevSlide + 1) % slideCount);
-    } else if (endX - startX > 50) {
-      // 오른쪽으로 스와이프
-      setCurrentSlide(prevSlide => (prevSlide - 1 + slideCount) % slideCount);
-    }
-  };
+  // Swipeable 설정
+  const handlers = useSwipeable({
+    onSwipedLeft: () =>
+      setCurrentSlide(prevSlide => (prevSlide + 1) % slideCount),
+    onSwipedRight: () =>
+      setCurrentSlide(prevSlide => (prevSlide - 1 + slideCount) % slideCount),
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true, // 마우스도 지원
+  });
 
   return (
     <div css={modalOverlayStyle}>
       <HeaderWithXButton onXClick={onClose} />
-      <div
-        css={modalContentStyle}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+      <div css={modalContentStyle} {...handlers}>
         <div css={modalTitleStyle}>
           <div css={titleStyle}>
             <span css={travelNameStyle}>{travelName}</span>
@@ -167,10 +154,10 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
           <span css={blackTextStyle}>여행 요약</span>
         </div>
 
-        <p>{`여행 기간: ${startDate} - ${endDate}`}</p>
+        <p>{`${startDate} ~ ${endDate}`}</p>
 
         {/* 슬라이드 영역 */}
-        <div>{slides[currentSlide]}</div>
+        <div css={slideStyle}>{slides[currentSlide]}</div>
 
         {/* 동그라미로 슬라이드 위치 표시 */}
         <div css={dotContainerStyle}>
