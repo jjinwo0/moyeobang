@@ -6,17 +6,17 @@ function formatToISO(dateString:string) {
 }
 
 // 원래 데이터 형태로 변환해주는 함수
-export function extractItems(parsedData : any) {
+export function extractItems(parsedData : any, transactionId: TransactionId) {
 
   let itemId = 1;
 
   const details = parsedData.products.map((product: any) => {
 
-    const orderItem = {
+    const orderItem : SettledItemByReceipt = {
       orderItemId: itemId,
       orderItemTitle: product.product_name,
       orderItemQuantity: product.quantity,
-      orderItemAmount: product.price,
+      orderItemPrice: product.price,
       participants: [] // 빈 배열로 설정
     }
     
@@ -25,19 +25,18 @@ export function extractItems(parsedData : any) {
     return orderItem
   });
 
-  const totalAmount = details.reduce((sum:number, item) => sum + item.orderItemAmount, 0);
+  const totalPrice = details.reduce((sum:number, item) => sum + item.orderItemPrice, 0);
 
-  const receiptData = {
-    place: parsedData.place_name,
+  const receiptData : TransactionDetailByReceipt = {
+    transactionId: Number(transactionId),
+    paymentName: parsedData.place_name,
     adress: parsedData.address, // address 필드 수정
-    totalAmount: totalAmount,
+    money: totalPrice,
     details: details,
-    accpetedNumber: parsedData.approval_number,
+    acceptedNumber: parsedData.approval_number,
     createdAt: formatToISO(parsedData.time), // 시간
-    splitMethod:"equal"
+    splitMethod:"receipt"
   };
 
   return receiptData
-
-
 }

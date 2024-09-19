@@ -14,11 +14,8 @@ const orderData = [
 				"카페라떼" : 2312,
 				"왕밤빵" : 2222,
 				"밤양갱" : 13131
-		},
+		}, 
   },
-
-
-
 ]
 
 export const Route = createFileRoute('/pos/')({

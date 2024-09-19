@@ -7,7 +7,10 @@ import { useState } from 'react';
 import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
 import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
 import { useLocation } from '@tanstack/react-router';
-export const Route = createFileRoute('/_layout/_protected/_layout/account/settle/')({
+import { useCompleteTransaction } from '@/context/TransactionContext';
+
+
+export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/settle/')({
   component: Settle
 })  
 
@@ -31,9 +34,12 @@ interface LocationState {
 export default function Settle() {
 
   // const navigate = useNavigate();
+  const {transactionId} : {transactionId:TransactionId} = Route.useParams(); // 임시 1 넣어둠.
   const {history} = useRouter()
   const location = useLocation();
   const state = location.state as LocationState || null;
+  const {transactionData} = useCompleteTransaction();
+  console.log(999999, transactionData.isNew, transactionData.adress)
 
 
   const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
@@ -57,17 +63,26 @@ export default function Settle() {
     <HeaderWithXButton onXClick={handleXClick}/>
     <div css={layoutStyle}>
     <TwoBtn 
-    leftText='영수증 인식'
-    rightText='직접 입력'
-    onLeftClick={handleLeft}
-    onRightClick={handleRight}
-    defaultActive={activeComponent}
+      leftText='영수증 인식'
+      rightText='직접 입력'
+      onLeftClick={handleLeft}
+      onRightClick={handleRight}
+      defaultActive={activeComponent}
     />
     { activeComponent==='left' && 
-    <SettleByReceiptComponent />
+      <SettleByReceiptComponent 
+        transactionId={transactionId}
+      />
     }
     { activeComponent==='right' && 
-    <SettleByCustomComponent />
+      <SettleByCustomComponent 
+        transactionId={transactionId} 
+        totalMoney={transactionData.money}
+        isNew={transactionData.isNew}
+        adress={transactionData.adress}
+        paymentName={transactionData.paymentName}
+        createdAt={transactionData.createdAt}
+      />
     }
   </div>
   </>

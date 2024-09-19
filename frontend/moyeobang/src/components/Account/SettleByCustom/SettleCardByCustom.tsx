@@ -53,17 +53,17 @@ export interface SettleCardByCustomProps {
     profileImage : ProfileImage;
     memberId: MemberId;
     nickname: Nickname;
-    amount: number;
+    money: number;
     isChecked:boolean;
     isDecided?:boolean;
-    onUpdate?: (updateUser : {memberId: MemberId; amount:number, isChecked:boolean}) => void;
+    onUpdate?: (updateUser : {memberId: MemberId; money:number, isChecked:boolean}) => void;
 }
 
 export default function SettleCardByCustom({
     memberId,
     profileImage,
     nickname,
-    amount,
+    money,
     isChecked,
     isDecided,
     onUpdate,
@@ -74,21 +74,21 @@ export default function SettleCardByCustom({
         const newValue = event.target.value
 
         if (newValue === "" && onUpdate) {
-            onUpdate({ memberId, amount:0, isChecked: isChecked});
+            onUpdate({ memberId, money:0, isChecked: isChecked});
         } else {
             const numericValue = parseFloat(newValue); // 숫자로변환
             // 숫자이면
             if (!isNaN(numericValue) && onUpdate) {
-                onUpdate({ memberId, amount:numericValue, isChecked: isChecked});
+                onUpdate({ memberId, money:numericValue, isChecked: isChecked});
             }
         }
     }
 
     function handleCheck() {
         const newCheck = !isChecked
-        const updatedAmount = newCheck ? amount : 0;
+        const updatedAmount = newCheck ? money : 0;
         if ( onUpdate ) {
-            onUpdate({ memberId, amount: updatedAmount, isChecked: newCheck });
+            onUpdate({ memberId, money: updatedAmount, isChecked: newCheck });
         }
 
     }
@@ -111,7 +111,7 @@ export default function SettleCardByCustom({
                     <input 
                     css={inputStyle(isDecided)}
                     type="text" 
-                    value={amount}
+                    value={money}
                     onChange={handleChange}
                     disabled={!isChecked}
                     readOnly={isDecided}

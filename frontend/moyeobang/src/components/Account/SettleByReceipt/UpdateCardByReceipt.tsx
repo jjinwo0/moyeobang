@@ -8,6 +8,7 @@ import { colors } from '@/styles/colors';
 import { useState, useEffect } from 'react';
 import { OrderItemId, OrderItemQuantity } from '@/types/ex';
 import ProfileImage from '../ProfileImage/ProfileImage';
+import { OrderItemPrice, OrderItemTitle } from '@/types/account';
 
 const cardLayoutStyle=css`
     display:flex;
@@ -107,13 +108,13 @@ interface UpdateCardByReceiptProps {
         itemId:OrderItemId;
         title:OrderItemTitle;
         quantity:OrderItemQuantity;
-        amount:OrderItemAmount;
+        price:OrderItemPrice;
         participants:ParticipantInfo[];
     })=>void;
     itemId:OrderItemId;
     itemTitle:OrderItemTitle;
     itemQuantity:OrderItemQuantity;
-    itemAmount:OrderItemAmount;
+    itemPrice:OrderItemPrice;
     participants:ParticipantInfo[]
 }
 
@@ -123,13 +124,13 @@ export default function UpdateCardByReceipt({
     itemId,
     itemTitle,
     itemQuantity,
-    itemAmount,
+    itemPrice,
     participants
     } : UpdateCardByReceiptProps) {
 
     const [title, setTitle]=useState(itemTitle);
     const [quantity, setQuantity]=useState(itemQuantity);
-    const [amount, setAmount]=useState(itemAmount);
+    const [price, setPrice]=useState(itemPrice);
     const [selectedParticipants, setSelectedParticipants] = useState(participants);
     const participantsCount:number = profileData.length
 
@@ -168,12 +169,12 @@ export default function UpdateCardByReceipt({
     function handleAmountChange(event:React.ChangeEvent<HTMLInputElement>) {
 
         if (event.target.value==='') {
-            setAmount(0);
+            setPrice(0);
         } else {
             const newAmount = parseInt(event.target.value, 10); //문자열을 정수로 변환 10진수
             // is (Not-a-Number) 확인
             // if (!isNaN(newAmount) && newAmount >= totalAmount) 
-            setAmount(newAmount)
+            setPrice(newAmount)
         }
     }
 
@@ -197,7 +198,7 @@ export default function UpdateCardByReceipt({
                 itemId,
                 title,
                 quantity,
-                amount,
+                price,
                 participants: selectedParticipants,
             });
         }
@@ -206,14 +207,14 @@ export default function UpdateCardByReceipt({
             setIsAll(true);
         }
 
-    }, [title, quantity, amount, selectedParticipants]);
+    }, [title, quantity, price, selectedParticipants]);
 
     return (
         <div css={cardLayoutStyle}>
             <div css={inputContainerStyle}>
                 <div css={itemStyle}><input type="text" value={title} onChange={handleTitleChange}/></div>
                 <div css={quantityStyle}><input type="text" value={quantity} onChange={handleQuantityChange}/>개</div>
-                <div css={amountStyle}><input type="text" value={amount} onChange={handleAmountChange}/>원</div>
+                <div css={amountStyle}><input type="text" value={price} onChange={handleAmountChange}/>원</div>
             </div>
             {isOpen && (
             <div css={profileContainerStyle}>

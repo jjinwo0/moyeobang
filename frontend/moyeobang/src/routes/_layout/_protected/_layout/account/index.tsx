@@ -63,8 +63,10 @@ export default function groupAccount() {
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
+        // 해당 memberId get요청
         setSelectedMember(memberId)
     } else {
+        // 전체 조회
         setSelectedMember(null)
     }
   }  

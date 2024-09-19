@@ -6,8 +6,9 @@ import { v4 as uuidv4 } from "uuid";
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
 import { useNavigate } from "@tanstack/react-router";
-import { extractItems } from "@/utils/receiptParser";
+import { extractItems } from "@/util/receiptParser";
 import FailByReceipt from "./FailByReceipt";
+import ResultByReceiptComponent from "./ResultByReceiptComponent";
 // import openAI from 'openai';
 
 const api_url:string = "/api/custom/v1/34393/8f13443da4a5bb3449e36dac1ddda218c4f02d27884df6cd85905363c5603a72/general"
@@ -60,13 +61,13 @@ const buttonStyle = css`
     }
 `;
 
-export default function SettleByReceiptComponent() {
+export default function SettleByReceiptComponent({transactionId} : {transactionId:TransactionId}) {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
-    const navigate = useNavigate({from: '/account/settle'});
+    const [results, setResults] = useState<TransactionDetailByReceipt>();
 
     // Base64 데이터를 Blob 파일로 변환
     const base64ToFile = (base64Data: string, filename: string) => {
@@ -83,7 +84,6 @@ export default function SettleByReceiptComponent() {
     function handleCapture() {
         try {
             const imageSrc = webcamRef.current?.getScreenshot();
-            // console.log(9999, imageSrc)
             if (imageSrc) {
                 const imageFile = base64ToFile(imageSrc, 'receipt.jpeg')
                 setImageSrc(imageSrc)
@@ -162,10 +162,15 @@ export default function SettleByReceiptComponent() {
             const data = await response.json();
             const message = data.choices[0].message.content;
 
+            // JSON 문자열 추출
+            const jsonStartIndex = message.indexOf("{");
+            const jsonEndIndex = message.lastIndexOf("}");
+            const jsonString = message.slice(jsonStartIndex, jsonEndIndex + 1);
+
             // JSON 문자열 파싱
             let parsedData;
             try {
-                parsedData = JSON.parse(message);
+                parsedData = JSON.parse(jsonString); // JSON 형식의 데이터만 추출해서 파싱
             } catch (parseError) {
                 console.error("JSON 파싱 오류:", parseError);
                 setError("영수증 처리 중 오류가 발생했습니다.");
@@ -174,25 +179,25 @@ export default function SettleByReceiptComponent() {
 
             // extractItems를 통해 데이터 변환
             if (parsedData && parsedData.products) {
-                const results = extractItems(parsedData); 
-                console.log(results);
-            
+                const results = extractItems(parsedData, transactionId); 
+                console.log('영수증 ocr 결과', results)
+                setResults(results);
 
-            // 이걸 이제 back에 POST로 보내주면 됨. 
-            //성공시! 받은 transactionId를 이용해 결과 수정페이지로 이동
-            const transactionId :TransactionId = 1; // 실제 값으로 대체
-            navigate({ to: `/account/resultByReceipt/${transactionId}` });
             } else {
-                console.error('정보없음');
+                console.error('영수증 처리 오류 발생');
                 setError("영수증 처리 중 오류가 발생했습니다.");
             }
-
 
         } catch(error) {
             console.log(error)
             setError("영수증 처리 중 오류가 발생했습니다.")
         }
     } 
+
+    function handleFailClose() {
+        setError('');
+        setImageSrc(null);
+    }
 
     return (
         <div css={layoutStyle}>
@@ -211,9 +216,9 @@ export default function SettleByReceiptComponent() {
                 <button onClick={handleCapture}/>
                 </div>
             
-            {isLoading && <div>처리 중...</div>}
-
-            {error && <FailByReceipt/>}
+            {results ? <ResultByReceiptComponent data={results}/> : <div>결과처리중</div> }
+            {/* {isLoading && <div>처리 중...</div>} */}
+            {error && <FailByReceipt onClose={handleFailClose}/>}
 
         </div>
     )
