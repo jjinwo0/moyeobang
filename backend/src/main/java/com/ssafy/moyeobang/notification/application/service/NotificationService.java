@@ -111,7 +111,7 @@ public class NotificationService implements NotificationUseCase {
         log.info("잔액 알림 전달 성공: " + response.getSuccessCount());
     }
 
-    private void send(Message message) {
+    void send(Message message) {
 
         ApiFuture<String> future = FirebaseMessaging.getInstance().sendAsync(message);
 
