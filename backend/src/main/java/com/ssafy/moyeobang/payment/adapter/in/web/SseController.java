@@ -22,7 +22,6 @@ public class SseController {
 
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter connect(@RequestParam String paymentRequestId) {
-        log.info("SSE 연결 시작: transactionId={}", paymentRequestId);
         return sseUseCase.connect(paymentRequestId);
     }
 
