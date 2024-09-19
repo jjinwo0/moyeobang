@@ -50,10 +50,12 @@ const oneLineStyle = css`
 export default function PaidAutoSchedule({
   schedule,
   scheduleNum,
+  dayNum,
   dragHandleProps,
 }: {
   schedule: PaidAutoSchedule;
   scheduleNum: number;
+  dayNum: number;
   dragHandleProps: any;
 }) {
   const getTimeFromSchedule = (scheduleTime: string) => {
@@ -87,7 +89,10 @@ export default function PaidAutoSchedule({
           </div>
           <div css={oneLineStyle}>
             <span>결제 비용</span>{' '}
-            <span style={{color: colors.fifth}}> {schedule.amount}원</span>
+            <span style={{color: colors.fifth}}>
+              {' '}
+              {schedule.amount.toLocaleString()}원
+            </span>
           </div>
           <div style={{display: 'flex', justifyContent: 'center'}}>
             <img src={doubleDown} alt="아래로 당기기" />

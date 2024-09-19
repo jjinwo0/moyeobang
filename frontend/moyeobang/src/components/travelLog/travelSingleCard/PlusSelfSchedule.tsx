@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
+import {useTravelLogContext} from '@/contexts/TravelLog';
 import blueBlankCheck from '@/assets/icons/blueBlankCheck.png';
 import blueCheck from '@/assets/icons/blueCheck.png';
 import hamburgerBtn from '@/assets/icons/hamburgerButton.png';
@@ -67,16 +68,23 @@ const budgetInputStyle = css`
   font-family: 'semibold';
   color: ${colors.strongGray};
   text-align: center;
+
+  &:focus {
+    border-color: ${colors.second};
+    outline: none;
+  }
 `;
 
 export default function Schedule({
   schedule,
   scheduleNum,
-  dragHandleProps
+  dragHandleProps,
+  dayNum,
 }: {
   schedule: PlusSelfSchedule;
   scheduleNum: number;
-  dragHandleProps:any;
+  dragHandleProps: any;
+  dayNum: number;
 }) {
   const getTimeFromSchedule = (scheduleTime: string) => {
     return scheduleTime.split('T')[1].slice(0, 5); // "T" 이후의 시간 부분에서 앞 5글자만 추출 ("HH:MM")
@@ -100,6 +108,33 @@ export default function Schedule({
       setBudget(schedule.predictedBudget);
     }
     console.log('전송할 예산:', budget);
+  };
+
+  // 완료 여부
+  const {travelSchedules, setTravelSchedules} = useTravelLogContext();
+  // 로컬 상태 제거, 전역 상태로 관리
+  const toggleCompletion = () => {
+    // 새로운 일정 리스트를 생성하고 completion을 토글
+    const updatedSchedules = travelSchedules.map(
+      (day: Schedules, index: number) => {
+        if (index + 1 === dayNum) {
+          return day.map((item: PlusSelfSchedule | PaidAutoSchedule) => {
+            // 'item'이 PlusSelfSchedule 타입인지 확인 (scheduleId가 있는지 확인)
+            if ('scheduleId' in item) {
+              return {
+                ...item,
+                completion:
+                  item.completion === 'completed' ? 'pending' : 'completed',
+              };
+            }
+            return item;
+          });
+        }
+        return day;
+      }
+    );
+
+    setTravelSchedules(updatedSchedules);
   };
 
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -126,7 +161,7 @@ export default function Schedule({
     } else {
       message = (
         <div>
-          여기서는 N명이서 평균{' '}
+          여기서는 N명이서 평균 <br />
           <span style={{color: colors.customBlue}}>
             {schedule.predictedBudget}원
           </span>{' '}
@@ -147,6 +182,7 @@ export default function Schedule({
           src={schedule.completion === 'completed' ? blueCheck : blueBlankCheck}
           alt="체크리스트"
           style={{width: '30px', height: '30px', margin: '5px'}}
+          onClick={toggleCompletion}
         />
         <span
           style={{
@@ -173,7 +209,7 @@ export default function Schedule({
             <div css={oneLineStyle}>
               <span>결제 비용</span>
               <span style={{color: colors.fifth}}>
-                {schedule.matchedTransaction.amount}원
+                {schedule.matchedTransaction.amount.toLocaleString()}원
               </span>
               <div style={{position: 'relative'}}>
                 <img

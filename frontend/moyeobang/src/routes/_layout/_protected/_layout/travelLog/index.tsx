@@ -1,6 +1,7 @@
 import React from 'react';
 import {createFileRoute} from '@tanstack/react-router';
 import {css} from '@emotion/react';
+import {TravelLogProvider} from '@/contexts/TravelLog';
 import TravelLogList from '@/components/travelLog/TravelLogList';
 import Navbar from '@/components/common/navBar/Navbar';
 
@@ -12,7 +13,9 @@ const travelLogMainLayout = css`
 const travelLogMain = () => {
   return (
     <div css={travelLogMainLayout}>
-      <TravelLogList />
+      <TravelLogProvider>
+        <TravelLogList />
+      </TravelLogProvider>
       <Navbar />
     </div>
   );

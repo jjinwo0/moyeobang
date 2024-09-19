@@ -4,6 +4,7 @@ import React from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+import {useTravelLogContext} from '@/contexts/TravelLog';
 import SingleTravelLog from './SingleTravelLog';
 
 const travelDayTitleSytle = css`
@@ -45,16 +46,35 @@ export default function DaySchedules({
   daySchedules: (PlusSelfSchedule | PaidAutoSchedule)[];
   dayNum: number;
 }) {
+  const {travelSchedules, setTravelSchedules} = useTravelLogContext();
   // onDragEnd 함수 추가
-  const handleOnDragEnd = result => {
+  const handleOnDragEnd = (result: any) => {
+    const {source, destination} = result;
+
     // 드래그가 성공적으로 완료되지 않으면 아무 것도 하지 않음
-    if (!result.destination) return;
+    if (!destination) return;
 
-    // 여기서 state를 업데이트하거나 다른 작업 수행 가능
-    console.log('드래그 시작 위치:', result.source.index);
-    console.log('드래그 종료 위치:', result.destination.index);
+    const dayId = dayNum - 1; // dayNum을 기준으로 배열 index로 사용 (0부터 시작하도록)
+
+    // travelSchedules의 깊은 복사본을 생성하여 불변성 유지
+    const updatedTravelSchedules = [...travelSchedules];
+
+    // 현재 dayId의 스케줄을 가져옴
+    const currentDaySchedules = Array.from(updatedTravelSchedules[dayId]);
+
+    // 드래그된 항목을 source에서 제거하고 destination으로 삽입
+    const [movedItem] = currentDaySchedules.splice(source.index, 1);
+    currentDaySchedules.splice(destination.index, 0, movedItem);
+
+    // 변경된 스케줄을 updatedTravelSchedules에 다시 할당
+    updatedTravelSchedules[dayId] = currentDaySchedules;
+
+    // 상태 업데이트
+    setTravelSchedules(updatedTravelSchedules);
+
+    console.log('드래그 시작 위치:', source.index);
+    console.log('드래그 종료 위치:', destination.index);
   };
-
   return (
     <>
       <span css={verticalLineStyle}></span>
@@ -86,15 +106,16 @@ export default function DaySchedules({
                         style={{
                           ...provided.draggableProps.style,
                           transform: provided.draggableProps.style?.transform,
-                          top: 0, // 위치가 어긋나는 문제 해결
-                          left: 0, // 추가 위치 속성 명시적으로 설정
-                          position: 'relative', // position: relative 설정
+                          top: 0,
+                          left: 0,
+                          position: 'relative',
                           height: '115px',
                         }}
                       >
                         <SingleTravelLog
                           schedule={schedule}
                           scheduleNum={index + 1}
+                          dayNum={dayNum}
                           dragHandleProps={provided.dragHandleProps}
                         />
                       </div>

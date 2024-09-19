@@ -117,9 +117,7 @@ interface MatchedTransaction {
 }
 
 // 1. schedule type 지정
-interface Schedules {
-  [dayId: number]: (PlusSelfSchedule | PaidAutoSchedule)[];
-}
+type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
 
 // 1) 추가된 일정
 interface PlusSelfSchedule {
@@ -142,7 +140,4 @@ interface PaidAutoSchedule {
 }
 
 // 2. 실제 여행 일정 조회 data 타입 지정
-interface TravelLog {
-  travelId: Id;
-  schedules: Schedules;
-}
+type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];

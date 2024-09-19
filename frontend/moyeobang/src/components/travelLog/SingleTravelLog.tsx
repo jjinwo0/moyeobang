@@ -6,11 +6,13 @@ interface SingleTravelLogProps {
   schedule: PlusSelfSchedule | PaidAutoSchedule;
   scheduleNum: number;
   dragHandleProps: any;
+  dayNum: number;
 }
 
 export default function SingleTravelLog({
   schedule,
   scheduleNum,
+  dayNum,
   dragHandleProps,
 }: SingleTravelLogProps) {
   return (
@@ -19,6 +21,7 @@ export default function SingleTravelLog({
         <PlusSelfSchedule
           schedule={schedule}
           scheduleNum={scheduleNum}
+          dayNum={dayNum}
           dragHandleProps={dragHandleProps}
         ></PlusSelfSchedule>
       ) : (
@@ -27,6 +30,7 @@ export default function SingleTravelLog({
           <PaidAutoSchedule
             schedule={schedule}
             scheduleNum={scheduleNum}
+            dayNum={dayNum}
             dragHandleProps={dragHandleProps}
           ></PaidAutoSchedule>
         </>
