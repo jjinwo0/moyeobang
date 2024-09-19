@@ -28,6 +28,17 @@ type PersonalTotalSpent = number;
 type PersonalUsagePercentage = number;
 type NeedsAdditionalDeposit = boolean;
 
+type Latitude = number;
+type Longitude = number;
+type AmountComparison = number;
+type CategoryPercent = number;
+type ParticipantName = string;
+type ParticipantAmount = number;
+type ConsumptionTag = string;
+type ImgUrl = string;
+type LocationName = string;
+type CategoryName = string;
+
 // interface OrderItems {
 //   orderItemTitle: OrderItemTitle;
 //   orderItemAmount: OrderItemAmount;
@@ -96,3 +107,34 @@ interface PersonalAccountBalance {
 //     settled : Settled
 //     createdAt : CreatedAt
 // }
+
+interface TravelLocation {
+  latitude: Latitude;
+  longitude: Longitude;
+}
+
+interface ConsumptionCategory {
+  categoryName: CategoryName;
+  percent: CategoryPercent;
+}
+
+interface ParticipantConsumption {
+  name: ParticipantName;
+  amount: ParticipantAmount;
+}
+
+interface ImgSummary {
+  imgUrl: ImgUrl;
+  locationName: LocationName;
+}
+
+interface TravelSummary {
+  locationList: TravelLocation[]; // 여행 장소들의 위도, 경도 리스트
+  totalAmount: TotalAmount; // 전체 예산
+  amountUsed: TotalUsed; // 총 사용 금액
+  amountComparison: AmountComparison;
+  consumptionCategory: ConsumptionCategory[]; // 소비 카테고리
+  consumptionTag: ConsumptionTag[]; // 소비 태그 (문구는 프론트에서 정함)
+  participantsConsumption: ParticipantConsumption[]; // 참가자별 소비 금액
+  imgSummary: ImgSummary[]; // 이미지와 장소 이름 리스트
+}
