@@ -4,7 +4,16 @@ import cloudIcon from '@/assets/icons/cloud.webp';
 import roadImg from '@/assets/icons/roadImg.png';
 import airplaneIcon from '@/assets/icons/airplane.webp';
 
-export default function ImgSummary({travelImg}) {
+interface TravelImage {
+  imgUrl: string; // 이미지 URL
+  locationName: string; // 장소 이름
+}
+
+interface ImgSummaryProps {
+  travelImg: TravelImage[]; // travelImg는 TravelImage 객체들의 배열
+}
+
+export default function ImgSummary({travelImg}: ImgSummaryProps) {
   const containerStyle = css`
     width: 100%;
     display: flex;
