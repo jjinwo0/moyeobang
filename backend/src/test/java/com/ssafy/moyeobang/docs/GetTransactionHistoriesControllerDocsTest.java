@@ -9,6 +9,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,16 +58,20 @@ public class GetTransactionHistoriesControllerDocsTest extends RestDocsSupport {
                 now()
         );
 
-        given(getTransactionHistoriesQuery.getTransactionHistories(any(Long.class)))
+        given(getTransactionHistoriesQuery.getTransactionHistories(any(Long.class), any(List.class)))
                 .willReturn(List.of(response1, response2));
 
         mockMvc.perform(
                         get("/api/accounts/{accountId}/transactions", 1L)
+                                .queryParam("memberIds", "1,2,3")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("get-transaction-histories",
                                 preprocessResponse(prettyPrint()),
+                                queryParameters(
+                                        parameterWithName("memberIds").description("멤버 id 리스트")
+                                ),
                                 responseFields(
                                         fieldWithPath("status").type(JsonFieldType.STRING)
                                                 .description("API 성공 여부"),

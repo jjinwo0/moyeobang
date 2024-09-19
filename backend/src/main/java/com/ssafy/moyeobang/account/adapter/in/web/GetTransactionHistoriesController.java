@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @WebAdapter
@@ -20,7 +21,8 @@ public class GetTransactionHistoriesController {
     private final GetTransactionHistoriesQuery getTransactionHistoriesQuery;
 
     @GetMapping("/api/accounts/{accountId}/transactions")
-    public ApiResult<List<GetTransactionHistoriesResponse>> getTransactionHistories(@PathVariable Long accountId) {
-        return success(getTransactionHistoriesQuery.getTransactionHistories(accountId));
+    public ApiResult<List<GetTransactionHistoriesResponse>> getTransactionHistories(@PathVariable Long accountId,
+                                                                                    @RequestParam List<Long> memberIds) {
+        return success(getTransactionHistoriesQuery.getTransactionHistories(accountId, memberIds));
     }
 }

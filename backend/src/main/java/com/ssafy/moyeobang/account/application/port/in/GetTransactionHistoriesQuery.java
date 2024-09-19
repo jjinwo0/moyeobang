@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface GetTransactionHistoriesQuery {
 
-    List<GetTransactionHistoriesResponse> getTransactionHistories(Long accountId);
+    List<GetTransactionHistoriesResponse> getTransactionHistories(Long accountId, List<Long> memberIds);
 }

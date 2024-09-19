@@ -18,7 +18,7 @@ public class GetTransactionHistoriesService implements GetTransactionHistoriesQu
     private final LoadAccountPort loadAccountPort;
 
     @Override
-    public List<GetTransactionHistoriesResponse> getTransactionHistories(Long accountId) {
+    public List<GetTransactionHistoriesResponse> getTransactionHistories(Long accountId, List<Long> memberIds) {
         TravelAccount travelAccount = loadAccountPort.loadTravelAccount(accountId);
         Transactions transactions = travelAccount.getTransactions();
 
