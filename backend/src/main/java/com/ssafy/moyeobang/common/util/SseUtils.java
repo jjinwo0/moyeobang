@@ -47,7 +47,6 @@ public class SseUtils {
                 emitter.send(SseEmitter.event()
                         .name(eventName)
                         .data(message));
-                emitter.complete();
             } catch (IOException e) {
                 log.error("Failed to send SSE event: {}", eventName, e);
                 throw new RuntimeException("Failed to send SSE event", e);
