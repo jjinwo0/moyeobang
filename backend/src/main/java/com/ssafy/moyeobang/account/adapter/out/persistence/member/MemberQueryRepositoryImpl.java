@@ -17,8 +17,8 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     public List<MemberInfo> findMembersBy(Long travelId) {
         return queryFactory.select(memberInfo())
                 .from(memberJpaEntity)
-                .join(memberJpaEntity, memberAccountJpaEntity.member)
-                .join(memberJpaEntity, memberTravelJpaEntity.member)
+                .join(memberAccountJpaEntity).on(memberAccountJpaEntity.member.eq(memberJpaEntity))
+                .join(memberTravelJpaEntity).on(memberTravelJpaEntity.member.eq(memberJpaEntity))
                 .fetchJoin()
                 .where(memberTravelJpaEntity.travel.id.eq(travelId))
                 .fetch();
