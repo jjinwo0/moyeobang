@@ -3,27 +3,29 @@ import React from 'react';
 import { colors } from '@/styles/colors';
 
 export interface ProfileImageProps {
-    memberId? : MemberId
-    profileImage? : ProfileImage
-    isSelected? : boolean
-    onClick? : (memberId : MemberId | null) => void
+    memberId? : MemberId;
+    profileImage? : ProfileImage;
+    isSelected? : boolean;
+    onClick?: () => void;
+    px?: number;
 }
 
 export default function ProfileImage({
-        memberId,
+        // memberId,
         profileImage,
         isSelected,
-        onClick 
+        onClick,
+        px=85
         } : ProfileImageProps ) {
 
-    const profileContainerStyle = css`
+    const profileContainerStyle = (px:number) => css`
     flex-shrink: 0;
     display: flex;
     text-align:center;
     align-items:center;
     justify-content:center;
-    width: 85px;
-    height: 85px;
+    width: ${px}px;
+    height: ${px}px;
     padding: 3px;
     box-sizing: border-box;
     border-radius: 50%;
@@ -46,19 +48,15 @@ export default function ProfileImage({
     box-sizing: border-box;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     cursor: pointer;
+    object-fit: cover;         
+    object-position: center;
     `; 
 
-    function handleClick() {
-        if (onClick && memberId !== undefined) {
-            onClick(memberId)
-        }
-
-    }
 
     return (
         <div 
-        css={profileContainerStyle}
-        onClick={handleClick}
+        css={profileContainerStyle(px)}
+        onClick={onClick}
         >
             <img 
             src={profileImage}

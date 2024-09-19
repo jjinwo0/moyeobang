@@ -39,10 +39,10 @@ type ImgUrl = string;
 type LocationName = string;
 type CategoryName = string;
 
-interface OrderItems {
-  orderItemTitle: OrderItemTitle;
-  orderItemAmount: OrderItemAmount;
-}
+// interface OrderItems {
+//   orderItemTitle: OrderItemTitle;
+//   orderItemAmount: OrderItemAmount;
+// }
 
 interface ParticipantInfo {
   memberId: MemberId;

@@ -1,16 +1,16 @@
 import React from "react"
 import Btn from "@/components/common/btn/Btn"
 import profileImage from '@/assets/images/profile.jpg'
-import SettleCard from "./SettleCard";
+import SettleCard from "./SettleCardByCustom";
 // import FinalModal from "../../FinalModal/FinalModal";
 // import Backdrop from "../../FinalModal/Backdrop/Backdrop";
 import { useState, useEffect } from "react";
 import refreshImage from '@/assets/icons/refresh.png';
 import { setDate } from "date-fns";
 import { layoutStyle, textLayoutStyle, balance, time, refresh, place, allButtonStyle, allRefreshLayoutStyle, settleListLayoutStyle, nButtonStyle, buttonLayoutStyle } from "./settlePage";
+import FinalModal from "@/components/FinalModal/FinalModal";
 
-
-const dummyData : ParticipantsInfo[] = [
+const dummyData : ParticipantInfo[] = [
     {   
         memberId: 1,
         profileImage: profileImage, 
@@ -43,8 +43,8 @@ const dummyData : ParticipantsInfo[] = [
     },
 ];
 
-interface CustomSettle {
-    participantsInfo: ParticipantsInfo
+export interface CustomSettle {
+    participantsInfo: ParticipantInfo
     amount : number
     isChecked: boolean
     isDecided:boolean // 금액 확정
@@ -53,12 +53,14 @@ interface CustomSettle {
 // 총 결제 금액 가져와야함!
 const totalAmount : number = 60000;
 
-export default function SettleComponent() {
+export default function SettleByCustomComponent() {
     const [ settleData , setSettleData ] = useState<CustomSettle[]>([]);
     const [ initialSettle, setInitialSettle] = useState<CustomSettle[]>([]);
     const [ remainAmount, setRemainAmount ] = useState<number>(totalAmount);
     const [ isAll, setIsAll ] = useState<boolean>(true);
     const [ canSettle, setCanSettle ] = useState<boolean>(false);
+    const [ isOpenFinalModal, setIsOpenFinalModal ] = useState<boolean>(false);
+    const [ confirmData, setConfirmData ] = useState<CustomSettle[]>([]);
 
     // 초기 데이터 설정
     useEffect(()=> {
@@ -81,7 +83,16 @@ export default function SettleComponent() {
         }
     }, [remainAmount])
 
-    // 정산하기 버튼
+    // 정산하기 버튼 최종확인 모달로 이동
+    function handleConfirm() {
+        setConfirmData(settleData
+        .filter(user => user.amount > 0)
+        )
+        setIsOpenFinalModal(true);
+        console.log(121212)
+    }
+
+    // 최종확인에서 확인완료 후 
     function handleSettle() {
         const info = settleData
         .filter(user => user.amount > 0) // 금액이 있는 유저
@@ -96,6 +107,7 @@ export default function SettleComponent() {
             'info' : info,
         }
         console.log(SpendData)
+        setIsOpenFinalModal(false);
     }
 
 
@@ -158,11 +170,21 @@ export default function SettleComponent() {
         setIsAll((prev) => !prev)
     };
 
+    function handleClickOutside() {
+        setIsOpenFinalModal(false);
+    }
+
     return (
+        <>
+        { isOpenFinalModal && 
+            <FinalModal 
+            onClickOutside={handleClickOutside} 
+            onClick={handleSettle} 
+            confirmData={confirmData}
+            totalAmount={totalAmount}
+            /> 
+        }
         <div css={layoutStyle}>
-            {/* <FinalModal onClickOutside={handleClickOutside}>
-                <div>gkgkgk</div>
-            </FinalModal> */}
             <div css={textLayoutStyle}>
                 <div css={place}>컴포즈 커피</div>
                 <div css={balance}>총 금액 : {totalAmount} 원 / 남은 금액 : {remainAmount} 원</div>
@@ -203,17 +225,17 @@ export default function SettleComponent() {
                 { canSettle ? 
             <Btn 
             buttonStyle={{ size:'big', style:'blue'}}
-            onClick={handleSettle}
+            onClick={handleConfirm}
             >정산하기
             </Btn> :
             <Btn 
             buttonStyle={{ size:'big', style:'gray'}}
-            onClick={handleSettle}
             >정산하기
             </Btn>
             
             }
             </div>
         </div>
+        </>
     )
 }

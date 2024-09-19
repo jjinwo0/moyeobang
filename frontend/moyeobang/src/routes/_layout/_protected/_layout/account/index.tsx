@@ -5,7 +5,7 @@ import Navbar from "@/components/common/navBar/Navbar";
 import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
 import React from 'react';
-import AccountCard from '@/components/Account/AccounrtCard/AccountCard';
+import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
 import { profileData, transactionsData } from "@/data/data";
 
@@ -67,7 +67,7 @@ export default function groupAccount() {
     } else {
         setSelectedMember(null)
     }
-}   
+  }  
 
   return (
     <>
