@@ -5,6 +5,7 @@ import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 import com.ssafy.moyeobang.payment.application.port.in.OfflinePaymentUseCase;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
+import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.SsePort;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,10 @@ public class OfflinePaymentService implements OfflinePaymentUseCase {
             ssePort.sendPaymentFailure(command.paymentRequestId(), "Payment failed");
             return false;
         }
-        processPaymentPort.processPayment(travelAccount, command.store(), command.paymentRequestMoney());
-        ssePort.sendPaymentSuccess(command.paymentRequestId(), "Payment successfully");
+
+        PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.store(),
+                command.paymentRequestMoney());
+        ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
         return true;
     }
 }
