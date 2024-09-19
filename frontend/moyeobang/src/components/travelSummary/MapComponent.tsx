@@ -2,11 +2,6 @@ import React from 'react';
 import {GoogleMap, Marker, useJsApiLoader} from '@react-google-maps/api';
 import {css} from '@emotion/react';
 
-const mapContainerStyle = css`
-  width: 300px;
-  height: 130px;
-`;
-
 // 구글 맵에 표시할 기본 중심 좌표 (제주도 예시)
 const center = {
   lat: 33.431441,
