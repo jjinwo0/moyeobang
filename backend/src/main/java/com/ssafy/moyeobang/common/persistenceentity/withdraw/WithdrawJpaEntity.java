@@ -1,7 +1,9 @@
 package com.ssafy.moyeobang.common.persistenceentity.withdraw;
 
 import com.ssafy.moyeobang.common.persistenceentity.BaseEntity;
+import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,7 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,26 +33,37 @@ public class WithdrawJpaEntity extends BaseEntity {
 
     private String title;
 
-    private String address;
-
     private long amount;
 
+    private long balanceSnapshot;
+
     private String targetAccountNumber;
+
+    private double latitude;
+
+    private double longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_account_id")
     private TravelAccountJpaEntity travelAccount;
 
+    @OneToMany(mappedBy = "withdraw", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<OrderJpaEntity> orders;
+
     @Builder
-    public WithdrawJpaEntity(String title,
-                             String address,
-                             long amount,
-                             String targetAccountNumber,
-                             TravelAccountJpaEntity travelAccount) {
+    private WithdrawJpaEntity(String title,
+                              long amount,
+                              long balanceSnapshot,
+                              String targetAccountNumber,
+                              double latitude,
+                              double longitude,
+                              TravelAccountJpaEntity travelAccount) {
         this.title = title;
-        this.address = address;
         this.amount = amount;
+        this.balanceSnapshot = balanceSnapshot;
         this.targetAccountNumber = targetAccountNumber;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.travelAccount = travelAccount;
     }
 }

@@ -43,4 +43,8 @@ public class MemberOrderHistoryJpaEntity extends BaseEntity {
         this.member = member;
         this.order = order;
     }
+
+    public Long getMemberId() {
+        return member.getId();
+    }
 }

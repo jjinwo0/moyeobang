@@ -30,6 +30,8 @@ public class DepositJpaEntity extends BaseEntity {
 
     private long amount;
 
+    private long balanceSnapshot;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_account_id")
     private TravelAccountJpaEntity travelAccount;
@@ -43,5 +45,9 @@ public class DepositJpaEntity extends BaseEntity {
         this.amount = amount;
         this.travelAccount = travelAccount;
         this.member = member;
+    }
+
+    public Long getMemberId() {
+        return member.getId();
     }
 }
