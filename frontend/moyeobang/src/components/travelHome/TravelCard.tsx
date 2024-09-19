@@ -6,6 +6,8 @@ import settingIcon from '@/assets/icons/settingIcon.png';
 import {useRouter, useNavigate} from '@tanstack/react-router';
 import Btn from '../common/btn/Btn';
 import ExitTravel from './ExitTravel';
+import inviteIcon from '@/assets/icons/inviteIcon.png';
+import ConfirmQuiz from '../quiz/ConfirmQuiz';
 
 const cardStyle = css`
   display: flex;
@@ -84,6 +86,17 @@ const exitModalStyle = css`
   z-index: 20;
 `;
 
+const quizButtonStyle = css`
+  position: absolute; /* 부모 요소 안에서 절대 위치 */
+  top: 16px; /* 위쪽으로 16px 간격 */
+  right: 45px; /* 오른쪽으로 16px 간격 */
+  z-index: 100;
+  img {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
 interface TravelCardProps {
   title: string;
   startDate: string;
@@ -100,22 +113,39 @@ export default function TravelCard({
   onClick,
 }: TravelCardProps) {
   const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
+  const [inviteModal, setInviteModal] = useState<boolean>(false);
   const [exitModal, setExitModal] = useState<boolean>(false);
   const navigate = useNavigate();
-  const clickSettingButton = () => {
+
+  const clickSettingButton = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파를 막아 카드 클릭이 발생하지 않도록 설정
     setSettingButtonClick(prev => !prev);
   };
-  const handleExitModalOpen = () => {
+
+  const clickInviteButton = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파를 막음
+    setInviteModal(true);
+  };
+
+  const handleExitModalOpen = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파를 막음
     setExitModal(true);
   };
 
   const closeExitModalOpen = () => {
     setExitModal(false);
   };
-  const goSettingPage = () => {
-    console.log('세팅페이지');
-    navigate({to: '/profile'}); // 직접 navigate 호출
+
+  const closeQuizModal = () => {
+    setInviteModal(false);
   };
+
+  const goSettingPage = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파를 막음
+    console.log('세팅페이지');
+    navigate({to: '/profile'});
+  };
+
   return (
     <>
       <div css={cardStyle} onClick={onClick}>
@@ -129,6 +159,9 @@ export default function TravelCard({
         </div>
         <div css={settingIconStyle}>
           <img src={settingIcon} onClick={clickSettingButton} />
+        </div>
+        <div css={quizButtonStyle} onClick={clickInviteButton}>
+          <img src={inviteIcon} />
         </div>
 
         {settingButtonClick && (
@@ -151,6 +184,12 @@ export default function TravelCard({
       {exitModal && (
         <div css={exitModalStyle}>
           <ExitTravel travelTitle={title} onClose={closeExitModalOpen} />
+        </div>
+      )}
+
+      {inviteModal && (
+        <div>
+          <ConfirmQuiz onClose={closeQuizModal} />
         </div>
       )}
     </>
