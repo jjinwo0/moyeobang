@@ -9,6 +9,7 @@ import hamburgerBtn from '@/assets/icons/hamburgerButton.png';
 import informationBtn from '@/assets/icons/information.png';
 import doubleDown from '@/assets/icons/doubleDown.png';
 import MessagePopup from '@/components/common/messagePopup/MessagePopup';
+import SettleDetail from './SettleDetail';
 
 const scheduleCardLayout = css`
   height: 140px;
@@ -135,6 +136,7 @@ export default function Schedule({
     );
 
     setTravelSchedules(updatedSchedules);
+    // [todo] 이때 완료 상태로 변경된 일정 목록 api로 전달
   };
 
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -278,9 +280,14 @@ export default function Schedule({
           </div>
 
           {/* 아래로 당기기 표시 */}
-          <div style={{display: 'flex', justifyContent: 'center'}}>
-            <img src={doubleDown} alt="아래로 당기기" />
-          </div>
+          {schedule.matchedTransaction?.amount ? (
+            <>
+              <SettleDetail></SettleDetail>
+              <div style={{display: 'flex', justifyContent: 'center'}}>
+                <img src={doubleDown} alt="아래로 당기기" />
+              </div>
+            </>
+          ) : null}
         </div>
 
         {/* 카드 이동 */}

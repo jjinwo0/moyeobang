@@ -71,6 +71,7 @@ export default function DaySchedules({
 
     // 상태 업데이트
     setTravelSchedules(updatedTravelSchedules);
+    // [todo] 순서 변경된 travelSchedules api로 전달하기
 
     console.log('드래그 시작 위치:', source.index);
     console.log('드래그 종료 위치:', destination.index);
