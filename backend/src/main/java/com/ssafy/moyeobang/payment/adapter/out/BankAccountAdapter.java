@@ -4,7 +4,7 @@ import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClient;
-import com.ssafy.moyeobang.payment.adapter.out.persistence.travelaccount.TravelAccountRepositoryInAccount;
+import com.ssafy.moyeobang.payment.adapter.out.persistence.travelaccount.TravelAccountRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.withdraw.WithdrawRepositoryInPayment;
 import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.Store;
@@ -20,7 +20,7 @@ public class BankAccountAdapter implements LoadTravelAccountPort, ProcessPayment
 
     private final BankApiClient bankApiClient;
 
-    private final TravelAccountRepositoryInAccount travelAccountRepository;
+    private final TravelAccountRepositoryInPayment travelAccountRepository;
     private final WithdrawRepositoryInPayment withdrawRepository;
 
     @Override
