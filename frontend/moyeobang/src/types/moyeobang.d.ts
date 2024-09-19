@@ -16,6 +16,7 @@ type StartDate = string;
 type EndDate = string;
 type QuizQuestion = string;
 type QuizAnswer = string;
+type ParticipantsCount = number;
 
 type CurrentBalance = number;
 type TotalAmount = number;
@@ -59,6 +60,8 @@ interface ParticipantInfo {
 interface Travel {
   travelId: TravelId;
   travelName: TravelName;
+  travelImg: ImgUrl | null;
+  participantsCount: ParticipantsCount;
   startDate: StartDate;
   endDate: EndDate;
   travelPlaceList: TravelPlaceList;

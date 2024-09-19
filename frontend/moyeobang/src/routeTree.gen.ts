@@ -18,9 +18,9 @@ import { Route as PosIndexImport } from './routes/pos/index'
 import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
-import { Route as LayoutProtectedLayoutQuizIndexImport } from './routes/_layout/_protected/_layout/quiz/index'
 import { Route as LayoutProtectedLayoutProfileIndexImport } from './routes/_layout/_protected/_layout/profile/index'
 import { Route as LayoutProtectedLayoutAccountIndexImport } from './routes/_layout/_protected/_layout/account/index'
+import { Route as LayoutProtectedLayoutQuizTravelIdImport } from './routes/_layout/_protected/_layout/quiz/$travelId'
 import { Route as LayoutProtectedLayoutAccountSettleIndexImport } from './routes/_layout/_protected/_layout/account/settle/index'
 import { Route as LayoutProtectedLayoutAccountResultByReceiptLayoutImport } from './routes/_layout/_protected/_layout/account/resultByReceipt/_layout'
 import { Route as LayoutProtectedLayoutAccountDetailLayoutImport } from './routes/_layout/_protected/_layout/account/detail/_layout'
@@ -88,12 +88,6 @@ const LayoutProtectedLayoutHomeIndexLazyRoute =
     ),
   )
 
-const LayoutProtectedLayoutQuizIndexRoute =
-  LayoutProtectedLayoutQuizIndexImport.update({
-    path: '/quiz/',
-    getParentRoute: () => LayoutProtectedLayoutRoute,
-  } as any)
-
 const LayoutProtectedLayoutProfileIndexRoute =
   LayoutProtectedLayoutProfileIndexImport.update({
     path: '/profile/',
@@ -103,6 +97,12 @@ const LayoutProtectedLayoutProfileIndexRoute =
 const LayoutProtectedLayoutAccountIndexRoute =
   LayoutProtectedLayoutAccountIndexImport.update({
     path: '/account/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
+
+const LayoutProtectedLayoutQuizTravelIdRoute =
+  LayoutProtectedLayoutQuizTravelIdImport.update({
+    path: '/quiz/$travelId',
     getParentRoute: () => LayoutProtectedLayoutRoute,
   } as any)
 
@@ -176,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutEntranceIndexImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/_protected/_layout/quiz/$travelId': {
+      id: '/_layout/_protected/_layout/quiz/$travelId'
+      path: '/quiz/$travelId'
+      fullPath: '/quiz/$travelId'
+      preLoaderRoute: typeof LayoutProtectedLayoutQuizTravelIdImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
     '/_layout/_protected/_layout/account/': {
       id: '/_layout/_protected/_layout/account/'
       path: '/account'
@@ -188,13 +195,6 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof LayoutProtectedLayoutProfileIndexImport
-      parentRoute: typeof LayoutProtectedLayoutImport
-    }
-    '/_layout/_protected/_layout/quiz/': {
-      id: '/_layout/_protected/_layout/quiz/'
-      path: '/quiz'
-      fullPath: '/quiz'
-      preLoaderRoute: typeof LayoutProtectedLayoutQuizIndexImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
     '/_layout/_protected/_layout/_Home/': {
@@ -319,9 +319,9 @@ const LayoutProtectedLayoutAccountResultByReceiptRouteWithChildren =
   )
 
 interface LayoutProtectedLayoutRouteChildren {
+  LayoutProtectedLayoutQuizTravelIdRoute: typeof LayoutProtectedLayoutQuizTravelIdRoute
   LayoutProtectedLayoutAccountIndexRoute: typeof LayoutProtectedLayoutAccountIndexRoute
   LayoutProtectedLayoutProfileIndexRoute: typeof LayoutProtectedLayoutProfileIndexRoute
-  LayoutProtectedLayoutQuizIndexRoute: typeof LayoutProtectedLayoutQuizIndexRoute
   LayoutProtectedLayoutHomeIndexLazyRoute: typeof LayoutProtectedLayoutHomeIndexLazyRoute
   LayoutProtectedLayoutAccountDetailRoute: typeof LayoutProtectedLayoutAccountDetailRouteWithChildren
   LayoutProtectedLayoutAccountResultByReceiptRoute: typeof LayoutProtectedLayoutAccountResultByReceiptRouteWithChildren
@@ -329,11 +329,12 @@ interface LayoutProtectedLayoutRouteChildren {
 }
 
 const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
+  LayoutProtectedLayoutQuizTravelIdRoute:
+    LayoutProtectedLayoutQuizTravelIdRoute,
   LayoutProtectedLayoutAccountIndexRoute:
     LayoutProtectedLayoutAccountIndexRoute,
   LayoutProtectedLayoutProfileIndexRoute:
     LayoutProtectedLayoutProfileIndexRoute,
-  LayoutProtectedLayoutQuizIndexRoute: LayoutProtectedLayoutQuizIndexRoute,
   LayoutProtectedLayoutHomeIndexLazyRoute:
     LayoutProtectedLayoutHomeIndexLazyRoute,
   LayoutProtectedLayoutAccountDetailRoute:
@@ -378,9 +379,9 @@ export interface FileRoutesByFullPath {
   '': typeof LayoutProtectedLayoutRouteWithChildren
   '/pos': typeof PosIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
+  '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/profile': typeof LayoutProtectedLayoutProfileIndexRoute
-  '/quiz': typeof LayoutProtectedLayoutQuizIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/account/detail': typeof LayoutProtectedLayoutAccountDetailLayoutRouteWithChildren
   '/account/resultByReceipt': typeof LayoutProtectedLayoutAccountResultByReceiptLayoutRouteWithChildren
@@ -393,9 +394,9 @@ export interface FileRoutesByTo {
   '': typeof LayoutProtectedRouteWithChildren
   '/pos': typeof PosIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
+  '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/profile': typeof LayoutProtectedLayoutProfileIndexRoute
-  '/quiz': typeof LayoutProtectedLayoutQuizIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/account/detail': typeof LayoutProtectedLayoutAccountDetailLayoutRouteWithChildren
   '/account/resultByReceipt': typeof LayoutProtectedLayoutAccountResultByReceiptLayoutRouteWithChildren
@@ -411,9 +412,9 @@ export interface FileRoutesById {
   '/pos/': typeof PosIndexRoute
   '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
+  '/_layout/_protected/_layout/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/_layout/_protected/_layout/account/': typeof LayoutProtectedLayoutAccountIndexRoute
   '/_layout/_protected/_layout/profile/': typeof LayoutProtectedLayoutProfileIndexRoute
-  '/_layout/_protected/_layout/quiz/': typeof LayoutProtectedLayoutQuizIndexRoute
   '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/_layout/_protected/_layout/account/detail': typeof LayoutProtectedLayoutAccountDetailRouteWithChildren
   '/_layout/_protected/_layout/account/detail/_layout': typeof LayoutProtectedLayoutAccountDetailLayoutRouteWithChildren
@@ -430,9 +431,9 @@ export interface FileRouteTypes {
     | ''
     | '/pos'
     | '/entrance'
+    | '/quiz/$travelId'
     | '/account'
     | '/profile'
-    | '/quiz'
     | '/'
     | '/account/detail'
     | '/account/resultByReceipt'
@@ -444,9 +445,9 @@ export interface FileRouteTypes {
     | ''
     | '/pos'
     | '/entrance'
+    | '/quiz/$travelId'
     | '/account'
     | '/profile'
-    | '/quiz'
     | '/'
     | '/account/detail'
     | '/account/resultByReceipt'
@@ -460,9 +461,9 @@ export interface FileRouteTypes {
     | '/pos/'
     | '/_layout/_protected/_layout'
     | '/_layout/entrance/'
+    | '/_layout/_protected/_layout/quiz/$travelId'
     | '/_layout/_protected/_layout/account/'
     | '/_layout/_protected/_layout/profile/'
-    | '/_layout/_protected/_layout/quiz/'
     | '/_layout/_protected/_layout/_Home/'
     | '/_layout/_protected/_layout/account/detail'
     | '/_layout/_protected/_layout/account/detail/_layout'
@@ -521,9 +522,9 @@ export const routeTree = rootRoute
       "filePath": "_layout/_protected/_layout.tsx",
       "parent": "/_layout/_protected",
       "children": [
+        "/_layout/_protected/_layout/quiz/$travelId",
         "/_layout/_protected/_layout/account/",
         "/_layout/_protected/_layout/profile/",
-        "/_layout/_protected/_layout/quiz/",
         "/_layout/_protected/_layout/_Home/",
         "/_layout/_protected/_layout/account/detail",
         "/_layout/_protected/_layout/account/resultByReceipt",
@@ -534,16 +535,16 @@ export const routeTree = rootRoute
       "filePath": "_layout/entrance/index.tsx",
       "parent": "/_layout"
     },
+    "/_layout/_protected/_layout/quiz/$travelId": {
+      "filePath": "_layout/_protected/_layout/quiz/$travelId.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
     "/_layout/_protected/_layout/account/": {
       "filePath": "_layout/_protected/_layout/account/index.tsx",
       "parent": "/_layout/_protected/_layout"
     },
     "/_layout/_protected/_layout/profile/": {
       "filePath": "_layout/_protected/_layout/profile/index.tsx",
-      "parent": "/_layout/_protected/_layout"
-    },
-    "/_layout/_protected/_layout/quiz/": {
-      "filePath": "_layout/_protected/_layout/quiz/index.tsx",
       "parent": "/_layout/_protected/_layout"
     },
     "/_layout/_protected/_layout/_Home/": {

@@ -102,6 +102,7 @@ interface TravelCardProps {
   startDate: string;
   endDate: string;
   place: string[];
+  participantsCount: number;
   onClick?: () => void;
 }
 
@@ -110,12 +111,17 @@ export default function TravelCard({
   startDate,
   endDate,
   place,
+  participantsCount,
   onClick,
 }: TravelCardProps) {
   const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
   const [inviteModal, setInviteModal] = useState<boolean>(false);
   const [exitModal, setExitModal] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const formatDate = (dateString: string) => {
+    return dateString.split('T')[0]; // "YYYY-MM-DDTHH:mm:ssZ"에서 "YYYY-MM-DD"만 추출
+  };
 
   const clickSettingButton = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 전파를 막아 카드 클릭이 발생하지 않도록 설정
@@ -151,9 +157,9 @@ export default function TravelCard({
       <div css={cardStyle} onClick={onClick}>
         <div css={overlayStyle}>
           <h2 css={titleStyle}>{title}</h2>
-          <p css={participantsStyle}>n 명과 함께</p>
+          <p css={participantsStyle}>{participantsCount}명과 함께</p>
           <p css={dateStyle}>
-            {startDate} ~ {endDate}
+            {formatDate(startDate)} ~ {formatDate(endDate)}
           </p>
           <p css={locationStyle}>{place.join(', ')}</p>
         </div>
