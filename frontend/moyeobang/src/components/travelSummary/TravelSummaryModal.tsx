@@ -7,6 +7,7 @@ import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
 import ConsumptionSummary from './ConsumptionSummary';
 import ImgSummary from './ImgSummary';
 import MapComponent from './MapComponent'; // 지도 컴포넌트 임포트
+import bangBang from '@/assets/icons/bangBang.png';
 
 const travelSummary: TravelSummary = {
   locationList: [
@@ -46,7 +47,31 @@ const travelSummary: TravelSummary = {
   ],
   imgSummary: [
     {
-      imgUrl: '',
+      imgUrl: bangBang,
+      locationName: '제주공항',
+    },
+    {
+      imgUrl: bangBang,
+      locationName: '제주공항',
+    },
+    {
+      imgUrl: bangBang,
+      locationName: '제주공항',
+    },
+    {
+      imgUrl: bangBang,
+      locationName: '제주공항',
+    },
+    {
+      imgUrl: bangBang,
+      locationName: '제주공항',
+    },
+    {
+      imgUrl: bangBang,
+      locationName: '제주공항',
+    },
+    {
+      imgUrl: bangBang,
       locationName: '제주공항',
     },
   ], // 이미지&장소이름 8개 리스트
@@ -143,16 +168,6 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
     <ImgSummary travelImg={travelSummary.imgSummary} />,
   ]; // 슬라이드에 표시할 컴포넌트들
 
-  // 지도에서 스와이프 이벤트를 막기 위한 함수
-  const stopSwipePropagation = (e: React.TouchEvent | React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
-  // 지도에서 터치 이벤트 자체를 차단하는 함수
-  const preventTouchMove = (e: React.TouchEvent) => {
-    e.preventDefault(); // 터치 이벤트 자체를 막음
-  };
-
   // Swipeable 설정
   const handlers = useSwipeable({
     onSwipedLeft: () =>
@@ -180,11 +195,7 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
 
         {/* 첫 번째 슬라이드일 때만 지도 보여주기 */}
         {currentSlide === 0 && (
-          <div
-            css={mapContainerStyle}
-            onTouchStart={stopSwipePropagation} // 이벤트 전파 차단
-            onTouchMove={preventTouchMove} // 터치 이벤트 차단
-          >
+          <div css={mapContainerStyle}>
             <MapComponent locationList={travelSummary.locationList} />
           </div>
         )}
