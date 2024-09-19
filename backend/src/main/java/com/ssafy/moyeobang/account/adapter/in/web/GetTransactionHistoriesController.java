@@ -7,6 +7,7 @@ import com.ssafy.moyeobang.account.application.port.in.GetTransactionHistoriesQu
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ public class GetTransactionHistoriesController {
 
     @GetMapping("/api/accounts/{accountId}/transactions")
     public ApiResult<List<GetTransactionHistoriesResponse>> getTransactionHistories(@PathVariable Long accountId,
-                                                                                    @RequestParam List<Long> memberIds) {
+                                                                                    @RequestParam Set<Long> memberIds) {
         return success(getTransactionHistoriesQuery.getTransactionHistories(accountId, memberIds));
     }
 }

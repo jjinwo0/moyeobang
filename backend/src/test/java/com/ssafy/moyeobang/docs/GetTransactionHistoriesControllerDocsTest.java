@@ -58,7 +58,7 @@ public class GetTransactionHistoriesControllerDocsTest extends RestDocsSupport {
                 now()
         );
 
-        given(getTransactionHistoriesQuery.getTransactionHistories(any(Long.class), any(List.class)))
+        given(getTransactionHistoriesQuery.getTransactionHistories(any(Long.class), any(Set.class)))
                 .willReturn(List.of(response1, response2));
 
         mockMvc.perform(

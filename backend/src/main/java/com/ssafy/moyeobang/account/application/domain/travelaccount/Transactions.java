@@ -3,10 +3,10 @@ package com.ssafy.moyeobang.account.application.domain.travelaccount;
 import static com.ssafy.moyeobang.account.application.domain.travelaccount.TransactionType.DEPOSIT;
 import static com.ssafy.moyeobang.account.application.domain.travelaccount.TransactionType.WITHDRAWAL;
 
+import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -28,11 +28,9 @@ public class Transactions {
                 .reduce(Money.ZERO, Money::add);
     }
 
-    public List<Transaction> getTransactions() {
-        return Collections.unmodifiableList(transactions);
-    }
-
-    public Stream<Transaction> stream() {
-        return transactions.stream();
+    public List<Transaction> getTransactionsRelatedTo(Set<Member> members) {
+        return transactions.stream()
+                .filter(transaction -> transaction.isRelatedTo(members))
+                .toList();
     }
 }

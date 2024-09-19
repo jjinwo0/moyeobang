@@ -61,7 +61,7 @@ class GetTransactionHistoriesServiceTest {
         //when
         List<GetTransactionHistoriesResponse> transactionHistories = getTransactionHistoriesService.getTransactionHistories(
                 1L,
-                List.of(1L, 2L, 3L)
+                Set.of(1L, 2L, 3L)
         );
 
         //then
