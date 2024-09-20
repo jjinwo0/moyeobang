@@ -25,6 +25,7 @@ import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import jakarta.persistence.EntityManager;
@@ -302,6 +303,7 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         return WithdrawJpaEntity.builder()
                 .title("투썸플레이스")
                 .amount(46000)
+                .settleType(SettleType.RECEIPT)
                 .travelAccount(travelAccount)
                 .build();
     }

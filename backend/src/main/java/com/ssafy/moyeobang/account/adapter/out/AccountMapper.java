@@ -80,8 +80,7 @@ public class AccountMapper {
 
     private Transaction mapToWithdrawal(WithdrawJpaEntity withdrawal, Members members) {
         List<Settle> settles = withdrawal.getOrderJpaEntities().stream()
-                .map(OrderJpaEntity::getSettle)
-                .map(settle -> mapToSettle(settle, members))
+                .map(order -> mapToSettle(order, members))
                 .toList();
 
         return Withdrawal.builder()
@@ -91,17 +90,25 @@ public class AccountMapper {
                 .money(Money.of(withdrawal.getAmount()))
                 .balanceSnapshot(Money.of(withdrawal.getBalanceSnapshot()))
                 .title(withdrawal.getTitle())
+                .address(withdrawal.getPlaceAddress())
+                .settleType(withdrawal.getSettleType().name())
                 .settles(new Settles(settles))
                 .build();
     }
 
-    private Settle mapToSettle(Map<Long, Long> settles, Members members) {
-        Map<Member, Money> settle = settles.keySet().stream()
+    private Settle mapToSettle(OrderJpaEntity order, Members members) {
+        Map<Long, Long> settles = order.getSettle();
+
+        Map<Member, Money> settle = order.getSettle().keySet().stream()
                 .collect(Collectors.toMap(
                         members::getMember,
                         key -> Money.of(settles.get(key))
                 ));
 
-        return new Settle(settle);
+        return new Settle(
+                order.getId(),
+                order.getTitle(),
+                settle
+        );
     }
 }

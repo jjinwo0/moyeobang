@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GetAccountMemberBalanceService implements GetAccountMemberBalanceQuery {
 

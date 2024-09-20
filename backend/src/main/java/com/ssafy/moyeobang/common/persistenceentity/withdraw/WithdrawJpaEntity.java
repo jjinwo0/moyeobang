@@ -6,6 +6,8 @@ import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntit
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,6 +46,15 @@ public class WithdrawJpaEntity extends BaseEntity {
 
     private double longitude;
 
+    private String placeId;
+
+    private String placeName;
+
+    private String placeAddress;
+
+    @Enumerated(EnumType.STRING)
+    private SettleType settleType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_account_id")
     private TravelAccountJpaEntity travelAccount;
@@ -58,6 +69,10 @@ public class WithdrawJpaEntity extends BaseEntity {
                               String targetAccountNumber,
                               double latitude,
                               double longitude,
+                              String placeId,
+                              String placeName,
+                              String placeAddress,
+                              SettleType settleType,
                               TravelAccountJpaEntity travelAccount) {
         this.title = title;
         this.amount = amount;
@@ -65,6 +80,10 @@ public class WithdrawJpaEntity extends BaseEntity {
         this.targetAccountNumber = targetAccountNumber;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.placeAddress = placeAddress;
+        this.settleType = settleType;
         this.travelAccount = travelAccount;
     }
 }
