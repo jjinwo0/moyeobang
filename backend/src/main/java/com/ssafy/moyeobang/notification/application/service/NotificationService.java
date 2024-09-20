@@ -11,7 +11,6 @@ import com.ssafy.moyeobang.notification.application.port.out.LoadMemberPort;
 import com.ssafy.moyeobang.notification.application.port.out.LoadMemberTravelInfoInTravelPort;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +52,7 @@ public class NotificationService implements NotificationUseCase {
                                 .setToken(token)
                                 .build();
 
-                        sender.send(message, new AtomicInteger(0));
+                        sender.send(message);
                     }
                 });
     }
@@ -84,7 +83,7 @@ public class NotificationService implements NotificationUseCase {
                         }))
                 .collect(Collectors.toList());
 
-        sender.sendAll(messageList, new AtomicInteger(0));
+        sender.sendAll(messageList);
     }
 
 
