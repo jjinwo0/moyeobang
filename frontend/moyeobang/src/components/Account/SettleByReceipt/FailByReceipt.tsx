@@ -42,16 +42,21 @@ const buttonLayoutStyle=css`
     gap:30px;
 `;
 
-export default function FailByReceipt() {
+interface FailByReceiptProps {
+    onClose: VoidFunction;
+}
+export default function FailByReceipt({onClose}:FailByReceiptProps) {
 
-    const navigate = useNavigate({from:'/account/settle'});
+    const navigate = useNavigate({from:'/account/$transactionId/settle'});
 
     function handleRestart() {
-        navigate({to:'/account/settle'})
+        navigate({to:'/account/$transactionId/settle'})
+        onClose()
     }
 
     function handleClose() {
         navigate({to:'/account'})
+        onClose()
     }
     return(
         <div css={layoutStyle}>

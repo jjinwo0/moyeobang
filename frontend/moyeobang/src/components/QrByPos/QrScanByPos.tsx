@@ -2,17 +2,19 @@ import React, { useRef, useEffect, useState } from "react"
 import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
-import PayCompletedModal from "./PayCompletedModal";
-import { useNavigate } from "@tanstack/react-router";
-import { useCompleteTransaction } from "@/context/TransactionContext";
+import Btn from "../common/btn/Btn";
 
 const qrReaderLayoutStyle = css`
-    padding-top: 30px;
     width: 100%;
     height: 100%;
     display:flex;
     flex-direction:column;
-    position : relative; 
+    align-items:center;
+    background-color:${colors.white};
+    /* position : absolute; */
+    z-index:9999;
+    top:0;
+    left:0;
     video { 
     width : 100% ; 
     height : 600px; 
@@ -30,11 +32,11 @@ const qrBoxStyle = css`
     left: 12% !important;
 `;
 
-// const resultStyle = css`
-//   font-family:'semibold';
-//   text-align: center;
-//   font-size: 20px;
-// `;
+const resultStyle = css`
+  font-family:'semibold';
+  text-align: center;
+  font-size: 20px;
+`;
 
 const smallText = css`
     font-family: 'regular';
@@ -62,24 +64,23 @@ const textBoxStyle= css`
 
 interface QrScanProps {
     onClose : () => void;
+    data : PosPay;
 }
-export default function QrScan({onClose} : QrScanProps) {
+
+export default function QrScanByPos({onClose, data} : QrScanProps) {
     
-    const navigate = useNavigate();
     const scanner = useRef<QrScanner>();
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
-    const {updateTransactionData} = useCompleteTransaction(); 
 
     // 결과 
     const [scannedResult, setScannedResult] = useState<string | undefined>("");
 
     // 성공
     function onScanSuccuess( result : QrScanner.ScanResult ) {
-        console.log(result);
         setScannedResult(result?.data)
-        // 성공 sse 받아오기!
+        // 받은 계좌, uuid정보 ! data넣어서 백에 보내기!!
     }
 
     function onScanFail(error: string | Error) {
@@ -116,7 +117,6 @@ export default function QrScan({onClose} : QrScanProps) {
         return () => {
             if (!videoElement.current) {
                 scanner?.current?.stop();
-
             }
         }
 
@@ -137,18 +137,7 @@ export default function QrScan({onClose} : QrScanProps) {
 
     // 결제완료 => 정산하기
     function handleSettle() {
-        // useContext에 데이터 업데이트
-        const newCompleteTransaction : CompleteTransaction = { 
-            transactionId: 1,
-            adress:'임시 주소',
-            paymentName: '임시 가게명',
-            money: 7890,
-            createdAt: '2024-09-01T12:34:56',
-            isNew:true,
-        };
-        
-        updateTransactionData(newCompleteTransaction);
-        navigate({to : `/account/settle/${newCompleteTransaction.transactionId}`})
+
         handleClose()
     }
 
@@ -168,11 +157,12 @@ export default function QrScan({onClose} : QrScanProps) {
                 </>
             }
                 { scannedResult && (
-                    <PayCompletedModal onClose={handleClose} onClick={handleSettle}/>
-                    // <p css={resultStyle}>
-                    //     스캔 결과 : {scannedResult}
-                    // </p>
+                    <p css={resultStyle}>
+                        스캔 결과 : {scannedResult}
+                        데이터 : {data.adress} {data.money} {data.paymentName}
+                    </p>
                 )}
+                <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSettle}>결제</Btn>
         </div>
     ) 
 }     

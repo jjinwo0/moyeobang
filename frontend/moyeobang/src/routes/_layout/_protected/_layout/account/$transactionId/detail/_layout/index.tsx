@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import { useNavigate } from '@tanstack/react-router'
 import TransactionDetailDefaultCard from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import Btn from '@/components/common/btn/Btn'
-import { detailDataByCustomAfterSettle, detailDataByEqualAfterSettle, detailDataByEqualBeforeSettle } from '@/data/data'
+import { detailDataByCustomAfterSettle, detailDataByReceiptAfterSettle } from '@/data/data'
 import { colors } from '@/styles/colors'
 import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
 import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
@@ -12,7 +12,7 @@ import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
 // const dataByCustomAfterSettle = detailDataByCustomAfterSettle;
 // const dataByEqualAfterSettle = detailDataByEqualAfterSettle;
 // const dataByEqualBeforeSettle = detailDataByEqualBeforeSettle;
-const data = detailDataByEqualAfterSettle;
+const data = detailDataByCustomAfterSettle;
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -52,77 +52,67 @@ const listStyle=css`
   }
 `;
 
-export const Route = createFileRoute('/_layout/_protected/_layout/account/detail/_layout/$transactionId')({
+export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/detail/_layout/')({
   component: TransactionDetail
 })
 
 export default function TransactionDetail() {
   const { transactionId } = Route.useParams()
-  const navigate = useNavigate({from:'/account/detail'});
-
-  function handleSettle() {
-    navigate({to:'/account/settle'})
-  }
+  const navigate = useNavigate({from:'/account/$transactionId/detail'});
 
   function handleUpdate() {
     // 영수증 정산일때
-    if ( data.splitMethod === "equal") {
-      navigate({to: `/account/resultByReceipt/${transactionId}`})
+    if ( data.splitMethod === "receipt") {
+      navigate({to: `/account/${transactionId}/resultByReceipt`})
+
     } else {
       // 직접 정산일때
-      navigate({to: '/account/settle', state: { active :'right'} as any})
+      navigate({to: `/account/${transactionId}/settle`, state: {active: 'right'} as any})
     }
   }
 
   return (
     <div css={layoutStyle}>
-      {transactionId}상세 페이지
       <TransactionDetailDefaultCard 
-            place={data.place}
-            totalAmount={data.amount}
+            paymentName={data.paymentName} 
+            money={data.money}
             createdAt={data.createdAt}
-            acceptedNumber={data.amount}
+            acceptedNumber={data.acceptedNumber}
             adress={data.adress}
         />
-        {data.settled} / {data.splitMethod}
-        { !data.settled && data.splitMethod ==='equal' &&
-          <div>
-            정산전.
-          </div>
-        }
-        { data.settled && data.splitMethod ==='equal' &&
+        { data.splitMethod ==='receipt' &&
           <>
-            <div css={columnStyle}><div>상품명</div><div>수량</div><div>금액</div></div>
-              <div css={listStyle}>
-                {data.details.map((detail, index) => (
-                  <DetailCardByReceipt key={index} {...detail}/>
-                ))}
-              </div>
+            <div css={columnStyle}>
+              <div>상품명</div>
+              <div>수량</div>
+              <div>금액</div>
+            </div>
+            <div css={listStyle}>
+              {data.details.map((detail, index) => (
+                <DetailCardByReceipt key={index} {...detail}/>
+              ))}
+            </div>
           </>
         }
-        { data.settled && data.splitMethod ==='custom' &&
+        { data.splitMethod ==='custom' &&
           <>
-            <div css={columnStyle}><div>프로필</div><div>정산자</div><div>정산금액</div></div>
-              <div css={listStyle}>
-                {data.details.map((detail, index) => (
-                  <DetailCardByCustom key={index} {...detail.participant} amount={detail.amount}/>
-                ))}
-              </div>
+            <div css={columnStyle}>
+              <div>프로필</div>
+              <div>정산자</div>
+              <div>정산금액</div>
+            </div>
+            <div css={listStyle}>
+              {data.details.map((detail, index) => (
+                <DetailCardByCustom key={index} {...detail.participant} money={detail.money}/>
+              ))}
+            </div>
           </>
         }
         <div css={buttonLayoutStyle}>
-        { data.settled ? (
-        <Btn 
-        buttonStyle={{ size:'big', style:'blue'}}
-        onClick={handleUpdate}
-        >정산 수정하기</Btn> 
-        ) : (
           <Btn 
           buttonStyle={{ size:'big', style:'blue'}}
-          onClick={handleSettle}
-          >정산 하러가기</Btn>
-        )
-          }
+          onClick={handleUpdate}
+          >정산 수정하기</Btn> 
         </div>
     </div>
   )

@@ -1,5 +1,4 @@
 import React from "react";
-import { SettledItemInfo } from "@/types/ex";
 import SmallProfileImage from "../ProfileImage/SmallProfileImage";
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
@@ -49,14 +48,14 @@ const profileListStyle = css`
     padding-bottom: 10px;
 `;
 
-export default function DetailCardByReceipt({orderItemTitle, orderItemAmount, orderItemQuantity, participants}:SettledItemInfo) {
+export default function DetailCardByReceipt({orderItemTitle, orderItemPrice, orderItemQuantity, participants}:SettledItemInfo) {
 
     return (
         <div>
             <div css={itemContainerStyle}>
                 <div css={titleBoxStyle}>{orderItemTitle}</div>
                 <div css={quantityBoxStyle}>{orderItemQuantity}개</div>
-                <div css={amountBoxStyle}>{orderItemAmount}</div>
+                <div css={amountBoxStyle}>{orderItemPrice}</div>
             </div>
             <div css={profileListStyle}>
                 {participants.map((participant, index) => (

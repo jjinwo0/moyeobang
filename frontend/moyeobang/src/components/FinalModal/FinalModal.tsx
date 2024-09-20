@@ -86,10 +86,10 @@ type FinalModalProps = PropsWithChildren<HTMLAttributes<HTMLDivElement>> & {
     onClickOutside: VoidFunction;
     onClick: VoidFunction;
     confirmData: CustomSettle[];
-    totalAmount: TotalAmount;
+    totalMoney: Money;
   }
 
-export default function FinalModal({onClickOutside, onClick, confirmData, totalAmount} : FinalModalProps) {
+export default function FinalModal({onClickOutside, onClick, confirmData, totalMoney} : FinalModalProps) {
 
     const modalRef = useRef<HTMLDivElement>(null);
     useOnClickOutside(modalRef, onClickOutside);
@@ -109,7 +109,7 @@ export default function FinalModal({onClickOutside, onClick, confirmData, totalA
                 </div>
                 <div css={textStyle}>
                     <div css={titleStyle}>최종확인</div>
-                    <div css={amountStyle}>총 {totalAmount} 원</div>
+                    <div css={amountStyle}>총 {totalMoney} 원</div>
                     <div css={countStyle}>인원 {confirmData.length} 명</div>
                 </div>
                 <div css={listLayoutStyle(isExpanded)}>
@@ -120,7 +120,7 @@ export default function FinalModal({onClickOutside, onClick, confirmData, totalA
                     profileImage={user.participantsInfo.profileImage}
                     nickname={user.participantsInfo.nickname}
                     isChecked={true}
-                    amount={user.amount}
+                    money={user.money}
                     />
                 ))}
                 </div>

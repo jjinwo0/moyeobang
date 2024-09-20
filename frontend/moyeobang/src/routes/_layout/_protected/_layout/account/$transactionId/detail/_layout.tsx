@@ -2,7 +2,7 @@ import HeaderWithBackButton from '@/components/common/Header/HeaderWithBackButto
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import React from 'react'
 
-export const Route = createFileRoute('/_layout/_protected/_layout/account/detail/_layout')({
+export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/detail/_layout')({
   component: AccountDetailLayout
 })
 

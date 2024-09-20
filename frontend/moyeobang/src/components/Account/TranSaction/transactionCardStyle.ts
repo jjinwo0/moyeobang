@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
 
-export const layout = css`
+export const layoutStyle = css`
     width:330px;
     height: 115px;
     border-top: solid 1px ${colors.lightGray};
@@ -18,26 +18,26 @@ export const layout = css`
     }
 `;
 
-export const upContainer = css`
+export const upContainerStyle = css`
     display: flex;
     justify-content: space-between;
     width: 100%;
     flex-grow: 1;
 `;
 
-export const textContainer = css`
+export const textContainerStyle = css`
     width: 200px;
     display : flex;
     flex-direction: column;
     gap: 10px;
 `;
 
-export const time = css`
+export const timeStyle = css`
     font-family: 'regular';
     font-size: 10px;
 `;
 
-export const location = css`
+export const locationStyle = css`
     padding-right: 15px;
     font-family: 'semibold';
     font-size: 20px;
@@ -46,7 +46,7 @@ export const location = css`
     white-space: nowrap;
 `;
 
-export const carousel = css`
+export const carouselStyle = css`
     display:flex;
     width: 150px;
     justify-content: flex-start;
@@ -63,7 +63,7 @@ export const carousel = css`
 `;
 
 
-export const downContainer = css`
+export const downContainerStyle = css`
     display : flex;
     flex-direction: column;
     gap: 10px;
@@ -71,7 +71,7 @@ export const downContainer = css`
     
 `;
 
-export const deposit = css`
+export const depositStyle = css`
     display: flex;
     justify-content: flex-end;
     font-family:'regular';
@@ -82,7 +82,7 @@ export const deposit = css`
     }
 `;
 
-export const notDeposit = css`
+export const notDepositStyle = css`
     display: flex;
     justify-content: flex-end;
     font-family:'regular';
@@ -93,7 +93,7 @@ export const notDeposit = css`
     }
 `;
 
-export const balance = css`
+export const balanceStyle = css`
     display: flex;
     justify-content: flex-end;
     font-family:'regular';

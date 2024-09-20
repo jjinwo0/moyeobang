@@ -41,20 +41,17 @@ const buttonLayoutStyle = css`
 `;
 
 interface PayCompletedModalProps {
-    onClose: ()=>void;
+    onClose: VoidFunction;
+    onClick: VoidFunction;
 }
 
-export default function PayCompletedModal({onClose} : PayCompletedModalProps) {
+// ! api 연결 후 transactionId 임시 제거하기
+export default function PayCompletedModal({onClose, onClick} : PayCompletedModalProps) {
 
     const navigate = useNavigate();
 
     function handleMain() {
         navigate({to : '/account'});
-        onClose();
-    }
-
-    function handleCaculate() {
-        navigate({to : '/account/settle'})
         onClose();
     }
 
@@ -68,14 +65,14 @@ export default function PayCompletedModal({onClose} : PayCompletedModalProps) {
             <div css={buttonLayoutStyle}>
                 <Btn 
                 buttonStyle={{ size:'big', style:'blue'}}
-                onClick={handleCaculate}
+                onClick={onClick}
                 >정산하기
                 </Btn>
-            <Btn 
-            buttonStyle={{ size:'big', style:'gray'}}
-            onClick={handleMain}
-            >닫기
-            </Btn>
+                <Btn 
+                buttonStyle={{ size:'big', style:'gray'}}
+                onClick={handleMain}
+                >닫기
+                </Btn>
             </div>
         </div>
     )
