@@ -10,22 +10,28 @@ import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
+import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
+import useTravelStore from '@/store/useTravelStore';
 
 const data: Travel[] = [
   {
     travelId: 1,
     travelName: '여행제목1',
-    startDate: '20240910',
-    endDate: '20240913',
-    travelPlaceList: ['강원도 춘천시', '제주도 서귀포시'],
+    travelImg: null,
+    participantsCount: 5,
+    startDate: '2024-09-10T12:34:56Z',
+    endDate: '2024-09-13T12:34:56Z',
+    travelPlaceList: ['제주도'],
     quizQuestion: '김훈민의 발사이즈는?',
     quizAnswer: '235',
   },
   {
     travelId: 2,
     travelName: '여행제목2',
-    startDate: '20230920',
-    endDate: '20230923',
+    travelImg: null,
+    participantsCount: 5,
+    startDate: '2023-09-01T12:34:56Z',
+    endDate: '2023-09-05T12:34:56Z',
     travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
@@ -118,31 +124,28 @@ const plusStyle = css`
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
+  const {setTravelData} = useTravelStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   };
 
-  const formatDateString = (dateString: string) => {
-    // "YYYYMMDD"를 "YYYY-MM-DD"로 변환
-    return `${dateString.slice(0, 4)}-${dateString.slice(4, 6)}-${dateString.slice(6, 8)}`;
-  };
-
   const today = normalizeDate(new Date());
 
   // 날짜를 변환한 후 비교
   const upcomingTrips = data.filter(
-    item => normalizeDate(new Date(formatDateString(item.startDate))) > today
+    item => normalizeDate(new Date(item.startDate)) > today
   );
   const pastTrips = data.filter(
-    item => normalizeDate(new Date(formatDateString(item.endDate))) < today
+    item => normalizeDate(new Date(item.endDate)) < today
   );
   const currentTrips = data.filter(
     item =>
-      normalizeDate(new Date(formatDateString(item.startDate))) <= today &&
-      normalizeDate(new Date(formatDateString(item.endDate))) >= today
+      normalizeDate(new Date(item.startDate)) <= today &&
+      normalizeDate(new Date(item.endDate)) >= today
   );
 
   // activeTab에 따라 표시할 여행 결정
@@ -160,6 +163,20 @@ function Index() {
     currentTrips.length === 0 &&
     upcomingTrips.length === 0 &&
     pastTrips.length === 0;
+
+  const handleTravelSummary = (travel: Travel) => {
+    setTravelData(
+      travel.travelName,
+      travel.startDate,
+      travel.endDate,
+      travel.travelPlaceList
+    ); // 상태 저장
+    setTravelSummaryModal(true);
+  };
+
+  const closeTravelSummary = () => {
+    setTravelSummaryModal(false);
+  };
 
   return (
     <>
@@ -188,6 +205,7 @@ function Index() {
                   startDate={trip.startDate}
                   endDate={trip.endDate}
                   place={trip.travelPlaceList}
+                  participantsCount={trip.participantsCount}
                 />
               ))}
             </div>
@@ -213,6 +231,12 @@ function Index() {
                   startDate={item.startDate}
                   endDate={item.endDate}
                   place={item.travelPlaceList}
+                  participantsCount={item.participantsCount}
+                  onClick={
+                    activeTab === 'past'
+                      ? () => handleTravelSummary(item)
+                      : undefined
+                  }
                 />
               ))
             ) : (
@@ -231,6 +255,10 @@ function Index() {
       <img src={plusButton} css={plusStyle} onClick={openModal} />
 
       {isModalOpen && <CreateTravel onClose={closeModal} />}
+
+      {travelSummaryModal && (
+        <TravelSummaryModal onClose={closeTravelSummary} />
+      )}
     </>
   );
 }
