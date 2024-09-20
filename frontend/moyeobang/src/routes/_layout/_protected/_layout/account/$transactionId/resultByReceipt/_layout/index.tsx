@@ -88,7 +88,7 @@ export default function settledReceipt() {
   const queryClient = useQueryClient();
 
   const search = useSearch({from:'/_layout/_protected/_layout/account/$transactionId/resultByReceipt/_layout'});
-  const {isNew} = search;
+  const {isNew} = search; // 장동오류
   const { receiptData } = useReceiptContext();
 
   console.log('수정으로 들어오면 isNew : ', isNew, '임')
