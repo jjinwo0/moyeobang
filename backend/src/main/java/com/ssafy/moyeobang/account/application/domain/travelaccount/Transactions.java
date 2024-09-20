@@ -33,6 +33,21 @@ public class Transactions {
                 .reduce(Money.ZERO, Money::add);
     }
 
+    public Money getDepositBalanceFor(Member member) {
+        return getTransactionsRelatedTo(Set.of(member)).stream()
+                .filter(transaction -> DEPOSIT.equals(transaction.getType()))
+                .map(Transaction::getMoney)
+                .reduce(Money.ZERO, Money::add);
+    }
+
+    public Money getWithdrawalBalanceFor(Member member) {
+        return getTransactionsRelatedTo(Set.of(member)).stream()
+                .filter(transaction -> WITHDRAWAL.equals(transaction.getType()))
+                .map(Withdrawal.class::cast)
+                .map(withdrawal -> withdrawal.getSettleAmountFor(member))
+                .reduce(Money.ZERO, Money::add);
+    }
+
     public List<Transaction> getTransactionsRelatedTo(Set<Member> members) {
         return transactions.stream()
                 .filter(transaction -> transaction.isRelatedTo(members))

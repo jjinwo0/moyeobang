@@ -58,4 +58,19 @@ public class TravelAccount {
                 .findFirst()
                 .map(Withdrawal.class::cast);
     }
+
+    public Money getBalanceFor(Member member) {
+        return Money.subtract(
+                getDepositAmountFor(member),
+                getWithdrawAmountFor(member)
+        );
+    }
+
+    public Money getDepositAmountFor(Member member) {
+        return transactions.getDepositBalanceFor(member);
+    }
+
+    public Money getWithdrawAmountFor(Member member) {
+        return transactions.getWithdrawalBalanceFor(member);
+    }
 }

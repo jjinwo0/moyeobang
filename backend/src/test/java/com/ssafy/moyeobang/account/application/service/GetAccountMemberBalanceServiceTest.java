@@ -2,19 +2,22 @@ package com.ssafy.moyeobang.account.application.service;
 
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountMemberBalanceResponse;
-import com.ssafy.moyeobang.account.application.domain.Account;
-import com.ssafy.moyeobang.account.application.domain.Activity;
-import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
-import com.ssafy.moyeobang.account.application.domain.Settle;
-import com.ssafy.moyeobang.account.application.domain.Settles;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.Deposit;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.Members;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.Transaction;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.Transactions;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.Withdrawal;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadMemberPort;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
@@ -32,108 +35,132 @@ class GetAccountMemberBalanceServiceTest {
     @Test
     void getAccountMemberBalance() {
         //given
-        Account travelAccount = createAccount("0016174648358791", 0L);
-
-        Member member1 = new Member(
-                1L,
-                "김두열1",
-                "https://profile-image.url",
-                "eea1652c-b5f3-4ef3-9aba-5360026f03b0",
-                "0016174648358792"
+        Member member1 = createMember(1L, "김두열", "0016174648358791");
+        Member member2 = createMember(2L, "김훈민", "0016174648358792");
+        Member member3 = createMember(3L, "박진우", "0016174648358793");
+        Members members = new Members(
+                Map.of(
+                        1L, member1,
+                        2L, member2,
+                        3L, member3
+                )
         );
 
-        Member member2 = new Member(
-                2L,
-                "김두열1",
-                "https://profile-image.url",
-                "eea1652c-b5f3-4ef3-9aba-5360026f03b0",
-                "0016174648358793"
-        );
+        Transaction transaction1 = createDeposit(member1);
+        Transaction transaction2 = createDeposit(member2);
+        Transaction transaction3 = createDeposit(member3);
+        Transaction transaction4 = createWithdrawal1(members);
+        Transaction transaction5 = createWithdrawal2(members);
+        Transactions transactions = new Transactions(transactions(transaction1, transaction2, transaction3, transaction4, transaction5));
 
-        Member member3 = new Member(
-                3L,
-                "김두열1",
-                "https://profile-image.url",
-                "eea1652c-b5f3-4ef3-9aba-5360026f03b0",
-                "0016174648358794"
-        );
+        TravelAccount travelAccount = new TravelAccount("0016174648358790", members, transactions);
 
         given(loadMemberPort.loadMember(1L)).willReturn(member1);
         given(loadMemberPort.loadMember(2L)).willReturn(member2);
         given(loadMemberPort.loadMember(3L)).willReturn(member3);
-
-        given(loadAccountPort.loadAccount("0016174648358791")).willReturn(travelAccount);
+        given(loadAccountPort.loadTravelAccount(any(Long.class))).willReturn(travelAccount);
 
         //when
         GetAccountMemberBalanceResponse accountMemberBalance1 = getAccountMemberBalanceService.getAccountMemberBalance(
-                "0016174648358791",
+                1L,
                 1L
         );
 
         GetAccountMemberBalanceResponse accountMemberBalance2 = getAccountMemberBalanceService.getAccountMemberBalance(
-                "0016174648358791",
+                1L,
                 2L
         );
 
         GetAccountMemberBalanceResponse accountMemberBalance3 = getAccountMemberBalanceService.getAccountMemberBalance(
-                "0016174648358791",
+                1L,
                 3L
         );
 
         //then
         assertThat(accountMemberBalance1).extracting("personalCurrentBalance", "personalTotalAmount", "personalTotalSpent")
-                .containsExactly(40000L, 100000L, 60000L);
+                .containsExactly(70000L, 100000L, 30000L);
 
         assertThat(accountMemberBalance2).extracting("personalCurrentBalance", "personalTotalAmount", "personalTotalSpent")
-                .containsExactly(40000L, 100000L, 60000L);
+                .containsExactly(60000L, 100000L, 40000L);
 
         assertThat(accountMemberBalance3).extracting("personalCurrentBalance", "personalTotalAmount", "personalTotalSpent")
-                .containsExactly(80000L, 100000L, 20000L);
+                .containsExactly(90000L, 100000L, 10000L);
     }
 
-    private Account createAccount(String accountNumber, Long amount) {
-        return Account.of(
-                accountNumber,
-                Money.of(amount),
-                createActivityWindow(accountNumber),
-                createSettles()
+    private Member createMember(Long id, String name, String accountNumber) {
+        return new Member(
+                id,
+                name,
+                "https://profile-image.url",
+                "eea1652c-b5f3-4ef3-9aba-5360026f03b0",
+                accountNumber
         );
     }
 
-    private ActivityWindow createActivityWindow(String travelAccountNumber) {
-        String memberAccountNumber1 = "0016174648358792";
-        String memberAccountNumber2 = "0016174648358793";
-        String memberAccountNumber3 = "0016174648358794";
-
-        String storeAccountNumber1 = "0016174648358795";
-        String storeAccountNumber2 = "0016174648358796";
-
-        Activity deposit1 = new Activity(travelAccountNumber, memberAccountNumber1, travelAccountNumber, now(), Money.of(100000));
-        Activity deposit2 = new Activity(travelAccountNumber, memberAccountNumber2, travelAccountNumber, now(), Money.of(100000));
-        Activity deposit3 = new Activity(travelAccountNumber, memberAccountNumber3, travelAccountNumber, now(), Money.of(100000));
-
-        Activity payment1 = new Activity(travelAccountNumber, travelAccountNumber, storeAccountNumber1, now(), Money.of(80000));
-        Activity payment2 = new Activity(travelAccountNumber, travelAccountNumber, storeAccountNumber2, now(), Money.of(60000));
-
-        return new ActivityWindow(List.of(deposit1, deposit2, deposit3, payment1, payment2));
+    private Transaction createDeposit(Member member) {
+        return Deposit.builder()
+                .transactionAccountNumber(member.getAccountNumber())
+                .timestamp(now())
+                .money(Money.of(100000))
+                .balanceSnapshot(Money.of(100000))
+                .depositMember(member)
+                .build();
     }
 
-    private Settles createSettles() {
-        Settle settle1 = new Settle(
+    private Transaction createWithdrawal1(Members members) {
+        com.ssafy.moyeobang.account.application.domain.travelaccount.Settle settle = new com.ssafy.moyeobang.account.application.domain.travelaccount.Settle(
+                1L,
+                "케잌",
                 Map.of(
-                        1L, 30000L,
-                        2L, 30000L,
-                        3L, 20000L
+                        members.getMember(1L), Money.of(10000),
+                        members.getMember(2L), Money.of(10000),
+                        members.getMember(3L), Money.of(10000)
                 )
         );
 
-        Settle settle2 = new Settle(
+        return Withdrawal.builder()
+                .transactionId(2L)
+                .transactionAccountNumber("222")
+                .timestamp(now())
+                .money(Money.of(30000))
+                .balanceSnapshot(Money.of(270000))
+                .title("스타벅스")
+                .address("광주 광역시 수완동")
+                .settleType("CUSTOM")
+                .settles(new com.ssafy.moyeobang.account.application.domain.travelaccount.Settles(List.of(settle)))
+                .build();
+    }
+
+    private Transaction createWithdrawal2(Members members) {
+        com.ssafy.moyeobang.account.application.domain.travelaccount.Settle settle = new com.ssafy.moyeobang.account.application.domain.travelaccount.Settle(
+                2L,
+                "김치찌개",
                 Map.of(
-                        1L, 30000L,
-                        2L, 30000L
+                        members.getMember(1L), Money.of(20000),
+                        members.getMember(2L), Money.of(30000)
                 )
         );
 
-        return new Settles(List.of(settle1, settle2));
+        return Withdrawal.builder()
+                .transactionId(3L)
+                .transactionAccountNumber("333")
+                .timestamp(now())
+                .money(Money.of(50000))
+                .balanceSnapshot(Money.of(220000))
+                .title("다복식당")
+                .address("광주 광역시 수완동")
+                .settleType("RECEIPT")
+                .settles(new com.ssafy.moyeobang.account.application.domain.travelaccount.Settles(List.of(settle)))
+                .build();
+    }
+
+    private List<Transaction> transactions(Transaction... transactions) {
+        List<Transaction> transactionList = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            transactionList.add(transaction);
+        }
+
+        return transactionList;
     }
 }

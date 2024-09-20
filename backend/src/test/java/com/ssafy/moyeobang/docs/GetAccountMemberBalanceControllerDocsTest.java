@@ -41,7 +41,7 @@ public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
                 Money.of(5000)
         );
 
-        given(getAccountMemberBalanceQuery.getAccountMemberBalance(any(String.class), any(Long.class)))
+        given(getAccountMemberBalanceQuery.getAccountMemberBalance(any(Long.class), any(Long.class)))
                 .willReturn(response);
 
         mockMvc.perform(
