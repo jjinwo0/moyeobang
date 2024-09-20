@@ -37,6 +37,14 @@ public class TravelAccount {
         );
     }
 
+    public Money getDepositAmount() {
+        return transactions.getDepositBalance();
+    }
+
+    public Money getWithdrawAmount() {
+        return transactions.getWithdrawalBalance();
+    }
+
     public List<Transaction> getTransactionsRelatedTo(Set<Long> memberIds) {
         return transactions.getTransactionsRelatedTo(
                 members.getMembers(memberIds)

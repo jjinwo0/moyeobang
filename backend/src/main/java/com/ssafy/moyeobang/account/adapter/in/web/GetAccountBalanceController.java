@@ -18,8 +18,8 @@ public class GetAccountBalanceController {
 
     private final GetAccountBalanceQuery getAccountBalanceQuery;
 
-    @GetMapping("/api/accounts/{accountNumber}/balance")
-    public ApiResult<GetAccountBalanceResponse> getAccountBalance(@PathVariable String accountNumber) {
-        return success(getAccountBalanceQuery.getAccountBalance(accountNumber));
+    @GetMapping("/api/accounts/{accountId}/balance")
+    public ApiResult<GetAccountBalanceResponse> getAccountBalance(@PathVariable Long accountId) {
+        return success(getAccountBalanceQuery.getAccountBalance(accountId));
     }
 }

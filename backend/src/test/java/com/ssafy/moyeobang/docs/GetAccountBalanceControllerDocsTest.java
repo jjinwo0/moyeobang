@@ -33,11 +33,11 @@ class GetAccountBalanceControllerDocsTest extends RestDocsSupport {
                 40.0
         );
 
-        given(getAccountBalanceQuery.getAccountBalance(any(String.class)))
+        given(getAccountBalanceQuery.getAccountBalance(any(Long.class)))
                 .willReturn(response);
 
         mockMvc.perform(
-                        get("/api/accounts/{accountNumber}/balance", "0016174548358792")
+                        get("/api/accounts/{accountId}/balance", 1L)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
