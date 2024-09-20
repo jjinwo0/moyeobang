@@ -1,6 +1,5 @@
 package com.ssafy.moyeobang.notification.application.service;
 
-import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
@@ -64,7 +63,7 @@ public class NotificationService implements NotificationUseCase {
      */
     @Override
     @Scheduled(cron = "0 0 22 * * ?", zone = "Asia/Seoul")
-    public void sendBalanceCheckNotification() throws FirebaseMessagingException {
+    public void sendBalanceCheckNotification() {
 
         Map<Long, List<MemberTravel>> map = memberTravelPort.findAllMemberInTravel();
 
