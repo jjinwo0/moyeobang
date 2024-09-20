@@ -1,7 +1,13 @@
 import {css} from '@emotion/react';
 import defalutSky from '@/assets/images/defaultSky.jpg';
-import React from 'react';
+import React, {useState} from 'react';
 import {colors} from '@/styles/colors';
+import settingIcon from '@/assets/icons/settingIcon.png';
+import {useRouter, useNavigate} from '@tanstack/react-router';
+import Btn from '../common/btn/Btn';
+import ExitTravel from './ExitTravel';
+import inviteIcon from '@/assets/icons/inviteIcon.png';
+import ConfirmQuiz from '../quiz/ConfirmQuiz';
 
 const cardStyle = css`
   display: flex;
@@ -57,31 +63,141 @@ const locationStyle = css`
   font-family: 'semibold';
 `;
 
+const settingIconStyle = css`
+  position: absolute; /* 부모 요소 안에서 절대 위치 */
+  top: 16px; /* 위쪽으로 16px 간격 */
+  right: 16px; /* 오른쪽으로 16px 간격 */
+  z-index: 100;
+  img {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
+const settingButtonStyle = css`
+  display: flex;
+  z-index: 10;
+  flex-direction: column;
+  align-self: flex-end;
+  margin-top: 20px;
+`;
+
+const exitModalStyle = css`
+  z-index: 20;
+`;
+
+const quizButtonStyle = css`
+  position: absolute; /* 부모 요소 안에서 절대 위치 */
+  top: 16px; /* 위쪽으로 16px 간격 */
+  right: 45px; /* 오른쪽으로 16px 간격 */
+  z-index: 100;
+  img {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
 interface TravelCardProps {
   title: string;
   startDate: string;
   endDate: string;
   place: string[];
+  participantsCount: number;
+  onClick?: () => void;
 }
 
-const TravelCard: React.FC<TravelCardProps> = ({
+export default function TravelCard({
   title,
   startDate,
   endDate,
   place,
-}) => {
-  return (
-    <div css={cardStyle}>
-      <div css={overlayStyle}>
-        <h2 css={titleStyle}>{title}</h2>
-        <p css={participantsStyle}>n 명과 함께</p>
-        <p css={dateStyle}>
-          {startDate} ~ {endDate}
-        </p>
-        <p css={locationStyle}>{place.join(', ')}</p>
-      </div>
-    </div>
-  );
-};
+  participantsCount,
+  onClick,
+}: TravelCardProps) {
+  const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
+  const [inviteModal, setInviteModal] = useState<boolean>(false);
+  const [exitModal, setExitModal] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-export default TravelCard;
+  const formatDate = (dateString: string) => {
+    return dateString.split('T')[0]; // "YYYY-MM-DDTHH:mm:ssZ"에서 "YYYY-MM-DD"만 추출
+  };
+
+  const clickSettingButton = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파를 막아 카드 클릭이 발생하지 않도록 설정
+    setSettingButtonClick(prev => !prev);
+  };
+
+  const clickInviteButton = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파를 막음
+    setInviteModal(true);
+  };
+
+  const handleExitModalOpen = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파를 막음
+    setExitModal(true);
+  };
+
+  const closeExitModalOpen = () => {
+    setExitModal(false);
+  };
+
+  const closeQuizModal = () => {
+    setInviteModal(false);
+  };
+
+  const goSettingPage = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 이벤트 전파를 막음
+    console.log('세팅페이지');
+    navigate({to: '/profile'});
+  };
+
+  return (
+    <>
+      <div css={cardStyle} onClick={onClick}>
+        <div css={overlayStyle}>
+          <h2 css={titleStyle}>{title}</h2>
+          <p css={participantsStyle}>{participantsCount}명과 함께</p>
+          <p css={dateStyle}>
+            {formatDate(startDate)} ~ {formatDate(endDate)}
+          </p>
+          <p css={locationStyle}>{place.join(', ')}</p>
+        </div>
+        <div css={settingIconStyle}>
+          <img src={settingIcon} onClick={clickSettingButton} />
+        </div>
+        <div css={quizButtonStyle} onClick={clickInviteButton}>
+          <img src={inviteIcon} />
+        </div>
+
+        {settingButtonClick && (
+          <div css={settingButtonStyle}>
+            <Btn
+              buttonStyle={{style: 'blue', size: 'small'}}
+              onClick={goSettingPage}
+            >
+              수정
+            </Btn>
+            <Btn
+              buttonStyle={{style: 'red', size: 'small'}}
+              onClick={handleExitModalOpen}
+            >
+              나가기
+            </Btn>
+          </div>
+        )}
+      </div>
+      {exitModal && (
+        <div css={exitModalStyle}>
+          <ExitTravel travelTitle={title} onClose={closeExitModalOpen} />
+        </div>
+      )}
+
+      {inviteModal && (
+        <div>
+          <ConfirmQuiz onClose={closeQuizModal} />
+        </div>
+      )}
+    </>
+  );
+}

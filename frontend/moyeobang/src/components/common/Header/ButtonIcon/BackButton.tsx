@@ -1,6 +1,5 @@
-import { useRouter } from '@tanstack/react-router';
+import { useRouter, useNavigate } from '@tanstack/react-router';
 import backImg from '@/assets/icons/backButton.png'
-
 import { css } from '@emotion/react';
 import React from 'react';
 
@@ -21,14 +20,15 @@ const backButtonImgStyle = css`
 `
 
 export default function BackButton() {
+    const navigate = useNavigate();
 
-    const router = useRouter();
+    const {history} = useRouter();
 
     function handleBackButton() {
         if (window.history.length > 1) {
-            router.back();
+            history.back();
         } else {
-            router.navigate({ to: '/' });
+            navigate({ to: '/' });
         }
     }
 

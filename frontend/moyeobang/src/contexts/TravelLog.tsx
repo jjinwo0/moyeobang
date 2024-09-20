@@ -15,6 +15,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         predictedBudget: 50000,
         completion: 'completed',
         memo: '도쿄 타워가서 누구보다 신나게 놀아야지',
+        scheduleImg: 'url',
         matchedTransaction: {
           transactionId: 78901,
           paymentName: '도쿄 타워 입장료 결제',
@@ -25,12 +26,12 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
             {
               memberId: 1,
               nickname: '김훈민',
-              profileImage: '/images/profiles/1.png',
+              profileImage: '/assets/images/profile.jpg',
             },
             {
               memberId: 2,
               nickname: '이수민',
-              profileImage: '/images/profiles/2.png',
+              profileImage: '/assets/images/profile.jpg',
             },
           ],
         },
@@ -45,12 +46,12 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
           {
             memberId: 1,
             nickname: '김훈민',
-            profileImage: '/images/profiles/1.png',
+            profileImage: '/assets/images/profile.jpg',
           },
           {
             memberId: 3,
             nickname: '박지현',
-            profileImage: '/images/profiles/3.png',
+            profileImage: '/assets/images/profile.jpg',
           },
         ],
       },

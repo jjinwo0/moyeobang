@@ -21,4 +21,14 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'), // @를 src로 설정
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://vu6tvl2vzm.apigw.ntruss.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: false,  // HTTPS 검증 비활성화
+      },
+    },
+  },
 });

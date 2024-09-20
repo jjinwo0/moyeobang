@@ -21,7 +21,7 @@ export const baseButtonStyle = css`
 export const sizeStyles = {
   sotiny: css`
     width: 55px;
-    height: 25px;
+    height: 20px;
     font-size: 12px;
   `,
   tiny: css`

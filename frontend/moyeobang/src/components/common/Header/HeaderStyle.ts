@@ -11,22 +11,26 @@ export const headerStyle = css`
   height: 50px;
   padding: 0 10px;
   perspective: 0;
-  z-index: 9999;
-  background-color: transparent;
+  z-index: 2;
   box-sizing: border-box;
 `;
 
 export const backButtonHeaderStyle = css`
   ${headerStyle}
+  background-color: transparent;
   justify-content: flex-start;
 `;
 
 export const closeButtonHeaderStyle = css`
   ${headerStyle}
+  background-color: white;
   justify-content: flex-end;
+  z-index: 2;
 `;
 
 export const twoIconsHeaderStyle = css`
   ${headerStyle}
+  background-color: transparent;
   justify-content: flex-end;
+  z-index: 2;
 `;

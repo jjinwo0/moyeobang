@@ -20,15 +20,10 @@ const XButtonImgStyle = css`
 `;
 
 export default function XButton() {
-  const router = useRouter();
-
-  function handleXButton() {
-    router.back();
-  }
 
   return (
     <button css={XButtonStyle}>
-      <img css={XButtonImgStyle} src={XImg} onClick={handleXButton} />
+      <img css={XButtonImgStyle} src={XImg} />
     </button>
   );
 }

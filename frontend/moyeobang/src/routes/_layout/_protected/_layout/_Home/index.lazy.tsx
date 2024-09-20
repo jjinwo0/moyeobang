@@ -1,7 +1,6 @@
 import {createLazyFileRoute} from '@tanstack/react-router';
 import React, {useState} from 'react';
 import {css} from '@emotion/react';
-// import HeaderWithAlarmAndQR from '@/components/common/Header/HeaderWithAlarmAndQR';
 import TravelCard from '@/components/travelHome/TravelCard';
 import {colors} from '@/styles/colors';
 import bangbang from '@/assets/icons/bangBang.png';
@@ -9,22 +8,30 @@ import sadBangbang from '@/assets/icons/sadBangbang.png';
 import TwoBtn from '@/components/common/btn/TwoBtn'; // TwoBtn 컴포넌트 임포트
 import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel';
+import useModalStore from '@/store/useModalStore';
+import NoTravel from '@/components/travelHome/NoTravel';
+import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
+import useTravelStore from '@/store/useTravelStore';
 
 const data: Travel[] = [
   {
     travelId: 1,
     travelName: '여행제목1',
-    startDate: '20240910',
-    endDate: '20240913',
-    travelPlaceList: ['강원도 춘천시', '제주도 서귀포시'],
+    travelImg: null,
+    participantsCount: 5,
+    startDate: '2024-09-10T12:34:56Z',
+    endDate: '2024-09-13T12:34:56Z',
+    travelPlaceList: ['제주도'],
     quizQuestion: '김훈민의 발사이즈는?',
     quizAnswer: '235',
   },
   {
     travelId: 2,
     travelName: '여행제목2',
-    startDate: '20230920',
-    endDate: '20230923',
+    travelImg: null,
+    participantsCount: 5,
+    startDate: '2023-09-01T12:34:56Z',
+    endDate: '2023-09-05T12:34:56Z',
     travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
@@ -56,14 +63,14 @@ const nickNameTextContainer = css`
 `;
 
 const nickNameStyle = css`
-  font-family: 'bold';
-  font-size: 32px;
-  margin-bottom: 15px;
+  font-family: 'surround';
+  font-size: 34px;
+  margin-bottom: 10px;
 `;
 
 const textStyle = css`
   font-family: 'surround';
-  font-size: 32px;
+  font-size: 34px;
   display: inline-block;
 `;
 
@@ -112,49 +119,63 @@ const plusStyle = css`
   right: 25px; /* 오른쪽에서 25px 떨어진 위치 */
   width: 48px;
   height: 48px;
-  z-index: 999; /* 다른 요소 위에 위치하도록 설정 */
+  z-index: 100; /* 다른 요소 위에 위치하도록 설정 */
 `;
-function Index() {
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
-  // 현재 날짜와 여행 날짜를 비교하여 예정된 여행과 지난 여행을 구분
-  const formatDateString = (dateString: string) => {
-    // "YYYYMMDD"를 "YYYY-MM-DD"로 변환
-    return `${dateString.slice(0, 4)}-${dateString.slice(4, 6)}-${dateString.slice(6, 8)}`;
+function Index() {
+  const {isModalOpen, openModal, closeModal} = useModalStore();
+  const {setTravelData} = useTravelStore();
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
+
+  // 날짜에서 시간 부분을 제거하는 함수
+  const normalizeDate = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   };
 
-  const today = new Date();
+  const today = normalizeDate(new Date());
 
   // 날짜를 변환한 후 비교
   const upcomingTrips = data.filter(
-    item => new Date(formatDateString(item.startDate)) >= today
+    item => normalizeDate(new Date(item.startDate)) > today
   );
   const pastTrips = data.filter(
-    item => new Date(formatDateString(item.endDate)) < today
+    item => normalizeDate(new Date(item.endDate)) < today
+  );
+  const currentTrips = data.filter(
+    item =>
+      normalizeDate(new Date(item.startDate)) <= today &&
+      normalizeDate(new Date(item.endDate)) >= today
   );
 
   // activeTab에 따라 표시할 여행 결정
-  const tripsToDisplay = activeTab === 'upcoming' ? upcomingTrips : pastTrips;
+  let tripsToDisplay;
+  if (activeTab === 'upcoming') {
+    tripsToDisplay = upcomingTrips;
+  } else if (activeTab === 'past') {
+    tripsToDisplay = pastTrips;
+  } else {
+    tripsToDisplay = currentTrips; // 필요에 따라 현재 진행 중인 여행
+  }
 
-  // 현재 날짜가 여행 기간 내에 있는지 확인하는 함수
-  const isTodayInTrip = (startDate: string, endDate: string) => {
-    const start = new Date(formatDateString(startDate));
-    const end = new Date(formatDateString(endDate));
-    return today >= start && today <= end;
+  // 여행이 하나도 없을 때
+  const noTripsAvailable =
+    currentTrips.length === 0 &&
+    upcomingTrips.length === 0 &&
+    pastTrips.length === 0;
+
+  const handleTravelSummary = (travel: Travel) => {
+    setTravelData(
+      travel.travelName,
+      travel.startDate,
+      travel.endDate,
+      travel.travelPlaceList
+    ); // 상태 저장
+    setTravelSummaryModal(true);
   };
 
-  // 현재 날짜가 포함된 여행 찾기
-  const currentTrip = data.find(trip =>
-    isTodayInTrip(trip.startDate, trip.endDate)
-  );
-
-  const openModal = () => {
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
+  const closeTravelSummary = () => {
+    setTravelSummaryModal(false);
   };
 
   return (
@@ -170,54 +191,74 @@ function Index() {
         <img src={bangbang} css={profileImageStyle} />
       </div>
 
-      {/* 현재 진행 중인 여행이 있을 경우 표시 */}
-      {currentTrip && (
-        <div css={containerStyle}>
-          <TravelCard
-            key={currentTrip.travelId}
-            title={currentTrip.travelName}
-            startDate={currentTrip.startDate}
-            endDate={currentTrip.endDate}
-            place={currentTrip.travelPlaceList}
-          />
-        </div>
-      )}
+      {noTripsAvailable ? (
+        <NoTravel />
+      ) : (
+        <>
+          {/* 현재 진행 중인 여행이 있을 경우 표시 */}
+          {currentTrips.length > 0 && (
+            <div css={containerStyle}>
+              {currentTrips.map(trip => (
+                <TravelCard
+                  key={trip.travelId}
+                  title={trip.travelName}
+                  startDate={trip.startDate}
+                  endDate={trip.endDate}
+                  place={trip.travelPlaceList}
+                  participantsCount={trip.participantsCount}
+                />
+              ))}
+            </div>
+          )}
 
-      {/* TwoBtn 컴포넌트 사용, 왼쪽엔 예정여행, 오른쪽엔 지난 여행 */}
-      <div css={buttonStyle}>
-        <TwoBtn
-          leftText="예정여행"
-          rightText="지난 여행"
-          onLeftClick={() => setActiveTab('upcoming')}
-          onRightClick={() => setActiveTab('past')}
-        />
-      </div>
-
-      {/* 여행 카드 리스트 */}
-      <div css={containerStyle}>
-        {tripsToDisplay.length > 0 ? (
-          tripsToDisplay.map(item => (
-            <TravelCard
-              key={item.travelId}
-              title={item.travelName}
-              startDate={item.startDate}
-              endDate={item.endDate}
-              place={item.travelPlaceList}
+          {/* TwoBtn 컴포넌트 사용, 왼쪽엔 예정여행, 오른쪽엔 지난 여행 */}
+          <div css={buttonStyle}>
+            <TwoBtn
+              leftText="예정여행"
+              rightText="지난 여행"
+              onLeftClick={() => setActiveTab('upcoming')}
+              onRightClick={() => setActiveTab('past')}
             />
-          ))
-        ) : (
-          <div css={noTravelStyle}>
-            <span css={noTravelTextStyle}>
-              {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이 없습니다
-            </span>
-            <img src={sadBangbang} css={sadIconStyle} />
           </div>
-        )}
-      </div>
+
+          {/* 여행 카드 리스트 */}
+          <div css={containerStyle}>
+            {tripsToDisplay.length > 0 ? (
+              tripsToDisplay.map(item => (
+                <TravelCard
+                  key={item.travelId}
+                  title={item.travelName}
+                  startDate={item.startDate}
+                  endDate={item.endDate}
+                  place={item.travelPlaceList}
+                  participantsCount={item.participantsCount}
+                  onClick={
+                    activeTab === 'past'
+                      ? () => handleTravelSummary(item)
+                      : undefined
+                  }
+                />
+              ))
+            ) : (
+              <div css={noTravelStyle}>
+                <span css={noTravelTextStyle}>
+                  {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이
+                  없습니다
+                </span>
+                <img src={sadBangbang} css={sadIconStyle} />
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
       <img src={plusButton} css={plusStyle} onClick={openModal} />
 
       {isModalOpen && <CreateTravel onClose={closeModal} />}
+
+      {travelSummaryModal && (
+        <TravelSummaryModal onClose={closeTravelSummary} />
+      )}
     </>
   );
 }

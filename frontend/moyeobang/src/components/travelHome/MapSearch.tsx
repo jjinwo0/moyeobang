@@ -22,7 +22,7 @@ const fetchCityData = async (cityName: string): Promise<CityResult[]> => {
   return response.data.results; // 도시 정보 반환
 };
 
-const MapSearch: React.FC = () => {
+export default function MapSearch() {
   const [cityInput, setCityInput] = useState<string>(''); // 입력값 관리
   const [cityName, setCityName] = useState<string>(''); // 검색된 도시 이름 관리
 
@@ -67,6 +67,4 @@ const MapSearch: React.FC = () => {
       )}
     </div>
   );
-};
-
-export default MapSearch;
+}
