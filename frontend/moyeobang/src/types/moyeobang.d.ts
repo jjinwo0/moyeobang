@@ -2,7 +2,7 @@ type ProfileImage = string;
 type TransactionId = number;
 type MemberId = number;
 type Nickname = string;
-type CreatedAt = string;
+type CreatedAt = Date;
 type TravelId = number;
 type TravelName = string;
 type TravelPlaceList = Place[];
@@ -81,6 +81,7 @@ type TravelAccountNumber = string;
 type IsNew = boolean;
 type TotalMoney = number;
 type TotalComsumption = number;
+type AccountId = number;
 
 interface ParticipantInfo {
     memberId: MemberId;
@@ -173,7 +174,6 @@ interface CompleteTransaction {
     adress:Adress;
     paymentName:PaymentName;
     createdAt:CreatedAt;
-    isNew?:IsNew;
 }
 
 interface ChatItem {
@@ -183,7 +183,7 @@ interface ChatItem {
 }
 
 interface ChatJsonProps {
-  puchase_data : string;
+  purchase_date : string;
   items : ChatItem[]
 }
 

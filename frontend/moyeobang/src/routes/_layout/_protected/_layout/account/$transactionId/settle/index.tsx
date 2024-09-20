@@ -9,7 +9,6 @@ import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/Settl
 import { useLocation } from '@tanstack/react-router';
 import { useCompleteTransaction } from '@/context/TransactionContext';
 
-
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/settle/')({
   component: Settle
 })  
@@ -39,7 +38,9 @@ export default function Settle() {
   const location = useLocation();
   const state = location.state as LocationState || null;
   const {transactionData} = useCompleteTransaction();
+  const [isHidden, setIsHidden] = useState(false);
 
+  const isNew : boolean = !location.pathname.includes('/detail') // 상세페이지에서 온거면 false 새로 생성  true
 
   const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
     state?.active === 'right' ? 'right' : 'left'
@@ -57,9 +58,13 @@ export default function Settle() {
     history.back()
   }
 
+  function handleHidden() {
+    setIsHidden(true);
+  }
+
   return (
     <>
-    <HeaderWithXButton onXClick={handleXClick}/>
+    { isHidden && <HeaderWithXButton onXClick={handleXClick}/> }
     <div css={layoutStyle}>
     <TwoBtn 
       leftText='영수증 인식'
@@ -75,14 +80,14 @@ export default function Settle() {
         adress={transactionData.adress}
         paymentName={transactionData.paymentName}
         createdAt={transactionData.createdAt}
-        isNew={transactionData.isNew}
+        handleHidden={handleHidden}
       />
     }
     { activeComponent==='right' && 
       <SettleByCustomComponent 
         transactionId={transactionId} 
         totalMoney={transactionData.money}
-        isNew={transactionData.isNew}
+        isNew={isNew}
         adress={transactionData.adress}
         paymentName={transactionData.paymentName}
         createdAt={transactionData.createdAt}

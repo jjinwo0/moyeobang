@@ -8,7 +8,7 @@ export interface TransactionDetailDefaultCardProps {
     paymentName:PaymentName;
     money:Money;
     createdAt:CreatedAt;
-    acceptedNumber:AcceptedNumber; // 승인번호
+    // acceptedNumber:AcceptedNumber; // 승인번호
     adress:Adress;
 }
 
@@ -46,9 +46,7 @@ export default function TransactionDetailDefaultCard({
     paymentName,
     money,
     createdAt,
-    acceptedNumber,
     adress
-
     } : TransactionDetailDefaultCardProps) {
 
     return (
@@ -59,10 +57,10 @@ export default function TransactionDetailDefaultCard({
                     <div css={labelStyle} >금액</div>
                     <div css={textStyle}>{money}원</div>
                 </div>
-                <div css={boxStyle}>
+                {/* <div css={boxStyle}>
                     <div css={labelStyle}>승인번호</div>
                     <div css={textStyle}>{acceptedNumber}</div>
-                </div>
+                </div> */}
                 <div css={boxStyle}>
                     <div css={labelStyle}>일시</div>
                     <div css={textStyle}>{format(createdAt,'yyyy-MM-dd HH:mm', {locale: ko})}</div>

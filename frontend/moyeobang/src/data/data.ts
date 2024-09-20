@@ -21,11 +21,6 @@ export const profileData : ParticipantInfo[] = [
         nickname: "홍길동",
         profileImage : profileImageUrl,
     },
-    {   
-        memberId : 5,
-        nickname: "홍길동",
-        profileImage : profileImageUrl,
-    },
   ]
   
   export const transactionsData = [

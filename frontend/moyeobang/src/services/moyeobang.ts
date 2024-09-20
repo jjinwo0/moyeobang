@@ -30,12 +30,12 @@ export default {
    */
   getTransactionList: async (
     accountId?: number,
-    memberId?: number[],
+    memberIds?: number[],
   ) =>
     axios.get<GetTransactionListByAccountIdByMemberId>(`/accounts/${accountId}/transactions`, {
       params: {
         accountId,
-        memberId: memberId?.join(),
+        memberIds: memberIds?.join(","),
       },
     }),
   /**

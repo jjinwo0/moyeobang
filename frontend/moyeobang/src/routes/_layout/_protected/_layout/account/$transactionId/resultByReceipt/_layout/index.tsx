@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { createFileRoute, useNavigate, useLocation} from '@tanstack/react-router'
+import React from 'react';
+import { createFileRoute, useNavigate} from '@tanstack/react-router'
 import { css } from '@emotion/react'
-import { isValid, parseISO } from 'date-fns';
-// import { detailDataByReceiptAfterSettle, chatData } from "@/data/data";
 import UpdateCardByReceipt from '@/components/Account/SettleByReceipt/UpdateCardByReceipt'
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
 import Btn from '@/components/common/btn/Btn';
 import { colors } from '@/styles/colors';
+import moyeobang from '@/services/moyeobang';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/resultByReceipt/_layout/')({
   component: settledReceipt
@@ -77,24 +77,39 @@ const buttonContainerStyle=css`
 
 export default function settledReceipt() {
   
+  const accountId : AccountId = 1; // 임시
   const { transactionId } :{ transactionId : TransactionId} = Route.useParams();
   const navigate = useNavigate({from:'/account/$transactionId/resultByReceipt'});
-  const [data, setData] = useState<TransactionDetailByReceipt>();
+  const [receiptData, setReceiptData] = useState<TransactionDetailByReceipt>();
+  const queryClient = useQueryClient();
   
-  // const chData = extractItems(chatData, transactionId);
-  // console.log(chData) // 영수증 정산 완료된 후 들어오는 임시 데이터
-  
-  // get으로 정산 후 기본 데이터 가져오기!
-  const { receipt } = useSuspenseQuery({
+  // get 기본 데이터 가져오기! (1/n정산된 데이터)
+  const { data } = useSuspenseQuery({
     queryKey: ['receipt', transactionId],
-    // queryFn: ({transactionId})
-  })
+    queryFn: () => moyeobang.getTransactionDetail(accountId, transactionId),
+  });
 
+  const receipt = data.data.data as TransactionDetailByReceipt;
+  console.log(receipt)
+  setReceiptData(receipt);
 
+  const {mutate: updateReceipt } = useMutation({
+    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => moyeobang.postSettleByReceipt(transactionId, data),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['receipt'],
+        refetchType: 'all',
+      });
+      await navigate({to: '/account/$transactionId/detail'});
+    },
+  });
 
   function handleSubmit() {
-      // 정산하기
-
+    if (!receiptData) {
+      console.error("영수증 데이터 없음")
+      return
+    }
+      updateReceipt({transactionId:transactionId, data:receiptData})
   }
 
   function handleChange({
@@ -110,7 +125,7 @@ export default function settledReceipt() {
       price: OrderItemPrice;
       participants: ParticipantInfo[];
     }) {
-      const updatedDetails = data?.details.map((detail) =>
+      const updatedDetails = receiptData?.details.map((detail) =>
         detail.orderItemId === itemId
           ? {
               ...detail,
@@ -123,7 +138,7 @@ export default function settledReceipt() {
       );
     
       if (updatedDetails) {
-        setData((prevData) => {
+        setReceiptData((prevData) => {
           if (!prevData) return prevData; // 기존 데이터가 없으면 그대로 반환
     
           return {
@@ -140,22 +155,18 @@ export default function settledReceipt() {
     navigate({to:'/account/$transactionId/settle'})
   }
   
-  // 날짜가 유효한지 확인
-  const validCreatedAt = data?.createdAt && isValid(new Date(data.createdAt));
 
   return (
     <div css={layoutStyle}>
           <div css={upContainerStyle} >
-            <div css={titleStyle}>{data?.paymentName}</div>
-            <div css={amountStyle}>{data?.money}원</div>
+            <div css={titleStyle}>{receiptData?.paymentName}</div>
+            <div css={amountStyle}>{receiptData?.money}원</div>
             <div css={timeStyle}>
-              {validCreatedAt
-              ? format(new Date(data?.createdAt), 'yyyy-MM-dd HH:mm', { locale: ko })
-              : '날짜 없음'}
+              {format(receiptData?.createdAt ?? new Date() , 'yyyy-MM-dd HH:mm', { locale: ko })}
             </div>
           </div>
           <div css={middleContainerStyle}>
-            {data?.details.map((detail, index) => (
+            {receiptData?.details.map((detail, index) => (
               <UpdateCardByReceipt 
               key={index}
               itemId={detail.orderItemId}

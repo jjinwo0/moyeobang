@@ -7,6 +7,7 @@ export const layoutStyle = css`
     z-index:9999;
     margin-top:50px;
     width:100%;
+    height:100%;
     display:flex;
     flex-direction:column;
     background-color: ${colors.white};
@@ -54,7 +55,7 @@ export const middleContainerStyle=css`
 `;
 
 export const buttonContainerStyle=css`
-  position:fixed;
+  /* position:fixed; */
   bottom:30px;
   background-color: ${colors.white};
   width:100%;

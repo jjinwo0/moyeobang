@@ -8,6 +8,8 @@ import { detailDataByCustomAfterSettle, detailDataByReceiptAfterSettle } from '@
 import { colors } from '@/styles/colors'
 import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
 import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import moyeobang from '@/services/moyeobang'
 
 // const dataByCustomAfterSettle = detailDataByCustomAfterSettle;
 // const dataByEqualAfterSettle = detailDataByEqualAfterSettle;
@@ -57,12 +59,21 @@ export const Route = createFileRoute('/_layout/_protected/_layout/account/$trans
 })
 
 export default function TransactionDetail() {
+  // 임시 accountId
+  const accountId = 1;
   const { transactionId } = Route.useParams()
   const navigate = useNavigate({from:'/account/$transactionId/detail'});
 
+  const {data} = useSuspenseQuery({
+    queryKey: ['transactionDetail', accountId, transactionId],
+    queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
+  });
+
+  const transactionDetailData = data.data.data;
+
   function handleUpdate() {
     // 영수증 정산일때
-    if ( data.splitMethod === "receipt") {
+    if ( transactionDetailData.splitMethod === "receipt") {
       navigate({to: `/account/${transactionId}/resultByReceipt`})
 
     } else {
@@ -71,16 +82,22 @@ export default function TransactionDetail() {
     }
   }
 
+  // 타입 가드 함수
+  function isSettledParticipantByCustom(
+    detail: SettledItemByReceipt | SettledParticipantByCustom
+  ): detail is SettledParticipantByCustom {
+    return (detail as SettledParticipantByCustom).participant !== undefined;
+  }
+
   return (
     <div css={layoutStyle}>
       <TransactionDetailDefaultCard 
-            paymentName={data.paymentName} 
-            money={data.money}
-            createdAt={data.createdAt}
-            acceptedNumber={data.acceptedNumber}
-            adress={data.adress}
+            paymentName={transactionDetailData.paymentName} 
+            money={transactionDetailData.money}
+            createdAt={transactionDetailData.createdAt}
+            adress={transactionDetailData.adress}
         />
-        { data.splitMethod ==='receipt' &&
+        { transactionDetailData.splitMethod ==='receipt' &&
           <>
             <div css={columnStyle}>
               <div>상품명</div>
@@ -88,13 +105,13 @@ export default function TransactionDetail() {
               <div>금액</div>
             </div>
             <div css={listStyle}>
-              {data.details.map((detail, index) => (
+              {transactionDetailData.details.map((detail, index) => (
                 <DetailCardByReceipt key={index} {...detail}/>
               ))}
             </div>
           </>
         }
-        { data.splitMethod ==='custom' &&
+        { transactionDetailData.splitMethod ==='custom' &&
           <>
             <div css={columnStyle}>
               <div>프로필</div>
@@ -102,9 +119,14 @@ export default function TransactionDetail() {
               <div>정산금액</div>
             </div>
             <div css={listStyle}>
-              {data.details.map((detail, index) => (
-                <DetailCardByCustom key={index} {...detail.participant} money={detail.money}/>
-              ))}
+              {transactionDetailData.details.map((detail, index) => {
+                if (isSettledParticipantByCustom(detail)) {
+                  return (
+                    <DetailCardByCustom key={index} {...detail.participant} money={detail.money}/>
+                  )
+                }
+                return null;
+                })}
             </div>
           </>
         }

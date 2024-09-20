@@ -1,5 +1,4 @@
 export default {
-    COMMENT: 'comment',
-    TRANSACTION_LIST: 'transactinList'
-
+    TRANSACTION_LIST: 'transactinList',
+    RECEIPT:'receipt'
   };
