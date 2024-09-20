@@ -41,6 +41,8 @@ const quizInputStyle = css`
   padding: 12px 16px;
   box-sizing: border-box;
   margin-top: 10px;
+  font-family: 'semibold';
+  font-size: 16px;
 
   &::placeholder {
     color: #b9b9b9 !important;
