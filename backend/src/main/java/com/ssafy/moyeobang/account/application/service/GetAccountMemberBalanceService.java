@@ -2,7 +2,7 @@ package com.ssafy.moyeobang.account.application.service;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountMemberBalanceResponse;
 import com.ssafy.moyeobang.account.application.domain.Member;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.in.GetAccountMemberBalanceQuery;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadMemberPort;

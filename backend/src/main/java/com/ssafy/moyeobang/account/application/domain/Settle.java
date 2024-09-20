@@ -1,28 +1,33 @@
 package com.ssafy.moyeobang.account.application.domain;
 
-import static java.util.stream.Collectors.toMap;
-
+import java.util.Collections;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@Getter
+@RequiredArgsConstructor
 public class Settle {
 
-    private final Map<Long, Money> settle;
-
-    public Settle(Map<Long, Long> settle) {
-        this.settle = settle.entrySet().stream()
-                .collect(toMap(
-                        Entry::getKey,
-                        entry -> Money.of(entry.getValue())
-                ));
-    }
+    private final Long id;
+    private final String title;
+    private final Map<Member, Money> settle;
 
     public Money getAmountFor(Member member) {
-        return settle.getOrDefault(member.getId(), Money.ZERO);
+        return settle.getOrDefault(member, Money.ZERO);
     }
 
-    public Set<Long> getParticipantIds() {
+    public Set<Member> getParticipants() {
         return settle.keySet();
+    }
+
+    public Map<Member, Money> getSettle() {
+        return Collections.unmodifiableMap(settle);
+    }
+
+    public Money getAmount() {
+        return settle.values().stream()
+                .reduce(Money.ZERO, Money::add);
     }
 }

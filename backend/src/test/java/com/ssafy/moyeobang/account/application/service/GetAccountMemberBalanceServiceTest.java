@@ -9,12 +9,14 @@ import static org.mockito.Mockito.mock;
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountMemberBalanceResponse;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Deposit;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Members;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Transaction;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Transactions;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Withdrawal;
+import com.ssafy.moyeobang.account.application.domain.Deposit;
+import com.ssafy.moyeobang.account.application.domain.Members;
+import com.ssafy.moyeobang.account.application.domain.Settle;
+import com.ssafy.moyeobang.account.application.domain.Settles;
+import com.ssafy.moyeobang.account.application.domain.Transaction;
+import com.ssafy.moyeobang.account.application.domain.Transactions;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.Withdrawal;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadMemberPort;
 import java.util.ArrayList;
@@ -108,7 +110,7 @@ class GetAccountMemberBalanceServiceTest {
     }
 
     private Transaction createWithdrawal1(Members members) {
-        com.ssafy.moyeobang.account.application.domain.travelaccount.Settle settle = new com.ssafy.moyeobang.account.application.domain.travelaccount.Settle(
+        Settle settle = new Settle(
                 1L,
                 "케잌",
                 Map.of(
@@ -127,12 +129,12 @@ class GetAccountMemberBalanceServiceTest {
                 .title("스타벅스")
                 .address("광주 광역시 수완동")
                 .settleType("CUSTOM")
-                .settles(new com.ssafy.moyeobang.account.application.domain.travelaccount.Settles(List.of(settle)))
+                .settles(new Settles(List.of(settle)))
                 .build();
     }
 
     private Transaction createWithdrawal2(Members members) {
-        com.ssafy.moyeobang.account.application.domain.travelaccount.Settle settle = new com.ssafy.moyeobang.account.application.domain.travelaccount.Settle(
+        Settle settle = new Settle(
                 2L,
                 "김치찌개",
                 Map.of(
@@ -150,7 +152,7 @@ class GetAccountMemberBalanceServiceTest {
                 .title("다복식당")
                 .address("광주 광역시 수완동")
                 .settleType("RECEIPT")
-                .settles(new com.ssafy.moyeobang.account.application.domain.travelaccount.Settles(List.of(settle)))
+                .settles(new Settles(List.of(settle)))
                 .build();
     }
 

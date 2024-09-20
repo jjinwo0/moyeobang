@@ -45,7 +45,7 @@ public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
                 .willReturn(response);
 
         mockMvc.perform(
-                        get("/api/accounts/{accountNumber}/balance/member", "0016174548358792")
+                        get("/api/accounts/{accountId}/balance/member", 1L)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )

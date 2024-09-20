@@ -7,14 +7,11 @@ import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositReposi
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.order.OrderRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.withdraw.WithdrawRepositoryInAccount;
-import com.ssafy.moyeobang.account.application.domain.Account;
-import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
-import com.ssafy.moyeobang.account.application.domain.Settles;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.MemberAccount;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Members;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Transactions;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.MemberAccount;
+import com.ssafy.moyeobang.account.application.domain.Members;
+import com.ssafy.moyeobang.account.application.domain.Transactions;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.SendMoneyPort;
@@ -38,9 +35,6 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
     private final TravelAccountRepositoryInAccount travelAccountRepository;
     private final OrderRepositoryInAccount orderRepository;
 
-    private final ActivityMapper activityMapper;
-    private final SettleMapper settleMapper;
-
     private final MemberRepositoryInAccount memberRepository;
     private final AccountMapper accountMapper;
     private final WithdrawRepositoryInAccount withdrawRepository;
@@ -56,27 +50,6 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
         travelAccountRepository.save(account);
 
         return accountNumber;
-    }
-
-    @Override
-    public Account loadAccount(String accountNumber) {
-        Long balance = bankApiClient.getBalance(accountNumber);
-
-        ActivityWindow activityWindow = activityMapper.mapToActivityWindow(
-                bankApiClient.getTransactionHistories(accountNumber),
-                accountNumber
-        );
-
-        Settles settles = settleMapper.mapToSettles(
-                orderRepository.findBy(accountNumber)
-        );
-
-        return Account.of(
-                accountNumber,
-                Money.of(balance),
-                activityWindow,
-                settles
-        );
     }
 
     @Override

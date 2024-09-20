@@ -1,6 +1,5 @@
-package com.ssafy.moyeobang.account.application.domain.travelaccount;
+package com.ssafy.moyeobang.account.application.domain;
 
-import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.error.InsufficientBalanceException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,5 @@
-package com.ssafy.moyeobang.account.application.domain.travelaccount;
+package com.ssafy.moyeobang.account.application.domain;
 
-import com.ssafy.moyeobang.account.application.domain.Member;
-import com.ssafy.moyeobang.account.application.domain.Money;
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Getter;

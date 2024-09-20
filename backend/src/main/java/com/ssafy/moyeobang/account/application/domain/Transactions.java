@@ -1,10 +1,8 @@
-package com.ssafy.moyeobang.account.application.domain.travelaccount;
+package com.ssafy.moyeobang.account.application.domain;
 
-import static com.ssafy.moyeobang.account.application.domain.travelaccount.TransactionType.DEPOSIT;
-import static com.ssafy.moyeobang.account.application.domain.travelaccount.TransactionType.WITHDRAWAL;
+import static com.ssafy.moyeobang.account.application.domain.TransactionType.DEPOSIT;
+import static com.ssafy.moyeobang.account.application.domain.TransactionType.WITHDRAWAL;
 
-import com.ssafy.moyeobang.account.application.domain.Member;
-import com.ssafy.moyeobang.account.application.domain.Money;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;

@@ -1,8 +1,8 @@
 package com.ssafy.moyeobang.account.application.service;
 
 import com.ssafy.moyeobang.account.application.domain.Member;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.MemberAccount;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.MemberAccount;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.in.SendMoneyCommand;
 import com.ssafy.moyeobang.account.application.port.in.SendMoneyUseCase;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;

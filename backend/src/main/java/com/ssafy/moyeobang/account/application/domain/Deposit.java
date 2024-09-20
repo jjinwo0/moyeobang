@@ -1,8 +1,7 @@
-package com.ssafy.moyeobang.account.application.domain.travelaccount;
+package com.ssafy.moyeobang.account.application.domain;
 
-import static com.ssafy.moyeobang.account.application.domain.travelaccount.TransactionType.DEPOSIT;
+import static com.ssafy.moyeobang.account.application.domain.TransactionType.DEPOSIT;
 
-import com.ssafy.moyeobang.account.application.domain.Member;
 import java.util.Set;
 import lombok.experimental.SuperBuilder;
 

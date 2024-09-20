@@ -9,14 +9,14 @@ import static org.mockito.Mockito.mock;
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountBalanceResponse;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Deposit;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Members;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Settle;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Settles;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Transaction;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Transactions;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Withdrawal;
+import com.ssafy.moyeobang.account.application.domain.Deposit;
+import com.ssafy.moyeobang.account.application.domain.Members;
+import com.ssafy.moyeobang.account.application.domain.Settle;
+import com.ssafy.moyeobang.account.application.domain.Settles;
+import com.ssafy.moyeobang.account.application.domain.Transaction;
+import com.ssafy.moyeobang.account.application.domain.Transactions;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.Withdrawal;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +104,7 @@ class GetAccountBalanceServiceTest {
                 .title("스타벅스")
                 .address("광주 광역시 수완동")
                 .settleType("CUSTOM")
-                .settles(new com.ssafy.moyeobang.account.application.domain.travelaccount.Settles(List.of(settle)))
+                .settles(new Settles(List.of(settle)))
                 .build();
     }
 

@@ -1,8 +1,7 @@
-package com.ssafy.moyeobang.account.application.domain.travelaccount;
+package com.ssafy.moyeobang.account.application.domain;
 
 import static java.util.stream.Collectors.toSet;
 
-import com.ssafy.moyeobang.account.application.domain.Member;
 import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;

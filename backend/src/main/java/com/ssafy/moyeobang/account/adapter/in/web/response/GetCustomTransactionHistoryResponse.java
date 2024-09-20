@@ -1,6 +1,6 @@
 package com.ssafy.moyeobang.account.adapter.in.web.response;
 
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Withdrawal;
+import com.ssafy.moyeobang.account.application.domain.Withdrawal;
 import java.util.List;
 
 public class GetCustomTransactionHistoryResponse extends GetTransactionHistoryResponse {

@@ -1,7 +1,7 @@
 package com.ssafy.moyeobang.account.application.service;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.in.GetTransactionHistoriesQuery;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.common.annotation.UseCase;

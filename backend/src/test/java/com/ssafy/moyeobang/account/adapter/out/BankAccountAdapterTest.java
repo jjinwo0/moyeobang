@@ -13,10 +13,8 @@ import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberTravelRe
 import com.ssafy.moyeobang.account.adapter.out.persistence.order.OrderRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.travel.TravelRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.withdraw.WithdrawRepositoryInAccount;
-import com.ssafy.moyeobang.account.application.domain.Account;
-import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
@@ -113,53 +111,6 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         //when & then
         assertThatThrownBy(() -> bankAccountAdapter.createAccount(member.getMemberKey()))
                 .isInstanceOf(HttpClientErrorException.class);
-    }
-
-    @DisplayName("싸피 뱅크 API를 활용하여 여행 모임 계좌 정보를 조회한다.")
-    @Test
-    void loadAccount() {
-        //given
-        MemberJpaEntity member1 = createMember();
-        MemberJpaEntity member2 = createMember();
-        memberRepository.saveAll(List.of(member1, member2));
-
-        TravelJpaEntity travel = createTravel();
-        travelRepository.save(travel);
-
-        TravelAccountJpaEntity travelAccount = createTravelAccount(member1, travel);
-        travelAccountRepository.save(travelAccount);
-
-        WithdrawJpaEntity withdraw = createWithdraw(travelAccount);
-        withdrawRepository.save(withdraw);
-
-        OrderJpaEntity order1 = createOrder("스초생", 37000, withdraw);
-        OrderJpaEntity order2 = createOrder("아이스 아메리카노 2잔", 9000, withdraw);
-        orderRepository.saveAll(List.of(order1, order2));
-
-        MemberOrderHistoryJpaEntity history1 = createOrderHistory(20000, member1, order1);
-        MemberOrderHistoryJpaEntity history2 = createOrderHistory(17000, member2, order1);
-        MemberOrderHistoryJpaEntity history3 = createOrderHistory(4500, member1, order2);
-        MemberOrderHistoryJpaEntity history4 = createOrderHistory(4500, member2, order2);
-        memberOrderHistoryRepository.saveAll(List.of(history1, history2, history3, history4));
-
-        entityManager.clear();
-
-        Member member = new Member(
-                member1.getId(),
-                "김두열",
-                "https://profile-image.url",
-                "eea1652c-b5f3-4ef3-9aba-5360026f03b0",
-                "0016174648358791"
-        );
-
-        //when
-        Account account = bankAccountAdapter.loadAccount(travelAccount.getAccountNumber());
-
-        //then
-        assertThat(account).extracting("accountNumber", "balance")
-                .containsExactly(travelAccount.getAccountNumber(), Money.ZERO);
-
-        assertThat(account.getWithdrawAmountFor(member)).isEqualTo(Money.of(24500));
     }
 
     @DisplayName("싸피 뱅크 API를 활용하여 여행 모임 계좌 정보를 조회한다.")
