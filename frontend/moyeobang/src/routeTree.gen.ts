@@ -19,9 +19,10 @@ import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as PosLayoutIndexImport } from './routes/pos/_layout/index'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
-import { Route as LayoutProtectedLayoutQuizIndexImport } from './routes/_layout/_protected/_layout/quiz/index'
 import { Route as LayoutProtectedLayoutProfileIndexImport } from './routes/_layout/_protected/_layout/profile/index'
 import { Route as LayoutProtectedLayoutAccountIndexImport } from './routes/_layout/_protected/_layout/account/index'
+import { Route as LayoutProtectedLayoutQuizTravelIdImport } from './routes/_layout/_protected/_layout/quiz/$travelId'
+import { Route as LayoutProtectedLayoutQuizInviteTravelIdImport } from './routes/_layout/_protected/_layout/quiz/invite/$travelId'
 import { Route as LayoutProtectedLayoutAccountTransactionIdSettleIndexImport } from './routes/_layout/_protected/_layout/account/$transactionId/settle/index'
 import { Route as LayoutProtectedLayoutAccountTransactionIdResultByReceiptLayoutImport } from './routes/_layout/_protected/_layout/account/$transactionId/resultByReceipt/_layout'
 import { Route as LayoutProtectedLayoutAccountTransactionIdDetailLayoutImport } from './routes/_layout/_protected/_layout/account/$transactionId/detail/_layout'
@@ -89,12 +90,6 @@ const LayoutProtectedLayoutHomeIndexLazyRoute =
     ),
   )
 
-const LayoutProtectedLayoutQuizIndexRoute =
-  LayoutProtectedLayoutQuizIndexImport.update({
-    path: '/quiz/',
-    getParentRoute: () => LayoutProtectedLayoutRoute,
-  } as any)
-
 const LayoutProtectedLayoutProfileIndexRoute =
   LayoutProtectedLayoutProfileIndexImport.update({
     path: '/profile/',
@@ -107,6 +102,12 @@ const LayoutProtectedLayoutAccountIndexRoute =
     getParentRoute: () => LayoutProtectedLayoutRoute,
   } as any)
 
+const LayoutProtectedLayoutQuizTravelIdRoute =
+  LayoutProtectedLayoutQuizTravelIdImport.update({
+    path: '/quiz/$travelId',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
+
 const LayoutProtectedLayoutAccountTransactionIdResultByReceiptRoute =
   LayoutProtectedLayoutAccountTransactionIdResultByReceiptImport.update({
     path: '/account/$transactionId/resultByReceipt',
@@ -116,6 +117,12 @@ const LayoutProtectedLayoutAccountTransactionIdResultByReceiptRoute =
 const LayoutProtectedLayoutAccountTransactionIdDetailRoute =
   LayoutProtectedLayoutAccountTransactionIdDetailImport.update({
     path: '/account/$transactionId/detail',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
+
+const LayoutProtectedLayoutQuizInviteTravelIdRoute =
+  LayoutProtectedLayoutQuizInviteTravelIdImport.update({
+    path: '/quiz/invite/$travelId',
     getParentRoute: () => LayoutProtectedLayoutRoute,
   } as any)
 
@@ -207,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PosLayoutIndexImport
       parentRoute: typeof PosLayoutImport
     }
+    '/_layout/_protected/_layout/quiz/$travelId': {
+      id: '/_layout/_protected/_layout/quiz/$travelId'
+      path: '/quiz/$travelId'
+      fullPath: '/quiz/$travelId'
+      preLoaderRoute: typeof LayoutProtectedLayoutQuizTravelIdImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
     '/_layout/_protected/_layout/account/': {
       id: '/_layout/_protected/_layout/account/'
       path: '/account'
@@ -221,18 +235,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProtectedLayoutProfileIndexImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
-    '/_layout/_protected/_layout/quiz/': {
-      id: '/_layout/_protected/_layout/quiz/'
-      path: '/quiz'
-      fullPath: '/quiz'
-      preLoaderRoute: typeof LayoutProtectedLayoutQuizIndexImport
-      parentRoute: typeof LayoutProtectedLayoutImport
-    }
     '/_layout/_protected/_layout/_Home/': {
       id: '/_layout/_protected/_layout/_Home/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutProtectedLayoutHomeIndexLazyImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
+    '/_layout/_protected/_layout/quiz/invite/$travelId': {
+      id: '/_layout/_protected/_layout/quiz/invite/$travelId'
+      path: '/quiz/invite/$travelId'
+      fullPath: '/quiz/invite/$travelId'
+      preLoaderRoute: typeof LayoutProtectedLayoutQuizInviteTravelIdImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
     '/_layout/_protected/_layout/account/$transactionId/detail': {
@@ -350,23 +364,27 @@ const LayoutProtectedLayoutAccountTransactionIdResultByReceiptRouteWithChildren 
   )
 
 interface LayoutProtectedLayoutRouteChildren {
+  LayoutProtectedLayoutQuizTravelIdRoute: typeof LayoutProtectedLayoutQuizTravelIdRoute
   LayoutProtectedLayoutAccountIndexRoute: typeof LayoutProtectedLayoutAccountIndexRoute
   LayoutProtectedLayoutProfileIndexRoute: typeof LayoutProtectedLayoutProfileIndexRoute
-  LayoutProtectedLayoutQuizIndexRoute: typeof LayoutProtectedLayoutQuizIndexRoute
   LayoutProtectedLayoutHomeIndexLazyRoute: typeof LayoutProtectedLayoutHomeIndexLazyRoute
+  LayoutProtectedLayoutQuizInviteTravelIdRoute: typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
   LayoutProtectedLayoutAccountTransactionIdDetailRoute: typeof LayoutProtectedLayoutAccountTransactionIdDetailRouteWithChildren
   LayoutProtectedLayoutAccountTransactionIdResultByReceiptRoute: typeof LayoutProtectedLayoutAccountTransactionIdResultByReceiptRouteWithChildren
   LayoutProtectedLayoutAccountTransactionIdSettleIndexRoute: typeof LayoutProtectedLayoutAccountTransactionIdSettleIndexRoute
 }
 
 const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
+  LayoutProtectedLayoutQuizTravelIdRoute:
+    LayoutProtectedLayoutQuizTravelIdRoute,
   LayoutProtectedLayoutAccountIndexRoute:
     LayoutProtectedLayoutAccountIndexRoute,
   LayoutProtectedLayoutProfileIndexRoute:
     LayoutProtectedLayoutProfileIndexRoute,
-  LayoutProtectedLayoutQuizIndexRoute: LayoutProtectedLayoutQuizIndexRoute,
   LayoutProtectedLayoutHomeIndexLazyRoute:
     LayoutProtectedLayoutHomeIndexLazyRoute,
+  LayoutProtectedLayoutQuizInviteTravelIdRoute:
+    LayoutProtectedLayoutQuizInviteTravelIdRoute,
   LayoutProtectedLayoutAccountTransactionIdDetailRoute:
     LayoutProtectedLayoutAccountTransactionIdDetailRouteWithChildren,
   LayoutProtectedLayoutAccountTransactionIdResultByReceiptRoute:
@@ -432,10 +450,11 @@ export interface FileRoutesByFullPath {
   '/pos': typeof PosLayoutRouteWithChildren
   '/entrance': typeof LayoutEntranceIndexRoute
   '/pos/': typeof PosLayoutIndexRoute
+  '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/profile': typeof LayoutProtectedLayoutProfileIndexRoute
-  '/quiz': typeof LayoutProtectedLayoutQuizIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
+  '/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
   '/account/$transactionId/detail': typeof LayoutProtectedLayoutAccountTransactionIdDetailLayoutRouteWithChildren
   '/account/$transactionId/resultByReceipt': typeof LayoutProtectedLayoutAccountTransactionIdResultByReceiptLayoutRouteWithChildren
   '/account/$transactionId/settle': typeof LayoutProtectedLayoutAccountTransactionIdSettleIndexRoute
@@ -447,10 +466,11 @@ export interface FileRoutesByTo {
   '': typeof LayoutProtectedRouteWithChildren
   '/pos': typeof PosLayoutIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
+  '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/profile': typeof LayoutProtectedLayoutProfileIndexRoute
-  '/quiz': typeof LayoutProtectedLayoutQuizIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
+  '/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
   '/account/$transactionId/detail': typeof LayoutProtectedLayoutAccountTransactionIdDetailLayoutIndexRoute
   '/account/$transactionId/resultByReceipt': typeof LayoutProtectedLayoutAccountTransactionIdResultByReceiptLayoutIndexRoute
   '/account/$transactionId/settle': typeof LayoutProtectedLayoutAccountTransactionIdSettleIndexRoute
@@ -465,10 +485,11 @@ export interface FileRoutesById {
   '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
   '/pos/_layout/': typeof PosLayoutIndexRoute
+  '/_layout/_protected/_layout/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/_layout/_protected/_layout/account/': typeof LayoutProtectedLayoutAccountIndexRoute
   '/_layout/_protected/_layout/profile/': typeof LayoutProtectedLayoutProfileIndexRoute
-  '/_layout/_protected/_layout/quiz/': typeof LayoutProtectedLayoutQuizIndexRoute
   '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
+  '/_layout/_protected/_layout/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
   '/_layout/_protected/_layout/account/$transactionId/detail': typeof LayoutProtectedLayoutAccountTransactionIdDetailRouteWithChildren
   '/_layout/_protected/_layout/account/$transactionId/detail/_layout': typeof LayoutProtectedLayoutAccountTransactionIdDetailLayoutRouteWithChildren
   '/_layout/_protected/_layout/account/$transactionId/resultByReceipt': typeof LayoutProtectedLayoutAccountTransactionIdResultByReceiptRouteWithChildren
@@ -485,10 +506,11 @@ export interface FileRouteTypes {
     | '/pos'
     | '/entrance'
     | '/pos/'
+    | '/quiz/$travelId'
     | '/account'
     | '/profile'
-    | '/quiz'
     | '/'
+    | '/quiz/invite/$travelId'
     | '/account/$transactionId/detail'
     | '/account/$transactionId/resultByReceipt'
     | '/account/$transactionId/settle'
@@ -499,10 +521,11 @@ export interface FileRouteTypes {
     | ''
     | '/pos'
     | '/entrance'
+    | '/quiz/$travelId'
     | '/account'
     | '/profile'
-    | '/quiz'
     | '/'
+    | '/quiz/invite/$travelId'
     | '/account/$transactionId/detail'
     | '/account/$transactionId/resultByReceipt'
     | '/account/$transactionId/settle'
@@ -515,10 +538,11 @@ export interface FileRouteTypes {
     | '/_layout/_protected/_layout'
     | '/_layout/entrance/'
     | '/pos/_layout/'
+    | '/_layout/_protected/_layout/quiz/$travelId'
     | '/_layout/_protected/_layout/account/'
     | '/_layout/_protected/_layout/profile/'
-    | '/_layout/_protected/_layout/quiz/'
     | '/_layout/_protected/_layout/_Home/'
+    | '/_layout/_protected/_layout/quiz/invite/$travelId'
     | '/_layout/_protected/_layout/account/$transactionId/detail'
     | '/_layout/_protected/_layout/account/$transactionId/detail/_layout'
     | '/_layout/_protected/_layout/account/$transactionId/resultByReceipt'
@@ -586,10 +610,11 @@ export const routeTree = rootRoute
       "filePath": "_layout/_protected/_layout.tsx",
       "parent": "/_layout/_protected",
       "children": [
+        "/_layout/_protected/_layout/quiz/$travelId",
         "/_layout/_protected/_layout/account/",
         "/_layout/_protected/_layout/profile/",
-        "/_layout/_protected/_layout/quiz/",
         "/_layout/_protected/_layout/_Home/",
+        "/_layout/_protected/_layout/quiz/invite/$travelId",
         "/_layout/_protected/_layout/account/$transactionId/detail",
         "/_layout/_protected/_layout/account/$transactionId/resultByReceipt",
         "/_layout/_protected/_layout/account/$transactionId/settle/"
@@ -603,6 +628,10 @@ export const routeTree = rootRoute
       "filePath": "pos/_layout/index.tsx",
       "parent": "/pos/_layout"
     },
+    "/_layout/_protected/_layout/quiz/$travelId": {
+      "filePath": "_layout/_protected/_layout/quiz/$travelId.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
     "/_layout/_protected/_layout/account/": {
       "filePath": "_layout/_protected/_layout/account/index.tsx",
       "parent": "/_layout/_protected/_layout"
@@ -611,12 +640,12 @@ export const routeTree = rootRoute
       "filePath": "_layout/_protected/_layout/profile/index.tsx",
       "parent": "/_layout/_protected/_layout"
     },
-    "/_layout/_protected/_layout/quiz/": {
-      "filePath": "_layout/_protected/_layout/quiz/index.tsx",
-      "parent": "/_layout/_protected/_layout"
-    },
     "/_layout/_protected/_layout/_Home/": {
       "filePath": "_layout/_protected/_layout/_Home/index.lazy.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/quiz/invite/$travelId": {
+      "filePath": "_layout/_protected/_layout/quiz/invite/$travelId.tsx",
       "parent": "/_layout/_protected/_layout"
     },
     "/_layout/_protected/_layout/account/$transactionId/detail": {
