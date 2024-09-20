@@ -152,3 +152,14 @@ interface Quiz {
   question: Question;
   answer: Answer;
 }
+
+//여행 상세 조회
+interface TravelDetail {
+  travelName: TravelName;
+  startDate: StartDate;
+  endDate: EndDate;
+  travelPlaceList: TravelPlaceList;
+  accountId: AccountId;
+  accountNumber: AccountNumber;
+  participantsInfo: ParticipantInfo[];
+}
