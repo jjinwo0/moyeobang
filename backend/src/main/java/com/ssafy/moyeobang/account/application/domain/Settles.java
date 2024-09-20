@@ -16,6 +16,10 @@ public class Settles {
 
     private final List<Settle> settles;
 
+    public boolean isParticipate(Member member) {
+        return getParticipant().contains(member);
+    }
+
     public Set<Member> getParticipant() {
         return settles.stream()
                 .map(Settle::getParticipants)

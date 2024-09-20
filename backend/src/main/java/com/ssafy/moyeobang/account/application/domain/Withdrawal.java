@@ -34,7 +34,7 @@ public class Withdrawal extends Transaction {
 
     @Override
     public boolean isRelatedTo(Set<Member> members) {
-        return settles.getParticipant().containsAll(members);
+        return members.stream().anyMatch(settles::isParticipate);
     }
 
     public Money getSettleAmountFor(Member member) {
