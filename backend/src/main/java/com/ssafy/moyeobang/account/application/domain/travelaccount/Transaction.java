@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract class Transaction {
 
-    private final Long transactionId;
+    private Long transactionId;
     private final String transactionAccountNumber;
     private final LocalDateTime timestamp;
     private final Money money;

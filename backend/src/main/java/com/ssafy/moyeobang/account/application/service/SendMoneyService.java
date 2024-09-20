@@ -1,7 +1,8 @@
 package com.ssafy.moyeobang.account.application.service;
 
-import com.ssafy.moyeobang.account.application.domain.Account;
 import com.ssafy.moyeobang.account.application.domain.Member;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.MemberAccount;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.in.SendMoneyCommand;
 import com.ssafy.moyeobang.account.application.port.in.SendMoneyUseCase;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
@@ -20,15 +21,32 @@ public class SendMoneyService implements SendMoneyUseCase {
     private final LoadAccountPort loadAccountPort;
     private final SendMoneyPort sendMoneyPort;
 
+//    @Override
+//    public void sendMoney(SendMoneyCommand command) {
+//        Member member = loadMemberPort.loadMember(command.memberId());
+//
+//        Account sourceAccount = loadAccountPort.loadAccount(member.getAccountNumber());
+//        Account targetAccount = loadAccountPort.loadAccount(command.targetAccountNumber());
+//
+//        sourceAccount.withdraw(targetAccount, command.money());
+//        targetAccount.deposit(sourceAccount, command.money());
+//
+//        sendMoneyPort.sendMoney(
+//                sourceAccount.getAccountNumber(),
+//                targetAccount.getAccountNumber(),
+//                command.money()
+//        );
+//    }
+
     @Override
     public void sendMoney(SendMoneyCommand command) {
         Member member = loadMemberPort.loadMember(command.memberId());
 
-        Account sourceAccount = loadAccountPort.loadAccount(member.getAccountNumber());
-        Account targetAccount = loadAccountPort.loadAccount(command.targetAccountNumber());
+        MemberAccount sourceAccount = loadAccountPort.loadMemberAccount(member.getAccountNumber());
+        TravelAccount targetAccount = loadAccountPort.loadTravelAccount(command.travelAccountId());
 
-        sourceAccount.withdraw(targetAccount, command.money());
-        targetAccount.deposit(sourceAccount, command.money());
+        sourceAccount.withdraw(command.money());
+        targetAccount.deposit(member, command.money());
 
         sendMoneyPort.sendMoney(
                 sourceAccount.getAccountNumber(),

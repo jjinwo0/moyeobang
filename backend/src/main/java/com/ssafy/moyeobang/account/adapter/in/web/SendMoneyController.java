@@ -20,12 +20,12 @@ public class SendMoneyController {
 
     private final SendMoneyUseCase sendMoneyUseCase;
 
-    @PostMapping("/api/accounts/{accountNumber}/send")
-    public ApiResult<Boolean> sendMoney(@PathVariable String accountNumber,
+    @PostMapping("/api/accounts/{accountId}/send")
+    public ApiResult<Boolean> sendMoney(@PathVariable Long accountId,
                                         @RequestBody SendMoneyRequest sendMoneyRequest) {
         SendMoneyCommand command = new SendMoneyCommand(
                 sendMoneyRequest.memberId(),
-                accountNumber,
+                accountId,
                 sendMoneyRequest.amount()
         );
 

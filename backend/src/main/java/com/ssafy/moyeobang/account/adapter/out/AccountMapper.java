@@ -1,5 +1,6 @@
 package com.ssafy.moyeobang.account.adapter.out;
 
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Stream.concat;
 
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberInfo;
@@ -15,6 +16,7 @@ import com.ssafy.moyeobang.account.application.domain.travelaccount.Withdrawal;
 import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +52,7 @@ public class AccountMapper {
                                           Members members) {
         List<Transaction> transactions = concat(depositStream(deposits, members), withdrawStream(withdrawals, members))
                 .sorted(Comparator.comparing(Transaction::getTimestamp))
-                .toList();
+                .collect(toCollection(ArrayList::new));
 
         return new Transactions(transactions);
     }

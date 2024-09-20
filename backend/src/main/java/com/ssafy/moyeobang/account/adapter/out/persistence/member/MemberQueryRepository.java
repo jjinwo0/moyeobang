@@ -4,5 +4,7 @@ import java.util.List;
 
 public interface MemberQueryRepository {
 
-    List<MemberInfo> findMembersBy(Long travelId);
+    List<MemberInfo> findMemberInfosBy(Long travelId);
+
+    MemberInfo findMemberInfoBy(Long id);
 }

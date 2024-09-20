@@ -15,6 +15,10 @@ public class Transactions {
 
     private final List<Transaction> transactions;
 
+    public void add(Transaction transaction) {
+        transactions.add(transaction);
+    }
+
     public Money getDepositBalance() {
         return transactions.stream()
                 .filter(transaction -> DEPOSIT.equals(transaction.getType()))

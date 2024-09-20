@@ -11,6 +11,7 @@ import com.ssafy.moyeobang.account.application.domain.Account;
 import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Settles;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.MemberAccount;
 import com.ssafy.moyeobang.account.application.domain.travelaccount.Members;
 import com.ssafy.moyeobang.account.application.domain.travelaccount.Transactions;
 import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
@@ -78,12 +79,23 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
         );
     }
 
+    @Override
+    public MemberAccount loadMemberAccount(String accountNumber) {
+        Long balance = bankApiClient.getBalance(accountNumber);
+
+        return new MemberAccount(
+                accountNumber,
+                Money.of(balance)
+        );
+    }
+
+    @Override
     public TravelAccount loadTravelAccount(Long accountId) {
         TravelAccountJpaEntity travelAccount = travelAccountRepository.findById(accountId)
                 .orElseThrow(AccountNotFoundException::new);
 
         Members members = accountMapper.mapToMembers(
-                memberRepository.findMembersBy(travelAccount.getTravelId())
+                memberRepository.findMemberInfosBy(travelAccount.getTravelId())
         );
 
         List<DepositJpaEntity> depositHistories = depositRepository.findByTravelAccountId(travelAccount.getId());
