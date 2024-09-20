@@ -12,8 +12,20 @@ import bangBang from '@/assets/icons/bangBang.png';
 const travelSummary: TravelSummary = {
   locationList: [
     {
-      latitude: 33.431441,
+      latitude: 33.43143,
       longitude: 126.874237, // 여행 장소들 위도,경도
+    },
+    {
+      latitude: 33.48549374886766,
+      longitude: 126.48117326163943, // 여행 장소들 위도,경도
+    },
+    {
+      latitude: 33.3942945,
+      longitude: 126.2398813, // 여행 장소들 위도,경도
+    },
+    {
+      latitude: 33.5098305,
+      longitude: 126.5233913, // 여행 장소들 위도,경도
     },
   ],
   totalAmount: 1000000, // 전체 예산
@@ -196,7 +208,10 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
         {/* 첫 번째 슬라이드일 때만 지도 보여주기 */}
         {currentSlide === 0 && (
           <div css={mapContainerStyle}>
-            <MapComponent locationList={travelSummary.locationList} />
+            <MapComponent
+              locationList={travelSummary.locationList}
+              travelPlaceList={travelPlaceList}
+            />
           </div>
         )}
 
