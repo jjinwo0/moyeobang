@@ -5,6 +5,7 @@ import Btn from '@/components/common/btn/Btn';
 import { locale } from 'dayjs';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import QrScanByPos from '@/components/QrByPos/QrScanByPos';
 
 const Items = [
   {
@@ -29,7 +30,7 @@ const Items = [
   },
 ];
 
-export const Route = createFileRoute('/pos/')({
+export const Route = createFileRoute('/pos/_layout/')({
   component: Pos
 })
 
@@ -67,10 +68,10 @@ const boxStyle=css`
 
 const buttonLayoutStyle=css`
     display:flex;
-    flex-direction:row;
+    flex-direction:column;
     /* align-items:center; */
     /* justify-content:center; */
-    gap:20px;
+    gap:5px;
 `;
 
 
@@ -79,8 +80,9 @@ export default function Pos() {
   const [paymentName, setPaymentName] = useState<PaymentName>('');
   const [money, setMoney] = useState<Money>(0);
   const [adress, setAdress]= useState<Adress>('');
-  const [createdAt, setCreatedAt]= useState<Date>(new Date());
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({}); // 각 상품의 수량을 저장
+  const [isOpenQrModal, setIsOpenQrModal] = useState<boolean>(false);
+  const [ data, setData ] = useState<PosPay>();
 
   function handlePaymentName(e: React.ChangeEvent<HTMLInputElement>) {
     setPaymentName(e.target.value)
@@ -102,10 +104,6 @@ export default function Pos() {
     }
   }
 
-  function handleCreatedAt(e: React.ChangeEvent<HTMLInputElement>) {
-    setCreatedAt(new Date(e.target.value));
-  }
-
   // 수량 증가
   function increaseQuantity(itemId: number) {
     const itemPrice = Items.find((item) => item.orderItemId === itemId)?.orderItemPrice || 0;
@@ -125,8 +123,13 @@ export default function Pos() {
     const itemPrice = Items.find((item) => item.orderItemId === itemId)?.orderItemPrice || 0;
 
     setQuantities((prevQuantities) => {
-      const newQuantity = (prevQuantities[itemId] || 0) - 1;
-      setMoney((prevMoney) => prevMoney - itemPrice); 
+      const currentQuantity = (prevQuantities[itemId] || 0)
+      const newQuantity = currentQuantity>=1 ? (currentQuantity - 1 ): 0;
+
+      if (currentQuantity > 0) {
+        setMoney((prevMoney) => prevMoney - itemPrice); 
+      }
+
       return {
         ...prevQuantities,
         [itemId]: newQuantity,
@@ -134,26 +137,38 @@ export default function Pos() {
     });
   }
 
-  function handleClick() {
+  // 정산하기
+  function handleSettle() {
+    const data : PosPay = {
+      paymentName:paymentName,
+      adress:adress,
+      money:money,
+    }
+    setData(data)
+    setIsOpenQrModal(true);
+  }
+
+  function handleQrClose() {
+    setIsOpenQrModal(false);
   }
 
   return (
     <div css={layoutStyle}>
+  {isOpenQrModal ? (
+     <QrScanByPos onClose={handleQrClose} data={data}/>
+  ) : (
+    <>
       <div>
-        <p>가게명(paymentName)</p>
-        <input type="text" value={paymentName} onChange={handlePaymentName}/>
+        <p>가게명(paymentName | placeName)</p>
+        <input type="text" value={paymentName} onChange={handlePaymentName} />
       </div>
       <div>
-        <p>주소(Adress)</p>
-      <input type="text" value={adress} onChange={handleAdress}/>
+        <p>주소(Address | placeAdress)</p>
+        <input type="text" value={adress} onChange={handleAdress} />
       </div>
       <div>
         <p>총금액(Money)</p>
-      <input type="text" value={money} onChange={handleMoney}/>
-      </div>
-      <div>
-        <p>날짜(CreatedAt) - {format(createdAt, 'yyyy-MM-dd HH:mm', { locale: ko })}</p>
-        <input type="date" value={createdAt} onChange={handleCreatedAt} />
+        <input type="text" value={money} onChange={handleMoney} />
       </div>
 
       {Items.map((item) => (
@@ -161,25 +176,33 @@ export default function Pos() {
           <div>
             <div>{item.orderItemTitle}</div>
             <div>{item.orderItemPrice}원</div>
-            <div>수량: {quantities[item.orderItemId] || 0}</div> 
+            <div>수량: {quantities[item.orderItemId] || 0}</div>
           </div>
-            <div const={buttonLayoutStyle}>
+          <div css={buttonLayoutStyle}>
             <div>
-              <Btn 
-                buttonStyle={{size:'middle', style:'blue'}}
+              <Btn
+                buttonStyle={{ size: 'middle', style: 'blue' }}
                 onClick={() => increaseQuantity(item.orderItemId)}
-                >+</Btn>
+              >
+                +
+              </Btn>
             </div>
             <div>
-              <Btn 
-                buttonStyle={{size:'middle', style:'red'}}
+              <Btn
+                buttonStyle={{ size: 'middle', style: 'red' }}
                 onClick={() => decreaseQuantity(item.orderItemId)}
-                >-</Btn>
+              >
+                -
+              </Btn>
             </div>
-            </div>
+          </div>
         </div>
       ))}
-      <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleClick}>결제하기</Btn>
-    </div>
+      <Btn buttonStyle={{ size: 'big', style: 'blue' }} onClick={handleSettle}>
+        결제하기
+      </Btn>
+    </>
+  )}
+</div>
   )
 }

@@ -29,7 +29,7 @@ interface SettleByCustomComponentProps {
 const dummyData = profileData; 
 
 // 임시로 넣어둠.
-export default function SettleByCustomComponent({transactionId, totalMoney, adress, paymentName, isPos, createdAt} : SettleByCustomComponentProps) {
+export default function SettleByCustomComponent({transactionId, totalMoney, adress, paymentName, isNew, createdAt} : SettleByCustomComponentProps) {
     const [ settleData , setSettleData ] = useState<CustomSettle[]>([]);
     const [ initialSettle, setInitialSettle] = useState<CustomSettle[]>([]);
     const [ remainMoney, setRemainMoney ] = useState<number>(totalMoney);
@@ -53,12 +53,12 @@ export default function SettleByCustomComponent({transactionId, totalMoney, adre
 
     // 초기 데이터 여부 확인
     useEffect(() => {
-        if (transactionId) {
+        if (!isNew) {
             // get으로 가져오기
         } else {
             // 새로 만들거임.
         }
-    }, [transactionId])
+    }, [isNew])
 
     // 총액만큼 정산되어야 정산 가능.
     useEffect(() => {
@@ -75,7 +75,6 @@ export default function SettleByCustomComponent({transactionId, totalMoney, adre
         .filter(user => user.money > 0)
         )
         setIsOpenFinalModal(true);
-        console.log(121212)
     }
 
     // 최종확인에서 확인완료 후 정산하기 
@@ -89,9 +88,13 @@ export default function SettleByCustomComponent({transactionId, totalMoney, adre
         }) )
         
         const SpendData = {
-            'paymentName' : '장소명',
-            'info' : info,
-            'splitMethod': 'custom',
+            money:totalMoney, 
+            paymentName : paymentName,
+            createdAt:createdAt,
+            transactionId:transactionId,
+            adress:adress,
+            info : info,
+            splitMethod : 'custom', 
         }
         console.log(SpendData)
         setIsOpenFinalModal(false);

@@ -129,7 +129,7 @@ interface BaseTransactionDetail {
     adress: Adress;
     money: Money;
     createdAt: CreatedAt;
-    acceptedNumber: AcceptedNumber;
+    // acceptedNumber: AcceptedNumber;
 }
   
 // 정산 완료 영수증 (N분의 1)
@@ -154,9 +154,43 @@ interface CompleteTransaction {
     adress:Adress;
     paymentName:PaymentName;
     createdAt:CreatedAt;
-    isNew:IsNew;
+    isNew?:IsNew;
 }
 
+interface ChatItem {
+  item_name:string,
+  quantity:number,
+  price:number
+}
+
+interface ChatJsonProps {
+  puchase_data : string;
+  items : ChatItem[]
+}
+
+interface PosPay {
+  money:Money;
+  adress:Adress;
+  paymentName:PaymentName;
+}
+
+interface PosOderItem {
+  title:string;
+  amount:number;
+  quantity:number;
+}
+
+interface PaymentProps {
+  paymentRequestId : string;
+  sourceAccountNumber: string;
+  placeId: string;
+  placeName:string;
+  placeAdress:string;
+  latitude: number;
+  logitude:number;
+  targetAccountNumber: string;
+  OrderItems : OrderItems[];
+}
   // api 요청
 interface MoyeobangResponse<T> {
     isSuccess: boolean;

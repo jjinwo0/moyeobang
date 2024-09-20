@@ -6,15 +6,22 @@ function formatToISO(dateString:string) {
 }
 
 // 원래 데이터 형태로 변환해주는 함수
-export function extractItems(parsedData : any, transactionId: TransactionId) {
+export function extractItems(
+  parsedData: ChatJsonProps, 
+  transactionId: TransactionId,
+  createdAt: CreatedAt,
+  money: Money,
+  paymentName: PaymentName,
+  address: Adress
+): TransactionDetailByReceipt {
 
   let itemId = 1;
 
-  const details = parsedData.products.map((product: any) => {
+  const details = parsedData.items.map((product: ChatItem) => {
 
     const orderItem : SettledItemByReceipt = {
       orderItemId: itemId,
-      orderItemTitle: product.product_name,
+      orderItemTitle: product.item_name,
       orderItemQuantity: product.quantity,
       orderItemPrice: product.price,
       participants: [] // 빈 배열로 설정
@@ -25,16 +32,15 @@ export function extractItems(parsedData : any, transactionId: TransactionId) {
     return orderItem
   });
 
-  const totalPrice = details.reduce((sum:number, item) => sum + item.orderItemPrice, 0);
+  // const totalPrice = details.reduce((sum:number, item) => sum + item.orderItemPrice, 0);
 
   const receiptData : TransactionDetailByReceipt = {
     transactionId: Number(transactionId),
-    paymentName: parsedData.place_name,
-    adress: parsedData.address, // address 필드 수정
-    money: totalPrice,
+    paymentName: paymentName,
+    adress: address, // address 필드 수정
+    money: money,
     details: details,
-    acceptedNumber: parsedData.approval_number,
-    createdAt: formatToISO(parsedData.time), // 시간
+    createdAt: createdAt, // 시간
     splitMethod:"receipt"
   };
 

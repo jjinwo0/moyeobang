@@ -3,15 +3,12 @@ import { createFileRoute, useNavigate, useLocation} from '@tanstack/react-router
 import { css } from '@emotion/react'
 import { isValid, parseISO } from 'date-fns';
 // import { detailDataByReceiptAfterSettle, chatData } from "@/data/data";
-// import { extractItems } from '@/util/receiptParser';
-// const dummyData = detailDataByReceiptAfterSettle;
 import UpdateCardByReceipt from '@/components/Account/SettleByReceipt/UpdateCardByReceipt'
+import { useSuspenseQuery } from '@tanstack/react-query';
 import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
 import Btn from '@/components/common/btn/Btn';
 import { colors } from '@/styles/colors';
-import { useReceiptContext } from '@/context/ReceiptContext';
-
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/resultByReceipt/_layout/')({
   component: settledReceipt
@@ -82,39 +79,30 @@ export default function settledReceipt() {
   
   const { transactionId } :{ transactionId : TransactionId} = Route.useParams();
   const navigate = useNavigate({from:'/account/$transactionId/resultByReceipt'});
-  const location = useLocation();
-  const {receiptData, isNew} = useReceiptContext();
-  const [data, setData] = useState<TransactionDetailByReceipt>(receiptData);
+  const [data, setData] = useState<TransactionDetailByReceipt>();
   
   // const chData = extractItems(chatData, transactionId);
   // console.log(chData) // 영수증 정산 완료된 후 들어오는 임시 데이터
+  
+  // get으로 정산 후 기본 데이터 가져오기!
+  const { receipt } = useSuspenseQuery({
+    queryKey: ['receipt', transactionId],
+    // queryFn: ({transactionId})
+  })
 
-  // isNew 기준으로 true 이면 POST. false 이면 PUT
-  useEffect(()=>{
-    // 수정
-    if (location.pathname.includes('/detail') && !isNew) {
-      // get요청
-    } else {
-      // receiptData 가져오기
-      setData(receiptData)
-    }
-  }, [isNew, location.pathname]);
+
 
   function handleSubmit() {
-
-    if (isNew) {
-      // POST 요청
-    } else {
-      // PUT 요청
-    }
+      // 정산하기
 
   }
-    function handleChange({
-      itemId,
-      title,
-      quantity,
-      price,
-      participants,
+
+  function handleChange({
+    itemId,
+    title,
+    quantity,
+    price,
+    participants,
     }: {
       itemId: OrderItemId;
       title: OrderItemTitle;
@@ -145,7 +133,7 @@ export default function settledReceipt() {
           };
         });
     }
-    console.log(updatedDetails) // 이거 이용해서 데이터 변환해서 PUT으로 보내기
+    console.log(updatedDetails) // 이거 이용해서 데이터 변환
   }
 
   function handleRestart(){

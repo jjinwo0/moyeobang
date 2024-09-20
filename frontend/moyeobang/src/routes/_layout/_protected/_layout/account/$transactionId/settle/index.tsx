@@ -39,7 +39,6 @@ export default function Settle() {
   const location = useLocation();
   const state = location.state as LocationState || null;
   const {transactionData} = useCompleteTransaction();
-  console.log(999999, transactionData.isNew, transactionData.adress)
 
 
   const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
@@ -72,6 +71,11 @@ export default function Settle() {
     { activeComponent==='left' && 
       <SettleByReceiptComponent 
         transactionId={transactionId}
+        money={transactionData.money}
+        adress={transactionData.adress}
+        paymentName={transactionData.paymentName}
+        createdAt={transactionData.createdAt}
+        isNew={transactionData.isNew}
       />
     }
     { activeComponent==='right' && 

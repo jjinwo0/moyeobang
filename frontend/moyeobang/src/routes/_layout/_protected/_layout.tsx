@@ -25,11 +25,9 @@ export default function Header() {
   const {pathname} = useLocation();
 
   const hideHeader =
-    pathname === '/account/receipt' ||
-    pathname === '/account/calculate' ||
-    pathname.startsWith('/account/detail/') ||
+    pathname.includes('/detail') ||
     pathname === '/profile' ||
-    pathname.startsWith('/account/resultByReceipt/');
+    pathname.includes('resultByReceipt');
   function handleAlarmClick() {
     setIsAlarmOpen(prev => !prev);
   }

@@ -48,6 +48,7 @@ export default function TransactionDetailDefaultCard({
     createdAt,
     acceptedNumber,
     adress
+
     } : TransactionDetailDefaultCardProps) {
 
     return (
@@ -68,7 +69,8 @@ export default function TransactionDetailDefaultCard({
                 </div>
                 <div css={boxStyle}>
                     <div css={labelStyle}>주소</div>
-                    <div css={textStyle}>{adress}</div>
+                    <div css={textStyle}>{adress
+                        }</div>
                 </div>
             </div>
         

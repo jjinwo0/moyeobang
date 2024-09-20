@@ -61,7 +61,7 @@ const buttonStyle = css`
     }
 `;
 
-export default function SettleByReceiptComponent({transactionId} : {transactionId:TransactionId}) {
+export default function SettleByReceiptComponent({transactionId, money, paymentName, adress, createdAt } : CompleteTransaction) {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -126,7 +126,7 @@ export default function SettleByReceiptComponent({transactionId} : {transactionI
             });
 
             // 영수증 텍스트 리스트 추출
-            const receiptTexts: string[] = response.data.images[0].fields.map((field: any) => field.inferText);
+            const receiptTexts: string[] = response.data.images[0].fields.map((field : any) => field.inferText);
             analyzeReceipt(receiptTexts.join(" "));
             } catch(error) {
                 console.error(error);
@@ -149,11 +149,11 @@ export default function SettleByReceiptComponent({transactionId} : {transactionI
                     messages: [
                         {
                             role: "system",
-                            content: "You are a helpful assistant that extracts data from receipts and outputs it in JSON format. Please extract information such as approval number, address, place name, time separately, and present product names, quantities, and prices in a table format.",
+                            content: "You are a helpful assistant to analyze the purchase date, items, quantity, and price from the receipt and output it in JSON format",
                         },
                         {
                             role: "user",
-                            content: `Here is the receipt text: ${stringResult}. Please extract the approval number, address, place name, and time separately. Also, output product names, quantities, and prices in a table format.`,
+                            content: `please analyze ${stringResult}. only items and date. If an item is free, set its cost to 0'`,
                         },
                     ],
                 })
@@ -179,7 +179,7 @@ export default function SettleByReceiptComponent({transactionId} : {transactionI
 
             // extractItems를 통해 데이터 변환
             if (parsedData && parsedData.products) {
-                const results = extractItems(parsedData, transactionId); 
+                const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, adress); 
                 console.log('영수증 ocr 결과', results)
                 setResults(results);
 
