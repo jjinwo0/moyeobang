@@ -3,6 +3,7 @@ import {css} from '@emotion/react';
 import dayjs, {Dayjs} from 'dayjs';
 import oneArrow from '@/assets/icons/oneLeftArrow.png';
 import {colors} from '@/styles/colors';
+import Btn from '../common/btn/Btn';
 
 interface CustomCalendarProps {
   onSelectRange: (start: Date, end: Date) => void;
@@ -48,10 +49,16 @@ const dayCellStyle = css`
   cursor: pointer;
 `;
 
-const selectedDayStyle = css`
-  background-color: ${colors.third};
-  color: white;
-  border-radius: 50%;
+const outsideCurrentMonthStyle = css`
+  color: ${colors.gray} !important; /* 회색으로 표시 */
+`;
+
+const sundayStyle = css`
+  color: ${colors.customRed}; /* 일요일 색상 */
+`;
+
+const saturdayStyle = css`
+  color: ${colors.customBlue}; /* 토요일 색상 */
 `;
 
 const prevStyle = css`
@@ -72,23 +79,27 @@ const dayFontStyle = css`
 `;
 
 const selectedStartDayStyle = css`
-  background-color: ${colors.third};
+  background-color: ${colors.second};
   color: white;
   border-top-left-radius: 50%;
   border-bottom-left-radius: 50%;
 `;
 
 const selectedEndDayStyle = css`
-  background-color: ${colors.third};
+  background-color: ${colors.second};
   color: white;
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
 `;
 
 const middleDayStyle = css`
-  background-color: ${colors.third};
+  background-color: ${colors.second};
   color: white;
   border-radius: 0; /* 중간 날짜는 네모로 */
+`;
+
+const btnStyle = css`
+  margin: 5px 0;
 `;
 
 export default function CustomCalendar({
@@ -121,6 +132,7 @@ export default function CustomCalendar({
     } else {
       setSelection({start: selection.start, end: day});
       onSelectRange(selection.start.toDate(), day.toDate());
+      // onClose();
     }
   };
 
@@ -131,7 +143,7 @@ export default function CustomCalendar({
 
   const days = [];
   let currentDay = startDate;
-  while (currentDay.isBefore(endDate, 'day')) {
+  while (currentDay.isBefore(endDate.add(1, 'day'), 'day')) {
     days.push(currentDay);
     currentDay = currentDay.add(1, 'day');
   }
@@ -144,12 +156,19 @@ export default function CustomCalendar({
         <img src={oneArrow} onClick={handleNextMonth} css={nextStyle} />
       </div>
       <div css={daysStyle}>
-        {['일', '월', '화', '수', '목', '금', '토'].map(day => (
-          <div key={day} css={dayCellStyle}>
+        {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
+          <div
+            key={day}
+            css={[
+              dayCellStyle,
+              index === 0 && sundayStyle, // 일요일 스타일 적용
+              index === 6 && saturdayStyle, // 토요일 스타일 적용
+            ]}
+          >
             {day}
           </div>
         ))}
-        {days.map(day => {
+        {days.map((day, index) => {
           const isStart = selection.start && day.isSame(selection.start, 'day');
           const isEnd = selection.end && day.isSame(selection.end, 'day');
           const isMiddle =
@@ -158,11 +177,18 @@ export default function CustomCalendar({
             day.isAfter(selection.start, 'day') &&
             day.isBefore(selection.end, 'day');
 
+          const isOutsideCurrentMonth = !day.isSame(currentMonth, 'month'); // 현재 월에 속하지 않는 날짜 체크
+          const isSunday = day.day() === 0; // 일요일
+          const isSaturday = day.day() === 6; // 토요일
+
           return (
             <div
               key={day.format('YYYY-MM-DD')}
               css={[
                 dayFontStyle,
+                isOutsideCurrentMonth && outsideCurrentMonthStyle, // 현재 월이 아닌 날짜 회색 스타일 적용
+                isSunday && sundayStyle, // 일요일 스타일
+                isSaturday && saturdayStyle, // 토요일 스타일
                 isStart && selectedStartDayStyle,
                 isEnd && selectedEndDayStyle,
                 isMiddle && middleDayStyle,
@@ -173,6 +199,14 @@ export default function CustomCalendar({
             </div>
           );
         })}
+      </div>
+      <div css={btnStyle}>
+        <Btn
+          buttonStyle={{style: 'blue', size: 'thinMiddle'}}
+          onClick={onClose}
+        >
+          날짜 확인
+        </Btn>
       </div>
     </div>
   );
