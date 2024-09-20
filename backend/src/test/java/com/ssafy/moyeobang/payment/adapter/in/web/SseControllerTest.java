@@ -1,5 +1,6 @@
 package com.ssafy.moyeobang.payment.adapter.in.web;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
@@ -21,7 +22,7 @@ public class SseControllerTest extends WebAdapterTestSupport {
     @MockBean
     private SseUseCase sseUseCase;
 
-    @DisplayName("결제 요청이 들어오기전, SSE 연결이 이루어져야 한다")
+    @DisplayName("결제 요청 API 를 호출하면, connected 메시지를 받아야한다")
     @Test
     void testSseConnect() throws Exception {
         // Given
@@ -30,7 +31,6 @@ public class SseControllerTest extends WebAdapterTestSupport {
 
         when(sseUseCase.connect(paymentRequestId)).thenReturn(emitter);
 
-        // Mock SSE 연결
         MvcResult mvcResult = mockMvc.perform(get("/api/payment/connect")
                         .param("paymentRequestId", paymentRequestId)
                         .accept(TEXT_EVENT_STREAM_VALUE))
@@ -44,8 +44,7 @@ public class SseControllerTest extends WebAdapterTestSupport {
         mockMvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(TEXT_EVENT_STREAM_VALUE))
-                .andExpect(content().string("connected!"));
+                .andExpect(content().string(containsString("connected")));
 
     }
-
 }

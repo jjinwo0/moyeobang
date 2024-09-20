@@ -1,5 +1,6 @@
 package com.ssafy.moyeobang.payment.adapter.in.server;
 
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -7,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.moyeobang.common.util.SseUtils;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OrderItemRequest;
 import com.ssafy.moyeobang.payment.application.port.in.OfflinePaymentUseCase;
@@ -23,24 +23,20 @@ public class OfflinePaymentControllerTest extends WebAdapterTestSupport {
     @MockBean
     private OfflinePaymentUseCase offlinePaymentUseCase;
 
-    @MockBean
-    private SseUtils sseUtils;
-
-
-    @DisplayName("결제 확인 API를 호출하면 결제 성공 여부를 서버로 반환한다.")
+    @DisplayName("결제 최종 API 요청이 들어오면 결제 성공 여부를 서버로 반환한다.")
     @Test
     void confirmPaymentToServer() throws Exception {
         // Given
         OfflinePaymentRequest request = new OfflinePaymentRequest(
-                "payment-123",          // paymentRequestId
-                "store-001",            // placeId
-                "Sample Store",         // placeName
-                "1234 Address",         // placeAddress
-                37.7749,                // latitude
-                -122.4194,              // longitude
-                10000L,                 // amount
-                "source-acc-001",       // sourceAccountNumber
-                "target-acc-002",       // targetAccountNumber
+                "payment-123",
+                "store-001",
+                "Sample Store",
+                "1234 Address",
+                37.7749,
+                -122.4194,
+                10000L,
+                "source-acc-001",
+                "target-acc-002",
                 List.of(new OrderItemRequest("Item1", 5000), new OrderItemRequest("Item2", 5000)) // orderItems
         );
 
@@ -53,6 +49,7 @@ public class OfflinePaymentControllerTest extends WebAdapterTestSupport {
                                 .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("SUCCESS"));
+                .andExpect(jsonPath("$.status").value("SUCCESS"))
+                .andExpect(jsonPath("$.error").value(nullValue()));
     }
 }
