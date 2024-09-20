@@ -12,6 +12,7 @@ import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
 import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
+import {useRouter} from '@tanstack/react-router';
 
 const data: Travel[] = [
   {
@@ -178,6 +179,11 @@ function Index() {
     setTravelSummaryModal(false);
   };
 
+  const router = useRouter();
+  const goSettingPage = () => {
+    router.navigate({to: '/profile'});
+  };
+
   return (
     <>
       {/* <HeaderWithAlarmAndQR /> */}
@@ -188,7 +194,7 @@ function Index() {
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
         </div>
-        <img src={bangbang} css={profileImageStyle} />
+        <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
       </div>
 
       {noTripsAvailable ? (
