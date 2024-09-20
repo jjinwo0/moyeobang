@@ -32,4 +32,9 @@ public class TravelJpaEntity extends BaseEntity {
         this.title = title;
         this.travelKey = travelKey;
     }
+
+    //TODO: 여행 계획 API 구현 후 삭제 예정
+    public void setTravelKey(String travelKey) {
+        this.travelKey = travelKey;
+    }
 }
