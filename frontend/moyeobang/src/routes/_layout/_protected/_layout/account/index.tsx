@@ -1,13 +1,15 @@
+import React, { useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router'
 import { css } from '@emotion/react'
 import { useState } from "react";
 import Navbar from "@/components/common/navBar/Navbar";
 import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
-import React from 'react';
 import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
 import { profileData, transactionsData } from "@/data/data";
+import moyeobang from '@/services/moyeobang';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
@@ -63,11 +65,21 @@ export default function groupAccount() {
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
+        // 해당 memberId get요청
         setSelectedMember(memberId)
     } else {
+        // 전체 조회
         setSelectedMember(null)
     }
   }  
+
+  // useEffect(()=>{
+  //   const {data} = useSuspenseQuery({
+  //     queryFn: () =>
+  //       moyeobang.getTransactionList(Number(accountId)),
+  //       queryKey: ['transactionList', accountId],
+  //   });
+  // }, [selectedMember])
 
   return (
     <>

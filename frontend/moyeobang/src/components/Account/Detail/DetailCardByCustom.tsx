@@ -1,7 +1,6 @@
 import React from "react";
 import { css } from "@emotion/react";
 import ProfileImage from "../ProfileImage/ProfileImage";
-import { colors } from "@/styles/colors";
 
 const layoutStyle = css`
     display: flex;
@@ -34,21 +33,21 @@ export interface SettleCardByCustomProps {
     profileImage : ProfileImage;
     memberId: MemberId;
     nickname: Nickname;
-    amount: number;
+    money: Money;
 }
 
 export default function DetailCardByCustom({
     // memberId,
     profileImage,
     nickname,
-    amount,
+    money,
     }:SettleCardByCustomProps) {
 
     return (
         <div css={layoutStyle}>
             <ProfileImage profileImage={profileImage} px={75}/>
             <div ccs={nameStyle}>{nickname}</div>
-            <div css={amountStyle}>{amount}원</div>
+            <div css={amountStyle}>{money}원</div>
         </div>
     )
 }
