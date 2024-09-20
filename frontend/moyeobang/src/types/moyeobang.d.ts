@@ -32,10 +32,12 @@ type PredictedBudget = number;
 type Completion = string;
 type Schedules = [];
 type scheduleTime = string;
-type Amount = number;
+type totalPrice = number;
 type PaymentTime = string;
 type Details = string;
 type Memo = string;
+type PaymentName = string;
+type SplitMethod = string;
 
 interface OrderItems {
   orderItemTitle: OrderItemTitle;
@@ -111,9 +113,11 @@ interface PersonalAccountBalance {
 // MatchedTransaction 지정
 interface MatchedTransaction {
   transactionId: Id;
-  amount: number;
+  paymentName: string;
+  totalPrice: number;
   paymentTime: string;
-  details: string;
+  splitMethod: SplitMethod;
+  participantsInfo: ParticipantsInfo[];
 }
 
 // 1. schedule type 지정
@@ -133,10 +137,12 @@ interface PlusSelfSchedule {
 
 // 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
 interface PaidAutoSchedule {
-  transactionId: Id | null;
-  amount: Amount;
+  transactionId: Id;
+  paymentName: PaymentName;
+  totalPrice: Amount;
   paymentTime: PaymentTime;
-  details: Details;
+  splitMethod: SplitMethod;
+  participantsInfo: ParticipantsInfo[];
 }
 
 // 2. 실제 여행 일정 조회 data 타입 지정

@@ -3,11 +3,11 @@ import React, {useState} from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import Btn from '@/components/common/btn/Btn';
 import blueBlankCheck from '@/assets/icons/blueBlankCheck.png';
 import blueCheck from '@/assets/icons/blueCheck.png';
 import hamburgerBtn from '@/assets/icons/hamburgerButton.png';
 import informationBtn from '@/assets/icons/information.png';
-import doubleDown from '@/assets/icons/doubleDown.png';
 import MessagePopup from '@/components/common/messagePopup/MessagePopup';
 import SettleDetail from './SettleDetail';
 
@@ -113,7 +113,7 @@ export default function Schedule({
 
   // 완료 여부
   const {travelSchedules, setTravelSchedules} = useTravelLogContext();
-  // 로컬 상태 제거, 전역 상태로 관리
+  // API 미적용, UI만 보여주기
   const toggleCompletion = () => {
     // 새로운 일정 리스트를 생성하고 completion을 토글
     const updatedSchedules = travelSchedules.map(
@@ -136,8 +136,23 @@ export default function Schedule({
     );
 
     setTravelSchedules(updatedSchedules);
-    // [todo] 이때 완료 상태로 변경된 일정 목록 api로 전달
   };
+  // [todo] 실제 API 적용 후 완료 여부 변경
+  // const toggleCompletion = async (scheduleId: number) => {
+  //   try {
+  //     // 특정 일정의 완료 상태를 토글하는 API 호출
+  //     await axios.patch(`/api/travel/${travelId}/schedule/${scheduleId}/complete`);
+
+  //     // 성공적으로 완료 상태가 변경되면 전체 여행 일정을 다시 가져옴
+  //     const response = await axios.get(`/api/travel/${travelId}/schedules`);
+
+  //     // 최신 여행 일정으로 상태를 업데이트
+  //     setTravelSchedules(response.data);
+  //   } catch (error) {
+  //     console.error("Error toggling completion and fetching schedules:", error);
+  //     // 에러 처리 (알림이나 UI로 피드백을 줄 수 있음)
+  //   }
+  // };
 
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<JSX.Element | string | null>(
@@ -145,7 +160,7 @@ export default function Schedule({
   );
 
   const difference = schedule.matchedTransaction
-    ? schedule.predictedBudget - schedule.matchedTransaction.amount
+    ? schedule.predictedBudget - schedule.matchedTransaction.totalPrice
     : 0;
   const differenceColor = difference < 0 ? colors.customRed : colors.customBlue;
 
@@ -202,39 +217,66 @@ export default function Schedule({
       {/* 일정 카드 */}
       <div css={scheduleLetterLayout}>
         <div css={scheduleLetterStyle}>
+          {/* 일정 이름 */}
           <div style={{fontFamily: 'semibold', fontSize: '24px'}}>
             {scheduleNum}. {schedule.scheduleTitle}
           </div>
 
-          {/* 결제 비용인지 예상 비용인지 보여줌 */}
-          {schedule.matchedTransaction?.amount ? (
+          {/* 메모 */}
+          {schedule.memo !== '' ? (
             <div css={oneLineStyle}>
-              <span>결제 비용</span>
-              <span style={{color: colors.fifth}}>
-                {schedule.matchedTransaction.amount.toLocaleString()}원
-              </span>
-              <div style={{position: 'relative'}}>
-                <img
-                  src={informationBtn}
-                  alt="information"
-                  onClick={handleInfoClick}
-                  style={{width: '18px', height: '18px', cursor: 'pointer'}}
-                />
-                {showPopup && popupMessage && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: '120%',
-                      left: '50%',
-                      transform: 'translateX(-80%)', // 팝업을 중앙 정렬
-                      width: 'max-content', // 텍스트에 맞게 너비 조정
-                    }}
-                  >
-                    <MessagePopup>{popupMessage}</MessagePopup>
-                  </div>
-                )}
-              </div>
+              <span>메모</span> <span css={memoStyle}>{schedule.memo}</span>
             </div>
+          ) : null}
+
+          {/* 결제 비용인지 예상 비용인지 보여줌 */}
+          {schedule.matchedTransaction?.totalPrice ? (
+            <>
+              {/* 결제 비용 보여주기 */}
+              <div css={oneLineStyle}>
+                <span>결제 비용</span>
+                <span style={{color: colors.fifth}}>
+                  {schedule.matchedTransaction.totalPrice.toLocaleString()}원
+                </span>
+                <div style={{position: 'relative'}}>
+                  <img
+                    src={informationBtn}
+                    alt="information"
+                    onClick={handleInfoClick}
+                    style={{width: '18px', height: '18px', cursor: 'pointer'}}
+                  />
+                  {showPopup && popupMessage && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '120%',
+                        left: '50%',
+                        transform: 'translateX(-80%)', // 팝업을 중앙 정렬
+                        width: 'max-content', // 텍스트에 맞게 너비 조정
+                      }}
+                    >
+                      <MessagePopup>{popupMessage}</MessagePopup>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* 정산된 인원 보여주기 */}
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '10px',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div>정산 참여자</div>
+                  <Btn buttonStyle={{size: 'sotiny', style: 'blue'}}>
+                    상세보기
+                  </Btn>
+                </div>
+                <div></div>
+              </div>
+            </>
           ) : (
             <div css={oneLineStyle} style={{alignItems: 'center'}}>
               <span>예상 비용</span>
@@ -273,21 +315,6 @@ export default function Schedule({
               </div>
             </div>
           )}
-
-          {/* 메모 */}
-          <div css={oneLineStyle}>
-            <span>메모</span> <span css={memoStyle}>{schedule.memo}</span>
-          </div>
-
-          {/* 아래로 당기기 표시 */}
-          {schedule.matchedTransaction?.amount ? (
-            <>
-              <SettleDetail></SettleDetail>
-              <div style={{display: 'flex', justifyContent: 'center'}}>
-                <img src={doubleDown} alt="아래로 당기기" />
-              </div>
-            </>
-          ) : null}
         </div>
 
         {/* 카드 이동 */}

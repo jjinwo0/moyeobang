@@ -19,10 +19,15 @@ export const baseButtonStyle = css`
 
 // size에 따른 스타일 설정
 export const sizeStyles = {
+  sotiny: css`
+    width: 55px;
+    height: 25px;
+    font-size: 12px;
+  `,
   tiny: css`
-    width: 40px;
-    height: 20px;
-    font-size: 10px;
+    width: 50px;
+    height: 25px;
+    font-size: 14px;
   `,
   small: css`
     width: 80px;

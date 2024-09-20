@@ -17,16 +17,42 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         memo: '도쿄 타워가서 누구보다 신나게 놀아야지',
         matchedTransaction: {
           transactionId: 78901,
-          amount: 50000,
+          paymentName: '도쿄 타워 입장료 결제',
+          totalPrice: 50000,
           paymentTime: '2024-10-01T12:15:00',
-          details: '도쿄 타워 입장료 결제',
+          splitMethod: 'custom', // 정산 방식: "receipt" 또는 "custom"
+          participantsInfo: [
+            {
+              memberId: 1,
+              nickname: '김훈민',
+              profileImage: '/images/profiles/1.png',
+            },
+            {
+              memberId: 2,
+              nickname: '이수민',
+              profileImage: '/images/profiles/2.png',
+            },
+          ],
         },
       },
       {
         transactionId: 78902,
-        amount: 25000,
+        paymentName: '신주쿠 카페 결제',
+        totalPrice: 25000,
         paymentTime: '2024-10-01T16:00:00',
-        details: '신주쿠 카페 결제',
+        splitMethod: 'receipt', // 정산 방식
+        participantsInfo: [
+          {
+            memberId: 1,
+            nickname: '김훈민',
+            profileImage: '/images/profiles/1.png',
+          },
+          {
+            memberId: 3,
+            nickname: '박지현',
+            profileImage: '/images/profiles/3.png',
+          },
+        ],
       },
     ],
     [

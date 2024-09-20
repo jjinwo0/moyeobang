@@ -4,7 +4,6 @@ import {colors} from '@/styles/colors';
 import {DraggableProvidedDragHandleProps} from 'react-beautiful-dnd';
 import blueCheck from '@/assets/icons/blueCheck.png';
 import hamburgerBtn from '@/assets/icons/hamburgerButton.png';
-import doubleDown from '@/assets/icons/doubleDown.png';
 
 const scheduleCardLayout = css`
   height: 140px;
@@ -85,17 +84,14 @@ export default function PaidAutoSchedule({
       <div css={scheduleLetterLayout}>
         <div css={scheduleLetterStyle}>
           <div style={{fontSize: '24px'}}>
-            {scheduleNum}. {schedule.details}
+            {scheduleNum}. {schedule.paymentName}
           </div>
           <div css={oneLineStyle}>
             <span>결제 비용</span>{' '}
             <span style={{color: colors.fifth}}>
               {' '}
-              {schedule.amount.toLocaleString()}원
+              {schedule.totalPrice.toLocaleString()}원
             </span>
-          </div>
-          <div style={{display: 'flex', justifyContent: 'center'}}>
-            <img src={doubleDown} alt="아래로 당기기" />
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 // Size 타입 정의
 type ButtonSize =
+  | 'sotiny'
   | 'tiny'
   | 'small'
   | 'middle'
