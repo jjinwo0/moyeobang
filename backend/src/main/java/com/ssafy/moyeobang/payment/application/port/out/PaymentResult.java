@@ -2,6 +2,6 @@ package com.ssafy.moyeobang.payment.application.port.out;
 
 import java.time.LocalDateTime;
 
-public record PaymentResult(long withdrawId, long amount, String placeAddress, String placeName,
-                            LocalDateTime createTime) {
+public record PaymentResult(long transactionId, long money, String address, String paymentName,
+                            LocalDateTime createAt) {
 }
