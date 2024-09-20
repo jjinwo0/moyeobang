@@ -16,6 +16,17 @@ import dayjs from 'dayjs';
 
 interface CreateTravelProps {
   onClose: () => void; // 모달을 닫는 함수
+  isEditMode?: boolean; // 수정 모드 여부
+  initialData?: {
+    // 수정 모드일 때의 초기 데이터
+    travelName?: string;
+    travelLocation?: string;
+    quizQuestion?: string;
+    quizAnswer?: string;
+    dateRange?: [Date | null, Date | null];
+    selectedImage?: string | null;
+  };
+  onSubmit?: () => void; // 수정 버튼 클릭 시 실행할 함수
 }
 
 const modalStyle = css`
@@ -49,6 +60,7 @@ const titleStyle = css`
 
 const titleBlue = css`
   color: ${colors.fifth};
+  margin-left: 3px;
 `;
 
 const travelStyle = css`
@@ -119,29 +131,51 @@ const photoStyle = (selectedImage: string | null) => css`
   }
 `;
 
-export default function CreateTravel({onClose}: CreateTravelProps) {
+export default function CreateTravel({
+  onClose,
+  isEditMode = false, // 기본값은 false로 설정 (생성 모드)
+  initialData = {}, // 기본값을 빈 객체로 설정하여 생성 모드에서 문제가 없도록 처리
+  onSubmit, // 수정 시의 함수
+}: CreateTravelProps) {
   const {closeModal} = useModalStore();
-  const [step, setStep] = useState<number>(1);
-  //인풋 값들 상태
-  const [travelName, setTravelName] = useState<string>(''); // 여행 이름 상태 추가
-  const [travelLocation, setTravelLocation] = useState<string>(''); // 여행 장소 상태 추가
-  const [quizQuestion, setQuizQuestion] = useState<string>(''); // 퀴즈 질문 상태 추가
-  const [quizAnswer, setQuizAnswer] = useState<string>(''); // 퀴즈 답변 상태 추가
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    null,
-    null,
-  ]); //날짜범위
+  //인풋값들 상태
+  const [travelName, setTravelName] = useState<string>(
+    initialData.travelName || ''
+  );
+  const [travelLocation, setTravelLocation] = useState<string>(
+    initialData.travelLocation || ''
+  );
+  const [quizQuestion, setQuizQuestion] = useState<string>(
+    initialData.quizQuestion || ''
+  );
+  const [quizAnswer, setQuizAnswer] = useState<string>(
+    initialData.quizAnswer || ''
+  );
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(
+    initialData.dateRange || [null, null]
+  );
+  const [selectedImage, setSelectedImage] = useState<string | null>(
+    initialData.selectedImage || null
+  );
+
+  const [step, setStep] = useState<number>(1); // Step 상태
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // 수정과 생성을 구분하여 처리
   const handleNextClick = () => {
-    console.log('여행 이름:', travelName);
-    console.log('여행 장소:', travelLocation);
-    console.log('여행 기간:', dateRange);
-    console.log('퀴즈 질문:', quizQuestion);
-    console.log('퀴즈 답변:', quizAnswer);
-    setStep(2); // "다음" 버튼 클릭 시 2단계(본인 인증)로 전환
+    if (isEditMode) {
+      // 수정 모드일 때는 onSubmit 함수 호출
+      onClose();
+      // onSubmit();
+    } else {
+      console.log('여행 이름:', travelName);
+      console.log('여행 장소:', travelLocation);
+      console.log('여행 기간:', dateRange);
+      console.log('퀴즈 질문:', quizQuestion);
+      console.log('퀴즈 답변:', quizAnswer);
+      setStep(2); // 생성 모드일 때 다음 단계로 이동
+    }
   };
 
   const handleCalendarClick = () => {
@@ -206,7 +240,7 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
       <div css={contentStyle}>
         <div css={titleStyle}>
           <span>여행</span>
-          <span css={titleBlue}>만들어방</span>
+          <span css={titleBlue}>{isEditMode ? '수정해방' : '만들어방'}</span>
         </div>
 
         {step === 1 ? (
@@ -292,7 +326,7 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
                 buttonStyle={{style: 'blue', size: 'small'}}
                 onClick={handleNextClick}
               >
-                다음
+                {isEditMode ? '수정' : '다음'}
               </Btn>
             </div>
           </>

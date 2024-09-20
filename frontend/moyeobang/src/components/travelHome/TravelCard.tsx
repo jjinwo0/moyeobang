@@ -8,6 +8,7 @@ import Btn from '../common/btn/Btn';
 import ExitTravel from './ExitTravel';
 import inviteIcon from '@/assets/icons/inviteIcon.png';
 import ConfirmQuiz from '../quiz/ConfirmQuiz';
+import CreateTravel from './CreateTravel';
 
 const cardStyle = css`
   display: flex;
@@ -117,7 +118,8 @@ export default function TravelCard({
   const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
   const [inviteModal, setInviteModal] = useState<boolean>(false);
   const [exitModal, setExitModal] = useState<boolean>(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const [editModal, setEditModal] = useState<boolean>(false);
 
   const formatDate = (dateString: string) => {
     return dateString.split('T')[0]; // "YYYY-MM-DDTHH:mm:ssZ"에서 "YYYY-MM-DD"만 추출
@@ -149,7 +151,12 @@ export default function TravelCard({
   const goSettingPage = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 전파를 막음
     console.log('세팅페이지');
-    navigate({to: '/profile'});
+    // navigate({to: '/profile'});
+    setEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModal(false);
   };
 
   return (
@@ -196,6 +203,12 @@ export default function TravelCard({
       {inviteModal && (
         <div>
           <ConfirmQuiz onClose={closeQuizModal} />
+        </div>
+      )}
+
+      {editModal && (
+        <div>
+          <CreateTravel onClose={closeEditModal} isEditMode={true} />
         </div>
       )}
     </>
