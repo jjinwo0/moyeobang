@@ -59,9 +59,18 @@ const transactionListStyle = css`
     display: none; 
   }
 `
-
+const accountId = 1;
 export default function groupAccount() {
-  const [ selectedMember , setSelectedMember ] = useState<number | null>(null) // default 전체임
+
+  type SelectedMember = MemberId | MemberId[]; 
+  const [ selectedMember , setSelectedMember ] = useState<SelectedMember | null>(null) // default 전체임
+
+  const {data} = useSuspenseQuery({
+    queryKey: ['transactionList', accountId],
+    queryFn: () => moyeobang.getTransactionList(Number(accountId)),
+  });
+
+  const transactionData = data.data.data;
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
@@ -69,17 +78,10 @@ export default function groupAccount() {
         setSelectedMember(memberId)
     } else {
         // 전체 조회
-        setSelectedMember(null)
+        const allList = profileData.map((member) => member.memberId)
+        setSelectedMember(allList)
     }
   }  
-
-  // useEffect(()=>{
-  //   const {data} = useSuspenseQuery({
-  //     queryFn: () =>
-  //       moyeobang.getTransactionList(Number(accountId)),
-  //       queryKey: ['transactionList', accountId],
-  //   });
-  // }, [selectedMember])
 
   return (
     <>
@@ -101,7 +103,7 @@ export default function groupAccount() {
             <AccountCard />
         </div>
         <div css={transactionListStyle}>
-            {transactionsData.map((tran, index) => 
+            {transactionData.map((tran, index) => 
                 <TransactionCard key={index} {...tran} />
             )}
         </div>

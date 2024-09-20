@@ -5,7 +5,6 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
-import { useNavigate } from "@tanstack/react-router";
 import { extractItems } from "@/util/receiptParser";
 import FailByReceipt from "./FailByReceipt";
 import ResultByReceiptComponent from "./ResultByReceiptComponent";
@@ -61,13 +60,15 @@ const buttonStyle = css`
     }
 `;
 
-export default function SettleByReceiptComponent({transactionId, money, paymentName, adress, createdAt } : CompleteTransaction) {
+type SettleByReceiptComponentProps = CompleteTransaction & {handleHidden : VoidFunction}
+
+export default function SettleByReceiptComponent({transactionId, money, paymentName, adress, createdAt, handleHidden} : SettleByReceiptComponentProps) {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
-    const [results, setResults] = useState<TransactionDetailByReceipt>();
+    const [results, setResults] = useState<TransactionDetailByReceipt | null>();
 
     // Base64 데이터를 Blob 파일로 변환
     const base64ToFile = (base64Data: string, filename: string) => {
@@ -149,11 +150,11 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
                     messages: [
                         {
                             role: "system",
-                            content: "You are a helpful assistant to analyze the purchase date, items, quantity, and price from the receipt and output it in JSON format",
+                            content: "You are a helpful assistant that extracts the purchase date, item name, quantity, and price from a receipt and outputs the information in JSON format. Ensure that the purchase date appears only once and all items are listed in a table format with their names, quantities, and prices.",
                         },
                         {
                             role: "user",
-                            content: `please analyze ${stringResult}. only items and date. If an item is free, set its cost to 0'`,
+                            content: `please analyze ${stringResult}. Make sure the output is in the following JSON format: {  "purchase_date": "YYYY-MM-DD", "items": [  { "item_name" : "사과" , "quantity": 1, "price": 10.00 }, { "item_name": "포도", "quantity": 2, "price": 20.00 } ] }only items and date. If an item is free, set its cost to 0'`,
                         },
                     ],
                 })
@@ -171,6 +172,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
             let parsedData;
             try {
                 parsedData = JSON.parse(jsonString); // JSON 형식의 데이터만 추출해서 파싱
+                console.log(parsedData)
             } catch (parseError) {
                 console.error("JSON 파싱 오류:", parseError);
                 setError("영수증 처리 중 오류가 발생했습니다.");
@@ -178,7 +180,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
             }
 
             // extractItems를 통해 데이터 변환
-            if (parsedData && parsedData.products) {
+            if (parsedData && parsedData.items) {
                 const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, adress); 
                 console.log('영수증 ocr 결과', results)
                 setResults(results);
@@ -199,9 +201,14 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
         setImageSrc(null);
     }
 
+    function handleCloseResult() {
+        setResults(null);
+        handleHidden();
+    }
+
     return (
         <div css={layoutStyle}>
-                <div css={cameraStyle}>
+            <div css={cameraStyle}>
                 {imageSrc ? (
                     <img src={imageSrc} alt="capture_img" />
                 ) : (
@@ -211,12 +218,11 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
                     videoConstraints={{ facingMode: "environment" }} // 모바일 후면 카메라 사용
                     />
                 )}
-                </div>
-                <div css={buttonStyle}>
+            </div>
+            <div css={buttonStyle}>
                 <button onClick={handleCapture}/>
-                </div>
-            
-            {results ? <ResultByReceiptComponent data={results}/> : <div>결과처리중</div> }
+            </div>
+            {results ? <ResultByReceiptComponent data={results} onClose={handleCloseResult} /> : <div>결과처리중</div> }
             {/* {isLoading && <div>처리 중...</div>} */}
             {error && <FailByReceipt onClose={handleFailClose}/>}
 

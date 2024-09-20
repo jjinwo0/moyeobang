@@ -6,8 +6,7 @@ const defaultCompleteTransacton : CompleteTransaction = {
     money:0,
     adress:'',
     paymentName:"",
-    createdAt:'',
-    isNew:true,
+    createdAt: new Date(),
 };
 
 // Context 생성

@@ -29,7 +29,7 @@ interface SettleByCustomComponentProps {
 const dummyData = profileData; 
 
 // 임시로 넣어둠.
-export default function SettleByCustomComponent({transactionId, totalMoney, adress, paymentName, isNew, createdAt} : SettleByCustomComponentProps) {
+export default function SettleByCustomComponent({transactionId, totalMoney, adress, paymentName, createdAt} : SettleByCustomComponentProps) {
     const [ settleData , setSettleData ] = useState<CustomSettle[]>([]);
     const [ initialSettle, setInitialSettle] = useState<CustomSettle[]>([]);
     const [ remainMoney, setRemainMoney ] = useState<number>(totalMoney);
@@ -51,14 +51,8 @@ export default function SettleByCustomComponent({transactionId, totalMoney, adre
         setRemainMoney(totalMoney);
     }, [])
 
-    // 초기 데이터 여부 확인
-    useEffect(() => {
-        if (!isNew) {
-            // get으로 가져오기
-        } else {
-            // 새로 만들거임.
-        }
-    }, [isNew])
+    // get으로 transaction의 상세 데이터 가져오기!
+
 
     // 총액만큼 정산되어야 정산 가능.
     useEffect(() => {
