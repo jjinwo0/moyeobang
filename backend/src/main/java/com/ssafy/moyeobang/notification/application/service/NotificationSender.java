@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NotificationSender {
 
-    // 동시성 처리 -> 5개의 스레드를 동시 처리 (CPU Core 수)
-    private final ExecutorService executor = Executors.newFixedThreadPool(16);
+    // 동시성 처리 -> 시스템에 따라 유동적으로 Pool 조정
+    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     private static final int RETRY_COUNT = 5;
 
