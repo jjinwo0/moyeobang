@@ -12,7 +12,7 @@ public abstract class GetTransactionHistoryResponse {
     private final Long transactionId;
     private final String paymentName;
     private final String address;
-    private final String acceptNumber;
+    private final String acceptedNumber;
     private final Long totalPrice;
     private final LocalDateTime createdAt;
 
