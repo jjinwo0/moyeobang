@@ -1,12 +1,10 @@
 package com.ssafy.moyeobang.payment.application.domain;
 
-import static lombok.AccessLevel.PRIVATE;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor(access = PRIVATE)
+@AllArgsConstructor
 public class TravelAccount {
 
     private final String accountNumber;
