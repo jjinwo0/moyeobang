@@ -16,6 +16,7 @@ type StartDate = string;
 type EndDate = string;
 type QuizQuestion = string;
 type QuizAnswer = string;
+type ParticipantsCount = number;
 
 type CurrentBalance = number;
 type TotalAmount = number;
@@ -39,6 +40,11 @@ type ImgUrl = string;
 type LocationName = string;
 type CategoryName = string;
 
+type Question = string;
+type Answer = string;
+
+type InvitationLink = string;
+
 // interface OrderItems {
 //   orderItemTitle: OrderItemTitle;
 //   orderItemAmount: OrderItemAmount;
@@ -54,6 +60,8 @@ interface ParticipantInfo {
 interface Travel {
   travelId: TravelId;
   travelName: TravelName;
+  travelImg: ImgUrl | null;
+  participantsCount: ParticipantsCount;
   startDate: StartDate;
   endDate: EndDate;
   travelPlaceList: TravelPlaceList;
@@ -137,4 +145,21 @@ interface TravelSummary {
   consumptionTag: ConsumptionTag[]; // 소비 태그 (문구는 프론트에서 정함)
   participantsConsumption: ParticipantConsumption[]; // 참가자별 소비 금액
   imgSummary: ImgSummary[]; // 이미지와 장소 이름 리스트
+}
+
+interface Quiz {
+  id: TravelId;
+  question: Question;
+  answer: Answer;
+}
+
+//여행 상세 조회
+interface TravelDetail {
+  travelName: TravelName;
+  startDate: StartDate;
+  endDate: EndDate;
+  travelPlaceList: TravelPlaceList;
+  accountId: AccountId;
+  accountNumber: AccountNumber;
+  participantsInfo: ParticipantInfo[];
 }
