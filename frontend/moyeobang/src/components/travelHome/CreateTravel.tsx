@@ -23,7 +23,8 @@ interface CreateTravelProps {
     travelLocation?: string;
     quizQuestion?: string;
     quizAnswer?: string;
-    dateRange?: [Date | null, Date | null];
+    startDate?: Date | null; // startDate 추가
+    endDate?: Date | null; // endDate 추가
     selectedImage?: string | null;
   };
   onSubmit?: () => void; // 수정 버튼 클릭 시 실행할 함수
@@ -142,8 +143,8 @@ export default function CreateTravel({
   const [travelName, setTravelName] = useState<string>(
     initialData.travelName || ''
   );
-  const [travelLocation, setTravelLocation] = useState<string>(
-    initialData.travelLocation || ''
+  const [travelPlaceList, setTravelPlaceList] = useState<string>(
+    initialData.travelPlaceList || ''
   );
   const [quizQuestion, setQuizQuestion] = useState<string>(
     initialData.quizQuestion || ''
@@ -152,7 +153,10 @@ export default function CreateTravel({
     initialData.quizAnswer || ''
   );
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(
-    initialData.dateRange || [null, null]
+    initialData.dateRange || [
+      initialData.startDate || null,
+      initialData.endDate || null,
+    ]
   );
   const [selectedImage, setSelectedImage] = useState<string | null>(
     initialData.selectedImage || null
@@ -170,7 +174,7 @@ export default function CreateTravel({
       // onSubmit();
     } else {
       console.log('여행 이름:', travelName);
-      console.log('여행 장소:', travelLocation);
+      console.log('여행 장소:', travelPlaceList);
       console.log('여행 기간:', dateRange);
       console.log('퀴즈 질문:', quizQuestion);
       console.log('퀴즈 답변:', quizAnswer);
@@ -210,6 +214,7 @@ export default function CreateTravel({
   };
 
   useEffect(() => {
+    console.log(initialData);
     if (isCalendarOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -283,8 +288,8 @@ export default function CreateTravel({
                 </div>
                 <LocationInput
                   label="여행장소"
-                  value={travelLocation}
-                  onChange={e => setTravelLocation(e.target.value)}
+                  value={travelPlaceList}
+                  onChange={e => setTravelPlaceList(e.target.value)}
                   placeholder="여행 장소를 검색하세요"
                 />
               </div>

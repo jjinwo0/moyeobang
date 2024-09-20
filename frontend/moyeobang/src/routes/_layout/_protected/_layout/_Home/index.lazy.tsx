@@ -13,6 +13,7 @@ import NoTravel from '@/components/travelHome/NoTravel';
 import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
 import {useRouter} from '@tanstack/react-router';
+import {useTravelContext} from '@/context/TravelDataContext';
 
 const data: Travel[] = [
   {
@@ -128,6 +129,7 @@ function Index() {
   const {setTravelData} = useTravelStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
+  const {setNowTravelData} = useTravelContext();
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -173,10 +175,29 @@ function Index() {
       travel.travelPlaceList
     ); // 상태 저장
     setTravelSummaryModal(true);
+    setNowTravelData({
+      travelName: travel.travelName,
+      startDate: travel.startDate,
+      endDate: travel.endDate,
+      travelPlaceList: travel.travelPlaceList,
+      quizQuestion: travel.quizQuestion,
+      quizAnswer: travel.quizAnswer,
+    }); // Context 상태 저장
   };
 
   const closeTravelSummary = () => {
     setTravelSummaryModal(false);
+  };
+
+  const clickTravelCard = (travel: Travel) => {
+    setNowTravelData({
+      travelName: travel.travelName,
+      startDate: travel.startDate,
+      endDate: travel.endDate,
+      travelPlaceList: travel.travelPlaceList,
+      quizQuestion: travel.quizQuestion,
+      quizAnswer: travel.quizAnswer,
+    }); // Context 상태 저장
   };
 
   const router = useRouter();
@@ -207,11 +228,14 @@ function Index() {
               {currentTrips.map(trip => (
                 <TravelCard
                   key={trip.travelId}
-                  title={trip.travelName}
+                  travelName={trip.travelName}
                   startDate={trip.startDate}
                   endDate={trip.endDate}
-                  place={trip.travelPlaceList}
+                  travelPlaceList={trip.travelPlaceList}
                   participantsCount={trip.participantsCount}
+                  quizQuestion={trip.quizQuestion} // quizQuestion 전달
+                  quizAnswer={trip.quizAnswer} // quizAnswer 전달
+                  onClick={() => clickTravelCard(trip)}
                 />
               ))}
             </div>
@@ -228,20 +252,23 @@ function Index() {
           </div>
 
           {/* 여행 카드 리스트 */}
+
           <div css={containerStyle}>
             {tripsToDisplay.length > 0 ? (
               tripsToDisplay.map(item => (
                 <TravelCard
                   key={item.travelId}
-                  title={item.travelName}
+                  travelName={item.travelName}
                   startDate={item.startDate}
                   endDate={item.endDate}
-                  place={item.travelPlaceList}
+                  travelPlaceList={item.travelPlaceList}
                   participantsCount={item.participantsCount}
+                  quizQuestion={item.quizQuestion}
+                  quizAnswer={item.quizAnswer}
                   onClick={
                     activeTab === 'past'
                       ? () => handleTravelSummary(item)
-                      : undefined
+                      : () => clickTravelCard(item)
                   }
                 />
               ))
