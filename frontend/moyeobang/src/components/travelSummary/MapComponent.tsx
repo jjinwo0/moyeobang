@@ -1,39 +1,120 @@
-import React from 'react';
-import {GoogleMap, Marker, useJsApiLoader} from '@react-google-maps/api';
-import {css} from '@emotion/react';
-
-// 구글 맵에 표시할 기본 중심 좌표 (제주도 예시)
-const center = {
-  lat: 33.431441,
-  lng: 126.874237,
-};
+import React, {useEffect, useState, useRef} from 'react';
+import {GoogleMap, useJsApiLoader} from '@react-google-maps/api';
+import axios from 'axios';
+import hearIcon from '@/assets/icons/hearIcon.png';
 
 interface MapProps {
   locationList: {latitude: number; longitude: number}[];
+  travelPlaceList: string[];
 }
 
-export default function MapComponent({locationList}: MapProps) {
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+export default function MapComponent({
+  locationList,
+  travelPlaceList,
+}: MapProps) {
   const {isLoaded} = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY, // Google API Key를 여기에 넣으세요
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
   });
 
-  if (!isLoaded) {
-    return <div>Loading...</div>; // API 로드 중일 때
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const [center, setCenter] = useState<Coordinates | null>(null);
+
+  // Geocoding API를 이용해 장소 이름에서 위도, 경도를 가져오는 함수
+  const getCoordinatesFromPlace = async (
+    placeName: string
+  ): Promise<Coordinates | null> => {
+    const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json`;
+
+    try {
+      const response = await axios.get(url, {
+        params: {
+          address: placeName,
+          key: apiKey,
+        },
+      });
+
+      const {results} = response.data;
+      if (results && results.length > 0) {
+        const location = results[0].geometry.location;
+        return {lat: location.lat, lng: location.lng};
+      } else {
+        console.error('No results found for this place:', placeName);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching coordinates:', error);
+      return null;
+    }
+  };
+
+  // 모든 장소의 위도와 경도를 가져와 평균 좌표를 계산하는 함수
+  useEffect(() => {
+    const fetchCoordinates = async () => {
+      const coordinatesList = await Promise.all(
+        travelPlaceList.map(place => getCoordinatesFromPlace(place))
+      );
+
+      const validCoordinates = coordinatesList.filter(Boolean) as Coordinates[];
+
+      if (validCoordinates.length > 0) {
+        const averageLat =
+          validCoordinates.reduce((sum, coord) => sum + coord.lat, 0) /
+          validCoordinates.length;
+        const averageLng =
+          validCoordinates.reduce((sum, coord) => sum + coord.lng, 0) /
+          validCoordinates.length;
+        setCenter({lat: averageLat, lng: averageLng});
+      }
+    };
+
+    fetchCoordinates();
+  }, [travelPlaceList]);
+
+  // 마커를 생성하는 함수
+  const createMarkers = (map: google.maps.Map) => {
+    console.log(locationList);
+    locationList.forEach(location => {
+      new google.maps.Marker({
+        map,
+        position: {lat: location.latitude, lng: location.longitude},
+        // icon: {
+        //   path: google.maps.SymbolPath.CIRCLE, // 기본 마커 대신 원형 심볼
+        //   fillColor: '#FF0000', // 마커 색상 (빨간색)
+        //   fillOpacity: 1, // 색상 불투명도
+        //   strokeWeight: 2, // 테두리 두께
+        //   strokeColor: '#FFFFFF', // 테두리 색상 (흰색)
+        //   scale: 8, // 크기 (값을 키워서 확대)
+        // },
+        icon: {
+          url: hearIcon, // hearIcon 이미지를 마커로 사용
+          size: new google.maps.Size(15, 15), // 원본 이미지 크기 설정
+          scaledSize: new google.maps.Size(15, 15), // 이미지 크기 조정
+        },
+      });
+    });
+  };
+
+  const handleMapLoad = (map: google.maps.Map) => {
+    mapRef.current = map;
+    createMarkers(map);
+  };
+
+  if (!isLoaded || !center) {
+    return <div>Loading...</div>;
   }
 
   return (
     <GoogleMap
       mapContainerStyle={{width: '330px', height: '150px'}}
       center={center}
-      zoom={10}
-    >
-      {/* 마커 표시 */}
-      {locationList.map((location, index) => (
-        <Marker
-          key={index}
-          position={{lat: location.latitude, lng: location.longitude}}
-        />
-      ))}
-    </GoogleMap>
+      zoom={9}
+      onLoad={handleMapLoad}
+    />
   );
 }
