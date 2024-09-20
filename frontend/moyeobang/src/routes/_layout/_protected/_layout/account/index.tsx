@@ -7,7 +7,7 @@ import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
 import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
-import { profileData, transactionsData } from "@/data/data";
+import { profileData, transactions } from "@/data/data";
 import moyeobang from '@/services/moyeobang';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
@@ -65,12 +65,13 @@ export default function groupAccount() {
   type SelectedMember = MemberId | MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember | null>(null) // default 전체임
 
-  const {data} = useSuspenseQuery({
-    queryKey: ['transactionList', accountId],
-    queryFn: () => moyeobang.getTransactionList(Number(accountId)),
-  });
+  // const {data} = useSuspenseQuery({
+  //   queryKey: ['transactionList', accountId],
+  //   queryFn: () => moyeobang.getTransactionList(Number(accountId)),
+  // });
 
-  const transactionData = data.data.data;
+  // const transactionData = data.data.data;
+  const transactionData = transactions;
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {

@@ -116,9 +116,9 @@ export default function FinalModal({onClickOutside, onClick, confirmData, totalM
                 { confirmData.map((user, index) => (
                     <SettleCard 
                     key={index}
-                    memberId={user.participantsInfo.memberId}
-                    profileImage={user.participantsInfo.profileImage}
-                    nickname={user.participantsInfo.nickname}
+                    memberId={user.participantInfo.memberId}
+                    profileImage={user.participantInfo.profileImage}
+                    nickname={user.participantInfo.nickname}
                     isChecked={true}
                     money={user.money}
                     />

@@ -4,17 +4,12 @@ import { css } from '@emotion/react'
 import { useNavigate } from '@tanstack/react-router'
 import TransactionDetailDefaultCard from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import Btn from '@/components/common/btn/Btn'
-import { detailDataByCustomAfterSettle, detailDataByReceiptAfterSettle } from '@/data/data'
+import { detailsByCustom, detailsByReceipt} from '@/data/data'
 import { colors } from '@/styles/colors'
 import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
 import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import moyeobang from '@/services/moyeobang'
-
-// const dataByCustomAfterSettle = detailDataByCustomAfterSettle;
-// const dataByEqualAfterSettle = detailDataByEqualAfterSettle;
-// const dataByEqualBeforeSettle = detailDataByEqualBeforeSettle;
-const data = detailDataByCustomAfterSettle;
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -46,7 +41,7 @@ const listStyle=css`
   display:flex;
   flex-direction:column;
   overflow-y:auto;
-  height:370px;
+  height:450px;
   padding: 0 5px;
 
   ::-webkit-scrollbar {
@@ -64,17 +59,19 @@ export default function TransactionDetail() {
   const { transactionId } = Route.useParams()
   const navigate = useNavigate({from:'/account/$transactionId/detail'});
 
-  const {data} = useSuspenseQuery({
-    queryKey: ['transactionDetail', accountId, transactionId],
-    queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
-  });
+  // const {data} = useSuspenseQuery({
+  //   queryKey: ['transactionDetail', accountId, transactionId],
+  //   queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
+  // });
 
-  const transactionDetailData = data.data.data;
+  // const transactionDetailData = data.data.data;
+  const transactionDetailData = detailsByReceipt;
+
 
   function handleUpdate() {
     // 영수증 정산일때
     if ( transactionDetailData.splitMethod === "receipt") {
-      navigate({to: `/account/${transactionId}/resultByReceipt`})
+      navigate({to: `/account/${transactionId}/resultByReceipt`, search: {isNew : 'false'}})
 
     } else {
       // 직접 정산일때

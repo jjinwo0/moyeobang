@@ -2,7 +2,7 @@ type ProfileImage = string;
 type TransactionId = number;
 type MemberId = number;
 type Nickname = string;
-type CreatedAt = Date;
+type CreatedAt = string;
 type TravelId = number;
 type TravelName = string;
 type TravelPlaceList = Place[];
@@ -68,7 +68,8 @@ type CreatedAt = string;
 type TransactionType = "입금" | "출금";
 type CurrentBalance = number; // 현재 잔액
 type Adress = string;
-type SplitMethod = "receipt" | "custom";
+type SplitMethod = string;
+// type SplitMethod = "receipt" | "custom";
 type OrderItemId = number;
 type OrderItemTitle = string;
 type OrderItemQuantity = number;
@@ -174,6 +175,18 @@ interface CompleteTransaction {
     adress:Adress;
     paymentName:PaymentName;
     createdAt:CreatedAt;
+}
+
+interface Info {
+  memberId:MemberId;
+  money:Money;
+}
+
+interface PostTransactionDetailByCustom {
+    paymentName:PaymentName;
+    money:Money;
+    info:Info[];
+    splitMethod:SplitMethod;
 }
 
 interface ChatItem {
