@@ -14,10 +14,11 @@ import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.error.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class BankAccountAdapter implements LoadTravelAccountPort, ProcessPaymentPort {
+public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPaymentPort {
 
     private final BankApiClient bankApiClient;
 
@@ -35,6 +36,7 @@ public class BankAccountAdapter implements LoadTravelAccountPort, ProcessPayment
     }
 
     @Override
+    @Transactional
     public PaymentResult processPayment(TravelAccount travelAccount, Store store, Money paymentRequestMoney) {
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(travelAccount.getAccountNumber());
 
