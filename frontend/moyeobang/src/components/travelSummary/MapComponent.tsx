@@ -14,7 +14,7 @@ interface MapProps {
 
 export default function MapComponent({locationList}: MapProps) {
   const {isLoaded} = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyCrWnDsyD0g1eRejtNBG39RU0OwkZseKMY', // Google API Key를 여기에 넣으세요
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY, // Google API Key를 여기에 넣으세요
   });
 
   if (!isLoaded) {

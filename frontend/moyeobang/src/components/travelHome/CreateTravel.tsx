@@ -122,15 +122,25 @@ const photoStyle = (selectedImage: string | null) => css`
 export default function CreateTravel({onClose}: CreateTravelProps) {
   const {closeModal} = useModalStore();
   const [step, setStep] = useState<number>(1);
+  //인풋 값들 상태
+  const [travelName, setTravelName] = useState<string>(''); // 여행 이름 상태 추가
+  const [travelLocation, setTravelLocation] = useState<string>(''); // 여행 장소 상태 추가
+  const [quizQuestion, setQuizQuestion] = useState<string>(''); // 퀴즈 질문 상태 추가
+  const [quizAnswer, setQuizAnswer] = useState<string>(''); // 퀴즈 답변 상태 추가
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
-  ]); // 날짜 범위
-  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false); // 달력 표시 상태
-  const [selectedImage, setSelectedImage] = useState<string | null>(null); // 이미지 미리보기 상태
-  const fileInputRef = useRef<HTMLInputElement | null>(null); // 파일 입력 Ref
+  ]); //날짜범위
+  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleNextClick = () => {
+    console.log('여행 이름:', travelName);
+    console.log('여행 장소:', travelLocation);
+    console.log('여행 기간:', dateRange);
+    console.log('퀴즈 질문:', quizQuestion);
+    console.log('퀴즈 답변:', quizAnswer);
     setStep(2); // "다음" 버튼 클릭 시 2단계(본인 인증)로 전환
   };
 
@@ -138,10 +148,10 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
     setIsCalendarOpen(prev => !prev); // 달력 표시/숨기기 토글
   };
 
-  const handleSelectRange = (start: Date, end: Date) => {
-    setDateRange([start, end]);
-    setIsCalendarOpen(false); // 달력 닫기
-  };
+  // const handleSelectRange = (start: Date, end: Date) => {
+  //   setDateRange([start, end]);
+  //   setIsCalendarOpen(false); // 달력 닫기
+  // };
 
   const handlePhotoClick = () => {
     fileInputRef.current?.click(); // 이미지 클릭 시 파일 선택창 열기
@@ -177,6 +187,19 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
     };
   }, [isCalendarOpen]);
 
+  const [selectedRange, setSelectedRange] = useState<{
+    start: Date | null;
+    end: Date | null;
+  }>({
+    start: null,
+    end: null,
+  });
+
+  const handleSelectRange = (start: Date, end: Date) => {
+    setSelectedRange({start, end});
+    setDateRange([start, end]); // 날짜 범위를 업데이트
+  };
+
   return (
     <div css={modalStyle}>
       <HeaderWithXButton onXClick={onClose} />
@@ -192,18 +215,19 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
               <div css={inputsContainerStyle}>
                 <LabeledInput
                   label="여행이름"
+                  value={travelName}
+                  onChange={e => setTravelName(e.target.value)}
                   placeholder="여행 이름을 입력하세요"
                 />
                 <div css={inputWithIconStyle}>
                   <LabeledInput
                     label="여행기간"
-                    placeholder={
+                    value={
                       dateRange[0] && dateRange[1]
-                        ? `${dayjs(dateRange[0]).format('YYYY-MM-DD')} ~ ${dayjs(
-                            dateRange[1]
-                          ).format('YYYY-MM-DD')}`
-                        : '여행 기간을 선택하세요'
+                        ? `${dayjs(dateRange[0]).format('YYYY-MM-DD')} ~ ${dayjs(dateRange[1]).format('YYYY-MM-DD')}`
+                        : ''
                     }
+                    placeholder="여행 기간을 선택하세요"
                     readOnly
                     onClick={handleCalendarClick}
                   />
@@ -211,19 +235,22 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
                     src={calendarIcon}
                     css={calendarIconStyle}
                     id="calendar-icon"
-                    onClick={handleCalendarClick} // 달력 아이콘 클릭 시 달력 표시
+                    onClick={handleCalendarClick}
                   />
                   {isCalendarOpen && (
                     <div className="custom-calendar">
                       <CustomCalendar
                         onSelectRange={handleSelectRange}
                         onClose={() => setIsCalendarOpen(false)}
+                        selectedRange={selectedRange}
                       />
                     </div>
                   )}
                 </div>
                 <LocationInput
                   label="여행장소"
+                  value={travelLocation}
+                  onChange={e => setTravelLocation(e.target.value)}
                   placeholder="여행 장소를 검색하세요"
                 />
               </div>
@@ -232,9 +259,16 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
                 <QuizInput
                   title="초대퀴즈"
                   label="Q"
+                  value={quizQuestion}
+                  onChange={e => setQuizQuestion(e.target.value)}
                   placeholder="김훈민의 별명은?"
                 />
-                <QuizInput label="A" placeholder="김훈민" />
+                <QuizInput
+                  label="A"
+                  value={quizAnswer}
+                  onChange={e => setQuizAnswer(e.target.value)}
+                  placeholder="김훈민"
+                />
               </div>
 
               <div css={photoStyle(selectedImage)}>

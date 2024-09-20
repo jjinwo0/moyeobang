@@ -9,7 +9,7 @@ interface CityResult {
 
 // Google Places API에서 도시 정보를 가져오는 함수
 const fetchCityData = async (cityName: string): Promise<CityResult[]> => {
-  const APIKey = 'AIzaSyCrWnDsyD0g1eRejtNBG39RU0OwkZseKMY'; // Google API 키를 여기에 추가하세요
+  const APIKey = process.env.VITE_GOOGLE_API_KEY;
   const response = await axios.get(
     `https://maps.googleapis.com/maps/api/geocode/json`,
     {
