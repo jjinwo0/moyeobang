@@ -19,20 +19,15 @@ public class SseUtils {
     public boolean add(String transactionId, SseEmitter emitter) {
         SseEmitter previousEmitter = this.emitters.put(transactionId, emitter);
         if (previousEmitter != null) {
-            log.warn("Emitter already existed for transaction: {}", transactionId);
             return false;
         }
 
-        log.info("New emitter added for transaction: {}", transactionId);
-
         emitter.onCompletion(() -> {
-            log.info("onCompletion callback for transaction: {}", transactionId);
             emitter.complete();
             this.emitters.remove(transactionId);
         });
 
         emitter.onTimeout(() -> {
-            log.info("onTimeout callback for transaction: {}", transactionId);
             emitter.complete();
             this.emitters.remove(transactionId);
         });
@@ -48,13 +43,10 @@ public class SseUtils {
                         .name(eventName)
                         .data(message));
             } catch (IOException e) {
-                log.error("Failed to send SSE event: {}", eventName, e);
                 throw new RuntimeException("Failed to send SSE event", e);
             } finally {
                 emitters.remove(transactionId);
             }
-        } else {
-            log.warn("Emitter not found for transaction: {}", transactionId);
         }
     }
 
@@ -65,7 +57,7 @@ public class SseUtils {
                 emitter.send(SseEmitter.event().name(eventName).data(data));
                 emitter.complete();
             } catch (IOException e) {
-                log.error("Failed to send SSE event: {}", eventName, e);
+                throw new RuntimeException("Failed to send SSE event", e);
             } finally {
                 emitters.remove(transactionId);
             }
