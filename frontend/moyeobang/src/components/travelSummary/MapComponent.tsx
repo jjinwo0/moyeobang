@@ -111,7 +111,7 @@ export default function MapComponent({
 
   return (
     <GoogleMap
-      mapContainerStyle={{width: '330px', height: '150px'}}
+      mapContainerStyle={{width: '350px', height: '150px'}}
       center={center}
       zoom={9}
       onLoad={handleMapLoad}
