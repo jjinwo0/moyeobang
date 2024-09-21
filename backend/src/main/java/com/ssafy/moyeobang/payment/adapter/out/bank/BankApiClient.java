@@ -4,6 +4,7 @@ import static com.ssafy.moyeobang.payment.adapter.out.bank.RestClientUtils.post;
 import static com.ssafy.moyeobang.payment.adapter.out.bank.RestClientUtils.postWithoutResponse;
 import static java.time.LocalDateTime.now;
 
+import com.ssafy.moyeobang.payment.adapter.out.bank.request.CreateAccountRequest;
 import com.ssafy.moyeobang.payment.adapter.out.bank.request.GetBalanceRequest;
 import com.ssafy.moyeobang.payment.adapter.out.bank.request.SendMoneyRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,17 @@ public class BankApiClient {
 
     public static final String ACCOUNT_TYPE_NUMBER = "999-1-8142cf9d861b42";
 
+    public String createAccount(String memberKey) {
+        CreateAccountRequest request = new CreateAccountRequest(
+                Headers.withUserKey(memberKey, "createDemandDepositAccount", now()),
+                ACCOUNT_TYPE_NUMBER
+        );
+
+        return post("/demandDeposit/createDemandDepositAccount", request)
+                .path("REC")
+                .path("accountNo")
+                .asText();
+    }
 
     public void payment(String targetAccountNumber, String sourceAccountNumber, long amount) {
         SendMoneyRequest request = new SendMoneyRequest(

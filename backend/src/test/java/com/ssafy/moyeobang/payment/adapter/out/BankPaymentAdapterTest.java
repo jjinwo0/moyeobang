@@ -3,8 +3,12 @@ package com.ssafy.moyeobang.payment.adapter.out;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClient;
+import com.ssafy.moyeobang.payment.adapter.out.persistence.member.MemberRepositoryInPayment;
+import com.ssafy.moyeobang.payment.adapter.out.persistence.travel.TravelRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travelaccount.TravelAccountRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.withdraw.WithdrawRepositoryInPayment;
 import com.ssafy.moyeobang.payment.application.domain.Money;
@@ -15,22 +19,26 @@ import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
-    @MockBean
+    @Autowired
     private LoadTravelAccountPort loadTravelAccountPort;
 
-    @MockBean
+    @Autowired
     private BankApiClient bankApiClient;
 
-    @MockBean
+    @Autowired
     private ProcessPaymentPort processPaymentPort;
+
+    @Autowired
+    private MemberRepositoryInPayment memberRepository;
+
+    @Autowired
+    private TravelRepositoryInPayment travelRepository;
 
     @Autowired
     private TravelAccountRepositoryInPayment travelAccountRepository;
@@ -38,15 +46,16 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
     @Autowired
     private WithdrawRepositoryInPayment withdrawRepository;
 
+    @Autowired
     private BankPaymentAdapter bankPaymentAdapter;
 
-    @BeforeEach
-    void setUp() {
-        bankPaymentAdapter = new BankPaymentAdapter(bankApiClient, travelAccountRepository, withdrawRepository);
-    }
 
     @AfterEach
     void tearDown() {
+        withdrawRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
+        travelRepository.deleteAllInBatch();
+        travelAccountRepository.deleteAllInBatch();
         withdrawRepository.deleteAllInBatch();
     }
 
@@ -54,7 +63,15 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
     @Test
     void loadTravelAccount() {
         // given
-        String accountNumber = "123-456-789";
+        MemberJpaEntity member = createMember();
+        memberRepository.save(member);
+
+        TravelJpaEntity travel = createTravel();
+        travelRepository.save(travel);
+
+        TravelAccountJpaEntity newTravelAccount = createTravelAccount(member, travel);
+
+        String accountNumber = newTravelAccount.getAccountNumber();
 
         when(bankApiClient.getBalance(accountNumber)).thenReturn(10000L);
 
@@ -95,6 +112,31 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
         assertThat(paymentResult.money()).isEqualTo(paymentRequestMoney.getAmount());
         assertThat(paymentResult.paymentName()).isEqualTo(store.getStoreName());
         assertThat(paymentResult.address()).isEqualTo(store.getStoreAddress());
+    }
+
+    private TravelAccountJpaEntity createTravelAccount(MemberJpaEntity member, TravelJpaEntity travel) {
+        String travelAccountNumber = bankApiClient.createAccount(member.getMemberKey());
+
+        return createTravelAccount(travelAccountNumber, travel);
+    }
+
+    private TravelAccountJpaEntity createTravelAccount(String travelAccountNumber, TravelJpaEntity travel) {
+        return TravelAccountJpaEntity.builder()
+                .accountNumber(travelAccountNumber)
+                .travel(travel)
+                .build();
+    }
+
+    private MemberJpaEntity createMember() {
+        return MemberJpaEntity.builder()
+                .memberKey("eea1652c-b5f3-4ef3-9aba-5360026f03b0")
+                .build();
+    }
+
+    private TravelJpaEntity createTravel() {
+        return TravelJpaEntity.builder()
+                .title("아기돼지 여행")
+                .build();
     }
 }
 
