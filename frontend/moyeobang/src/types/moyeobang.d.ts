@@ -200,10 +200,18 @@ interface ChatJsonProps {
   items : ChatItem[]
 }
 
+interface QrData {
+    paymentRequestId: string; // 고유번호 uuidv4()
+    sourceAccountNumber: string; // 결제 계좌번호
+}
+
 interface PosPay {
-  money:Money;
-  adress:Adress;
-  paymentName:PaymentName;
+  placeId: number;
+  placeName:string;
+  placeAdress:string;
+  latitude: number;
+  longitude:number;
+  targetAccountNumber: string;
 }
 
 interface PosOderItem {
@@ -214,14 +222,14 @@ interface PosOderItem {
 
 interface PaymentProps {
   paymentRequestId : string;
-  sourceAccountNumber: string;
+  sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
   placeId: string;
   placeName:string;
   placeAdress:string;
   latitude: number;
-  logitude:number;
+  longitude:number;
   targetAccountNumber: string;
-  OrderItems : OrderItems[];
+  // OrderItems : OrderItems[];  // 없앰
 }
   // api 요청
 interface MoyeobangResponse<T> {
@@ -241,6 +249,7 @@ type PostTransactionDetailByCustomResponse = MoyeobangResponse<TransactionDetail
 type PutTransactionDetailByCustomResponse = MoyeobangResponse<TransactionDetailByCustom>;
 type PostTransactionDetailByReceiptResponse = MoyeobangResponse<TransactionDetailByReceipt>;
 type PutTransactionDetailByReceiptResponse = MoyeobangResponse<TransactionDetailByReceipt>;
+type PostPayByPosResponse = MoyeobangResponse<null>;
 
 
 interface TravelLocation {
