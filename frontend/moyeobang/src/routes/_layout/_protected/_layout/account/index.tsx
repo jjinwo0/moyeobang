@@ -89,14 +89,14 @@ export default function groupAccount() {
     <div css={layoutStyle}>
         <div css={profileListStyle} >
         <AllImage
-        isSelected={null===selectedMember}
+        isSelected={Array.isArray(selectedMember)}
         onClick={() => onMemberClick(null)}
         />
         { profileData.map((profile, index) => (
             <ProfileImage 
             key={index} 
             {...profile} 
-            isSelected={profile.memberId === selectedMember } 
+            isSelected={Array.isArray(selectedMember) ? false : profile.memberId === selectedMember } 
             onClick={() => onMemberClick(profile.memberId)} />
         ))}
         </div>

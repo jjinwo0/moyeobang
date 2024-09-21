@@ -4,7 +4,7 @@ import SettleCard from "./SettleCardByCustom";
 import { useState, useEffect } from "react";
 import refreshImage from '@/assets/icons/refresh.png';
 import { layoutStyle, textLayoutStyle, balance, time, refresh, place, allButtonStyle, allRefreshLayoutStyle, settleListLayoutStyle, nButtonStyle, buttonLayoutStyle } from "./settlePage";
-import FinalModal from "@/components/FinalModal/FinalModal";
+import FinalModal from "@/components/Account/FinalModal/FinalModal";
 import { profileData} from "@/data/data";
 import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
 
-interface CustomSettle {
+export interface CustomSettle {
     participantInfo: ParticipantInfo
     money : number
     isChecked: boolean

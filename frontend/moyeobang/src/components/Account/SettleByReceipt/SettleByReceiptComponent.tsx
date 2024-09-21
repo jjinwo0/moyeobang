@@ -185,7 +185,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
 
             // extractItems를 통해 데이터 변환
             if (parsedData && parsedData.items) {
-                const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, adress); 
+                const results = extractItems(parsedData, transactionId=1, createdAt, money=20000, paymentName='가게명', adress='주소'); 
                 console.log('영수증 ocr 결과', results)
                 // setResults(results);
                 updateReceiptData(results)
@@ -230,7 +230,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
             <div css={buttonStyle}>
                 <button onClick={handleCapture}/>
             </div>
-            {results ? <ResultByReceiptComponent data={results} onClose={handleCloseResult} /> : <div>결과처리중</div> }
+            {/* {results ? <ResultByReceiptComponent data={results} onClose={handleCloseResult} /> : <div>결과처리중</div> } */}
             {/* {isLoading && <div>처리 중...</div>} */}
             {error && <FailByReceipt onClose={handleFailClose}/>}
 

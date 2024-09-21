@@ -6,8 +6,6 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
 import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
-import { useLocation } from '@tanstack/react-router';
-import { useCompleteTransaction } from '@/context/TransactionContext';
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { detailsByCustom } from "@/data/data";
 
@@ -26,11 +24,6 @@ const layoutStyle = css`
   gap: 20px;
 `;
 
-// LocationState 타입 정의
-interface LocationState {
-  active?: string; // active 속성이 있을 수 있는 타입 지정
-}
-
 const accountId = 1; //임시
 
 // 정산페이지 (영수증인지 직접 입력인지)
@@ -39,9 +32,7 @@ export default function Settle() {
   // const navigate = useNavigate();
   const {transactionId} : {transactionId:TransactionId} = Route.useParams(); // 임시 1 넣어둠.
   const {history} = useRouter()
-  const location = useLocation();
-  const state = location.state as LocationState || null;
-  // const {transactionDetailData} = useCompleteTransaction();
+  const {method} :{method:SplitMethod} = Route.useSearch();
   const [isHidden, setIsHidden] = useState(false);
 
   // get으로 transaction의 상세 데이터 가져오기!
@@ -53,10 +44,8 @@ export default function Settle() {
   // const transactionDetailData = data.data.data;
   const transactionDetailData = detailsByCustom; // 임시
 
-  // const isNew : boolean = !location.pathname.includes('/detail') // 상세페이지에서 온거면 false
-
   const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
-    state?.active === 'right' ? 'right' : 'left'
+    method === 'custom' ? 'right' : 'left'
     );
 
   function handleLeft() {

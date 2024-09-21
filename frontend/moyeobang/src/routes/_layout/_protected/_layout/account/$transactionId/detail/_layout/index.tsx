@@ -9,6 +9,7 @@ import { colors } from '@/styles/colors'
 import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
 import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import moyeobang from '@/services/moyeobang'
 
 const layoutStyle = css`
@@ -20,7 +21,8 @@ const layoutStyle = css`
   height:100%;
 `;
 
-const buttonLayoutStyle=css`
+const LinkStyle = css`
+  text-decoration: none;
   position:fixed;
   bottom:30px;
 `;
@@ -67,18 +69,6 @@ export default function TransactionDetail() {
   // const transactionDetailData = data.data.data;
   const transactionDetailData = detailsByReceipt;
 
-
-  function handleUpdate() {
-    // 영수증 정산일때
-    if ( transactionDetailData.splitMethod === "receipt") {
-      navigate({to: `/account/${transactionId}/resultByReceipt`, search: {isNew : 'false'}})
-
-    } else {
-      // 직접 정산일때
-      navigate({to: `/account/${transactionId}/settle`, state: {active: 'right'} as any})
-    }
-  }
-
   // 타입 가드 함수
   function isSettledParticipantByCustom(
     detail: SettledItemByReceipt | SettledParticipantByCustom
@@ -106,6 +96,9 @@ export default function TransactionDetail() {
                 <DetailCardByReceipt key={index} {...detail}/>
               ))}
             </div>
+            <Link to={`/account/${transactionId}/resultByReceipt`} search={{isNew:false}} css={LinkStyle}>
+              <Btn buttonStyle={{ size:'big', style:'blue'}}>정산 수정하기</Btn> 
+            </Link>
           </>
         }
         { transactionDetailData.splitMethod ==='custom' &&
@@ -125,14 +118,11 @@ export default function TransactionDetail() {
                 return null;
                 })}
             </div>
+            <Link to={`/account/${transactionId}/settle`} search={{method: 'custom'}} css={LinkStyle}>
+              <Btn buttonStyle={{ size:'big', style:'blue'}}>정산 수정하기</Btn> 
+            </Link>
           </>
         }
-        <div css={buttonLayoutStyle}>
-          <Btn 
-          buttonStyle={{ size:'big', style:'blue'}}
-          onClick={handleUpdate}
-          >정산 수정하기</Btn> 
-        </div>
     </div>
   )
 }

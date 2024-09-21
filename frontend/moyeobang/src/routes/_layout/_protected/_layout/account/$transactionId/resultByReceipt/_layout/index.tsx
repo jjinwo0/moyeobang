@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { createFileRoute, useLocation, useNavigate, useSearch} from '@tanstack/react-router'
+import { createFileRoute, useNavigate} from '@tanstack/react-router'
 import { css } from '@emotion/react'
 import UpdateCardByReceipt from '@/components/Account/SettleByReceipt/UpdateCardByReceipt'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {format} from 'date-fns';
-import {is, ko} from 'date-fns/locale';
+import { ko} from 'date-fns/locale';
 import Btn from '@/components/common/btn/Btn';
 import { colors } from '@/styles/colors';
 import moyeobang from '@/services/moyeobang';
@@ -76,9 +76,6 @@ const buttonContainerStyle=css`
   gap:20px;
   padding-top: 10px;
 `;
-interface DetailSearch {
-  isNew:boolean;
-};
 
 export default function settledReceipt() {
   
@@ -86,22 +83,21 @@ export default function settledReceipt() {
   const { transactionId } :{ transactionId : TransactionId} = Route.useParams();
   const navigate = useNavigate({from:'/account/$transactionId/resultByReceipt'});
   const queryClient = useQueryClient();
-
-  const search = useSearch({from:'/_layout/_protected/_layout/account/$transactionId/resultByReceipt/_layout'});
-  const {isNew} = search; // 장동오류
   const { receiptData } = useReceiptContext();
+  const {isNew} : {isNew : boolean} = Route.useSearch();
+  const isNewState = isNew!==undefined ? false : true;
 
-  console.log('수정으로 들어오면 isNew : ', isNew, '임')
+  console.log('수정으로 들어오면 isNew : ', isNewState, '임')
   
   // get 기본 데이터 가져오기! (1/n정산된 데이터)
   // const { data } = useQuery({
   //   queryKey: ['receipt', transactionId],
   //   queryFn: () => moyeobang.getTransactionDetail(accountId, transactionId),
-  //   enabled: !isNew
+  //   enabled: !isNewState
   // });
 
   // const receipt = isNew ? receiptData : data?.data.data as TransactionDetailByReceipt;
-  const receipt = isNew ? receiptData : detailsByReceipt; // 임시
+  const receipt = isNewState ? receiptData : detailsByReceipt; // 임시
 
   useEffect(() => {
     setUpdateDetails(receipt.details);
@@ -169,11 +165,10 @@ export default function settledReceipt() {
   return (
     <div css={layoutStyle}>
           <div css={upContainerStyle} >
-            새로만들면 {isNew} 임
             <div css={titleStyle}>{receipt?.paymentName}</div>
             <div css={amountStyle}>{receipt?.money}원</div>
             <div css={timeStyle}>
-              {format(receipt?.createdAt ?? new Date() , 'yyyy-MM-dd HH:mm', { locale: ko })}
+              {format(receipt?.createdAt, 'yyyy-MM-dd HH:mm', { locale: ko })}
             </div>
           </div>
           <div css={middleContainerStyle}>
