@@ -81,6 +81,7 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
     align-items: center;
     justify-content: center;
     text-align: center;
+    // background-color: white;
   `;
 
   const imgStyle = css`
@@ -89,6 +90,7 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
     border-radius: 10px;
     object-fit: cover;
     margin-bottom: 5px;
+    // background-color: white;
   `;
 
   const placeNameStyle = css`

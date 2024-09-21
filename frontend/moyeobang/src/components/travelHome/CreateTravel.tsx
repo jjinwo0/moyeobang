@@ -10,12 +10,24 @@ import Btn from '../common/btn/Btn';
 import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import calendarIcon from '@/assets/icons/calendar.png';
 import useModalStore from '@/store/useModalStore';
-
+import MapSearch from './MapSearch';
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
 
 interface CreateTravelProps {
   onClose: () => void; // 모달을 닫는 함수
+  isEditMode?: boolean; // 수정 모드 여부
+  initialData?: {
+    // 수정 모드일 때의 초기 데이터
+    travelName?: string;
+    travelPlaceList?: string[];
+    quizQuestion?: string;
+    quizAnswer?: string;
+    startDate?: Date | null; // startDate 추가
+    endDate?: Date | null; // endDate 추가
+    selectedImage?: string | null;
+  };
+  onSubmit?: () => void; // 수정 버튼 클릭 시 실행할 함수
 }
 
 const modalStyle = css`
@@ -49,6 +61,7 @@ const titleStyle = css`
 
 const titleBlue = css`
   color: ${colors.fifth};
+  margin-left: 3px;
 `;
 
 const travelStyle = css`
@@ -119,29 +132,90 @@ const photoStyle = (selectedImage: string | null) => css`
   }
 `;
 
-export default function CreateTravel({onClose}: CreateTravelProps) {
+//여행 장소 검색 태그
+const tagStyle = css`
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  // margin-top: -50px;
+  margin: 5px;
+  background-color: #e0e0e0;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #333;
+
+  .close-button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #ff0000;
+  }
+`;
+
+const locationStyle = css`
+  // margin-bottom: 10px;
+  margin-top: 10px;
+`;
+
+const tagContainerStyle = css`
+  margin-top: 10px;
+  max-width: 330px;
+  // margin-bottom: -10px;
+`;
+
+export default function CreateTravel({
+  onClose,
+  isEditMode = false, // 기본값은 false로 설정 (생성 모드)
+  initialData = {}, // 기본값을 빈 객체로 설정하여 생성 모드에서 문제가 없도록 처리
+  onSubmit, // 수정 시의 함수
+}: CreateTravelProps) {
   const {closeModal} = useModalStore();
-  const [step, setStep] = useState<number>(1);
-  //인풋 값들 상태
-  const [travelName, setTravelName] = useState<string>(''); // 여행 이름 상태 추가
-  const [travelLocation, setTravelLocation] = useState<string>(''); // 여행 장소 상태 추가
-  const [quizQuestion, setQuizQuestion] = useState<string>(''); // 퀴즈 질문 상태 추가
-  const [quizAnswer, setQuizAnswer] = useState<string>(''); // 퀴즈 답변 상태 추가
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    null,
-    null,
-  ]); //날짜범위
+  const [cityInput, setCityInput] = useState<string>(''); // 선택된 도시 이름
+  const [isMapSearchVisible, setMapSearchVisible] = useState<boolean>(false); // MapSearch 표시 여부
+  //인풋값들 상태
+  const [travelName, setTravelName] = useState<string>(
+    initialData.travelName || ''
+  );
+  const [travelPlaceList, setTravelPlaceList] = useState<string[]>(
+    initialData.travelPlaceList || []
+  );
+  const [quizQuestion, setQuizQuestion] = useState<string>(
+    initialData.quizQuestion || ''
+  );
+  const [quizAnswer, setQuizAnswer] = useState<string>(
+    initialData.quizAnswer || ''
+  );
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(
+    initialData.dateRange || [
+      initialData.startDate || null,
+      initialData.endDate || null,
+    ]
+  );
+  const [selectedImage, setSelectedImage] = useState<string | null>(
+    initialData.selectedImage || null
+  );
+
+  const [step, setStep] = useState<number>(1); // Step 상태
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // 수정과 생성을 구분하여 처리
   const handleNextClick = () => {
-    console.log('여행 이름:', travelName);
-    console.log('여행 장소:', travelLocation);
-    console.log('여행 기간:', dateRange);
-    console.log('퀴즈 질문:', quizQuestion);
-    console.log('퀴즈 답변:', quizAnswer);
-    setStep(2); // "다음" 버튼 클릭 시 2단계(본인 인증)로 전환
+    if (isEditMode) {
+      // 수정 모드일 때는 onSubmit 함수 호출
+      onClose();
+      // onSubmit();
+    } else {
+      console.log('여행 이름:', travelName);
+      console.log('여행 장소:', travelPlaceList);
+      console.log('여행 시작:', dateRange[0]);
+      console.log('여행 끝:', dateRange[1]);
+      console.log('퀴즈 질문:', quizQuestion);
+      console.log('퀴즈 답변:', quizAnswer);
+      setStep(2); // 생성 모드일 때 다음 단계로 이동
+    }
   };
 
   const handleCalendarClick = () => {
@@ -176,6 +250,7 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
   };
 
   useEffect(() => {
+    console.log(initialData);
     if (isCalendarOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -200,13 +275,39 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
     setDateRange([start, end]); // 날짜 범위를 업데이트
   };
 
+  // 사용자가 입력한 값을 cityInput으로 업데이트
+  const handleCityInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCityInput(e.target.value); // 현재 입력된 값을 업데이트
+  };
+
+  // MapSearch에서 도시 선택 후 배열에 추가
+  const handleCitySelect = (city: string) => {
+    setTravelPlaceList(prev => [...prev, city]); // 선택된 도시를 배열에 추가
+    setMapSearchVisible(false); // MapSearch 숨기기
+    setCityInput(''); // 입력 필드 초기화
+  };
+
+  // 검색 버튼을 클릭하면 cityInput 값을 사용하여 검색 실행
+  const handleCitySearchClick = () => {
+    if (cityInput.trim() && !travelPlaceList.includes(cityInput)) {
+      // setTravelPlaceList([...travelPlaceList, cityInput]);
+      // setCityInput(''); // 입력 필드 초기화
+      setMapSearchVisible(true); // MapSearch 표시
+    }
+  };
+
+  // 태그 삭제
+  const handleDeleteTag = (place: string) => {
+    setTravelPlaceList(travelPlaceList.filter(item => item !== place));
+  };
+
   return (
     <div css={modalStyle}>
       <HeaderWithXButton onXClick={onClose} />
       <div css={contentStyle}>
         <div css={titleStyle}>
           <span>여행</span>
-          <span css={titleBlue}>만들어방</span>
+          <span css={titleBlue}>{isEditMode ? '수정해방' : '만들어방'}</span>
         </div>
 
         {step === 1 ? (
@@ -247,12 +348,43 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
                     </div>
                   )}
                 </div>
+              </div>
+
+              <div css={locationStyle}>
                 <LocationInput
                   label="여행장소"
-                  value={travelLocation}
-                  onChange={e => setTravelLocation(e.target.value)}
+                  // value={travelPlaceList.join(', ')} // 배열을 문자열로 변환하여 입력 필드에 표시
+                  value={cityInput}
+                  // onChange={e =>
+                  //   setTravelPlaceList(
+                  //     e.target.value.split(',').map(place => place.trim())
+                  //   )
+                  // } // 쉼표로 구분하여 배열로 변환
+                  onChange={handleCityInputChange}
+                  onClick={handleCitySearchClick} // 검색 아이콘 클릭 시 검색 실행
                   placeholder="여행 장소를 검색하세요"
                 />
+
+                {isMapSearchVisible && (
+                  <MapSearch
+                    onSelectCity={handleCitySelect}
+                    cityName={cityInput}
+                  />
+                )}
+
+                <div css={tagContainerStyle}>
+                  {travelPlaceList.map((place, index) => (
+                    <div css={tagStyle} key={index}>
+                      {place}
+                      <button
+                        className="close-button"
+                        onClick={() => handleDeleteTag(place)}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div css={quizStyle}>
@@ -292,7 +424,7 @@ export default function CreateTravel({onClose}: CreateTravelProps) {
                 buttonStyle={{style: 'blue', size: 'small'}}
                 onClick={handleNextClick}
               >
-                다음
+                {isEditMode ? '수정' : '다음'}
               </Btn>
             </div>
           </>

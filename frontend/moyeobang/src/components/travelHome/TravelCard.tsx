@@ -8,6 +8,9 @@ import Btn from '../common/btn/Btn';
 import ExitTravel from './ExitTravel';
 import inviteIcon from '@/assets/icons/inviteIcon.png';
 import ConfirmQuiz from '../quiz/ConfirmQuiz';
+import CreateTravel from './CreateTravel';
+import useTravelStore from '@/store/useTravelStore';
+import {useTravelContext} from '@/context/TravelDataContext'; // TravelDataContext import
 
 const cardStyle = css`
   display: flex;
@@ -67,7 +70,7 @@ const settingIconStyle = css`
   position: absolute; /* 부모 요소 안에서 절대 위치 */
   top: 16px; /* 위쪽으로 16px 간격 */
   right: 16px; /* 오른쪽으로 16px 간격 */
-  z-index: 100;
+  z-index: 10;
   img {
     width: 24px;
     height: 24px;
@@ -90,7 +93,7 @@ const quizButtonStyle = css`
   position: absolute; /* 부모 요소 안에서 절대 위치 */
   top: 16px; /* 위쪽으로 16px 간격 */
   right: 45px; /* 오른쪽으로 16px 간격 */
-  z-index: 100;
+  z-index: 10;
   img {
     width: 24px;
     height: 24px;
@@ -98,26 +101,33 @@ const quizButtonStyle = css`
 `;
 
 interface TravelCardProps {
-  title: string;
-  startDate: string;
-  endDate: string;
-  place: string[];
+  travelName: string;
+  startDate: Date;
+  endDate: Date;
+  travelPlaceList: string[];
   participantsCount: number;
+  quizQuestion: string;
+  quizAnswer: string;
   onClick?: () => void;
 }
 
 export default function TravelCard({
-  title,
+  travelName,
   startDate,
   endDate,
-  place,
+  travelPlaceList,
   participantsCount,
+  quizQuestion,
+  quizAnswer,
   onClick,
 }: TravelCardProps) {
   const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
   const [inviteModal, setInviteModal] = useState<boolean>(false);
   const [exitModal, setExitModal] = useState<boolean>(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const [editModal, setEditModal] = useState<boolean>(false);
+  const {setTravelData} = useTravelStore();
+  // const {nowTravelData} = useTravelContext(); // useTravelContext로 데이터 가져오기
 
   const formatDate = (dateString: string) => {
     return dateString.split('T')[0]; // "YYYY-MM-DDTHH:mm:ssZ"에서 "YYYY-MM-DD"만 추출
@@ -136,6 +146,7 @@ export default function TravelCard({
   const handleExitModalOpen = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 전파를 막음
     setExitModal(true);
+    setSettingButtonClick(prev => !prev);
   };
 
   const closeExitModalOpen = () => {
@@ -149,19 +160,26 @@ export default function TravelCard({
   const goSettingPage = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 전파를 막음
     console.log('세팅페이지');
-    navigate({to: '/profile'});
+    // navigate({to: '/profile'});
+    // setTravelData(title, startDate, endDate, place);
+    setEditModal(true);
+    setSettingButtonClick(prev => !prev);
+  };
+
+  const closeEditModal = () => {
+    setEditModal(false);
   };
 
   return (
     <>
       <div css={cardStyle} onClick={onClick}>
         <div css={overlayStyle}>
-          <h2 css={titleStyle}>{title}</h2>
+          <h2 css={titleStyle}>{travelName}</h2>
           <p css={participantsStyle}>{participantsCount}명과 함께</p>
           <p css={dateStyle}>
             {formatDate(startDate)} ~ {formatDate(endDate)}
           </p>
-          <p css={locationStyle}>{place.join(', ')}</p>
+          <p css={locationStyle}>{travelPlaceList.join(', ')}</p>
         </div>
         <div css={settingIconStyle}>
           <img src={settingIcon} onClick={clickSettingButton} />
@@ -189,13 +207,30 @@ export default function TravelCard({
       </div>
       {exitModal && (
         <div css={exitModalStyle}>
-          <ExitTravel travelTitle={title} onClose={closeExitModalOpen} />
+          <ExitTravel travelTitle={travelName} onClose={closeExitModalOpen} />
         </div>
       )}
 
       {inviteModal && (
         <div>
           <ConfirmQuiz onClose={closeQuizModal} />
+        </div>
+      )}
+
+      {editModal && (
+        <div>
+          <CreateTravel
+            onClose={closeEditModal}
+            isEditMode={true}
+            initialData={{
+              travelName: travelName,
+              startDate: startDate,
+              endDate: endDate,
+              travelPlaceList: travelPlaceList,
+              quizQuestion: quizQuestion,
+              quizAnswer: quizAnswer,
+            }}
+          />
         </div>
       )}
     </>
