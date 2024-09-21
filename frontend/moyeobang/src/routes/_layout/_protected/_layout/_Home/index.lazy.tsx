@@ -12,8 +12,6 @@ import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
 import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
-import {useRouter} from '@tanstack/react-router';
-import {useTravelContext} from '@/context/TravelDataContext';
 
 const data: Travel[] = [
   {
@@ -189,22 +187,6 @@ function Index() {
     setTravelSummaryModal(false);
   };
 
-  const clickTravelCard = (travel: Travel) => {
-    setNowTravelData({
-      travelName: travel.travelName,
-      startDate: travel.startDate,
-      endDate: travel.endDate,
-      travelPlaceList: travel.travelPlaceList,
-      quizQuestion: travel.quizQuestion,
-      quizAnswer: travel.quizAnswer,
-    }); // Context 상태 저장
-  };
-
-  const router = useRouter();
-  const goSettingPage = () => {
-    router.navigate({to: '/profile'});
-  };
-
   return (
     <>
       {/* <HeaderWithAlarmAndQR /> */}
@@ -215,7 +197,7 @@ function Index() {
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
         </div>
-        <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
+        <img src={bangbang} css={profileImageStyle} />
       </div>
 
       {noTripsAvailable ? (
