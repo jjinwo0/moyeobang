@@ -175,7 +175,8 @@ export default function CreateTravel({
     } else {
       console.log('여행 이름:', travelName);
       console.log('여행 장소:', travelPlaceList);
-      console.log('여행 기간:', dateRange);
+      console.log('여행 시작:', dateRange[0]);
+      console.log('여행 끝:', dateRange[1]);
       console.log('퀴즈 질문:', quizQuestion);
       console.log('퀴즈 답변:', quizAnswer);
       setStep(2); // 생성 모드일 때 다음 단계로 이동
@@ -288,8 +289,12 @@ export default function CreateTravel({
                 </div>
                 <LocationInput
                   label="여행장소"
-                  value={travelPlaceList}
-                  onChange={e => setTravelPlaceList(e.target.value)}
+                  value={travelPlaceList.join(', ')} // 배열을 문자열로 변환하여 입력 필드에 표시
+                  onChange={e =>
+                    setTravelPlaceList(
+                      e.target.value.split(',').map(place => place.trim())
+                    )
+                  } // 쉼표로 구분하여 배열로 변환
                   placeholder="여행 장소를 검색하세요"
                 />
               </div>
