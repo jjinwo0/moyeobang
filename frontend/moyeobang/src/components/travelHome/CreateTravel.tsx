@@ -10,7 +10,7 @@ import Btn from '../common/btn/Btn';
 import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import calendarIcon from '@/assets/icons/calendar.png';
 import useModalStore from '@/store/useModalStore';
-
+import MapSearch from './MapSearch';
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
 
@@ -132,6 +132,39 @@ const photoStyle = (selectedImage: string | null) => css`
   }
 `;
 
+//여행 장소 검색 태그
+const tagStyle = css`
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  // margin-top: -50px;
+  margin: 5px;
+  background-color: #e0e0e0;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #333;
+
+  .close-button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #ff0000;
+  }
+`;
+
+const locationStyle = css`
+  // margin-bottom: 10px;
+  margin-top: 10px;
+`;
+
+const tagContainerStyle = css`
+  margin-top: 10px;
+  max-width: 330px;
+  // margin-bottom: -10px;
+`;
+
 export default function CreateTravel({
   onClose,
   isEditMode = false, // 기본값은 false로 설정 (생성 모드)
@@ -139,6 +172,8 @@ export default function CreateTravel({
   onSubmit, // 수정 시의 함수
 }: CreateTravelProps) {
   const {closeModal} = useModalStore();
+  const [cityInput, setCityInput] = useState<string>(''); // 선택된 도시 이름
+  const [isMapSearchVisible, setMapSearchVisible] = useState<boolean>(false); // MapSearch 표시 여부
   //인풋값들 상태
   const [travelName, setTravelName] = useState<string>(
     initialData.travelName || ''
@@ -240,6 +275,32 @@ export default function CreateTravel({
     setDateRange([start, end]); // 날짜 범위를 업데이트
   };
 
+  // 사용자가 입력한 값을 cityInput으로 업데이트
+  const handleCityInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCityInput(e.target.value); // 현재 입력된 값을 업데이트
+  };
+
+  // MapSearch에서 도시 선택 후 배열에 추가
+  const handleCitySelect = (city: string) => {
+    setTravelPlaceList(prev => [...prev, city]); // 선택된 도시를 배열에 추가
+    setMapSearchVisible(false); // MapSearch 숨기기
+    setCityInput(''); // 입력 필드 초기화
+  };
+
+  // 검색 버튼을 클릭하면 cityInput 값을 사용하여 검색 실행
+  const handleCitySearchClick = () => {
+    if (cityInput.trim() && !travelPlaceList.includes(cityInput)) {
+      // setTravelPlaceList([...travelPlaceList, cityInput]);
+      // setCityInput(''); // 입력 필드 초기화
+      setMapSearchVisible(true); // MapSearch 표시
+    }
+  };
+
+  // 태그 삭제
+  const handleDeleteTag = (place: string) => {
+    setTravelPlaceList(travelPlaceList.filter(item => item !== place));
+  };
+
   return (
     <div css={modalStyle}>
       <HeaderWithXButton onXClick={onClose} />
@@ -287,16 +348,43 @@ export default function CreateTravel({
                     </div>
                   )}
                 </div>
+              </div>
+
+              <div css={locationStyle}>
                 <LocationInput
                   label="여행장소"
-                  value={travelPlaceList.join(', ')} // 배열을 문자열로 변환하여 입력 필드에 표시
-                  onChange={e =>
-                    setTravelPlaceList(
-                      e.target.value.split(',').map(place => place.trim())
-                    )
-                  } // 쉼표로 구분하여 배열로 변환
+                  // value={travelPlaceList.join(', ')} // 배열을 문자열로 변환하여 입력 필드에 표시
+                  value={cityInput}
+                  // onChange={e =>
+                  //   setTravelPlaceList(
+                  //     e.target.value.split(',').map(place => place.trim())
+                  //   )
+                  // } // 쉼표로 구분하여 배열로 변환
+                  onChange={handleCityInputChange}
+                  onClick={handleCitySearchClick} // 검색 아이콘 클릭 시 검색 실행
                   placeholder="여행 장소를 검색하세요"
                 />
+
+                {isMapSearchVisible && (
+                  <MapSearch
+                    onSelectCity={handleCitySelect}
+                    cityName={cityInput}
+                  />
+                )}
+
+                <div css={tagContainerStyle}>
+                  {travelPlaceList.map((place, index) => (
+                    <div css={tagStyle} key={index}>
+                      {place}
+                      <button
+                        className="close-button"
+                        onClick={() => handleDeleteTag(place)}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div css={quizStyle}>

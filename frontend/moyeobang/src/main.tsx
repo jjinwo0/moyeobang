@@ -28,12 +28,12 @@ const rootElement = document.getElementById('root')!; // 'root'에 맞게 수정
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        {/* <ReactQueryDevtools initialIsOpen={false} />  */}
-        {/* Devtools 추가 */}
-      </QueryClientProvider>
-    </StrictMode>
+    // <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      {/* <ReactQueryDevtools initialIsOpen={false} />  */}
+      {/* Devtools 추가 */}
+    </QueryClientProvider>
+    // </StrictMode>
   );
 }

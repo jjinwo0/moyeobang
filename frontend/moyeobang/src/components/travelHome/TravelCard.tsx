@@ -70,7 +70,7 @@ const settingIconStyle = css`
   position: absolute; /* 부모 요소 안에서 절대 위치 */
   top: 16px; /* 위쪽으로 16px 간격 */
   right: 16px; /* 오른쪽으로 16px 간격 */
-  z-index: 100;
+  z-index: 10;
   img {
     width: 24px;
     height: 24px;
@@ -93,7 +93,7 @@ const quizButtonStyle = css`
   position: absolute; /* 부모 요소 안에서 절대 위치 */
   top: 16px; /* 위쪽으로 16px 간격 */
   right: 45px; /* 오른쪽으로 16px 간격 */
-  z-index: 100;
+  z-index: 10;
   img {
     width: 24px;
     height: 24px;
