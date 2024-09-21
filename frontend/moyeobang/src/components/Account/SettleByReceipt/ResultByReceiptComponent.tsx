@@ -83,8 +83,8 @@ export default function ResultByReceiptComponent({data, onClose}:ResultByReceipt
   }
 
   function handleRestart(){
-    navigate({to:'/account/$transactionId/settle'})
     onClose();
+    navigate({to:'/account/$transactionId/settle'})
   }
 
   return (

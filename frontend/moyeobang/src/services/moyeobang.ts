@@ -54,7 +54,7 @@ export default {
   /**
  * 직접 정산 
  */
-  postSettleByCustom: async (transactionId:number, data: TransactionDetailByCustom) =>
+  postSettleByCustom: async (transactionId:number, data: PostTransactionDetailByCustom) =>
     axios.post<PostTransactionDetailByCustomResponse>(
       `/travel/accounts/transactions/${transactionId}/settle/custom`,
       data,
@@ -62,7 +62,7 @@ export default {
         headers: {'Content-Type': 'application/json'},
       },
     ),
-    /**
+  /**
  * 직접 정산 수정
  */
   putSettleByCustom: async (transactionId:number, data: TransactionDetailByCustom) =>

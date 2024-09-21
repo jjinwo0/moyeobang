@@ -26,6 +26,7 @@ export default function Header() {
 
   const hideHeader =
     pathname.includes('/detail') ||
+    pathname.includes('/settle') ||
     pathname === '/profile' ||
     pathname.includes('resultByReceipt');
   function handleAlarmClick() {

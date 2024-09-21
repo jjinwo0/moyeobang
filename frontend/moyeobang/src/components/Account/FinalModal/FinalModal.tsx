@@ -5,9 +5,9 @@ import {useRef, useState} from "react";
 import Backdrop from "./Backdrop/Backdrop";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { colors } from "@/styles/colors";
-import Btn from "../common/btn/Btn";
-import SettleCard from "../Account/SettleByCustom/SettleCardByCustom";
-import { CustomSettle } from "../Account/SettleByCustom/SettleByCustomComponent";
+import Btn from "@/components/common/btn/Btn"
+import SettleCard from "@/components/Account/SettleByCustom/SettleCardByCustom";
+import { CustomSettle } from "@/components/Account/SettleByCustom/SettleByCustomComponent";
 
 const modalContainerStyle = (isExpanded: boolean) => css`
     background-color: ${colors.white};
@@ -116,9 +116,9 @@ export default function FinalModal({onClickOutside, onClick, confirmData, totalM
                 { confirmData.map((user, index) => (
                     <SettleCard 
                     key={index}
-                    memberId={user.participantsInfo.memberId}
-                    profileImage={user.participantsInfo.profileImage}
-                    nickname={user.participantsInfo.nickname}
+                    memberId={user.participantInfo.memberId}
+                    profileImage={user.participantInfo.profileImage}
+                    nickname={user.participantInfo.nickname}
                     isChecked={true}
                     money={user.money}
                     />

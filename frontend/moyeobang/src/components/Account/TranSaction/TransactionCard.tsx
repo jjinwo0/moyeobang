@@ -51,8 +51,6 @@ export default function TransactionCard({
                 }
                 <div css={balanceStyle}> 잔액 <p>{currentBalance}</p> 원</div>
             </div>
-
-        
         </Link>
     )
 }
