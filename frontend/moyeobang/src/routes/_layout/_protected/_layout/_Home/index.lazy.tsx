@@ -190,7 +190,9 @@ function Index() {
 
   const router = useRouter();
   const goSettingPage = () => {
-    router.navigate({to: '/profile'});
+    router.navigate({
+      to: `/profile/${nickName}`,
+    });
   };
 
   return (

@@ -216,7 +216,7 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
             <span css={travelNameStyle}>{travelName}</span>
             <span css={blackTextStyle}>의</span>
           </div>
-          <span css={travelPlaceStyle}>{travelPlaceList.join(', ')}</span>
+          <span css={travelPlaceStyle}>{travelPlaceList.join(' & ')}</span>
           <span css={blackTextStyle}> 여행 요약</span>
         </div>
 

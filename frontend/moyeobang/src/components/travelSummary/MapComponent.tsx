@@ -1,7 +1,8 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {GoogleMap, useJsApiLoader} from '@react-google-maps/api';
 import axios from 'axios';
-import hearIcon from '@/assets/icons/hearIcon.png';
+// import hearIcon from '@/assets/icons/hearIcon.png';
+import hearIcon from '@/assets/icons/heartIcon.webp';
 
 interface MapProps {
   locationList: {latitude: number; longitude: number}[];
@@ -93,8 +94,8 @@ export default function MapComponent({
         // },
         icon: {
           url: hearIcon, // hearIcon 이미지를 마커로 사용
-          size: new google.maps.Size(15, 15), // 원본 이미지 크기 설정
-          scaledSize: new google.maps.Size(15, 15), // 이미지 크기 조정
+          size: new google.maps.Size(18, 18), // 원본 이미지 크기 설정
+          scaledSize: new google.maps.Size(18, 18), // 이미지 크기 조정
         },
       });
     });
