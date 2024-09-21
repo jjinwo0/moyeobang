@@ -12,6 +12,7 @@ import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
 import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
+import {useRouter} from '@tanstack/react-router';
 
 const data: Travel[] = [
   {
@@ -127,7 +128,7 @@ function Index() {
   const {setTravelData} = useTravelStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
-  const {setNowTravelData} = useTravelContext();
+  // const {setNowTravelData} = useTravelContext();
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -173,18 +174,23 @@ function Index() {
       travel.travelPlaceList
     ); // 상태 저장
     setTravelSummaryModal(true);
-    setNowTravelData({
-      travelName: travel.travelName,
-      startDate: travel.startDate,
-      endDate: travel.endDate,
-      travelPlaceList: travel.travelPlaceList,
-      quizQuestion: travel.quizQuestion,
-      quizAnswer: travel.quizAnswer,
-    }); // Context 상태 저장
+    // setNowTravelData({
+    //   travelName: travel.travelName,
+    //   startDate: travel.startDate,
+    //   endDate: travel.endDate,
+    //   travelPlaceList: travel.travelPlaceList,
+    //   quizQuestion: travel.quizQuestion,
+    //   quizAnswer: travel.quizAnswer,
+    // }); // Context 상태 저장
   };
 
   const closeTravelSummary = () => {
     setTravelSummaryModal(false);
+  };
+
+  const router = useRouter();
+  const goSettingPage = () => {
+    router.navigate({to: '/profile'});
   };
 
   return (
@@ -197,7 +203,7 @@ function Index() {
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
         </div>
-        <img src={bangbang} css={profileImageStyle} />
+        <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
       </div>
 
       {noTripsAvailable ? (
@@ -217,7 +223,7 @@ function Index() {
                   participantsCount={trip.participantsCount}
                   quizQuestion={trip.quizQuestion} // quizQuestion 전달
                   quizAnswer={trip.quizAnswer} // quizAnswer 전달
-                  onClick={() => clickTravelCard(trip)}
+                  // onClick={() => clickTravelCard(trip)}
                 />
               ))}
             </div>
@@ -250,7 +256,7 @@ function Index() {
                   onClick={
                     activeTab === 'past'
                       ? () => handleTravelSummary(item)
-                      : () => clickTravelCard(item)
+                      : undefined
                   }
                 />
               ))

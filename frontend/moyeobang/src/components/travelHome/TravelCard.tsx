@@ -102,8 +102,8 @@ const quizButtonStyle = css`
 
 interface TravelCardProps {
   travelName: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   travelPlaceList: string[];
   participantsCount: number;
   quizQuestion: string;
@@ -127,7 +127,7 @@ export default function TravelCard({
   // const navigate = useNavigate();
   const [editModal, setEditModal] = useState<boolean>(false);
   const {setTravelData} = useTravelStore();
-  const {nowTravelData} = useTravelContext(); // useTravelContext로 데이터 가져오기
+  // const {nowTravelData} = useTravelContext(); // useTravelContext로 데이터 가져오기
 
   const formatDate = (dateString: string) => {
     return dateString.split('T')[0]; // "YYYY-MM-DDTHH:mm:ssZ"에서 "YYYY-MM-DD"만 추출
@@ -220,7 +220,14 @@ export default function TravelCard({
           <CreateTravel
             onClose={closeEditModal}
             isEditMode={true}
-            initialData={nowTravelData}
+            initialData={{
+              travelName: travelName,
+              startDate: startDate,
+              endDate: endDate,
+              travelPlaceList: travelPlaceList,
+              quizQuestion: quizQuestion,
+              quizAnswer: quizAnswer,
+            }}
           />
         </div>
       )}

@@ -20,7 +20,7 @@ interface CreateTravelProps {
   initialData?: {
     // 수정 모드일 때의 초기 데이터
     travelName?: string;
-    travelLocation?: string;
+    travelPlaceList?: string[];
     quizQuestion?: string;
     quizAnswer?: string;
     startDate?: Date | null; // startDate 추가
@@ -143,8 +143,8 @@ export default function CreateTravel({
   const [travelName, setTravelName] = useState<string>(
     initialData.travelName || ''
   );
-  const [travelPlaceList, setTravelPlaceList] = useState<string>(
-    initialData.travelPlaceList || ''
+  const [travelPlaceList, setTravelPlaceList] = useState<string[]>(
+    initialData.travelPlaceList || []
   );
   const [quizQuestion, setQuizQuestion] = useState<string>(
     initialData.quizQuestion || ''
