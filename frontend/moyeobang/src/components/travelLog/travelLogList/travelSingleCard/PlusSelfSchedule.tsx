@@ -17,8 +17,10 @@ const scheduleCardLayout = css`
   align-items: center;
   margin: 5px 0;
   border-bottom: 1.5px solid ${colors.lightGray};
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   padding: 5px 0;
+  background-color: white;
+  margin-bottom: 10px;
 `;
 
 const checkBoxStyle = css`

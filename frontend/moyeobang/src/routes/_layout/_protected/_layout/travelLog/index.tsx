@@ -10,9 +10,10 @@ import PlusSelf from '@/components/travelLog/PlusSelf';
 const travelLogMainLayout = css`
   background-color: aquamarine;
   height: 100vh;
+  position: relative;
 `;
 const plusStyle = css`
-  position: fixed;
+  position: absolute;
   bottom: 90px;
   right: 25px;
   width: 48px;
@@ -22,7 +23,7 @@ const plusStyle = css`
 
 const travelLogMain = () => {
   const [showPlusSelf, setShowPlusSelf] = useState<boolean>(false);
-  const handlePlusSelf = () => {
+  const handleShowPlusSelf = () => {
     setShowPlusSelf(!showPlusSelf);
   };
   return (
@@ -31,12 +32,12 @@ const travelLogMain = () => {
         <TravelLogProvider>
           <TravelLogList />
           <div css={plusStyle}>
-            <PlusBtn onClick={handlePlusSelf} />
+            <PlusBtn onClick={handleShowPlusSelf} />
           </div>
         </TravelLogProvider>
         <Navbar />
       </div>
-      {showPlusSelf && <PlusSelf handlePlusSelf={handlePlusSelf} ></PlusSelf>}
+      {showPlusSelf && <PlusSelf handlePlusSelf={handleShowPlusSelf}></PlusSelf>}
     </>
   );
 };

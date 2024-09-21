@@ -13,6 +13,8 @@ const locationInputWrapperStyle = css`
   position: relative;
   display: flex;
   flex-direction: column;
+  font-size: 20px;
+  font-family: 'regular';
 `;
 
 const locationInputStyle = css`
@@ -24,10 +26,12 @@ const locationInputStyle = css`
   box-sizing: border-box;
   margin-top: 10px;
   padding-right: 10px;
+  font-size: 18px;
 
   &::placeholder {
     color: #b9b9b9;
     font-family: 'regular';
+    font-size: 18px;
   }
 `;
 
