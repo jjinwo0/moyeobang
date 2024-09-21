@@ -146,6 +146,7 @@ export default function TravelCard({
   const handleExitModalOpen = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 전파를 막음
     setExitModal(true);
+    setSettingButtonClick(prev => !prev);
   };
 
   const closeExitModalOpen = () => {
@@ -162,6 +163,7 @@ export default function TravelCard({
     // navigate({to: '/profile'});
     // setTravelData(title, startDate, endDate, place);
     setEditModal(true);
+    setSettingButtonClick(prev => !prev);
   };
 
   const closeEditModal = () => {
