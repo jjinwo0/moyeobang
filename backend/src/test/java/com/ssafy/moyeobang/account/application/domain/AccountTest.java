@@ -52,7 +52,7 @@ class AccountTest {
     }
 
     private Account createAccount(String accountNumber, Long amount) {
-        return Account.of(accountNumber, Money.of(amount), new ActivityWindow(new ArrayList<>()));
+        return Account.of(accountNumber, Money.of(amount), new ActivityWindow(new ArrayList<>()), new Settles(new ArrayList<>()));
     }
 
     private Account createAccountWithActivityWindow(String accountNumber, Long amount) {
@@ -60,7 +60,8 @@ class AccountTest {
         Activity activity2 = createActivity("111", "333", "111", Money.of(10000));
         Activity activity3 = createActivity("111", "111", "444", Money.of(3000));
 
-        return Account.of(accountNumber, Money.of(amount), new ActivityWindow(List.of(activity1, activity2, activity3)));
+        return Account.of(accountNumber, Money.of(amount), new ActivityWindow(List.of(activity1, activity2, activity3)),
+                new Settles(new ArrayList<>()));
     }
 
     private static Activity createActivity(String ownerAccountNumber,

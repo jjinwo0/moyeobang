@@ -48,5 +48,6 @@ public class OrderJpaEntity extends BaseEntity {
         this.title = title;
         this.amount = amount;
         this.withdraw = withdraw;
+        this.memberOrderHistories = new ArrayList<>();
     }
 }

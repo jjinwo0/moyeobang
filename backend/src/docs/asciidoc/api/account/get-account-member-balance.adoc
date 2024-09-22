@@ -1,0 +1,12 @@
+[[get-account-balance]]
+=== 모임 통장 공금 잔액 조회
+
+==== HTTP Request
+
+include::{snippets}/get-account-member-balance/http-request.adoc[]
+include::{snippets}/get-account-member-balance/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-account-member-balance/http-response.adoc[]
+include::{snippets}/get-account-member-balance/response-fields.adoc[]

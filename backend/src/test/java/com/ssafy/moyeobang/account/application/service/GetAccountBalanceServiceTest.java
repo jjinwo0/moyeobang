@@ -11,7 +11,9 @@ import com.ssafy.moyeobang.account.application.domain.Account;
 import com.ssafy.moyeobang.account.application.domain.Activity;
 import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
+import com.ssafy.moyeobang.account.application.domain.Settles;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,9 +34,9 @@ class GetAccountBalanceServiceTest {
 
         ActivityWindow activityWindow = new ActivityWindow(List.of(activity1, activity2, activity3));
 
-        Account account = Account.of("111", Money.ZERO, activityWindow);
+        Account account = Account.of("111", Money.ZERO, activityWindow, new Settles(new ArrayList<>()));
 
-        given(loadAccountPort.loadTravelAccount(any(String.class)))
+        given(loadAccountPort.loadAccount(any(String.class)))
                 .willReturn(account);
 
         //when
