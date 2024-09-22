@@ -6,15 +6,15 @@ import static java.time.LocalDateTime.now;
 
 import com.ssafy.moyeobang.payment.adapter.out.bank.request.CreateAccountRequest;
 import com.ssafy.moyeobang.payment.adapter.out.bank.request.GetBalanceRequest;
-import com.ssafy.moyeobang.payment.adapter.out.bank.request.SendMoneyRequest;
+import com.ssafy.moyeobang.payment.adapter.out.bank.request.PaymentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BankApiClient {
+public class BankApiClientInPayment {
 
-    public static final String ACCOUNT_TYPE_NUMBER = "999-1-8142cf9d861b42";
+    public static final String ACCOUNT_TYPE_NUMBER = "001-1-7ea6862a889c4d";
 
     public String createAccount(String memberKey) {
         CreateAccountRequest request = new CreateAccountRequest(
@@ -29,7 +29,7 @@ public class BankApiClient {
     }
 
     public void payment(String targetAccountNumber, String sourceAccountNumber, long amount) {
-        SendMoneyRequest request = new SendMoneyRequest(
+        PaymentRequest request = new PaymentRequest(
                 Headers.withCommonUserKey("updateDemandDepositAccountTransfer", now()),
                 targetAccountNumber,
                 sourceAccountNumber,

@@ -27,7 +27,7 @@ public class Headers {
     private String userKey;
 
     public static Headers withCommonUserKey(String apiName, LocalDateTime transmissionDateTime) {
-        return withUserKey("eea1652c-b5f3-4ef3-9aba-5360026f03b0", apiName, transmissionDateTime);
+        return withUserKey("596d1e36-c34a-4bbe-9abd-a329decc19e7", apiName, transmissionDateTime);
     }
 
     public static Headers withUserKey(String userKey, String apiName, LocalDateTime transmissionDateTime) {
