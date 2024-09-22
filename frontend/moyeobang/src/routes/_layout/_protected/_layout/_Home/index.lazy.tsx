@@ -197,11 +197,11 @@ function Index() {
   };
 
   const router = useRouter();
-  // const clickTravelCard = (travel: Travel) => {
-  //   router.navigate({
-  //     to: `/travelLog`,
-  //   });
-  // };
+  const clickTravelCard = (travel: Travel) => {
+    // router.navigate({
+    //   to: `/travelLog`,
+    // });
+  };
 
   const closeTravelSummary = () => {
     setTravelSummaryModal(false);

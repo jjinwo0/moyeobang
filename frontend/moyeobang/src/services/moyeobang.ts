@@ -116,7 +116,11 @@ export default {
   /**
    * 여행 목록 전체 조회
    */
-  getTravelList: async () => {
-    axios.get<MoyeobangResponse<Travel>>('/travel/');
-  },
+  getTravelList: async () => axios.get<MoyeobangResponse<Travel>>('/travel/'),
+
+  /**
+   * 여행 디테일 조회
+   */
+  getTravelDetail: async (travelId: number) =>
+    axios.get<MoyeobangResponse<TravelDetail>>(`/travel/${travelId}`),
 };
