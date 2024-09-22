@@ -59,16 +59,23 @@ const balanceStyle = css`
     text-align: center;
 `;
 
-export default function AccountCard() {
+interface AccountCardProps {
+    travelName:TravelName
+    travelAccountNumber:TravelAccountNumber;
+    memberName?:ParticipantName
+    currentBalance:CurrentBalance;   
+}
+
+export default function AccountCard({travelName, travelAccountNumber, memberName, currentBalance} :AccountCardProps ) {
 
     return (
 
         <div css={cardLayoutStyle}>
             <div css={overlayStyle}>
-                    <div css={titleStyle} >아기돼지 오형제</div>
-                    <div css={accountStyle} >333-333-3333</div>
-                    {/* <div css={nameStyle}>가현</div> */}
-                    <div css={balanceStyle} >90000원</div>
+                    <div css={titleStyle} >{travelName}</div>
+                    <div css={accountStyle} >{travelAccountNumber}</div>
+                    { memberName ? <div css={nameStyle}>{memberName}</div> : undefined}
+                    <div css={balanceStyle} >{currentBalance}원</div>
             </div>
         </div>
     )

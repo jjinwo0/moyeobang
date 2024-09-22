@@ -39,6 +39,7 @@ export default function TransactionCard({
                     { participants && participants.map((part, index) => (
                         <SmallProfileImage 
                         key={index}
+                        px={45}
                         profileImage={part.profileImage}
                         />
                     ))}
