@@ -46,16 +46,18 @@ const proposal = css`
   width: 100%;
 `;
 
-type PublicDepositProps = GroupAccountBalance & {travelName: TravelName} & {
+type PublicDepositProps = AccountBalanceByGroup & {travelName: TravelName} & {
   budget: number;
 };
 
 const PublicDeposit: React.FC<PublicDepositProps> = ({
-  totalAmount,
   travelName,
-  budget,
+  // currentBalance,
+  totalMoney,
+  // totalComsumption,
+  // usagePercentage,
 }) => {
-  const [value, setValue] = useState<string | number>(budget);
+  const [value, setValue] = useState<string | number>(totalMoney);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
 
   const handleFocus = () => {
@@ -78,7 +80,7 @@ const PublicDeposit: React.FC<PublicDepositProps> = ({
     <div css={basicLayout}>
       <div css={accumulatedMoneyLayout}>
         <span>현재 누적 입금 금액</span>
-        <span css={bluefont}>{totalAmount}원</span>
+        <span css={bluefont}>{totalMoney}원</span>
       </div>
       <div>{travelName} 을/를 위해</div>
       <div css={proposal}>
