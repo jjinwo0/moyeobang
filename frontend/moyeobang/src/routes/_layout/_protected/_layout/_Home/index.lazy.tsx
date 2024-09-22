@@ -7,7 +7,7 @@ import bangbang from '@/assets/icons/bangBang.png';
 import sadBangbang from '@/assets/icons/sadBangbang.png';
 import TwoBtn from '@/components/common/btn/TwoBtn'; // TwoBtn 컴포넌트 임포트
 import plusButton from '@/assets/icons/plusButton.png';
-import CreateTravel from '@/components/travelHome/CreateTravel';
+import CreateTravel from '@/components/travelHome/CreateTravel.tsx';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
 import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
