@@ -14,9 +14,7 @@ import com.ssafy.moyeobang.payment.adapter.out.persistence.withdraw.WithdrawRepo
 import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.Store;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
-import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
-import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,13 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
     @Autowired
-    private LoadTravelAccountPort loadTravelAccountPort;
-
-    @Autowired
     private BankApiClientInPayment bankApiClientInPayment;
-
-    @Autowired
-    private ProcessPaymentPort processPaymentPort;
 
     @Autowired
     private MemberRepositoryInPayment memberRepository;
