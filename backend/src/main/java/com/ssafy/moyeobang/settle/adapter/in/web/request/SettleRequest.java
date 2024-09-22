@@ -7,5 +7,6 @@ public record SettleRequest(int money,
                             String paymentName,
                             String address,
                             String acceptedNumber,
-                            List<OrderRequest> details) {
+                            List<OrderRequest> details,
+                            String splitMethod) {
 }
