@@ -8,7 +8,7 @@ import Btn from '../common/btn/Btn';
 import ExitTravel from './ExitTravel';
 import inviteIcon from '@/assets/icons/inviteIcon.png';
 import ConfirmQuiz from '../quiz/ConfirmQuiz';
-import CreateTravel from './CreateTravel';
+import CreateTravel from './CreateTravel.tsx';
 import useTravelStore from '@/store/useTravelStore';
 import {useTravelContext} from '@/context/TravelDataContext'; // TravelDataContext import
 

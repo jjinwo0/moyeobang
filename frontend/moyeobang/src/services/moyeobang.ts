@@ -2,7 +2,6 @@ import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
 
 export default {
-  
   // 모임 통장
   /**
   * 모임 통장 공금 잔액 조회
@@ -55,7 +54,7 @@ export default {
       data,
       {
         headers: {'Content-Type': 'application/json'},
-      },
+      }
     ),
   /**
  * 직접 정산 수정 fetch임 추후에
@@ -66,7 +65,7 @@ export default {
       data,
       {
         headers: {'Content-Type': 'application/json'},
-      },
+      }
     ),
   /**
  * 영수증 정산 
@@ -77,7 +76,7 @@ export default {
       data,
       {
         headers: {'Content-Type': 'application/json'},
-      },
+      }
     ),
   /**
  * 영수증 정산 수정 fetch임 추후에
@@ -88,7 +87,7 @@ export default {
       data,
       {
         headers: {'Content-Type': 'application/json'},
-      },
+      }
     ),
 
   /**
@@ -100,6 +99,12 @@ export default {
     data,
     {
       headers: {'Content-Type': 'application/json'},
-    },
-  ),
-}
+    }),
+
+  /**
+   * 여행 목록 전체 조회
+   */
+  getTravelList: async () => {
+    axios.get<MoyeobangResponse<Travel>>('/travel/');
+  },
+};

@@ -6,8 +6,12 @@ import bangBang from '@/assets/icons/bangBang.png';
 import {colors} from '@/styles/colors';
 import React from 'react';
 import SettingBox from '@/components/travelHome/SettingBox';
+// import {useLocation} from '@tanstack/react-router';
+import {useMatch} from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_layout/_protected/_layout/profile/')({
+export const Route = createFileRoute(
+  '/_layout/_protected/_layout/profile/$nickName'
+)({
   component: profile,
 });
 
@@ -21,6 +25,7 @@ const containerStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 10;
 `;
 
 const contentStyle = css`
@@ -54,6 +59,10 @@ const nicknameStyle = css`
   margin-top: 10px;
 `;
 
+const backButtonStyle = css`
+  background-color: transparent; /* 이 스타일이 우선적으로 적용됩니다 */
+`;
+
 const blurStyle = css`
   position: absolute;
   top: 0;
@@ -66,13 +75,20 @@ const blurStyle = css`
 `;
 
 export default function profile() {
+  // useMatch를 사용해 URL 파라미터로 전달된 nickName 가져오기
+  const {
+    params: {nickName}, // URL 파라미터에서 nickName 가져오기
+  } = useMatch('/_layout/_protected/_layout/profile/$nickName'); // 라우트와 매칭
+
   return (
     <>
       <div css={containerStyle}>
-        <HeaderWithBackButton />
+        <div css={backButtonStyle}>
+          <HeaderWithBackButton />
+        </div>
         <div css={contentStyle}>
           <div css={profileStyle}></div>
-          <p css={nicknameStyle}>닉네임</p>
+          <p css={nicknameStyle}>{nickName}</p>
           {/* Render multiple Box components */}
           <SettingBox title="정보수정" />
           <SettingBox
