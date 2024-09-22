@@ -58,9 +58,9 @@ export default {
       },
     ),
   /**
- * 직접 정산 수정 fetc임 추후에
+ * 직접 정산 수정 fetch임 추후에
  */
-  putSettleByCustom: async (transactionId:number, data: TransactionDetailByCustom) =>
+  putSettleByCustom: async (transactionId:number, data: PostTransactionDetailByCustom) =>
     axios.post<MoyeobangResponse<null>>(
       `/travel/accounts/transactions/${transactionId}/settle/custom`,
       data,

@@ -208,11 +208,11 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
     }
 
     // 전체 다 닫기
-    function handleCloseResult() {
-        setResults(null);
-        handleHidden();
-        setImageSrc(null)
-    }
+    // function handleCloseResult() {
+    //     setResults(null);
+    //     handleHidden();
+    //     setImageSrc(null)
+    // }
 
     return (
         <div css={layoutStyle}>

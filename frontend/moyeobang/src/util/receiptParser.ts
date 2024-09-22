@@ -1,11 +1,5 @@
-function formatToISO(dateString:string) {
-  const [datePart, timePart] = dateString.split(" ");
-  const [year, month, day] = datePart.split(".");
-  const isoString = `${year}-${month}-${day}T${timePart}Z`;
-  return isoString;
-}
+// 영수증 => 원래 데이터 형태로 변환해주는 함수
 
-// 원래 데이터 형태로 변환해주는 함수
 export function extractItems(
   parsedData: ChatJsonProps, 
   transactionId: TransactionId,

@@ -42,7 +42,7 @@ type InvitationLink = string;
 
 interface ParticipantInfo {
   memberId: MemberId;
-  nickname: Nickname;
+  memberName: MemberName;
   profileImage: ProfileImage;
 }
 

@@ -1,8 +1,8 @@
 export default {
-    ACCOUNTBYGROUP:'accountByGroup',
-    ACCOUNTBYMEMBERID:'accountByMemberId',
+    ACCOUNT_BYGROUP:'accountByGroup',
+    ACCOUNT_BYMEMBERID:'accountByMemberId',
     TRANSACTION_LIST: 'transactinList',
     RECEIPT:'receipt', 
     CUSTOM:'custom',
-    TRANSACTIONDETAIL:'transactionDetail',
+    TRANSACTION_DETAIL:'transactionDetail',
   };

@@ -96,7 +96,7 @@ export default function settledReceipt() {
   //   enabled: !isNewState
   // });
 
-  // const receipt = isNew ? receiptData : data?.data.data as TransactionDetailByReceipt;
+  // const receipt = isNewState ? receiptData : data?.data.data as TransactionDetailByReceipt;
   const receipt = isNewState ? receiptData : detailsByReceipt; // 임시
 
   useEffect(() => {
@@ -106,7 +106,8 @@ export default function settledReceipt() {
   const [updateDetails , setUpdateDetails] = useState<SettledItemByReceipt[]>(receipt.details);
 
   const {mutate: updateReceipt } = useMutation({
-    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => moyeobang.postSettleByReceipt(transactionId, data),
+    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => 
+      moyeobang.postSettleByReceipt(transactionId, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['receipt'],
