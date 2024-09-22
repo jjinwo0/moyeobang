@@ -1,7 +1,5 @@
-package com.ssafy.moyeobang.account.application.domain.travelaccount;
+package com.ssafy.moyeobang.account.application.domain;
 
-import com.ssafy.moyeobang.account.application.domain.Member;
-import com.ssafy.moyeobang.account.application.domain.Money;
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Getter;
@@ -11,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract class Transaction {
 
-    private final Long transactionId;
+    private Long transactionId;
     private final String transactionAccountNumber;
     private final LocalDateTime timestamp;
     private final Money money;

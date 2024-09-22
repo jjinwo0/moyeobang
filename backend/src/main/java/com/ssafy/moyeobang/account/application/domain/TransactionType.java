@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.account.application.domain.travelaccount;
+package com.ssafy.moyeobang.account.application.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

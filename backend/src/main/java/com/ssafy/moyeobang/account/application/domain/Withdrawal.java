@@ -1,9 +1,7 @@
-package com.ssafy.moyeobang.account.application.domain.travelaccount;
+package com.ssafy.moyeobang.account.application.domain;
 
-import static com.ssafy.moyeobang.account.application.domain.travelaccount.TransactionType.WITHDRAWAL;
+import static com.ssafy.moyeobang.account.application.domain.TransactionType.WITHDRAWAL;
 
-import com.ssafy.moyeobang.account.application.domain.Member;
-import com.ssafy.moyeobang.account.application.domain.Money;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +34,11 @@ public class Withdrawal extends Transaction {
 
     @Override
     public boolean isRelatedTo(Set<Member> members) {
-        return members.containsAll(settles.getParticipant());
+        return members.stream().anyMatch(settles::isParticipate);
+    }
+
+    public Money getSettleAmountFor(Member member) {
+        return getTotalSettleAmount().get(member);
     }
 
     public Map<Member, Money> getTotalSettleAmount() {

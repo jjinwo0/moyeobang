@@ -20,9 +20,9 @@ public class GetAccountMemberController {
 
     private final GetAccountMemberBalanceQuery getAccountMemberBalanceQuery;
 
-    @GetMapping("/api/accounts/{accountNumber}/balance/member")
-    public ApiResult<GetAccountMemberBalanceResponse> getAccountMemberBalance(@PathVariable String accountNumber,
+    @GetMapping("/api/accounts/{accountId}/balance/member")
+    public ApiResult<GetAccountMemberBalanceResponse> getAccountMemberBalance(@PathVariable Long accountId,
                                                                               @RequestBody GetAccountMemberBalanceRequest request) {
-        return success(getAccountMemberBalanceQuery.getAccountMemberBalance(accountNumber, request.memberId()));
+        return success(getAccountMemberBalanceQuery.getAccountMemberBalance(accountId, request.memberId()));
     }
 }

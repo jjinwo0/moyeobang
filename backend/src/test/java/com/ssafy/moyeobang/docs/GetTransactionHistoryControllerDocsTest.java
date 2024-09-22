@@ -15,9 +15,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoryResponse;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Settle;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Settles;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Withdrawal;
+import com.ssafy.moyeobang.account.application.domain.Settle;
+import com.ssafy.moyeobang.account.application.domain.Settles;
+import com.ssafy.moyeobang.account.application.domain.Withdrawal;
 import com.ssafy.moyeobang.account.application.port.in.GetTransactionHistoryQuery;
 import java.util.List;
 import java.util.Map;

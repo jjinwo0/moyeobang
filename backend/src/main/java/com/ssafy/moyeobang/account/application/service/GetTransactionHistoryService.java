@@ -1,8 +1,8 @@
 package com.ssafy.moyeobang.account.application.service;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoryResponse;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
-import com.ssafy.moyeobang.account.application.domain.travelaccount.Withdrawal;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
+import com.ssafy.moyeobang.account.application.domain.Withdrawal;
 import com.ssafy.moyeobang.account.application.port.in.GetTransactionHistoryQuery;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.error.TransactionNotFoundException;

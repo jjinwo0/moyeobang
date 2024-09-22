@@ -1,8 +1,8 @@
 package com.ssafy.moyeobang.account.application.service;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountMemberBalanceResponse;
-import com.ssafy.moyeobang.account.application.domain.Account;
 import com.ssafy.moyeobang.account.application.domain.Member;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.in.GetAccountMemberBalanceQuery;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadMemberPort;
@@ -19,8 +19,8 @@ public class GetAccountMemberBalanceService implements GetAccountMemberBalanceQu
     private final LoadAccountPort loadAccountPort;
 
     @Override
-    public GetAccountMemberBalanceResponse getAccountMemberBalance(String accountNumber, Long memberId) {
-        Account account = loadAccountPort.loadAccount(accountNumber);
+    public GetAccountMemberBalanceResponse getAccountMemberBalance(Long accountId, Long memberId) {
+        TravelAccount account = loadAccountPort.loadTravelAccount(accountId);
 
         Member member = loadMemberPort.loadMember(memberId);
 

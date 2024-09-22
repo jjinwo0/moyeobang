@@ -4,5 +4,5 @@ import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountMemberBalan
 
 public interface GetAccountMemberBalanceQuery {
 
-    GetAccountMemberBalanceResponse getAccountMemberBalance(String accountNumber, Long memberId);
+    GetAccountMemberBalanceResponse getAccountMemberBalance(Long accountId, Long memberId);
 }

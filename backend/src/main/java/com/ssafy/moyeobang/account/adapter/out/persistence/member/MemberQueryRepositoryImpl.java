@@ -14,7 +14,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<MemberInfo> findMembersBy(Long travelId) {
+    public List<MemberInfo> findMemberInfosBy(Long travelId) {
         return queryFactory.select(memberInfo())
                 .from(memberJpaEntity)
                 .join(memberAccountJpaEntity).on(memberAccountJpaEntity.member.eq(memberJpaEntity))
@@ -22,6 +22,16 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                 .fetchJoin()
                 .where(memberTravelJpaEntity.travel.id.eq(travelId))
                 .fetch();
+    }
+
+    @Override
+    public MemberInfo findMemberInfoBy(Long id) {
+        return queryFactory.select(memberInfo())
+                .from(memberJpaEntity)
+                .join(memberAccountJpaEntity).on(memberAccountJpaEntity.member.eq(memberJpaEntity))
+                .fetchJoin()
+                .where(memberJpaEntity.id.eq(id))
+                .fetchFirst();
     }
 
     private QMemberInfo memberInfo() {
