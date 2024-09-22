@@ -1,4 +1,5 @@
 import axios from '@/util/axios';
+import axios8081 from '@/util/axios8081';
 
 export default {
   // 모임 통장
@@ -105,6 +106,12 @@ export default {
         headers: {'Content-Type': 'application/json'},
       }
     ),
+
+  // pos기 결제 요청
+  postPayByPos: async (data: PaymentProps) =>
+    axios.post<PostPayByPosResponse>('/van/payment/process', data, {
+      headers: {'Content-Type': 'application/json'},
+    }),
 
   /**
    * 여행 목록 전체 조회
