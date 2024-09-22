@@ -25,4 +25,9 @@ public class Deposit extends Transaction {
     public Set<Member> getParticipants() {
         return Set.of(depositMember);
     }
+
+    @Override
+    public boolean isRelatedTo(Set<Member> members) {
+        return members.contains(depositMember);
+    }
 }

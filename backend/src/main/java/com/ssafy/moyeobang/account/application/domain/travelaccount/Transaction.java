@@ -22,4 +22,6 @@ public abstract class Transaction {
     public abstract String getTransactionTitle();
 
     public abstract Set<Member> getParticipants();
+
+    public abstract boolean isRelatedTo(Set<Member> members);
 }

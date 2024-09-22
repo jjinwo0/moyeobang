@@ -26,4 +26,9 @@ public class Withdrawal extends Transaction {
     public Set<Member> getParticipants() {
         return settles.getParticipant();
     }
+
+    @Override
+    public boolean isRelatedTo(Set<Member> members) {
+        return members.containsAll(settles.getParticipant());
+    }
 }

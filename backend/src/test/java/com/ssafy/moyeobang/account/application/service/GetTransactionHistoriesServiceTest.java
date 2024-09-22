@@ -54,12 +54,15 @@ class GetTransactionHistoriesServiceTest {
         Transactions transactions = new Transactions(List.of(transaction1, transaction2, transaction3));
 
         TravelAccount travelAccount = new TravelAccount("111", members, transactions);
-        
+
         given(loadAccountPort.loadTravelAccount(any(Long.class)))
                 .willReturn(travelAccount);
 
         //when
-        List<GetTransactionHistoriesResponse> transactionHistories = getTransactionHistoriesService.getTransactionHistories(1L);
+        List<GetTransactionHistoriesResponse> transactionHistories = getTransactionHistoriesService.getTransactionHistories(
+                1L,
+                Set.of(1L, 2L, 3L)
+        );
 
         //then
         assertThat(transactionHistories).extracting(

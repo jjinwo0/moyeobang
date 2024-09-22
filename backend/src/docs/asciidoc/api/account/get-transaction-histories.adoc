@@ -4,6 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/get-transaction-histories/http-request.adoc[]
+include::{snippets}/get-transaction-histories/query-parameters.adoc[]
 
 ==== HTTP Response
 
