@@ -65,8 +65,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
                 paymentRequestMoney.getAmount()
         );
 
-        return new PaymentResult(savedWithdraw.getId(), savedWithdraw.getAmount(), savedWithdraw.getPlaceAddress(),
-                savedWithdraw.getPlaceName(), savedWithdraw.getCreateTime());
+        return new PaymentResult(savedWithdraw.getId());
     }
 
     private TravelAccountJpaEntity getTravelAccount(String accountNumber) {
