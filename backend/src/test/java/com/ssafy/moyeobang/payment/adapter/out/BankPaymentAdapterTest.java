@@ -1,12 +1,11 @@
 package com.ssafy.moyeobang.payment.adapter.out;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
-import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClient;
+import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClientInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.member.MemberRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travel.TravelRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travelaccount.TravelAccountRepositoryInPayment;
@@ -29,7 +28,7 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
     private LoadTravelAccountPort loadTravelAccountPort;
 
     @Autowired
-    private BankApiClient bankApiClient;
+    private BankApiClientInPayment bankApiClientInPayment;
 
     @Autowired
     private ProcessPaymentPort processPaymentPort;
@@ -53,13 +52,25 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
     @AfterEach
     void tearDown() {
         withdrawRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
-        travelRepository.deleteAllInBatch();
         travelAccountRepository.deleteAllInBatch();
-        withdrawRepository.deleteAllInBatch();
+        travelRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
     }
 
-    @DisplayName("사용자의 여행 계좌를 로드한다.")
+    @DisplayName("방장의 유저 키를 이용해 싸피 뱅크 여행 모임 통장 계좌를 생성한다.")
+    @Test
+    void createAccount() {
+        //given
+        MemberJpaEntity member = createMember();
+        memberRepository.save(member);
+        //when
+        String accountNumber = bankPaymentAdapter.createAccount(member.getMemberKey());
+
+        //then
+        assertThat(accountNumber).hasSize(16);
+    }
+
+    @DisplayName("사용자의 여행 모임 통장 계좌를 로드한다.")
     @Test
     void loadTravelAccount() {
         // given
@@ -73,35 +84,36 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
         String accountNumber = newTravelAccount.getAccountNumber();
 
-        when(bankApiClient.getBalance(accountNumber)).thenReturn(10000L);
-
-        when(loadTravelAccountPort.loadTravelAccount(accountNumber))
-                .thenReturn(TravelAccount.of(accountNumber, Money.of(10000L)));
+        Long balance = bankApiClientInPayment.getBalance(accountNumber);
 
         // when
-        TravelAccount travelAccount = bankPaymentAdapter.loadTravelAccount(accountNumber);
+        TravelAccount resultTravelAccount = bankPaymentAdapter.loadTravelAccount(accountNumber);
 
         // then
-        assertThat(travelAccount.getAccountNumber()).isEqualTo(accountNumber);
-        assertThat(travelAccount.getBalance().getAmount()).isEqualTo(10000L);
+        assertThat(resultTravelAccount.getAccountNumber()).isEqualTo(accountNumber);
+        assertThat(resultTravelAccount.getBalance().getAmount()).isEqualTo(balance);
     }
 
-    @DisplayName("사용자의 계좌로 결제를 처리한다.")
+    @DisplayName("사용자의 여행 모임 계좌로 결제를 처리한다.")
     @Test
     void processPayment() {
         // given
-        String accountNumber = "123-456-789";
-        Store store = new Store("store-001", "Sample Store", "Sample Address", 37.7749, -122.4194, "store-acc-002");
-        Money paymentRequestMoney = Money.of(10000L);
+        MemberJpaEntity member = createMember();
+        memberRepository.save(member);
 
-        TravelAccountJpaEntity travelAccountJpaEntity = TravelAccountJpaEntity.builder()
-                .accountNumber(accountNumber)
-                .build();
+        TravelJpaEntity travel = createTravel();
+        travelRepository.save(travel);
+
+        TravelAccountJpaEntity travelAccountJpaEntity = createTravelAccount(member, travel);
         travelAccountRepository.save(travelAccountJpaEntity);
 
-        when(bankApiClient.getBalance(accountNumber)).thenReturn(20000L);
+        String accountNumber = travelAccountJpaEntity.getAccountNumber();
 
-        TravelAccount travelAccount = TravelAccount.of(accountNumber, Money.of(20000L));
+        Long balance = bankApiClientInPayment.getBalance(accountNumber);
+        TravelAccount travelAccount = TravelAccount.of(accountNumber, Money.of(balance));
+
+        Store store = new Store("store-001", "Sample Store", "Sample Address", 37.7749, -122.4194, "store-acc-002");
+        Money paymentRequestMoney = Money.of(10000L);
 
         // when
         PaymentResult paymentResult = bankPaymentAdapter.processPayment(
@@ -115,7 +127,7 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
     }
 
     private TravelAccountJpaEntity createTravelAccount(MemberJpaEntity member, TravelJpaEntity travel) {
-        String travelAccountNumber = bankApiClient.createAccount(member.getMemberKey());
+        String travelAccountNumber = bankApiClientInPayment.createAccount(member.getMemberKey());
 
         return createTravelAccount(travelAccountNumber, travel);
     }
@@ -129,7 +141,7 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
     private MemberJpaEntity createMember() {
         return MemberJpaEntity.builder()
-                .memberKey("eea1652c-b5f3-4ef3-9aba-5360026f03b0")
+                .memberKey("596d1e36-c34a-4bbe-9abd-a329decc19e7")
                 .build();
     }
 
