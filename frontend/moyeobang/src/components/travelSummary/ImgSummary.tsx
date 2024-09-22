@@ -60,6 +60,11 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
     position: absolute;
     right: -15px;
     top: -55px;
+    font-family: 'semibold';
+  `;
+
+  const firstLineStyle = css`
+    margin-bottom: 3px;
   `;
 
   const informationImgStyle = css`
@@ -141,8 +146,8 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
             <MessagePopup
               message={
                 <>
-                  업로드한 사진 중 <br />
-                  추천된 8개의 사진을 보여줍니다.
+                  <p css={firstLineStyle}>업로드한 사진 8개를</p>
+                  <p>랜덤으로 보여줍니다.</p>
                 </>
               }
             />

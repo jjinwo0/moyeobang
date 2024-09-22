@@ -13,6 +13,8 @@ import NoTravel from '@/components/travelHome/NoTravel';
 import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
 import {useRouter} from '@tanstack/react-router';
+import {useSuspenseQuery} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 const data: Travel[] = [
   {
@@ -130,6 +132,12 @@ function Index() {
   const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
   // const {setNowTravelData} = useTravelContext();
 
+  // //get으로 여행 목록 전체 조회하기
+  // const {data} = useSuspenseQuery({
+  //   queryKey: ['travelList'],
+  //   queryFn: () => moyeobang.getTravelList(),
+  // });
+
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -174,6 +182,10 @@ function Index() {
       travel.travelPlaceList
     ); // 상태 저장
     setTravelSummaryModal(true);
+
+    //여행 기록 페이지로 이동
+    // clickTravelCard(travel);
+
     // setNowTravelData({
     //   travelName: travel.travelName,
     //   startDate: travel.startDate,
@@ -184,11 +196,17 @@ function Index() {
     // }); // Context 상태 저장
   };
 
+  const router = useRouter();
+  // const clickTravelCard = (travel: Travel) => {
+  //   router.navigate({
+  //     to: `/travelLog`,
+  //   });
+  // };
+
   const closeTravelSummary = () => {
     setTravelSummaryModal(false);
   };
 
-  const router = useRouter();
   const goSettingPage = () => {
     router.navigate({
       to: `/profile/${nickName}`,
@@ -225,7 +243,7 @@ function Index() {
                   participantsCount={trip.participantsCount}
                   quizQuestion={trip.quizQuestion} // quizQuestion 전달
                   quizAnswer={trip.quizAnswer} // quizAnswer 전달
-                  // onClick={() => clickTravelCard(trip)}
+                  onClick={() => clickTravelCard(trip)}
                 />
               ))}
             </div>
@@ -258,7 +276,7 @@ function Index() {
                   onClick={
                     activeTab === 'past'
                       ? () => handleTravelSummary(item)
-                      : undefined
+                      : () => clickTravelCard(item)
                   }
                 />
               ))
