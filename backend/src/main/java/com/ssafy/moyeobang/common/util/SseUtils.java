@@ -44,8 +44,6 @@ public class SseUtils {
                         .data(message));
             } catch (IOException e) {
                 throw new RuntimeException("Failed to send SSE event", e);
-            } finally {
-                emitters.remove(transactionId);
             }
         }
     }
@@ -62,6 +60,10 @@ public class SseUtils {
                 emitters.remove(transactionId);
             }
         }
+    }
+
+    public SseEmitter getEmitter(String transactionId) {
+        return emitters.get(transactionId);
     }
 
 
