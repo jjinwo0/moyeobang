@@ -1,19 +1,27 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {css} from '@emotion/react';
-import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
+import HeaderWithXButton from '../../common/Header/HeaderWithXbutton';
 import {colors} from '@/styles/colors';
-import * as PlusSelfStyle from '@/components/travelLog/PlusSelfStyle';
-import Btn from '../common/btn/Btn';
-import LocationInput from '../common/Inputs/LocationInput';
-import LabeledInput from '../common/Inputs/LabeledInput';
-import TimeInput from '../common/Inputs/TimeInput';
+import * as PlusSelfStyle from '@/components/travelLog/PlusSelf/PlusSelfStyle';
+import Btn from '../../common/btn/Btn';
+import LocationInput from '../../common/Inputs/LocationInput';
+import LabeledInput from '../../common/Inputs/LabeledInput';
+import TimeInput from '../../common/Inputs/TimeInput';
 import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 
 interface PlusSelfProps {
   handleShowPlusSelf: () => void; // 함수형 props 정의
+  handleShowMapSearch: () => void;
+  handleSearchLocation: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  searchLocation: string | undefined;
 }
 
-export default function PlusSelf({handleShowPlusSelf}: PlusSelfProps) {
+export default function PlusSelf({
+  handleShowPlusSelf,
+  handleShowMapSearch,
+  handleSearchLocation,
+  searchLocation,
+}: PlusSelfProps) {
   const [AMPMSelection, setAMPMSelection] = useState<'AM' | 'PM'>('AM');
   const handleAMPMSelection = () => {
     setAMPMSelection(prev => (prev === 'AM' ? 'PM' : 'AM'));
@@ -33,6 +41,15 @@ export default function PlusSelf({handleShowPlusSelf}: PlusSelfProps) {
     }
   };
 
+  const [scheduleName, setScheduleName] = useState<string | undefined>(
+    searchLocation
+  );
+
+  // searchLocation이 변할 때마다 scheduleName을 업데이트
+  useEffect(() => {
+    setScheduleName(searchLocation);
+  }, [searchLocation]);
+
   return (
     <>
       <HeaderWithXButton onXClick={handleShowPlusSelf} />
@@ -44,17 +61,25 @@ export default function PlusSelf({handleShowPlusSelf}: PlusSelfProps) {
           <span>일정을</span> <span style={{color: colors.fifth}}>적어방</span>
         </div>
         {/* 1. 여행 장소 */}
-        <LocationInput label="일정 장소" placeholder="여행 장소 검색" />
-        {/* 2. 여행 이름 */}
-        <LabeledInput
-          label={
-            <div>
-              <span style={{color: colors.customRed}}>*</span>{' '}
-              <span>일정 이름</span>
-            </div>
-          }
-          placeholder="여행 이름"
+        <LocationInput
+          label="일정 장소"
+          placeholder="여행 장소 검색"
+          onClick={handleShowMapSearch}
+          onChange={e => handleSearchLocation(e)}
         />
+        {/* 2. 여행 이름 */}
+        <div css={PlusSelfStyle.inputContainerStyle}>
+          <span style={{color: colors.customRed}}>*</span>{' '}
+          <span>일정 이름</span>
+          <input
+            type="text"
+            value={scheduleName}
+            onChange={e => {
+              setScheduleName(e.target.value);
+            }}
+            css={PlusSelfStyle.labeledInputStyle}
+          />
+        </div>
         {/* 3. 여행 시간 */}
         <div>
           <div css={PlusSelfStyle.labelStyle}>시간</div>

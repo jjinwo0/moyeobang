@@ -1,10 +1,10 @@
 import type {InputHTMLAttributes} from 'react';
 import {css} from '@emotion/react';
 import 'react';
-import searchImg from './../../../../src/assets/Search.png';
+import searchImg from '@/assets/icons/Search.png';
 
 type LocationInputProps = InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
+  label?: string;
   onClick: () => void;
 };
 
@@ -53,7 +53,7 @@ export default function LocationInput({
 }: LocationInputProps) {
   return (
     <label css={locationInputWrapperStyle}>
-      {label}
+      {label && <span style={{height: '20px'}}>{label}</span>}
       <input type="text" {...props} css={locationInputStyle} />
       <img
         src={searchImg}

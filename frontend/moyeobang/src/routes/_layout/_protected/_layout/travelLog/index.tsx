@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
+import React, {HtmlHTMLAttributes, useState} from 'react';
 import {createFileRoute} from '@tanstack/react-router';
 import {css} from '@emotion/react';
 import {TravelLogProvider} from '@/contexts/TravelLog';
 import TravelLogList from '@/components/travelLog/travelLogList/TravelLogList';
 import Navbar from '@/components/common/navBar/Navbar';
 import PlusBtn from '@/components/common/btn/PlustBtn';
-import PlusSelf from '@/components/travelLog/PlusSelf';
+import PlusSelf from '@/components/travelLog/PlusSelf/PlusSelf';
+import ScheduleMapSearch from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearch';
 
 const travelLogMainLayout = css`
   background-color: aquamarine;
@@ -23,9 +24,21 @@ const plusStyle = css`
 
 const travelLogMain = () => {
   const [showPlusSelf, setShowPlusSelf] = useState<boolean>(false);
+  const [showMapSearch, setShowMapSearch] = useState<boolean>(false);
   const handleShowPlusSelf = () => {
     setShowPlusSelf(!showPlusSelf);
   };
+
+  // 지도 검색 모달
+  const [searchLocation, setSearchLocation] = useState<string | undefined>();
+  const handleShowMapSearch = () => {
+    setShowMapSearch(!showMapSearch);
+  };
+  const handleSearchLocation = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchLocation(e.target.value);
+    console.log(e.target.value);
+  };
+
   return (
     <>
       <div css={travelLogMainLayout}>
@@ -37,7 +50,21 @@ const travelLogMain = () => {
         </TravelLogProvider>
         <Navbar />
       </div>
-      {showPlusSelf && <PlusSelf handlePlusSelf={handleShowPlusSelf}></PlusSelf>}
+      {showPlusSelf && (
+        <PlusSelf
+          handleShowPlusSelf={handleShowPlusSelf}
+          handleShowMapSearch={handleShowMapSearch}
+          searchLocation={searchLocation}
+          handleSearchLocation={handleSearchLocation}
+        ></PlusSelf>
+      )}
+      {showMapSearch && (
+        <ScheduleMapSearch
+          handleShowMapSearch={handleShowMapSearch}
+          searchLocation={searchLocation}
+          handleSearchLocation={handleSearchLocation}
+        ></ScheduleMapSearch>
+      )}
     </>
   );
 };

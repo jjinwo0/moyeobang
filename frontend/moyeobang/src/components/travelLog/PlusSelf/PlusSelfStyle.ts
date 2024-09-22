@@ -97,3 +97,28 @@ export const btnLayout = css`
   justify-content: flex-end;
   width: 320px;
 `;
+
+export const inputContainerStyle = css`
+  width: 330px;
+  flex-direction: column;
+  display: flex;
+  font-size: 20px;
+  font-family: 'regular';
+`;
+
+export const labeledInputStyle = css`
+  width: 100%;
+  height: 50px;
+  border: 1px solid #1ec0ff;
+  border-radius: 50px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  margin-top: 10px;
+  font-size: 18px;
+
+  &::placeholder {
+    color: #b9b9b9 !important;
+    font-family: 'regular';
+    font-size: 18px;
+  }
+`;
