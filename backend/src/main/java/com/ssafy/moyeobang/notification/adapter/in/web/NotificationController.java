@@ -24,4 +24,21 @@ public class NotificationController {
         notificationUseCase.sendNotification(travelId, payload);
         return success(true);
     }
+
+    /**
+     * 회원 공금 입금 요구 API
+     * todo: AccessToken 발급 시, memberId PathVariable 삭제
+     * @param travelId
+     * @param memberId
+     * @param payload
+     * @return
+     */
+    @PostMapping("/api/travel/accounts/deposit/remind/{travelId}/{memberId}")
+    public ApiResult<?> remind(@PathVariable("travelId") Long travelId,
+                               @PathVariable("memberId") Long memberId,
+                               @RequestBody NotificationPayload payload) {
+
+        notificationUseCase.sendRemind(travelId, memberId, payload);
+        return success(true);
+    }
 }
