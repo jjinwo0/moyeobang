@@ -9,28 +9,21 @@ import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntit
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.common.util.SseUtils;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
-import com.ssafy.moyeobang.payment.adapter.in.server.request.OrderItemRequest;
 import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClientInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.member.MemberRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travel.TravelRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travelaccount.TravelAccountRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.withdraw.WithdrawRepositoryInPayment;
 import com.ssafy.moyeobang.support.IntegrationTestSupport;
-import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 
 public class OfflinePaymentIntegrationTest extends IntegrationTestSupport {
-
-    private static final Logger log = LoggerFactory.getLogger(OfflinePaymentIntegrationTest.class);
-
 
     @LocalServerPort
     private int port;
@@ -80,7 +73,7 @@ public class OfflinePaymentIntegrationTest extends IntegrationTestSupport {
         // When
         Thread sseThread = new Thread(() -> {
             String sseResponse = RestClientUtils.getSseEventStream(port,
-                    "/api/payment/connect?paymentRequestId=payment-123", 3000);
+                    "/api/payment/connect?paymentRequestId=payment-123");
             assertThat(sseResponse).contains("connected");
         });
 
@@ -97,8 +90,7 @@ public class OfflinePaymentIntegrationTest extends IntegrationTestSupport {
                 -122.4194,
                 10000L,
                 accountNumber,
-                "store-acc-002",
-                List.of(new OrderItemRequest("item1", 5000), new OrderItemRequest("item2", 5000))
+                "store-acc-002"
         );
 
         JsonNode paymentResponse = post(port, "/api/payment/confirm", paymentRequest);

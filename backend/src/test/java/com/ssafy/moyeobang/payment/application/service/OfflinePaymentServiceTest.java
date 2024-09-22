@@ -15,7 +15,6 @@ import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.SsePort;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -37,8 +36,7 @@ public class OfflinePaymentServiceTest {
                 "payment-123",
                 "account-123",
                 new Store("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
-                Money.of(10000L),
-                null
+                Money.of(10000L)
         );
 
         TravelAccount travelAccount = new TravelAccount("account-123", Money.of(20000L));
@@ -46,8 +44,7 @@ public class OfflinePaymentServiceTest {
         when(loadTravelAccountPort.loadTravelAccount(any(String.class)))
                 .thenReturn(travelAccount);
 
-        PaymentResult paymentResult = new PaymentResult(
-                1, 10000L, "1234 Address", "Sample Store", LocalDateTime.now());
+        PaymentResult paymentResult = new PaymentResult(1);
         when(processPaymentPort.processPayment(any(TravelAccount.class), any(Store.class), any(Money.class)))
                 .thenReturn(paymentResult);
 
@@ -67,8 +64,7 @@ public class OfflinePaymentServiceTest {
                 "payment-123",
                 "account-123",
                 new Store("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
-                Money.of(30000L),
-                null
+                Money.of(30000L)
         );
 
         TravelAccount travelAccount = new TravelAccount("account-123", Money.of(20000L));

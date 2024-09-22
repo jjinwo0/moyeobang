@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClientInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.member.MemberRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travel.TravelRepositoryInPayment;
@@ -121,9 +122,10 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
         );
 
         // then
-        assertThat(paymentResult.money()).isEqualTo(paymentRequestMoney.getAmount());
-        assertThat(paymentResult.paymentName()).isEqualTo(store.getStoreName());
-        assertThat(paymentResult.address()).isEqualTo(store.getStoreAddress());
+        WithdrawJpaEntity savedWithdraw = withdrawRepository.findById(paymentResult.transactionId())
+                .orElseThrow(() -> new AssertionError("Withdraw entity not found"));
+
+        assertThat(paymentResult.transactionId()).isEqualTo(savedWithdraw.getId());
     }
 
     private TravelAccountJpaEntity createTravelAccount(MemberJpaEntity member, TravelJpaEntity travel) {
