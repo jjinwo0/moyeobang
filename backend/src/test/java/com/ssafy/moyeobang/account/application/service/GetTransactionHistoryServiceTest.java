@@ -2,13 +2,11 @@ package com.ssafy.moyeobang.account.application.service;
 
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse;
-import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse.ParticipantInfo;
+import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoryResponse;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.travelaccount.Deposit;
@@ -22,20 +20,18 @@ import com.ssafy.moyeobang.account.application.domain.travelaccount.Withdrawal;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class GetTransactionHistoriesServiceTest {
+class GetTransactionHistoryServiceTest {
 
     private final LoadAccountPort loadAccountPort = mock(LoadAccountPort.class);
 
-    private final GetTransactionHistoriesService getTransactionHistoriesService =
-            new GetTransactionHistoriesService(loadAccountPort);
+    private final GetTransactionHistoryService getTransactionHistoryService = new GetTransactionHistoryService(loadAccountPort);
 
-    @DisplayName("모임 통장 계좌에서 계좌 이체 내역을 조회한다.")
+    @DisplayName("모임 통장에서 계좌 이체 내역을 상세 조회한다.")
     @Test
-    void getTransactionHistories() {
+    void getTransactionHistory() {
         //given
         Member member1 = createMember(1L, "김두열");
         Member member2 = createMember(2L, "김훈민");
@@ -59,32 +55,14 @@ class GetTransactionHistoriesServiceTest {
                 .willReturn(travelAccount);
 
         //when
-        List<GetTransactionHistoriesResponse> transactionHistories = getTransactionHistoriesService.getTransactionHistories(
-                1L,
-                Set.of(1L, 2L, 3L)
-        );
+        GetTransactionHistoryResponse transactionHistory = getTransactionHistoryService.getTransactionHistory(1L, 3L);
 
         //then
-        assertThat(transactionHistories).extracting(
-                "transactionId", "paymentName", "money", "transactionType", "currentBalance", "participants"
-        ).containsExactly(
-                tuple(1L, "김두열", 100000L, "입금", 100000L,
-                        Set.of(new ParticipantInfo(1L, "김두열", "https://profile-image.url"))
-                ),
-                tuple(2L, "스타벅스", 30000L, "출금", 70000L,
-                        Set.of(
-                                new ParticipantInfo(1L, "김두열", "https://profile-image.url"),
-                                new ParticipantInfo(2L, "김훈민", "https://profile-image.url"),
-                                new ParticipantInfo(3L, "박진우", "https://profile-image.url")
-                        )
-                ),
-                tuple(3L, "다복식당", 50000L, "출금", 20000L,
-                        Set.of(
-                                new ParticipantInfo(1L, "김두열", "https://profile-image.url"),
-                                new ParticipantInfo(2L, "김훈민", "https://profile-image.url")
-                        )
-                )
-        );
+        assertThat(transactionHistory)
+                .extracting("paymentName", "address", "totalPrice")
+                .containsExactly(
+                        "다복식당", "광주 광역시 수완동", 50000L
+                );
     }
 
     private Member createMember(Long id, String name) {

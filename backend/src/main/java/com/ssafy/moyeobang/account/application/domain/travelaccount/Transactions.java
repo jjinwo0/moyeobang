@@ -5,6 +5,7 @@ import static com.ssafy.moyeobang.account.application.domain.travelaccount.Trans
 
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,9 @@ public class Transactions {
         return transactions.stream()
                 .filter(transaction -> transaction.isRelatedTo(members))
                 .toList();
+    }
+
+    public List<Transaction> getTransactions() {
+        return Collections.unmodifiableList(transactions);
     }
 }

@@ -2,6 +2,7 @@ package com.ssafy.moyeobang.account.application.domain.travelaccount;
 
 import com.ssafy.moyeobang.account.application.domain.Money;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +26,13 @@ public class TravelAccount {
         return transactions.getTransactionsRelatedTo(
                 members.getMembers(memberIds)
         );
+    }
+
+    public Optional<Withdrawal> findTransactionBy(Long transactionId) {
+        return transactions.getTransactions().stream()
+                .filter(transaction -> transaction.getType().equals(TransactionType.WITHDRAWAL))
+                .filter(transaction -> transaction.getTransactionId().equals(transactionId))
+                .findFirst()
+                .map(Withdrawal.class::cast);
     }
 }
