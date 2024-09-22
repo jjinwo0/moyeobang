@@ -12,25 +12,12 @@ abstract class RestClientUtils {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static JsonNode get(int port, String uri) {
-        try {
-            String responseBody = restClient(port).get()
-                    .uri(uri)
-                    .retrieve()
-                    .body(String.class);
-
-            return MAPPER.readTree(responseBody);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String getSseEventStream(int port, String uri, long timeout) {
+    public static String getSseEventStream(int port, String uri) {
         return restClient(port).get()
                 .uri(uri)
-                .accept(MediaType.TEXT_EVENT_STREAM) // Accept header to support SSE
+                .accept(MediaType.TEXT_EVENT_STREAM)
                 .retrieve()
-                .body(String.class); // Return the raw event stream
+                .body(String.class);
     }
 
     public static JsonNode post(int port, String uri, Object request) {
