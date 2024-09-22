@@ -5,11 +5,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.util.List;
 import org.springframework.web.client.RestClient;
 
 abstract class RestClientUtils {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = objectMapper();
 
     public static JsonNode post(String uri, Object request) {
         try {
@@ -26,9 +28,30 @@ abstract class RestClientUtils {
         }
     }
 
+    public static void postWithoutResponse(String uri, Object request) {
+        restClient().post()
+                .uri(uri)
+                .contentType(APPLICATION_JSON)
+                .body(request)
+                .retrieve();
+    }
+
+    public static <T> List<T> postConvertResponseToList(String uri, Object request, Class<T> clazz) {
+        return MAPPER.convertValue(
+                post(uri, request).path("REC").path("list"),
+                MAPPER.getTypeFactory().constructCollectionType(List.class, clazz)
+        );
+    }
+
     private static RestClient restClient() {
         return RestClient.builder()
                 .baseUrl("https://finopenapi.ssafy.io/ssafy/api/v1/edu")
                 .build();
+    }
+
+    private static ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper;
     }
 }
