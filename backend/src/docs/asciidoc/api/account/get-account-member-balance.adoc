@@ -1,5 +1,5 @@
-[[get-account-balance]]
-=== 모임 통장 공금 잔액 조회
+[[get-account-member-balance]]
+=== 개인 별 모임 통장 잔액 조회
 
 ==== HTTP Request
 

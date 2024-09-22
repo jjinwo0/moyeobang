@@ -4,11 +4,16 @@ import com.ssafy.moyeobang.account.adapter.out.bank.BankApiClient;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.MemberAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositRepositoryInAccount;
-import com.ssafy.moyeobang.account.adapter.out.persistence.order.OrderQueryRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.order.OrderRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.withdraw.WithdrawRepositoryInAccount;
 import com.ssafy.moyeobang.account.application.domain.Account;
 import com.ssafy.moyeobang.account.application.domain.ActivityWindow;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Settles;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.Members;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.Transactions;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.SendMoneyPort;
@@ -17,6 +22,8 @@ import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -28,10 +35,14 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
 
     private final MemberAccountRepositoryInAccount memberAccountRepository;
     private final TravelAccountRepositoryInAccount travelAccountRepository;
-    private final OrderQueryRepositoryInAccount orderQueryRepository;
+    private final OrderRepositoryInAccount orderRepository;
 
     private final ActivityMapper activityMapper;
     private final SettleMapper settleMapper;
+
+    private final MemberRepositoryInAccount memberRepository;
+    private final AccountMapper accountMapper;
+    private final WithdrawRepositoryInAccount withdrawRepository;
 
     @Override
     public String createAccount(String memberKey) {
@@ -56,7 +67,7 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
         );
 
         Settles settles = settleMapper.mapToSettles(
-                orderQueryRepository.findBy(accountNumber)
+                orderRepository.findBy(accountNumber)
         );
 
         return Account.of(
@@ -64,6 +75,30 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
                 Money.of(balance),
                 activityWindow,
                 settles
+        );
+    }
+
+    public TravelAccount loadTravelAccount(Long accountId) {
+        TravelAccountJpaEntity travelAccount = travelAccountRepository.findById(accountId)
+                .orElseThrow(AccountNotFoundException::new);
+
+        Members members = accountMapper.mapToMembers(
+                memberRepository.findMembersBy(travelAccount.getTravelId())
+        );
+
+        List<DepositJpaEntity> depositHistories = depositRepository.findByTravelAccountId(travelAccount.getId());
+        List<WithdrawJpaEntity> withdrawalHistories = withdrawRepository.findByTravelAccountId(travelAccount.getId());
+
+        Transactions transactions = accountMapper.mapToTransactions(
+                depositHistories,
+                withdrawalHistories,
+                members
+        );
+
+        return new TravelAccount(
+                travelAccount.getAccountNumber(),
+                members,
+                transactions
         );
     }
 

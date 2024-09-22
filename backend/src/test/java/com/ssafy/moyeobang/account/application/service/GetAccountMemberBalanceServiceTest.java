@@ -121,16 +121,16 @@ class GetAccountMemberBalanceServiceTest {
     private Settles createSettles() {
         Settle settle1 = new Settle(
                 Map.of(
-                        1L, Money.of(30000),
-                        2L, Money.of(30000),
-                        3L, Money.of(20000)
+                        1L, 30000L,
+                        2L, 30000L,
+                        3L, 20000L
                 )
         );
 
         Settle settle2 = new Settle(
                 Map.of(
-                        1L, Money.of(30000),
-                        2L, Money.of(30000)
+                        1L, 30000L,
+                        2L, 30000L
                 )
         );
 

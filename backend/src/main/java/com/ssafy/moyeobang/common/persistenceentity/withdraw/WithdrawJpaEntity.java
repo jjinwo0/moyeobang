@@ -34,11 +34,15 @@ public class WithdrawJpaEntity extends BaseEntity {
 
     private String title;
 
-    private String address;
-
     private long amount;
 
+    private long balanceSnapshot;
+
     private String targetAccountNumber;
+
+    private double latitude;
+
+    private double longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_account_id")
@@ -48,15 +52,19 @@ public class WithdrawJpaEntity extends BaseEntity {
     private List<OrderJpaEntity> orderJpaEntities = new ArrayList<>();
 
     @Builder
-    public WithdrawJpaEntity(String title,
-                             String address,
-                             long amount,
-                             String targetAccountNumber,
-                             TravelAccountJpaEntity travelAccount) {
+    private WithdrawJpaEntity(String title,
+                              long amount,
+                              long balanceSnapshot,
+                              String targetAccountNumber,
+                              double latitude,
+                              double longitude,
+                              TravelAccountJpaEntity travelAccount) {
         this.title = title;
-        this.address = address;
         this.amount = amount;
+        this.balanceSnapshot = balanceSnapshot;
         this.targetAccountNumber = targetAccountNumber;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.travelAccount = travelAccount;
     }
 }

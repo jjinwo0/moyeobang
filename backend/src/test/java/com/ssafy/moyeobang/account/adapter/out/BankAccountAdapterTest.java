@@ -9,15 +9,19 @@ import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccount
 import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberOrderHistoryRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberTravelRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.order.OrderRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.travel.TravelRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.withdraw.WithdrawRepositoryInAccount;
 import com.ssafy.moyeobang.account.application.domain.Account;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
+import com.ssafy.moyeobang.account.application.domain.travelaccount.TravelAccount;
+import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberOrderHistoryJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
@@ -57,6 +61,9 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
     private MemberAccountRepositoryInAccount memberAccountRepository;
 
     @Autowired
+    private MemberTravelRepositoryInAccount memberTravelRepository;
+
+    @Autowired
     private DepositRepositoryInAccount depositRepository;
 
     @Autowired
@@ -70,6 +77,7 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
 
     @AfterEach
     void tearDown() {
+        memberTravelRepository.deleteAllInBatch();
         memberOrderHistoryRepository.deleteAllInBatch();
         orderRepository.deleteAllInBatch();
         withdrawRepository.deleteAllInBatch();
@@ -153,6 +161,53 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         assertThat(account.getWithdrawAmountFor(member)).isEqualTo(Money.of(24500));
     }
 
+    @DisplayName("싸피 뱅크 API를 활용하여 여행 모임 계좌 정보를 조회한다.")
+    @Test
+    void loadTravelAccount() {
+        //given
+        MemberJpaEntity member1 = createMember();
+        MemberJpaEntity member2 = createMember();
+        memberRepository.saveAll(List.of(member1, member2));
+
+        MemberAccountJpaEntity memberAccount1 = createMemberAccount("111", member1);
+        MemberAccountJpaEntity memberAccount2 = createMemberAccount("222", member2);
+        memberAccountRepository.saveAll(List.of(memberAccount1, memberAccount2));
+
+        TravelJpaEntity travel = createTravel();
+        travelRepository.save(travel);
+
+        MemberTravelJpaEntity memberTravel1 = createMemberTravel(travel, member1);
+        MemberTravelJpaEntity memberTravel2 = createMemberTravel(travel, member2);
+        memberTravelRepository.saveAll(List.of(memberTravel1, memberTravel2));
+
+        TravelAccountJpaEntity travelAccountJpaEntity = createTravelAccount(member1, travel);
+        travelAccountRepository.save(travelAccountJpaEntity);
+
+        DepositJpaEntity deposit = createDeposit(travelAccountJpaEntity, member1);
+        depositRepository.save(deposit);
+
+        WithdrawJpaEntity withdraw = createWithdraw(travelAccountJpaEntity);
+        withdrawRepository.save(withdraw);
+
+        OrderJpaEntity order1 = createOrder("스초생", 37000, withdraw);
+        OrderJpaEntity order2 = createOrder("아이스 아메리카노 2잔", 9000, withdraw);
+        orderRepository.saveAll(List.of(order1, order2));
+
+        MemberOrderHistoryJpaEntity history1 = createOrderHistory(20000, member1, order1);
+        MemberOrderHistoryJpaEntity history2 = createOrderHistory(17000, member2, order1);
+        MemberOrderHistoryJpaEntity history3 = createOrderHistory(4500, member1, order2);
+        MemberOrderHistoryJpaEntity history4 = createOrderHistory(4500, member2, order2);
+        memberOrderHistoryRepository.saveAll(List.of(history1, history2, history3, history4));
+
+        entityManager.clear();
+
+        //when
+        TravelAccount travelAccount = bankAccountAdapter.loadTravelAccount(travelAccountJpaEntity.getId());
+
+        //then
+        assertThat(travelAccount.getBalance()).isEqualTo(Money.of(54000));
+    }
+
     @DisplayName("싸피 뱅크 API를 활용하여 개인 계좌에서 여행 모임 계좌로 돈을 송금한다.")
     @Test
     void sendMoney() {
@@ -224,6 +279,22 @@ class BankAccountAdapterTest extends PersistenceAdapterTestSupport {
         return TravelAccountJpaEntity.builder()
                 .accountNumber(travelAccountNumber)
                 .travel(travel)
+                .build();
+    }
+
+    private MemberTravelJpaEntity createMemberTravel(TravelJpaEntity travel, MemberJpaEntity member1) {
+        return MemberTravelJpaEntity.builder()
+                .travel(travel)
+                .member(member1)
+                .build();
+    }
+
+    private DepositJpaEntity createDeposit(TravelAccountJpaEntity travelAccount, MemberJpaEntity member) {
+        return DepositJpaEntity.builder()
+                .amount(100000)
+                .balanceSnapshot(100000)
+                .travelAccount(travelAccount)
+                .member(member)
                 .build();
     }
 

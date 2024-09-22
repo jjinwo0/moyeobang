@@ -8,11 +8,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
-@Repository
 @RequiredArgsConstructor
-public class OrderQueryRepositoryInAccount {
+public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
