@@ -32,11 +32,12 @@ public class SettleService implements SettleUseCase {
         2. OrderHistory에 Member 정보와 Order 정보를 넣는다.
         3. MemberTravel의 개인 예산에 사용 금액을 update한다.
          */
+        int amount = (int) Math.floor(command.amount() / command.participants().size());
 
         Order order = createOrderPort.createOrder(
                 new OrderInfo(
                         command.title(),
-                        command.amount(), // 이미 계산해서 보내는 금액
+                        amount, // 서비스 로직에서 계산하는 것으로 수정
                         command.transactionId()
                 )
         );
