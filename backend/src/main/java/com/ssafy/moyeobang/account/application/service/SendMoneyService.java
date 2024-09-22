@@ -21,23 +21,6 @@ public class SendMoneyService implements SendMoneyUseCase {
     private final LoadAccountPort loadAccountPort;
     private final SendMoneyPort sendMoneyPort;
 
-//    @Override
-//    public void sendMoney(SendMoneyCommand command) {
-//        Member member = loadMemberPort.loadMember(command.memberId());
-//
-//        Account sourceAccount = loadAccountPort.loadAccount(member.getAccountNumber());
-//        Account targetAccount = loadAccountPort.loadAccount(command.targetAccountNumber());
-//
-//        sourceAccount.withdraw(targetAccount, command.money());
-//        targetAccount.deposit(sourceAccount, command.money());
-//
-//        sendMoneyPort.sendMoney(
-//                sourceAccount.getAccountNumber(),
-//                targetAccount.getAccountNumber(),
-//                command.money()
-//        );
-//    }
-
     @Override
     public void sendMoney(SendMoneyCommand command) {
         Member member = loadMemberPort.loadMember(command.memberId());

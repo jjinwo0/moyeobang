@@ -5,21 +5,23 @@ import com.ssafy.moyeobang.account.adapter.out.persistence.account.MemberAccount
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
-import com.ssafy.moyeobang.account.adapter.out.persistence.order.OrderRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.travel.TravelRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.withdraw.WithdrawRepositoryInAccount;
-import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.MemberAccount;
 import com.ssafy.moyeobang.account.application.domain.Members;
+import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Transactions;
 import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.SendMoneyPort;
 import com.ssafy.moyeobang.account.error.AccountNotFoundException;
+import com.ssafy.moyeobang.account.error.TravelNotFoundException;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,24 +30,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, SendMoneyPort {
 
+    private final AccountMapper accountMapper;
     private final BankApiClient bankApiClient;
-    private final DepositRepositoryInAccount depositRepository;
+
+    private final MemberRepositoryInAccount memberRepository;
+    private final TravelRepositoryInAccount travelRepository;
 
     private final MemberAccountRepositoryInAccount memberAccountRepository;
     private final TravelAccountRepositoryInAccount travelAccountRepository;
-    private final OrderRepositoryInAccount orderRepository;
 
-    private final MemberRepositoryInAccount memberRepository;
-    private final AccountMapper accountMapper;
+    private final DepositRepositoryInAccount depositRepository;
     private final WithdrawRepositoryInAccount withdrawRepository;
 
     @Override
-    public String createAccount(String memberKey) {
-        String accountNumber = bankApiClient.createAccount(memberKey);
+    public String createAccount(Long travelId) {
+        String travelKey = bankApiClient.createTravelKey();
 
-        TravelAccountJpaEntity account = TravelAccountJpaEntity.builder()
-                .accountNumber(accountNumber)
-                .build();
+        String accountNumber = bankApiClient.createAccount(travelKey);
+
+        TravelJpaEntity travel = getTravel(travelId);
+        travel.setTravelKey(travelKey);
+
+        TravelAccountJpaEntity account = createTravelAccount(accountNumber, travel);
 
         travelAccountRepository.save(account);
 
@@ -54,7 +60,9 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
 
     @Override
     public MemberAccount loadMemberAccount(String accountNumber) {
-        Long balance = bankApiClient.getBalance(accountNumber);
+        MemberAccountJpaEntity memberAccount = getMemberAccount(accountNumber);
+
+        Long balance = bankApiClient.getBalance(memberAccount.getMember().getMemberKey(), accountNumber);
 
         return new MemberAccount(
                 accountNumber,
@@ -96,10 +104,28 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
         depositRepository.save(deposit);
 
         bankApiClient.sendMoney(
+                memberAccount.getMember().getMemberKey(),
                 travelAccount.getAccountNumber(),
                 memberAccount.getAccountNumber(),
                 money.getAmount()
         );
+    }
+
+    private TravelAccountJpaEntity createTravelAccount(String accountNumber, TravelJpaEntity travel) {
+        return TravelAccountJpaEntity.builder()
+                .accountNumber(accountNumber)
+                .travel(travel)
+                .build();
+    }
+
+    private DepositJpaEntity createDeposit(TravelAccountJpaEntity travelAccount,
+                                           MemberAccountJpaEntity memberAccount,
+                                           Money money) {
+        return DepositJpaEntity.builder()
+                .amount(money.getAmount())
+                .travelAccount(travelAccount)
+                .member(memberAccount.getMember())
+                .build();
     }
 
     private MemberAccountJpaEntity getMemberAccount(String accountNumber) {
@@ -112,13 +138,8 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
                 .orElseThrow(AccountNotFoundException::new);
     }
 
-    private DepositJpaEntity createDeposit(TravelAccountJpaEntity travelAccount,
-                                           MemberAccountJpaEntity memberAccount,
-                                           Money money) {
-        return DepositJpaEntity.builder()
-                .amount(money.getAmount())
-                .travelAccount(travelAccount)
-                .member(memberAccount.getMember())
-                .build();
+    private TravelJpaEntity getTravel(Long travelId) {
+        return travelRepository.findById(travelId)
+                .orElseThrow(TravelNotFoundException::new);
     }
 }

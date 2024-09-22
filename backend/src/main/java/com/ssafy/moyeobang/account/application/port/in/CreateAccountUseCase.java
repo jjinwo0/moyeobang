@@ -4,5 +4,5 @@ import com.ssafy.moyeobang.account.adapter.in.web.response.CreateAccountResponse
 
 public interface CreateAccountUseCase {
 
-    CreateAccountResponse createAccount(Long memberId);
+    CreateAccountResponse createAccount(Long travelId);
 }

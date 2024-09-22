@@ -36,7 +36,7 @@ class CreateAccountServiceTest {
                                 "0016174648358792")
                 );
 
-        given(createAccountPort.createAccount(any(String.class)))
+        given(createAccountPort.createAccount(any(Long.class)))
                 .willReturn("0016174648358792");
 
         //when
