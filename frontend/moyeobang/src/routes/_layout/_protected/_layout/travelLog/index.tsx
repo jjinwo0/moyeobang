@@ -63,6 +63,7 @@ const travelLogMain = () => {
           handleShowMapSearch={handleShowMapSearch}
           searchLocation={searchLocation}
           handleSearchLocation={handleSearchLocation}
+          setSearchLocation={setSearchLocation}
         ></ScheduleMapSearch>
       )}
     </>

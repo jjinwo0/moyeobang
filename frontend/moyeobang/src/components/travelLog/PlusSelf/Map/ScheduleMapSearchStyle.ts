@@ -54,7 +54,6 @@ export const searchImgStyle = css`
 export const MapLayout = css`
   width: 390px;
   height: 100vh;
-  background-color: aquamarine;
   position: fixed;
   top: 0;
   left: 0;
