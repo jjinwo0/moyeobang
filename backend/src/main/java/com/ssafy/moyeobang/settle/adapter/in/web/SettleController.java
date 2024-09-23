@@ -29,12 +29,12 @@ public class SettleController {
                                      @RequestBody SettleRequest request) {
 
         // todo: 리턴값 고정하고 값이 없을 때 errorResponse를 할 것인가?
-        return success(request.orderItems().stream()
+        return success(request.details().stream()
                 .allMatch(item -> settleUseCase.balanceSettle(
                         new SettleCommand(
                                 transactionId,
-                                item.title(),
-                                item.amount(),
+                                item.orderItemTitle(),
+                                item.orderItemPrice(),
                                 item.participants()
                         ))
                 )
@@ -45,11 +45,11 @@ public class SettleController {
     public ApiResult<Boolean> customSettle(@PathVariable("transactionId") Long transactionId,
                                            @RequestBody CustomSettleRequest request) {
 
-        return success(request.customSettleInfos().stream()
+        return success(request.info().stream()
                 .allMatch(info -> settleUseCase.customBalanceSettle(
                         new CustomSettleCommand(
                                 transactionId,
-                                request.title(),
+                                request.paymentName(),
                                 info.amount(),
                                 info.memberId()
                         )
