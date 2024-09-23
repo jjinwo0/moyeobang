@@ -28,18 +28,28 @@ class SettleControllerTest extends WebAdapterTestSupport {
     void setup() {
 
         request = new SettleRequest(
+                20000,
+                "2024-02-01JAWFE",
+                "스타벅스",
+                "서울특별시 구로구 중앙로 1길 10",
+                "123456789",
                 List.of(
                         new OrderRequest(
                                 "testOrder1",
+                                1L,
+                                3,
                                 12000,
                                 List.of(1L, 2L, 3L)
                         ),
                         new OrderRequest(
                                 "testOrder2",
+                                2L,
+                                4,
                                 8000,
                                 List.of(1L, 2L, 3L, 4L)
                         )
-                )
+                ),
+                "testMethod"
         );
     }
 
@@ -49,7 +59,7 @@ class SettleControllerTest extends WebAdapterTestSupport {
 
         when(settleUseCase.balanceSettle(any(SettleCommand.class))).thenReturn(true);
 
-        mockMvc.perform(post("/api/travel/accounts/{accountId}/transactions/{transactionId}/settle",
+        mockMvc.perform(post("/api/travel/accounts/transactions/{transactionId}/settle",
                         1L,
                         100L)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,9 +71,9 @@ class SettleControllerTest extends WebAdapterTestSupport {
     @DisplayName("요청 값을 누락한 상황 예외 처리 테스트")
     void 요청_데이터_누락() throws Exception {
 
-        request = new SettleRequest(null);
+        request = new SettleRequest(0, null, null, null, null, null, null);
 
-        mockMvc.perform(post("/api/travel/accounts/{accountId}/transactions/{transactionId}/settle",
+        mockMvc.perform(post("/api/travel/accounts/transactions/{transactionId}/settle",
                         1L,
                         100L)
                         .contentType(MediaType.APPLICATION_JSON)
