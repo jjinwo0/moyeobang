@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -23,8 +24,22 @@ public class SecurityConfig {
                 .headers(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // RESTful API를 위한 STATELESS
+                )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/**").permitAll()
+                )
+                .oauth2Login(
+                        auth -> auth.loginPage("/login")
+                                .authorizationEndpoint(
+                                        endpoint -> endpoint
+                                                .baseUri("/oauth2/authorization")
+                                )
+                                .userInfoEndpoint(
+                                        endpoint -> endpoint.userService())
                 )
                 .build();
     }
