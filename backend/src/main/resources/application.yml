@@ -59,7 +59,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: develop
+      on-profile: deploy
 
   datasource:
     url: jdbc:mysql://j11c102.p.ssafy.io:3306/moyeobang?serverTimezone=UTC&characterEncoding=UTF-8
