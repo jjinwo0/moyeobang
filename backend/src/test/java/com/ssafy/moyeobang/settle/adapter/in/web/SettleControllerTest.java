@@ -59,7 +59,7 @@ class SettleControllerTest extends WebAdapterTestSupport {
 
         when(settleUseCase.balanceSettle(any(SettleCommand.class))).thenReturn(true);
 
-        mockMvc.perform(post("/api/travel/accounts/{accountId}/transactions/{transactionId}/settle",
+        mockMvc.perform(post("/api/travel/accounts/transactions/{transactionId}/settle",
                         1L,
                         100L)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +73,7 @@ class SettleControllerTest extends WebAdapterTestSupport {
 
         request = new SettleRequest(0, null, null, null, null, null, null);
 
-        mockMvc.perform(post("/api/travel/accounts/{accountId}/transactions/{transactionId}/settle",
+        mockMvc.perform(post("/api/travel/accounts/transactions/{transactionId}/settle",
                         1L,
                         100L)
                         .contentType(MediaType.APPLICATION_JSON)
