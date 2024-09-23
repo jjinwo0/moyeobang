@@ -4,11 +4,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,19 +43,14 @@ public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
                 .willReturn(response);
 
         mockMvc.perform(
-                        get("/api/accounts/{accountId}/balance/member", 1L)
+                        get("/api/accounts/{accountId}/balance/member/{memberId}", 1L, 1L)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("get-account-member-balance",
-                                preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
-                                requestFields(
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER)
-                                                .description("멤버 id")
-                                ),
                                 responseFields(
                                         fieldWithPath("status").type(JsonFieldType.STRING)
                                                 .description("API 성공 여부"),
