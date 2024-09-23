@@ -931,6 +931,11 @@ const PlusSelfGoogleMap = forwardRef(
 
                 if (location) {
                   bounds.extend(location); // 각 검색된 장소의 위치를 경계에 추가
+                  console.log('[*] viewport', viewport);
+                  console.log('[*] location', location);
+
+                  console.log('[*] bounds', bounds);
+
                   return {
                     position: location,
                     title: result.name, // 장소 이름을 타이틀로 설정
