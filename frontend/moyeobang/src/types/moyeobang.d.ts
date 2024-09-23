@@ -1,8 +1,8 @@
 type ProfileImage = string;
 type TransactionId = number;
 type MemberId = number;
-type Nickname = string;
-type CreatedAt = Date;
+type MemberName = string;
+type CreatedAt = string;
 type TravelId = number;
 type TravelName = string;
 type TravelPlaceList = Place[];
@@ -42,7 +42,7 @@ type InvitationLink = string;
 
 interface ParticipantInfo {
   memberId: MemberId;
-  nickname: Nickname;
+  memberName: MemberName;
   profileImage: ProfileImage;
 }
 
@@ -60,15 +60,16 @@ interface Travel {
 }
 
 type MemberId = number;
-type Nickname = string;
+type MemberName = string;
 type ProfileImage = string;
 type TransactionId = number;
 type WithdrawId = number;
 type CreatedAt = string;
-type TransactionType = "입금" | "출금";
+type TransactionType = string;
 type CurrentBalance = number; // 현재 잔액
 type Adress = string;
-type SplitMethod = "receipt" | "custom";
+type SplitMethod = string;
+// type SplitMethod = "receipt" | "custom";
 type OrderItemId = number;
 type OrderItemTitle = string;
 type OrderItemQuantity = number;
@@ -85,7 +86,7 @@ type AccountId = number;
 
 interface ParticipantInfo {
     memberId: MemberId;
-    nickname: Nickname;
+    memberName: Nickname;
     profileImage: ProfileImage;
   }
 
@@ -97,7 +98,7 @@ interface OrderItems {
   }
 
 // 모임 통장 공금 잔액 조회
-interface GroupAccountBalance {
+interface AccountBalanceByGroup {
   currentBalance: CurrentBalance;
   totalMoney: TotalMoney;
   totalComsumption: TotalComsumption;
@@ -105,10 +106,10 @@ interface GroupAccountBalance {
 }
 
 // 모임 통장 개인 잔액 조회
-interface PersonalAccountBalance {
+interface AccountBalanceBymemberId {
   participant: ParticipantInfo;
   personalCurrentBalance: PersonalCurrentBalance;
-  personalCurrentMoney: TotalMoney;
+  personalTotalMoney: TotalMoney;
   personalTotalConsumption: TotalComsumption;
   personalUsagePercentage: PersonalUsagePercentage;
   needsAdditionalDeposit?: NeedsAdditionalDeposit;
@@ -121,8 +122,8 @@ interface TransactionList {
     money : Money;
     participants : ParticipantInfo[];   // 정산한 사람들(default)
     transactionType : TransactionType;
-    currentBalance : CurrentBalance;
     createdAt : CreatedAt;
+    currentBalance : CurrentBalance;
 }
 
 // 상세 조회 영수증 정산 'receipt'의 details
@@ -176,6 +177,18 @@ interface CompleteTransaction {
     createdAt:CreatedAt;
 }
 
+interface Info {
+  memberId:MemberId;
+  money:Money;
+}
+
+interface PostTransactionDetailByCustom {
+    paymentName:PaymentName;
+    money:Money;
+    info:Info[];
+    splitMethod:SplitMethod;
+}
+
 interface ChatItem {
   item_name:string,
   quantity:number,
@@ -187,10 +200,18 @@ interface ChatJsonProps {
   items : ChatItem[]
 }
 
+interface QrData {
+    paymentRequestId: string; // 고유번호 uuidv4()
+    sourceAccountNumber: string; // 결제 계좌번호
+}
+
 interface PosPay {
-  money:Money;
-  adress:Adress;
-  paymentName:PaymentName;
+  placeId: number;
+  placeName:string;
+  placeAdress:Adress;
+  latitude: Latitude;
+  longitude:Longitude;
+  targetAccountNumber: string;
 }
 
 interface PosOderItem {
@@ -201,34 +222,28 @@ interface PosOderItem {
 
 interface PaymentProps {
   paymentRequestId : string;
-  sourceAccountNumber: string;
+  sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
   placeId: string;
   placeName:string;
   placeAdress:string;
   latitude: number;
-  logitude:number;
+  longitude:number;
   targetAccountNumber: string;
-  OrderItems : OrderItems[];
+  // OrderItems : OrderItems[];  // 없앰
 }
+
+interface ErrorResponse {
+  status: number;
+  code: string | null;  // '미정'
+  message: string;
+}
+
   // api 요청
 interface MoyeobangResponse<T> {
-    isSuccess: boolean;
-    code: number;
-    message: string;
+    status: string;
     data: T;
-    errors: string[];
-  }
-  
-
-type getGroupAccountStateResponse = MoyeobangResponse<GroupAccountBalance>;
-type getAccountStateByMembeerIdResponse = MoyeobangResponse<PersonalAccountBalance>;
-type GetTransactionListByAccountIdByMemberId = MoyeobangResponse<TransactionList[]>;
-type GetTransactionDetailByAccountId = MoyeobangResponse<TransactionDetailProps>;
-type PostTransactionDetailByCustomResponse = MoyeobangResponse<TransactionDetailByCustom>;
-type PutTransactionDetailByCustomResponse = MoyeobangResponse<TransactionDetailByCustom>;
-type PostTransactionDetailByReceiptResponse = MoyeobangResponse<TransactionDetailByReceipt>;
-type PutTransactionDetailByReceiptResponse = MoyeobangResponse<TransactionDetailByReceipt>;
-
+    error: ErrorResponse | null;
+}
 
 interface TravelLocation {
   latitude: Latitude;

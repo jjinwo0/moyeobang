@@ -3,6 +3,8 @@ import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
 import Btn from "../common/btn/Btn";
+import ResultByPos from "./ResultByPos";
+import HeaderWithXButton from "../common/Header/HeaderWithXbutton";
 
 const qrReaderLayoutStyle = css`
     width: 100%;
@@ -11,6 +13,7 @@ const qrReaderLayoutStyle = css`
     flex-direction:column;
     align-items:center;
     background-color:${colors.white};
+
     /* position : absolute; */
     z-index:9999;
     top:0;
@@ -29,18 +32,13 @@ const qrBoxStyle = css`
     border-radius: 15px;
     position: absolute;
     top: 25%;
-    left: 12% !important;
+    left: 9% !important;
 `;
 
 const resultStyle = css`
   font-family:'semibold';
   text-align: center;
   font-size: 20px;
-`;
-
-const smallText = css`
-    font-family: 'regular';
-    font-size:15px;
 `;
 
 const bigText = css`
@@ -62,24 +60,39 @@ const textBoxStyle= css`
     gap:20px;
 `;
 
-interface QrScanProps {
+interface QrScanByPosProps {
     onClose : () => void;
-    data : PosPay;
+    paymentData : PosPay;
 }
 
-export default function QrScanByPos({onClose, data} : QrScanProps) {
+export default function QrScanByPos({onClose, paymentData } : QrScanByPosProps) {
     
     const scanner = useRef<QrScanner>();
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
+    const [ resultData, setResultData ] = useState< PaymentProps| null>(null);
+    const [openResultModal, setOpenResultModal] = useState<boolean>(false);
 
     // 결과 
-    const [scannedResult, setScannedResult] = useState<string | undefined>("");
+    const [scannedResult, setScannedResult] = useState<QrData | null>();
 
     // 성공
     function onScanSuccuess( result : QrScanner.ScanResult ) {
-        setScannedResult(result?.data)
+
+        try {
+            const data = JSON.parse(result.data);
+            setScannedResult(data);
+            console.log('파싱된 QR 데이터', data)
+
+            // 결제 데이터 합치기
+            const payData : PaymentProps= {...data, ...paymentData}
+            setResultData(payData) // 결제 전체 데이터
+            setOpenResultModal(true) // 결제 모달 열기
+
+        } catch (error) {
+            console.log(error)
+        }
         // 받은 계좌, uuid정보 ! data넣어서 백에 보내기!!
     }
 
@@ -129,20 +142,9 @@ export default function QrScanByPos({onClose, data} : QrScanProps) {
         }
     }, [qrOn])
 
-    // 결제완료 => 모달 닫기
-    function handleClose() {
-        setScannedResult('');
-        onClose();
-    }
-
-    // 결제완료 => 정산하기
-    function handleSettle() {
-
-        handleClose()
-    }
-
     return (
         <div css={qrReaderLayoutStyle}>
+            <HeaderWithXButton onXClick={onClose}/>
             { !scannedResult && 
                 <>
                 <video ref={videoElement} ></video>
@@ -151,18 +153,15 @@ export default function QrScanByPos({onClose, data} : QrScanProps) {
                 ref={qrBoxElement}>
                 </div>
                 <div css={textBoxStyle}>
-                <div css={smallText}>오프라인 결제 • 해외결제 • 싸피페이</div>
                 <div css={bigText}><span css={english}>QR</span>코드를 스캔하세요</div>
                 </div>
                 </>
             }
-                { scannedResult && (
+                { openResultModal && resultData &&(
                     <p css={resultStyle}>
-                        스캔 결과 : {scannedResult}
-                        데이터 : {data.adress} {data.money} {data.paymentName}
+                       <ResultByPos {...resultData} />
                     </p>
                 )}
-                <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSettle}>결제</Btn>
         </div>
     ) 
 }     

@@ -7,9 +7,9 @@ import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
 import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
-import { profileData, transactionsData } from "@/data/data";
+import { profileData, transactions } from "@/data/data";
 import moyeobang from '@/services/moyeobang';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
@@ -62,15 +62,37 @@ const transactionListStyle = css`
 const accountId = 1;
 export default function groupAccount() {
 
+  const allList = profileData.map((member) => member.memberId)
   type SelectedMember = MemberId | MemberId[]; 
-  const [ selectedMember , setSelectedMember ] = useState<SelectedMember | null>(null) // default 전체임
+  const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
 
-  const {data} = useSuspenseQuery({
-    queryKey: ['transactionList', accountId],
-    queryFn: () => moyeobang.getTransactionList(Number(accountId)),
-  });
+  // const {transactionData} = useSuspenseQuery({
+  //   queryKey: ['transactionList', accountId],
+  //   queryFn: () => moyeobang.getTransactionList(Number(accountId)),
+  // });
 
-  const transactionData = data.data.data;
+  // get 모임 통장 전체 잔액 
+  // const { accountDataByGroup } = useQuery({
+  //   queryKey: ['accoutByGroup', accountId],
+  //   queryFn: () => moyeobang.getAccountState(accountId),
+  //   enabled: Array.isArray(selectedMember) // 전체
+  // });
+
+  // get 모임 통장 개인별 잔액
+  // const { accountDataByMember } = useQuery({
+  //   queryKey: ['accountByMemberId', accountId, selectedMember],
+  //   queryFn: () => {
+  //     if (!Array.isArray(selectedMember)) {
+  //       return moyeobang.getAccountStateBymemberId(accountId, selectedMember)
+  //     }
+  //   },
+  //   enabled: !Array.isArray(selectedMember) // 개인별
+  // });
+
+  //  const accountData = Array.isArray(selectedMember) ? accountDataByGroup?.data.data : accountDataByMember?.data.data;
+
+  // const transactionData = transactionData.data.data;
+  const transactionListData = transactions;
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
@@ -88,27 +110,39 @@ export default function groupAccount() {
     <div css={layoutStyle}>
         <div css={profileListStyle} >
         <AllImage
-        isSelected={null===selectedMember}
+        isSelected={Array.isArray(selectedMember)}
         onClick={() => onMemberClick(null)}
         />
         { profileData.map((profile, index) => (
             <ProfileImage 
             key={index} 
             {...profile} 
-            isSelected={profile.memberId === selectedMember } 
+            isSelected={Array.isArray(selectedMember) ? false : profile.memberId === selectedMember } 
             onClick={() => onMemberClick(profile.memberId)} />
         ))}
         </div>
         <div css={accountCardStyle} >
-            <AccountCard />
+          {Array.isArray(selectedMember) ? 
+            // <AccountCard 
+            // currentBalance={accountData.currentBalance}
+            // travelAccountNumber={'333333-12-8912312'}
+            // travelName={'아기돼지 오형제'}
+            // /> 
+            <div>전체{selectedMember}</div>
+            :
+            // <AccountCard 
+            // currentBalance={accountData.currentBalance}
+            // travelAccountNumber={'333333-12-8912312'}
+            // travelName={'아기돼지 오형제'}
+            // memberName={accountData.participant.memberkName}
+            // />
+            <div>개인{selectedMember}</div>
+          }
         </div>
         <div css={transactionListStyle}>
-            {transactionData.map((tran, index) => 
+            {transactionListData.map((tran, index) => 
                 <TransactionCard key={index} {...tran} />
             )}
-        </div>
-        <div>
-            {selectedMember}
         </div>
     </div>
     <Navbar/>

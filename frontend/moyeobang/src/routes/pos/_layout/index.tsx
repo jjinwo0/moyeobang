@@ -2,9 +2,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import React, { useState } from 'react'
 import { css } from '@emotion/react';
 import Btn from '@/components/common/btn/Btn';
-import { locale } from 'dayjs';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import QrScanByPos from '@/components/QrByPos/QrScanByPos';
 
 const Items = [
@@ -38,15 +35,14 @@ const layoutStyle =css`
   display:flex;
   flex-direction:column;
   align-items: center;
-  gap:10px;
   justify-content:center;
   padding: 0 10px;
 
   input {
     width:300px;
-    height:50px;
+    height:30px;
     border-radius:15px;
-    font-size: 20px;
+    font-size: 16px;
     padding: 0 15px;
   }
 
@@ -77,31 +73,68 @@ const buttonLayoutStyle=css`
 
 // createdAt, uuid(paymentRequestId), paymentName, adress, money 필요
 export default function Pos() {
-  const [paymentName, setPaymentName] = useState<PaymentName>('');
-  const [money, setMoney] = useState<Money>(0);
-  const [adress, setAdress]= useState<Adress>('');
+  const [placeId, setPlaceId] = useState<number | undefined>();
+  const [placeName, setPlaceName] = useState<PaymentName>('');
+  const [amount, setAmount] = useState<Money>();
+  const [placeAdress, setPlaceAdress]= useState<Adress>('');
+  const [latitude, setLatitude]= useState<number | undefined>();
+  const [longitude, setLongitude]= useState<number | undefined>();
+  const [targetAccountNumber, setTargetAccountNumber]= useState<string>("");
+
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({}); // 각 상품의 수량을 저장
   const [isOpenQrModal, setIsOpenQrModal] = useState<boolean>(false);
   const [ data, setData ] = useState<PosPay>();
 
-  function handlePaymentName(e: React.ChangeEvent<HTMLInputElement>) {
-    setPaymentName(e.target.value)
-  }
-
-  function handleAdress(e: React.ChangeEvent<HTMLInputElement>) {
-    setAdress(e.target.value)
-  }
-
-  function handleMoney(e: React.ChangeEvent<HTMLInputElement>) {
+  function handlePlaceId(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.value === '') {
-      setMoney(0);
+      setPlaceId(undefined)
     }
-
-    const newMoney = parseFloat(e.target.value); // 숫자로변환
-
-    if ( !isNaN(newMoney) ) {
-      setMoney(newMoney)
+    const newId= parseInt(e.target.value); // 숫자로변환
+    if ( !isNaN(newId) ) {
+      setPlaceId(newId)
     }
+  }
+
+  function handlePlaceName(e: React.ChangeEvent<HTMLInputElement>) {
+    setPlaceName(e.target.value)
+  }
+
+  function handlePlaceAdress(e: React.ChangeEvent<HTMLInputElement>) {
+    setPlaceAdress(e.target.value)
+  }
+
+  function handleAmount(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.value === '') {
+      setAmount(undefined)
+    }
+    const newAmount = parseInt(e.target.value); // 숫자로변환
+    if ( !isNaN(newAmount) ) {
+      setAmount(newAmount)
+    }
+  }
+
+  function handleLatitude(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.value === '') {
+      setLatitude(undefined)
+    }
+    const newLatitude = parseFloat(e.target.value); // 숫자로변환
+    if ( !isNaN(newLatitude) ) {
+      setLatitude(newLatitude)
+    }
+  }
+
+  function handleLongitude(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.value === '') {
+      setLongitude(undefined)
+    }
+    const newLongitude = parseFloat(e.target.value); // 숫자로변환
+    if ( !isNaN(newLongitude) ) {
+      setLongitude(newLongitude)
+    }
+  }
+
+  function handleTargetAccountNumber(e: React.ChangeEvent<HTMLInputElement>) {
+    setTargetAccountNumber(e.target.value);
   }
 
   // 수량 증가
@@ -110,7 +143,7 @@ export default function Pos() {
 
     setQuantities((prevQuantities) => {
       const newQuantity = (prevQuantities[itemId] || 0) + 1;
-      setMoney((prevMoney) => prevMoney + itemPrice); 
+      setAmount((prevAmount) => prevAmount ? prevAmount + itemPrice : itemPrice); 
       return {
         ...prevQuantities,
         [itemId]: newQuantity,
@@ -127,7 +160,7 @@ export default function Pos() {
       const newQuantity = currentQuantity>=1 ? (currentQuantity - 1 ): 0;
 
       if (currentQuantity > 0) {
-        setMoney((prevMoney) => prevMoney - itemPrice); 
+        setAmount((prevAmount) => prevAmount ? prevAmount - itemPrice : 0); 
       }
 
       return {
@@ -139,13 +172,20 @@ export default function Pos() {
 
   // 정산하기
   function handleSettle() {
-    const data : PosPay = {
-      paymentName:paymentName,
-      adress:adress,
-      money:money,
+
+    if (placeId && latitude && longitude) {
+
+      const data : PosPay = {
+        placeId,
+        placeName,
+        placeAdress,
+        latitude,
+        longitude,
+        targetAccountNumber,
+      }
+      setData(data)
+      setIsOpenQrModal(true);
     }
-    setData(data)
-    setIsOpenQrModal(true);
   }
 
   function handleQrClose() {
@@ -154,22 +194,38 @@ export default function Pos() {
 
   return (
     <div css={layoutStyle}>
-  {isOpenQrModal ? (
-     <QrScanByPos onClose={handleQrClose} data={data}/>
-  ) : (
+      {isOpenQrModal && data ? (
+        <QrScanByPos onClose={handleQrClose} paymentData={data} /> ) : (
     <>
       <div>
-        <p>가게명(paymentName | placeName)</p>
-        <input type="text" value={paymentName} onChange={handlePaymentName} />
+        <p>가맹점 id (placeId)</p>
+        <input type="number" value={placeId !== undefined ? placeId : ''} onChange={handlePlaceId} />
       </div>
       <div>
-        <p>주소(Address | placeAdress)</p>
-        <input type="text" value={adress} onChange={handleAdress} />
+        <p>가맹점 이름 (placeName)</p>
+        <input type="text" value={placeName} onChange={handlePlaceName} />
+      </div>
+      <div>
+        <p>가맹점 주소(placeAdress)</p>
+        <input type="text" value={placeAdress} onChange={handlePlaceAdress} />
+      </div>
+      <div>
+        <p>가맹점 계좌번호(targetAccountNumber)</p>
+        <input type="text" value={targetAccountNumber} onChange={handleTargetAccountNumber} />
+      </div>
+      <div>
+        <p>위도(latitude)</p>
+        <input type="number" value={latitude} onChange={handleLatitude} step="0.000001"/>
+      </div>
+      <div>
+        <p>경도(longitude)</p>
+        <input type="number" value={longitude} onChange={handleLongitude} step="0.000001"/>
       </div>
       <div>
         <p>총금액(Money)</p>
-        <input type="text" value={money} onChange={handleMoney} />
+        <input type="number" value={amount} onChange={handleAmount} />
       </div>
+
 
       {Items.map((item) => (
         <div key={item.orderItemId} css={boxStyle}>

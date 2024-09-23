@@ -4,17 +4,13 @@ import { css } from '@emotion/react'
 import { useNavigate } from '@tanstack/react-router'
 import TransactionDetailDefaultCard from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import Btn from '@/components/common/btn/Btn'
-import { detailDataByCustomAfterSettle, detailDataByReceiptAfterSettle } from '@/data/data'
+import { detailsByCustom, detailsByReceipt} from '@/data/data'
 import { colors } from '@/styles/colors'
 import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
 import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import moyeobang from '@/services/moyeobang'
-
-// const dataByCustomAfterSettle = detailDataByCustomAfterSettle;
-// const dataByEqualAfterSettle = detailDataByEqualAfterSettle;
-// const dataByEqualBeforeSettle = detailDataByEqualBeforeSettle;
-const data = detailDataByCustomAfterSettle;
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -25,7 +21,8 @@ const layoutStyle = css`
   height:100%;
 `;
 
-const buttonLayoutStyle=css`
+const LinkStyle = css`
+  text-decoration: none;
   position:fixed;
   bottom:30px;
 `;
@@ -46,7 +43,7 @@ const listStyle=css`
   display:flex;
   flex-direction:column;
   overflow-y:auto;
-  height:370px;
+  height:450px;
   padding: 0 5px;
 
   ::-webkit-scrollbar {
@@ -64,23 +61,13 @@ export default function TransactionDetail() {
   const { transactionId } = Route.useParams()
   const navigate = useNavigate({from:'/account/$transactionId/detail'});
 
-  const {data} = useSuspenseQuery({
-    queryKey: ['transactionDetail', accountId, transactionId],
-    queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
-  });
+  // const {data} = useSuspenseQuery({
+  //   queryKey: ['transactionDetail', accountId, transactionId],
+  //   queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
+  // });
 
-  const transactionDetailData = data.data.data;
-
-  function handleUpdate() {
-    // 영수증 정산일때
-    if ( transactionDetailData.splitMethod === "receipt") {
-      navigate({to: `/account/${transactionId}/resultByReceipt`})
-
-    } else {
-      // 직접 정산일때
-      navigate({to: `/account/${transactionId}/settle`, state: {active: 'right'} as any})
-    }
-  }
+  // const transactionDetailData = data.data.data;
+  const transactionDetailData = detailsByReceipt;
 
   // 타입 가드 함수
   function isSettledParticipantByCustom(
@@ -109,6 +96,9 @@ export default function TransactionDetail() {
                 <DetailCardByReceipt key={index} {...detail}/>
               ))}
             </div>
+            <Link to={`/account/${transactionId}/resultByReceipt`} search={{isNew:false}} css={LinkStyle}>
+              <Btn buttonStyle={{ size:'big', style:'blue'}}>정산 수정하기</Btn> 
+            </Link>
           </>
         }
         { transactionDetailData.splitMethod ==='custom' &&
@@ -128,14 +118,11 @@ export default function TransactionDetail() {
                 return null;
                 })}
             </div>
+            <Link to={`/account/${transactionId}/settle`} search={{method: 'custom'}} css={LinkStyle}>
+              <Btn buttonStyle={{ size:'big', style:'blue'}}>정산 수정하기</Btn> 
+            </Link>
           </>
         }
-        <div css={buttonLayoutStyle}>
-          <Btn 
-          buttonStyle={{ size:'big', style:'blue'}}
-          onClick={handleUpdate}
-          >정산 수정하기</Btn> 
-        </div>
     </div>
   )
 }

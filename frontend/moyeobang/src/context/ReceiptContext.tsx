@@ -6,7 +6,7 @@ const defaultReceipt : TransactionDetailByReceipt = {
     paymentName: '',
     adress: '',
     money: 0,
-    createdAt: '',
+    createdAt: new Date().toDateString(),
     details: [],
     splitMethod: 'receipt',
 };
@@ -14,7 +14,7 @@ const defaultReceipt : TransactionDetailByReceipt = {
 // Context 생성
 const ReceiptContext = createContext<{
     receiptData : TransactionDetailByReceipt;
-    updateReceiptData : (newData: TransactionDetailByReceipt, isNew:boolean) => void;
+    updateReceiptData : (newData: TransactionDetailByReceipt) => void;
     }>({
         receiptData : defaultReceipt,
         updateReceiptData: () => {}, // 기본값

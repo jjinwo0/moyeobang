@@ -32,21 +32,21 @@ const amountStyle=css`
 export interface SettleCardByCustomProps {
     profileImage : ProfileImage;
     memberId: MemberId;
-    nickname: Nickname;
+    memberName: MemberName;
     money: Money;
 }
 
 export default function DetailCardByCustom({
     // memberId,
     profileImage,
-    nickname,
+    memberName,
     money,
     }:SettleCardByCustomProps) {
 
     return (
         <div css={layoutStyle}>
             <ProfileImage profileImage={profileImage} px={75}/>
-            <div ccs={nameStyle}>{nickname}</div>
+            <div ccs={nameStyle}>{memberName}</div>
             <div css={amountStyle}>{money}원</div>
         </div>
     )

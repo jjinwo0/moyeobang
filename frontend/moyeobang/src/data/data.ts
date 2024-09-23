@@ -3,27 +3,27 @@ import profileImageUrl from '@/assets/images/profile.jpg'
 export const profileData : ParticipantInfo[] = [
     {   
         memberId : 1,
-        nickname: "홍길동",
+        memberName: "홍길동",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 2,
-        nickname: "홍길동",
+        memberName: "홍길동",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 3,
-        nickname: "홍길동",
+        memberName: "홍길동",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 4,
-        nickname: "홍길동",
+        memberName: "홍길동",
         profileImage : profileImageUrl,
     },
   ]
   
-  export const transactionsData = [
+  export const transactions = [
       {
         transactionId: 2,
         paymentName: "스타벅스",
@@ -51,22 +51,22 @@ export const profileData : ParticipantInfo[] = [
         participants: [
           {
               "memberId": 1,
-              "nickname": "홍길동",
+              "memberName": "홍길동",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 2,
-              "nickname": "김철수",
+              "memberName": "김철수",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 3,
-              "nickname": "이영희",
+              "memberName": "이영희",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 4,
-              "nickname": "박민수",
+              "memberName": "박민수",
               "profileImage":  profileImageUrl
             },
            
@@ -103,22 +103,22 @@ export const profileData : ParticipantInfo[] = [
         participants: [
           {
               "memberId": 1,
-              "nickname": "홍길동",
+              "memberName": "홍길동",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 2,
-              "nickname": "김철수",
+              "memberName": "김철수",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 3,
-              "nickname": "이영희",
+              "memberName": "이영희",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 4,
-              "nickname": "박민수",
+              "memberName": "박민수",
               "profileImage":  profileImageUrl
             },
            
@@ -126,7 +126,7 @@ export const profileData : ParticipantInfo[] = [
         splitMethod: "custom",
         transactionType : "입금",
         currentBalance : 1203000,
-        createdAt: "2024-09-01T12:34:56Z", 
+        createdAt: new Date(), 
       },
       {
         transactionId: 1,
@@ -155,22 +155,22 @@ export const profileData : ParticipantInfo[] = [
         participants: [
           {
               "memberId": 1,
-              "nickname": "홍길동",
+              "memberName": "홍길동",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 2,
-              "nickname": "김철수",
+              "memberName": "김철수",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 3,
-              "nickname": "이영희",
+              "memberName": "이영희",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 4,
-              "nickname": "박민수",
+              "memberName": "박민수",
               "profileImage":  profileImageUrl
             },
            
@@ -207,22 +207,22 @@ export const profileData : ParticipantInfo[] = [
         participants: [
           {
               "memberId": 1,
-              "nickname": "홍길동",
+              "memberName": "홍길동",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 2,
-              "nickname": "김철수",
+              "memberName": "김철수",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 3,
-              "nickname": "이영희",
+              "memberName": "이영희",
               "profileImage":  profileImageUrl
             },
             {
               "memberId": 4,
-              "nickname": "박민수",
+              "memberName": "박민수",
               "profileImage":  profileImageUrl
             },
            
@@ -230,18 +230,16 @@ export const profileData : ParticipantInfo[] = [
         splitMethod: "custom",
         transactionType : "입금",
         currentBalance : 1203000,
-        createdAt: "2024-09-01T12:34:56Z", 
+        createdAt: new Date(), 
       },
     ];
 
-// 정산 완료 영수증 정산 settled:'true' splitMethod: 'eqaul'
-
-export const detailDataByReceiptAfterSettle = {
-      transactionId: 2,
+    // 영수증정산
+export const detailsByReceipt = {
+      transactionId: 1,
       paymentName: "스타벅스",
       adress: "광주광역시 광산구 00로 00번길",
       money: 12000,
-      acceptedNumber: '12312414',
       details:   [
         {
           orderItemId:1,
@@ -251,7 +249,7 @@ export const detailDataByReceiptAfterSettle = {
            participants: [
              {
                memberId: 1,
-               nickname: "김훈민",
+               memberName: "김훈민",
                profileImage: profileImageUrl
              }
            ]
@@ -264,12 +262,12 @@ export const detailDataByReceiptAfterSettle = {
            participants: [
              {
                memberId: 1,
-               nickname: "김훈민",
+               memberName: "김훈민",
                profileImage: profileImageUrl
              },
              {
                memberId: 2,
-               nickname: "이수민",
+               memberName: "이수민",
                profileImage: profileImageUrl
              }
            ]
@@ -282,7 +280,7 @@ export const detailDataByReceiptAfterSettle = {
          participants: [
            {
              memberId: 3,
-             nickname: "박지현",
+             memberName: "박지현",
              profileImage: profileImageUrl
           }
          ]
@@ -295,69 +293,67 @@ export const detailDataByReceiptAfterSettle = {
          participants: [
            {
              memberId: 1,
-             nickname: "김훈민",
+             memberName: "김훈민",
              profileImage: profileImageUrl
            },
            {
              memberId: 2,
-             nickname: "이수민",
+             memberName: "이수민",
              profileImage: profileImageUrl
            }
          ]
        },
-     ]
-         ,
+     ],
       splitMethod: "receipt",  // 정산 방식
       createdAt: "2024-09-01T12:34:56Z"
     }
 
-// 정산 완료 직접 정산 settled:'true' splitMethod: 'custom'
-export const detailDataByCustomAfterSettle = {
-      transactionId: 2,
+//  직접 정산
+export const detailsByCustom = {
+      transactionId: 1,
       paymentName: "스타벅스",
       adress: "광주광역시 광산구 00로 00번길",
-      money: 12000,
-      acceptedNumber: '12312414',
+      money: 80000,
       details: [
-        {
-          participant : {
-          memberId: 1,
-          nickname: "김훈민",
-          profileImage: profileImageUrl
-          },
-          money : 24000
-        },
+        // {
+        //   participant : {
+        //   memberId: 1,
+        //   memberName: "김훈민",
+        //   profileImage: profileImageUrl
+        //   },
+        //   money : 20000
+        // },
         {
           participant : {
           memberId: 2,
-          nickname: "강두홍",
+          memberName: "강두홍",
           profileImage: profileImageUrl
           },
-          money : 24000
+          money : 20000
         },
         {
           participant : {
           memberId: 3,
-          nickname: "전가현",
+          memberName: "전가현",
           profileImage: profileImageUrl
           },
-          money : 24000
+          money : 20000
         },
         {
           participant : {
           memberId: 4,
-          nickname: "김두열",
+          memberName: "김두열",
           profileImage: profileImageUrl
           },
-          money : 24000
+          money : 20000
         },
         {
           participant : {
           memberId: 5,
-          nickname: "박진우",
+          memberName: "박진우",
           profileImage: profileImageUrl
           },
-          money : 24000
+          money : 20000
         },
       ],
       splitMethod: "custom",  // 정산 방식

@@ -39,6 +39,7 @@ export default function TransactionCard({
                     { participants && participants.map((part, index) => (
                         <SmallProfileImage 
                         key={index}
+                        px={45}
                         profileImage={part.profileImage}
                         />
                     ))}
@@ -51,8 +52,6 @@ export default function TransactionCard({
                 }
                 <div css={balanceStyle}> 잔액 <p>{currentBalance}</p> 원</div>
             </div>
-
-        
         </Link>
     )
 }

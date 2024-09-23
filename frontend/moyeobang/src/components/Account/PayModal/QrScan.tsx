@@ -2,9 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
-import PayCompletedModal from "./PayCompletedModal";
-import { useNavigate } from "@tanstack/react-router";
-import { useCompleteTransaction } from "@/context/TransactionContext";
+// import PayCompletedModal from "./PayCompletedModal";
 
 const qrReaderLayoutStyle = css`
     padding-top: 30px;
@@ -60,17 +58,12 @@ const textBoxStyle= css`
     gap:20px;
 `;
 
-interface QrScanProps {
-    onClose : () => void;
-}
-export default function QrScan({onClose} : QrScanProps) {
+export default function QrScan() {
     
-    const navigate = useNavigate();
     const scanner = useRef<QrScanner>();
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
-    const {updateTransactionData} = useCompleteTransaction(); 
 
     // 결과 
     const [scannedResult, setScannedResult] = useState<string | undefined>("");
@@ -130,27 +123,16 @@ export default function QrScan({onClose} : QrScanProps) {
     }, [qrOn])
 
     // 결제완료 => 모달 닫기
-    function handleClose() {
-        setScannedResult('');
-        onClose();
-    }
+    // function handleClose() {
+    //     setScannedResult('');
+    //     onClose();
+    // }
 
     // 결제완료 => 정산하기
-    function handleSettle() {
-        // useContext에 데이터 업데이트
-        const newCompleteTransaction : CompleteTransaction = { 
-            transactionId: 1,
-            adress:'임시 주소',
-            paymentName: '임시 가게명',
-            money: 7890,
-            createdAt: '2024-09-01T12:34:56',
-            isNew:true,
-        };
-        
-        updateTransactionData(newCompleteTransaction);
-        navigate({to : `/account/settle/${newCompleteTransaction.transactionId}`})
-        handleClose()
-    }
+    // function handleSettle() {
+    //     handleClose()
+    //     console.log('결제완료')
+    // }
 
     return (
         <div css={qrReaderLayoutStyle}>
@@ -168,7 +150,8 @@ export default function QrScan({onClose} : QrScanProps) {
                 </>
             }
                 { scannedResult && (
-                    <PayCompletedModal onClose={handleClose} onClick={handleSettle}/>
+                    <div>결제완료.</div>
+                    // <PayCompletedModal onClose={handleClose} transactionId={transactionId}/>
                     // <p css={resultStyle}>
                     //     스캔 결과 : {scannedResult}
                     // </p>
