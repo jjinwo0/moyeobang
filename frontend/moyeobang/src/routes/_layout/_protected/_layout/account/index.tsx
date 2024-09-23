@@ -63,41 +63,55 @@ const accountId = 1;
 export default function groupAccount() {
 
   const allList = profileData.map((member) => member.memberId)
-  type SelectedMember = MemberId | MemberId[]; 
+  type SelectedMember = MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
 
-  // const {transactionData} = useSuspenseQuery({
-  //   queryKey: ['transactionList', accountId],
-  //   queryFn: () => moyeobang.getTransactionList(Number(accountId)),
-  // });
+  const {data : transactionData} = useSuspenseQuery({
+    queryKey: ['transactionList', accountId, selectedMember ],
+    queryFn: () => moyeobang.getTransactionList(Number(accountId), selectedMember),
+  });
 
   // get 모임 통장 전체 잔액 
-  // const { accountDataByGroup } = useQuery({
-  //   queryKey: ['accoutByGroup', accountId],
-  //   queryFn: () => moyeobang.getAccountState(accountId),
-  //   enabled: Array.isArray(selectedMember) // 전체
-  // });
+  const { data :accountDataByGroup } = useQuery({
+    queryKey: ['accoutByGroup', accountId],
+    queryFn: () => moyeobang.getAccountState(accountId),
+    enabled: selectedMember.length>1 // 전체
+  });
 
-  // get 모임 통장 개인별 잔액
-  // const { accountDataByMember } = useQuery({
-  //   queryKey: ['accountByMemberId', accountId, selectedMember],
-  //   queryFn: () => {
-  //     if (!Array.isArray(selectedMember)) {
-  //       return moyeobang.getAccountStateBymemberId(accountId, selectedMember)
-  //     }
-  //   },
-  //   enabled: !Array.isArray(selectedMember) // 개인별
-  // });
+  //get 모임 통장 개인별 잔액
+  const { data : accountDataByMember } = useQuery({
+    queryKey: ['accountByMemberId', accountId, selectedMember],
+    queryFn: () => {
+      if (!Array.isArray(selectedMember)) {
+        return moyeobang.getAccountStateBymemberId(accountId, selectedMember)
+      }
+    },
+    enabled: selectedMember.length==1 // 개인별
+  });
 
-  //  const accountData = Array.isArray(selectedMember) ? accountDataByGroup?.data.data : accountDataByMember?.data.data;
+  const transactionListData = transactionData.data.data;
+  // const transactionListData = transactions;
 
-  // const transactionData = transactionData.data.data;
-  const transactionListData = transactions;
+
+  // 타입 가드 함수
+  function isAccountBalanceByGroup(
+    accountData: AccountBalanceByGroup | AccountBalanceBymemberId
+  ): accountData is AccountBalanceByGroup {
+    return (accountData as AccountBalanceByGroup).totalMoney !== undefined;
+  }
+
+  const accountData = selectedMember.length > 1 
+    ? accountDataByGroup?.data.data 
+    : accountDataByMember?.data.data;
+
+  if (!accountData) {
+    return <div>Loading...</div>;
+  }
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
         // 해당 memberId get요청
-        setSelectedMember(memberId)
+        setSelectedMember([memberId])
     } else {
         // 전체 조회
         const allList = profileData.map((member) => member.memberId)
@@ -122,21 +136,19 @@ export default function groupAccount() {
         ))}
         </div>
         <div css={accountCardStyle} >
-          {Array.isArray(selectedMember) ? 
-            // <AccountCard 
-            // currentBalance={accountData.currentBalance}
-            // travelAccountNumber={'333333-12-8912312'}
-            // travelName={'아기돼지 오형제'}
-            // /> 
-            <div>전체{selectedMember}</div>
+          {isAccountBalanceByGroup(accountData)  ? 
+            <AccountCard 
+            currentBalance={accountData.currentBalance}
+            travelAccountNumber={'333333-12-8912312'}
+            travelName={'아기돼지 오형제'}
+            /> 
             :
-            // <AccountCard 
-            // currentBalance={accountData.currentBalance}
-            // travelAccountNumber={'333333-12-8912312'}
-            // travelName={'아기돼지 오형제'}
-            // memberName={accountData.participant.memberkName}
-            // />
-            <div>개인{selectedMember}</div>
+            <AccountCard 
+            currentBalance={accountData.personalCurrentBalance}
+            travelAccountNumber={'333333-12-8912312'}
+            travelName={'아기돼지 오형제'}
+            memberName={accountData.participant.memberName}
+            />
           }
         </div>
         <div css={transactionListStyle}>

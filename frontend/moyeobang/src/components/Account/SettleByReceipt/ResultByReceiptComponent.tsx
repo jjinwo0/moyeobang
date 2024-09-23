@@ -94,7 +94,7 @@ export default function ResultByReceiptComponent({data, onClose}:ResultByReceipt
             <div css={titleStyle}>{updatedData.paymentName}</div>
             <div css={amountStyle}>{updatedData.money}원</div>
             <div css={timeStyle}>
-              { format(new Date(updatedData.createdAt), 'yyyy-MM-dd HH:mm', { locale: ko }) }
+              { format(updatedData.createdAt, 'yyyy-MM-dd HH:mm', { locale: ko }) }
             </div>
           </div>
           <div css={middleContainerStyle}>
