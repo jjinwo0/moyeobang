@@ -76,10 +76,10 @@ export default function Pos() {
   const [placeId, setPlaceId] = useState<number | undefined>();
   const [placeName, setPlaceName] = useState<PaymentName>('');
   const [amount, setAmount] = useState<Money>();
-  const [placeAdress, setPlaceAdress]= useState<Adress>('');
+  const [placeAddress, setPlaceAddress]= useState<Adress>('');
   const [latitude, setLatitude]= useState<number | undefined>();
   const [longitude, setLongitude]= useState<number | undefined>();
-  const [targetAccountNumber, setTargetAccountNumber]= useState<string>("");
+  const [targetAccountNumber, setTargetAccountNumber]= useState<string>("0012280102000441");
 
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({}); // 각 상품의 수량을 저장
   const [isOpenQrModal, setIsOpenQrModal] = useState<boolean>(false);
@@ -99,8 +99,8 @@ export default function Pos() {
     setPlaceName(e.target.value)
   }
 
-  function handlePlaceAdress(e: React.ChangeEvent<HTMLInputElement>) {
-    setPlaceAdress(e.target.value)
+  function handlePlaceAddress(e: React.ChangeEvent<HTMLInputElement>) {
+    setPlaceAddress(e.target.value)
   }
 
   function handleAmount(e: React.ChangeEvent<HTMLInputElement>) {
@@ -173,12 +173,13 @@ export default function Pos() {
   // 정산하기
   function handleSettle() {
 
-    if (placeId && latitude && longitude) {
+    if (placeId && latitude && longitude && amount) {
 
       const data : PosPay = {
         placeId,
         placeName,
-        placeAdress,
+        placeAddress,
+        amount,
         latitude,
         longitude,
         targetAccountNumber,
@@ -206,8 +207,8 @@ export default function Pos() {
         <input type="text" value={placeName} onChange={handlePlaceName} />
       </div>
       <div>
-        <p>가맹점 주소(placeAdress)</p>
-        <input type="text" value={placeAdress} onChange={handlePlaceAdress} />
+        <p>가맹점 주소(placeAddress)</p>
+        <input type="text" value={placeAddress} onChange={handlePlaceAddress} />
       </div>
       <div>
         <p>가맹점 계좌번호(targetAccountNumber)</p>

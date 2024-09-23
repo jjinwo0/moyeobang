@@ -70,38 +70,6 @@ interface ParticipantInfo {
   profileImage: ProfileImage;
 }
 
-// 정산 전
-interface TransactionRecords {
-  transactionId: Id;
-  place: Place;
-  details: OrderItems[];
-  totalAmount: TotalAmount;
-  participants: ParticipantsInfo[];
-  splitMethod: SplitMethod;
-  settled: Settled;
-  createdAt: CreatedAt;
-}
-
-interface SettledItemInfo {
-  orderItemTitle: OrderItemTitle;
-  orderItemAmount: OrderItemAmount;
-  participants: ParticipantsInfo[];
-}
-
-type SettledItemsInfo = SettledItemInfo[];
-
-// 정산 후
-interface TransactionRecords {
-  transactionId: Id;
-  place: Place;
-  details: OrderItems[];
-  totalAmount: TotalAmount;
-  participants: SettledItemInfo[];
-  splitMethod: SplitMethod;
-  settled: Settled;
-  createdAt: CreatedAt;
-}
-
 // 여행 목록 관련 정보
 interface Travel {
   travelId: Id;
@@ -159,7 +127,7 @@ interface OrderItems {
 // 모임 통장 공금 잔액 조회
 interface AccountBalanceByGroup {
   currentBalance: CurrentBalance;
-  totalMoney: TotalMoney;
+  totalAmount: TotalMoney;
   totalComsumption: TotalComsumption;
   usagePercentage: UsagePercentage;
 }
@@ -288,7 +256,7 @@ interface SettledParticipantByCustom {
 interface BaseTransactionDetail {
   transactionId: TransactionId;
   paymentName: PaymentName;
-  adress: Adress;
+  address: Adress;
   money: Money;
   createdAt: CreatedAt;
   // acceptedNumber: AcceptedNumber;
@@ -313,7 +281,7 @@ type TransactionDetailProps =
 interface CompleteTransaction {
   transactionId: TransactionId;
   money: Money;
-  adress: Adress;
+  address: Adress;
   paymentName: PaymentName;
   createdAt: CreatedAt;
 }
@@ -349,7 +317,8 @@ interface QrData {
 interface PosPay {
   placeId: number;
   placeName:string;
-  placeAdress:Adress;
+  placeAddress:Adress;
+  amount:Money;
   latitude: Latitude;
   longitude:Longitude;
   targetAccountNumber: string;
@@ -366,7 +335,8 @@ interface PaymentProps {
   sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
   placeId: string;
   placeName: string;
-  placeAdress: string;
+  placeAddress: string;
+  amount:Money;
   latitude: number;
   longitude: number;
   targetAccountNumber: string;

@@ -9,8 +9,6 @@ import Btn from '@/components/common/btn/Btn';
 import { colors } from '@/styles/colors';
 import moyeobang from '@/services/moyeobang';
 import { useState } from 'react';
-import { detailsByReceipt } from '@/data/data'
-import { useReceiptContext } from '@/context/ReceiptContext';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/resultByReceipt/_layout/')({
   component: settledReceipt
@@ -83,29 +81,31 @@ export default function settledReceipt() {
   const { transactionId } :{ transactionId : TransactionId} = Route.useParams();
   const navigate = useNavigate({from:'/account/$transactionId/resultByReceipt'});
   const queryClient = useQueryClient();
-  const { receiptData } = useReceiptContext();
   const {isNew} : {isNew : boolean} = Route.useSearch();
   const isNewState = isNew!==undefined ? false : true;
 
-  console.log('수정으로 들어오면 isNew : ', isNewState, '임')
+  console.log('수정으로 들어오면 isNewState : ', !isNewState, '임')
   
   // TODO 주석 제거
   // get 기본 데이터 가져오기! (1/n정산된 데이터)
-  const { data } = useQuery({
-    queryKey: ['receipt', transactionId],
-    queryFn: () => moyeobang.getTransactionDetail(accountId, transactionId),
+  const { data, isLoading } = useQuery({
+    queryKey: ['receipt', accountId,  transactionId],
+    queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
     enabled: !isNewState
   });
 
-  const receipt = isNewState ? receiptData : data?.data.data as TransactionDetailByReceipt;
+  console.log(accountId, Number(transactionId))
+  if (isLoading) {
+    console.log(' 로딩')
+  }
 
-  // const receipt = isNewState ? receiptData : detailsByReceipt; // 임시
+  // const receipt = isNewState ? receiptData : data?.data.data as TransactionDetailByReceipt;
 
   useEffect(() => {
     setUpdateDetails(receipt.details);
   }, [])
 
-  const [updateDetails , setUpdateDetails] = useState<SettledItemByReceipt[]>(receipt.details);
+  const [updateDetails , setUpdateDetails] = useState<SettledItemByReceipt[]>(receipt?.details);
 
   const {mutate: updateReceipt } = useMutation({
     mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => 
@@ -171,7 +171,7 @@ export default function settledReceipt() {
             <div css={titleStyle}>{receipt?.paymentName}</div>
             <div css={amountStyle}>{receipt?.money}원</div>
             <div css={timeStyle}>
-              {format(receipt?.createdAt, 'yyyy-MM-dd HH:mm', { locale: ko })}
+              {receipt?.createdAt && format( new Date(receipt?.createdAt), 'yyyy-MM-dd HH:mm', { locale: ko })}
             </div>
           </div>
           <div css={middleContainerStyle}>

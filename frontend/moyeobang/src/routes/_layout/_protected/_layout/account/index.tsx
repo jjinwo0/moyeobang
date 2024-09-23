@@ -67,6 +67,7 @@ export default function groupAccount() {
   const allList = profileData.map((member) => member.memberId)
   type SelectedMember = MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
+  const [member, setMember] = useState<MemberId | null>(null);
 
   // TODO 주석제거
   // **
@@ -84,16 +85,17 @@ export default function groupAccount() {
 
   //get 모임 통장 개인별 잔액
   const { data : accountDataByMember } = useQuery({
-    queryKey: ['accountByMemberId', accountId, selectedMember],
+    queryKey: ['accountByMemberId', accountId, member],
     queryFn: () => {
-      if (!Array.isArray(selectedMember)) {
-        return moyeobang.getAccountStateBymemberId(accountId, selectedMember)
+      if ( selectedMember.length==1 && member) {
+        return moyeobang.getAccountStateBymemberId(accountId, member)
       }
     },
-    enabled: selectedMember.length==1 // 개인별
+    enabled: selectedMember.length==1 && selectedMember !== undefined && accountId !== undefined,// 개인별
   });
 
   const transactionListData = transactionData.data.data;
+  console.log(transactionListData)
   // **
 
   // const transactionListData = transactions;//임시
@@ -103,7 +105,7 @@ export default function groupAccount() {
   function isAccountBalanceByGroup(
     accountData: AccountBalanceByGroup | AccountBalanceBymemberId
   ): accountData is AccountBalanceByGroup {
-    return (accountData as AccountBalanceByGroup).totalMoney !== undefined;
+    return (accountData as AccountBalanceByGroup).totalAmount !== undefined;
   }
 
   const accountData = selectedMember.length > 1 
@@ -113,11 +115,13 @@ export default function groupAccount() {
   if (!accountData) {
     return <div>Loading...</div>;
   }
+  console.log(1111, accountData)
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
         // 해당 memberId get요청
         setSelectedMember([memberId])
+        setMember(memberId)
     } else {
         // 전체 조회
         const allList = profileData.map((member) => member.memberId)
@@ -154,12 +158,12 @@ export default function groupAccount() {
             currentBalance={accountData.personalCurrentBalance}
             travelAccountNumber={'333333-12-8912312'}
             travelName={'아기돼지 오형제'}
-            memberName={accountData.participant.memberName}
+            memberName={'가현'}
             />
           }
         </div>
         <div css={transactionListStyle}>
-            {transactionListData.map((tran, index) => 
+            {transactionListData.reverse().map((tran, index) => 
                 <TransactionCard key={index} {...tran} />
             )}
         </div>
