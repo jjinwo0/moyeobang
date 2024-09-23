@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -97,7 +96,7 @@ class NotificationServiceTest {
 
         // send 메서드가 호출된 횟수 확인
         // notificationService는 InjectionMock인 실제 객체이므로 verify 활용 불가 -> 분기처리
-        verify(sender, times(2)).send(any(Message.class), any(AtomicInteger.class));
+        verify(sender, times(2)).send(any(Message.class));
     }
 
     @Test
@@ -118,13 +117,13 @@ class NotificationServiceTest {
         when(fcmTokenPort.hasKey("test2@ssafy.com")).thenReturn(true);
 
         doThrow(FirebaseMessagingException.class)
-                .when(sender).send(any(Message.class), any(AtomicInteger.class));
+                .when(sender).send(any(Message.class));
 
         // when
         assertThrows(FirebaseMessagingException.class, () ->
                 notificationService.sendNotification(1L, payload));
 
-        verify(sender, times(2)).send(any(Message.class), any(AtomicInteger.class));
+        verify(sender, times(2)).send(any(Message.class));
     }
 
     @Test
@@ -174,6 +173,6 @@ class NotificationServiceTest {
         verify(fcmTokenPort, times(1)).getToken("test3@ssafy.com");
         verify(fcmTokenPort, times(1)).getToken("test4@ssafy.com");
 
-        verify(sender, times(1)).sendAll(any(List.class), any(AtomicInteger.class));
+        verify(sender, times(1)).sendAll(any(List.class));
     }
 }
