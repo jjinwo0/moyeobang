@@ -31,11 +31,19 @@ public class TravelJpaEntity extends BaseEntity {
 
     private String title;
 
+    private String travelKey;
+    
     @OneToMany(mappedBy = "travel", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberTravelJpaEntity> memberTravelJpaEntities = new ArrayList<>();
 
     @Builder
-    public TravelJpaEntity(String title) {
+    public TravelJpaEntity(String title, String travelKey) {
         this.title = title;
+        this.travelKey = travelKey;
+    }
+
+    //TODO: 여행 계획 API 구현 후 삭제 예정
+    public void setTravelKey(String travelKey) {
+        this.travelKey = travelKey;
     }
 }

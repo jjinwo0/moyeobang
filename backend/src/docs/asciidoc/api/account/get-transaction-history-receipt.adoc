@@ -1,0 +1,11 @@
+[[get-transaction-history-receipt]]
+=== 결제 내역 상세 조회 (영수증 정산)
+
+==== HTTP Request
+
+include::{snippets}/get-transaction-history-receipt/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-transaction-history-receipt/http-response.adoc[]
+include::{snippets}/get-transaction-history-receipt/response-fields.adoc[]

@@ -1,7 +1,6 @@
 package com.ssafy.moyeobang.account.application.service;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.CreateAccountResponse;
-import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.port.in.CreateAccountUseCase;
 import com.ssafy.moyeobang.account.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.account.application.port.out.LoadMemberPort;
@@ -18,10 +17,8 @@ public class CreateAccountService implements CreateAccountUseCase {
     private final CreateAccountPort createAccountPort;
 
     @Override
-    public CreateAccountResponse createAccount(Long memberId) {
-        Member member = loadMemberPort.loadMember(memberId);
-
-        String accountNumber = createAccountPort.createAccount(member.getMemberKey());
+    public CreateAccountResponse createAccount(Long travelId) {
+        String accountNumber = createAccountPort.createAccount(travelId);
 
         return new CreateAccountResponse(accountNumber);
     }

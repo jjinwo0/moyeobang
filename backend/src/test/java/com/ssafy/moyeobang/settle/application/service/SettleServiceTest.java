@@ -1,11 +1,20 @@
 package com.ssafy.moyeobang.settle.application.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.ssafy.moyeobang.settle.application.domain.order.Order;
 import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
 import com.ssafy.moyeobang.settle.application.port.in.SettleCommand;
 import com.ssafy.moyeobang.settle.application.port.out.CreateMemberOrderHistoryPort;
 import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
 import com.ssafy.moyeobang.settle.application.port.out.UpdateMemberTravelPort;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,13 +23,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SettleServiceTest {
@@ -45,7 +47,6 @@ class SettleServiceTest {
         // 요청 데이터
         settleCommand = new SettleCommand(
                 10L,
-                100L,
                 "testTransaction",
                 10000,
                 List.of(1L, 2L, 3L)

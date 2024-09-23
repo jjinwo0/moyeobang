@@ -26,6 +26,11 @@ public class AccountExceptionHandler {
         return new ResponseEntity<>(error(message, status), headers, status);
     }
 
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<?> handleInsufficientBalanceException(Exception e) {
+        return newResponse(e, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MemberNotFoundException.class)
     public ResponseEntity<?> handleMemberNotFoundException(Exception e) {
         return newResponse(e, HttpStatus.NOT_FOUND);

@@ -1,5 +1,5 @@
 [[create-account]]
-=== 유저 정보
+=== 모임 통장 계좌 생성
 
 ==== HTTP Request
 

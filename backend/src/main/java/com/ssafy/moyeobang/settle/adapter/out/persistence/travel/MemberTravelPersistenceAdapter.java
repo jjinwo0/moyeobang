@@ -15,7 +15,7 @@ public class MemberTravelPersistenceAdapter implements FindMemberTravelPort, Upd
 
     private final MemberTravelRepositoryInSettle memberTravelRepository;
 
-    private final MemberTravelMapper memberTravelMapper;
+    private final MemberTravelMapperInSettle memberTravelMapperInSettle;
 
     @Override
     public MemberTravel findMemberTravel(Long memberId, Long travelId) {
@@ -24,7 +24,7 @@ public class MemberTravelPersistenceAdapter implements FindMemberTravelPort, Upd
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Member[" + memberId + "]이 참여한 여행 [" + travelId + "]의 정보가 없습니다."));
 
-        return memberTravelMapper.mapToDomain(findEntity);
+        return memberTravelMapperInSettle.mapToDomain(findEntity);
     }
 
     @Override

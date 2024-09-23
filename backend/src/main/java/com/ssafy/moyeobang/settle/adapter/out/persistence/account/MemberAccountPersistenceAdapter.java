@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberAccountPersistenceAdapter implements FindMemberAccountPort {
 
     private final MemberAccountRepositoryInSettle accountRepository;
-    private final AccountMapper accountMapper;
+    private final AccountMapperInSettle accountMapperInSettle;
 
     @Override
     public Account findMemberAccount(Long accountId) {
@@ -20,6 +20,6 @@ public class MemberAccountPersistenceAdapter implements FindMemberAccountPort {
         MemberAccountJpaEntity accountEntity = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("Account id[" + accountId + "] 계좌 정보를 찾지 못했습니다."));
 
-        return accountMapper.mapToDomain(accountEntity);
+        return accountMapperInSettle.mapToDomain(accountEntity);
     }
 }
