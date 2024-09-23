@@ -163,7 +163,7 @@ export default function groupAccount() {
           }
         </div>
         <div css={transactionListStyle}>
-            {transactionListData.map((tran, index) => 
+            {transactionListData.reverse().map((tran, index) => 
                 <TransactionCard key={index} {...tran} />
             )}
         </div>

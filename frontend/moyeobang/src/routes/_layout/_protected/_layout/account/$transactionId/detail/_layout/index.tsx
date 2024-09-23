@@ -66,14 +66,15 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
+  console.log(121212, transactionDetailData)
 
   // const transactionDetailData = detailsByReceipt; // 임시
 
   // 타입 가드 함수
   function isSettledParticipantByCustom(
-    detail: SettledItemByReceipt | SettledParticipantByCustom
-  ): detail is SettledParticipantByCustom {
-    return (detail as SettledParticipantByCustom).participant !== undefined;
+    details: SettledItemByReceipt[] | SettledParticipantByCustom[]
+  ): details is SettledParticipantByCustom[] {
+    return (details as SettledParticipantByCustom[])[0].participant !== undefined;
   }
 
   return (
@@ -84,7 +85,7 @@ export default function TransactionDetail() {
             createdAt={transactionDetailData.createdAt}
             adress={transactionDetailData.adress}
         />
-        { transactionDetailData.splitMethod ==='receipt' &&
+        { transactionDetailData.splitMethod ==='receipt' && !isSettledParticipantByCustom(transactionDetailData.details) &&
           <>
             <div css={columnStyle}>
               <div>상품명</div>
@@ -109,12 +110,9 @@ export default function TransactionDetail() {
               <div>정산금액</div>
             </div>
             <div css={listStyle}>
-              {transactionDetailData.details.map((detail, index) => {
-                if (isSettledParticipantByCustom(detail)) {
-                  return (
-                    <DetailCardByCustom key={index} {...detail.participant} money={detail.money}/>
-                  )
-                }
+              { isSettledParticipantByCustom(transactionDetailData.details) &&
+               transactionDetailData.details.map((detail, index) => {
+                  <DetailCardByCustom key={index} {...detail.participant} money={detail.money}/>
                 return null;
                 })}
             </div>
