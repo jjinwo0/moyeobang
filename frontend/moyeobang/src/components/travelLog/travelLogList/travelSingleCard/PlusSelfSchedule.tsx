@@ -149,22 +149,7 @@ export default function Schedule({
 
     setTravelSchedules(updatedSchedules);
   };
-  // [todo] 실제 API 적용 후 완료 여부 변경
-  // const toggleCompletion = async (scheduleId: number) => {
-  //   try {
-  //     // 특정 일정의 완료 상태를 토글하는 API 호출
-  //     await axios.patch(`/api/travel/${travelId}/schedule/${scheduleId}/complete`);
-
-  //     // 성공적으로 완료 상태가 변경되면 전체 여행 일정을 다시 가져옴
-  //     const response = await axios.get(`/api/travel/${travelId}/schedules`);
-
-  //     // 최신 여행 일정으로 상태를 업데이트
-  //     setTravelSchedules(response.data);
-  //   } catch (error) {
-  //     console.error("Error toggling completion and fetching schedules:", error);
-  //     // 에러 처리 (알림이나 UI로 피드백을 줄 수 있음)
-  //   }
-  // };
+ 
 
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<JSX.Element | string | null>(

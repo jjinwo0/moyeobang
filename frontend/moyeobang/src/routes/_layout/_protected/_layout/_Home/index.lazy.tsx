@@ -242,9 +242,9 @@ function Index() {
       participantsInfo: travel.participantsInfo,
     }); // 상태 저장
 
-    // router.navigate({
-    //   to: `/travelLog`,
-    // });
+    router.navigate({
+      to: `/travelLog`,
+    });
   };
 
   const closeTravelSummary = () => {

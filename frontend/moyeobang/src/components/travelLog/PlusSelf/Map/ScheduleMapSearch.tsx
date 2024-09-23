@@ -3,6 +3,7 @@ import * as ScheduleMapSearchStyle from '@/components/travelLog/PlusSelf/Map/Sch
 import PlusSelfGoogleMap from '@/components/travelLog/PlusSelf/Map/PlusSelfGoolgeMap';
 import SearchImg from '@/assets/icons/Search.png';
 import {Status, Wrapper} from '@googlemaps/react-wrapper';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 // 구글 맵 API
 const mapAPI = import.meta.env.VITE_GOOGLE_API_KEY;
@@ -31,31 +32,10 @@ export default function ScheduleMapSearch({
   setSearchLocation,
 }: ScheduleMapSearchProps) {
   const [searchMap, setSearchMap] = useState(searchLocation);
-  // useEffect(() => {
-  //   // searchLocation 변경될 때마다 업데이트
-  // }, [searchLocation]);
   const googleMapRef = useRef<any>(null);
+  const {travelPlaceList} = useTravelDetailStore();
+  console.log(travelPlaceList);
 
-  // const searchLocationHandler = () => {
-  //   if (!searchMap) {
-  //     alert('장소를 입력해주세요.');
-  //     return;
-  //   }
-  //   if (searchLocation && googleMapRef.current) {
-  //     const geocoder = new window.google.maps.Geocoder();
-  //     geocoder.geocode({address: searchLocation}, (results, status) => {
-  //       if (status === 'OK' && results && results[0]) {
-  //         const location = results[0].geometry.location;
-  //         googleMapRef.current.setCenter(location.lat(), location.lng());
-  //         setSearchLocation(searchMap);
-  //       } else {
-  //         alert('장소를 찾을 수 없습니다.');
-  //       }
-  //     });
-  //   }
-  // };
-
-  // 검색어를 입력할 때 searchMap 상태를 업데이트하고, 검색 버튼을 누르면 searchLocation 상태를 업데이트
   const searchLocationHandler = () => {
     if (!searchMap) {
       alert('장소를 입력해주세요.');
@@ -64,6 +44,7 @@ export default function ScheduleMapSearch({
     // 검색어를 상태에 반영하여 PlusSelfGoogleMap에 전달
     setSearchLocation(searchMap);
   };
+
   return (
     <>
       {/* <div style={{zIndex: '40'}}>
@@ -93,7 +74,7 @@ export default function ScheduleMapSearch({
           <Wrapper apiKey={mapAPI} render={render} libraries={['places']}>
             <PlusSelfGoogleMap
               ref={googleMapRef}
-              initialLocation={searchLocation}
+              searchLocation={searchLocation}
             />
           </Wrapper>
         </div>
