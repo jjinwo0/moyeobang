@@ -85,5 +85,8 @@ public class WithdrawJpaEntity extends BaseEntity {
         this.placeAddress = placeAddress;
         this.settleType = settleType;
         this.travelAccount = travelAccount;
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.placeAddress = placeAddress;
     }
 }
