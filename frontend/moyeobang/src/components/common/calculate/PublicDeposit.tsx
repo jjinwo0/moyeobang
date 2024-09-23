@@ -46,7 +46,7 @@ const proposal = css`
   width: 100%;
 `;
 
-type PublicDepositProps = GroupAccountBalance & {travelName: TravelName} & {
+type PublicDepositProps = AccountBalanceByGroup & {travelName: TravelName} & {
   budget: number;
 };
 
@@ -79,7 +79,7 @@ export default function PublicDeposit({
     <div css={basicLayout}>
       <div css={accumulatedMoneyLayout}>
         <span>현재 누적 입금 금액</span>
-        <span css={bluefont}>{totalAmount}원</span>
+        <span css={bluefont}>{totalMoney}원</span>
       </div>
       <div>{travelName} 을/를 위해</div>
       <div css={proposal}>

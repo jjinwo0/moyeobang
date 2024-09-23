@@ -9,7 +9,7 @@ export default function AllImage({
     onClick 
     } : ProfileImageProps ) {
 
-    const profileContainerStyle = css`
+    const profileContainerStyle = (isSelected : boolean) => css`
     flex-shrink: 0;
     display: flex;
     text-align:center;
@@ -41,14 +41,10 @@ export default function AllImage({
     cursor: pointer;
     `; 
 
-    function handleClick() {
-        onClick(null)
-    }
-
     return (
         <div 
-        css={profileContainerStyle}
-        onClick={handleClick}
+        css={profileContainerStyle(isSelected)}
+        onClick={onClick}
         >
             <div 
             css={profileStyle}

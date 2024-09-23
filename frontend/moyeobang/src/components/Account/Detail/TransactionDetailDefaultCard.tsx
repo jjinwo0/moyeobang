@@ -1,4 +1,3 @@
-import { Adress } from "@/types/ex";
 import React from "react";
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
@@ -6,11 +5,11 @@ import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
 
 export interface TransactionDetailDefaultCardProps {
-    place:Place
-    totalAmount:TotalAmount
-    createdAt:CreatedAt
-    acceptedNumber:number // 승인번호
-    adress:Adress
+    paymentName:PaymentName;
+    money:Money;
+    createdAt:CreatedAt;
+    // acceptedNumber:AcceptedNumber; // 승인번호
+    adress:Adress;
 }
 
 const placeStyle = css`
@@ -44,32 +43,32 @@ const textStyle = css`
 `;
 
 export default function TransactionDetailDefaultCard({
-    place,
-    totalAmount,
+    paymentName,
+    money,
     createdAt,
-    acceptedNumber,
     adress
     } : TransactionDetailDefaultCardProps) {
 
     return (
         <>
-            <div css={placeStyle} >{place}</div>
+            <div css={placeStyle} >{paymentName}</div>
             <div css={layoutStyle}>
                 <div css={boxStyle}>
                     <div css={labelStyle} >금액</div>
-                    <div css={textStyle}>{totalAmount}원</div>
+                    <div css={textStyle}>{money}원</div>
                 </div>
-                <div css={boxStyle}>
+                {/* <div css={boxStyle}>
                     <div css={labelStyle}>승인번호</div>
                     <div css={textStyle}>{acceptedNumber}</div>
-                </div>
+                </div> */}
                 <div css={boxStyle}>
                     <div css={labelStyle}>일시</div>
                     <div css={textStyle}>{format(createdAt,'yyyy-MM-dd HH:mm', {locale: ko})}</div>
                 </div>
                 <div css={boxStyle}>
                     <div css={labelStyle}>주소</div>
-                    <div css={textStyle}>{adress}</div>
+                    <div css={textStyle}>{adress
+                        }</div>
                 </div>
             </div>
         

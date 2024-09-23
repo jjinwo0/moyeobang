@@ -7,34 +7,86 @@ import bangbang from '@/assets/icons/bangBang.png';
 import sadBangbang from '@/assets/icons/sadBangbang.png';
 import TwoBtn from '@/components/common/btn/TwoBtn'; // TwoBtn 컴포넌트 임포트
 import plusButton from '@/assets/icons/plusButton.png';
-import CreateTravel from '@/components/travelHome/CreateTravel';
+import CreateTravel from '@/components/travelHome/CreateTravel.tsx';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
 import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
+import {useRouter} from '@tanstack/react-router';
+import {useSuspenseQuery} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 const data: Travel[] = [
   {
     travelId: 1,
     travelName: '여행제목1',
     travelImg: null,
-    participantsCount: 5,
+    participantsCount: 4,
     startDate: '2024-09-10T12:34:56Z',
     endDate: '2024-09-13T12:34:56Z',
     travelPlaceList: ['제주도'],
     quizQuestion: '김훈민의 발사이즈는?',
     quizAnswer: '235',
+    accountId: 1,
+    accountNumber: '123456789123',
+    participantsInfo: [
+      {
+        memberId: 1,
+        nickname: '홍길동',
+        profileImage: 'https://example.com/images/honggildong.jpg',
+      },
+      {
+        memberId: 2,
+        nickname: '김철수',
+        profileImage: 'https://example.com/images/kimcheolsu.jpg',
+      },
+      {
+        memberId: 3,
+        nickname: '이영희',
+        profileImage: 'https://example.com/images/leeyounghee.jpg',
+      },
+      {
+        memberId: 4,
+        nickname: '박민수',
+        profileImage: 'https://example.com/images/parkminsu.jpg',
+      },
+    ],
   },
   {
     travelId: 2,
     travelName: '여행제목2',
     travelImg: null,
-    participantsCount: 5,
+    participantsCount: 4,
     startDate: '2023-09-01T12:34:56Z',
     endDate: '2023-09-05T12:34:56Z',
     travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
+    accountId: 1,
+    accountNumber: '123456789123',
+    participantsInfo: [
+      {
+        memberId: 1,
+        nickname: '홍길동',
+        profileImage: 'https://example.com/images/honggildong.jpg',
+      },
+      {
+        memberId: 2,
+        nickname: '김철수',
+        profileImage: 'https://example.com/images/kimcheolsu.jpg',
+      },
+      {
+        memberId: 3,
+        nickname: '이영희',
+        profileImage: 'https://example.com/images/leeyounghee.jpg',
+      },
+      {
+        memberId: 4,
+        nickname: '박민수',
+        profileImage: 'https://example.com/images/parkminsu.jpg',
+      },
+    ],
   },
 ];
 
@@ -124,9 +176,16 @@ const plusStyle = css`
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
-  const {setTravelData} = useTravelStore();
+  const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
+  // const {setNowTravelData} = useTravelContext();
+
+  // //get으로 여행 목록 전체 조회하기
+  // const {data} = useSuspenseQuery({
+  //   queryKey: ['travelList'],
+  //   queryFn: () => moyeobang.getTravelList(),
+  // });
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -165,17 +224,37 @@ function Index() {
     pastTrips.length === 0;
 
   const handleTravelSummary = (travel: Travel) => {
-    setTravelData(
-      travel.travelName,
-      travel.startDate,
-      travel.endDate,
-      travel.travelPlaceList
-    ); // 상태 저장
+    //여행 기록 페이지로 이동
+    clickTravelCard(travel);
     setTravelSummaryModal(true);
+  };
+
+  const router = useRouter();
+  const clickTravelCard = (travel: Travel) => {
+    console.log('Clicked travel:', travel.travelId); // 어떤 여행이 클릭되었는지 확인
+    setTravelData({
+      travelName: travel.travelName,
+      startDate: travel.startDate,
+      endDate: travel.endDate,
+      travelPlaceList: travel.travelPlaceList,
+      accountId: travel.accountId,
+      accountNumber: travel.accountNumber,
+      participantsInfo: travel.participantsInfo,
+    }); // 상태 저장
+
+    // router.navigate({
+    //   to: `/travelLog`,
+    // });
   };
 
   const closeTravelSummary = () => {
     setTravelSummaryModal(false);
+  };
+
+  const goSettingPage = () => {
+    router.navigate({
+      to: `/profile/${nickName}`,
+    });
   };
 
   return (
@@ -188,7 +267,7 @@ function Index() {
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
         </div>
-        <img src={bangbang} css={profileImageStyle} />
+        <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
       </div>
 
       {noTripsAvailable ? (
@@ -201,11 +280,14 @@ function Index() {
               {currentTrips.map(trip => (
                 <TravelCard
                   key={trip.travelId}
-                  title={trip.travelName}
+                  travelName={trip.travelName}
                   startDate={trip.startDate}
                   endDate={trip.endDate}
-                  place={trip.travelPlaceList}
+                  travelPlaceList={trip.travelPlaceList}
                   participantsCount={trip.participantsCount}
+                  quizQuestion={trip.quizQuestion} // quizQuestion 전달
+                  quizAnswer={trip.quizAnswer} // quizAnswer 전달
+                  onClick={() => clickTravelCard(trip)}
                 />
               ))}
             </div>
@@ -222,20 +304,23 @@ function Index() {
           </div>
 
           {/* 여행 카드 리스트 */}
+
           <div css={containerStyle}>
             {tripsToDisplay.length > 0 ? (
               tripsToDisplay.map(item => (
                 <TravelCard
                   key={item.travelId}
-                  title={item.travelName}
+                  travelName={item.travelName}
                   startDate={item.startDate}
                   endDate={item.endDate}
-                  place={item.travelPlaceList}
+                  travelPlaceList={item.travelPlaceList}
                   participantsCount={item.participantsCount}
+                  quizQuestion={item.quizQuestion}
+                  quizAnswer={item.quizAnswer}
                   onClick={
                     activeTab === 'past'
                       ? () => handleTravelSummary(item)
-                      : undefined
+                      : () => clickTravelCard(item)
                   }
                 />
               ))

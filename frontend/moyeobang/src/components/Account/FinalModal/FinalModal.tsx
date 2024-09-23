@@ -5,9 +5,9 @@ import {useRef, useState} from "react";
 import Backdrop from "./Backdrop/Backdrop";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { colors } from "@/styles/colors";
-import Btn from "../common/btn/Btn";
-import SettleCard from "../Account/SettleByCustom/SettleCardByCustom";
-import { CustomSettle } from "../Account/SettleByCustom/SettleByCustomComponent";
+import Btn from "@/components/common/btn/Btn"
+import SettleCard from "@/components/Account/SettleByCustom/SettleCardByCustom";
+import { CustomSettle } from "@/components/Account/SettleByCustom/SettleByCustomComponent";
 
 const modalContainerStyle = (isExpanded: boolean) => css`
     background-color: ${colors.white};
@@ -86,10 +86,10 @@ type FinalModalProps = PropsWithChildren<HTMLAttributes<HTMLDivElement>> & {
     onClickOutside: VoidFunction;
     onClick: VoidFunction;
     confirmData: CustomSettle[];
-    totalAmount: TotalAmount;
+    totalMoney: Money;
   }
 
-export default function FinalModal({onClickOutside, onClick, confirmData, totalAmount} : FinalModalProps) {
+export default function FinalModal({onClickOutside, onClick, confirmData, totalMoney} : FinalModalProps) {
 
     const modalRef = useRef<HTMLDivElement>(null);
     useOnClickOutside(modalRef, onClickOutside);
@@ -109,18 +109,18 @@ export default function FinalModal({onClickOutside, onClick, confirmData, totalA
                 </div>
                 <div css={textStyle}>
                     <div css={titleStyle}>최종확인</div>
-                    <div css={amountStyle}>총 {totalAmount} 원</div>
+                    <div css={amountStyle}>총 {totalMoney} 원</div>
                     <div css={countStyle}>인원 {confirmData.length} 명</div>
                 </div>
                 <div css={listLayoutStyle(isExpanded)}>
                 { confirmData.map((user, index) => (
                     <SettleCard 
                     key={index}
-                    memberId={user.participantsInfo.memberId}
-                    profileImage={user.participantsInfo.profileImage}
-                    nickname={user.participantsInfo.nickname}
+                    memberId={user.participantInfo.memberId}
+                    profileImage={user.participantInfo.profileImage}
+                    nickname={user.participantInfo.nickname}
                     isChecked={true}
-                    amount={user.amount}
+                    money={user.money}
                     />
                 ))}
                 </div>

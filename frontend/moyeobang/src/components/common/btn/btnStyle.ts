@@ -55,6 +55,12 @@ export const sizeStyles = {
     font-size: 18px;
     font-family: 'medium';
   `,
+  thinMiddle: css`
+    width: 300px;
+    height: 35px;
+    font-size: 18px;
+    font-family: 'medium';
+  `,
 };
 
 // variant에 따른 스타일 설정

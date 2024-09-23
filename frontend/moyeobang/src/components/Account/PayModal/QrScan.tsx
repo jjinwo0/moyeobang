@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
-import PayCompletedModal from "./PayCompletedModal";
+// import PayCompletedModal from "./PayCompletedModal";
 
 const qrReaderLayoutStyle = css`
     padding-top: 30px;
@@ -28,11 +28,11 @@ const qrBoxStyle = css`
     left: 12% !important;
 `;
 
-const resultStyle = css`
-  font-family:'semibold';
-  text-align: center;
-  font-size: 20px;
-`;
+// const resultStyle = css`
+//   font-family:'semibold';
+//   text-align: center;
+//   font-size: 20px;
+// `;
 
 const smallText = css`
     font-family: 'regular';
@@ -58,10 +58,7 @@ const textBoxStyle= css`
     gap:20px;
 `;
 
-interface QrScanProps {
-    onClose : () => void;
-}
-export default function QrScan({onClose} : QrScanProps) {
+export default function QrScan() {
     
     const scanner = useRef<QrScanner>();
     const videoElement = useRef<HTMLVideoElement>(null);
@@ -75,6 +72,7 @@ export default function QrScan({onClose} : QrScanProps) {
     function onScanSuccuess( result : QrScanner.ScanResult ) {
         console.log(result);
         setScannedResult(result?.data)
+        // 성공 sse 받아오기!
     }
 
     function onScanFail(error: string | Error) {
@@ -98,7 +96,8 @@ export default function QrScan({onClose} : QrScanProps) {
             //QR스캐너 시작
             scanner?.current?.start()
             .then(() => 
-                setQrOn(true))
+                setQrOn(true)
+            )
             .catch((error : Error) => {
                 if (error) {
                     setQrOn(false);
@@ -123,10 +122,17 @@ export default function QrScan({onClose} : QrScanProps) {
         }
     }, [qrOn])
 
-    function handleClose() {
-        setScannedResult('');
-        onClose();
-    }
+    // 결제완료 => 모달 닫기
+    // function handleClose() {
+    //     setScannedResult('');
+    //     onClose();
+    // }
+
+    // 결제완료 => 정산하기
+    // function handleSettle() {
+    //     handleClose()
+    //     console.log('결제완료')
+    // }
 
     return (
         <div css={qrReaderLayoutStyle}>
@@ -144,7 +150,8 @@ export default function QrScan({onClose} : QrScanProps) {
                 </>
             }
                 { scannedResult && (
-                    <PayCompletedModal onClose={handleClose}/>
+                    <div>결제완료.</div>
+                    // <PayCompletedModal onClose={handleClose} transactionId={transactionId}/>
                     // <p css={resultStyle}>
                     //     스캔 결과 : {scannedResult}
                     // </p>

@@ -3,7 +3,7 @@ import bangImage from '@/assets/icons/bangBang.png';
 import Btn from "@/components/common/btn/Btn";
 import React from "react";
 import { colors } from "@/styles/colors";
-import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
 const layoutStyle = css`
     position: fixed;
@@ -40,23 +40,17 @@ const buttonLayoutStyle = css`
     gap: 30px;
 `;
 
+const linkStyle = css`
+    text-decoration: none;
+`;
+
 interface PayCompletedModalProps {
-    onClose: ()=>void;
+    transactionId:TransactionId;
+    onClose: VoidFunction;
 }
 
-export default function PayCompletedModal({onClose} : PayCompletedModalProps) {
-
-    const navigate = useNavigate();
-
-    function handleMain() {
-        navigate({to : '/account'});
-        onClose();
-    }
-
-    function handleCaculate() {
-        navigate({to : '/account/settle'})
-        onClose();
-    }
+// ! api 연결 후 transactionId 임시 제거하기
+export default function PayCompletedModal({transactionId, onClose} : PayCompletedModalProps) {
 
     return (
         <div css={layoutStyle}>
@@ -66,16 +60,14 @@ export default function PayCompletedModal({onClose} : PayCompletedModalProps) {
             src={bangImage} 
             alt="bangbang" />
             <div css={buttonLayoutStyle}>
-                <Btn 
-                buttonStyle={{ size:'big', style:'blue'}}
-                onClick={handleCaculate}
-                >정산하기
+                <Link to={`/account/${transactionId}/settle`} css={linkStyle}>        
+                    <Btn buttonStyle={{ size:'big', style:'blue'}}>
+                        정산하기
+                    </Btn>
+                </Link>
+                <Btn buttonStyle={{ size:'big', style:'gray'}} onClick={onClose}>
+                    닫기
                 </Btn>
-            <Btn 
-            buttonStyle={{ size:'big', style:'gray'}}
-            onClick={handleMain}
-            >닫기
-            </Btn>
             </div>
         </div>
     )

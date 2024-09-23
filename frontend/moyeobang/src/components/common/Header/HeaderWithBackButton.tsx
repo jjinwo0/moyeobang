@@ -3,7 +3,6 @@ import { headerStyle, backButtonHeaderStyle } from "./HeaderStyle";
 import BackButton from "./ButtonIcon/BackButton";
 import React from "react";
 
-
 export default function HeaderWithBackButton() {
 
     return (
@@ -14,7 +13,7 @@ export default function HeaderWithBackButton() {
             ]}
         >
             <div>
-            <BackButton />
+            <BackButton/>
             </div>
         </nav>
     )

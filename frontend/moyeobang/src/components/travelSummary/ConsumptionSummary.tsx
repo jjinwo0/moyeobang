@@ -114,7 +114,6 @@ export default function ConsumptionSummary({
     consumptionCategory,
     participantsConsumption,
     consumptionTag,
-    locationList,
   } = travelData;
 
   // 금액 비교 함수

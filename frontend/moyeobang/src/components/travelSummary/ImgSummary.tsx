@@ -3,6 +3,8 @@ import informationIcon from '@/assets/icons/information.png';
 import cloudIcon from '@/assets/icons/cloud.webp';
 import roadImg from '@/assets/icons/roadImg.png';
 import airplaneIcon from '@/assets/icons/airplane.webp';
+import MessagePopup from '../common/messagePopup/MessagePopup';
+import React, {useState, useEffect, useRef} from 'react';
 
 interface TravelImage {
   imgUrl: string; // 이미지 URL
@@ -14,6 +16,29 @@ interface ImgSummaryProps {
 }
 
 export default function ImgSummary({travelImg}: ImgSummaryProps) {
+  const [message, setMessage] = useState<boolean>(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  // 화면에서 다른 곳을 클릭했을 때 팝업을 닫는 기능 추가
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
+        setMessage(false); // popupRef 외부를 클릭하면 팝업 닫기
+      }
+    };
+
+    // 전역 클릭 이벤트 등록
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // 컴포넌트가 언마운트될 때 이벤트 제거
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const containerStyle = css`
     width: 100%;
     display: flex;
@@ -27,20 +52,31 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
     background-color: rgba(135, 224, 255, 0.3);
     margin: 40px 0;
     border-radius: 15px;
-    position: relative; /* Position relative로 설정 */
+    position: relative;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  `;
+
+  const popUpStyle = css`
+    position: absolute;
+    right: -15px;
+    top: -55px;
+    font-family: 'semibold';
+  `;
+
+  const firstLineStyle = css`
+    margin-bottom: 3px;
   `;
 
   const informationImgStyle = css`
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   `;
 
   const cloudIconStyle = css`
-    width: 50px;
+    width: 60px;
     position: absolute;
     top: 60px;
     left: 20px;
@@ -58,9 +94,9 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
 
   const airplaneIconStyle = css`
     position: absolute;
-    bottom: 40px;
+    bottom: 30px;
     right: 20px;
-    width: 80px;
+    width: 90px;
   `;
 
   const gridContainerStyle = css`
@@ -97,13 +133,33 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
     color: #333;
   `;
 
+  const handleInformation = () => {
+    setMessage(!message);
+  };
+
   return (
     <div css={containerStyle}>
       <div css={boxStyle}>
-        <img src={informationIcon} css={informationImgStyle} />
+        {/* 팝업을 감싸는 div에 ref 추가 */}
+        <div css={popUpStyle} ref={popupRef}>
+          {message && (
+            <MessagePopup
+              message={
+                <>
+                  <p css={firstLineStyle}>업로드한 사진 8개를</p>
+                  <p>랜덤으로 보여줍니다.</p>
+                </>
+              }
+            />
+          )}
+        </div>
+        <img
+          src={informationIcon}
+          css={informationImgStyle}
+          onClick={handleInformation}
+        />
         <img src={cloudIcon} css={cloudIconStyle} />
         <img src={airplaneIcon} css={airplaneIconStyle} />
-        {/* travelImg 데이터를 기반으로 이미지와 장소 이름을 roadImg 위에 표시 */}
         <div css={gridContainerStyle}>
           {travelImg.map((item, index) => (
             <div css={gridItemStyle} key={index}>
@@ -112,8 +168,7 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
             </div>
           ))}
         </div>
-        <img src={roadImg} css={roadImgStyle} />{' '}
-        {/* 도로 이미지를 맨 아래에 표시 */}
+        <img src={roadImg} css={roadImgStyle} />
       </div>
     </div>
   );

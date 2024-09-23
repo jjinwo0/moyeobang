@@ -26,7 +26,8 @@ const locationInputStyle = css`
   box-sizing: border-box;
   margin-top: 10px;
   padding-right: 10px;
-  font-size: 18px;
+  font-size: 16px;
+  font-family: 'semibold';
 
   &::placeholder {
     color: #b9b9b9;

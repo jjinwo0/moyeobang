@@ -1,67 +1,57 @@
 import React from "react";
 import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
-import { css } from "@emotion/react";
-import { colors } from "@/styles/colors";
 import SmallProfileImage from "../ProfileImage/SmallProfileImage";
 import { Link } from "@tanstack/react-router";
 
-import { layout, 
-    upContainer, 
-    textContainer, 
-    time, 
-    location, 
-    carousel, 
-    deposit, 
-    notDeposit, 
-    balance, 
-    downContainer
+import { layoutStyle, 
+    upContainerStyle, 
+    textContainerStyle, 
+    timeStyle, 
+    locationStyle, 
+    carouselStyle, 
+    depositStyle, 
+    notDepositStyle, 
+    balanceStyle, 
+    downContainerStyle
 } from './transactionCardStyle'
-
-
-type TransactionCardProps = TransactionRecords
 
 export default function TransactionCard({
     transactionId,
-    place,
-    // details,
-    amount,
+    paymentName,
+    money,
     participants,
-    // splitMethod,
-    settled,
-    isDeposit,
-    totalBalance,
+    transactionType,
+    currentBalance,
     createdAt,
-    } : TransactionCardProps) {
+    } : TransactionList) {
 
     return(
         <Link 
-        to={`/account/detail/${transactionId}`}
-        css={layout}>
-            <div css={upContainer}>
-                <div css={textContainer} >
-                    <div css={time} >{format(createdAt, 'yyyy-MM-dd HH:mm', {locale: ko})}</div>
-                    <div css={location}>{place}</div>
+        to={`/account/${transactionId}/detail`}
+        css={layoutStyle}>
+            <div css={upContainerStyle}>
+                <div css={textContainerStyle} >
+                    <div css={timeStyle} >{format(createdAt, 'yyyy-MM-dd HH:mm', {locale: ko})}</div>
+                    <div css={locationStyle}>{paymentName}</div>
                 </div>
-                { settled &&                
-                <div css={carousel}>
+                <div css={carouselStyle}>
                     { participants && participants.map((part, index) => (
                         <SmallProfileImage 
                         key={index}
+                        px={45}
                         profileImage={part.profileImage}
                         />
                     ))}
                 </div> 
-                }
             </div >
-            <div css={downContainer}>
-                { isDeposit ? <div css={deposit} >입금 <p>{amount}</p> 원</div> : 
-                <div css={notDeposit}>출금  <p>{amount}</p> 원</div>
+            <div css={downContainerStyle}>
+                { transactionType === "입금" ? 
+                    (<div css={depositStyle} >입금 <p>{money}</p> 원</div>) : 
+                    (<div css={notDepositStyle}>출금  <p>{money}</p> 원</div>)
                 }
-                <div css={balance}> 잔액 <p>{totalBalance}</p> 원</div>
+                <div css={balanceStyle}> 잔액 <p>{currentBalance}</p> 원</div>
             </div>
-
-        
         </Link>
     )
 }

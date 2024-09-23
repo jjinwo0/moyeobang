@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useSwipeable} from 'react-swipeable';
-import useTravelStore from '@/store/useTravelStore';
+// import useTravelStore from '@/store/useTravelStore';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
@@ -8,12 +9,28 @@ import ConsumptionSummary from './ConsumptionSummary';
 import ImgSummary from './ImgSummary';
 import MapComponent from './MapComponent'; // 지도 컴포넌트 임포트
 import bangBang from '@/assets/icons/bangBang.png';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko'; // 한국어 요일을 위해 한국어 로케일 임포트
+import weekday from 'dayjs/plugin/weekday'; // 요일 계산을 위한 플러그인
+import updateLocale from 'dayjs/plugin/updateLocale'; // 요일 출력 수정용 플러그인
 
 const travelSummary: TravelSummary = {
   locationList: [
     {
-      latitude: 33.431441,
+      latitude: 33.43143,
       longitude: 126.874237, // 여행 장소들 위도,경도
+    },
+    {
+      latitude: 33.48549374886766,
+      longitude: 126.48117326163943, // 여행 장소들 위도,경도
+    },
+    {
+      latitude: 33.3942945,
+      longitude: 126.2398813, // 여행 장소들 위도,경도
+    },
+    {
+      latitude: 33.5098305,
+      longitude: 126.5233913, // 여행 장소들 위도,경도
     },
   ],
   totalAmount: 1000000, // 전체 예산
@@ -159,14 +176,28 @@ const slideStyle = css`
   max-width: 390px;
 `;
 
+dayjs.extend(weekday);
+dayjs.extend(updateLocale);
+
+dayjs.locale('ko'); // 여기서 한국어 로케일을 설정
+
+// 한국어 요일 설정
+dayjs.updateLocale('ko', {
+  weekdays: ['일', '월', '화', '수', '목', '금', '토'],
+});
+
 export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
-  const {travelName, startDate, endDate, travelPlaceList} = useTravelStore();
+  const {travelName, startDate, endDate, travelPlaceList} =
+    useTravelDetailStore();
   const [currentSlide, setCurrentSlide] = useState(0); // 슬라이드 상태
   const slideCount = 2; // 슬라이드 개수
   const slides = [
     <ConsumptionSummary travelData={travelSummary} />,
     <ImgSummary travelImg={travelSummary.imgSummary} />,
   ]; // 슬라이드에 표시할 컴포넌트들
+
+  const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD (dddd)');
+  const formattedEndDate = dayjs(endDate).format('YYYY-MM-DD (dddd)');
 
   // Swipeable 설정
   const handlers = useSwipeable({
@@ -187,16 +218,19 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
             <span css={travelNameStyle}>{travelName}</span>
             <span css={blackTextStyle}>의</span>
           </div>
-          <span css={travelPlaceStyle}>{travelPlaceList.join(', ')}</span>
+          <span css={travelPlaceStyle}>{travelPlaceList.join(' & ')}</span>
           <span css={blackTextStyle}> 여행 요약</span>
         </div>
 
-        <p>{`${startDate} ~ ${endDate}`}</p>
+        <p>{`${formattedStartDate} ~ ${formattedEndDate}`}</p>
 
         {/* 첫 번째 슬라이드일 때만 지도 보여주기 */}
         {currentSlide === 0 && (
           <div css={mapContainerStyle}>
-            <MapComponent locationList={travelSummary.locationList} />
+            <MapComponent
+              locationList={travelSummary.locationList}
+              travelPlaceList={travelPlaceList}
+            />
           </div>
         )}
 
