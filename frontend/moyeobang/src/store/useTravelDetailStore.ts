@@ -3,25 +3,18 @@ import {create} from 'zustand';
 interface TravelState
   extends Omit<
     Travel,
-    | 'quizQuestion'
-    | 'quizAnswer'
-    | 'travelImg'
-    | 'participantsCount'
-    | 'travelId'
+    'quizQuestion' | 'quizAnswer' | 'travelImg' | 'participantsCount'
   > {
   setTravelData: (
     data: Omit<
       Travel,
-      | 'quizQuestion'
-      | 'quizAnswer'
-      | 'travelImg'
-      | 'participantsCount'
-      | 'travelId'
+      'quizQuestion' | 'quizAnswer' | 'travelImg' | 'participantsCount'
     >
   ) => void;
 }
 
 const useTravelDetailStore = create<TravelState>(set => ({
+  travelId: 0,
   travelName: '',
   startDate: '',
   endDate: '',
@@ -30,6 +23,7 @@ const useTravelDetailStore = create<TravelState>(set => ({
   accountNumber: '',
   participantsInfo: [],
   setTravelData: ({
+    travelId,
     travelName,
     startDate,
     endDate,
@@ -39,6 +33,7 @@ const useTravelDetailStore = create<TravelState>(set => ({
     participantsInfo,
   }) =>
     set({
+      travelId,
       travelName,
       startDate,
       endDate,

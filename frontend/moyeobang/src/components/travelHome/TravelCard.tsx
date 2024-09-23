@@ -7,10 +7,13 @@ import {useRouter, useNavigate} from '@tanstack/react-router';
 import Btn from '../common/btn/Btn';
 import ExitTravel from './ExitTravel';
 import inviteIcon from '@/assets/icons/inviteIcon.png';
+import blackPaperIcon from '@/assets/icons/blackPaperIcon.png';
 import ConfirmQuiz from '../quiz/ConfirmQuiz';
 import CreateTravel from './CreateTravel.tsx';
 import useTravelStore from '@/store/useTravelStore';
 import {useTravelContext} from '@/context/TravelDataContext'; // TravelDataContext import
+import useModalStore from '@/store/useModalStore.ts';
+import TravelSummaryModal from '../travelSummary/travelSummaryModal.tsx';
 
 const cardStyle = css`
   display: flex;
@@ -85,6 +88,17 @@ const settingButtonStyle = css`
   margin-top: 20px;
 `;
 
+const reportIconStyle = css`
+  position: absolute; /* 부모 요소 안에서 절대 위치 */
+  top: 15px; /* 위쪽으로 16px 간격 */
+  right: 75px; /* 오른쪽으로 16px 간격 */
+  z-index: 10;
+  img {
+    width: 26px;
+    height: 26px;
+  }
+`;
+
 const exitModalStyle = css`
   z-index: 20;
 `;
@@ -109,6 +123,7 @@ interface TravelCardProps {
   quizQuestion: string;
   quizAnswer: string;
   onClick?: () => void;
+  activeTab?: string;
 }
 
 export default function TravelCard({
@@ -120,10 +135,12 @@ export default function TravelCard({
   quizQuestion,
   quizAnswer,
   onClick,
+  activeTab,
 }: TravelCardProps) {
   const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
   const [inviteModal, setInviteModal] = useState<boolean>(false);
   const [exitModal, setExitModal] = useState<boolean>(false);
+  const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
   // const navigate = useNavigate();
   const [editModal, setEditModal] = useState<boolean>(false);
   const {setTravelData} = useTravelStore();
@@ -141,6 +158,21 @@ export default function TravelCard({
   const clickInviteButton = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 전파를 막음
     setInviteModal(true);
+  };
+
+  const clickSummaryButton = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log('Modal open with:', {
+      travelName,
+      startDate,
+      endDate,
+      travelPlaceList,
+    });
+    setTravelSummaryModal(true);
+  };
+
+  const closeSummaryModal = () => {
+    setTravelSummaryModal(false);
   };
 
   const handleExitModalOpen = (e: React.MouseEvent) => {
@@ -187,6 +219,11 @@ export default function TravelCard({
         <div css={quizButtonStyle} onClick={clickInviteButton}>
           <img src={inviteIcon} />
         </div>
+        {activeTab === 'past' && (
+          <div css={reportIconStyle} onClick={clickSummaryButton}>
+            <img src={blackPaperIcon} />
+          </div>
+        )}
 
         {settingButtonClick && (
           <div css={settingButtonStyle}>
@@ -230,6 +267,18 @@ export default function TravelCard({
               quizQuestion: quizQuestion,
               quizAnswer: quizAnswer,
             }}
+          />
+        </div>
+      )}
+
+      {travelSummaryModal && (
+        <div>
+          <TravelSummaryModal
+            travelName={travelName}
+            startDate={startDate}
+            endDate={endDate}
+            travelPlaceList={travelPlaceList}
+            onClose={closeSummaryModal}
           />
         </div>
       )}
