@@ -68,6 +68,7 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
+  console.log('거래 상세 데이터', transactionDetailData)
 
   function handleUpdateReceipt() {
     setOpentUpdateModal(true);
@@ -96,7 +97,8 @@ export default function TransactionDetail() {
         paymentName={transactionDetailData.paymentName}
         money={transactionDetailData.money}
         createdAt={transactionDetailData.createdAt}
-        adress={transactionDetailData.adress}
+        adress={transactionDetailData.address}
+        acceptedNumber={transactionDetailData.acceptedNumber}
       />
       {transactionDetailData.splitMethod === 'receipt' &&
         !isSettledParticipantByCustom(transactionDetailData.details) && (

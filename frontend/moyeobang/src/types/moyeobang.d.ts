@@ -259,7 +259,7 @@ interface BaseTransactionDetail {
   address: Adress;
   money: Money;
   createdAt: CreatedAt;
-  // acceptedNumber: AcceptedNumber;
+  acceptedNumber: AcceptedNumber;
 }
 
 // 정산 완료 영수증 (N분의 1)
@@ -284,6 +284,7 @@ interface CompleteTransaction {
   address: Adress;
   paymentName: PaymentName;
   createdAt: CreatedAt;
+  acceptedNumber:AcceptedNumber;
 }
 
 interface Info {
@@ -296,6 +297,7 @@ interface PostTransactionDetailByCustom {
   money: Money;
   info: Info[];
   splitMethod: SplitMethod;
+  acceptedNumber:AcceptedNumber;
 }
 
 interface ChatItem {

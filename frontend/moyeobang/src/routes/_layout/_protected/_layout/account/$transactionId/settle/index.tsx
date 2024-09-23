@@ -1,8 +1,8 @@
+import React from 'react';
 import { createFileRoute,useRouter } from '@tanstack/react-router'
 import HeaderWithXButton from '@/components/common/Header/HeaderWithXbutton'
 import { css } from '@emotion/react'
 import TwoBtn from '@/components/common/btn/TwoBtn';
-import React, { useEffect } from 'react';
 import { useState } from 'react';
 import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
 import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
@@ -77,20 +77,22 @@ export default function Settle() {
           />
           { activeComponent === 'left' && 
             <SettleByReceiptComponent 
-              transactionId={transactionId}
+              transactionId={Number(transactionId)}
               money={transactionDetailData.money}
               address={transactionDetailData.address}
               paymentName={transactionDetailData.paymentName}
               createdAt={transactionDetailData.createdAt}
+              acceptedNumber={transactionDetailData.acceptedNumber}
             />
           }
           { activeComponent === 'right' && isSettledParticipantByCustom(transactionDetailData.details) &&
             <SettleByCustomComponent
-              transactionId={transactionId}
+              transactionId={Number(transactionId)}
               paymentName={transactionDetailData.paymentName}
               createdAt={transactionDetailData.createdAt}
               totalMoney={transactionDetailData.money}
               details={transactionDetailData.details}
+              acceptedNumber={transactionDetailData.acceptedNumber}
             />
           }
         </div>

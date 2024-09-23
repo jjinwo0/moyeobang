@@ -18,7 +18,6 @@ const layoutStyle=css`
   width:100%;
   height:100%;
   background-color:${colors.white};
-  width:100%;
   display:flex;
   flex-direction:column;
 `;
@@ -127,7 +126,7 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
 
       setUpdateDetails((prevDetails) => {
 
-        if (!prevDetails) return prevDetails; 
+        if (!prevDetails) return []; 
 
         return prevDetails?.map((detail) => 
           detail.orderItemId === itemId ?
@@ -149,8 +148,7 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
       splitMethod:'receipt',
     }
     updateSettleByReceipt({transactionId: data.transactionId , data : updateReceipt})
-    console.log('정산될 영수증', updateReceipt)
-    console.log('영수증 정산완료 클릭')
+    console.log('정산 클릭 정산될 데이터:', updateReceipt)
   }
 
   function handleRestart() {
@@ -189,7 +187,9 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
         <Link to={`/account/${data.transactionId}/settle`} css={linkStyle}>
           <Btn buttonStyle={{size:'big', style:'greenBlue'}} onClick={handleRestart}>영수증 다시 찍기</Btn>
         </Link>
-        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>정산 완료</Btn>
+        { isNew ? 
+        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>정산 완료</Btn> : 
+        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>수정 완료</Btn>}
       </div>
     </div>
   )

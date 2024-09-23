@@ -69,8 +69,6 @@ export default function groupAccount() {
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
   const [member, setMember] = useState<MemberId | null>(null);
 
-  // TODO 주석제거
-  // **
   const {data : transactionData} = useSuspenseQuery({
     queryKey: ['transactionList', accountId, selectedMember ],
     queryFn: () => moyeobang.getTransactionList(Number(accountId), selectedMember),
@@ -95,13 +93,8 @@ export default function groupAccount() {
   });
 
   const transactionListData = transactionData.data.data;
-  console.log(transactionListData)
-  // **
 
-  // const transactionListData = transactions;//임시
-
-  // TODO 주석 제거
-  // // 타입 가드 함수
+  // 타입 가드 함수
   function isAccountBalanceByGroup(
     accountData: AccountBalanceByGroup | AccountBalanceBymemberId
   ): accountData is AccountBalanceByGroup {
@@ -115,7 +108,6 @@ export default function groupAccount() {
   if (!accountData) {
     return <div>Loading...</div>;
   }
-  console.log(1111, accountData)
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
@@ -146,7 +138,6 @@ export default function groupAccount() {
         ))}
         </div>
         <div css={accountCardStyle} >
-          {/* TODO 주석 제거 */}
           {isAccountBalanceByGroup(accountData)  ? 
             <AccountCard 
             currentBalance={accountData.currentBalance}

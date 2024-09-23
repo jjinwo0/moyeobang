@@ -6,6 +6,7 @@ import travelLog from '@/assets/icons/travelLog.webp';
 import wallet from '@/assets/icons/wallet.png';
 import coin from '@/assets/icons/coin.png';
 import CalculatePopup from '../calculate/CalculatePopup';
+import { Link } from '@tanstack/react-router';
 
 const footer = css`
   position: fixed;
@@ -108,6 +109,7 @@ export default function Navbar() {
           <p>정산</p>
         </div>
         <div css={nav}>
+          <Link to={'/travelLog'}>
           <div
             css={travel(selectedItem === 'travel')}
             onClick={() => setSelectedItem('travel')}
@@ -115,6 +117,8 @@ export default function Navbar() {
             <img src={travelLog} width={50} height={50} alt="여행 기록" />
             <p>여행기록</p>
           </div>
+          </Link>
+          <Link to={'/account'}>
           <div
             css={account(selectedItem === 'account')}
             onClick={() => setSelectedItem('account')}
@@ -122,6 +126,7 @@ export default function Navbar() {
             <img src={wallet} width={50} height={50} />
             <p>모임통장</p>
           </div>
+          </Link>
         </div>
       </div>
 

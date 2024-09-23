@@ -62,7 +62,7 @@ const buttonStyle = css`
 
 type SettleByReceiptComponentProps = CompleteTransaction
 
-export default function SettleByReceiptComponent({transactionId, money, paymentName, address, createdAt} : SettleByReceiptComponentProps) {
+export default function SettleByReceiptComponent({transactionId, money, paymentName, address, createdAt, acceptedNumber} : SettleByReceiptComponentProps) {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -182,7 +182,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
 
             // extractItems를 통해 데이터 변환
             if (parsedData && parsedData.items) {
-                const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, address); 
+                const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, address, acceptedNumber); 
                 console.log('영수증 ocr 결과', results)
                 setResults(results)
                 setOpenResultModal(true);
