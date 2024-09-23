@@ -5,7 +5,7 @@ import com.ssafy.moyeobang.notification.application.domain.Travel;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TravelMapper {
+public class TravelMapperInNotification {
 
     public Travel mapToDomain(TravelJpaEntity entity) {
 

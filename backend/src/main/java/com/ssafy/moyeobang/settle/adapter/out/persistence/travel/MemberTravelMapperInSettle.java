@@ -8,7 +8,7 @@ import com.ssafy.moyeobang.settle.application.domain.travel.MemberTravel.Mapping
 import org.springframework.stereotype.Component;
 
 @Component
-public class MemberTravelMapper {
+public class MemberTravelMapperInSettle {
 
     MemberTravel mapToDomain(final MemberTravelJpaEntity memberTravelJpaEntity) {
 

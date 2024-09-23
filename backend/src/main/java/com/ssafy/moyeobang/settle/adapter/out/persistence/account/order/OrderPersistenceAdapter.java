@@ -19,7 +19,7 @@ public class OrderPersistenceAdapter implements FindOrderPort, CreateOrderPort {
 
     private final TransactionPersistenceAdapter transactionPersistenceAdapter;
 
-    private final OrderMapper orderMapper;
+    private final OrderMapperInSettle orderMapperInSettle;
 
     @Override
     public Order findOrder(Long id) {
@@ -27,7 +27,7 @@ public class OrderPersistenceAdapter implements FindOrderPort, CreateOrderPort {
         OrderJpaEntity findEntity = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order id[" + id + "] 주문 건 정보가 존재하지 않습니다."));
 
-        return orderMapper.mapToDomain(findEntity);
+        return orderMapperInSettle.mapToDomain(findEntity);
     }
 
     @Override
@@ -35,10 +35,10 @@ public class OrderPersistenceAdapter implements FindOrderPort, CreateOrderPort {
 
         WithdrawJpaEntity findWithdraw = transactionPersistenceAdapter.findWithdrawEntity(info.transactionId());
 
-        OrderJpaEntity createOrderEntity = orderMapper.createEntityByInfo(info, findWithdraw);
+        OrderJpaEntity createOrderEntity = orderMapperInSettle.createEntityByInfo(info, findWithdraw);
 
         orderRepository.save(createOrderEntity);
 
-        return orderMapper.mapToDomain(createOrderEntity);
+        return orderMapperInSettle.mapToDomain(createOrderEntity);
     }
 }

@@ -8,7 +8,7 @@ import com.ssafy.moyeobang.settle.application.domain.account.Account.AccountNo;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountMapper {
+public class AccountMapperInSettle {
 
     // 개인 계좌
     Account mapToDomain(final MemberAccountJpaEntity entity) {

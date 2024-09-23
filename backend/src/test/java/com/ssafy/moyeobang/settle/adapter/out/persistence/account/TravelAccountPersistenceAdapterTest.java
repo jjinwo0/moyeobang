@@ -27,7 +27,7 @@ class TravelAccountPersistenceAdapterTest extends PersistenceAdapterTestSupport 
     private TravelRepositoryInSettle travelRepository;
 
     @Autowired
-    private AccountMapper mapper;
+    private AccountMapperInSettle mapper;
 
     @BeforeEach
     void setUp() {

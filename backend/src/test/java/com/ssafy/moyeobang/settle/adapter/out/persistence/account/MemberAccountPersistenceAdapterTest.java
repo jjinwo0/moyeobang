@@ -27,7 +27,7 @@ class MemberAccountPersistenceAdapterTest extends PersistenceAdapterTestSupport 
     private MemberRepositoryInSettle memberRepository;
 
     @Autowired
-    private AccountMapper mapper;
+    private AccountMapperInSettle mapper;
 
     @BeforeEach
     void setUp() {
