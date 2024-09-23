@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.util.List;
 import org.springframework.web.client.RestClient;
 
 abstract class RestClientUtils {
@@ -28,6 +27,20 @@ abstract class RestClientUtils {
         }
     }
 
+    public static JsonNode postWithBaseUrl(String baseUrl, Object request) {
+        try {
+            String responseBody = restClient(baseUrl).post()
+                    .contentType(APPLICATION_JSON)
+                    .body(request)
+                    .retrieve()
+                    .body(String.class);
+
+            return MAPPER.readTree(responseBody);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void postWithoutResponse(String uri, Object request) {
         restClient().post()
                 .uri(uri)
@@ -36,16 +49,15 @@ abstract class RestClientUtils {
                 .retrieve();
     }
 
-    public static <T> List<T> postConvertResponseToList(String uri, Object request, Class<T> clazz) {
-        return MAPPER.convertValue(
-                post(uri, request).path("REC").path("list"),
-                MAPPER.getTypeFactory().constructCollectionType(List.class, clazz)
-        );
-    }
-
     private static RestClient restClient() {
         return RestClient.builder()
                 .baseUrl("https://finopenapi.ssafy.io/ssafy/api/v1/edu")
+                .build();
+    }
+
+    private static RestClient restClient(String baseUrl) {
+        return RestClient.builder()
+                .baseUrl(baseUrl)
                 .build();
     }
 

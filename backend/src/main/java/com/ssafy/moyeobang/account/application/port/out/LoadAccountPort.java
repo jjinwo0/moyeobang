@@ -1,10 +1,11 @@
 package com.ssafy.moyeobang.account.application.port.out;
 
-import com.ssafy.moyeobang.account.application.domain.Account;
+import com.ssafy.moyeobang.account.application.domain.MemberAccount;
+import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 
 public interface LoadAccountPort {
 
-    Account loadMemberAccount(Long memberId);
+    MemberAccount loadMemberAccount(String accountNumber);
 
-    Account loadTravelAccount(String accountNumber);
+    TravelAccount loadTravelAccount(Long accountId);
 }

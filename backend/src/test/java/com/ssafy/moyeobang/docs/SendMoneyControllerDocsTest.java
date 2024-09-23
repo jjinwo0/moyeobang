@@ -27,7 +27,7 @@ class SendMoneyControllerDocsTest extends RestDocsSupport {
     @MockBean
     private SendMoneyUseCase sendMoneyUseCase;
 
-    @DisplayName("공금 입금 API를 호출하면 개인 계좌에서 모임 통장 계좌로 돈을 송금한다.")
+    @DisplayName("공금 입금 API")
     @Test
     void sendMoney() throws Exception {
         SendMoneyRequest request = new SendMoneyRequest(1L, 10000L);
@@ -35,7 +35,7 @@ class SendMoneyControllerDocsTest extends RestDocsSupport {
         willDoNothing().given(sendMoneyUseCase).sendMoney(any(SendMoneyCommand.class));
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/accounts/{accountNumber}/send", "0016174648358792")
+                        MockMvcRequestBuilders.post("/api/accounts/{accountId}/send", 1L)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )

@@ -1,5 +1,7 @@
 package com.ssafy.moyeobang.common.persistenceentity.order;
 
+import static java.util.stream.Collectors.toMap;
+
 import com.ssafy.moyeobang.common.persistenceentity.BaseEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberOrderHistoryJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
@@ -16,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,5 +51,14 @@ public class OrderJpaEntity extends BaseEntity {
         this.title = title;
         this.amount = amount;
         this.withdraw = withdraw;
+    }
+
+    public Map<Long, Long> getSettle() {
+        return memberOrderHistoryJpaEntities.stream()
+                .collect(toMap(
+                                MemberOrderHistoryJpaEntity::getMemberId,
+                                MemberOrderHistoryJpaEntity::getAmount
+                        )
+                );
     }
 }

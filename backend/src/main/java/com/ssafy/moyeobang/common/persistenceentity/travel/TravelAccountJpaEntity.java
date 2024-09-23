@@ -37,4 +37,8 @@ public class TravelAccountJpaEntity extends BaseEntity {
         this.accountNumber = accountNumber;
         this.travel = travel;
     }
+
+    public Long getTravelId() {
+        return travel.getId();
+    }
 }

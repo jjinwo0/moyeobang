@@ -6,6 +6,8 @@ import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntit
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,21 +36,24 @@ public class WithdrawJpaEntity extends BaseEntity {
 
     private String title;
 
-    private Double latitude;
-
-    private Double longitude;
-
     private long amount;
 
     private long balanceSnapshot;
 
     private String targetAccountNumber;
 
+    private double latitude;
+
+    private double longitude;
+
     private String placeId;
 
     private String placeName;
 
     private String placeAddress;
+
+    @Enumerated(EnumType.STRING)
+    private SettleType settleType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_account_id")
@@ -58,22 +63,27 @@ public class WithdrawJpaEntity extends BaseEntity {
     private List<OrderJpaEntity> orderJpaEntities = new ArrayList<>();
 
     @Builder
-    public WithdrawJpaEntity(String title,
-                             Double latitude,
-                             Double longitude,
-                             long amount,
-                             long balanceSnapshot,
-                             String targetAccountNumber,
-                             TravelAccountJpaEntity travelAccount,
-                             String placeId,
-                             String placeName,
-                             String placeAddress) {
+    private WithdrawJpaEntity(String title,
+                              long amount,
+                              long balanceSnapshot,
+                              String targetAccountNumber,
+                              double latitude,
+                              double longitude,
+                              String placeId,
+                              String placeName,
+                              String placeAddress,
+                              SettleType settleType,
+                              TravelAccountJpaEntity travelAccount) {
         this.title = title;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.amount = amount;
         this.balanceSnapshot = balanceSnapshot;
         this.targetAccountNumber = targetAccountNumber;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.placeAddress = placeAddress;
+        this.settleType = settleType;
         this.travelAccount = travelAccount;
         this.placeId = placeId;
         this.placeName = placeName;

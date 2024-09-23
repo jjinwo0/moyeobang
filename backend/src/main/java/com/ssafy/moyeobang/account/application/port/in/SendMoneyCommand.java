@@ -6,11 +6,11 @@ import com.ssafy.moyeobang.account.application.domain.Money;
 import jakarta.validation.constraints.NotNull;
 
 public record SendMoneyCommand(@NotNull Long memberId,
-                               @NotNull String targetAccountNumber,
+                               @NotNull Long travelAccountId,
                                @NotNull Money money) {
 
-    public SendMoneyCommand(Long memberId, String targetAccountNumber, Long amount) {
-        this(memberId, targetAccountNumber, Money.of(amount));
+    public SendMoneyCommand(Long memberId, Long travelAccountId, Long amount) {
+        this(memberId, travelAccountId, Money.of(amount));
 
         validate(this);
     }

@@ -13,7 +13,7 @@ public record TransactionHistoryResponse(Long transactionUniqueNo,
                                          String transactionTypeName,
                                          String transactionAccountNo,
                                          Long transactionBalance,
-                                         String transactionAfterBalance,
+                                         Long transactionAfterBalance,
                                          String transactionSummary,
                                          String transactionMemo) {
 
