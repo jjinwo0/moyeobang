@@ -60,20 +60,20 @@ public class SettleService implements SettleUseCase {
         Order order = createOrderPort.createOrder(
                 new OrderInfo(
                         command.title(),
-                        command.amount(),
+                        command.money(),
                         command.transactionId()
                 )
         );
 
         createMemberOrderHistoryPort.createMemberOrderHistory(
-                command.amount(),
+                command.money(),
                 new MappingInfo(
                         command.memberId(),
                         order.getId())
         );
 
         updateMemberTravelPort.decreaseMemberTravelAmount(
-                command.amount(),
+                command.money(),
                 command.memberId(),
                 order.getId()
         );

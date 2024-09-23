@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record CustomSettleCommand(@NotNull Long transactionId,
                                   @NotNull String title,
-                                  @NotNull Integer amount,
+                                  @NotNull Integer money,
                                   @NotNull Long memberId) {
 }
