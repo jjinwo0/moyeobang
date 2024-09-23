@@ -1,6 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
 import * as ScheduleMapSearchStyle from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearchStyle';
-import HeaderWithXButton from '@/components/common/Header/HeaderWithXbutton';
 import PlusSelfGoogleMap from '@/components/travelLog/PlusSelf/Map/PlusSelfGoolgeMap';
 import SearchImg from '@/assets/icons/Search.png';
 import {Status, Wrapper} from '@googlemaps/react-wrapper';
@@ -37,19 +36,33 @@ export default function ScheduleMapSearch({
   // }, [searchLocation]);
   const googleMapRef = useRef<any>(null);
 
+  // const searchLocationHandler = () => {
+  //   if (!searchMap) {
+  //     alert('장소를 입력해주세요.');
+  //     return;
+  //   }
+  //   if (searchLocation && googleMapRef.current) {
+  //     const geocoder = new window.google.maps.Geocoder();
+  //     geocoder.geocode({address: searchLocation}, (results, status) => {
+  //       if (status === 'OK' && results && results[0]) {
+  //         const location = results[0].geometry.location;
+  //         googleMapRef.current.setCenter(location.lat(), location.lng());
+  //         setSearchLocation(searchMap);
+  //       } else {
+  //         alert('장소를 찾을 수 없습니다.');
+  //       }
+  //     });
+  //   }
+  // };
+
+  // 검색어를 입력할 때 searchMap 상태를 업데이트하고, 검색 버튼을 누르면 searchLocation 상태를 업데이트
   const searchLocationHandler = () => {
-    if (searchLocation && googleMapRef.current) {
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({address: searchLocation}, (results, status) => {
-        if (status === 'OK' && results && results[0]) {
-          const location = results[0].geometry.location;
-          googleMapRef.current.setCenter(location.lat(), location.lng());
-          setSearchLocation(searchMap);
-        } else {
-          alert('장소를 찾을 수 없습니다.');
-        }
-      });
+    if (!searchMap) {
+      alert('장소를 입력해주세요.');
+      return;
     }
+    // 검색어를 상태에 반영하여 PlusSelfGoogleMap에 전달
+    setSearchLocation(searchMap);
   };
   return (
     <>
@@ -77,7 +90,7 @@ export default function ScheduleMapSearch({
         </div>
         {/* 지도 보여주기 */}
         <div css={ScheduleMapSearchStyle.MapLayout}>
-          <Wrapper apiKey={mapAPI} render={render}>
+          <Wrapper apiKey={mapAPI} render={render} libraries={['places']}>
             <PlusSelfGoogleMap
               ref={googleMapRef}
               initialLocation={searchLocation}
