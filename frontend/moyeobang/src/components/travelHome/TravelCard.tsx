@@ -116,8 +116,8 @@ const quizButtonStyle = css`
 
 interface TravelCardProps {
   travelName: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
   travelPlaceList: string[];
   participantsCount: number;
   quizQuestion: string;

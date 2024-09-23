@@ -10,8 +10,6 @@ import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel.tsx';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
-// import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
-import useTravelStore from '@/store/useTravelStore';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
@@ -58,8 +56,8 @@ const data: Travel[] = [
     travelName: '여행제목2',
     travelImg: null,
     participantsCount: 4,
-    startDate: '2024-09-22T12:34:56Z',
-    endDate: '2024-09-26T12:34:56Z',
+    startDate: '2024-09-23T12:34:56Z',
+    endDate: '2024-09-23T12:34:56Z',
     travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
@@ -182,10 +180,12 @@ function Index() {
   // const {setNowTravelData} = useTravelContext();
 
   // //[todo] get으로 여행 목록 전체 조회하기
-  // const {data} = useSuspenseQuery({
+  // const {data:travelData} = useSuspenseQuery({
   //   queryKey: ['travelList'],
   //   queryFn: () => moyeobang.getTravelList(),
   // });
+
+  // const data = travelData?.data.data;
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -193,6 +193,7 @@ function Index() {
   };
 
   const today = normalizeDate(new Date());
+  // console.log(today);
 
   // 날짜를 변환한 후 비교
   const upcomingTrips = data.filter(
