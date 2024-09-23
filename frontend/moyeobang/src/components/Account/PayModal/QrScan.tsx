@@ -150,7 +150,7 @@ export default function QrScan() {
                 </>
             }
                 { scannedResult && (
-                    <div>결제완료.</div>
+                    <div>결제완료.!(QrScan컴포넌트)</div>
                     // <PayCompletedModal onClose={handleClose} transactionId={transactionId}/>
                     // <p css={resultStyle}>
                     //     스캔 결과 : {scannedResult}

@@ -20,7 +20,7 @@ export default {
     memberId:number
   ) =>
     axios.get<MoyeobangResponse<AccountBalanceBymemberId>>(
-      `/accounts/${accountId}/balance/${memberId}`,
+      `/accounts/${accountId}/balance/member/${memberId}`,
 ),
   /**
    * 전체 결제 내역 전체 & 개별 조회

@@ -159,7 +159,7 @@ interface OrderItems {
 // 모임 통장 공금 잔액 조회
 interface AccountBalanceByGroup {
   currentBalance: CurrentBalance;
-  totalMoney: TotalMoney;
+  totalAmount: TotalMoney;
   totalComsumption: TotalComsumption;
   usagePercentage: UsagePercentage;
 }
@@ -349,7 +349,8 @@ interface QrData {
 interface PosPay {
   placeId: number;
   placeName:string;
-  placeAdress:Adress;
+  placeAddress:Adress;
+  amount:Money;
   latitude: Latitude;
   longitude:Longitude;
   targetAccountNumber: string;
@@ -366,7 +367,8 @@ interface PaymentProps {
   sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
   placeId: string;
   placeName: string;
-  placeAdress: string;
+  placeAddress: string;
+  amount:Money;
   latitude: number;
   longitude: number;
   targetAccountNumber: string;
