@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useSwipeable} from 'react-swipeable';
-import useTravelStore from '@/store/useTravelStore';
+// import useTravelStore from '@/store/useTravelStore';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
@@ -186,7 +187,8 @@ dayjs.updateLocale('ko', {
 });
 
 export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
-  const {travelName, startDate, endDate, travelPlaceList} = useTravelStore();
+  const {travelName, startDate, endDate, travelPlaceList} =
+    useTravelDetailStore();
   const [currentSlide, setCurrentSlide] = useState(0); // 슬라이드 상태
   const slideCount = 2; // 슬라이드 개수
   const slides = [

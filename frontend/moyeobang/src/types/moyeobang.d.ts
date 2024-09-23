@@ -39,7 +39,6 @@ type Answer = string;
 
 type InvitationLink = string;
 
-
 interface ParticipantInfo {
   memberId: MemberId;
   nickname: Nickname;
@@ -57,6 +56,9 @@ interface Travel {
   travelPlaceList: TravelPlaceList;
   quizQuestion: QuizQuestion;
   quizAnswer: QuizAnswer;
+  accountId: AccountId;
+  accountNumber: AccountNumber;
+  participantsInfo: ParticipantInfo[];
 }
 
 type MemberId = number;
@@ -65,7 +67,7 @@ type ProfileImage = string;
 type TransactionId = number;
 type WithdrawId = number;
 type CreatedAt = string;
-type TransactionType = "입금" | "출금";
+type TransactionType = '입금' | '출금';
 type CurrentBalance = number; // 현재 잔액
 type Adress = string;
 type SplitMethod = string;
@@ -85,17 +87,17 @@ type TotalComsumption = number;
 type AccountId = number;
 
 interface ParticipantInfo {
-    memberId: MemberId;
-    nickname: Nickname;
-    profileImage: ProfileImage;
-  }
+  memberId: MemberId;
+  nickname: Nickname;
+  profileImage: ProfileImage;
+}
 
 interface OrderItems {
-    orderItemId: OrderItemId;
-    orderItemTitle: OrderItemTitle;
-    orderItemQuantity : OrderItemquantity;
-    orderItemPrice: OrderItemPrice;
-  }
+  orderItemId: OrderItemId;
+  orderItemTitle: OrderItemTitle;
+  orderItemQuantity: OrderItemquantity;
+  orderItemPrice: OrderItemPrice;
+}
 
 // 모임 통장 공금 잔액 조회
 interface GroupAccountBalance {
@@ -117,52 +119,52 @@ interface PersonalAccountBalance {
 
 // 결제 내역 전체 조회 GET
 interface TransactionList {
-    transactionId : TransactionId;
-    paymentName : PaymentName;
-    money : Money;
-    participants : ParticipantInfo[];   // 정산한 사람들(default)
-    transactionType : TransactionType;
-    currentBalance : CurrentBalance;
-    createdAt : CreatedAt;
+  transactionId: TransactionId;
+  paymentName: PaymentName;
+  money: Money;
+  participants: ParticipantInfo[]; // 정산한 사람들(default)
+  transactionType: TransactionType;
+  currentBalance: CurrentBalance;
+  createdAt: CreatedAt;
 }
 
 // 상세 조회 영수증 정산 'receipt'의 details
 interface SettledItemByReceipt {
-    orderItemId: OrderItemId;
-    orderItemTitle : OrderItemTitle;
-    orderItemPrice: OrderItemPrice;
-    orderItemQuantity : OrderItemQuantity;
-    participants : ParticipantInfo[];
+  orderItemId: OrderItemId;
+  orderItemTitle: OrderItemTitle;
+  orderItemPrice: OrderItemPrice;
+  orderItemQuantity: OrderItemQuantity;
+  participants: ParticipantInfo[];
 }
 
 // 상세 조회 직접 정산 'custom' 의 details
 interface SettledParticipantByCustom {
-    participant: ParticipantInfo;
-    money:Money;
+  participant: ParticipantInfo;
+  money: Money;
 }
 
 // 정산 정보 상세 조회 GET
 
 // 공통 타입 정의
 interface BaseTransactionDetail {
-    transactionId : TransactionId;
-    paymentName: PaymentName;
-    adress: Adress;
-    money: Money;
-    createdAt: CreatedAt;
-    // acceptedNumber: AcceptedNumber;
+  transactionId: TransactionId;
+  paymentName: PaymentName;
+  adress: Adress;
+  money: Money;
+  createdAt: CreatedAt;
+  // acceptedNumber: AcceptedNumber;
 }
-  
+
 // 정산 완료 영수증 (N분의 1)
-interface TransactionDetailByReceipt extends BaseTransactionDetail  {
-    details: SettledItemByReceipt[];
-    splitMethod: SplitMethod; // 'receipt'
+interface TransactionDetailByReceipt extends BaseTransactionDetail {
+  details: SettledItemByReceipt[];
+  splitMethod: SplitMethod; // 'receipt'
 }
-  
+
 // 정산 완료 (직접 정산) (default 정산)
-interface TransactionDetailByCustom extends BaseTransactionDetail  {
-    details: SettledParticipantByCustom[];
-    splitMethod: SplitMethod; // 'custom'
+interface TransactionDetailByCustom extends BaseTransactionDetail {
+  details: SettledParticipantByCustom[];
+  splitMethod: SplitMethod; // 'custom'
 }
 
 type TransactionDetailProps =
@@ -170,87 +172,93 @@ type TransactionDetailProps =
   | TransactionDetailByCustom;
 
 interface CompleteTransaction {
-    transactionId: TransactionId;
-    money:Money;
-    adress:Adress;
-    paymentName:PaymentName;
-    createdAt:CreatedAt;
+  transactionId: TransactionId;
+  money: Money;
+  adress: Adress;
+  paymentName: PaymentName;
+  createdAt: CreatedAt;
 }
 
 interface Info {
-  memberId:MemberId;
-  money:Money;
+  memberId: MemberId;
+  money: Money;
 }
 
 interface PostTransactionDetailByCustom {
-    paymentName:PaymentName;
-    money:Money;
-    info:Info[];
-    splitMethod:SplitMethod;
+  paymentName: PaymentName;
+  money: Money;
+  info: Info[];
+  splitMethod: SplitMethod;
 }
 
 interface ChatItem {
-  item_name:string,
-  quantity:number,
-  price:number
+  item_name: string;
+  quantity: number;
+  price: number;
 }
 
 interface ChatJsonProps {
-  purchase_date : string;
-  items : ChatItem[]
+  purchase_date: string;
+  items: ChatItem[];
 }
 
 interface QrData {
-    paymentRequestId: string; // 고유번호 uuidv4()
-    sourceAccountNumber: string; // 결제 계좌번호
+  paymentRequestId: string; // 고유번호 uuidv4()
+  sourceAccountNumber: string; // 결제 계좌번호
 }
 
 interface PosPay {
   placeId: number;
-  placeName:string;
-  placeAdress:string;
+  placeName: string;
+  placeAdress: string;
   latitude: number;
-  longitude:number;
+  longitude: number;
   targetAccountNumber: string;
 }
 
 interface PosOderItem {
-  title:string;
-  amount:number;
-  quantity:number;
+  title: string;
+  amount: number;
+  quantity: number;
 }
 
 interface PaymentProps {
-  paymentRequestId : string;
+  paymentRequestId: string;
   sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
   placeId: string;
-  placeName:string;
-  placeAdress:string;
+  placeName: string;
+  placeAdress: string;
   latitude: number;
-  longitude:number;
+  longitude: number;
   targetAccountNumber: string;
   // OrderItems : OrderItems[];  // 없앰
 }
-  // api 요청
+// api 요청
 interface MoyeobangResponse<T> {
-    isSuccess: boolean;
-    code: number;
-    message: string;
-    data: T;
-    errors: string[];
-  }
-  
+  isSuccess: boolean;
+  code: number;
+  message: string;
+  data: T;
+  errors: string[];
+}
 
 type getGroupAccountStateResponse = MoyeobangResponse<GroupAccountBalance>;
-type getAccountStateByMembeerIdResponse = MoyeobangResponse<PersonalAccountBalance>;
-type GetTransactionListByAccountIdByMemberId = MoyeobangResponse<TransactionList[]>;
-type GetTransactionDetailByAccountId = MoyeobangResponse<TransactionDetailProps>;
-type PostTransactionDetailByCustomResponse = MoyeobangResponse<TransactionDetailByCustom>;
-type PutTransactionDetailByCustomResponse = MoyeobangResponse<TransactionDetailByCustom>;
-type PostTransactionDetailByReceiptResponse = MoyeobangResponse<TransactionDetailByReceipt>;
-type PutTransactionDetailByReceiptResponse = MoyeobangResponse<TransactionDetailByReceipt>;
+type getAccountStateByMembeerIdResponse =
+  MoyeobangResponse<PersonalAccountBalance>;
+type GetTransactionListByAccountIdByMemberId = MoyeobangResponse<
+  TransactionList[]
+>;
+type GetTransactionDetailByAccountId =
+  MoyeobangResponse<TransactionDetailProps>;
+type PostTransactionDetailByCustomResponse =
+  MoyeobangResponse<TransactionDetailByCustom>;
+type PutTransactionDetailByCustomResponse =
+  MoyeobangResponse<TransactionDetailByCustom>;
+type PostTransactionDetailByReceiptResponse =
+  MoyeobangResponse<TransactionDetailByReceipt>;
+type PutTransactionDetailByReceiptResponse =
+  MoyeobangResponse<TransactionDetailByReceipt>;
 type PostPayByPosResponse = MoyeobangResponse<null>;
-
 
 interface TravelLocation {
   latitude: Latitude;
@@ -287,15 +295,4 @@ interface Quiz {
   id: TravelId;
   question: Question;
   answer: Answer;
-}
-
-//여행 상세 조회
-interface TravelDetail {
-  travelName: TravelName;
-  startDate: StartDate;
-  endDate: EndDate;
-  travelPlaceList: TravelPlaceList;
-  accountId: AccountId;
-  accountNumber: AccountNumber;
-  participantsInfo: ParticipantInfo[];
 }
