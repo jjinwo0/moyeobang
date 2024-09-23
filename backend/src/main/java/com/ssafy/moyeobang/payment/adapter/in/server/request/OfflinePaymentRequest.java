@@ -5,8 +5,8 @@ public record OfflinePaymentRequest(
         String placeId,
         String placeName,
         String placeAddress,
-        Double latitude,
-        Double longitude,
+        double latitude,
+        double longitude,
         long amount,
         String sourceAccountNumber,
         String targetAccountNumber) {

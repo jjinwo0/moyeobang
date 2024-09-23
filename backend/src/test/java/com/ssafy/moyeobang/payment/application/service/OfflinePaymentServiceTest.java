@@ -11,6 +11,7 @@ import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.Store;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.StoreCommand;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
@@ -35,7 +36,7 @@ public class OfflinePaymentServiceTest {
         PaymentCommand command = new PaymentCommand(
                 "payment-123",
                 "account-123",
-                new Store("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
+                new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
                 Money.of(10000L)
         );
 
@@ -63,7 +64,7 @@ public class OfflinePaymentServiceTest {
         PaymentCommand command = new PaymentCommand(
                 "payment-123",
                 "account-123",
-                new Store("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
+                new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
                 Money.of(30000L)
         );
 

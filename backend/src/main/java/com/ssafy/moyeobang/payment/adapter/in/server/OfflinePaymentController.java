@@ -5,9 +5,9 @@ import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
-import com.ssafy.moyeobang.payment.application.domain.Store;
 import com.ssafy.moyeobang.payment.application.port.in.OfflinePaymentUseCase;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.StoreCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +25,7 @@ public class OfflinePaymentController {
     @PostMapping("/confirm")
     public ApiResult<Boolean> confirmPayment(@RequestBody OfflinePaymentRequest request) {
 
-        Store store = Store.of(
+        StoreCommand storeCommand = StoreCommand.createAndValidate(
                 request.placeId(),
                 request.placeName(),
                 request.placeAddress(),
@@ -37,7 +37,7 @@ public class OfflinePaymentController {
         PaymentCommand command = new PaymentCommand(
                 request.paymentRequestId(),
                 request.sourceAccountNumber(),
-                store,
+                storeCommand,
                 request.amount()
         );
         boolean paymentSuccess = offlinePaymentUseCase.confirmPayment(command);
