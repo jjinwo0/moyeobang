@@ -74,8 +74,12 @@ import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
 import {css} from '@emotion/react';
 
+interface AddressComponent {
+  long_name: string;
+}
+
 interface CityResult {
-  formatted_address: string;
+  address_components: AddressComponent[]; // address_components 배열을 정확히 정의
 }
 
 // Google Places API에서 도시 정보를 가져오는 함수
@@ -94,7 +98,7 @@ const fetchCityData = async (cityName: string): Promise<CityResult[]> => {
       }
     );
 
-    // console.log('지도 검색 결과:', response); // 응답 결과 로그
+    console.log('지도 검색 결과:', response); // 응답 결과 로그
     return response.data.results;
   } catch (error) {
     console.error(error); // 에러 메시지 로그
@@ -163,9 +167,19 @@ export default function MapSearch({cityName, onSelectCity}: MapSearchProps) {
             {data.map((result: CityResult, index: number) => (
               <li
                 key={index}
-                onClick={() => onSelectCity(result.formatted_address)} // 도시 선택 시 부모 컴포넌트로 전달
+                onClick={() => {
+                  if (
+                    result.address_components &&
+                    result.address_components.length > 0
+                  ) {
+                    onSelectCity(result.address_components[0].long_name); // 첫 번째 주소 컴포넌트의 long_name 전달
+                  }
+                }}
               >
-                {result.formatted_address}
+                {result.address_components &&
+                result.address_components.length > 0
+                  ? result.address_components[0].long_name
+                  : 'Unknown location'}
               </li>
             ))}
           </ul>

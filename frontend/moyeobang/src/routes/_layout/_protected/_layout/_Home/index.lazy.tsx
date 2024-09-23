@@ -12,6 +12,7 @@ import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
 import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
@@ -21,23 +22,71 @@ const data: Travel[] = [
     travelId: 1,
     travelName: '여행제목1',
     travelImg: null,
-    participantsCount: 5,
+    participantsCount: 4,
     startDate: '2024-09-10T12:34:56Z',
     endDate: '2024-09-13T12:34:56Z',
     travelPlaceList: ['제주도'],
     quizQuestion: '김훈민의 발사이즈는?',
     quizAnswer: '235',
+    accountId: 1,
+    accountNumber: '123456789123',
+    participantsInfo: [
+      {
+        memberId: 1,
+        nickname: '홍길동',
+        profileImage: 'https://example.com/images/honggildong.jpg',
+      },
+      {
+        memberId: 2,
+        nickname: '김철수',
+        profileImage: 'https://example.com/images/kimcheolsu.jpg',
+      },
+      {
+        memberId: 3,
+        nickname: '이영희',
+        profileImage: 'https://example.com/images/leeyounghee.jpg',
+      },
+      {
+        memberId: 4,
+        nickname: '박민수',
+        profileImage: 'https://example.com/images/parkminsu.jpg',
+      },
+    ],
   },
   {
     travelId: 2,
     travelName: '여행제목2',
     travelImg: null,
-    participantsCount: 5,
+    participantsCount: 4,
     startDate: '2023-09-01T12:34:56Z',
     endDate: '2023-09-05T12:34:56Z',
     travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
+    accountId: 1,
+    accountNumber: '123456789123',
+    participantsInfo: [
+      {
+        memberId: 1,
+        nickname: '홍길동',
+        profileImage: 'https://example.com/images/honggildong.jpg',
+      },
+      {
+        memberId: 2,
+        nickname: '김철수',
+        profileImage: 'https://example.com/images/kimcheolsu.jpg',
+      },
+      {
+        memberId: 3,
+        nickname: '이영희',
+        profileImage: 'https://example.com/images/leeyounghee.jpg',
+      },
+      {
+        memberId: 4,
+        nickname: '박민수',
+        profileImage: 'https://example.com/images/parkminsu.jpg',
+      },
+    ],
   },
 ];
 
@@ -127,7 +176,7 @@ const plusStyle = css`
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
-  const {setTravelData} = useTravelStore();
+  const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
   // const {setNowTravelData} = useTravelContext();
@@ -175,33 +224,28 @@ function Index() {
     pastTrips.length === 0;
 
   const handleTravelSummary = (travel: Travel) => {
-    setTravelData(
-      travel.travelName,
-      travel.startDate,
-      travel.endDate,
-      travel.travelPlaceList
-    ); // 상태 저장
-    setTravelSummaryModal(true);
-
     //여행 기록 페이지로 이동
-    // clickTravelCard(travel);
-
-    // setNowTravelData({
-    //   travelName: travel.travelName,
-    //   startDate: travel.startDate,
-    //   endDate: travel.endDate,
-    //   travelPlaceList: travel.travelPlaceList,
-    //   quizQuestion: travel.quizQuestion,
-    //   quizAnswer: travel.quizAnswer,
-    // }); // Context 상태 저장
+    clickTravelCard(travel);
+    setTravelSummaryModal(true);
   };
 
   const router = useRouter();
-  // const clickTravelCard = (travel: Travel) => {
-  //   router.navigate({
-  //     to: `/travelLog`,
-  //   });
-  // };
+  const clickTravelCard = (travel: Travel) => {
+    console.log('Clicked travel:', travel.travelId); // 어떤 여행이 클릭되었는지 확인
+    setTravelData({
+      travelName: travel.travelName,
+      startDate: travel.startDate,
+      endDate: travel.endDate,
+      travelPlaceList: travel.travelPlaceList,
+      accountId: travel.accountId,
+      accountNumber: travel.accountNumber,
+      participantsInfo: travel.participantsInfo,
+    }); // 상태 저장
+
+    // router.navigate({
+    //   to: `/travelLog`,
+    // });
+  };
 
   const closeTravelSummary = () => {
     setTravelSummaryModal(false);
