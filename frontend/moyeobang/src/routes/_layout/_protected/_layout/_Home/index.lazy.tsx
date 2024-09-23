@@ -10,7 +10,7 @@ import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel.tsx';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
-import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
+// import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
 import useTravelStore from '@/store/useTravelStore';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useRouter} from '@tanstack/react-router';
@@ -33,22 +33,22 @@ const data: Travel[] = [
     participantsInfo: [
       {
         memberId: 1,
-        nickname: '홍길동',
+        memberName: '홍길동',
         profileImage: 'https://example.com/images/honggildong.jpg',
       },
       {
         memberId: 2,
-        nickname: '김철수',
+        memberName: '김철수',
         profileImage: 'https://example.com/images/kimcheolsu.jpg',
       },
       {
         memberId: 3,
-        nickname: '이영희',
+        memberName: '이영희',
         profileImage: 'https://example.com/images/leeyounghee.jpg',
       },
       {
         memberId: 4,
-        nickname: '박민수',
+        memberName: '박민수',
         profileImage: 'https://example.com/images/parkminsu.jpg',
       },
     ],
@@ -58,8 +58,8 @@ const data: Travel[] = [
     travelName: '여행제목2',
     travelImg: null,
     participantsCount: 4,
-    startDate: '2023-09-01T12:34:56Z',
-    endDate: '2023-09-05T12:34:56Z',
+    startDate: '2024-09-22T12:34:56Z',
+    endDate: '2024-09-26T12:34:56Z',
     travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
@@ -68,29 +68,29 @@ const data: Travel[] = [
     participantsInfo: [
       {
         memberId: 1,
-        nickname: '홍길동',
+        memberName: '홍길동',
         profileImage: 'https://example.com/images/honggildong.jpg',
       },
       {
         memberId: 2,
-        nickname: '김철수',
+        memberName: '김철수',
         profileImage: 'https://example.com/images/kimcheolsu.jpg',
       },
       {
         memberId: 3,
-        nickname: '이영희',
+        memberName: '이영희',
         profileImage: 'https://example.com/images/leeyounghee.jpg',
       },
       {
         memberId: 4,
-        nickname: '박민수',
+        memberName: '박민수',
         profileImage: 'https://example.com/images/parkminsu.jpg',
       },
     ],
   },
 ];
 
-const nickName: Nickname = '진우바오';
+const memberName: MemberName = '진우바오';
 
 const containerStyle = css`
   display: flex;
@@ -178,10 +178,10 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
+  // const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
   // const {setNowTravelData} = useTravelContext();
 
-  // //get으로 여행 목록 전체 조회하기
+  // //[todo] get으로 여행 목록 전체 조회하기
   // const {data} = useSuspenseQuery({
   //   queryKey: ['travelList'],
   //   queryFn: () => moyeobang.getTravelList(),
@@ -223,16 +223,11 @@ function Index() {
     upcomingTrips.length === 0 &&
     pastTrips.length === 0;
 
-  const handleTravelSummary = (travel: Travel) => {
-    //여행 기록 페이지로 이동
-    clickTravelCard(travel);
-    setTravelSummaryModal(true);
-  };
-
   const router = useRouter();
   const clickTravelCard = (travel: Travel) => {
     console.log('Clicked travel:', travel.travelId); // 어떤 여행이 클릭되었는지 확인
     setTravelData({
+      travelId: travel.travelId,
       travelName: travel.travelName,
       startDate: travel.startDate,
       endDate: travel.endDate,
@@ -242,18 +237,12 @@ function Index() {
       participantsInfo: travel.participantsInfo,
     }); // 상태 저장
 
-    // router.navigate({
-    //   to: `/travelLog`,
-    // });
-  };
-
-  const closeTravelSummary = () => {
-    setTravelSummaryModal(false);
+    router.navigate({to: `/travelLog`});
   };
 
   const goSettingPage = () => {
     router.navigate({
-      to: `/profile/${nickName}`,
+      to: `/profile/${memberName}`,
     });
   };
 
@@ -262,7 +251,7 @@ function Index() {
       {/* <HeaderWithAlarmAndQR /> */}
       <div css={descriptionStyle}>
         <div css={nickNameTextContainer}>
-          <p css={nickNameStyle}>{nickName}의</p>
+          <p css={nickNameStyle}>{memberName}의</p>
           <span css={textStyle}>
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
@@ -317,11 +306,8 @@ function Index() {
                   participantsCount={item.participantsCount}
                   quizQuestion={item.quizQuestion}
                   quizAnswer={item.quizAnswer}
-                  onClick={
-                    activeTab === 'past'
-                      ? () => handleTravelSummary(item)
-                      : () => clickTravelCard(item)
-                  }
+                  onClick={() => clickTravelCard(item)}
+                  activeTab={activeTab}
                 />
               ))
             ) : (
@@ -340,10 +326,6 @@ function Index() {
       <img src={plusButton} css={plusStyle} onClick={openModal} />
 
       {isModalOpen && <CreateTravel onClose={closeModal} />}
-
-      {travelSummaryModal && (
-        <TravelSummaryModal onClose={closeTravelSummary} />
-      )}
     </>
   );
 }

@@ -1,7 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSwipeable} from 'react-swipeable';
-// import useTravelStore from '@/store/useTravelStore';
-import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
@@ -186,9 +184,23 @@ dayjs.updateLocale('ko', {
   weekdays: ['일', '월', '화', '수', '목', '금', '토'],
 });
 
-export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
-  const {travelName, startDate, endDate, travelPlaceList} =
-    useTravelDetailStore();
+interface TravelSummaryProps {
+  travelName: string;
+  startDate: Date;
+  endDate: Date;
+  travelPlaceList: string[];
+  onClose: () => void;
+}
+
+export default function TravelSummaryModal({
+  travelName,
+  startDate,
+  endDate,
+  travelPlaceList,
+  onClose,
+}: TravelSummaryProps) {
+  // const {travelName, startDate, endDate, travelPlaceList} =
+  //   useTravelDetailStore();
   const [currentSlide, setCurrentSlide] = useState(0); // 슬라이드 상태
   const slideCount = 2; // 슬라이드 개수
   const slides = [
@@ -207,6 +219,9 @@ export default function TravelSummaryModal({onClose}: {onClose: () => void}) {
       setCurrentSlide(prevSlide => (prevSlide - 1 + slideCount) % slideCount),
     preventDefaultTouchmoveEvent: true,
     trackMouse: true, // 마우스도 지원
+  });
+  useEffect(() => {
+    console.log('여행이름', travelName);
   });
 
   return (

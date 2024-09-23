@@ -10,6 +10,7 @@ interface ModalState {
 // Zustand 스토어 생성 시 타입 지정
 const useModalStore = create<ModalState>(set => ({
   isModalOpen: false,
+  travelSummaryModal: false,
   openModal: () => set({isModalOpen: true}),
   closeModal: () => set({isModalOpen: false}),
 }));
