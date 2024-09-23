@@ -9,7 +9,7 @@ import Btn from '@/components/common/btn/Btn';
 import { colors } from '@/styles/colors';
 import moyeobang from '@/services/moyeobang';
 import { useState } from 'react';
-import { detailsByReceipt } from '@/data/data'
+// import { detailsByReceipt } from '@/data/data'
 import { useReceiptContext } from '@/context/ReceiptContext';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/resultByReceipt/_layout/')({
@@ -90,14 +90,14 @@ export default function settledReceipt() {
   console.log('수정으로 들어오면 isNew : ', isNewState, '임')
   
   // get 기본 데이터 가져오기! (1/n정산된 데이터)
-  // const { data } = useQuery({
-  //   queryKey: ['receipt', transactionId],
-  //   queryFn: () => moyeobang.getTransactionDetail(accountId, transactionId),
-  //   enabled: !isNewState
-  // });
+  const { data } = useQuery({
+    queryKey: ['receipt', transactionId],
+    queryFn: () => moyeobang.getTransactionDetail(accountId, transactionId),
+    enabled: !isNewState
+  });
 
-  // const receipt = isNew ? receiptData : data?.data.data as TransactionDetailByReceipt;
-  const receipt = isNewState ? receiptData : detailsByReceipt; // 임시
+  const receipt = isNewState ? receiptData : data?.data.data as TransactionDetailByReceipt;
+  // const receipt = isNewState ? receiptData : detailsByReceipt; // 임시
 
   useEffect(() => {
     setUpdateDetails(receipt.details);
@@ -106,7 +106,8 @@ export default function settledReceipt() {
   const [updateDetails , setUpdateDetails] = useState<SettledItemByReceipt[]>(receipt.details);
 
   const {mutate: updateReceipt } = useMutation({
-    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => moyeobang.postSettleByReceipt(transactionId, data),
+    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => 
+      moyeobang.postSettleByReceipt(transactionId, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['receipt'],

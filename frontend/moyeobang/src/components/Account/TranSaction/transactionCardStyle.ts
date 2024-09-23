@@ -5,7 +5,7 @@ export const layoutStyle = css`
     width:330px;
     height: 115px;
     border-top: solid 1px ${colors.lightGray};
-    padding: 15px 20px;
+    padding: 20px 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -29,12 +29,12 @@ export const textContainerStyle = css`
     width: 200px;
     display : flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 `;
 
 export const timeStyle = css`
     font-family: 'regular';
-    font-size: 10px;
+    font-size: 12px;
 `;
 
 export const locationStyle = css`
@@ -66,7 +66,7 @@ export const carouselStyle = css`
 export const downContainerStyle = css`
     display : flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     flex-grow: 1;
     
 `;

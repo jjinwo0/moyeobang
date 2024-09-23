@@ -7,7 +7,8 @@ import { useState } from 'react';
 import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
 import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { detailsByCustom } from "@/data/data";
+// import { detailsByCustom } from "@/data/data";
+import moyeobang from '@/services/moyeobang';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/settle/')({
   component: Settle
@@ -36,13 +37,13 @@ export default function Settle() {
   const [isHidden, setIsHidden] = useState(false);
 
   // get으로 transaction의 상세 데이터 가져오기!
-  // const {data} = useSuspenseQuery({
-  // queryKey: ['transactionDetail', accountId, transactionId],
-  // queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
-  // });
+  const {data} = useSuspenseQuery({
+  queryKey: ['transactionDetail', accountId, transactionId],
+  queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
+  });
 
-  // const transactionDetailData = data.data.data;
-  const transactionDetailData = detailsByCustom; // 임시
+  const transactionDetailData = data.data.data;
+  // const transactionDetailData = detailsByCustom; // 임시
 
   const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
     method === 'custom' ? 'right' : 'left'
@@ -62,6 +63,13 @@ export default function Settle() {
 
   function handleHidden() {
     setIsHidden(true);
+  }
+
+  // 타입 가드 함수
+  function isSettledParticipantByCustom(
+    detail: SettledItemByReceipt[] | SettledParticipantByCustom[]
+  ): detail is SettledParticipantByCustom[] {
+    return (detail as SettledParticipantByCustom[])[0]!.participant !== undefined;
   }
 
   return (
@@ -85,7 +93,7 @@ export default function Settle() {
         handleHidden={handleHidden}
       />
     }
-    { activeComponent==='right' && 
+    { activeComponent==='right' && isSettledParticipantByCustom(transactionDetailData.details) &&
       <SettleByCustomComponent
         transactionId={transactionId}
         paymentName={transactionDetailData.paymentName}

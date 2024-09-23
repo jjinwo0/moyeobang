@@ -1,7 +1,8 @@
 export default {
-  TRANSACTION_LIST: 'transactinList',
-  RECEIPT: 'receipt',
-  CUSTOM: 'custom',
-  TRANSACTIONDETAIL: 'transactionDetail',
-  TRAVELLIST: 'travelList',
-};
+    ACCOUNT_BYGROUP:'accountByGroup',
+    ACCOUNT_BYMEMBERID:'accountByMemberId',
+    TRANSACTION_LIST: 'transactinList',
+    RECEIPT:'receipt', 
+    CUSTOM:'custom',
+    TRANSACTION_DETAIL:'transactionDetail',
+  };

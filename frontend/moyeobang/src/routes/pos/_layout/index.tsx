@@ -2,9 +2,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import React, { useState } from 'react'
 import { css } from '@emotion/react';
 import Btn from '@/components/common/btn/Btn';
-import { locale } from 'dayjs';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import QrScanByPos from '@/components/QrByPos/QrScanByPos';
 
 const Items = [
@@ -76,12 +73,12 @@ const buttonLayoutStyle=css`
 
 // createdAt, uuid(paymentRequestId), paymentName, adress, money 필요
 export default function Pos() {
-  const [placeId, setPlaceId] = useState<number>(0);
+  const [placeId, setPlaceId] = useState<number | undefined>();
   const [placeName, setPlaceName] = useState<PaymentName>('');
-  const [amount, setAmount] = useState<Money>(0);
+  const [amount, setAmount] = useState<Money>();
   const [placeAdress, setPlaceAdress]= useState<Adress>('');
-  const [latitude, setLatitude]= useState<number>(0);
-  const [longitude, setLongitude]= useState<number>(0);
+  const [latitude, setLatitude]= useState<number | undefined>();
+  const [longitude, setLongitude]= useState<number | undefined>();
   const [targetAccountNumber, setTargetAccountNumber]= useState<string>("");
 
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({}); // 각 상품의 수량을 저장
@@ -90,9 +87,9 @@ export default function Pos() {
 
   function handlePlaceId(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.value === '') {
-      setPlaceId(0);
+      setPlaceId(undefined)
     }
-    const newId= parseFloat(e.target.value); // 숫자로변환
+    const newId= parseInt(e.target.value); // 숫자로변환
     if ( !isNaN(newId) ) {
       setPlaceId(newId)
     }
@@ -108,9 +105,9 @@ export default function Pos() {
 
   function handleAmount(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.value === '') {
-      setAmount(0);
+      setAmount(undefined)
     }
-    const newAmount = parseFloat(e.target.value); // 숫자로변환
+    const newAmount = parseInt(e.target.value); // 숫자로변환
     if ( !isNaN(newAmount) ) {
       setAmount(newAmount)
     }
@@ -118,7 +115,7 @@ export default function Pos() {
 
   function handleLatitude(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.value === '') {
-      setLatitude(0);
+      setLatitude(undefined)
     }
     const newLatitude = parseFloat(e.target.value); // 숫자로변환
     if ( !isNaN(newLatitude) ) {
@@ -128,7 +125,7 @@ export default function Pos() {
 
   function handleLongitude(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.value === '') {
-      setLongitude(0);
+      setLongitude(undefined)
     }
     const newLongitude = parseFloat(e.target.value); // 숫자로변환
     if ( !isNaN(newLongitude) ) {
@@ -146,7 +143,7 @@ export default function Pos() {
 
     setQuantities((prevQuantities) => {
       const newQuantity = (prevQuantities[itemId] || 0) + 1;
-      setAmount((prevAmount) => prevAmount + itemPrice); 
+      setAmount((prevAmount) => prevAmount ? prevAmount + itemPrice : itemPrice); 
       return {
         ...prevQuantities,
         [itemId]: newQuantity,
@@ -163,7 +160,7 @@ export default function Pos() {
       const newQuantity = currentQuantity>=1 ? (currentQuantity - 1 ): 0;
 
       if (currentQuantity > 0) {
-        setAmount((prevAmount) => prevAmount - itemPrice); 
+        setAmount((prevAmount) => prevAmount ? prevAmount - itemPrice : 0); 
       }
 
       return {
@@ -175,16 +172,20 @@ export default function Pos() {
 
   // 정산하기
   function handleSettle() {
-    const data : PosPay = {
-      placeId,
-      placeName,
-      placeAdress,
-      latitude,
-      longitude,
-      targetAccountNumber,
+
+    if (placeId && latitude && longitude) {
+
+      const data : PosPay = {
+        placeId,
+        placeName,
+        placeAdress,
+        latitude,
+        longitude,
+        targetAccountNumber,
+      }
+      setData(data)
+      setIsOpenQrModal(true);
     }
-    setData(data)
-    setIsOpenQrModal(true);
   }
 
   function handleQrClose() {
@@ -198,7 +199,7 @@ export default function Pos() {
     <>
       <div>
         <p>가맹점 id (placeId)</p>
-        <input type="text" value={placeId} onChange={handlePlaceId} />
+        <input type="number" value={placeId !== undefined ? placeId : ''} onChange={handlePlaceId} />
       </div>
       <div>
         <p>가맹점 이름 (placeName)</p>
@@ -214,15 +215,15 @@ export default function Pos() {
       </div>
       <div>
         <p>위도(latitude)</p>
-        <input type="text" value={latitude} onChange={handleLatitude} />
+        <input type="number" value={latitude} onChange={handleLatitude} step="0.000001"/>
       </div>
       <div>
         <p>경도(longitude)</p>
-        <input type="text" value={longitude} onChange={handleLongitude} />
+        <input type="number" value={longitude} onChange={handleLongitude} step="0.000001"/>
       </div>
       <div>
         <p>총금액(Money)</p>
-        <input type="text" value={amount} onChange={handleAmount} />
+        <input type="number" value={amount} onChange={handleAmount} />
       </div>
 
 
