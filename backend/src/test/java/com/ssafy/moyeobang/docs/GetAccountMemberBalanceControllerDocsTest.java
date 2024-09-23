@@ -11,14 +11,12 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.moyeobang.account.adapter.in.web.request.GetAccountMemberBalanceRequest;
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountMemberBalanceResponse;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.port.in.GetAccountMemberBalanceQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
@@ -29,7 +27,6 @@ public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
     @DisplayName("모임 통장 개인 별 잔액 조회 API")
     @Test
     void getAccountMemberBalance() throws Exception {
-        GetAccountMemberBalanceRequest request = new GetAccountMemberBalanceRequest(1L);
         GetAccountMemberBalanceResponse response = new GetAccountMemberBalanceResponse(
                 1L,
                 "김두열",
@@ -44,8 +41,6 @@ public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(
                         get("/api/accounts/{accountId}/balance/member/{memberId}", 1L, 1L)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

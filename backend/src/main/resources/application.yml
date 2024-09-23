@@ -58,10 +58,10 @@ spring:
       on-profile: develop
 
   datasource:
-    url: jdbc:mysql://j11c102.p.ssafy.io:3306/ssafyro?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://j11c102.p.ssafy.io:3306/moyeobang?serverTimezone=UTC&characterEncoding=UTF-8
     username: c102
     password: 123456789
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
