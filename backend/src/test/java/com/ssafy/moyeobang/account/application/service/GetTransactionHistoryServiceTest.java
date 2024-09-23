@@ -7,10 +7,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoryResponse;
-import com.ssafy.moyeobang.account.application.domain.Member;
-import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Deposit;
+import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Members;
+import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Settle;
 import com.ssafy.moyeobang.account.application.domain.Settles;
 import com.ssafy.moyeobang.account.application.domain.Transaction;
@@ -59,7 +59,7 @@ class GetTransactionHistoryServiceTest {
 
         //then
         assertThat(transactionHistory)
-                .extracting("paymentName", "address", "totalPrice")
+                .extracting("paymentName", "address", "money")
                 .containsExactly(
                         "다복식당", "광주 광역시 수완동", 50000L
                 );
