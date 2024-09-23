@@ -33,6 +33,7 @@ export const LocationInputStyle = css`
   margin-top: 10px;
   padding-right: 10px;
   font-size: 18px;
+  font-family: 'semibold';
 
   &::placeholder {
     color: #b9b9b9;
