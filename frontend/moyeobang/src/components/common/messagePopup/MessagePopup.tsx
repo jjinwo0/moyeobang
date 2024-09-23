@@ -6,50 +6,50 @@ const messageStyle = css`
   background-color: white;
   border: #6f6f6f solid 1.5px;
   border-radius: 5px;
-  font-size: 12px;
-  font-weight: 500;
-  height: auto;
+  font-size: 18px;
+  font-family: 'medium';
   letter-spacing: -0.25px;
   margin-top: 6.8px;
   padding: 10px 8px;
   position: relative;
-  width: fit-content;
+  min-width: 160px;
+  max-width: 230px;
   z-index: 100;
   text-align: center;
+  white-space: normal;
+  line-height: 1.4; /* 줄 간격 설정으로 가독성 향상 */
 
   &:after {
     border-color: transparent transparent white transparent;
     border-style: solid;
-    border-width: 0px 5.5px 8px 5.5px; /* 삼각형을 위쪽으로 변경 */
+    border-width: 0px 5.5px 8px 5.5px;
     content: '';
     display: block;
     right: 30px;
     position: absolute;
-    bottom: -8px; /* 말풍선 아래쪽으로 위치 조정 */
+    bottom: -8px;
     width: 0;
     z-index: 1;
-    transform: rotate(180deg); /* 삼각형 회전 적용 */
+    transform: rotate(180deg);
   }
 
   &:before {
     border-color: transparent transparent #6f6f6f transparent;
     border-style: solid;
-    border-width: 0 7px 9px 7px; /* 테두리 삼각형도 위쪽으로 변경 */
+    border-width: 0 7px 9px 7px;
     content: '';
     display: block;
     right: 28.5px;
     position: absolute;
-    bottom: -9px; /* 말풍선 아래쪽으로 테두리 삼각형 위치 조정 */
+    bottom: -9px;
     width: 0;
     z-index: 0;
-    transform: rotate(180deg); /* 삼각형 회전 적용 */
+    transform: rotate(180deg);
   }
 `;
 
-export default function MessagePopup({
-  message,
-}: {
-  message: string | JSX.Element;
-}) {
-  return <div css={messageStyle}>{message}</div>;
-}
+const MessagePopup = ({children}: {children: string | JSX.Element}) => {
+  return <div css={messageStyle}>{children}</div>;
+};
+
+export default MessagePopup;

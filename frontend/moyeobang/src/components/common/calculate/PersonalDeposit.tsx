@@ -38,7 +38,11 @@ const proposal = css`
   width: 100%;
 `;
 
-const PersonalDeposit: React.FC<{travelName: TravelName}> = ({travelName}) => {
+export default function PersonalDeposit({
+  travelName,
+}: {
+  travelName: TravelName;
+}) {
   const [value, setValue] = useState<number | string>(0);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
   const handleFocus = () => {
@@ -78,6 +82,4 @@ const PersonalDeposit: React.FC<{travelName: TravelName}> = ({travelName}) => {
       </Btn>
     </div>
   );
-};
-
-export default PersonalDeposit;
+}

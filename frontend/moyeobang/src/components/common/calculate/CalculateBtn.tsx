@@ -13,7 +13,7 @@ interface CalculateBtnProps {
   setShowModal: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CalculateBtn: React.FC<CalculateBtnProps> = ({ setShowModal }) => {
+export default function CalculateBtn({setShowModal}: CalculateBtnProps) {
   const handlePublicDeposit = () => {
     setShowModal('publicDeposit');
   };
@@ -37,6 +37,4 @@ const CalculateBtn: React.FC<CalculateBtnProps> = ({ setShowModal }) => {
       </Btn>
     </div>
   );
-};
-
-export default CalculateBtn;
+}

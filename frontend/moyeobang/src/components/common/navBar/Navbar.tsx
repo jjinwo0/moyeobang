@@ -5,17 +5,20 @@ import navBar from '@/assets/icons/navBar.png';
 import travelLog from '@/assets/icons/travelLog.webp';
 import wallet from '@/assets/icons/wallet.png';
 import coin from '@/assets/icons/coin.png';
+import CalculatePopup from '../calculate/CalculatePopup';
 
 const footer = css`
   position: fixed;
+  max-width: 390px;
   bottom: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 10;
 `;
 
 const nav = css`
   width: 390px;
   height: 76.522px;
+  position: relative;
   background-image: url(${navBar});
   background-size: cover;
   background-repeat: no-repeat;
@@ -45,7 +48,33 @@ const account = (isSelected: boolean) => css`
   }
 `;
 
+// const cal = css`
+//   width: 65px;
+//   height: 65px;
+//   background-color: rgba(135, 224, 255, 0.3);
+//   border-radius: 50%;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   margin: -41px auto;
+//   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.4);
+
+//   p {
+//     font-family: 'semibold';
+//     font-size: 12px;
+//     margin-top: 3px;
+//     display: flex;
+//     margin-right: 1px;
+//     color: rgba(0, 0, 0, 0.6);
+//   }
+// `;
+
 const cal = css`
+  position: absolute; /* 부모 요소(nav) 안에서 위치를 고정 */
+  top: -25px; /* nav 위쪽에 위치하도록 설정 */
+  left: 50%; /* 가로 중앙에 위치 */
+  transform: translateX(-50%); /* 중앙 정렬을 보장하기 위해 X축으로 50% 이동 */
   width: 65px;
   height: 65px;
   background-color: rgba(135, 224, 255, 0.3);
@@ -54,46 +83,49 @@ const cal = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: -41px auto;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.4);
 
   p {
     font-family: 'semibold';
     font-size: 12px;
     margin-top: 3px;
-    display: flex;
-    margin-right: 1px;
     color: rgba(0, 0, 0, 0.6);
   }
 `;
 
-const Navbar = ({onCalClick}: {onCalClick: () => void}) => {
+// {onCalClick}: {onCalClick: () => void}
+export default function Navbar() {
   const [selectedItem, setSelectedItem] = useState<string | null>('travel');
-
+  const [showModal, setShowModal] = useState<string | boolean>(false);
+  const onCalClick = () => {
+    setShowModal(!showModal);
+  };
   return (
-    <div css={footer}>
-      <div css={cal} onClick={onCalClick}>
-        <img src={coin} width={35} height={35} />
-        <p>정산</p>
-      </div>
-      <div css={nav}>
-        <div
-          css={travel(selectedItem === 'travel')}
-          onClick={() => setSelectedItem('travel')}
-        >
-          <img src={travelLog} width={50} height={50} alt="여행 기록" />
-          <p>여행기록</p>
+    <>
+      <div css={footer}>
+        <div css={cal} onClick={onCalClick}>
+          <img src={coin} width={35} height={35} />
+          <p>정산</p>
         </div>
-        <div
-          css={account(selectedItem === 'account')}
-          onClick={() => setSelectedItem('account')}
-        >
-          <img src={wallet} width={50} height={50} />
-          <p>모임통장</p>
+        <div css={nav}>
+          <div
+            css={travel(selectedItem === 'travel')}
+            onClick={() => setSelectedItem('travel')}
+          >
+            <img src={travelLog} width={50} height={50} alt="여행 기록" />
+            <p>여행기록</p>
+          </div>
+          <div
+            css={account(selectedItem === 'account')}
+            onClick={() => setSelectedItem('account')}
+          >
+            <img src={wallet} width={50} height={50} />
+            <p>모임통장</p>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
 
-export default Navbar;
+      {showModal && <CalculatePopup></CalculatePopup>}
+    </>
+  );
+}

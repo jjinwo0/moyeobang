@@ -1,15 +1,17 @@
-import type {InputHTMLAttributes} from 'react';
+import type {InputHTMLAttributes, ReactNode} from 'react';
 import {css} from '@emotion/react';
 import 'react';
 
 type LabeledInputProps = InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
+  label: string | ReactNode;
 };
 
 const inputContainerStyle = css`
   width: 330px;
   flex-direction: column;
   display: flex;
+  font-size: 20px;
+  font-family: 'regular';
 `;
 
 const labeledInputStyle = css`
@@ -26,6 +28,7 @@ const labeledInputStyle = css`
   &::placeholder {
     color: #b9b9b9 !important;
     font-family: 'regular';
+    font-size: 18px;
   }
 `;
 

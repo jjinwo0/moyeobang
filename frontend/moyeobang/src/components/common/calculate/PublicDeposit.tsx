@@ -50,14 +50,12 @@ type PublicDepositProps = AccountBalanceByGroup & {travelName: TravelName} & {
   budget: number;
 };
 
-const PublicDeposit: React.FC<PublicDepositProps> = ({
+export default function PublicDeposit({
+  totalAmount,
   travelName,
-  // currentBalance,
-  totalMoney,
-  // totalComsumption,
-  // usagePercentage,
-}) => {
-  const [value, setValue] = useState<string | number>(totalMoney);
+  budget,
+}: PublicDepositProps) {
+  const [value, setValue] = useState<string | number>(budget);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
 
   const handleFocus = () => {
@@ -74,6 +72,7 @@ const PublicDeposit: React.FC<PublicDepositProps> = ({
   const handleOnclick = () => {
     // 공금 요청 알림 보내기
     setValue(0);
+    setFocused(false); // 다시 초기화
   };
 
   return (
@@ -101,6 +100,4 @@ const PublicDeposit: React.FC<PublicDepositProps> = ({
       </Btn>
     </div>
   );
-};
-
-export default PublicDeposit;
+}

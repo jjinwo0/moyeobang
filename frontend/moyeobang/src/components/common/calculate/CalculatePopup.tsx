@@ -25,7 +25,7 @@ const messageStyle = css`
   max-width: 390px;
   z-index: 2000; /* Navbar 위에 나타나도록 z-index 설정 */
   text-align: center;
-  bottom: 120px; /* Navbar 위에 위치하도록 조정 */
+  bottom: 125px; /* Navbar 위에 위치하도록 조정 */
   left: 50%;
   transform: translateX(-50%); //중간에 위치하기 위해 left, tranform 속석 사용
 
