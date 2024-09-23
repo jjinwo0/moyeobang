@@ -31,7 +31,7 @@ export function extractItems(
   const receiptData : TransactionDetailByReceipt = {
     transactionId: Number(transactionId),
     paymentName: paymentName,
-    adress: address, // address 필드 수정
+    address: address, // address 필드 수정
     money: money,
     details: details,
     createdAt: createdAt, // 시간

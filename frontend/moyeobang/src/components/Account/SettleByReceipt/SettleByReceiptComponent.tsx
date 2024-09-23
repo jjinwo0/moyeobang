@@ -8,8 +8,6 @@ import { colors } from "@/styles/colors";
 import { extractItems } from "@/util/receiptParser";
 import FailByReceipt from "./FailByReceipt";
 import ResultByReceiptComponent from "./ResultByReceiptComponent";
-import { useReceiptContext } from "@/context/ReceiptContext";
-import { useNavigate } from "@tanstack/react-router";
 // import openAI from 'openai';
 
 const api_url:string = "/api/custom/v1/34393/8f13443da4a5bb3449e36dac1ddda218c4f02d27884df6cd85905363c5603a72/general"
@@ -62,17 +60,16 @@ const buttonStyle = css`
     }
 `;
 
-type SettleByReceiptComponentProps = CompleteTransaction & {handleHidden : VoidFunction}
+type SettleByReceiptComponentProps = CompleteTransaction
 
-export default function SettleByReceiptComponent({transactionId, money, paymentName, adress, createdAt, handleHidden} : SettleByReceiptComponentProps) {
+export default function SettleByReceiptComponent({transactionId, money, paymentName, address, createdAt} : SettleByReceiptComponentProps) {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
-    const [results, setResults] = useState<TransactionDetailByReceipt | null>();
-    const {updateReceiptData} = useReceiptContext();
-    const navigate = useNavigate({from:'/account/$transactionId/settle'});
+    const [results, setResults] = useState<TransactionDetailByReceipt>();
+    const [openResultModal, setOpenResultModal] = useState<boolean>(false);
 
     // Base64 데이터를 Blob 파일로 변환
     const base64ToFile = (base64Data: string, filename: string) => {
@@ -185,11 +182,10 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
 
             // extractItems를 통해 데이터 변환
             if (parsedData && parsedData.items) {
-                const results = extractItems(parsedData, transactionId=1, createdAt, money=20000, paymentName='가게명', adress='주소'); 
+                const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, address); 
                 console.log('영수증 ocr 결과', results)
-                // setResults(results);
-                updateReceiptData(results)
-                navigate({to:'/account/$transactionId/resultByReceipt'})
+                setResults(results)
+                setOpenResultModal(true);
 
             } else {
                 console.error('영수증 처리 오류 발생');
@@ -207,33 +203,34 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
         setImageSrc(null);
     }
 
-    // 전체 다 닫기
-    // function handleCloseResult() {
-    //     setResults(null);
-    //     handleHidden();
-    //     setImageSrc(null)
-    // }
+    function handleClose() {
+        setOpenResultModal(false);
+        setImageSrc('');
+    }
 
     return (
         <div css={layoutStyle}>
-            <div css={cameraStyle}>
-                {imageSrc ? (
-                    <img src={imageSrc} alt="capture_img" />
-                ) : (
-                    <Webcam 
-                    ref={webcamRef} 
-                    screenshotFormat="image/jpeg"
-                    videoConstraints={{ facingMode: "environment" }} // 모바일 후면 카메라 사용
-                    />
-                )}
-            </div>
-            <div css={buttonStyle}>
-                <button onClick={handleCapture}/>
-            </div>
-            {/* {results ? <ResultByReceiptComponent data={results} onClose={handleCloseResult} /> : <div>결과처리중</div> } */}
-            {/* {isLoading && <div>처리 중...</div>} */}
-            {error && <FailByReceipt onClose={handleFailClose}/>}
-
+           {results && openResultModal ? (
+            <ResultByReceiptComponent data={results} onClose={handleClose} isNew={true} />
+        ) : (
+            <>
+                <div css={cameraStyle}>
+                    {imageSrc ? (
+                        <img src={imageSrc} alt="capture_img" />
+                    ) : (
+                        <Webcam 
+                        ref={webcamRef} 
+                        screenshotFormat="image/jpeg"
+                        videoConstraints={{ facingMode: "environment" }} // 모바일 후면 카메라 사용
+                        />
+                    )}
+                </div>
+                <div css={buttonStyle}>
+                    <button onClick={handleCapture}/>
+                </div>
+            </>
+        )}
+        {error && <FailByReceipt onClose={handleFailClose} />}
         </div>
     )
 }

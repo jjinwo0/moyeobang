@@ -1,47 +1,115 @@
-import React, { useState } from 'react';
-import { useNavigate} from '@tanstack/react-router'
-import UpdateCardByReceipt from '@/components/Account/SettleByReceipt/UpdateCardByReceipt'
+import React from "react"
+import { css } from "@emotion/react"
+import { colors } from "@/styles/colors";
+import Btn from "@/components/common/btn/Btn";
 import {format} from 'date-fns';
-import {ko} from 'date-fns/locale';
-import Btn from '@/components/common/btn/Btn';
-import HeaderWithBackButton from '@/components/common/Header/HeaderWithBackButton';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {layoutStyle,  upContainerStyle, titleStyle, amountStyle, timeStyle, middleContainerStyle, buttonContainerStyle} from './resultByReceipt';
-import moyeobang from '@/services/moyeobang';
+import { ko} from 'date-fns/locale';
+import { Link, useNavigate } from "@tanstack/react-router";
+import UpdateCardByReceipt from "./UpdateCardByReceipt";
+import { useState } from "react";
+import moyeobang from "@/services/moyeobang";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import HeaderWithBackButton from "@/components/common/Header/HeaderWithBackButton";
+
+const layoutStyle=css`
+  position: absolute;
+  inset: 0;
+  z-index:99999;
+  width:100%;
+  height:100%;
+  background-color:${colors.white};
+  width:100%;
+  display:flex;
+  flex-direction:column;
+`;
+
+const upContainerStyle=css`
+  margin-top: 50px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  padding-left:30px;
+  padding-top:20px;
+  padding-bottom:20px;
+`;
+
+const titleStyle=css`
+  font-family:'semibold';
+  font-size:24px;
+`;
+
+const amountStyle=css`
+  font-family:'semibold';
+  font-size:20px;
+`;
+
+const timeStyle=css`
+  font-family:'regular';
+  font-size:16px;
+`;
+
+const middleContainerStyle=css`
+  display:flex;
+  flex-direction:column;
+  box-sizing:border-box;
+  width:100%;
+  max-width: 100%;
+  height:515px;
+  gap:20px;
+  overflow-y:auto;
+  padding-bottom: 20px;
+
+  &::-webkit-scrollbar {
+        display: none;
+    }
+  
+`;
+
+const buttonContainerStyle=css`
+  position:fixed;
+  bottom:30px;
+  background-color: ${colors.white};
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+  padding-top: 10px;
+`;
+
+const linkStyle =css`
+  text-decoration: none;
+`
+
 
 interface ResultByReceiptComponentProps {
   data:TransactionDetailByReceipt;
-  onClose: VoidFunction;
+  isNew:boolean;
+  onClose:VoidFunction;
 }
 
+// 영수증 인식 결과
+// isNew : True (post) 처음 | isNew : false (fetch) 수정
+export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultByReceiptComponentProps) {
 
-export default function ResultByReceiptComponent({data, onClose}:ResultByReceiptComponentProps) {
-  
-  const navigate = useNavigate({from:'/account/$transactionId/settle'});
+  const [ updateDetails, setUpdateDetails] = useState<SettledItemByReceipt[]>(data.details);
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [updatedData, setUpdatedData] = useState<TransactionDetailByReceipt>(data);
-  const transactionId = data.transactionId;
 
-  const {mutate: updateReceipt } = useMutation({
-    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => moyeobang.postSettleByReceipt(transactionId, data),
+  // 영수증 정산 update API
+  const {mutate: updateSettleByReceipt } = useMutation({
+    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => 
+      moyeobang.postSettleByReceipt(transactionId, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['receipt'],
         refetchType: 'all',
       });
-      await navigate({to: '/account/$transactionId/detail'});
-      onClose(); // 결과 컴포넌트 닫기
+      await navigate({to: `/account/${data.transactionId}/detail`});
+      onClose();
     },
   });
-
-  // 영수증 인식 후 결과 컴포넌트
-  function handleSubmit() {
-    if (!updatedData) {
-      console.error("영수증 데이터 없음")
-      return
-    }
-    updateReceipt({transactionId:transactionId, data:updatedData})
-  }
 
   function handleChange({
     itemId,
@@ -49,57 +117,64 @@ export default function ResultByReceiptComponent({data, onClose}:ResultByReceipt
     quantity,
     price,
     participants,
-  }: {
-    itemId: OrderItemId;
-    title: OrderItemTitle;
-    quantity: OrderItemQuantity;
-    price: OrderItemPrice;
-    participants: ParticipantInfo[];
-  }) {
-    const updatedDetails = data?.details.map((detail) =>
-      detail.orderItemId === itemId
-        ? {
-            ...detail,
-            orderItemAmount: price,
-            orderItemQuantity: quantity,
-            orderItemTitle: title,
-            participants: participants,
-          }
-        : detail
-    );
-    
-      if (updatedDetails) {
-        setUpdatedData((prevData) => {
-          if (!prevData) return prevData; // 기존 데이터가 없으면 그대로 반환
-    
-          return {
-            ...prevData,
-            details: updatedDetails,
-            splitMethod: prevData.splitMethod ?? 'receipt'
-          };
-        });
-    }
-    console.log(updatedDetails) // 이거 이용해서 데이터 변환해서 PUT으로 보내기
+    }: {
+      itemId: OrderItemId;
+      title: OrderItemTitle;
+      quantity: OrderItemQuantity;
+      price: OrderItemPrice;
+      participants: ParticipantInfo[];
+    }) {
+
+      setUpdateDetails((prevDetails) => {
+
+        if (!prevDetails) return prevDetails; 
+
+        return prevDetails?.map((detail) => 
+          detail.orderItemId === itemId ?
+          {...detail,
+            orderItemTitle:title,
+            orderItemQuantity:quantity,
+            orderItemPrice:price,
+            participants:participants
+          } : detail
+        )
+      })
+    // console.log(updateDetails) // 이거 이용해서 데이터 변환
   }
 
-  function handleRestart(){
+  function handleSubmit() {
+    const updateReceipt = {
+      ...data,
+      details:updateDetails,
+      splitMethod:'receipt',
+    }
+    updateSettleByReceipt({transactionId: data.transactionId , data : updateReceipt})
+    console.log('정산될 영수증', updateReceipt)
+    console.log('영수증 정산완료 클릭')
+  }
+
+  function handleRestart() {
     onClose();
-    navigate({to:'/account/$transactionId/settle'})
+    navigate({to:`/account/${data.transactionId}/settle`})
+  }
+
+  function handleBackButton() {
+    onClose();
   }
 
   return (
     <div css={layoutStyle}>
-      <HeaderWithBackButton />
-          <div css={upContainerStyle} >
-            <div css={titleStyle}>{updatedData.paymentName}</div>
-            <div css={amountStyle}>{updatedData.money}원</div>
+      <HeaderWithBackButton onClick={handleBackButton}/>
+        <div css={upContainerStyle} >
+          <div css={titleStyle}>{data.paymentName}</div>
+            <div css={amountStyle}>{data.money}원</div>
             <div css={timeStyle}>
-              { format(updatedData.createdAt, 'yyyy-MM-dd HH:mm', { locale: ko }) }
-            </div>
+              {data.createdAt && format(data.createdAt, 'yyyy-MM-dd HH:mm', { locale: ko })}
           </div>
-          <div css={middleContainerStyle}>
-            {updatedData.details.map((detail, index) => (
-              <UpdateCardByReceipt 
+        </div>
+        <div css={middleContainerStyle}>
+          {data.details.map((detail, index) => (
+            <UpdateCardByReceipt 
               key={index}
               itemId={detail.orderItemId}
               itemTitle={detail.orderItemTitle}
@@ -107,13 +182,15 @@ export default function ResultByReceiptComponent({data, onClose}:ResultByReceipt
               itemPrice={detail.orderItemPrice} 
               participants={detail.participants}
               onChange={handleChange}
-              />
-            ))}
-        </div>
-        <div css={buttonContainerStyle}>
+            />
+          ))}
+       </div>
+      <div css={buttonContainerStyle}>
+        <Link to={`/account/${data.transactionId}/settle`} css={linkStyle}>
           <Btn buttonStyle={{size:'big', style:'greenBlue'}} onClick={handleRestart}>영수증 다시 찍기</Btn>
-          <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>정산 완료</Btn>
-        </div>
+        </Link>
+        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>정산 완료</Btn>
+      </div>
     </div>
   )
 }

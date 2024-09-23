@@ -3,13 +3,15 @@ import React from 'react'
 import { css } from '@emotion/react'
 import TransactionDetailDefaultCard from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import Btn from '@/components/common/btn/Btn'
-import { detailsByCustom, detailsByReceipt} from '@/data/data'
 import { colors } from '@/styles/colors'
 import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
 import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import moyeobang from '@/services/moyeobang'
+import ResultByPos from '@/components/QrByPos/ResultByPos'
+import ResultByReceiptComponenet from '@/components/Account/SettleByReceipt/ResultByReceiptComponent'
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -58,17 +60,22 @@ export default function TransactionDetail() {
   // 임시 accountId
   const accountId = 1;
   const { transactionId } = Route.useParams()
+  const [ openUpdateModal, setOpentUpdateModal] = useState<boolean>(false);
 
-  // TODO 주석 제거
   const {data} = useSuspenseQuery({
     queryKey: ['transactionDetail', accountId, transactionId],
     queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
   });
 
   const transactionDetailData = data.data.data;
-  console.log(121212, transactionDetailData)
 
-  // const transactionDetailData = detailsByReceipt; // 임시
+  function handleUpdateReceipt() {
+    setOpentUpdateModal(true);
+  }
+
+  function handleClose() {
+    setOpentUpdateModal(false);
+  }
 
   // 타입 가드 함수
   function isSettledParticipantByCustom(
@@ -77,15 +84,22 @@ export default function TransactionDetail() {
     return (details as SettledParticipantByCustom[])[0].participant !== undefined;
   }
 
-  return (
+  return openUpdateModal ? (
+    <ResultByReceiptComponenet 
+      data={transactionDetailData as TransactionDetailByReceipt} 
+      onClose={handleClose}
+      isNew={false}
+      />
+  ) : (
     <div css={layoutStyle}>
-      <TransactionDetailDefaultCard 
-            paymentName={transactionDetailData.paymentName} 
-            money={transactionDetailData.money}
-            createdAt={transactionDetailData.createdAt}
-            adress={transactionDetailData.adress}
-        />
-        { transactionDetailData.splitMethod ==='receipt' && !isSettledParticipantByCustom(transactionDetailData.details) &&
+      <TransactionDetailDefaultCard
+        paymentName={transactionDetailData.paymentName}
+        money={transactionDetailData.money}
+        createdAt={transactionDetailData.createdAt}
+        adress={transactionDetailData.adress}
+      />
+      {transactionDetailData.splitMethod === 'receipt' &&
+        !isSettledParticipantByCustom(transactionDetailData.details) && (
           <>
             <div css={columnStyle}>
               <div>상품명</div>
@@ -94,33 +108,36 @@ export default function TransactionDetail() {
             </div>
             <div css={listStyle}>
               {transactionDetailData.details.map((detail, index) => (
-                <DetailCardByReceipt key={index} {...detail}/>
+                <DetailCardByReceipt key={index} {...detail} />
               ))}
             </div>
-            <Link to={`/account/${transactionId}/resultByReceipt`} search={{isNew:false}} css={LinkStyle}>
-              <Btn buttonStyle={{ size:'big', style:'blue'}}>정산 수정하기</Btn> 
-            </Link>
+            <Btn buttonStyle={{ size: 'big', style: 'blue' }} onClick={handleUpdateReceipt}>
+              정산 수정하기
+            </Btn>
           </>
-        }
-        { transactionDetailData.splitMethod ==='custom' &&
-          <>
-            <div css={columnStyle}>
-              <div>프로필</div>
-              <div>정산자</div>
-              <div>정산금액</div>
-            </div>
-            <div css={listStyle}>
-              { isSettledParticipantByCustom(transactionDetailData.details) &&
-               transactionDetailData.details.map((detail, index) => {
-                  <DetailCardByCustom key={index} {...detail.participant} money={detail.money}/>
-                return null;
-                })}
-            </div>
-            <Link to={`/account/${transactionId}/settle`} search={{method: 'custom'}} css={LinkStyle}>
-              <Btn buttonStyle={{ size:'big', style:'blue'}}>정산 수정하기</Btn> 
-            </Link>
-          </>
-        }
+        )}
+      {transactionDetailData.splitMethod === 'custom' && (
+        <>
+          <div css={columnStyle}>
+            <div>프로필</div>
+            <div>정산자</div>
+            <div>정산금액</div>
+          </div>
+          <div css={listStyle}>
+            {isSettledParticipantByCustom(transactionDetailData.details) &&
+              transactionDetailData.details.map((detail, index) => (
+                <DetailCardByCustom
+                  key={index}
+                  {...detail.participant}
+                  money={detail.money}
+                />
+              ))}
+          </div>
+          <Link to={`/account/${transactionId}/settle`} search={{ method: 'custom' }} css={LinkStyle}>
+            <Btn buttonStyle={{ size: 'big', style: 'blue' }}>정산 수정하기</Btn>
+          </Link>
+        </>
+      )}
     </div>
-  )
+  );
 }

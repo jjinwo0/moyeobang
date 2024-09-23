@@ -79,7 +79,7 @@ export default function Pos() {
   const [placeAddress, setPlaceAddress]= useState<Adress>('');
   const [latitude, setLatitude]= useState<number | undefined>();
   const [longitude, setLongitude]= useState<number | undefined>();
-  const [targetAccountNumber, setTargetAccountNumber]= useState<string>("");
+  const [targetAccountNumber, setTargetAccountNumber]= useState<string>("0012280102000441");
 
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({}); // 각 상품의 수량을 저장
   const [isOpenQrModal, setIsOpenQrModal] = useState<boolean>(false);

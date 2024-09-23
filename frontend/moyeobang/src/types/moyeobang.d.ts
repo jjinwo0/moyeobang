@@ -256,7 +256,7 @@ interface SettledParticipantByCustom {
 interface BaseTransactionDetail {
   transactionId: TransactionId;
   paymentName: PaymentName;
-  adress: Adress;
+  address: Adress;
   money: Money;
   createdAt: CreatedAt;
   // acceptedNumber: AcceptedNumber;
@@ -281,7 +281,7 @@ type TransactionDetailProps =
 interface CompleteTransaction {
   transactionId: TransactionId;
   money: Money;
-  adress: Adress;
+  address: Adress;
   paymentName: PaymentName;
   createdAt: CreatedAt;
 }
