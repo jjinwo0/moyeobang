@@ -4,23 +4,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.moyeobang.account.adapter.in.web.request.GetAccountMemberBalanceRequest;
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountMemberBalanceResponse;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.port.in.GetAccountMemberBalanceQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
@@ -31,7 +27,6 @@ public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
     @DisplayName("모임 통장 개인 별 잔액 조회 API")
     @Test
     void getAccountMemberBalance() throws Exception {
-        GetAccountMemberBalanceRequest request = new GetAccountMemberBalanceRequest(1L);
         GetAccountMemberBalanceResponse response = new GetAccountMemberBalanceResponse(
                 1L,
                 "김두열",
@@ -45,19 +40,12 @@ public class GetAccountMemberBalanceControllerDocsTest extends RestDocsSupport {
                 .willReturn(response);
 
         mockMvc.perform(
-                        get("/api/accounts/{accountId}/balance/member", 1L)
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
+                        get("/api/accounts/{accountId}/balance/member/{memberId}", 1L, 1L)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("get-account-member-balance",
-                                preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
-                                requestFields(
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER)
-                                                .description("멤버 id")
-                                ),
                                 responseFields(
                                         fieldWithPath("status").type(JsonFieldType.STRING)
                                                 .description("API 성공 여부"),

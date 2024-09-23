@@ -13,7 +13,7 @@ public abstract class GetTransactionHistoryResponse {
     private final String paymentName;
     private final String address;
     private final String acceptedNumber;
-    private final Long totalPrice;
+    private final Long money;
     private final LocalDateTime createdAt;
 
     public static GetTransactionHistoryResponse ofType(Withdrawal withdrawal) {

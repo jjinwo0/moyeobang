@@ -79,7 +79,7 @@ public class GetTransactionHistoryControllerDocsTest extends RestDocsSupport {
                                                 .description("정산 참가자 이름"),
                                         fieldWithPath("data.details[].participants[].profileImage").type(JsonFieldType.STRING)
                                                 .description("정산 참가자 프로필 이미지"),
-                                        fieldWithPath("data.totalPrice").type(JsonFieldType.NUMBER)
+                                        fieldWithPath("data.money").type(JsonFieldType.NUMBER)
                                                 .description("결제 총 금액"),
                                         fieldWithPath("data.splitMethod").type(JsonFieldType.STRING)
                                                 .description("정산 방법"),
@@ -134,7 +134,7 @@ public class GetTransactionHistoryControllerDocsTest extends RestDocsSupport {
                                                 .description("정산 참가자 프로필 이미지"),
                                         fieldWithPath("data.details[].money").type(JsonFieldType.NUMBER)
                                                 .description("참가자 별 정산 금액"),
-                                        fieldWithPath("data.totalPrice").type(JsonFieldType.NUMBER)
+                                        fieldWithPath("data.money").type(JsonFieldType.NUMBER)
                                                 .description("결제 총 금액"),
                                         fieldWithPath("data.splitMethod").type(JsonFieldType.STRING)
                                                 .description("정산 방법"),
