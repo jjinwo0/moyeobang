@@ -9,6 +9,8 @@ import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.SsePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @UseCase
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class OfflinePaymentService implements OfflinePaymentUseCase {
     private final LoadTravelAccountPort loadTravelAccountPort;
 
     @Override
+    @Transactional
     public boolean confirmPayment(PaymentCommand command) {
         TravelAccount travelAccount = loadTravelAccountPort.loadTravelAccount(command.travelAccountNumber());
 
@@ -28,8 +31,7 @@ public class OfflinePaymentService implements OfflinePaymentUseCase {
             ssePort.sendPaymentFailure(command.paymentRequestId(), "Payment failed");
             return false;
         }
-
-        PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.store(),
+        PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.toStoreDomain(),
                 command.paymentRequestMoney());
         ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
         return true;
