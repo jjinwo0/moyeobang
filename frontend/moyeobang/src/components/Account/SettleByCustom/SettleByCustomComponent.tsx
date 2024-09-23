@@ -221,7 +221,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     key={index}
                     memberId={user.participantInfo.memberId}
                     profileImage={user.participantInfo.profileImage}
-                    nickname={user.participantInfo.nickname}
+                    memberName={user.participantInfo.memberName}
                     isChecked={user.isChecked}
                     isDecided={user.isDecided}
                     money={user.money}

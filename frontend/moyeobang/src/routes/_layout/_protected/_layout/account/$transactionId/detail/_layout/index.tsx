@@ -3,7 +3,7 @@ import React from 'react'
 import { css } from '@emotion/react'
 import TransactionDetailDefaultCard from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import Btn from '@/components/common/btn/Btn'
-// import { detailsByCustom, detailsByReceipt} from '@/data/data'
+import { detailsByCustom, detailsByReceipt} from '@/data/data'
 import { colors } from '@/styles/colors'
 import DetailCardByReceipt from '@/components/Account/Detail/DetailCardByReceipt'
 import DetailCardByCustom from '@/components/Account/Detail/DetailCardByCustom'
@@ -59,12 +59,14 @@ export default function TransactionDetail() {
   const accountId = 1;
   const { transactionId } = Route.useParams()
 
+  // TODO 주석 제거
   const {data} = useSuspenseQuery({
     queryKey: ['transactionDetail', accountId, transactionId],
     queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
   });
 
   const transactionDetailData = data.data.data;
+
   // const transactionDetailData = detailsByReceipt; // 임시
 
   // 타입 가드 함수

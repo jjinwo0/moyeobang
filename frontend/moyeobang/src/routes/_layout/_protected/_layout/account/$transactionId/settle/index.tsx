@@ -7,7 +7,7 @@ import { useState } from 'react';
 import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
 import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
 import { useSuspenseQuery } from "@tanstack/react-query";
-// import { detailsByCustom } from "@/data/data";
+import { detailsByCustom } from "@/data/data";
 import moyeobang from '@/services/moyeobang';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/settle/')({
@@ -34,8 +34,8 @@ export default function Settle() {
   const {transactionId} : {transactionId:TransactionId} = Route.useParams(); // 임시 1 넣어둠.
   const {history} = useRouter()
   const {method} :{method:SplitMethod} = Route.useSearch();
-  const [isHidden, setIsHidden] = useState(false);
 
+  // TODO 주석 제거
   // get으로 transaction의 상세 데이터 가져오기!
   const {data} = useSuspenseQuery({
   queryKey: ['transactionDetail', accountId, transactionId],
@@ -43,6 +43,7 @@ export default function Settle() {
   });
 
   const transactionDetailData = data.data.data;
+
   // const transactionDetailData = detailsByCustom; // 임시
 
   const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
@@ -62,7 +63,7 @@ export default function Settle() {
   }
 
   function handleHidden() {
-    setIsHidden(true);
+    // setIsHidden(true);
   }
 
   // 타입 가드 함수
