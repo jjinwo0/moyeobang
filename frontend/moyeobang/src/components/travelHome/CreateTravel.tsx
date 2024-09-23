@@ -37,8 +37,8 @@ interface CreateTravelProps {
     travelPlaceList?: string[];
     quizQuestion?: string;
     quizAnswer?: string;
-    startDate?: Date | null; // startDate 추가
-    endDate?: Date | null; // endDate 추가
+    startDate?: string | null; // startDate 추가
+    endDate?: string | null; // endDate 추가
     selectedImage?: string | null;
   };
   onSubmit?: () => void; // 수정 버튼 클릭 시 실행할 함수
@@ -66,12 +66,14 @@ export default function CreateTravel({
   const [quizAnswer, setQuizAnswer] = useState<string>(
     initialData.quizAnswer || ''
   );
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(
-    initialData.dateRange || [
-      initialData.startDate || null,
-      initialData.endDate || null,
-    ]
-  );
+  const [dateRange, setDateRange] = useState<[string | null, string | null]>([
+    initialData.startDate
+      ? dayjs(initialData.startDate).format('YYYY-MM-DD') // Date 타입이면 string으로 변환
+      : null,
+    initialData.endDate
+      ? dayjs(initialData.endDate).format('YYYY-MM-DD') // Date 타입이면 string으로 변환
+      : null,
+  ]);
   const [selectedImage, setSelectedImage] = useState<string | null>(
     initialData.selectedImage || null
   );
@@ -79,20 +81,39 @@ export default function CreateTravel({
   const [step, setStep] = useState<number>(1); // Step 상태
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [formData, setFormData] = useState<FormData>(new FormData());
 
   // 수정과 생성을 구분하여 처리
   const handleNextClick = () => {
+    if (!travelName || !dateRange[0] || !dateRange[1]) {
+      alert('모든 필드를 입력해주세요');
+      return;
+    }
+    const newFormData = new FormData();
+    newFormData.append('travelName', travelName);
+    newFormData.append('startDate', dateRange[0] || '');
+    newFormData.append('endDate', dateRange[1] || '');
+    newFormData.append('travelPlaceList', travelPlaceList.join(','));
+    newFormData.append('quizQuestion', quizQuestion);
+    newFormData.append('quizAnswer', quizAnswer);
+    if (selectedImage) {
+      const file = fileInputRef.current?.files?.[0];
+      if (file) {
+        newFormData.append('travelImage', file);
+      }
+    }
+
+    setFormData(newFormData); // formData 상태 업데이트
+
+    // // FormData의 내용을 확인하기 위해 entries() 사용
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0] + ': ' + pair[1]);
+    // }
     if (isEditMode) {
       // 수정 모드일 때는 onSubmit 함수 호출
       onClose();
       // onSubmit();
     } else {
-      console.log('여행 이름:', travelName);
-      console.log('여행 장소:', travelPlaceList);
-      console.log('여행 시작:', dateRange[0]);
-      console.log('여행 끝:', dateRange[1]);
-      console.log('퀴즈 질문:', quizQuestion);
-      console.log('퀴즈 답변:', quizAnswer);
       setStep(2); // 생성 모드일 때 다음 단계로 이동
     }
   };
@@ -142,14 +163,14 @@ export default function CreateTravel({
   }, [isCalendarOpen]);
 
   const [selectedRange, setSelectedRange] = useState<{
-    start: Date | string | null;
-    end: Date | string | null;
+    start: string | null;
+    end: string | null;
   }>({
     start: null,
     end: null,
   });
 
-  const handleSelectRange = (start: Date, end: Date) => {
+  const handleSelectRange = (start: string, end: string) => {
     setSelectedRange({start, end});
     setDateRange([start, end]); // 날짜 범위를 업데이트
   };
@@ -308,7 +329,7 @@ export default function CreateTravel({
             </div>
           </>
         ) : (
-          <AuthVerification onClose={closeModal} />
+          <AuthVerification onClose={closeModal} formData={formData} />
         )}
       </div>
     </div>

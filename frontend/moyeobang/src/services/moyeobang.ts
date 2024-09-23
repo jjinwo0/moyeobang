@@ -104,5 +104,13 @@ export default {
   /**
    * 여행 목록 전체 조회
    */
-  getTravelList: async () => axios.get<MoyeobangResponse<Travel>>('/travel/'),
+  getTravelList: async () => axios.get<MoyeobangResponse<Travel>>('/travel'),
+
+  /**
+   * 여행 생성 api
+   */
+  postTravel: async (data: FormData) =>
+    axios.post<MoyeobangResponse<null>>('/travel/create', data, {
+      headers: {'Content-Type': 'multipart/form-data'},
+    }),
 };

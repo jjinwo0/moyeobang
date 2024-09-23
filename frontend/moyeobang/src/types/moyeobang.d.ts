@@ -144,10 +144,10 @@ type TotalComsumption = number;
 type AccountId = number;
 
 interface ParticipantInfo {
-    memberId: MemberId;
-    memberName: Nickname;
-    profileImage: ProfileImage;
-  }
+  memberId: MemberId;
+  memberName: Nickname;
+  profileImage: ProfileImage;
+}
 
 interface OrderItems {
   orderItemId: OrderItemId;
@@ -258,13 +258,13 @@ type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
 
 // 결제 내역 전체 조회 GET
 interface TransactionList {
-    transactionId : TransactionId;
-    paymentName : PaymentName;
-    money : Money;
-    participants : ParticipantInfo[];   // 정산한 사람들(default)
-    transactionType : TransactionType;
-    createdAt : CreatedAt;
-    currentBalance : CurrentBalance;
+  transactionId: TransactionId;
+  paymentName: PaymentName;
+  money: Money;
+  participants: ParticipantInfo[]; // 정산한 사람들(default)
+  transactionType: TransactionType;
+  createdAt: CreatedAt;
+  currentBalance: CurrentBalance;
 }
 
 // 상세 조회 영수증 정산 'receipt'의 details
@@ -348,10 +348,10 @@ interface QrData {
 
 interface PosPay {
   placeId: number;
-  placeName:string;
-  placeAdress:Adress;
+  placeName: string;
+  placeAdress: Adress;
   latitude: Latitude;
-  longitude:Longitude;
+  longitude: Longitude;
   targetAccountNumber: string;
 }
 
@@ -375,15 +375,15 @@ interface PaymentProps {
 
 interface ErrorResponse {
   status: number;
-  code: number;  
+  code: number;
   message: string;
 }
 
-  // api 요청
+// api 요청
 interface MoyeobangResponse<T> {
-    status: string;
-    data: T;
-    error: ErrorResponse | null;
+  status: string;
+  data: T;
+  error: ErrorResponse | null;
 }
 
 interface TravelLocation {
@@ -421,4 +421,14 @@ interface Quiz {
   id: TravelId;
   question: Question;
   answer: Answer;
+}
+
+interface PostTravel {
+  travelName: TravelName;
+  stratDate: StartDate;
+  endDate: EndDate;
+  travelPlaceList: TravelPlaceList;
+  quizQuestion: QuizQuestion;
+  quizAnswer: QuizAnswer;
+  travelImg: ImgUrl | null;
 }
