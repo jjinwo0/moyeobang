@@ -8,4 +8,6 @@ public interface NotificationUseCase {
     void sendNotification(Long travelId, NotificationPayload payload);
 
     void sendBalanceCheckNotification() throws FirebaseMessagingException;
+
+    void sendRemind(Long travelId, Long memberId, NotificationPayload payload);
 }

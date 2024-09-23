@@ -5,6 +5,7 @@ import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
 import com.ssafy.moyeobang.notification.application.domain.Member;
 import com.ssafy.moyeobang.notification.application.domain.MemberTravel;
+import com.ssafy.moyeobang.notification.application.domain.Travel;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import com.ssafy.moyeobang.notification.application.port.out.FCMTokenPort;
 import com.ssafy.moyeobang.notification.application.port.out.LoadMemberPort;
@@ -12,6 +13,9 @@ import com.ssafy.moyeobang.notification.application.port.out.LoadMemberTravelInf
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.ssafy.moyeobang.notification.application.port.out.LoadTravelPort;
+import com.ssafy.moyeobang.notification.error.FailedSendNotificationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +30,8 @@ public class NotificationService implements NotificationUseCase {
     private final LoadMemberTravelInfoInTravelPort memberTravelPort;
 
     private final LoadMemberPort memberPort;
+
+    private final LoadTravelPort travelPort;
 
     private final NotificationSender sender;
 
@@ -84,6 +90,30 @@ public class NotificationService implements NotificationUseCase {
                 .collect(Collectors.toList());
 
         sender.sendAll(messageList);
+    }
+
+    /*
+    지정한 회원에게 입금 요구
+     */
+    @Override
+    public void sendRemind(Long travelId, Long memberId, NotificationPayload payload) {
+
+        Travel travel = travelPort.findById(travelId);
+
+        Member member = memberPort.findById(memberId);
+
+        if (!memberHasKey(member.getEmail()))
+            throw new FailedSendNotificationException("입금 요청 전송에 실패했습니다.");
+
+        String token = tokenPort.getToken(member.getEmail());
+
+        Message message = Message.builder()
+                .putData("title", "[" + travel.getTitle() + " 여행 공금 입금 요청]")
+                .putData("content", payload.amount() + "원 입금 요청을 받았어요.")
+                .setToken(token)
+                .build();
+
+        sender.send(message);
     }
 
 
