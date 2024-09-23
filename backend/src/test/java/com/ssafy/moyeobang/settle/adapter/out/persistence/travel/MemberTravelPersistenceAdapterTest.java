@@ -31,7 +31,7 @@ class MemberTravelPersistenceAdapterTest extends PersistenceAdapterTestSupport {
     private TravelRepositoryInSettle travelRepository;
 
     @Autowired
-    private MemberTravelMapper memberTravelMapper;
+    private MemberTravelMapperInSettle memberTravelMapperInSettle;
 
     @BeforeEach
     void setUp() {

@@ -47,7 +47,7 @@ public class OrderJpaEntity extends BaseEntity {
     private List<MemberOrderHistoryJpaEntity> memberOrderHistoryJpaEntities = new ArrayList<>();
 
     @Builder
-    public OrderJpaEntity(String title, int amount, WithdrawJpaEntity withdraw) {
+    public OrderJpaEntity(String title, long amount, WithdrawJpaEntity withdraw) {
         this.title = title;
         this.amount = amount;
         this.withdraw = withdraw;

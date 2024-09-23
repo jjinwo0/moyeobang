@@ -8,7 +8,7 @@ import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderMapper {
+public class OrderMapperInSettle {
 
     Order mapToDomain(final OrderJpaEntity orderEntity) {
 

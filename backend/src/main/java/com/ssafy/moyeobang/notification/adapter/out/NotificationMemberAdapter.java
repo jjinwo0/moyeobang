@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class NotificationMemberAdapter implements FCMTokenPort, LoadMemberPort {
 
     private final MemberRepositoryInNotification memberRepository;
-    private final MemberMapper memberMapper;
+    private final MemberMapperInNotification memberMapper;
 
     @Override
     public String getToken(String email) {

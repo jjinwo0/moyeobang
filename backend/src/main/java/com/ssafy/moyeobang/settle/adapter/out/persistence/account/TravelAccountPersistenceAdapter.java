@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class TravelAccountPersistenceAdapter implements FindTravelAccountPort {
 
     private final TravelAccountRepositoryInSettle travelAccountRepository;
-    private final AccountMapper accountMapper;
+    private final AccountMapperInSettle accountMapperInSettle;
 
     @Override
     public Account findTravelAccount(Long travelAccountId) {
@@ -21,6 +21,6 @@ public class TravelAccountPersistenceAdapter implements FindTravelAccountPort {
                 .orElseThrow(() -> new AccountNotFoundException(
                         "Travel Account id[" + travelAccountId + "] 계좌 정보를 찾을 수 없습니다."));
 
-        return accountMapper.mapToTravelDomain(travelAccountEntity);
+        return accountMapperInSettle.mapToTravelDomain(travelAccountEntity);
     }
 }

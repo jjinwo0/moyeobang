@@ -8,7 +8,7 @@ import com.ssafy.moyeobang.settle.application.domain.member.Member.PersonalInfo;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MemberMapper {
+public class MemberMapperInSettle {
 
     Member mapToDomain(final MemberJpaEntity memberEntity) {
 
