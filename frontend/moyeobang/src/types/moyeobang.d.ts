@@ -234,7 +234,7 @@ interface PaymentProps {
 
 interface ErrorResponse {
   status: number;
-  code: string | null;  // '미정'
+  code: number;  
   message: string;
 }
 
