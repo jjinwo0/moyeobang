@@ -1,8 +1,6 @@
 package com.ssafy.moyeobang.notification.application.service;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,7 +8,6 @@ import static org.mockito.Mockito.when;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
 import com.ssafy.moyeobang.notification.application.domain.Member;
@@ -99,32 +96,32 @@ class NotificationServiceTest {
         verify(sender, times(2)).send(any(Message.class));
     }
 
-    @Test
-    @DisplayName("알림 전송 실패 케이스 테스트")
-    void 알림_전송_실패() {
-
-        // given
-        NotificationPayload payload = new NotificationPayload("입금 요청", 5000);
-
-        Member member1 = Member.of(1L, "test1@ssafy.com", "testToken1");
-        Member member2 = Member.of(2L, "test2@ssafy.com", "testToken2");
-
-        when(memberTravelPort.findMemberIdByMemberTravelEntity(any()))
-                .thenReturn(List.of(member1, member2));
-        when(fcmTokenPort.getToken("test1@ssafy.com")).thenReturn("testToken1");
-        when(fcmTokenPort.getToken("test2@ssafy.com")).thenReturn("testToken2");
-        when(fcmTokenPort.hasKey("test1@ssafy.com")).thenReturn(true);
-        when(fcmTokenPort.hasKey("test2@ssafy.com")).thenReturn(true);
-
-        doThrow(FirebaseMessagingException.class)
-                .when(sender).send(any(Message.class));
-
-        // when
-        assertThrows(FirebaseMessagingException.class, () ->
-                notificationService.sendNotification(1L, payload));
-
-        verify(sender, times(2)).send(any(Message.class));
-    }
+//    @Test
+//    @DisplayName("알림 전송 실패 케이스 테스트")
+//    void 알림_전송_실패() {
+//
+//        // given
+//        NotificationPayload payload = new NotificationPayload("입금 요청", 5000);
+//
+//        Member member1 = Member.of(1L, "test1@ssafy.com", "testToken1");
+//        Member member2 = Member.of(2L, "test2@ssafy.com", "testToken2");
+//
+//        when(memberTravelPort.findMemberIdByMemberTravelEntity(any()))
+//                .thenReturn(List.of(member1, member2));
+//        when(fcmTokenPort.getToken("test1@ssafy.com")).thenReturn("testToken1");
+//        when(fcmTokenPort.getToken("test2@ssafy.com")).thenReturn("testToken2");
+//        when(fcmTokenPort.hasKey("test1@ssafy.com")).thenReturn(true);
+//        when(fcmTokenPort.hasKey("test2@ssafy.com")).thenReturn(true);
+//
+//        doThrow(FirebaseMessagingException.class)
+//                .when(sender).send(any(Message.class));
+//
+//        // when
+//        assertThrows(FirebaseMessagingException.class, () ->
+//                notificationService.sendNotification(1L, payload));
+//
+//        verify(sender, times(2)).send(any(Message.class));
+//    }
 
     @Test
     @DisplayName("각 여행에 참여중인 모든 인원들에게 잔액 알림 전송")

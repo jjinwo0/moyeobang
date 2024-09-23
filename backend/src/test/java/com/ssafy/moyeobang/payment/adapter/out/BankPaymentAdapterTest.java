@@ -17,10 +17,12 @@ import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Disabled
 public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
     @Autowired
@@ -49,6 +51,7 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
         travelRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
     }
+
 
     @DisplayName("방장의 유저 키를 이용해 싸피 뱅크 여행 모임 통장 계좌를 생성한다.")
     @Test

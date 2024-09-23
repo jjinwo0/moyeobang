@@ -13,9 +13,9 @@ import com.ssafy.moyeobang.payment.application.port.out.CreateAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
-import com.ssafy.moyeobang.payment.error.AccountNotFoundException;
+import com.ssafy.moyeobang.payment.error.ErrorCode;
+import com.ssafy.moyeobang.payment.error.PaymentException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -50,7 +50,6 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
     }
 
     @Override
-    @Transactional
     public PaymentResult processPayment(TravelAccount travelAccount, Store store, Money paymentRequestMoney) {
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(travelAccount.getAccountNumber());
 
@@ -70,7 +69,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
 
     private TravelAccountJpaEntity getTravelAccount(String accountNumber) {
         return travelAccountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(AccountNotFoundException::new);
+                .orElseThrow(() -> new PaymentException(ErrorCode.TRAVEL_ACCOUNT_NOT_FOUND));
     }
 
     private WithdrawJpaEntity createPaymentWithdraw(TravelAccountJpaEntity travelAccount, Store store,
