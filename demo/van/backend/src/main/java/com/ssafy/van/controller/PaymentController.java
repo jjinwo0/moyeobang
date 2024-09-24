@@ -1,6 +1,7 @@
 package com.ssafy.van.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.van.domain.ApiResult;
 import com.ssafy.van.domain.PaymentRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class PaymentController {
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     @PostMapping("/process")
     public ResponseEntity<ApiResult> processPayment(@RequestBody PaymentRequest paymentRequest) {
@@ -26,7 +28,8 @@ public class PaymentController {
         log.info("Payment request: {}", paymentRequest);
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(mainServiceUrl, paymentRequest, String.class);
-            ApiResult apiResult = new ApiResult("SUCCESS", response.getBody(), null);
+            ApiResult responseData = objectMapper.readValue(response.getBody(), ApiResult.class);
+            ApiResult apiResult = new ApiResult("SUCCESS", responseData, null);
             return ResponseEntity.ok(apiResult);
         } catch (Exception e) {
             ApiResult errorResponse = new ApiResult("ERROR", null, "Payment failed.");
