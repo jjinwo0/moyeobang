@@ -1,6 +1,9 @@
 package com.ssafy.moyeobang.travel.adapter.in.web;
 
+import static com.ssafy.moyeobang.common.util.ApiUtils.success;
+
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
+import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.travel.adapter.in.web.in.CreateTravelRequest;
 import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
@@ -20,8 +23,8 @@ public class CreateTravelController {
     private final CreateTravelUseCase createTravelUseCase;
 
     @PostMapping("/api/travels")
-    public CreateTravelResponse createTravel(@RequestPart CreateTravelRequest request,
-                                             @RequestPart(required = false) MultipartFile backgroundImage) throws IOException {
+    public ApiResult<CreateTravelResponse> createTravel(@RequestPart CreateTravelRequest request,
+                                                        @RequestPart(required = false) MultipartFile backgroundImage) throws IOException {
         CreateTravelInCommand command = new CreateTravelInCommand(
                 request.travelName(),
                 request.startDate(),
@@ -35,6 +38,6 @@ public class CreateTravelController {
                 backgroundImage.getSize()
         );
 
-        return createTravelUseCase.createTravel(command);
+        return success(createTravelUseCase.createTravel(command));
     }
 }

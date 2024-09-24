@@ -21,8 +21,12 @@ class TravelPersistenceAdapterTest extends PersistenceAdapterTestSupport {
     @Autowired
     private TravelRepositoryInTravel travelRepository;
 
+    @Autowired
+    private TravelPlaceRepositoryInTravel travelPlaceRepository;
+
     @AfterEach
     void tearDown() {
+        travelPlaceRepository.deleteAllInBatch();
         travelRepository.deleteAllInBatch();
     }
 
@@ -40,7 +44,7 @@ class TravelPersistenceAdapterTest extends PersistenceAdapterTestSupport {
                 List.of("강원도 춘천", "제주도", "경상남도 함양"),
                 "김훈민의 발 사이즈는?",
                 "270",
-                null
+                "https://sample-image.png"
         );
 
         //when

@@ -14,7 +14,21 @@ public record CreateTravelOutCommand(@NotNull String title,
                                      @NotNull String quizAnswer,
                                      String backgroundImageUrl) {
 
-    public CreateTravelOutCommand {
+    public CreateTravelOutCommand(String title,
+                                  LocalDate startDate,
+                                  LocalDate endDate,
+                                  List<String> travelPlaces,
+                                  String quizQuestion,
+                                  String quizAnswer,
+                                  String backgroundImageUrl) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.travelPlaces = travelPlaces;
+        this.quizQuestion = quizQuestion;
+        this.quizAnswer = quizAnswer;
+        this.backgroundImageUrl = backgroundImageUrl;
+
         validate(this);
     }
 }
