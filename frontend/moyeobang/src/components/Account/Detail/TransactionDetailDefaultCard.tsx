@@ -60,7 +60,7 @@ export default function TransactionDetailDefaultCard({
                 </div>
                 <div css={boxStyle}>
                     <div css={labelStyle}>승인번호</div>
-                    <div css={textStyle}>{acceptedNumber}</div>
+                    <div css={textStyle}>{acceptedNumber.slice(0,13)}</div>
                 </div>
                 <div css={boxStyle}>
                     <div css={labelStyle}>일시</div>

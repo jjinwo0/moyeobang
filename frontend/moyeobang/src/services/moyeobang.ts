@@ -70,7 +70,7 @@ export default {
   /**
  * 영수증 정산 
  */
-  postSettleByReceipt: async (transactionId:number, data: TransactionDetailByReceipt) =>
+  postSettleByReceipt: async (transactionId:number, data: PostTransactionDetailByReceipt) =>
     axios.post<MoyeobangResponse<null>>(
       `/travel/accounts/transactions/${transactionId}/settle`,
       data,

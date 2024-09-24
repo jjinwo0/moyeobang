@@ -300,6 +300,25 @@ interface PostTransactionDetailByCustom {
   acceptedNumber:AcceptedNumber;
 }
 
+// 상세 조회 영수증 정산 'receipt'의 details
+interface PostSettledItemByReceipt {
+  orderItemId: OrderItemId;
+  orderItemTitle: OrderItemTitle;
+  orderItemPrice: OrderItemPrice;
+  orderItemQuantity: OrderItemQuantity;
+  participants: MemberId[];
+}
+
+interface PostTransactionDetailByReceipt {
+  paymentName: PaymentName;
+  address: Adress;
+  money: Money;
+  createdAt: CreatedAt;
+  acceptedNumber: AcceptedNumber;
+  details: PostSettledItemByReceipt[];
+  splitMethod: SplitMethod; // 'receipt'
+}
+
 interface ChatItem {
   item_name: string;
   quantity: number;

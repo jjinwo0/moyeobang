@@ -10,7 +10,7 @@ export function extractItems(
   acceptedNumber: AcceptedNumber
 ): TransactionDetailByReceipt {
 
-  let itemId = 1;
+  let itemId : number= 1;
 
   const details = parsedData.items.map((product: ChatItem) => {
 
