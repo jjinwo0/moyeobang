@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 @PersistenceAdapter
 public class LocalFileStorage implements UploadImagePort {
 
-    @Value("{storage.path}")
+    @Value("${moyeobang.storage.path}")
     private String storagePath;
 
     @Override
