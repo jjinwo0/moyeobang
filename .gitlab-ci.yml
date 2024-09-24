@@ -28,18 +28,10 @@ result_report_job:
     - test
   script:
     - |
-      if compgen -G "backend/build/test-results/test/**/*.xml" > /dev/null; then
-        TEST_COUNT=$(grep -o "<testsuite" backend/build/test-results/test/**/*.xml | wc -l)
-        FAIL_COUNT=$(grep -o "<failure" backend/build/test-results/test/**/*.xml | wc -l)
-        SKIP_COUNT=$(grep -o "<skipped" backend/build/test-results/test/**/*.xml | wc -l)
-        DURATION=$(grep -oP "(?<=time=\")[^\"]+" backend/build/test-results/test/**/*.xml | awk "{sum+=\$1} END {print sum}")
-      else
-        echo "No XML files found."
-        TEST_COUNT=0
-        FAIL_COUNT=0
-        SKIP_COUNT=0
-        DURATION=0
-      fi
+      TEST_COUNT=$(grep -o "<testsuite" backend/build/test-results/test/**/*.xml | wc -l)
+      FAIL_COUNT=$(grep -o "<failure" backend/build/test-results/test/**/*.xml | wc -l)
+      SKIP_COUNT=$(grep -o "<skipped" backend/build/test-results/test/**/*.xml | wc -l)
+      DURATION=$(grep -oP "(?<=time=\")[^\"]+" backend/build/test-results/test/**/*.xml | awk "{sum+=\$1} END {print sum}")
 
     - |
       curl --request POST --header "PRIVATE-TOKEN: AHt8jnrz-9FtsyyJPMt9" \
