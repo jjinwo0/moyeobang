@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -32,14 +33,20 @@ public class TravelJpaEntity extends BaseEntity {
     private String title;
 
     private String travelKey;
-    
+
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
+
     @OneToMany(mappedBy = "travel", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberTravelJpaEntity> memberTravelJpaEntities = new ArrayList<>();
 
     @Builder
-    public TravelJpaEntity(String title, String travelKey) {
+    private TravelJpaEntity(String title, String travelKey, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
         this.travelKey = travelKey;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     //TODO: 여행 계획 API 구현 후 삭제 예정

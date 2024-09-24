@@ -32,7 +32,7 @@ class LoadMemberAdapterTest extends PersistenceAdapterTestSupport {
 
     @DisplayName("유저의 id로 유저 정보를 조회한다.")
     @Test
-    void createAccount() {
+    void loadMember() {
         //given
         MemberJpaEntity memberJpaEntity = createMember();
         memberRepository.save(memberJpaEntity);
