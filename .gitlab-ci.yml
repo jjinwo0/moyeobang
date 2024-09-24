@@ -1,7 +1,7 @@
 stages:
   - test
 
-test:
+unit_test_job:
   stage: test
   script:
     - ./gradlew test
@@ -24,6 +24,6 @@ test:
       junit:
         - build/test-results/test/**/*.xml
 
-only:
-  - merge_requests
-  - backend
+  only:
+    - merge_requests
+    - backend
