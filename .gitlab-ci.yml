@@ -9,9 +9,9 @@ unit_test_job:
 
   script:
     - cd ./backend
-    - ls /home
+    - ls /shared
     - mkdir -p src/main/resources/firebase
-    - cp /moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json src/main/resources/firebase/
+    - cp /shared/moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json src/main/resources/firebase/moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json
     - ./gradlew test
     - 'TEST_COUNT=$(grep -o "<testsuite" build/test-results/test/**/*.xml | wc -l)'
     - 'FAIL_COUNT=$(grep -o "<failure" build/test-results/test/**/*.xml | wc -l)'
