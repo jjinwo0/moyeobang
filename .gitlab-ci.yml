@@ -3,6 +3,10 @@ stages:
 
 unit_test_job:
   stage: test
+
+  tags:
+    - test
+
   script:
     - ./gradlew test
     - 'TEST_COUNT=$(grep -o "<testsuite" build/test-results/test/**/*.xml | wc -l)'
