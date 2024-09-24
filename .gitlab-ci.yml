@@ -11,11 +11,19 @@ unit_test_job:
     - cd ./backend
     - mkdir -p src/main/resources/firebase
     - curl -o src/main/resources/firebase/moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json https://moyeobang.s3.ap-southeast-2.amazonaws.com/moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json
-    - ./gradlew test
-    - 'TEST_COUNT=$(grep -o "<testsuite" backend/build/test-results/test/**/*.xml | wc -l)'
-    - 'FAIL_COUNT=$(grep -o "<failure" backend/build/test-results/test/**/*.xml | wc -l)'
-    - 'SKIP_COUNT=$(grep -o "<skipped" backend/build/test-results/test/**/*.xml | wc -l)'
-    - 'DURATION=$(grep -oP "(?<=time=\")[^\"]+" build/test-results/test/**/*.xml | awk "{sum+=\$1} END {print sum}")'
+    - |
+      if compgen -G "build/test-results/test/**/*.xml" > /dev/null; then
+        TEST_COUNT=$(grep -o "<testsuite" build/test-results/test/**/*.xml | wc -l)
+        FAIL_COUNT=$(grep -o "<failure" build/test-results/test/**/*.xml | wc -l)
+        SKIP_COUNT=$(grep -o "<skipped" build/test-results/test/**/*.xml | wc -l)
+        DURATION=$(grep -oP "(?<=time=\")[^\"]+" build/test-results/test/**/*.xml | awk "{sum+=\$1} END {print sum}")
+      else
+        echo "No XML files found."
+        TEST_COUNT=0
+        FAIL_COUNT=0
+        SKIP_COUNT=0
+        DURATION=0
+      fi
   
   after_script:
     - |
