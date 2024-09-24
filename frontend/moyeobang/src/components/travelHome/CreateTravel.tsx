@@ -92,12 +92,16 @@ export default function CreateTravel({
       return;
     }
     const newFormData = new FormData();
-    newFormData.append('travelName', travelName);
-    newFormData.append('startDate', dateRange[0] || '');
-    newFormData.append('endDate', dateRange[1] || '');
-    newFormData.append('travelPlaceList', travelPlaceList.join(','));
-    newFormData.append('quizQuestion', quizQuestion);
-    newFormData.append('quizAnswer', quizAnswer);
+    const requestData = {
+      travelName: travelName,
+      startDate: dateRange[0],
+      endDate: dateRange[1],
+      travelPlaceList: travelPlaceList,
+      quizQuestion: quizQuestion,
+      quizAnser: quizAnswer,
+    };
+
+    newFormData.append('request', JSON.stringify(requestData));
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
       if (file) {
@@ -107,7 +111,7 @@ export default function CreateTravel({
 
     setFormData(newFormData); // formData 상태 업데이트
 
-    // // FormData의 내용을 확인하기 위해 entries() 사용
+    // FormData의 내용을 확인하기 위해 entries() 사용
     // for (let pair of formData.entries()) {
     //   console.log(pair[0] + ': ' + pair[1]);
     // }
