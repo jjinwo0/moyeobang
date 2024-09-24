@@ -8,6 +8,7 @@ unit_test_job:
     - test
 
   script:
+    - cd ./backend
     - ./gradlew test
     - 'TEST_COUNT=$(grep -o "<testsuite" build/test-results/test/**/*.xml | wc -l)'
     - 'FAIL_COUNT=$(grep -o "<failure" build/test-results/test/**/*.xml | wc -l)'
