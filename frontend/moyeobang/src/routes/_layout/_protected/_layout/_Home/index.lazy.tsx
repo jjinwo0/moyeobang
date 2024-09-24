@@ -91,6 +91,13 @@ const data: Travel[] = [
 
 const memberName: MemberName = '진우바오';
 
+const memberData: Member = {
+  memberId: 1,
+  memberName: '진우바오',
+  profileImage: 'https://example.com/images.jpg',
+  accountNumber: '123456789123', // 모여방과 연결된 계좌
+};
+
 const containerStyle = css`
   display: flex;
   flex-direction: column;
@@ -182,7 +189,7 @@ function Index() {
   // //[todo] get으로 여행 목록 전체 조회하기
   // const {data:travelData} = useSuspenseQuery({
   //   queryKey: ['travelList'],
-  //   queryFn: () => moyeobang.getTravelList(),
+  //   queryFn: () => moyeobang.getTravelList(memberData.memberId),
   // });
 
   // const data = travelData?.data.data;

@@ -432,3 +432,10 @@ interface PostTravel {
   quizAnswer: QuizAnswer;
   travelImg: ImgUrl | null;
 }
+
+interface Member {
+  memberId: Id;
+  memberName: MemberName;
+  profileImage: ImgUrl;
+  accountNumber: AccountNumber;
+}

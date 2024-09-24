@@ -7,8 +7,10 @@ import {requestPermissionAndSaveToken} from '@/services/notificationService';
 const modalOverlayStyle = css`
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100vw;
+  left: 50%; /* 좌우 중앙 정렬을 위한 설정 */
+  transform: translateX(-50%); /* 중앙 정렬을 위해 -50% 이동 */
+  max-width: 390px;
+  width: 100%; /* 100%로 지정 */
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
   display: flex;
@@ -18,7 +20,7 @@ const modalOverlayStyle = css`
 `;
 
 const modalContainerStyle = css`
-  width: 65%;
+  width: 50%;
   padding: 30px;
   background-color: white;
   border-radius: 10px;
@@ -37,9 +39,9 @@ const questionStyle = css`
 `;
 
 const descriptionStyle = css`
-  font-family: 'regular';
-  font-size: 16px;
-  color: ${colors.gray};
+  font-family: 'medium';
+  font-size: 14px;
+  color: ${colors.strongGray};
   margin-bottom: 20px;
   line-height: 1.5;
 `;
