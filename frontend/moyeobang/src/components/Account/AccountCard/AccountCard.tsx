@@ -75,7 +75,7 @@ export default function AccountCard({travelName, travelAccountNumber, memberName
                     <div css={titleStyle} >{travelName}</div>
                     <div css={accountStyle} >{travelAccountNumber}</div>
                     { memberName ? <div css={nameStyle}>{memberName}</div> : undefined}
-                    <div css={balanceStyle} >{currentBalance}원</div>
+                    <div css={balanceStyle} >{currentBalance.toLocaleString()}원</div>
             </div>
         </div>
     )

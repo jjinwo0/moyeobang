@@ -17,7 +17,7 @@ const layoutStyle = css`
   margin-top: 50px;
   display:flex;
   flex-direction:column;
-  gap:15px;
+  gap:20px;
   padding: 10px 30px;
   height:100%;
 `;
@@ -33,7 +33,7 @@ const columnStyle=css`
   flex-direction:row;
   justify-content:space-between;
   align-items:center;
-  padding: 10px 5px;
+  padding: 15px 5px;
   border-top: solid 3px ${colors.lightGray};
   font-family:'semibold';
   font-size:20px;
@@ -44,7 +44,7 @@ const listStyle=css`
   display:flex;
   flex-direction:column;
   overflow-y:auto;
-  height:450px;
+  height:400px;
   padding: 0 5px;
 
   ::-webkit-scrollbar {
@@ -68,6 +68,7 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
+  console.log('거래 상세 데이터', transactionDetailData)
 
   function handleUpdateReceipt() {
     setOpentUpdateModal(true);
@@ -96,7 +97,8 @@ export default function TransactionDetail() {
         paymentName={transactionDetailData.paymentName}
         money={transactionDetailData.money}
         createdAt={transactionDetailData.createdAt}
-        adress={transactionDetailData.adress}
+        adress={transactionDetailData.address}
+        acceptedNumber={transactionDetailData.acceptedNumber}
       />
       {transactionDetailData.splitMethod === 'receipt' &&
         !isSettledParticipantByCustom(transactionDetailData.details) && (

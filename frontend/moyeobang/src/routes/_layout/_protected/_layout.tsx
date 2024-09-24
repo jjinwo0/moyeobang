@@ -40,6 +40,7 @@ export default function Header() {
         <HeaderWithAlarmAndQR
           onAlarmClick={handleAlarmClick}
           onQRClick={handleQRClick}
+          isBack={pathname==='/account' || pathname==='/travelLog'}
         />
       )}
       <div css={layoutStyle}>

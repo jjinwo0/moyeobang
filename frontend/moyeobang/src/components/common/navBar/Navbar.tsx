@@ -6,6 +6,7 @@ import travelLog from '@/assets/icons/travelLog.webp';
 import wallet from '@/assets/icons/wallet.png';
 import coin from '@/assets/icons/coin.png';
 import CalculatePopup from '../calculate/CalculatePopup';
+import { Link } from '@tanstack/react-router';
 
 const footer = css`
   position: fixed;
@@ -70,6 +71,10 @@ const account = (isSelected: boolean) => css`
 //   }
 // `;
 
+const linkStyle=css`
+  text-decoration: none;
+`;
+
 const cal = css`
   position: absolute; /* 부모 요소(nav) 안에서 위치를 고정 */
   top: -25px; /* nav 위쪽에 위치하도록 설정 */
@@ -108,18 +113,22 @@ export default function Navbar() {
           <p>정산</p>
         </div>
         <div css={nav}>
-          <div
-            css={travel(selectedItem === 'travel')}
-            onClick={() => setSelectedItem('travel')}
+          <div 
+          css={travel(selectedItem === 'travel')}
+          onClick={() => setSelectedItem('travel')}
           >
+            <Link to={'/travelLog'} css={linkStyle} >
             <img src={travelLog} width={50} height={50} alt="여행 기록" />
+            </Link>
             <p>여행기록</p>
           </div>
-          <div
-            css={account(selectedItem === 'account')}
-            onClick={() => setSelectedItem('account')}
+          <div 
+          css={account(selectedItem === 'account')}
+          onClick={() => setSelectedItem('account')}
           >
+            <Link to={'/account'} css={linkStyle} >
             <img src={wallet} width={50} height={50} />
+            </Link>
             <p>모임통장</p>
           </div>
         </div>

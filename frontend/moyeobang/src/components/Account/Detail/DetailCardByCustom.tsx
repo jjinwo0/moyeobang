@@ -1,6 +1,7 @@
 import React from "react";
 import { css } from "@emotion/react";
 import ProfileImage from "../ProfileImage/ProfileImage";
+import { colors } from "@/styles/colors";
 
 const layoutStyle = css`
     display: flex;
@@ -10,19 +11,26 @@ const layoutStyle = css`
     gap: 10px;
     font-family: 'medium';
     font-size: 20px;
-    padding: 10px 0;
+    padding: 15px 0;
+    border-top: solid 1px ${colors.lightGray};
 `;
 
 const nameStyle=css`
-    width:150px;
-    text-align:right;
-    white-space: nowrap;      
-    overflow: hidden;        
-    text-overflow: ellipsis;  
+    width:120px;
+    box-sizing:border-box;
+    text-align:left;
+    white-space: normal;       // 여러줄
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;     // 두줄
+    line-clamp: 2;             // -webkit으로 설정
+    text-overflow: ellipsis; 
+    padding-left:20px;
 `;
 
 const amountStyle=css`
-    width:90px;
+    width:100px;
     text-align:right;
     white-space: nowrap;      
     overflow: hidden;        
@@ -46,8 +54,8 @@ export default function DetailCardByCustom({
     return (
         <div css={layoutStyle}>
             <ProfileImage profileImage={profileImage} px={75}/>
-            <div ccs={nameStyle}>{memberName}</div>
-            <div css={amountStyle}>{money}원</div>
+            <div css={nameStyle}>{memberName}</div>
+            <div css={amountStyle}>{money.toLocaleString()}원</div>
         </div>
     )
 }

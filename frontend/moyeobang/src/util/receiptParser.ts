@@ -6,10 +6,11 @@ export function extractItems(
   createdAt: CreatedAt,
   money: Money,
   paymentName: PaymentName,
-  address: Adress
+  address: Adress,
+  acceptedNumber: AcceptedNumber
 ): TransactionDetailByReceipt {
 
-  let itemId = 1;
+  let itemId : number= 1;
 
   const details = parsedData.items.map((product: ChatItem) => {
 
@@ -35,7 +36,8 @@ export function extractItems(
     money: money,
     details: details,
     createdAt: createdAt, // 시간
-    splitMethod:"receipt"
+    splitMethod:"receipt",
+    acceptedNumber:acceptedNumber
   };
 
   return receiptData

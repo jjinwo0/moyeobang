@@ -10,9 +10,9 @@ import FailByReceipt from "./FailByReceipt";
 import ResultByReceiptComponent from "./ResultByReceiptComponent";
 // import openAI from 'openai';
 
-const api_url:string = "/api/custom/v1/34393/8f13443da4a5bb3449e36dac1ddda218c4f02d27884df6cd85905363c5603a72/general"
-const secret_key:string = "UEVXbkNCTGFYRGtGUlFUTWhWR3NXUmdNU0dUUkV3ZVM="
-const open_ai_key:string="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"
+const api_url= "/api/custom/v1/34393/8f13443da4a5bb3449e36dac1ddda218c4f02d27884df6cd85905363c5603a72/general"
+const secret_key= import.meta.env.VITE_OCR_API_KEY;
+const open_ai_key= import.meta.env.VITE_GPT_API_KEY;
 
 const layoutStyle = css`
     width:100%;
@@ -62,7 +62,7 @@ const buttonStyle = css`
 
 type SettleByReceiptComponentProps = CompleteTransaction
 
-export default function SettleByReceiptComponent({transactionId, money, paymentName, address, createdAt} : SettleByReceiptComponentProps) {
+export default function SettleByReceiptComponent({transactionId, money, paymentName, address, createdAt, acceptedNumber} : SettleByReceiptComponentProps) {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -147,7 +147,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
                     Authorization: `Bearer ${open_ai_key}`,
                 },
                 body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
+                    model: "gpt-4o-mini",
                     messages: [
                         {
                             role: "system",
@@ -182,7 +182,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
 
             // extractItems를 통해 데이터 변환
             if (parsedData && parsedData.items) {
-                const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, address); 
+                const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, address, acceptedNumber); 
                 console.log('영수증 ocr 결과', results)
                 setResults(results)
                 setOpenResultModal(true);

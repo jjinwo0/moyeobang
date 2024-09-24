@@ -18,7 +18,6 @@ const layoutStyle=css`
   width:100%;
   height:100%;
   background-color:${colors.white};
-  width:100%;
   display:flex;
   flex-direction:column;
 `;
@@ -99,7 +98,7 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
 
   // 영수증 정산 update API
   const {mutate: updateSettleByReceipt } = useMutation({
-    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: TransactionDetailByReceipt}) => 
+    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: PostTransactionDetailByReceipt}) => 
       moyeobang.postSettleByReceipt(transactionId, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -127,7 +126,7 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
 
       setUpdateDetails((prevDetails) => {
 
-        if (!prevDetails) return prevDetails; 
+        if (!prevDetails) return []; 
 
         return prevDetails?.map((detail) => 
           detail.orderItemId === itemId ?
@@ -143,14 +142,28 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
   }
 
   function handleSubmit() {
-    const updateReceipt = {
-      ...data,
-      details:updateDetails,
+
+    // 회원 아이디만 넣은 details
+    const updatedDetail = updateDetails.map((detail) => {
+      const memberIds = detail.participants.map((part) => part.memberId)
+      return {
+        ...detail,
+        participants : memberIds
+      }
+    })
+
+    // 보낼 데이터
+    const updatedReceipt : PostTransactionDetailByReceipt = {
+      paymentName: data.paymentName,
+      address: data.address,
+      money: data.money,
+      createdAt: data.createdAt,
+      acceptedNumber: data.acceptedNumber,
+      details: updatedDetail,
       splitMethod:'receipt',
     }
-    updateSettleByReceipt({transactionId: data.transactionId , data : updateReceipt})
-    console.log('정산될 영수증', updateReceipt)
-    console.log('영수증 정산완료 클릭')
+    updateSettleByReceipt({transactionId: data.transactionId , data : updatedReceipt})
+    console.log('정산 클릭 정산될 데이터:', updatedReceipt)
   }
 
   function handleRestart() {
@@ -189,7 +202,9 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
         <Link to={`/account/${data.transactionId}/settle`} css={linkStyle}>
           <Btn buttonStyle={{size:'big', style:'greenBlue'}} onClick={handleRestart}>영수증 다시 찍기</Btn>
         </Link>
-        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>정산 완료</Btn>
+        { isNew ? 
+        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>정산 완료</Btn> : 
+        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>수정 완료</Btn>}
       </div>
     </div>
   )
