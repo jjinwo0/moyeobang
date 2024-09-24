@@ -1,9 +1,9 @@
-import type {InputHTMLAttributes} from 'react';
+import type {InputHTMLAttributes, ReactNode} from 'react';
 import {css} from '@emotion/react';
 import 'react';
 
 type QuizInputProps = InputHTMLAttributes<HTMLInputElement> & {
-  title?: string; // Title is optional now
+  title?: string | ReactNode; // Title is optional now
   label: string;
 };
 

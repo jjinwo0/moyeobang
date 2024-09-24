@@ -281,14 +281,22 @@ export default function CreateTravel({
             <div css={travelStyle}>
               <div css={inputsContainerStyle}>
                 <LabeledInput
-                  label="여행이름"
+                  label={
+                    <span>
+                      <span style={{color: 'red'}}>*</span> 여행이름
+                    </span>
+                  }
                   value={travelName}
                   onChange={e => setTravelName(e.target.value)}
                   placeholder="여행 이름을 입력하세요"
                 />
                 <div css={inputWithIconStyle}>
                   <LabeledInput
-                    label="여행기간"
+                    label={
+                      <span>
+                        <span style={{color: 'red'}}>*</span> 여행기간
+                      </span>
+                    }
                     value={
                       dateRange[0] && dateRange[1]
                         ? `${dayjs(dateRange[0]).format('YYYY-MM-DD')} ~ ${dayjs(dateRange[1]).format('YYYY-MM-DD')}`
@@ -318,7 +326,11 @@ export default function CreateTravel({
 
               <div css={locationStyle}>
                 <LocationInput
-                  label="여행장소"
+                  label={
+                    <span>
+                      <span style={{color: 'red'}}>*</span> 여행장소
+                    </span>
+                  }
                   // value={travelPlaceList.join(', ')} // 배열을 문자열로 변환하여 입력 필드에 표시
                   value={cityInput}
                   // onChange={e =>
@@ -355,7 +367,11 @@ export default function CreateTravel({
 
               <div css={quizStyle}>
                 <QuizInput
-                  title="초대퀴즈"
+                  title={
+                    <span>
+                      <span style={{color: 'red'}}>*</span> 초대퀴즈
+                    </span>
+                  }
                   label="Q"
                   value={quizQuestion}
                   onChange={e => setQuizQuestion(e.target.value)}
