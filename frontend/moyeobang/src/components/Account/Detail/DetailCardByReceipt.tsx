@@ -55,7 +55,7 @@ export default function DetailCardByReceipt({orderItemTitle, orderItemPrice, ord
             <div css={itemContainerStyle}>
                 <div css={titleBoxStyle}>{orderItemTitle}</div>
                 <div css={quantityBoxStyle}>{orderItemQuantity}개</div>
-                <div css={amountBoxStyle}>{orderItemPrice}</div>
+                <div css={amountBoxStyle}>{orderItemPrice.toLocaleString()}</div>
             </div>
             <div css={profileListStyle}>
                 {participants.map((participant, index) => (

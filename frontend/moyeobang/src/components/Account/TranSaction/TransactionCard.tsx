@@ -47,10 +47,10 @@ export default function TransactionCard({
             </div >
             <div css={downContainerStyle}>
                 { transactionType === "입금" ? 
-                    (<div css={depositStyle} >입금 <p>{money}</p> 원</div>) : 
-                    (<div css={notDepositStyle}>출금  <p>{money}</p> 원</div>)
+                    (<div css={depositStyle} >입금 <p>{money.toLocaleString()}</p> 원</div>) : 
+                    (<div css={notDepositStyle}>출금  <p>{money.toLocaleString()}</p> 원</div>)
                 }
-                <div css={balanceStyle}> 잔액 <p>{currentBalance}</p> 원</div>
+                <div css={balanceStyle}> 잔액 <p>{currentBalance.toLocaleString()}</p> 원</div>
             </div>
         </Link>
     )

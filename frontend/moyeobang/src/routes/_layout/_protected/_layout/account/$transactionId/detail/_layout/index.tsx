@@ -33,7 +33,7 @@ const columnStyle=css`
   flex-direction:row;
   justify-content:space-between;
   align-items:center;
-  padding: 10px 5px;
+  padding: 15px 5px;
   border-top: solid 3px ${colors.lightGray};
   font-family:'semibold';
   font-size:20px;

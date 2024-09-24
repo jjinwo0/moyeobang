@@ -19,7 +19,7 @@ const placeStyle = css`
 `;
 
 const layoutStyle = css`
-    padding-top:25px;
+    padding-top:20px;
     display:flex;
     flex-direction:column;
     gap:22px;
@@ -56,7 +56,7 @@ export default function TransactionDetailDefaultCard({
             <div css={layoutStyle}>
                 <div css={boxStyle}>
                     <div css={labelStyle} >금액</div>
-                    <div css={textStyle}>{money}원</div>
+                    <div css={textStyle}>{money.toLocaleString()}원</div>
                 </div>
                 <div css={boxStyle}>
                     <div css={labelStyle}>승인번호</div>

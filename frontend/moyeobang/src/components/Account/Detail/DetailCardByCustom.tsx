@@ -55,7 +55,7 @@ export default function DetailCardByCustom({
         <div css={layoutStyle}>
             <ProfileImage profileImage={profileImage} px={75}/>
             <div css={nameStyle}>{memberName}</div>
-            <div css={amountStyle}>{money}원</div>
+            <div css={amountStyle}>{money.toLocaleString()}원</div>
         </div>
     )
 }
