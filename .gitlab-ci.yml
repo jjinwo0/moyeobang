@@ -9,7 +9,7 @@ unit_test_job:
 
   script:
     - cd ./backend
-    - ls /
+    - ls /home
     - mkdir -p src/main/resources/firebase
     - cp /moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json src/main/resources/firebase/
     - ./gradlew test
