@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class NotificationMemberAdapter implements FCMTokenPort, LoadMemberPort {
 
     private final MemberRepositoryInNotification memberRepository;
-    private final MemberMapper memberMapper;
+    private final MemberMapperInNotificaion memberMapper;
 
     @Override
     public String getToken(String email) {
@@ -28,6 +28,17 @@ public class NotificationMemberAdapter implements FCMTokenPort, LoadMemberPort {
     public boolean hasKey(String email) {
 
         return memberRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public void saveFCMToken(Long id, String token) {
+
+        MemberJpaEntity entity = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("[" + id + "] 회원을 찾을 수 없습니다."));
+
+        entity.saveFCMToken(token);
+
+        memberRepository.save(entity);
     }
 
     @Override
