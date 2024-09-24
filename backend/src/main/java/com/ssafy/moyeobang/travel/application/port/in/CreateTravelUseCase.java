@@ -4,5 +4,5 @@ import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
 
 public interface CreateTravelUseCase {
 
-    CreateTravelResponse createTravel(CreateTravelCommand command);
+    CreateTravelResponse createTravel(CreateTravelInCommand command);
 }

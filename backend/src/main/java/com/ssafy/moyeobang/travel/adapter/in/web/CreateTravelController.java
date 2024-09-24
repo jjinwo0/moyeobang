@@ -3,7 +3,7 @@ package com.ssafy.moyeobang.travel.adapter.in.web;
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.travel.adapter.in.web.in.CreateTravelRequest;
 import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
-import com.ssafy.moyeobang.travel.application.port.in.CreateTravelCommand;
+import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelUseCase;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class CreateTravelController {
     @PostMapping("/api/travels")
     public CreateTravelResponse createTravel(@RequestPart CreateTravelRequest request,
                                              @RequestPart(required = false) MultipartFile backgroundImage) throws IOException {
-        CreateTravelCommand command = new CreateTravelCommand(
+        CreateTravelInCommand command = new CreateTravelInCommand(
                 request.travelName(),
                 request.startDate(),
                 request.endDate(),

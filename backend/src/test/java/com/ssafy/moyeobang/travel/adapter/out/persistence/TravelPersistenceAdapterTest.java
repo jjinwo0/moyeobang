@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
-import com.ssafy.moyeobang.travel.application.port.in.CreateTravelCommand;
+import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -33,7 +33,7 @@ class TravelPersistenceAdapterTest extends PersistenceAdapterTestSupport {
         LocalDate startDate = now();
         LocalDate endDate = now().plusDays(1);
 
-        CreateTravelCommand command = new CreateTravelCommand(
+        CreateTravelOutCommand command = new CreateTravelOutCommand(
                 "즐거운 제주도 여행",
                 startDate,
                 endDate,
