@@ -6,4 +6,5 @@ export default {
   CUSTOM: 'custom',
   TRANSACTION_DETAIL: 'transactionDetail',
   // TRAVELLIST:'travelList',
+  // QUIZ:'quiz',
 };

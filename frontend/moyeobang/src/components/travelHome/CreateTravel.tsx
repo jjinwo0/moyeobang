@@ -27,10 +27,13 @@ import useModalStore from '@/store/useModalStore';
 import MapSearch from './MapSearch';
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
+import moyeobang from '@/services/moyeobang';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 interface CreateTravelProps {
   onClose: () => void; // 모달을 닫는 함수
   isEditMode?: boolean; // 수정 모드 여부
+  travelId?: number;
   initialData?: {
     // 수정 모드일 때의 초기 데이터
     travelName?: string;
@@ -41,14 +44,13 @@ interface CreateTravelProps {
     endDate?: string | null; // endDate 추가
     selectedImage?: string | null;
   };
-  onSubmit?: () => void; // 수정 버튼 클릭 시 실행할 함수
 }
 
 export default function CreateTravel({
   onClose,
+  travelId, // 수정 모드일 때만 사용됨
   isEditMode = false, // 기본값은 false로 설정 (생성 모드)
   initialData = {}, // 기본값을 빈 객체로 설정하여 생성 모드에서 문제가 없도록 처리
-  onSubmit, // 수정 시의 함수
 }: CreateTravelProps) {
   const {closeModal} = useModalStore();
   const [cityInput, setCityInput] = useState<string>(''); // 선택된 도시 이름
@@ -112,11 +114,71 @@ export default function CreateTravel({
     if (isEditMode) {
       // 수정 모드일 때는 onSubmit 함수 호출
       onClose();
-      // onSubmit();
+      handleSubmit();
     } else {
       setStep(2); // 생성 모드일 때 다음 단계로 이동
     }
   };
+
+  const handleSubmit = () => {
+    const newform = new FormData();
+
+    // 필수 필드 유효성 검사
+    if (!travelName || !dateRange[0] || !dateRange[1]) {
+      alert('모든 필드를 입력해주세요');
+      return;
+    }
+
+    // 변경된 필드만 추가
+    if (travelName !== initialData.travelName) {
+      newform.append('travelName', travelName);
+    }
+
+    if (dateRange[0] !== initialData.startDate) {
+      newform.append('startDate', dateRange[0] || '');
+    }
+
+    if (dateRange[1] !== initialData.endDate) {
+      newform.append('endDate', dateRange[1] || '');
+    }
+
+    if (travelPlaceList.join(',') !== initialData.travelPlaceList?.join(',')) {
+      newform.append('travelPlaceList', travelPlaceList.join(','));
+    }
+
+    if (quizQuestion !== initialData.quizQuestion) {
+      newform.append('quizQuestion', quizQuestion);
+    }
+
+    if (quizAnswer !== initialData.quizAnswer) {
+      newform.append('quizAnswer', quizAnswer);
+    }
+
+    if (selectedImage) {
+      const file = fileInputRef.current?.files?.[0];
+      if (file) {
+        newform.append('travelImage', file);
+      }
+    }
+
+    // // [todo] travelId가 존재하는 경우에만 mutate 호출
+    // if (typeof travelId === 'number') {
+    //   patchTravel(newform); // 바로 newform을 전달
+    // }
+  };
+
+  // //[todo] 여행 수정 api 연결
+  // const queryClient = useQueryClient();
+  // const {mutate: patchTravel} = useMutation({
+  //   mutationFn: (formData: FormData) =>
+  //     moyeobang.patchTravel(travelId!, formData), //travelId!로 타입을 단언
+  //   onSuccess: async () => {
+  //     await queryClient.invalidateQueries({
+  //       queryKey: ['travelList'],
+  //       refetchType: 'all',
+  //     });
+  //   },
+  // });
 
   const handleCalendarClick = () => {
     setIsCalendarOpen(prev => !prev); // 달력 표시/숨기기 토글

@@ -113,4 +113,18 @@ export default {
     axios.post<MoyeobangResponse<null>>('/travel/create', data, {
       headers: {'Content-Type': 'multipart/form-data'},
     }),
+
+  /**
+   * 여행 정보 수정 api
+   */
+  patchTravel: async (travelId: Id, data: FormData) =>
+    axios.patch<MoyeobangResponse<null>>(`/travel/update/${travelId}`, data, {
+      headers: {'Content-Type': 'multipart/form-data'},
+    }),
+
+  /**
+   * 여행 퀴즈 조회 api
+   */
+  getTravelQuiz: async (travelId: Id) =>
+    axios.get<MoyeobangResponse<Quiz>>(`/travel/${travelId}/quiz`),
 };

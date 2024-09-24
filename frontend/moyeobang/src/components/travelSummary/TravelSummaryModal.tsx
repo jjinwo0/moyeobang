@@ -186,8 +186,8 @@ dayjs.updateLocale('ko', {
 
 interface TravelSummaryProps {
   travelName: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   travelPlaceList: string[];
   onClose: () => void;
 }

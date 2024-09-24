@@ -3,6 +3,8 @@ import {css} from '@emotion/react';
 import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
 import clipboardIcon from '@/assets/icons/clipboardIcon.png';
+import {useSuspenseQuery} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 const data: Quiz = {
   id: 1,
@@ -106,14 +108,23 @@ const englishStyle = css`
 `;
 
 interface ConfirmQuizProps {
+  travelId: number;
   onClose: () => void;
 }
 
-export default function ConfirmQuiz({onClose}: ConfirmQuizProps) {
+export default function ConfirmQuiz({onClose, travelId}: ConfirmQuizProps) {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(invitationLink);
     alert('초대 링크가 복사되었습니다.');
   };
+
+  // //[todo] get으로 초대퀴즈 조회하기
+  // const {data: quizData} = useSuspenseQuery({
+  //   queryKey: ['quiz'],
+  //   queryFn: () => moyeobang.getTravelQuiz(travelId),
+  // });
+
+  // const data = quizData?.data.data;
 
   return (
     <div css={modalOverlayStyle}>

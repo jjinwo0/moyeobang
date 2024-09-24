@@ -115,6 +115,7 @@ const quizButtonStyle = css`
 `;
 
 interface TravelCardProps {
+  travelId?: number;
   travelName: string;
   startDate: string | Date;
   endDate: string | Date;
@@ -127,6 +128,7 @@ interface TravelCardProps {
 }
 
 export default function TravelCard({
+  travelId,
   travelName,
   startDate,
   endDate,
@@ -146,8 +148,15 @@ export default function TravelCard({
   const {setTravelData} = useTravelStore();
   // const {nowTravelData} = useTravelContext(); // useTravelContext로 데이터 가져오기
 
-  const formatDate = (dateString: string) => {
-    return dateString.split('T')[0]; // "YYYY-MM-DDTHH:mm:ssZ"에서 "YYYY-MM-DD"만 추출
+  const formatDate = (date: string | Date) => {
+    if (typeof date === 'string') {
+      return date.split('T')[0];
+    }
+    // date가 string이면 그대로 사용, Date이면 YYYY-MM-DD로 변환
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
+    }
+    return date;
   };
 
   const clickSettingButton = (e: React.MouseEvent) => {
@@ -250,7 +259,7 @@ export default function TravelCard({
 
       {inviteModal && (
         <div>
-          <ConfirmQuiz onClose={closeQuizModal} />
+          <ConfirmQuiz onClose={closeQuizModal} travelId={travelId} />
         </div>
       )}
 
@@ -259,10 +268,11 @@ export default function TravelCard({
           <CreateTravel
             onClose={closeEditModal}
             isEditMode={true}
+            // travelId={travelId}
             initialData={{
               travelName: travelName,
-              startDate: startDate,
-              endDate: endDate,
+              startDate: formatDate(startDate),
+              endDate: formatDate(endDate),
               travelPlaceList: travelPlaceList,
               quizQuestion: quizQuestion,
               quizAnswer: quizAnswer,
@@ -275,8 +285,8 @@ export default function TravelCard({
         <div>
           <TravelSummaryModal
             travelName={travelName}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={formatDate(startDate)}
+            endDate={formatDate(endDate)}
             travelPlaceList={travelPlaceList}
             onClose={closeSummaryModal}
           />

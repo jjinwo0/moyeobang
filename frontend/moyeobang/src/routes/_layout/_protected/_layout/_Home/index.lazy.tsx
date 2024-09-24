@@ -176,8 +176,6 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  // const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
-  // const {setNowTravelData} = useTravelContext();
 
   // //[todo] get으로 여행 목록 전체 조회하기
   // const {data:travelData} = useSuspenseQuery({
@@ -300,6 +298,7 @@ function Index() {
               tripsToDisplay.map(item => (
                 <TravelCard
                   key={item.travelId}
+                  travelId={item.travelId}
                   travelName={item.travelName}
                   startDate={item.startDate}
                   endDate={item.endDate}
