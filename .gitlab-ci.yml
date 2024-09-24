@@ -11,6 +11,7 @@ unit_test_job:
     - cd ./backend
     - mkdir -p src/main/resources/firebase
     - curl -o src/main/resources/firebase/moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json https://moyeobang.s3.ap-southeast-2.amazonaws.com/moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json
+    - ./gradlew test
     - |
       if compgen -G "build/test-results/test/**/*.xml" > /dev/null; then
         TEST_COUNT=$(grep -o "<testsuite" build/test-results/test/**/*.xml | wc -l)
