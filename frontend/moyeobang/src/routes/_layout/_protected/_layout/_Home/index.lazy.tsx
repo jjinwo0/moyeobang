@@ -14,6 +14,7 @@ import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import AllowNotification from '@/components/notification/AllowNotification';
 
 const data: Travel[] = [
   {
@@ -176,6 +177,7 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [pushNotification, setPushNotification] = useState<boolean>(true); // 추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
 
   // //[todo] get으로 여행 목록 전체 조회하기
   // const {data:travelData} = useSuspenseQuery({
@@ -245,6 +247,10 @@ function Index() {
     });
   };
 
+  const closePush = () => {
+    setPushNotification(false);
+  };
+
   return (
     <>
       {/* <HeaderWithAlarmAndQR /> */}
@@ -257,6 +263,8 @@ function Index() {
         </div>
         <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
       </div>
+
+      {pushNotification && <AllowNotification onClose={closePush} />}
 
       {noTripsAvailable ? (
         <NoTravel />

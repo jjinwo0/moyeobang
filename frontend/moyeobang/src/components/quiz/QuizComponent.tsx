@@ -1,10 +1,12 @@
 /** @jsxImportSource @emotion/react */
+import React from 'react';
 import {useRouter} from '@tanstack/react-router';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import QuizInput from '../common/Inputs/QuizInput';
 import Btn from '../common/btn/Btn';
 import CloseButton from '@/assets/icons/closeButton.png';
+import TimeInput from '../common/Inputs/TimeInput';
 
 interface QuizComponentProps {
   question: string;
@@ -61,7 +63,7 @@ const modalContentStyle = css`
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 60%;
+  width: 68%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center; /* 기본적으로 중앙 정렬 */
 `;
@@ -106,7 +108,7 @@ const quizInputStyle = css`
   padding: 0; /* QuizInput 컴포넌트 자체의 padding이 있을 경우 조정 */
   display: flex;
   justify-content: flex-start; /* 왼쪽 정렬 */
-  width: 100%; /* 필요한 경우 전체 너비로 설정 */
+  width: 80%; /* 필요한 경우 전체 너비로 설정 */
 `;
 
 const buttonStyle = css`
