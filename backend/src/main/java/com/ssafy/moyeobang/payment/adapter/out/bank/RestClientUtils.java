@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestClient;
 
+@Slf4j
 abstract class RestClientUtils {
 
     private static final ObjectMapper MAPPER = objectMapper();
@@ -29,6 +31,15 @@ abstract class RestClientUtils {
     }
 
     public static void postWithoutResponse(String uri, Object request) {
+        log.info("postWithoutResponse : {} ", request);
+        restClient().post()
+                .uri(uri)
+                .contentType(APPLICATION_JSON)
+                .body(request)
+                .retrieve();
+    }
+
+    public static void postWithResponse(String uri, Object request) {
         restClient().post()
                 .uri(uri)
                 .contentType(APPLICATION_JSON)
