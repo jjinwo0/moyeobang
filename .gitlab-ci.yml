@@ -19,8 +19,10 @@ unit_test_job:
       junit:
         - backend/build/test-results/test/**/*.xml
   only:
-    - merge_requests
-    - backend
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
 
 result_report_job:
   stage: report
@@ -54,5 +56,7 @@ result_report_job:
     - unit_test_job
 
   only:
-    - merge_requests
-    - backend
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
