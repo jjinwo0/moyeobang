@@ -14,8 +14,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.moyeobang.travel.adapter.in.web.in.CreateTravelRequest;
-import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
+import com.ssafy.moyeobang.travel.adapter.in.web.request.CreateTravelRequest;
+import com.ssafy.moyeobang.travel.adapter.in.web.response.CreateTravelResponse;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelUseCase;
 import java.time.LocalDate;

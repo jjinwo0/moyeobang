@@ -4,8 +4,8 @@ import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
-import com.ssafy.moyeobang.travel.adapter.in.web.in.CreateTravelRequest;
-import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
+import com.ssafy.moyeobang.travel.adapter.in.web.request.CreateTravelRequest;
+import com.ssafy.moyeobang.travel.adapter.in.web.response.CreateTravelResponse;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelUseCase;
 import java.io.IOException;
