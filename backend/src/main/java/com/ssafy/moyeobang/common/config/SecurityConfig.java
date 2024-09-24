@@ -1,5 +1,6 @@
 package com.ssafy.moyeobang.common.config;
 
+import com.ssafy.moyeobang.common.config.oauth.OAuth2CustomService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final OAuth2CustomService oAuth2CustomService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +42,9 @@ public class SecurityConfig {
                                                 .baseUri("/oauth2/authorization")
                                 )
                                 .userInfoEndpoint(
-                                        endpoint -> endpoint.userService())
+                                        endpoint -> endpoint.userService(oAuth2CustomService))
+                                .successHandler()
+                                .failureHandler()
                 )
                 .build();
     }
