@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import * as ScheduleMapSearchStyle from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearchStyle';
 import PlusSelfGoogleMap from '@/components/travelLog/PlusSelf/Map/PlusSelfGoolgeMap'; // PlusSelfGoogleMap 사용
 import SearchImg from '@/assets/icons/Search.png';
@@ -46,7 +46,7 @@ export default function ScheduleMapSearch({
             onClick={searchLocationHandler} // 검색 버튼 클릭 시 호출
           />
         </div>
-        
+
         {/* 2. 지도 보여주기: PlusSelfGoogleMap 컴포넌트 사용 */}
         <div css={ScheduleMapSearchStyle.MapLayout}>
           <PlusSelfGoogleMap

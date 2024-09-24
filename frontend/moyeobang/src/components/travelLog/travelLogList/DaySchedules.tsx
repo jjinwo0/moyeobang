@@ -1,11 +1,9 @@
-//
-
 import React from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import {useTravelLogContext} from '@/contexts/TravelLog';
 import SingleTravelLog from './travelSingleCard/SingleTravelLog';
+import {useTravelLogContext} from '@/contexts/TravelLog';
 
 const travelDayTitleSytle = css`
   margin-top: 5px;
@@ -90,34 +88,39 @@ export default function DaySchedules({
           <Droppable droppableId="daySchedules">
             {provided => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                {daySchedules.map((schedule, index) => (
-                  <Draggable
-                    key={index}
-                    draggableId={`schedule-${index}`}
-                    index={index}
-                  >
-                    {provided => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        style={{
-                          ...provided.draggableProps.style,
-                          transform: provided.draggableProps.style?.transform,
-                          top: 0,
-                          left: 0,
-                          position: 'relative',
-                        }}
+                {daySchedules.map((schedule, index) => {
+                  return (
+                    <>
+                      <Draggable
+                        key={index}
+                        draggableId={`schedule-${index}`}
+                        index={index}
                       >
-                        <SingleTravelLog
-                          schedule={schedule}
-                          scheduleNum={index + 1}
-                          dayNum={dayNum}
-                          dragHandleProps={provided.dragHandleProps}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                        {provided => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            style={{
+                              ...provided.draggableProps.style,
+                              transform:
+                                provided.draggableProps.style?.transform,
+                              top: 0,
+                              left: 0,
+                              position: 'relative',
+                            }}
+                          >
+                            <SingleTravelLog
+                              schedule={schedule}
+                              scheduleNum={index + 1}
+                              dayNum={dayNum}
+                              dragHandleProps={provided.dragHandleProps}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    </>
+                  );
+                })}
                 {provided.placeholder}
               </div>
             )}

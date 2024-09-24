@@ -8,12 +8,16 @@ import LocationInput from '../../common/Inputs/LocationInput';
 import LabeledInput from '../../common/Inputs/LabeledInput';
 import TimeInput from '../../common/Inputs/TimeInput';
 import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
+import searchImg from '@/assets/icons/Search.png';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
+import {useTravelLogContext} from '@/contexts/TravelLog';
 
 interface PlusSelfProps {
   handleShowPlusSelf: () => void; // 함수형 props 정의
   handleShowMapSearch: () => void;
   handleSearchLocation: (e: React.ChangeEvent<HTMLInputElement>) => void;
   searchLocation: string | undefined;
+  setSearchLocation: () => void;
 }
 
 export default function PlusSelf({
@@ -21,7 +25,9 @@ export default function PlusSelf({
   handleShowMapSearch,
   handleSearchLocation,
   searchLocation,
+  setSearchLocation,
 }: PlusSelfProps) {
+  const {travelPlaceList} = useTravelDetailStore();
   const [AMPMSelection, setAMPMSelection] = useState<'AM' | 'PM'>('AM');
   const handleAMPMSelection = () => {
     setAMPMSelection(prev => (prev === 'AM' ? 'PM' : 'AM'));
@@ -40,6 +46,16 @@ export default function PlusSelf({
       setSelectedImage(imageUrl); // 이미지 상태 업데이트
     }
   };
+
+  const handlePlaceSelection = (place: string) => {
+    setSelectedPlace(place);
+    // setSearchLocation(prev => `${place} ${prev}`);
+  };
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const toggleDropdown = () => setIsDropdownOpen(prev => !prev);
+
+  const {selectedPlace, setSelectedPlace} = useTravelLogContext();
 
   const [scheduleName, setScheduleName] = useState<string | undefined>(
     searchLocation
@@ -61,16 +77,54 @@ export default function PlusSelf({
           <span>일정을</span> <span style={{color: colors.fifth}}>적어방</span>
         </div>
         {/* 1. 여행 장소 */}
-        <LocationInput
-          label="일정 장소"
-          placeholder="여행 장소 검색"
-          onClick={handleShowMapSearch}
-          onChange={e => handleSearchLocation(e)}
-        />
+        <div css={PlusSelfStyle.LocationInputLayout}>
+          일정 장소
+          <div css={PlusSelfStyle.LocationInputAllLayout}>
+            <div css={PlusSelfStyle.relativeContainer}>
+              <div css={PlusSelfStyle.placeListStyle} onClick={toggleDropdown}>
+                {`▶ ${selectedPlace ?? ''}` || '여행 장소 선택'}
+              </div>
+              {isDropdownOpen && (
+                <div css={PlusSelfStyle.dropdownContentStyle}>
+                  {travelPlaceList.map((place, index) => (
+                    <div
+                      key={index}
+                      css={PlusSelfStyle.placeOptionStyle}
+                      onClick={() => handlePlaceSelection(place)}
+                    >
+                      {place}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div css={PlusSelfStyle.inputImgWrapper}>
+              <input
+                type="text"
+                name=""
+                id=""
+                css={PlusSelfStyle.LocationInputStyle}
+                placeholder="여행 장소 검색"
+                onChange={e => handleSearchLocation(e)}
+              />
+              <img
+                src={searchImg}
+                alt="검색 버튼 이미지"
+                css={PlusSelfStyle.searchImgStyle}
+                onClick={handleShowMapSearch}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* 2. 여행 이름 */}
         <div css={PlusSelfStyle.inputContainerStyle}>
-          <span style={{color: colors.customRed}}>*</span>{' '}
-          <span>일정 이름</span>
+          <div>
+            {' '}
+            <span style={{color: colors.customRed}}>*</span>{' '}
+            <span>일정 이름</span>
+          </div>
+
           <input
             type="text"
             value={scheduleName}
@@ -78,6 +132,7 @@ export default function PlusSelf({
               setScheduleName(e.target.value);
             }}
             css={PlusSelfStyle.labeledInputStyle}
+            placeholder="일정 이름 입력"
           />
         </div>
         {/* 3. 여행 시간 */}

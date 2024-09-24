@@ -1,4 +1,5 @@
 import React, {createContext, useContext, useState} from 'react';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 // Context 생성
 const TravelLogContext = createContext<any>(null);
@@ -76,6 +77,18 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const [searchLocation, setSearchLocation] = useState<string | undefined>();
+
+  const {travelPlaceList} = useTravelDetailStore();
+
+  const [selectedPlace, setSelectedPlace] = useState<string | []>(
+    travelPlaceList[0]
+  );
+
+  // scheduleDayNum 실제 day를 알 수 있다.
+  // scheduleDayNum-1을 하면 인덱스를 알 수 있다.
+  const [scheduleDayNum, setScheduleDayNum] = useState<number | null>();
+
   return (
     <TravelLogContext.Provider
       value={{
@@ -83,6 +96,12 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         currentIndex,
         setCurrentIndex,
         setTravelSchedules,
+        searchLocation,
+        setSearchLocation,
+        selectedPlace,
+        setSelectedPlace,
+        scheduleDayNum,
+        setScheduleDayNum,
       }}
     >
       {children}

@@ -41,31 +41,32 @@ const travelLogMain = () => {
 
   return (
     <>
-      <div css={travelLogMainLayout}>
-        <TravelLogProvider>
+      <TravelLogProvider>
+        <div css={travelLogMainLayout}>
           <TravelLogList />
           <div css={plusStyle}>
             <PlusBtn onClick={handleShowPlusSelf} />
           </div>
-        </TravelLogProvider>
-        <Navbar />
-      </div>
-      {showPlusSelf && (
-        <PlusSelf
-          handleShowPlusSelf={handleShowPlusSelf}
-          handleShowMapSearch={handleShowMapSearch}
-          searchLocation={searchLocation}
-          handleSearchLocation={handleSearchLocation}
-        ></PlusSelf>
-      )}
-      {showMapSearch && (
-        <ScheduleMapSearch
-          handleShowMapSearch={handleShowMapSearch}
-          searchLocation={searchLocation}
-          handleSearchLocation={handleSearchLocation}
-          setSearchLocation={setSearchLocation}
-        ></ScheduleMapSearch>
-      )}
+          <Navbar />
+        </div>
+        {showPlusSelf && (
+          <PlusSelf
+            handleShowPlusSelf={handleShowPlusSelf}
+            handleShowMapSearch={handleShowMapSearch}
+            searchLocation={searchLocation}
+            setSearchLocation={setSearchLocation}
+            handleSearchLocation={handleSearchLocation}
+          ></PlusSelf>
+        )}
+        {showMapSearch && (
+          <ScheduleMapSearch
+            handleShowMapSearch={handleShowMapSearch}
+            searchLocation={searchLocation}
+            handleSearchLocation={handleSearchLocation}
+            setSearchLocation={setSearchLocation}
+          ></ScheduleMapSearch>
+        )}
+      </TravelLogProvider>
     </>
   );
 };

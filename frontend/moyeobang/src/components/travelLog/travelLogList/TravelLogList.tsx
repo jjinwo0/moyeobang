@@ -40,14 +40,36 @@ export default function TravelLogList() {
   const {travelSchedules, currentIndex, setCurrentIndex} =
     useTravelLogContext();
 
+  // const handlers = useSwipeable({
+  //   onSwipedLeft: () =>
+  //     setCurrentIndex((prevIndex: number) =>
+  //       Math.min(prevIndex + 1, travelSchedules.length - 1)
+  //     ), // 왼쪽 스와이프하면 다음 페이지로 이동
+  //   onSwipedRight: () =>
+  //     setCurrentIndex((prevIndex: number) => Math.max(prevIndex - 1, 0)), // 오른쪽 스와이프하면 이전 페이지로 이동
+  // });
+
   const handlers = useSwipeable({
-    onSwipedLeft: () =>
-      setCurrentIndex((prevIndex: number) =>
-        Math.min(prevIndex + 1, travelSchedules.length - 1)
-      ), // 왼쪽 스와이프하면 다음 페이지로 이동
-    onSwipedRight: () =>
-      setCurrentIndex((prevIndex: number) => Math.max(prevIndex - 1, 0)), // 오른쪽 스와이프하면 이전 페이지로 이동
+    onSwipedLeft: () => {
+      setCurrentIndex((prevIndex: number) => {
+        const newIndex = Math.min(prevIndex + 1, travelSchedules.length - 1);
+        setScheduleDayNum(newIndex + 1); // 새로운 스케줄 번호 설정 (1부터 시작)
+        console.log('[*] 오른쪽', newIndex + 1);
+
+        return newIndex;
+      });
+    },
+    onSwipedRight: () => {
+      setCurrentIndex((prevIndex: number) => {
+        const newIndex = Math.max(prevIndex - 1, 0);
+        setScheduleDayNum(newIndex + 1); // 새로운 스케줄 번호 설정 (1부터 시작)
+        console.log('[*] 왼쪽', newIndex + 1);
+
+        return newIndex;
+      });
+    },
   });
+  const {scheduleDayNum, setScheduleDayNum} = useTravelLogContext();
 
   return (
     <div {...handlers} css={travelLogListLayout}>
@@ -55,17 +77,19 @@ export default function TravelLogList() {
         (
           scheduleGroup: (PlusSelfSchedule | PaidAutoSchedule)[],
           index: number
-        ) => (
-          <div
-            css={[
-              dayScheduleStyle,
-              {transform: `translateX(-${currentIndex * 390}px)`},
-            ]} // 390px 단위로 스와이프
-            key={index}
-          >
-            <DaySchedules daySchedules={scheduleGroup} dayNum={index + 1} />
-          </div>
-        )
+        ) => {
+          return (
+            <div
+              css={[
+                dayScheduleStyle,
+                {transform: `translateX(-${currentIndex * 390}px)`},
+              ]} // 390px 단위로 스와이프
+              key={index}
+            >
+              <DaySchedules daySchedules={scheduleGroup} dayNum={index + 1} />
+            </div>
+          );
+        }
       )}
     </div>
   );

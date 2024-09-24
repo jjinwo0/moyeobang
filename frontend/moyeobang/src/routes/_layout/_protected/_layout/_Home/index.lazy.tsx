@@ -60,7 +60,7 @@ const data: Travel[] = [
     participantsCount: 4,
     startDate: '2023-09-01T12:34:56Z',
     endDate: '2023-09-05T12:34:56Z',
-    travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
+    travelPlaceList: ['춘천시', '함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
     accountId: 1,
