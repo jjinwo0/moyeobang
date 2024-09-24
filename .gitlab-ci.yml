@@ -27,12 +27,11 @@ result_report_job:
   tags:
     - test
   script:
-    - ls -R backend/build/test-results/test/
     - |
-      TEST_COUNT=$(grep -o "<testsuite" backend/build/test-results/test/*.xml | wc -l)
-      FAIL_COUNT=$(grep -o "<failure" backend/build/test-results/test/*.xml | wc -l)
-      SKIP_COUNT=$(grep -o "<skipped" backend/build/test-results/test/*.xml | wc -l)
-      DURATION=$(grep -oP "(?<=time=\")[^\"]+" backend/build/test-results/test/**/*.xml | awk "{sum+=\$1} END {print sum}")
+      TEST_COUNT=$(find backend/build/test-results/test/ -name "*.xml" | wc -l)
+      FAIL_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<failure" {} \; | wc -l)
+      SKIP_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<skipped" {} \; | wc -l)
+      DURATION=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -oP "(?<=time=\")[^\"]+" {} \; | awk "{sum+=\$1} END {print sum}")
 
     - |
       curl --request POST --header "PRIVATE-TOKEN: AHt8jnrz-9FtsyyJPMt9" \
