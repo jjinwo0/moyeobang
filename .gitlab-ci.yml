@@ -33,7 +33,10 @@ result_report_job:
       SKIP_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<skipped" {} \; | wc -l)
       DURATION=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -oP "(?<=time=\")[^\"]+" {} \; | awk "{sum+=\$1} END {print sum}")
 
-    - echo `## Unit Test Results\n- **$TEST_COUNT tests**, **$FAIL_COUNT failures**, **$SKIP_COUNT skipped**\n- ⏱️ Time taken: ${DURATION}s\nResults for commit [$CI_COMMIT_SHORT_SHA]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)\n\nThis comment has been updated with the latest results.`
+    - echo $TEST_COUNT
+    - echo $FAIL_COUNT
+    - echo $SKIP_COUNT
+    - echo $DURATION
 
     - |
       curl --request POST --header "PRIVATE-TOKEN: AHt8jnrz-9FtsyyJPMt9" \
