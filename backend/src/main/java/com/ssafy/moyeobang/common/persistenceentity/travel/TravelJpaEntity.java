@@ -11,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -34,15 +34,15 @@ public class TravelJpaEntity extends BaseEntity {
 
     private String travelKey;
 
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @OneToMany(mappedBy = "travel", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberTravelJpaEntity> memberTravelJpaEntities = new ArrayList<>();
 
     @Builder
-    private TravelJpaEntity(String title, String travelKey, LocalDateTime startDate, LocalDateTime endDate) {
+    private TravelJpaEntity(String title, String travelKey, LocalDate startDate, LocalDate endDate) {
         this.title = title;
         this.travelKey = travelKey;
         this.startDate = startDate;

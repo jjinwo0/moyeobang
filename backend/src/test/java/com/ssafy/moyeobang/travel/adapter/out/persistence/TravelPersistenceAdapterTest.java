@@ -1,12 +1,13 @@
 package com.ssafy.moyeobang.travel.adapter.out.persistence;
 
-import static java.time.LocalDateTime.now;
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelCommand;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,13 +30,17 @@ class TravelPersistenceAdapterTest extends PersistenceAdapterTestSupport {
     @Test
     void createTravel() {
         //given
-        LocalDateTime startDate = now();
-        LocalDateTime endDate = now().plusDays(1);
+        LocalDate startDate = now();
+        LocalDate endDate = now().plusDays(1);
 
         CreateTravelCommand command = new CreateTravelCommand(
                 "즐거운 제주도 여행",
                 startDate,
-                endDate
+                endDate,
+                List.of("강원도 춘천", "제주도", "경상남도 함양"),
+                "김훈민의 발 사이즈는?",
+                "270",
+                null
         );
 
         //when
