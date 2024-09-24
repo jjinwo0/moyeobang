@@ -19,10 +19,10 @@ const placeStyle = css`
 `;
 
 const layoutStyle = css`
-    padding-top:20px;
+    padding-top:25px;
     display:flex;
     flex-direction:column;
-    gap:20px;
+    gap:22px;
     border-top: solid 3px ${colors.lightGray};
 `;
 

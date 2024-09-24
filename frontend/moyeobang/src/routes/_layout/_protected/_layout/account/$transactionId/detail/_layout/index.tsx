@@ -17,7 +17,7 @@ const layoutStyle = css`
   margin-top: 50px;
   display:flex;
   flex-direction:column;
-  gap:15px;
+  gap:20px;
   padding: 10px 30px;
   height:100%;
 `;
@@ -44,7 +44,7 @@ const listStyle=css`
   display:flex;
   flex-direction:column;
   overflow-y:auto;
-  height:450px;
+  height:400px;
   padding: 0 5px;
 
   ::-webkit-scrollbar {

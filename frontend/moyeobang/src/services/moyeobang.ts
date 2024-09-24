@@ -95,7 +95,7 @@ export default {
    */
   postPayByPos: async (data: PaymentProps) =>
     axios8081.post<MoyeobangResponse<null>>(
-      '/van/payment/process',
+      '/payment/process',
     data,
     {
       headers: {'Content-Type': 'application/json'},

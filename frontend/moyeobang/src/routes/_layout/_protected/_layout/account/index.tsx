@@ -7,11 +7,10 @@ import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
 import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
-import { profileData, transactions } from "@/data/data";
+import { profileData} from "@/data/data";
 import moyeobang from '@/services/moyeobang';
 import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
-import HorizonBarGraph from '@/components/Account/Chart/HorizonBarGraph';
-import ChartCard from '@/components/Account/Chart/ChartCard';
+import Spinner from '@/components/Sipnner/Spinner';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
@@ -20,18 +19,23 @@ export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
 const layoutStyle = css`
     max-width: 100%;
     margin-top: 50px;
-
     display: flex;
     flex-direction: column;
+    align-items:center;
     height:100%;
-
+    gap:10px;
 `;
 
 const profileListStyle = css`
     display: flex;
     flex-direction: row;
-    padding: 15px;
+    justify-content:flex-start;
+    align-items:center;
+    padding: 10px 0;
+    padding-left:10px;
+    box-sizing:border-box;
     gap: 15px;
+    width: 370px;
 
     overflow-x: auto;
 
@@ -44,7 +48,7 @@ const accountCardStyle = css`
     max-width: 100%;
     display:flex;
     justify-content: center;
-    padding: 20px;
+    /* padding: 20px; */
 `;
 
 const transactionListStyle = css`
@@ -53,7 +57,7 @@ const transactionListStyle = css`
   flex-direction: column;
   align-items: center;
 
-  max-height: 400px; 
+  max-height: 390px; 
   overflow-y: auto; 
   width: 100%;
 
@@ -106,7 +110,7 @@ export default function groupAccount() {
     : accountDataByMember?.data.data;
 
   if (!accountData) {
-    return <div>Loading...</div>;
+    return <Spinner/>;
   }
 
   function onMemberClick(memberId : MemberId | null) {
