@@ -50,7 +50,7 @@ public class SettleController {
                         new CustomSettleCommand(
                                 transactionId,
                                 request.paymentName(),
-                                info.amount(),
+                                info.money(),
                                 info.memberId()
                         )
                 ))
