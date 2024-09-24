@@ -42,7 +42,12 @@ result_report_job:
 
     - |
       curl -v --request POST --header "PRIVATE-TOKEN: $TEAM_API_TOKEN" \
-      --data-urlencode "body=## Unit Test Results\n- **$TEST_COUNT tests**, **$FAIL_COUNT failures**, **$SKIP_COUNT skipped**\n- ⏱️ Time taken: ${DURATION}s\nResults for commit [$CI_COMMIT_SHORT_SHA]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)\n\nThis comment has been updated with the latest results." \
+      --data-urlencode "body=## Unit Test Results
+      --- 
+      **✔ $TEST_COUNT tests**, **❌ $FAIL_COUNT failures**, **💤 $SKIP_COUNT skipped**
+      ⏱️ Time taken: ${DURATION}s
+      Results for commit [$CI_COMMIT_SHORT_SHA]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)
+      This comment has been updated with the latest results." \
       "https://lab.ssafy.com/api/v4/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
   
   dependencies:
