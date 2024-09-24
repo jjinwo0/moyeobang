@@ -253,7 +253,11 @@ export default function TravelCard({
       </div>
       {exitModal && (
         <div css={exitModalStyle}>
-          <ExitTravel travelTitle={travelName} onClose={closeExitModalOpen} />
+          <ExitTravel
+            travelTitle={travelName}
+            onClose={closeExitModalOpen}
+            travelId={travelId}
+          />
         </div>
       )}
 

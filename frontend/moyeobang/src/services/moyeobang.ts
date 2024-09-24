@@ -132,4 +132,10 @@ export default {
    */
   getTravelQuiz: async (travelId: Id) =>
     axios.get<MoyeobangResponse<Quiz>>(`/travel/${travelId}/quiz`),
+
+  /**
+   * 여행 나가기 api
+   */
+  deleteTravel: async (travelId: Id) =>
+    axios.delete<MoyeobangResponse<null>>(`/travel/${travelId}/leave`),
 };
