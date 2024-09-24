@@ -24,10 +24,10 @@ unit_test_job:
   artifacts:
     when: always
     paths:
-      - build/test-results/test/
+      - backend/build/test-results/test/
     reports:
       junit:
-        - build/test-results/test/**/*.xml
+        - backend/build/test-results/test/**/*.xml
 
   only:
     - merge_requests
