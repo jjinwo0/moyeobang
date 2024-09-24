@@ -35,16 +35,17 @@ public class SseUtils {
         return true;
     }
 
-    public void sendEvent(String transactionId, String eventName, String message) {
+    public void sendEventMsg(String transactionId, String eventName, String message) {
         SseEmitter emitter = emitters.get(transactionId);
-        if (emitter != null) {
-            try {
-                emitter.send(SseEmitter.event()
-                        .name(eventName)
-                        .data(message));
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to send SSE event", e);
-            }
+        if (emitter == null) {
+            throw new RuntimeException("Cannot find enrolled emitter");
+        }
+        try {
+            emitter.send(SseEmitter.event()
+                    .name(eventName)
+                    .data(message));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to send SSE event", e);
         }
     }
 
@@ -72,10 +73,10 @@ public class SseUtils {
     }
 
     public void sendPaymentFailure(String transactionId, String message) {
-        sendEvent(transactionId, "payment-failed", message);
+        sendEventMsg(transactionId, "payment-failed", message);
     }
 
     public void sendConnectedMessage(String transactionId) {
-        sendEvent(transactionId, "connect", "connected!");
+        sendEventMsg(transactionId, "connect", "connected!");
     }
 }
