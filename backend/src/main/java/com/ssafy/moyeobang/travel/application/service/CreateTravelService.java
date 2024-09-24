@@ -19,16 +19,16 @@ public class CreateTravelService implements CreateTravelUseCase {
     private final UploadImagePort uploadImagePort;
 
     @Override
-    public CreateTravelResponse createTravel(CreateTravelInCommand command) {
-        String imageUrl = uploadImagePort.uploadImage(command.backgroundImage());
+    public CreateTravelResponse createTravel(CreateTravelInCommand inCommand) {
+        String imageUrl = uploadImagePort.uploadImage(inCommand.backgroundImage());
 
         CreateTravelOutCommand outCommand = new CreateTravelOutCommand(
-                command.title(),
-                command.startDate(),
-                command.endDate(),
-                command.travelPlaces(),
-                command.quizQuestion(),
-                command.quizAnswer(),
+                inCommand.title(),
+                inCommand.startDate(),
+                inCommand.endDate(),
+                inCommand.travelPlaces(),
+                inCommand.quizQuestion(),
+                inCommand.quizAnswer(),
                 imageUrl
         );
 

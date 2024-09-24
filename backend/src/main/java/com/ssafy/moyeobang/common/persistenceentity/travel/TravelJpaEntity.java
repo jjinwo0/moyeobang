@@ -38,15 +38,22 @@ public class TravelJpaEntity extends BaseEntity {
 
     private LocalDate endDate;
 
+    private String backgroundImageUrl;
+
     @OneToMany(mappedBy = "travel", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberTravelJpaEntity> memberTravelJpaEntities = new ArrayList<>();
 
     @Builder
-    private TravelJpaEntity(String title, String travelKey, LocalDate startDate, LocalDate endDate) {
+    private TravelJpaEntity(String title,
+                            String travelKey,
+                            LocalDate startDate,
+                            LocalDate endDate,
+                            String backgroundImageUrl) {
         this.title = title;
         this.travelKey = travelKey;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.backgroundImageUrl = backgroundImageUrl;
     }
 
     //TODO: 여행 계획 API 구현 후 삭제 예정
