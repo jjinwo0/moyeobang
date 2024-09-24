@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CreateTravelService implements CreateTravelUseCase {
 
-    private final CreateTravelPort createTravelPort;
     private final UploadImagePort uploadImagePort;
+    private final CreateTravelPort createTravelPort;
 
     @Override
     public CreateTravelResponse createTravel(CreateTravelInCommand inCommand) {
