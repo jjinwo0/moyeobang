@@ -19,3 +19,9 @@ include::api/account/get-account-member-balance.adoc[]
 include::api/account/get-transaction-histories.adoc[]
 include::api/account/get-transaction-history-receipt.adoc[]
 include::api/account/get-transaction-history-custom.adoc[]
+
+[[travel-API]]
+== Travel API
+
+include::api/travel/create-travel.adoc[]
+include::api/travel/get-travels.adoc[]
