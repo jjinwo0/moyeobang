@@ -1,6 +1,7 @@
 package com.ssafy.moyeobang.payment.adapter.out;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
@@ -16,6 +17,7 @@ import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.error.ErrorCode;
 import com.ssafy.moyeobang.payment.error.PaymentException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -51,9 +53,21 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
     }
 
     @Override
+    public int loadMemberCount(String accountNumber) {
+        TravelAccountJpaEntity travelAccountEntity = getTravelAccount(accountNumber);
+        return travelAccountEntity.getTravel().getMemberTravelJpaEntities().size();
+    }
+
+    @Override
     public PaymentResult processPayment(TravelAccount travelAccount, Store store, Money paymentRequestMoney,
                                         String paymentRequestId) {
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(travelAccount.getAccountNumber());
+
+        List<MemberTravelJpaEntity> memberTravels = travelAccountEntity.getTravel().getMemberTravelJpaEntities();
+
+        if (memberTravels.isEmpty()) {
+            throw new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL);
+        }
 
         WithdrawJpaEntity withdraw = createPaymentWithdraw(travelAccountEntity, store,
                 Money.subtract(travelAccount.getBalance(), paymentRequestMoney).getAmount(), paymentRequestMoney,
