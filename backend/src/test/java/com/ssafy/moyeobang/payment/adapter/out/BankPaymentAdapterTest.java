@@ -108,12 +108,13 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
         Long balance = bankApiClientInPayment.getBalance(accountNumber);
         TravelAccount travelAccount = TravelAccount.of(accountNumber, Money.of(balance));
 
+        String paymentRequestId = "payment-001";
         Store store = new Store("store-001", "Sample Store", "Sample Address", 37.7749, -122.4194, "store-acc-002");
         Money paymentRequestMoney = Money.of(10000L);
 
         // when
         PaymentResult paymentResult = bankPaymentAdapter.processPayment(
-                travelAccount, store, paymentRequestMoney
+                travelAccount, store, paymentRequestMoney, paymentRequestId
         );
 
         // then
