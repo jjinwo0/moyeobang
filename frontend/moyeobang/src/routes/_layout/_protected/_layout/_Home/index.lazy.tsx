@@ -20,7 +20,7 @@ const data: Travel[] = [
   {
     travelId: 1,
     travelName: '여행제목1',
-    travelImg: null,
+    travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
     participantsCount: 4,
     startDate: '2024-09-10T12:34:56Z',
     endDate: '2024-09-13T12:34:56Z',
@@ -238,6 +238,7 @@ function Index() {
     setTravelData({
       travelId: travel.travelId,
       travelName: travel.travelName,
+      travelImg: travel.travelImg,
       startDate: travel.startDate,
       endDate: travel.endDate,
       travelPlaceList: travel.travelPlaceList,
@@ -292,6 +293,7 @@ function Index() {
                   quizQuestion={trip.quizQuestion} // quizQuestion 전달
                   quizAnswer={trip.quizAnswer} // quizAnswer 전달
                   onClick={() => clickTravelCard(trip)}
+                  travelImg={trip.travelImg}
                 />
               ))}
             </div>
@@ -324,6 +326,7 @@ function Index() {
                   quizAnswer={item.quizAnswer}
                   onClick={() => clickTravelCard(item)}
                   activeTab={activeTab}
+                  travelImg={item.travelImg}
                 />
               ))
             ) : (
