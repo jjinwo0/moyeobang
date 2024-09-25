@@ -21,4 +21,9 @@ public class LoadTravelAdapter implements LoadTravelPort {
                 .map(travelMapper::mapToTravel)
                 .toList();
     }
+
+    @Override
+    public Travel loadTravel(Long travelId) {
+        return null;
+    }
 }

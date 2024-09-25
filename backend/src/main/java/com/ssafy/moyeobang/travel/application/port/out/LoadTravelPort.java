@@ -6,4 +6,6 @@ import java.util.List;
 public interface LoadTravelPort {
 
     List<Travel> loadTravelsBy(Long memberId);
+
+    Travel loadTravel(Long travelId);
 }
