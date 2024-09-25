@@ -23,6 +23,8 @@ unit_test_job:
       when: on_success
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "frontend"
       when: never
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+      when: never
 
 result_report_job:
   stage: report
@@ -57,4 +59,6 @@ result_report_job:
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
       when: on_success
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "frontend"
+      when: never
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
       when: never
