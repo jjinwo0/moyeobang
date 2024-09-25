@@ -32,7 +32,7 @@ public class OfflinePaymentService implements OfflinePaymentUseCase {
             return false;
         }
         PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.toStoreDomain(),
-                command.paymentRequestMoney());
+                command.paymentRequestMoney(), command.paymentRequestId());
         ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
         return true;
     }

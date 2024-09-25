@@ -31,8 +31,8 @@ public class BankApiClientInPayment {
     public void payment(String targetAccountNumber, String sourceAccountNumber, long amount) {
         PaymentRequest request = new PaymentRequest(
                 Headers.withCommonUserKey("updateDemandDepositAccountTransfer", now()),
-                sourceAccountNumber,
                 targetAccountNumber,
+                sourceAccountNumber,
                 amount
         );
 

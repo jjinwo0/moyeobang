@@ -46,7 +46,8 @@ public class OfflinePaymentServiceTest {
                 .thenReturn(travelAccount);
 
         PaymentResult paymentResult = new PaymentResult(1);
-        when(processPaymentPort.processPayment(any(TravelAccount.class), any(Store.class), any(Money.class)))
+        when(processPaymentPort.processPayment(any(TravelAccount.class), any(Store.class), any(Money.class),
+                any(String.class)))
                 .thenReturn(paymentResult);
 
         // When
