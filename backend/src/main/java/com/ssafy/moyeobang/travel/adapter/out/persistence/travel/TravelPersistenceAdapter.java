@@ -53,9 +53,7 @@ public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelP
 
     @Override
     public boolean leaveTravel(Long travelId, Long memberId) {
-        memberTravelRepository.deleteBy(travelId, memberId);
-
-        return true;
+        return memberTravelRepository.deleteBy(travelId, memberId) == 1;
     }
 
     private void updateTravelPlaces(UpdateTravelOutCommand command, TravelJpaEntity travel) {

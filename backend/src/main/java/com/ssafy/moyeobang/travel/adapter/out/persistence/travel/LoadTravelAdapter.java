@@ -3,6 +3,7 @@ package com.ssafy.moyeobang.travel.adapter.out.persistence.travel;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.travel.application.domain.Travel;
 import com.ssafy.moyeobang.travel.application.port.out.LoadTravelPort;
+import com.ssafy.moyeobang.travel.error.TravelNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,9 @@ public class LoadTravelAdapter implements LoadTravelPort {
 
     @Override
     public Travel loadTravel(Long travelId) {
-        return null;
+        TravelInfo travelInfo = travelRepository.findTravelInfoBy(travelId)
+                .orElseThrow(TravelNotFoundException::new);
+
+        return travelMapper.mapToTravel(travelInfo);
     }
 }

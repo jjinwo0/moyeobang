@@ -10,5 +10,5 @@ public interface TravelPlaceRepositoryInTravel extends JpaRepository<TravelPlace
 
     @Modifying
     @Query("delete TravelPlaceJpaEntity t where t.travel.id = :travelId")
-    void deleteAllBy(@Param("travelId") Long travelId);
+    int deleteAllBy(@Param("travelId") Long travelId);
 }

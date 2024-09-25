@@ -8,6 +8,7 @@ import static com.ssafy.moyeobang.common.persistenceentity.travel.QTravelJpaEnti
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -25,6 +26,20 @@ public class TravelQueryRepositoryImpl implements TravelQueryRepository {
                 .join(travelAccountJpaEntity).on(travelAccountJpaEntity.travel.eq(travelJpaEntity))
                 .where(memberTravelJpaEntity.member.id.eq(memberId))
                 .fetch();
+    }
+
+    @Override
+    public Optional<TravelInfo> findTravelInfoBy(Long id) {
+        TravelInfo travelInfo = queryFactory.select(travelInfo())
+                .from(travelJpaEntity)
+                .join(memberTravelJpaEntity).on(memberTravelJpaEntity.travel.eq(travelJpaEntity))
+                .join(memberTravelJpaEntity.member, memberJpaEntity)
+                .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
+                .join(travelAccountJpaEntity).on(travelAccountJpaEntity.travel.eq(travelJpaEntity))
+                .where(travelJpaEntity.id.eq(id))
+                .fetchOne();
+
+        return Optional.ofNullable(travelInfo);
     }
 
     private QTravelInfo travelInfo() {
