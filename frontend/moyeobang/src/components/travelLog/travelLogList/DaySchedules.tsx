@@ -90,35 +90,32 @@ export default function DaySchedules({
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 {daySchedules.map((schedule, index) => {
                   return (
-                    <>
-                      <Draggable
-                        key={index}
-                        draggableId={`schedule-${index}`}
-                        index={index}
-                      >
-                        {provided => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            style={{
-                              ...provided.draggableProps.style,
-                              transform:
-                                provided.draggableProps.style?.transform,
-                              top: 0,
-                              left: 0,
-                              position: 'relative',
-                            }}
-                          >
-                            <SingleTravelLog
-                              schedule={schedule}
-                              scheduleNum={index + 1}
-                              dayNum={dayNum}
-                              dragHandleProps={provided.dragHandleProps}
-                            />
-                          </div>
-                        )}
-                      </Draggable>
-                    </>
+                    <Draggable
+                      key={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
+                      draggableId={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
+                      index={index}
+                    >
+                      {provided => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          style={{
+                            ...provided.draggableProps.style,
+                            transform: provided.draggableProps.style?.transform,
+                            top: 0,
+                            left: 0,
+                            position: 'relative',
+                          }}
+                        >
+                          <SingleTravelLog
+                            schedule={schedule}
+                            scheduleNum={index + 1}
+                            dayNum={dayNum}
+                            dragHandleProps={provided.dragHandleProps}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
                   );
                 })}
                 {provided.placeholder}

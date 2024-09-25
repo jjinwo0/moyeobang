@@ -89,6 +89,10 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
   // scheduleDayNum-1을 하면 인덱스를 알 수 있다.
   const [scheduleDayNum, setScheduleDayNum] = useState<number | null>();
 
+  // 여기서 selectedMarker 상태를 추가
+  const [selectedMarker, setSelectedMarker] =
+    useState<google.maps.MarkerOptions | null>(null);
+
   return (
     <TravelLogContext.Provider
       value={{
@@ -102,6 +106,8 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         setSelectedPlace,
         scheduleDayNum,
         setScheduleDayNum,
+        selectedMarker,
+        setSelectedMarker,
       }}
     >
       {children}

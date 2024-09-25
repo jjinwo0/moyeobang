@@ -40,15 +40,6 @@ export default function TravelLogList() {
   const {travelSchedules, currentIndex, setCurrentIndex} =
     useTravelLogContext();
 
-  // const handlers = useSwipeable({
-  //   onSwipedLeft: () =>
-  //     setCurrentIndex((prevIndex: number) =>
-  //       Math.min(prevIndex + 1, travelSchedules.length - 1)
-  //     ), // 왼쪽 스와이프하면 다음 페이지로 이동
-  //   onSwipedRight: () =>
-  //     setCurrentIndex((prevIndex: number) => Math.max(prevIndex - 1, 0)), // 오른쪽 스와이프하면 이전 페이지로 이동
-  // });
-
   const handlers = useSwipeable({
     onSwipedLeft: () => {
       setCurrentIndex((prevIndex: number) => {

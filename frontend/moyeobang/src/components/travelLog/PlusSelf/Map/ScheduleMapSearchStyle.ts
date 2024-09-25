@@ -1,3 +1,4 @@
+import {colors} from '@/styles/colors';
 import {css} from '@emotion/react';
 
 export const ScheduleMapSearchLayout = css`
@@ -57,5 +58,22 @@ export const MapLayout = css`
   height: 100vh;
   position: fixed;
   top: 0;
+  left: 55;
+`;
+
+export const MapSpaceStyle = css`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+export const MapDetailLayout = css`
+  width: 100%;
+  /* height: 50vh; */
+  position: absolute;
+  bottom: 0;
   left: 0;
+  background-color: ${colors.white};
+  border-radius: 45px;
+  touch-action: none;
 `;
