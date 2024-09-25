@@ -42,7 +42,7 @@ public class CheckQuizAnswerControllerDocsTest extends RestDocsSupport {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("check-quiz-answer",
+                .andDo(document("check-travel-quiz-answer",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestFields(
