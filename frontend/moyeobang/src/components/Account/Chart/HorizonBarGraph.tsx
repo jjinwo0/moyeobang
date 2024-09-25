@@ -2,7 +2,6 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { colors } from '@/styles/colors';
 import { css } from '@emotion/react';
-import { RIGHT } from 'react-swipeable';
 
 const rawData = [
   {
@@ -13,7 +12,6 @@ const rawData = [
     '두열': 16,
   },
 ];
-
 // 값 합계를 구하고, 각 값을 100으로 정규화
 const total = rawData[0]['가현'] + rawData[0]['두홍'] + rawData[0]['지연'] + rawData[0]['두열'];
 
