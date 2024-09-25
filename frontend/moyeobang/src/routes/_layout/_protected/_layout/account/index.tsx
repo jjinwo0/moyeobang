@@ -7,9 +7,10 @@ import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
 import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
-import { profileData, transactions } from "@/data/data";
+import { profileData} from "@/data/data";
 import moyeobang from '@/services/moyeobang';
 import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
+import Spinner from '@/components/Sipnner/Spinner';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
@@ -18,18 +19,23 @@ export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
 const layoutStyle = css`
     max-width: 100%;
     margin-top: 50px;
-
     display: flex;
     flex-direction: column;
+    align-items:center;
     height:100%;
-
+    gap:10px;
 `;
 
 const profileListStyle = css`
     display: flex;
     flex-direction: row;
-    padding: 15px;
+    justify-content:flex-start;
+    align-items:center;
+    padding: 10px 0;
+    padding-left:10px;
+    box-sizing:border-box;
     gap: 15px;
+    width: 370px;
 
     overflow-x: auto;
 
@@ -42,7 +48,7 @@ const accountCardStyle = css`
     max-width: 100%;
     display:flex;
     justify-content: center;
-    padding: 20px;
+    /* padding: 20px; */
 `;
 
 const transactionListStyle = css`
@@ -51,7 +57,7 @@ const transactionListStyle = css`
   flex-direction: column;
   align-items: center;
 
-  max-height: 400px; 
+  max-height: 390px; 
   overflow-y: auto; 
   width: 100%;
 
@@ -65,6 +71,7 @@ export default function groupAccount() {
   const allList = profileData.map((member) => member.memberId)
   type SelectedMember = MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
+  const [member, setMember] = useState<MemberId | null>(null);
 
   const {data : transactionData} = useSuspenseQuery({
     queryKey: ['transactionList', accountId, selectedMember ],
@@ -80,24 +87,22 @@ export default function groupAccount() {
 
   //get 모임 통장 개인별 잔액
   const { data : accountDataByMember } = useQuery({
-    queryKey: ['accountByMemberId', accountId, selectedMember],
+    queryKey: ['accountByMemberId', accountId, member],
     queryFn: () => {
-      if (!Array.isArray(selectedMember)) {
-        return moyeobang.getAccountStateBymemberId(accountId, selectedMember)
+      if ( selectedMember.length==1 && member) {
+        return moyeobang.getAccountStateBymemberId(accountId, member)
       }
     },
-    enabled: selectedMember.length==1 // 개인별
+    enabled: selectedMember.length==1 && selectedMember !== undefined && accountId !== undefined,// 개인별
   });
 
   const transactionListData = transactionData.data.data;
-  // const transactionListData = transactions;
-
 
   // 타입 가드 함수
   function isAccountBalanceByGroup(
     accountData: AccountBalanceByGroup | AccountBalanceBymemberId
   ): accountData is AccountBalanceByGroup {
-    return (accountData as AccountBalanceByGroup).totalMoney !== undefined;
+    return (accountData as AccountBalanceByGroup).totalAmount !== undefined;
   }
 
   const accountData = selectedMember.length > 1 
@@ -105,13 +110,14 @@ export default function groupAccount() {
     : accountDataByMember?.data.data;
 
   if (!accountData) {
-    return <div>Loading...</div>;
+    return <Spinner/>;
   }
 
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
         // 해당 memberId get요청
         setSelectedMember([memberId])
+        setMember(memberId)
     } else {
         // 전체 조회
         const allList = profileData.map((member) => member.memberId)
@@ -124,14 +130,14 @@ export default function groupAccount() {
     <div css={layoutStyle}>
         <div css={profileListStyle} >
         <AllImage
-        isSelected={Array.isArray(selectedMember)}
+        isSelected={selectedMember.length>1}
         onClick={() => onMemberClick(null)}
         />
         { profileData.map((profile, index) => (
             <ProfileImage 
             key={index} 
             {...profile} 
-            isSelected={Array.isArray(selectedMember) ? false : profile.memberId === selectedMember } 
+            isSelected={selectedMember.length!==1 ? false : selectedMember.includes(profile.memberId) } 
             onClick={() => onMemberClick(profile.memberId)} />
         ))}
         </div>
@@ -147,12 +153,12 @@ export default function groupAccount() {
             currentBalance={accountData.personalCurrentBalance}
             travelAccountNumber={'333333-12-8912312'}
             travelName={'아기돼지 오형제'}
-            memberName={accountData.participant.memberName}
+            memberName={'가현'}
             />
           }
         </div>
         <div css={transactionListStyle}>
-            {transactionListData.map((tran, index) => 
+            {transactionListData.reverse().map((tran, index) => 
                 <TransactionCard key={index} {...tran} />
             )}
         </div>

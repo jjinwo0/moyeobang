@@ -17,9 +17,13 @@ const backButtonStyle = css`
 const backButtonImgStyle = css`
     width: 28px;
     height:28px;
-`
+`;
 
-export default function BackButton() {
+export interface BackButtonProps {
+    onClick?: VoidFunction
+}
+
+export default function BackButton({onClick}:BackButtonProps) {
     const navigate = useNavigate();
 
     const {history} = useRouter();
@@ -34,7 +38,7 @@ export default function BackButton() {
 
 
     return (
-        <button css={backButtonStyle} onClick={handleBackButton}>
+        <button css={backButtonStyle} onClick={ onClick ? onClick : handleBackButton}>
             <img 
             css={backButtonImgStyle}
             src={backImg} 

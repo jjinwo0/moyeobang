@@ -15,8 +15,8 @@ export default {
    */
   getAccountStateBymemberId: async (accountId: number, memberId: number) =>
     axios.get<MoyeobangResponse<AccountBalanceBymemberId>>(
-      `/accounts/${accountId}/balance/${memberId}`
-    ),
+      `/accounts/${accountId}/balance/member/${memberId}`,
+),
   /**
    * 전체 결제 내역 전체 & 개별 조회
    */
@@ -65,12 +65,9 @@ export default {
       }
     ),
   /**
-   * 영수증 정산
-   */
-  postSettleByReceipt: async (
-    transactionId: number,
-    data: TransactionDetailByReceipt
-  ) =>
+ * 영수증 정산 
+ */
+  postSettleByReceipt: async (transactionId:number, data: PostTransactionDetailByReceipt) =>
     axios.post<MoyeobangResponse<null>>(
       `/travel/accounts/transactions/${transactionId}/settle`,
       data,
@@ -97,7 +94,10 @@ export default {
    * pos기 결제 요청
    */
   postPayByPos: async (data: PaymentProps) =>
-    axios8081.post<MoyeobangResponse<null>>('/van/payment/process', data, {
+    axios8081.post<MoyeobangResponse<null>>(
+      '/payment/process',
+    data,
+    {
       headers: {'Content-Type': 'application/json'},
     }),
 

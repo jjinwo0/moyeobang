@@ -6,10 +6,11 @@ export function extractItems(
   createdAt: CreatedAt,
   money: Money,
   paymentName: PaymentName,
-  address: Adress
+  address: Adress,
+  acceptedNumber: AcceptedNumber
 ): TransactionDetailByReceipt {
 
-  let itemId = 1;
+  let itemId : number= 1;
 
   const details = parsedData.items.map((product: ChatItem) => {
 
@@ -31,11 +32,12 @@ export function extractItems(
   const receiptData : TransactionDetailByReceipt = {
     transactionId: Number(transactionId),
     paymentName: paymentName,
-    adress: address, // address 필드 수정
+    address: address, // address 필드 수정
     money: money,
     details: details,
     createdAt: createdAt, // 시간
-    splitMethod:"receipt"
+    splitMethod:"receipt",
+    acceptedNumber:acceptedNumber
   };
 
   return receiptData

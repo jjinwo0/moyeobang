@@ -1,9 +1,10 @@
 
 import { headerStyle, backButtonHeaderStyle } from "./HeaderStyle";
-import BackButton from "./ButtonIcon/BackButton";
+import BackButton, { BackButtonProps } from "./ButtonIcon/BackButton";
 import React from "react";
 
-export default function HeaderWithBackButton() {
+
+export default function HeaderWithBackButton({onClick}:BackButtonProps) {
 
     return (
         <nav 
@@ -13,7 +14,7 @@ export default function HeaderWithBackButton() {
             ]}
         >
             <div>
-            <BackButton/>
+            <BackButton onClick={onClick}/>
             </div>
         </nav>
     )

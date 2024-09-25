@@ -32,7 +32,7 @@ interface ConnectMessage {
 
 export default function QrPay( ) {
 
-    const paymentRequestId : string = uuidv4();
+    const [paymentRequestId] = useState<string>(uuidv4());
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [resultMessage, setResultMessage] = useState<ResultMessage| null>(null);
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
@@ -40,7 +40,7 @@ export default function QrPay( ) {
 
     const data : QrData= {
         paymentRequestId: paymentRequestId,
-        sourceAccountNumber: '333-3333-333'
+        sourceAccountNumber: '0018418012115489'
     }
 
     // new EventSource(url, options)
@@ -56,15 +56,15 @@ export default function QrPay( ) {
         }
 
         // 각 이벤트 이름에 맞는 메시지를 처리
-        eventSource.addEventListener('connected', (event:any) => {
-            const parsedData : ConnectMessage = JSON.parse(event.data);
+        eventSource.addEventListener('connect', (event:any) => {
+            const parsedData : ConnectMessage = event.data;
             console.log('연결 성공 여부:', parsedData.message);
         });
 
         eventSource.addEventListener('payment-success', (event:any) => {
             const parsedData : ResultMessage = JSON.parse(event.data);
             console.log('paymentResult:', parsedData);
-            setResultMessage(parsedData);
+            setResultMessage(parsedData);                                                                                           
             setOpenCompleteModal(true);
         });
 
@@ -75,7 +75,7 @@ export default function QrPay( ) {
             }
 
             if (event.target.readyState === EventSource.CLOSED) {
-                // 종료 시 할일
+                console.log('see연결 종료')
             }
         };
 
@@ -90,20 +90,21 @@ export default function QrPay( ) {
         return () => {
             if (eventSource) {
                 eventSource.close();
+                console.log('sse 연결 종료')
             }
         };
     }, []);
 
     // openCompleteModal이 true가 되면 SSE 연결 종료
-    useEffect(() => {
-        if (openCompleteModal && eventSource) {
-            eventSource.close();
-        }
-    }, [openCompleteModal, eventSource]);
+    // useEffect(() => {
+    //     if (openCompleteModal && eventSource) {
+    //         eventSource.close();
+    //     }
+    // }, [openCompleteModal, eventSource]);
 
     function handleClose() {
         setOpenCompleteModal(false);
-    }
+    }   
 
 
     return (

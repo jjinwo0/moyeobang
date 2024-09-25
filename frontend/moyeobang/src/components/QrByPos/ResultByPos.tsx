@@ -28,7 +28,7 @@ const containerLayoutStyle=css`
         display:flex;
         flex-direction:column;
         align-items:center;
-        justify-cotent:center;
+        justify-content:center;
         box-sizing:border-box;
     }
 `;
@@ -42,9 +42,10 @@ export default function ResultByPos({
     sourceAccountNumber,
     placeId,
     placeName,
-    placeAdress,
+    placeAddress,
     latitude,
     longitude,
+    amount,
     targetAccountNumber,
     }:PaymentProps) {
 
@@ -63,7 +64,8 @@ export default function ResultByPos({
             sourceAccountNumber : sourceAccountNumber,
             placeId : placeId,
             placeName : placeName,
-            placeAdress : placeAdress,
+            placeAddress : placeAddress,
+            amount:amount,
             latitude : latitude,
             longitude : longitude,
             targetAccountNumber : targetAccountNumber,
@@ -78,7 +80,7 @@ export default function ResultByPos({
                 <p>모임통장 계좌번호 : {sourceAccountNumber}</p>
                 <p>가맹점 id : {placeId}</p>
                 <p>가맹정 이름 : {placeName}</p>
-                <p>가맹점 주소 : {placeAdress}</p>
+                <p>가맹점 주소 : {placeAddress}</p>
                 <p>워도 : {latitude}</p>
                 <p>경도 : {longitude}</p>
                 <p>가맹점 계좌번호 : {targetAccountNumber}</p>

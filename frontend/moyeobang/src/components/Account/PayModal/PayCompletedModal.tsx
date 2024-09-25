@@ -60,7 +60,7 @@ export default function PayCompletedModal({transactionId, onClose} : PayComplete
             src={bangImage} 
             alt="bangbang" />
             <div css={buttonLayoutStyle}>
-                <Link to={`/account/${transactionId}/settle`} css={linkStyle}>        
+                <Link to={`/account/${transactionId.toString()}/settle`} css={linkStyle}>        
                     <Btn buttonStyle={{ size:'big', style:'blue'}}>
                         정산하기
                     </Btn>
