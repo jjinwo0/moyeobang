@@ -2,6 +2,9 @@ import {css} from '@emotion/react';
 import React from 'react';
 import Btn from '../common/btn/Btn';
 import bangBang from '@/assets/icons/bangBang.png';
+import moyeobang from '@/services/moyeobang';                                                                 
+import { useQueryClient,useMutation } from '@tanstack/react-query';
+
 
 const containerStyle = css`
   width: 100%;
@@ -43,12 +46,54 @@ const timeStyle = css`
 
 interface PublicRequestProps {
   message: string;
+  accountId: number;
+  amount: number;
+}
+
+interface Data {
+  memberId: number;
+  amount: number;
 }
 
 // const travelName: string = '아기돼지오형제';
 
-export default function PublicRequest({message}: PublicRequestProps) {
+export default function PublicRequest({message, accountId,amount}: PublicRequestProps) {
   const timestamp = new Date().toLocaleString();
+
+  const data:Data ={
+    // memberId: memberId,
+    memberId:1,
+    amount: amount, 
+  }
+
+  //[todo] 수락 버튼 클릭 시 공금 입금 api 연결 필요
+
+  // const queryClient = useQueryClient();
+
+  // const {mutate: postDepositAccount} = useMutation({
+  //   mutationFn: async (data:Data)=>{
+  //     const response = await moyeobang.postDepositAccount(accountId, data);
+  //     return response.data;
+  //   },        
+  //   onSuccess: async () => {
+  //     // const {currentBalance} = response.data;
+
+  //     await queryClient.invalidateQueries({
+  //       queryKey: ['currentBalance'],
+  //       refetchType: 'all',
+  //     });
+  //   },
+  // });
+
+  const handleAccept = () => {
+    //[todo] 수락 버튼 클릭 시 공금 입금 api 연결 필요
+    // postDepositAccount(data);
+  };
+
+  const handleCancel = () => {
+    // 취소 로직 추가
+  };
+
   return (
     <div css={containerStyle}>
       <div css={contentStyle}>
@@ -57,8 +102,8 @@ export default function PublicRequest({message}: PublicRequestProps) {
           <p css={timeStyle}>{timestamp}</p>
           <span css={textStyle}>{message}</span>
           <div css={buttonContainerStyle}>
-            <Btn buttonStyle={{style: 'red', size: 'tiny'}}>취소</Btn>
-            <Btn buttonStyle={{style: 'blue', size: 'tiny'}}>수락</Btn>
+            <Btn buttonStyle={{style: 'red', size: 'tiny'}} onClick={handleCancel}>취소</Btn>
+            <Btn buttonStyle={{style: 'blue', size: 'tiny'}} onClick={handleAccept}>수락</Btn>
           </div>
         </div>
       </div>

@@ -740,3 +740,12 @@ interface PaymentProps {
   longitude: number;
   targetAccountNumber: string;
 }
+
+interface PostDepositAccount {
+  memberId: Id;
+  amount: Money;
+}
+
+interface ResponsePostDepositAccount {
+  accountBalance: CurrentBalance;
+}

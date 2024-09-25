@@ -77,7 +77,7 @@ export default function NotificationModal() {
     <div css={layoutStyle}>
       {/* Only render the PublicRequest component when there's data */}
       {publicRequestData && (
-        <PublicRequest message={publicRequestData.message} />
+        <PublicRequest message={publicRequestData.message} accountId={publicRequestData.accountId} amount={publicRequestData.amount}/>
       )}
     </div>
   );
