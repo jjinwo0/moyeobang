@@ -16,6 +16,7 @@ import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.SsePort;
+import com.ssafy.moyeobang.payment.application.port.out.UpdateMemberBalancePort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,9 +25,10 @@ public class OfflinePaymentServiceTest {
     private final SsePort ssePort = mock(SsePort.class);
     private final ProcessPaymentPort processPaymentPort = mock(ProcessPaymentPort.class);
     private final LoadTravelAccountPort loadTravelAccountPort = mock(LoadTravelAccountPort.class);
+    private final UpdateMemberBalancePort updateMemberBalancePort = mock(UpdateMemberBalancePort.class);
 
     private final OfflinePaymentService offlinePaymentService = new OfflinePaymentService(
-            ssePort, processPaymentPort, loadTravelAccountPort
+            ssePort, processPaymentPort, loadTravelAccountPort, updateMemberBalancePort
     );
 
     @DisplayName("결제가 성공적으로 이루어지면 SSE 성공 메시지를 보낸다.")
