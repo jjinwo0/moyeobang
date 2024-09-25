@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.travel.adapter.out.persistence;
+package com.ssafy.moyeobang.travel.adapter.out.persistence.travel;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;

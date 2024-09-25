@@ -43,6 +43,9 @@ public class TravelJpaEntity extends BaseEntity {
     @OneToMany(mappedBy = "travel", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberTravelJpaEntity> memberTravelJpaEntities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "travel", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<TravelPlaceJpaEntity> travelPlaceJpaEntities = new ArrayList<>();
+
     @Builder
     private TravelJpaEntity(String title,
                             String travelKey,
@@ -59,5 +62,11 @@ public class TravelJpaEntity extends BaseEntity {
     //TODO: 여행 계획 API 구현 후 삭제 예정
     public void setTravelKey(String travelKey) {
         this.travelKey = travelKey;
+    }
+
+    public List<String> getTravelPlaces() {
+        return travelPlaceJpaEntities.stream()
+                .map(TravelPlaceJpaEntity::getName)
+                .toList();
     }
 }
