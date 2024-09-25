@@ -1,13 +1,10 @@
-package com.ssafy.moyeobang.travel.adapter.out.persistence;
+package com.ssafy.moyeobang.travel.adapter.out.persistence.travel;
 
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
-import com.ssafy.moyeobang.travel.adapter.out.persistence.travel.TravelPersistenceAdapter;
-import com.ssafy.moyeobang.travel.adapter.out.persistence.travel.TravelPlaceRepositoryInTravel;
-import com.ssafy.moyeobang.travel.adapter.out.persistence.travel.TravelRepositoryInTravel;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import java.time.LocalDate;
 import java.util.List;

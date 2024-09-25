@@ -22,7 +22,7 @@ public class TravelMapper {
 
         return new Travel(
                 travel.getId(),
-                travel.getTravelKey(),
+                travel.getTitle(),
                 travel.getBackgroundImageUrl(),
                 mapToMembers(travel),
                 travel.getStartDate(),

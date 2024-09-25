@@ -47,11 +47,11 @@ public class TravelJpaEntity extends BaseEntity {
     private List<TravelPlaceJpaEntity> travelPlaceJpaEntities = new ArrayList<>();
 
     @Builder
-    private TravelJpaEntity(String title,
-                            String travelKey,
-                            LocalDate startDate,
-                            LocalDate endDate,
-                            String backgroundImageUrl) {
+    public TravelJpaEntity(String title,
+                           String travelKey,
+                           LocalDate startDate,
+                           LocalDate endDate,
+                           String backgroundImageUrl) {
         this.title = title;
         this.travelKey = travelKey;
         this.startDate = startDate;

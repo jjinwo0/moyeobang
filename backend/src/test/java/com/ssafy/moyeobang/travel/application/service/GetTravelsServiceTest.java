@@ -6,7 +6,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import autoparams.AutoSource;
-import autoparams.Repeat;
 import com.ssafy.moyeobang.travel.adapter.in.web.response.GetTravelsResponse;
 import com.ssafy.moyeobang.travel.application.domain.Travel;
 import com.ssafy.moyeobang.travel.application.port.out.LoadTravelPort;
@@ -23,7 +22,6 @@ class GetTravelsServiceTest {
     @DisplayName("특정 회원이 소속되어 있는 여행 목록을 조회한다.")
     @ParameterizedTest
     @AutoSource
-    @Repeat
     void getTravels(Long memberId, Travel travel1, Travel travel2, Travel travel3) {
         //given
         given(loadTravelPort.loadTravelsBy(memberId))

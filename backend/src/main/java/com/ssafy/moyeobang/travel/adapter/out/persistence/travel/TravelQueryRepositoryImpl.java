@@ -21,11 +21,8 @@ public class TravelQueryRepositoryImpl implements TravelQueryRepository {
                 .from(travelJpaEntity)
                 .join(memberTravelJpaEntity).on(memberTravelJpaEntity.travel.eq(travelJpaEntity))
                 .join(memberTravelJpaEntity.member, memberJpaEntity)
-                .fetchJoin()
                 .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
-                .fetchJoin()
                 .join(travelAccountJpaEntity).on(travelAccountJpaEntity.travel.eq(travelJpaEntity))
-                .fetchJoin()
                 .where(memberTravelJpaEntity.member.id.eq(memberId))
                 .fetch();
     }
