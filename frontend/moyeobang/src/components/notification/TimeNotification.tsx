@@ -43,7 +43,7 @@ export default function TimeNotification() {
         <img src={exclamationMark} alt="Notification Icon" />
         <div>
           <p css={timeStyle}>2024.09.03 20:00</p>
-          <span>하루를 마무리하는 현재</span>
+          <span css={textStyle}>하루를 마무리하는 현재</span>
           <span css={titleStyle}> {travelName}</span>
           <span css={textStyle}>
             에 300,000원 남아있어요!

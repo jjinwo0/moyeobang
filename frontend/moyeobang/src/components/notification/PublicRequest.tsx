@@ -41,17 +41,21 @@ const timeStyle = css`
   margin-bottom: 5px;
 `;
 
-const travelName: string = '아기돼지오형제';
+interface PublicRequestProps {
+  message: string;
+}
 
-export default function PublicRequest() {
+// const travelName: string = '아기돼지오형제';
+
+export default function PublicRequest({message}: PublicRequestProps) {
+  const timestamp = new Date().toLocaleString();
   return (
     <div css={containerStyle}>
       <div css={contentStyle}>
         <img src={bangBang} alt="Notification Icon" />
         <div>
-          <p css={timeStyle}>2024.09.03 13:10</p>
-          <span css={titleStyle}>{travelName}</span>
-          <span css={textStyle}>에서 300,000원을 공금 요청했어요.</span>
+          <p css={timeStyle}>{timestamp}</p>
+          <span css={textStyle}>{message}</span>
           <div css={buttonContainerStyle}>
             <Btn buttonStyle={{style: 'red', size: 'tiny'}}>취소</Btn>
             <Btn buttonStyle={{style: 'blue', size: 'tiny'}}>수락</Btn>

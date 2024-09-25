@@ -1,12 +1,13 @@
+import React, {useState, useEffect} from 'react';
+import PublicRequest from './PublicRequest'; // Import your existing component
 import {css} from '@emotion/react';
-import React from 'react';
-import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
-import HurryNotification from './HurryNotification';
-import PublicRequest from './PublicRequest';
-import TimeNotification from './TimeNotification';
 
-interface NotificationModalProps {
-  onXClick: () => void;
+interface PublicRequestData {
+  title: string;
+  message: string;
+  requestId: string;
+  amount: number;
+  accountId: string;
 }
 
 const layoutStyle = css`
@@ -21,25 +22,48 @@ const layoutStyle = css`
   align-items: center;
   z-index: 100;
 `;
+export default function NotificationModal() {
+  const [publicRequestData, setPublicRequestData] =
+    useState<PublicRequestData | null>(null);
 
-const notificationStyle = css`
-  display: flex;
-  flex-direction: column; /* 세로로 나열 */
-  gap: 10px; /* 컴포넌트들 사이 간격을 20px로 설정 */
-  width: 100%; /* 필요한 경우 너비 설정 */
-`;
+  // Handle the incoming push notification
+  useEffect(() => {
+    const handlePushNotification = (event: MessageEvent) => {
+      console.log('Notification received:', event.data);
+      // Extract relevant data and set it in the state
+      const {title, message, requestId, amount, accountId} = event.data.data;
+      setPublicRequestData({title, message, requestId, amount, accountId});
+    };
 
-export default function NotificationModal({onXClick}: NotificationModalProps) {
+    window.addEventListener('message', handlePushNotification as EventListener);
+
+    // Simulate receiving a notification for demo purposes
+    const dummyNotification = {
+      data: {
+        title: '입금 알림',
+        message: '꿀꿀이들의 여행 모임 통장에 200000원을 입금하시겠습니까?',
+        requestId: '789012', // 공금 입금 요청의 고유 ID
+        amount: 200000,
+        accountId: '123456',
+        action: 'deposit_request',
+      },
+    };
+    window.postMessage(dummyNotification, '*');
+
+    return () => {
+      window.removeEventListener(
+        'message',
+        handlePushNotification as EventListener
+      );
+    };
+  }, []);
+
   return (
-    <>
-      <HeaderWithXButton onXClick={onXClick} />
-      <div css={layoutStyle}>
-        <div css={notificationStyle}>
-          <HurryNotification />
-          <PublicRequest />
-          <TimeNotification />
-        </div>
-      </div>
-    </>
+    <div css={layoutStyle}>
+      {/* Only render the PublicRequest component when there's data */}
+      {publicRequestData && (
+        <PublicRequest message={publicRequestData.message} />
+      )}
+    </div>
   );
 }
