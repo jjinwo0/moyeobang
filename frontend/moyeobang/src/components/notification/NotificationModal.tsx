@@ -26,18 +26,33 @@ export default function NotificationModal() {
   const [publicRequestData, setPublicRequestData] =
     useState<PublicRequestData | null>(null);
 
-  // Handle the incoming push notification
+  // // 실제 푸시알림으로 진행할때는
+  // useEffect(() => {
+  //   const handlePushNotification = (event: MessageEvent) => {
+  //     console.log('Notification received:', event.data);
+  //     const {title, message, requestId, amount, accountId} = event.data;
+  //     setPublicRequestData({title, message, requestId, amount, accountId});
+  //   };
+
+  //   navigator.serviceWorker.addEventListener('message', handlePushNotification);
+
+  //   return () => {
+  //     navigator.serviceWorker.removeEventListener('message', handlePushNotification);
+  //   };
+  // }, []);
+
+  // 푸시 알림 처리
   useEffect(() => {
     const handlePushNotification = (event: MessageEvent) => {
       console.log('Notification received:', event.data);
-      // Extract relevant data and set it in the state
+      // 데이터 추출 및 상태 설정
       const {title, message, requestId, amount, accountId} = event.data.data;
       setPublicRequestData({title, message, requestId, amount, accountId});
     };
 
     window.addEventListener('message', handlePushNotification as EventListener);
 
-    // Simulate receiving a notification for demo purposes
+    // 일단 더미데이터
     const dummyNotification = {
       data: {
         title: '입금 알림',

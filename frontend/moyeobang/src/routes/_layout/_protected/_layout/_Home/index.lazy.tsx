@@ -19,7 +19,7 @@ import AllowNotification from '@/components/notification/AllowNotification';
 const data: Travel[] = [
   {
     travelId: 1,
-    travelName: '여행제목1',
+    travelName: '여행이름1',
     travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
     participantsCount: 4,
     startDate: '2024-09-10T12:34:56Z',

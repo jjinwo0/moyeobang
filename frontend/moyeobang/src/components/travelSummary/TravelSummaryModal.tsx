@@ -105,7 +105,7 @@ const modalOverlayStyle = css`
 `;
 
 const modalContentStyle = css`
-  padding: 20px;
+  padding: 10px 20px;
   flex-grow: 1;
   text-align: center;
 
@@ -127,10 +127,15 @@ const titleStyle = css`
     margin-bottom: 0;
     display: inline;
   }
+
+  margin-bottom: 5px;
 `;
 
 const travelNameStyle = css`
   color: ${colors.fifth};
+  border: 3px solid ${colors.customBlue};
+  border-radius: 20px;
+  padding: 5px 10px;
 `;
 
 const blackTextStyle = css`
@@ -147,7 +152,7 @@ const travelPlaceStyle = css`
 
 const modalTitleStyle = css`
   margin-top: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const mapContainerStyle = css`

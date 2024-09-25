@@ -30,10 +30,14 @@ const overlayStyle = css`
 `;
 
 const titleStyle = css`
+  max-width: 200px;
   font-size: 24px;
   font-family: 'bold';
   color: ${colors.fifth};
   margin-bottom: 15px;
+  white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
 `;
 
 const participantsStyle = css`
