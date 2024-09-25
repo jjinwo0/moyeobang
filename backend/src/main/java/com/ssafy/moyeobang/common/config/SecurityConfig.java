@@ -1,6 +1,9 @@
 package com.ssafy.moyeobang.common.config;
 
+import com.ssafy.moyeobang.common.config.jwt.TokenManager;
+import com.ssafy.moyeobang.common.config.oauth.MemberRepositoryInOAuth;
 import com.ssafy.moyeobang.common.config.oauth.OAuth2CustomService;
+import com.ssafy.moyeobang.common.config.oauth.OAuth2SuccessHandler;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +21,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final OAuth2CustomService oAuth2CustomService;
+
+    private final MemberRepositoryInOAuth memberRepository;
+
+    private final TokenManager tokenManager;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,8 +50,7 @@ public class SecurityConfig {
                                 )
                                 .userInfoEndpoint(
                                         endpoint -> endpoint.userService(oAuth2CustomService))
-                                .successHandler()
-                                .failureHandler()
+                                .successHandler(oAuth2SuccessHandler())
                 )
                 .build();
     }
@@ -60,5 +66,13 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
+    }
+
+    public OAuth2SuccessHandler oAuth2SuccessHandler() {
+
+        return new OAuth2SuccessHandler(
+                memberRepository,
+                tokenManager
+        );
     }
 }
