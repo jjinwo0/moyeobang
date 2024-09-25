@@ -64,6 +64,16 @@ public class TravelJpaEntity extends BaseEntity {
         this.travelKey = travelKey;
     }
 
+    public void updateTravel(String title,
+                             LocalDate startDate,
+                             LocalDate endDate,
+                             String backgroundImageUrl) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.backgroundImageUrl = backgroundImageUrl == null ? this.backgroundImageUrl : backgroundImageUrl;
+    }
+
     public List<String> getTravelPlaces() {
         return travelPlaceJpaEntities.stream()
                 .map(TravelPlaceJpaEntity::getName)
