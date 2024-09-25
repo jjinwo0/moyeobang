@@ -152,4 +152,14 @@ export default {
     axios.post<MoyeobangResponse<boolean>>(`/travels/${travelId}/quiz`, data, {
       headers: {'Content-Type': 'application/json'},
     }),
+
+  /**
+   * 여행 계좌 생성
+   */
+  postAccount: async (travelId: Id) =>
+    axios.post<MoyeobangResponse<ResponsePostAccount>>(
+      '/accounts',
+      {travelId: travelId},
+      {headers: {'Content-Type': 'application/json'}}
+    ),
 };

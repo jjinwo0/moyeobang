@@ -149,15 +149,35 @@ export default function AuthVerification({
   // //[todo] 여행 생성 api 연결 필요
   // const queryClient = useQueryClient();
 
-  // const {mutate: postTravel} = useMutation({
-  //   mutationFn: (formData: FormData) => moyeobang.postTravel(formData),
-  //   onSuccess: async () => {
+  // const { mutate: postTravel } = useMutation({
+  //   mutationFn: async (formData: FormData) => {
+  //     const response = await moyeobang.postTravel(formData);
+  //     return response.data; // Axios의 response.data 반환
+  //   },
+  //   onSuccess: async (response: MoyeobangResponse<ResponsePostTravel>) => {
+  //     const { travelId } = response.data; // 응답에서 travelId 추출
+
+  //     // travelList 쿼리 무효화 및 재요청
   //     await queryClient.invalidateQueries({
   //       queryKey: ['travelList'],
   //       refetchType: 'all',
   //     });
+
+  //     // travelId를 사용해 postAccount 호출
+  //     postAccount(travelId);
   //   },
   // });
+
+  // //[todo] 여행 계좌 생성
+  // const {mutate:postAccount} = useMutation({
+  //   mutationFn:(travelId:number) => moyeobang.postAccount(travelId),
+  //   onSuccess: async(response) => {
+  //     await queryClient.invalidateQueries({
+  //       queryKey:['accountNumber'],
+  //       refetchType:'all'
+  //     })
+  //   }
+  // })
 
   const handleCompleteClick = () => {
     if (isVerified && isAllTermsAgreed) {

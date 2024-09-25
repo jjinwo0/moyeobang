@@ -7,4 +7,5 @@ export default {
   TRANSACTION_DETAIL: 'transactionDetail',
   // TRAVELLIST:'travelList',
   // QUIZ:'quiz',
+  // ACCOUNTNUMBER:'accountNumber',
 };

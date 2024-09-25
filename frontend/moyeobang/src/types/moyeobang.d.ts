@@ -425,6 +425,10 @@ interface ResponsePostTravel {
   travelId: Id;
 }
 
+interface ResponsePostAccount {
+  accountNumber: TravelAccountNumber;
+}
+
 interface PostTravel {
   travelName: TravelName;
   stratDate: StartDate;
