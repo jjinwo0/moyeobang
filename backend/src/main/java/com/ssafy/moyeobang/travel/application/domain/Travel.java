@@ -14,6 +14,10 @@ public record Travel(Long id,
                      Quiz quiz,
                      TravelAccount travelAccount) {
 
+    public boolean checkIfQuizAnswerIsCorrect(String answer) {
+        return quiz.checkIfAnswerIsCorrect(answer);
+    }
+
     public int getParticipantCount() {
         return members.size();
     }
