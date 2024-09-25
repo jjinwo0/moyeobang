@@ -365,3 +365,67 @@ const content = "```json\n{\n    \"approval_number\": \"POS 1039331\",\n    \"ad
 // 텍스트에서 불필요한 ```json과 개행 문자 제거
 const cleanContent = content.replace(/```json|```|\n/g, '');
 export const chatData = JSON.parse(cleanContent);
+
+
+export const proportionData = {
+	comsuptionByCategory : [
+		{
+		categoryName : '액티비티',
+		proportion : 20.5,
+		balance:80000
+		},
+		{
+		categoryName : '식당, 카페',
+		proportion : 38.3,
+		balance:121000
+		},
+		{
+		categoryName : '할공, 호텔',
+		proportion : 38.3,
+		balance:121000
+		},
+		{
+		categoryName : '해당 없음',
+		proportion : 38.3,
+		balance:121000
+		}
+	],
+	consumptionByMember: [
+		{
+		member : {
+      memberId: 3,
+      memberName: "전가현",
+      profileImage: profileImageUrl
+      },
+		proportion : 38.3,
+		balance :23000
+		},
+		{
+      member : {
+        memberId: 3,
+        memberName: "전가현",
+        profileImage: profileImageUrl
+        },
+		proportion : 38.3,
+		balance :23000
+		},
+    {
+      member : {
+        memberId: 3,
+        memberName: "전가현",
+        profileImage: profileImageUrl
+        },
+		proportion : 38.3,
+		balance :23000
+		},
+    {
+      member : {
+        memberId: 3,
+        memberName: "전가현",
+        profileImage: profileImageUrl
+        },
+		proportion : 38.3,
+		balance :23000
+		},
+	]
+}

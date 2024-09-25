@@ -37,7 +37,7 @@ const titleStyle=css`
 
 export default function HorizonBarGraph() {
   return (
-    <div style={{ width: '100%', height: '100px' }}> 
+    <div style={{ width: '100%', height: '60px' }}> 
         <div css={titleStyle}>
             사용 금액 21,5000 (100%) 기준
         </div>
@@ -55,15 +55,29 @@ export default function HorizonBarGraph() {
         >
         {/* 그리드 제거 */}
           {/* <CartesianGrid strokeDasharray="3 3" /> */}
-          <XAxis type="number" domain={[0, 100]} tick={false}  axisLine={false} tickLine={false} padding={{ left:0, right: 5 }} />
-          <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} tick={false} />
+          <XAxis 
+          type="number" 
+          domain={[0, 100]} 
+          tick={false}  
+          axisLine={false} 
+          tickLine={false} 
+          height={0}
+          />
+          <YAxis 
+          type="category" 
+          dataKey="name" 
+          axisLine={false} 
+          tickLine={false} 
+          tick={false} 
+          width={0}
+          />
           <Tooltip />
           {/* 해당 색에 대한 설명 제거 */}
           {/* <Legend /> */} 
-          <Bar dataKey="가현" stackId="a" fill={`${colors.gray}`} radius={[10, 0, 0, 10]}/>
+          <Bar dataKey="가현" stackId="a" fill={`${colors.gray}`} radius={[20, 0, 0, 20]}/>
           <Bar dataKey="두홍" stackId="a" fill={`${colors.customGreenBlue}`}/>
           <Bar dataKey="지연" stackId="a" fill={`${colors.third}`}/>
-          <Bar dataKey="두열" stackId="a" fill={`${colors.fourth}`} radius={[0, 10, 10, 0]}/>
+          <Bar dataKey="두열" stackId="a" fill={`${colors.fourth}`} radius={[0, 20, 20, 0]}/>
         </BarChart>
       </ResponsiveContainer>
     </div>

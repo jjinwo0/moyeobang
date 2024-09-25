@@ -134,12 +134,12 @@ interface AccountBalanceByGroup {
 
 // 모임 통장 개인 잔액 조회
 interface AccountBalanceBymemberId {
-  participant: ParticipantInfo;
+  simpleUserProfile: ParticipantInfo;
   personalCurrentBalance: PersonalCurrentBalance;
-  personalTotalMoney: TotalMoney;
-  personalTotalConsumption: TotalComsumption;
+  personalTotalAmount: TotalMoney;
+  personalTotalSpent: TotalComsumption;
   personalUsagePercentage: PersonalUsagePercentage;
-  needsAdditionalDeposit?: NeedsAdditionalDeposit;
+  needsAdditionalDeposit: NeedsAdditionalDeposit;
 }
 
 // 여행 일정 조회
@@ -412,4 +412,23 @@ interface Quiz {
   id: TravelId;
   question: Question;
   answer: Answer;
+}
+
+// [모임통장] 소비 비율 차트 데이터
+interface ConsumptionProportionByCategory {
+  categoryName:string;
+  proportion:number;
+  balance:number;
+}
+
+interface ConsumptionProportionByMember {
+  member:ParticipantInfo;
+  proportion:number;
+  balance:number;
+}
+
+// 전체일때 
+interface ConsumptionProportionData {
+  consumptionByCategory:ConsumptionByCategory[];
+  consumptionByMember:ConsumptionByMember[];
 }

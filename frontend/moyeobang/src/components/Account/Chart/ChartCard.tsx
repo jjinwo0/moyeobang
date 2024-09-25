@@ -16,8 +16,8 @@ const cardLayoutStyle = css`
     gap:10px;
 `
 
-
 const titleStyle = css`
+    margin-top:10px;
     font-family: 'bold';
     font-size: 24px;
     color: ${colors.fifth};
@@ -33,9 +33,11 @@ const accountStyle = css`
 
 const chartContainerStyle=css`
     width:100%;
-    flex-grow: 1;
+    height:100px;
     display: flex;
     align-items: center;
+    justify-content:center;
+    margin-bottom:25px;
 `;
 
 export default function ChartCard() {
