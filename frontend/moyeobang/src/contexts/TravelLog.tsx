@@ -25,12 +25,12 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
           participantsInfo: [
             {
               memberId: 1,
-              nickname: '김훈민',
+              memberName: '김훈민',
               profileImage: '/assets/images/profile.jpg',
             },
             {
               memberId: 2,
-              nickname: '이수민',
+              memberName: '이수민',
               profileImage: '/assets/images/profile.jpg',
             },
           ],
@@ -45,12 +45,12 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         participantsInfo: [
           {
             memberId: 1,
-            nickname: '김훈민',
+            memberName: '김훈민',
             profileImage: '/assets/images/profile.jpg',
           },
           {
             memberId: 3,
-            nickname: '박지현',
+            memberName: '박지현',
             profileImage: '/assets/images/profile.jpg',
           },
         ],

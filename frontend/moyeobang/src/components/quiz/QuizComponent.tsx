@@ -23,22 +23,22 @@ const data = {
   participantsInfo: [
     {
       memberId: 1,
-      nickname: '홍길동',
+      memberName: '홍길동',
       profileImage: 'https://example.com/images/honggildong.jpg',
     },
     {
       memberId: 2,
-      nickname: '김철수',
+      memberName: '김철수',
       profileImage: 'https://example.com/images/kimcheolsu.jpg',
     },
     {
       memberId: 3,
-      nickname: '이영희',
+      memberName: '이영희',
       profileImage: 'https://example.com/images/leeyounghee.jpg',
     },
     {
       memberId: 4,
-      nickname: '박민수',
+      memberName: '박민수',
       profileImage: 'https://example.com/images/parkminsu.jpg',
     },
   ],

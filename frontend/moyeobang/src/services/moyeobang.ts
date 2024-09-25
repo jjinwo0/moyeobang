@@ -122,8 +122,8 @@ export default {
   /**
    * 여행 정보 수정 api
    */
-  patchTravel: async (travelId: Id, data: FormData) =>
-    axios.patch<MoyeobangResponse<null>>(`/travel/update/${travelId}`, data, {
+  putTravel: async (travelId: Id, data: FormData) =>
+    axios.put<MoyeobangResponse<null>>(`/travel/update/${travelId}`, data, {
       headers: {'Content-Type': 'multipart/form-data'},
     }),
 

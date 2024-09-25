@@ -133,30 +133,16 @@ export default function CreateTravel({
       return;
     }
 
-    // 변경된 필드만 추가
-    if (travelName !== initialData.travelName) {
-      newform.append('travelName', travelName);
-    }
+    const request = {
+      travelName: travelName,
+      startDate: dateRange[0],
+      endDate: dateRange[1],
+      travelPlaceList: travelPlaceList,
+      quizQuestion: quizQuestion,
+      quizAnswer: quizAnswer,
+    };
 
-    if (dateRange[0] !== initialData.startDate) {
-      newform.append('startDate', dateRange[0] || '');
-    }
-
-    if (dateRange[1] !== initialData.endDate) {
-      newform.append('endDate', dateRange[1] || '');
-    }
-
-    if (travelPlaceList.join(',') !== initialData.travelPlaceList?.join(',')) {
-      newform.append('travelPlaceList', travelPlaceList.join(','));
-    }
-
-    if (quizQuestion !== initialData.quizQuestion) {
-      newform.append('quizQuestion', quizQuestion);
-    }
-
-    if (quizAnswer !== initialData.quizAnswer) {
-      newform.append('quizAnswer', quizAnswer);
-    }
+    newform.append('request', JSON.stringify(request));
 
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
@@ -167,7 +153,7 @@ export default function CreateTravel({
 
     // // [todo] travelId가 존재하는 경우에만 mutate 호출
     // if (typeof travelId === 'number') {
-    //   patchTravel(newform); // 바로 newform을 전달
+    //   putTravel(newform); // 바로 newform을 전달
     // }
   };
 
