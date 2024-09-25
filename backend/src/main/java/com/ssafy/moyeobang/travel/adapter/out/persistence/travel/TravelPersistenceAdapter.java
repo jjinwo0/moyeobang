@@ -5,12 +5,14 @@ import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelPlaceJpaEntity;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelPort;
+import com.ssafy.moyeobang.travel.application.port.out.UpdateTravelOutCommand;
+import com.ssafy.moyeobang.travel.application.port.out.UpdateTravelPort;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class TravelPersistenceAdapter implements CreateTravelPort {
+public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelPort {
 
     private final TravelRepositoryInTravel travelRepository;
     private final TravelPlaceRepositoryInTravel travelPlaceRepository;
@@ -24,6 +26,11 @@ public class TravelPersistenceAdapter implements CreateTravelPort {
         travelPlaceRepository.saveAll(travelPlaces);
 
         return travel.getId();
+    }
+
+    @Override
+    public boolean updateTravel(UpdateTravelOutCommand command) {
+        return false;
     }
 
     private TravelJpaEntity createTravelJpaEntity(CreateTravelOutCommand command) {
