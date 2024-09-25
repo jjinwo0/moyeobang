@@ -14,6 +14,7 @@ import {useTravelLogContext} from '@/contexts/TravelLog';
 import MarkerDetail from './MarkerDetail';
 import {MapDetailLayout, MapSpaceStyle} from './ScheduleMapSearchStyle';
 import defaultMarkerIcon from '@/assets/icons/redDot.png';
+import typesKo from '@/assets/types_ko.json';
 
 const mapAPI = import.meta.env.VITE_GOOGLE_API_KEY;
 
@@ -25,6 +26,11 @@ const containerStyle = (isMarkerSelected: boolean) => ({
 const defaultCenter = {lat: 37.5665, lng: 126.978}; // 기본 중심: 서울
 
 const libraries: Library[] = ['places'];
+
+// 영어로 된 types들을 한국어로 변경하는 함수
+const translateTypes = (types: string[]) => {
+  return types.map(type => (typesKo as Record<string, string>)[type] || type);
+};
 
 // PlusSelfGoogleMap 컴포넌트
 const PlusSelfGoogleMap = forwardRef(
@@ -112,7 +118,7 @@ const PlusSelfGoogleMap = forwardRef(
                     address: result.formatted_address || '',
                     rating: result.rating,
                     openingHours: result.opening_hours?.weekday_text || [],
-                    types: result.types,
+                    types: translateTypes(result.types || []),
                   };
 
                   service.getDetails(

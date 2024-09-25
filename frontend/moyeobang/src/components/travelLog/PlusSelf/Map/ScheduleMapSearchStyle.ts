@@ -77,3 +77,4 @@ export const MapDetailLayout = css`
   border-radius: 45px;
   touch-action: none;
 `;
+
