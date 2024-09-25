@@ -6,12 +6,6 @@ import clipboardIcon from '@/assets/icons/clipboardIcon.png';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 
-const data: Quiz = {
-  id: 1,
-  question: '문제요',
-  answer: '답이어라',
-};
-
 // const invitationLink: InvitationLink = 'https://yourapp.com/invite-link';
 
 // 초대 링크 생성 함수
@@ -117,23 +111,22 @@ const englishStyle = css`
 interface ConfirmQuizProps {
   travelId: number;
   onClose: () => void;
+  quizQusetion: string;
+  quizAnswer: string;
 }
 
-export default function ConfirmQuiz({onClose, travelId}: ConfirmQuizProps) {
+export default function ConfirmQuiz({
+  onClose,
+  travelId,
+  quizQusetion,
+  quizAnswer,
+}: ConfirmQuizProps) {
   const invitationLink = createInvitaionLink(travelId);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(invitationLink);
     alert('초대 링크가 복사되었습니다.');
   };
-
-  // //[todo] get으로 초대퀴즈 조회하기
-  // const {data: quizData} = useSuspenseQuery({
-  //   queryKey: ['quiz'],
-  //   queryFn: () => moyeobang.getTravelQuiz(travelId),
-  // });
-
-  // const data = quizData?.data.data;
 
   return (
     <div css={modalOverlayStyle}>
@@ -149,11 +142,11 @@ export default function ConfirmQuiz({onClose, travelId}: ConfirmQuizProps) {
 
         <div css={questionStyle}>
           <span css={englishStyle}>Q</span>
-          <span>{data.question}</span>
+          <span>{quizQusetion}</span>
         </div>
         <div css={answerStyle}>
           <span css={englishStyle}>A</span>
-          <span>{data.answer}</span>
+          <span>{quizAnswer}</span>
         </div>
 
         {/* 확인 버튼 */}

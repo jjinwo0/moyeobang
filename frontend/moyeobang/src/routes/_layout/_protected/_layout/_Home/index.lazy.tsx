@@ -184,7 +184,7 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [pushNotification, setPushNotification] = useState<boolean>(false); // 추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
+  const [pushNotification, setPushNotification] = useState<boolean>(true); // 추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
 
   // //[todo] get으로 여행 목록 전체 조회하기
   // const {data:travelData} = useSuspenseQuery({

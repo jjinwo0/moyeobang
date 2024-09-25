@@ -11,16 +11,14 @@ export const Route = createFileRoute(
 });
 
 interface Quiz {
-  id: number;
   question: string;
-  answer: string;
+  travelName: string;
 }
 
 // 더미 데이터
 const data: Quiz = {
-  id: 1,
   question: '문제요',
-  answer: '답이어라',
+  travelName: '아기돼지 오형제',
 };
 
 function QuizPage() {
@@ -49,7 +47,11 @@ function QuizPage() {
   return (
     <>
       {data ? (
-        <QuizComponent question={data.question} travelId={travelId} />
+        <QuizComponent
+          question={data.question}
+          travelId={travelId}
+          travelName={data.travelName}
+        />
       ) : (
         <p>퀴즈 데이터를 찾을 수 없습니다.</p>
       )}

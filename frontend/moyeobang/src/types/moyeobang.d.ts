@@ -418,9 +418,7 @@ interface TravelSummary {
 }
 
 interface Quiz {
-  id: TravelId;
   question: Question;
-  answer: Answer;
 }
 
 interface PostTravel {

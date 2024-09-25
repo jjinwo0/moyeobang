@@ -12,6 +12,7 @@ import moyeobang from '@/services/moyeobang';
 interface QuizComponentProps {
   question: string;
   travelId: number;
+  travelName: string;
 }
 
 const data = {
@@ -129,6 +130,7 @@ const closeButtonStyle = css`
 export default function QuizComponent({
   question,
   travelId,
+  travelName,
 }: QuizComponentProps) {
   const [answer, setAnswer] = useState(''); // 입력된 답을 관리할 상태
   const router = useRouter(); // TanStack Router 사용
@@ -159,7 +161,7 @@ export default function QuizComponent({
     <div css={modalOverlayStyle}>
       <div css={modalContentStyle}>
         <img src={CloseButton} css={closeButtonStyle} onClick={handleClose} />
-        <p css={travelTitleStyle}>{data.travelName}</p>
+        <p css={travelTitleStyle}>{travelName}</p>
         <p css={descripitionStyle}>여행에 초대되셨습니다</p>
         <p>퀴즈를 풀고 여행을 함께 해보세요!</p>
         <div css={quizStyle}>

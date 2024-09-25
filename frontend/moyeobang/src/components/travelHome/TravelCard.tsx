@@ -251,7 +251,7 @@ export default function TravelCard({
           </div>
         )}
       </div>
-      {exitModal && (
+      {exitModal && travelId !== undefined && (
         <div css={exitModalStyle}>
           <ExitTravel
             travelTitle={travelName}
@@ -261,9 +261,14 @@ export default function TravelCard({
         </div>
       )}
 
-      {inviteModal && (
+      {inviteModal && travelId !== undefined && (
         <div>
-          <ConfirmQuiz onClose={closeQuizModal} travelId={travelId} />
+          <ConfirmQuiz
+            onClose={closeQuizModal}
+            travelId={travelId}
+            quizQusetion={quizQuestion}
+            quizAnswer={quizAnswer}
+          />
         </div>
       )}
 
