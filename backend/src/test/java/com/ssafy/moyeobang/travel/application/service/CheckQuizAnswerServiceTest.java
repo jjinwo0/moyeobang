@@ -6,33 +6,17 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import autoparams.AutoSource;
-import com.ssafy.moyeobang.travel.adapter.in.web.response.GetQuizQuestionResponse;
 import com.ssafy.moyeobang.travel.application.domain.Travel;
 import com.ssafy.moyeobang.travel.application.port.in.CheckQuizAnswerCommand;
 import com.ssafy.moyeobang.travel.application.port.out.LoadTravelPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 
-class QuizServiceTest {
+class CheckQuizAnswerServiceTest {
 
     private final LoadTravelPort loadTravelPort = mock(LoadTravelPort.class);
 
-    private final QuizService quizService = new QuizService(loadTravelPort);
-
-    @DisplayName("여행 참가 퀴즈 질문을 조회한다.")
-    @ParameterizedTest
-    @AutoSource
-    void getQuizQuestion(Travel travel) {
-        //given
-        given(loadTravelPort.loadTravel(any(Long.class)))
-                .willReturn(travel);
-
-        //when
-        GetQuizQuestionResponse response = quizService.getQuizQuestion(travel.id());
-
-        //then
-        assertThat(response.question()).isEqualTo(travel.getQuestion());
-    }
+    private final CheckQuizAnswerService checkQuizAnswerService = new CheckQuizAnswerService(loadTravelPort);
 
     @DisplayName("여행 참가 퀴즈 정답 여부를 확인한다. (정답)")
     @ParameterizedTest
@@ -45,7 +29,7 @@ class QuizServiceTest {
         CheckQuizAnswerCommand command = new CheckQuizAnswerCommand(travel.id(), travel.getAnswer());
 
         //when
-        boolean isCorrected = quizService.checkQuizAnswer(command);
+        boolean isCorrected = checkQuizAnswerService.checkQuizAnswer(command);
 
         //then
         assertThat(isCorrected).isTrue();
@@ -62,7 +46,7 @@ class QuizServiceTest {
         CheckQuizAnswerCommand command = new CheckQuizAnswerCommand(travel.id(), "오답");
 
         //when
-        boolean isCorrected = quizService.checkQuizAnswer(command);
+        boolean isCorrected = checkQuizAnswerService.checkQuizAnswer(command);
 
         //then
         assertThat(isCorrected).isFalse();
