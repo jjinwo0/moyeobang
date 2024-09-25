@@ -12,7 +12,14 @@ const data: Quiz = {
   answer: '답이어라',
 };
 
-const invitationLink: InvitationLink = 'https://yourapp.com/invite-link';
+// const invitationLink: InvitationLink = 'https://yourapp.com/invite-link';
+
+// 초대 링크 생성 함수
+const createInvitaionLink = (travelId: number) => {
+  const baseUrl = window.location.origin;
+  const secureToken = Math.random().toString(36).substr(2); // 랜덤 토큰 생성
+  return `${baseUrl}/quiz/${travelId}?moyeobang=${secureToken}`;
+};
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -113,6 +120,8 @@ interface ConfirmQuizProps {
 }
 
 export default function ConfirmQuiz({onClose, travelId}: ConfirmQuizProps) {
+  const invitationLink = createInvitaionLink(travelId);
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(invitationLink);
     alert('초대 링크가 복사되었습니다.');
