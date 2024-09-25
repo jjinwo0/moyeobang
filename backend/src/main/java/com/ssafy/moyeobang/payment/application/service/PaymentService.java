@@ -3,8 +3,8 @@ package com.ssafy.moyeobang.payment.application.service;
 import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
-import com.ssafy.moyeobang.payment.application.port.in.OfflinePaymentUseCase;
-import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.OnlinePaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
 @RequiredArgsConstructor
-public class OfflinePaymentService implements OfflinePaymentUseCase {
+public class PaymentService implements PaymentUseCase {
 
     private final SsePort ssePort;
     private final ProcessPaymentPort processPaymentPort;
@@ -25,7 +25,7 @@ public class OfflinePaymentService implements OfflinePaymentUseCase {
 
     @Override
     @Transactional
-    public boolean confirmPayment(PaymentCommand command) {
+    public boolean confirmPayment(OnlinePaymentCommand command) {
         TravelAccount travelAccount = loadTravelAccountPort.loadTravelAccount(command.travelAccountNumber());
 
         boolean canPayment = !travelAccount.couldNotWithdraw(command.paymentRequestMoney());

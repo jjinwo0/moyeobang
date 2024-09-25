@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.Store;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
-import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.OnlinePaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.StoreCommand;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
@@ -30,7 +30,7 @@ public class OfflinePaymentServiceTest {
     private final LoadTravelAccountPort loadTravelAccountPort = mock(LoadTravelAccountPort.class);
     private final UpdateMemberBalancePort updateMemberBalancePort = mock(UpdateMemberBalancePort.class);
 
-    private final OfflinePaymentService offlinePaymentService = new OfflinePaymentService(
+    private final PaymentService offlinePaymentService = new PaymentService(
             ssePort, processPaymentPort, loadTravelAccountPort, updateMemberBalancePort
     );
 
@@ -38,7 +38,7 @@ public class OfflinePaymentServiceTest {
     @Test
     void confirmPaymentSuccess() {
         // Given
-        PaymentCommand command = new PaymentCommand(
+        OnlinePaymentCommand command = new OnlinePaymentCommand(
                 "payment-123",
                 "account-123",
                 new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
@@ -71,7 +71,7 @@ public class OfflinePaymentServiceTest {
     @Test
     void confirmPaymentFailsWhenNoMembers() {
         // Given
-        PaymentCommand command = new PaymentCommand(
+        OnlinePaymentCommand command = new OnlinePaymentCommand(
                 "payment-123",
                 "account-123",
                 new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
@@ -95,7 +95,7 @@ public class OfflinePaymentServiceTest {
     @Test
     void confirmPaymentFailure() {
         // Given
-        PaymentCommand command = new PaymentCommand(
+        OnlinePaymentCommand command = new OnlinePaymentCommand(
                 "payment-123",
                 "account-123",
                 new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),

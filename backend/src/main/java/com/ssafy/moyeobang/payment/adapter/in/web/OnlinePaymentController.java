@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.payment.adapter.in.server;
+package com.ssafy.moyeobang.payment.adapter.in.web;
 
 import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor
-public class OfflinePaymentController {
+public class OnlinePaymentController {
 
     private final PaymentUseCase paymentUseCase;
 
-    @PostMapping("/confirm")
+    @PostMapping("/process")
     public ApiResult<Boolean> confirmPayment(@RequestBody OfflinePaymentRequest request) {
 
         StoreCommand storeCommand = StoreCommand.createAndValidate(

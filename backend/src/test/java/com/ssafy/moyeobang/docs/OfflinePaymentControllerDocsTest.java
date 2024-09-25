@@ -14,8 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
-import com.ssafy.moyeobang.payment.application.port.in.OfflinePaymentUseCase;
-import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.OnlinePaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,7 +25,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 class OfflinePaymentControllerDocsTest extends RestDocsSupport {
 
     @MockBean
-    private OfflinePaymentUseCase offlinePaymentUseCase;
+    private PaymentUseCase paymentUseCase;
 
     @DisplayName("오프라인 결제 확인 API")
     @Test
@@ -42,7 +42,7 @@ class OfflinePaymentControllerDocsTest extends RestDocsSupport {
                 "source-account-123",
                 "store-acc-002"
         );
-        given(offlinePaymentUseCase.confirmPayment(any(PaymentCommand.class)))
+        given(paymentUseCase.confirmPayment(any(OnlinePaymentCommand.class)))
                 .willReturn(true);
 
         // When & Then
