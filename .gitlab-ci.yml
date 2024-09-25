@@ -18,11 +18,11 @@ unit_test_job:
     reports:
       junit:
         - backend/build/test-results/test/**/*.xml
-  only:
-    refs:
-      - merge_requests
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
+      when: on_success
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "frontend"
+      when: never
 
 result_report_job:
   stage: report
@@ -30,7 +30,7 @@ result_report_job:
     - test
   script:
     - |
-      TEST_COUNT=$(find backend/build/test-results/test/ -name "*.xml" | wc -l)
+      TEST_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<tests" {} \; | wc -l)
       FAIL_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<failure" {} \; | wc -l)
       SKIP_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<skipped" {} \; | wc -l)
       DURATION=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -oP "(?<=time=\")[^\"]+" {} \; | awk "{sum+=\$1} END {print sum}")
@@ -40,8 +40,6 @@ result_report_job:
     - echo $SKIP_COUNT
     - echo $DURATION
 
-    - echo $MY_CI_TOKEN
-
     - |
       curl -v --request POST --header "PRIVATE-TOKEN: $TEAM_API_TOKEN" \
       --data-urlencode "body=## Unit Test Results   
@@ -49,14 +47,14 @@ result_report_job:
          
       **⏱️ Time taken: ${DURATION}s**   
          
-      ###### Results for commit [$CI_COMMIT_SHORT_SHA]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)" \
+      Results for commit [$CI_COMMIT_SHORT_SHA]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)" \
       "https://lab.ssafy.com/api/v4/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
-  
+
   dependencies:
     - unit_test_job
 
-  only:
-    refs:
-      - merge_requests
-    variables:
-      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
+      when: on_success
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "frontend"
+      when: never
