@@ -2,6 +2,12 @@ import React from 'react';
 import {css} from '@emotion/react';
 import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -45,12 +51,31 @@ const btnStyle = css`
 interface ExitTravelProps {
   travelTitle: string; // travelTitle prop의 타입을 문자열로 정의
   onClose: () => void;
+  travelId: number;
 }
 
-export default function ExitTravel({travelTitle, onClose}: ExitTravelProps) {
-  const handleExitTravel = () => {
+export default function ExitTravel({
+  travelTitle,
+  onClose,
+  travelId,
+}: ExitTravelProps) {
+  // //[todo] 여행 삭제 api 연결
+  // const queryClient = useQueryClient();
+  // const {mutate: leaveTravel} = useMutation({
+  //   //zustand에서 멤버Id 꺼내와서 넣기
+  //   mutationFn: (travelId: Id) => moyeobang.leaveTravel(travelId,memberId),
+  //   onSuccess: async () => {
+  //     await queryClient.invalidateQueries({
+  //       queryKey: ['travelList'],
+  //       refetchType: 'all',
+  //     });
+  //   },
+  // });
+
+  const handleExitTravel = (travelId: number) => {
     onClose();
-    //나가기 API 호출 함수 추가해야함
+    //[todo]나가기 API 호출 함수 추가해야함
+    // leaveTravel(travelId);
   };
 
   return (
@@ -67,7 +92,7 @@ export default function ExitTravel({travelTitle, onClose}: ExitTravelProps) {
           </Btn>
           <Btn
             buttonStyle={{style: 'red', size: 'small'}}
-            onClick={handleExitTravel}
+            onClick={() => handleExitTravel(travelId)}
           >
             나가기
           </Btn>

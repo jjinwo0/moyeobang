@@ -27,28 +27,30 @@ import useModalStore from '@/store/useModalStore';
 import MapSearch from './MapSearch';
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
+import moyeobang from '@/services/moyeobang';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 interface CreateTravelProps {
   onClose: () => void; // 모달을 닫는 함수
   isEditMode?: boolean; // 수정 모드 여부
+  travelId?: number;
   initialData?: {
     // 수정 모드일 때의 초기 데이터
     travelName?: string;
     travelPlaceList?: string[];
     quizQuestion?: string;
     quizAnswer?: string;
-    startDate?: Date | null; // startDate 추가
-    endDate?: Date | null; // endDate 추가
+    startDate?: string | null; // startDate 추가
+    endDate?: string | null; // endDate 추가
     selectedImage?: string | null;
   };
-  onSubmit?: () => void; // 수정 버튼 클릭 시 실행할 함수
 }
 
 export default function CreateTravel({
   onClose,
+  travelId, // 수정 모드일 때만 사용됨
   isEditMode = false, // 기본값은 false로 설정 (생성 모드)
   initialData = {}, // 기본값을 빈 객체로 설정하여 생성 모드에서 문제가 없도록 처리
-  onSubmit, // 수정 시의 함수
 }: CreateTravelProps) {
   const {closeModal} = useModalStore();
   const [cityInput, setCityInput] = useState<string>(''); // 선택된 도시 이름
@@ -66,12 +68,14 @@ export default function CreateTravel({
   const [quizAnswer, setQuizAnswer] = useState<string>(
     initialData.quizAnswer || ''
   );
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(
-    initialData.dateRange || [
-      initialData.startDate || null,
-      initialData.endDate || null,
-    ]
-  );
+  const [dateRange, setDateRange] = useState<[string | null, string | null]>([
+    initialData.startDate
+      ? dayjs(initialData.startDate).format('YYYY-MM-DD') // Date 타입이면 string으로 변환
+      : null,
+    initialData.endDate
+      ? dayjs(initialData.endDate).format('YYYY-MM-DD') // Date 타입이면 string으로 변환
+      : null,
+  ]);
   const [selectedImage, setSelectedImage] = useState<string | null>(
     initialData.selectedImage || null
   );
@@ -79,23 +83,92 @@ export default function CreateTravel({
   const [step, setStep] = useState<number>(1); // Step 상태
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [formData, setFormData] = useState<FormData>(new FormData());
 
   // 수정과 생성을 구분하여 처리
   const handleNextClick = () => {
+    if (!travelName || !dateRange[0] || !dateRange[1]) {
+      alert('모든 필드를 입력해주세요');
+      return;
+    }
+    const newFormData = new FormData();
+    const requestData = {
+      travelName: travelName,
+      startDate: dateRange[0],
+      endDate: dateRange[1],
+      travelPlaceList: travelPlaceList,
+      quizQuestion: quizQuestion,
+      quizAnser: quizAnswer,
+    };
+
+    newFormData.append('request', JSON.stringify(requestData));
+    if (selectedImage) {
+      const file = fileInputRef.current?.files?.[0];
+      if (file) {
+        newFormData.append('backgroundImage', file);
+      }
+    }
+
+    setFormData(newFormData); // formData 상태 업데이트
+
+    // FormData의 내용을 확인하기 위해 entries() 사용
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0] + ': ' + pair[1]);
+    // }
     if (isEditMode) {
       // 수정 모드일 때는 onSubmit 함수 호출
       onClose();
-      // onSubmit();
+      handleSubmit();
     } else {
-      console.log('여행 이름:', travelName);
-      console.log('여행 장소:', travelPlaceList);
-      console.log('여행 시작:', dateRange[0]);
-      console.log('여행 끝:', dateRange[1]);
-      console.log('퀴즈 질문:', quizQuestion);
-      console.log('퀴즈 답변:', quizAnswer);
       setStep(2); // 생성 모드일 때 다음 단계로 이동
     }
   };
+
+  const handleSubmit = () => {
+    const newform = new FormData();
+
+    // 필수 필드 유효성 검사
+    if (!travelName || !dateRange[0] || !dateRange[1]) {
+      alert('모든 필드를 입력해주세요');
+      return;
+    }
+
+    const request = {
+      travelName: travelName,
+      startDate: dateRange[0],
+      endDate: dateRange[1],
+      travelPlaceList: travelPlaceList,
+      quizQuestion: quizQuestion,
+      quizAnswer: quizAnswer,
+    };
+
+    newform.append('request', JSON.stringify(request));
+
+    if (selectedImage) {
+      const file = fileInputRef.current?.files?.[0];
+      if (file) {
+        newform.append('backgroundImage', file);
+      }
+    }
+
+    // // [todo] travelId가 존재하는 경우에만 mutate 호출
+    // if (typeof travelId === 'number') {
+    //   putTravel(newform); // 바로 newform을 전달
+    // }
+  };
+
+  // //[todo] 여행 수정 api 연결
+  // const queryClient = useQueryClient();
+  // const {mutate: patchTravel} = useMutation({
+  //   mutationFn: (formData: FormData) =>
+  //     moyeobang.patchTravel(travelId!, formData), //travelId!로 타입을 단언
+  //   onSuccess: async () => {
+  //     await queryClient.invalidateQueries({
+  //       queryKey: ['travelList'],
+  //       refetchType: 'all',
+  //     });
+  //   },
+  // });
 
   const handleCalendarClick = () => {
     setIsCalendarOpen(prev => !prev); // 달력 표시/숨기기 토글
@@ -142,14 +215,14 @@ export default function CreateTravel({
   }, [isCalendarOpen]);
 
   const [selectedRange, setSelectedRange] = useState<{
-    start: Date | string | null;
-    end: Date | string | null;
+    start: string | null;
+    end: string | null;
   }>({
     start: null,
     end: null,
   });
 
-  const handleSelectRange = (start: Date, end: Date) => {
+  const handleSelectRange = (start: string, end: string) => {
     setSelectedRange({start, end});
     setDateRange([start, end]); // 날짜 범위를 업데이트
   };
@@ -194,14 +267,22 @@ export default function CreateTravel({
             <div css={travelStyle}>
               <div css={inputsContainerStyle}>
                 <LabeledInput
-                  label="여행이름"
+                  label={
+                    <span>
+                      <span style={{color: 'red'}}>*</span> 여행이름
+                    </span>
+                  }
                   value={travelName}
                   onChange={e => setTravelName(e.target.value)}
                   placeholder="여행 이름을 입력하세요"
                 />
                 <div css={inputWithIconStyle}>
                   <LabeledInput
-                    label="여행기간"
+                    label={
+                      <span>
+                        <span style={{color: 'red'}}>*</span> 여행기간
+                      </span>
+                    }
                     value={
                       dateRange[0] && dateRange[1]
                         ? `${dayjs(dateRange[0]).format('YYYY-MM-DD')} ~ ${dayjs(dateRange[1]).format('YYYY-MM-DD')}`
@@ -231,7 +312,11 @@ export default function CreateTravel({
 
               <div css={locationStyle}>
                 <LocationInput
-                  label="여행장소"
+                  label={
+                    <span>
+                      <span style={{color: 'red'}}>*</span> 여행장소
+                    </span>
+                  }
                   // value={travelPlaceList.join(', ')} // 배열을 문자열로 변환하여 입력 필드에 표시
                   value={cityInput}
                   // onChange={e =>
@@ -268,7 +353,11 @@ export default function CreateTravel({
 
               <div css={quizStyle}>
                 <QuizInput
-                  title="초대퀴즈"
+                  title={
+                    <span>
+                      <span style={{color: 'red'}}>*</span> 초대퀴즈
+                    </span>
+                  }
                   label="Q"
                   value={quizQuestion}
                   onChange={e => setQuizQuestion(e.target.value)}
@@ -308,7 +397,7 @@ export default function CreateTravel({
             </div>
           </>
         ) : (
-          <AuthVerification onClose={closeModal} />
+          <AuthVerification onClose={closeModal} formData={formData} />
         )}
       </div>
     </div>

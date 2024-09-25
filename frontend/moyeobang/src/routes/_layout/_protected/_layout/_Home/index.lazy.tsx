@@ -10,12 +10,11 @@ import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel.tsx';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
-// import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
-import useTravelStore from '@/store/useTravelStore';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import AllowNotification from '@/components/notification/AllowNotification';
 
 const data: Travel[] = [
   {
@@ -58,8 +57,8 @@ const data: Travel[] = [
     travelName: '여행제목2',
     travelImg: null,
     participantsCount: 4,
-    startDate: '2024-09-22T12:34:56Z',
-    endDate: '2024-09-26T12:34:56Z',
+    startDate: '2024-09-23T12:34:56Z',
+    endDate: '2024-09-23T12:34:56Z',
     travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
@@ -91,6 +90,13 @@ const data: Travel[] = [
 ];
 
 const memberName: MemberName = '진우바오';
+
+const memberData: Member = {
+  memberId: 1,
+  memberName: '진우바오',
+  profileImage: 'https://example.com/images.jpg',
+  accountNumber: '123456789123', // 모여방과 연결된 계좌
+};
 
 const containerStyle = css`
   display: flex;
@@ -178,14 +184,16 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  // const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
-  // const {setNowTravelData} = useTravelContext();
+  const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
 
   // //[todo] get으로 여행 목록 전체 조회하기
-  // const {data} = useSuspenseQuery({
+  // const {data:travelData} = useSuspenseQuery({
   //   queryKey: ['travelList'],
-  //   queryFn: () => moyeobang.getTravelList(),
+  //   //memberId는 쥬스탄드에서 꺼내쓰기!
+  //   queryFn: () => moyeobang.getTravelList(memberId),
   // });
+
+  // const data = travelData?.data.data;
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -193,6 +201,7 @@ function Index() {
   };
 
   const today = normalizeDate(new Date());
+  // console.log(today);
 
   // 날짜를 변환한 후 비교
   const upcomingTrips = data.filter(
@@ -246,6 +255,10 @@ function Index() {
     });
   };
 
+  const closePush = () => {
+    setPushNotification(false);
+  };
+
   return (
     <>
       {/* <HeaderWithAlarmAndQR /> */}
@@ -258,6 +271,8 @@ function Index() {
         </div>
         <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
       </div>
+
+      {pushNotification && <AllowNotification onClose={closePush} />}
 
       {noTripsAvailable ? (
         <NoTravel />
@@ -299,6 +314,7 @@ function Index() {
               tripsToDisplay.map(item => (
                 <TravelCard
                   key={item.travelId}
+                  travelId={item.travelId}
                   travelName={item.travelName}
                   startDate={item.startDate}
                   endDate={item.endDate}

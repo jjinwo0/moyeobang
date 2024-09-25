@@ -22,7 +22,7 @@ import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protecte
 import { Route as LayoutProtectedLayoutTravelLogIndexImport } from './routes/_layout/_protected/_layout/travelLog/index'
 import { Route as LayoutProtectedLayoutAccountIndexImport } from './routes/_layout/_protected/_layout/account/index'
 import { Route as LayoutProtectedLayoutQuizTravelIdImport } from './routes/_layout/_protected/_layout/quiz/$travelId'
-import { Route as LayoutProtectedLayoutProfileNickNameImport } from './routes/_layout/_protected/_layout/profile/$nickName'
+import { Route as LayoutProtectedLayoutProfileMemberNameImport } from './routes/_layout/_protected/_layout/profile/$memberName'
 import { Route as LayoutProtectedLayoutQuizInviteTravelIdImport } from './routes/_layout/_protected/_layout/quiz/invite/$travelId'
 import { Route as LayoutProtectedLayoutAccountTransactionIdSettleIndexImport } from './routes/_layout/_protected/_layout/account/$transactionId/settle/index'
 import { Route as LayoutProtectedLayoutAccountTransactionIdDetailLayoutImport } from './routes/_layout/_protected/_layout/account/$transactionId/detail/_layout'
@@ -103,9 +103,9 @@ const LayoutProtectedLayoutQuizTravelIdRoute =
     getParentRoute: () => LayoutProtectedLayoutRoute,
   } as any)
 
-const LayoutProtectedLayoutProfileNickNameRoute =
-  LayoutProtectedLayoutProfileNickNameImport.update({
-    path: '/profile/$nickName',
+const LayoutProtectedLayoutProfileMemberNameRoute =
+  LayoutProtectedLayoutProfileMemberNameImport.update({
+    path: '/profile/$memberName',
     getParentRoute: () => LayoutProtectedLayoutRoute,
   } as any)
 
@@ -193,11 +193,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PosLayoutIndexImport
       parentRoute: typeof PosLayoutImport
     }
-    '/_layout/_protected/_layout/profile/$nickName': {
-      id: '/_layout/_protected/_layout/profile/$nickName'
-      path: '/profile/$nickName'
-      fullPath: '/profile/$nickName'
-      preLoaderRoute: typeof LayoutProtectedLayoutProfileNickNameImport
+    '/_layout/_protected/_layout/profile/$memberName': {
+      id: '/_layout/_protected/_layout/profile/$memberName'
+      path: '/profile/$memberName'
+      fullPath: '/profile/$memberName'
+      preLoaderRoute: typeof LayoutProtectedLayoutProfileMemberNameImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
     '/_layout/_protected/_layout/quiz/$travelId': {
@@ -299,7 +299,7 @@ const LayoutProtectedLayoutAccountTransactionIdDetailRouteWithChildren =
   )
 
 interface LayoutProtectedLayoutRouteChildren {
-  LayoutProtectedLayoutProfileNickNameRoute: typeof LayoutProtectedLayoutProfileNickNameRoute
+  LayoutProtectedLayoutProfileMemberNameRoute: typeof LayoutProtectedLayoutProfileMemberNameRoute
   LayoutProtectedLayoutQuizTravelIdRoute: typeof LayoutProtectedLayoutQuizTravelIdRoute
   LayoutProtectedLayoutAccountIndexRoute: typeof LayoutProtectedLayoutAccountIndexRoute
   LayoutProtectedLayoutTravelLogIndexRoute: typeof LayoutProtectedLayoutTravelLogIndexRoute
@@ -310,8 +310,8 @@ interface LayoutProtectedLayoutRouteChildren {
 }
 
 const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
-  LayoutProtectedLayoutProfileNickNameRoute:
-    LayoutProtectedLayoutProfileNickNameRoute,
+  LayoutProtectedLayoutProfileMemberNameRoute:
+    LayoutProtectedLayoutProfileMemberNameRoute,
   LayoutProtectedLayoutQuizTravelIdRoute:
     LayoutProtectedLayoutQuizTravelIdRoute,
   LayoutProtectedLayoutAccountIndexRoute:
@@ -385,7 +385,7 @@ export interface FileRoutesByFullPath {
   '/pos': typeof PosLayoutRouteWithChildren
   '/entrance': typeof LayoutEntranceIndexRoute
   '/pos/': typeof PosLayoutIndexRoute
-  '/profile/$nickName': typeof LayoutProtectedLayoutProfileNickNameRoute
+  '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/travelLog': typeof LayoutProtectedLayoutTravelLogIndexRoute
@@ -400,7 +400,7 @@ export interface FileRoutesByTo {
   '': typeof LayoutProtectedRouteWithChildren
   '/pos': typeof PosLayoutIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
-  '/profile/$nickName': typeof LayoutProtectedLayoutProfileNickNameRoute
+  '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/travelLog': typeof LayoutProtectedLayoutTravelLogIndexRoute
@@ -419,7 +419,7 @@ export interface FileRoutesById {
   '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
   '/pos/_layout/': typeof PosLayoutIndexRoute
-  '/_layout/_protected/_layout/profile/$nickName': typeof LayoutProtectedLayoutProfileNickNameRoute
+  '/_layout/_protected/_layout/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/_layout/_protected/_layout/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/_layout/_protected/_layout/account/': typeof LayoutProtectedLayoutAccountIndexRoute
   '/_layout/_protected/_layout/travelLog/': typeof LayoutProtectedLayoutTravelLogIndexRoute
@@ -438,7 +438,7 @@ export interface FileRouteTypes {
     | '/pos'
     | '/entrance'
     | '/pos/'
-    | '/profile/$nickName'
+    | '/profile/$memberName'
     | '/quiz/$travelId'
     | '/account'
     | '/travelLog'
@@ -452,7 +452,7 @@ export interface FileRouteTypes {
     | ''
     | '/pos'
     | '/entrance'
-    | '/profile/$nickName'
+    | '/profile/$memberName'
     | '/quiz/$travelId'
     | '/account'
     | '/travelLog'
@@ -469,7 +469,7 @@ export interface FileRouteTypes {
     | '/_layout/_protected/_layout'
     | '/_layout/entrance/'
     | '/pos/_layout/'
-    | '/_layout/_protected/_layout/profile/$nickName'
+    | '/_layout/_protected/_layout/profile/$memberName'
     | '/_layout/_protected/_layout/quiz/$travelId'
     | '/_layout/_protected/_layout/account/'
     | '/_layout/_protected/_layout/travelLog/'
@@ -539,7 +539,7 @@ export const routeTree = rootRoute
       "filePath": "_layout/_protected/_layout.tsx",
       "parent": "/_layout/_protected",
       "children": [
-        "/_layout/_protected/_layout/profile/$nickName",
+        "/_layout/_protected/_layout/profile/$memberName",
         "/_layout/_protected/_layout/quiz/$travelId",
         "/_layout/_protected/_layout/account/",
         "/_layout/_protected/_layout/travelLog/",
@@ -557,8 +557,8 @@ export const routeTree = rootRoute
       "filePath": "pos/_layout/index.tsx",
       "parent": "/pos/_layout"
     },
-    "/_layout/_protected/_layout/profile/$nickName": {
-      "filePath": "_layout/_protected/_layout/profile/$nickName.tsx",
+    "/_layout/_protected/_layout/profile/$memberName": {
+      "filePath": "_layout/_protected/_layout/profile/$memberName.tsx",
       "parent": "/_layout/_protected/_layout"
     },
     "/_layout/_protected/_layout/quiz/$travelId": {

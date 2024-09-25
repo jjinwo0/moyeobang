@@ -82,7 +82,7 @@ const cal = css`
   transform: translateX(-50%); /* 중앙 정렬을 보장하기 위해 X축으로 50% 이동 */
   width: 65px;
   height: 65px;
-  background-color: rgba(135, 224, 255, 0.3);
+  background-color: rgb(196, 239, 248); /* 투명도 없는 비슷한 색상 */
   border-radius: 50%;
   display: flex;
   flex-direction: column;

@@ -6,9 +6,9 @@ import {colors} from '@/styles/colors';
 import Btn from '../common/btn/Btn';
 
 interface CustomCalendarProps {
-  onSelectRange: (start: Date, end: Date) => void;
+  onSelectRange: (start: string, end: string) => void;
   onClose: () => void;
-  selectedRange: {start: Date | null; end: Date | null};
+  selectedRange: {start: string | null; end: string | null};
 }
 
 const calendarContainerStyle = css`
@@ -131,7 +131,10 @@ export default function CustomCalendar({
       setSelection({start: day, end: selection.start});
     } else {
       setSelection({start: selection.start, end: day});
-      onSelectRange(selection.start.toDate(), day.toDate());
+      onSelectRange(
+        selection.start.format('YYYY-MM-DD'), // Date 객체를 문자열로 변환
+        day.format('YYYY-MM-DD')
+      );
       // onClose();
     }
   };

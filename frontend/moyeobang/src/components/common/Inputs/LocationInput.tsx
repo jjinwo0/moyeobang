@@ -1,10 +1,10 @@
-import type {InputHTMLAttributes} from 'react';
+import type {InputHTMLAttributes, ReactNode} from 'react';
 import {css} from '@emotion/react';
 import 'react';
 import searchImg from '@/assets/icons/Search.png';
 
 type LocationInputProps = InputHTMLAttributes<HTMLInputElement> & {
-  label?: string;
+  label?: string | ReactNode;
   onClick: () => void;
 };
 
