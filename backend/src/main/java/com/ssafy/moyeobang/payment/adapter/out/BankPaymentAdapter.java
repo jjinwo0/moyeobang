@@ -55,7 +55,12 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
     @Override
     public int loadMemberCount(String accountNumber) {
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(accountNumber);
-        return travelAccountEntity.getTravel().getMemberTravelJpaEntities().size();
+        List<MemberTravelJpaEntity> memberTravels = travelAccountEntity.getTravel().getMemberTravelJpaEntities();
+
+        if (memberTravels.isEmpty()) {
+            throw new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL);
+        }
+        return memberTravels.size();
     }
 
     @Override
