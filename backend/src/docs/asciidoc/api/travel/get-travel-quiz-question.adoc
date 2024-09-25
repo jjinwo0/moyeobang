@@ -1,0 +1,11 @@
+[[create-travels]]
+=== 여행 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/get-travel-quiz-question/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-travel-quiz-question/http-response.adoc[]
+include::{snippets}/get-travel-quiz-question/response-fields.adoc[]

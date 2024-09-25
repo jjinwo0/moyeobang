@@ -1,6 +1,8 @@
 package com.ssafy.moyeobang.travel.application.port.in;
 
+import com.ssafy.moyeobang.travel.adapter.in.web.response.GetQuizQuestionResponse;
+
 public interface GetQuizQuery {
 
-    String getQuizQuestion(Long travelId);
+    GetQuizQuestionResponse getQuizQuestion(Long travelId);
 }

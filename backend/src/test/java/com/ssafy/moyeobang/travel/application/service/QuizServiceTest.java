@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import autoparams.AutoSource;
+import com.ssafy.moyeobang.travel.adapter.in.web.response.GetQuizQuestionResponse;
 import com.ssafy.moyeobang.travel.application.domain.Travel;
 import com.ssafy.moyeobang.travel.application.port.out.LoadTravelPort;
 import org.junit.jupiter.api.DisplayName;
@@ -26,9 +27,9 @@ class QuizServiceTest {
                 .willReturn(travel);
 
         //when
-        String quizQuestion = quizService.getQuizQuestion(travel.id());
+        GetQuizQuestionResponse response = quizService.getQuizQuestion(travel.id());
 
         //then
-        assertThat(quizQuestion).isEqualTo(travel.getQuestion());
+        assertThat(response.question()).isEqualTo(travel.getQuestion());
     }
 }
