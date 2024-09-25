@@ -138,4 +138,12 @@ export default {
    */
   deleteTravel: async (travelId: Id) =>
     axios.delete<MoyeobangResponse<null>>(`/travel/${travelId}/leave`),
+
+  /**
+   * 참가자 퀴즈 제출
+   */
+  postQuiz: async (travelId: Id, data: submitQuiz) =>
+    axios.post<MoyeobangResponse<boolean>>(`/travel/${travelId}/quiz`, data, {
+      headers: {'Content-Type': 'application/json'},
+    }),
 };

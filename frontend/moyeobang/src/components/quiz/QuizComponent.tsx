@@ -1,16 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, {useState} from 'react';
 import {useRouter} from '@tanstack/react-router';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import QuizInput from '../common/Inputs/QuizInput';
 import Btn from '../common/btn/Btn';
 import CloseButton from '@/assets/icons/closeButton.png';
-import TimeInput from '../common/Inputs/TimeInput';
+import {useMutation} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 interface QuizComponentProps {
   question: string;
-  travelId: string | number;
+  travelId: number;
 }
 
 const data = {
@@ -129,11 +130,29 @@ export default function QuizComponent({
   question,
   travelId,
 }: QuizComponentProps) {
+  const [answer, setAnswer] = useState(''); // 입력된 답을 관리할 상태
   const router = useRouter(); // TanStack Router 사용
+
+  // // [todo] 퀴즈 제출 api 연결
+  // const {mutate: postQuiz} = useMutation({
+  //   mutationFn: ({travelId, answer}: {travelId: number; answer: string}) =>
+  //     moyeobang.postQuiz(travelId, {answer}),
+  //   onSuccess: () => {
+  //     alert('퀴즈 제출 성공!');
+  //     router.navigate({to: '/'}); // 홈으로 리다이렉트
+  //   },
+  //   onError: () => {
+  //     alert('퀴즈 제출에 실패했습니다.');
+  //   },
+  // });
 
   // close 버튼 클릭 시 홈으로 이동
   const handleClose = () => {
     router.navigate({to: '/'}); // 홈으로 리다이렉트
+  };
+
+  const onsubmitQuiz = (travelId: Id, answer: string) => {
+    // postQuiz({travelId, answer});
   };
 
   return (
@@ -150,11 +169,20 @@ export default function QuizComponent({
         <div css={quizStyle}>
           <span css={englishStyle}>A</span>
           <div css={quizInputStyle}>
-            <QuizInput placeholder="여행 퀴즈 답을 입력하세요" />
+            <QuizInput
+              placeholder="여행 퀴즈 답을 입력하세요"
+              value={answer}
+              onChange={e => setAnswer(e.target.value)}
+            />
           </div>
         </div>
         <div css={buttonStyle}>
-          <Btn buttonStyle={{style: 'blue', size: 'middle'}}>여행 참여</Btn>
+          <Btn
+            buttonStyle={{style: 'blue', size: 'middle'}}
+            onClick={() => onsubmitQuiz(travelId, answer)}
+          >
+            여행 참여
+          </Btn>
         </div>
       </div>
     </div>

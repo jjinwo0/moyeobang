@@ -4,7 +4,7 @@ import 'react';
 
 type QuizInputProps = InputHTMLAttributes<HTMLInputElement> & {
   title?: string | ReactNode; // Title is optional now
-  label: string;
+  label?: string;
 };
 
 const containerStyle = css`

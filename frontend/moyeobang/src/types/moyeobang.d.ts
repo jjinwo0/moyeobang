@@ -439,3 +439,7 @@ interface Member {
   profileImage: ImgUrl;
   accountNumber: AccountNumber;
 }
+
+interface submitQuiz {
+  answer: QuizAnswer;
+}
