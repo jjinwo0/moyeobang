@@ -139,9 +139,14 @@ export default function QuizComponent({
   // const {mutate: postQuiz} = useMutation({
   //   mutationFn: ({travelId, answer}: {travelId: number; answer: string}) =>
   //     moyeobang.postQuiz(travelId, {answer}),
-  //   onSuccess: () => {
-  //     alert('퀴즈 제출 성공!');
-  //     router.navigate({to: '/'}); // 홈으로 리다이렉트
+  //   onSuccess: (response) => {
+  //     const {data} = response.data;
+  //     if(data === true) {
+  //       alert('정답입니다! 여행을 함께하세요!')
+  //       router.navigate({to: '/'}); // 홈으로 리다이렉트
+  //     } else {
+  //       alert('오답입니다. 다시 시도하세요.')
+  //     }
   //   },
   //   onError: () => {
   //     alert('퀴즈 제출에 실패했습니다.');

@@ -57,18 +57,17 @@ interface AllowNotificationProps {
 }
 
 export default function AllowNotification({onClose}: AllowNotificationProps) {
-  // const handleAllowClick = () => {
-  //   // 푸시 알림 권한 요청 및 FCM 토큰 저장
-  //   requestPermissionAndSaveToken()
-  //     .then(() => {
-  //       console.log('푸시 알림 권한 허용 및 토큰 저장 성공');
-  //       onClose(); // 모달 닫기
-  //     })
-  //     .catch((error: Error) => {
-  //       console.error('푸시 알림 권한 요청 실패:', error);
-  //       onClose(); // 실패해도 모달 닫기
-  //     });
+  // const handleAllowClick = async () => {
+  //   // 서비스 워커가 준비된 후에 권한 요청 및 FCM 토큰 생성
+  //   if (navigator.serviceWorker) {
+  //     const registration = await navigator.serviceWorker.ready;
+  //     console.log('Service Worker 준비 완료:', registration);
+  //     await requestPermissionAndSaveToken(); // 권한 요청 및 FCM 토큰 생성
+  //   } else {
+  //     console.error('Service Worker is not ready.');
+  //   }
   // };
+
   return (
     <div css={modalOverlayStyle}>
       <div css={modalContainerStyle}>
