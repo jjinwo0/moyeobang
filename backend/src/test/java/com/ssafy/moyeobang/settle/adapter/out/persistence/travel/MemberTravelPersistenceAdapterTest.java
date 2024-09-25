@@ -3,12 +3,12 @@ package com.ssafy.moyeobang.settle.adapter.out.persistence.travel;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.ssafy.moyeobang.common.error.exception.EntityNotFoundException;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.settle.adapter.out.persistence.member.MemberRepositoryInSettle;
 import com.ssafy.moyeobang.settle.application.domain.travel.MemberTravel;
-import com.ssafy.moyeobang.settle.error.EntityNotFoundException;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
