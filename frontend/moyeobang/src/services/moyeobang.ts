@@ -123,7 +123,7 @@ export default {
    * 여행 정보 수정 api
    */
   putTravel: async (travelId: Id, data: FormData) =>
-    axios.put<MoyeobangResponse<null>>(`/travel/update/${travelId}`, data, {
+    axios.put<MoyeobangResponse<null>>(`/travels/${travelId}`, data, {
       headers: {'Content-Type': 'multipart/form-data'},
     }),
 
@@ -131,19 +131,19 @@ export default {
    * 여행 퀴즈 조회 api
    */
   getTravelQuiz: async (travelId: Id) =>
-    axios.get<MoyeobangResponse<Quiz>>(`/travel/${travelId}/quiz`),
+    axios.get<MoyeobangResponse<Quiz>>(`/travels/${travelId}/quiz`),
 
   /**
    * 여행 나가기 api
    */
   deleteTravel: async (travelId: Id) =>
-    axios.delete<MoyeobangResponse<null>>(`/travel/${travelId}/leave`),
+    axios.delete<MoyeobangResponse<null>>(`/travels/${travelId}/leave`),
 
   /**
    * 참가자 퀴즈 제출
    */
   postQuiz: async (travelId: Id, data: submitQuiz) =>
-    axios.post<MoyeobangResponse<boolean>>(`/travel/${travelId}/quiz`, data, {
+    axios.post<MoyeobangResponse<boolean>>(`/travels/${travelId}/quiz`, data, {
       headers: {'Content-Type': 'application/json'},
     }),
 };
