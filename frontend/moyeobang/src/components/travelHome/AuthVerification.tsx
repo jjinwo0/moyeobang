@@ -146,7 +146,7 @@ export default function AuthVerification({
     setShowModal(false); // 인증 완료 후 모달 닫기
   };
 
-  //[todo] 여행 생성 api 연결 필요
+  // //[todo] 여행 생성 api 연결 필요
   // const queryClient = useQueryClient();
 
   // const {mutate: postTravel} = useMutation({

@@ -105,7 +105,7 @@ export default function CreateTravel({
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
       if (file) {
-        newFormData.append('travelImage', file);
+        newFormData.append('backgroundImage', file);
       }
     }
 
@@ -147,7 +147,7 @@ export default function CreateTravel({
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
       if (file) {
-        newform.append('travelImage', file);
+        newform.append('backgroundImage', file);
       }
     }
 

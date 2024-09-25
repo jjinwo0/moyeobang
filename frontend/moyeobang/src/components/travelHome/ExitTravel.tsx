@@ -62,7 +62,8 @@ export default function ExitTravel({
   // //[todo] 여행 삭제 api 연결
   // const queryClient = useQueryClient();
   // const {mutate: leaveTravel} = useMutation({
-  //   mutationFn: (travelId: Id) => moyeobang.deleteTravel(travelId),
+  //   //zustand에서 멤버Id 꺼내와서 넣기
+  //   mutationFn: (travelId: Id) => moyeobang.leaveTravel(travelId,memberId),
   //   onSuccess: async () => {
   //     await queryClient.invalidateQueries({
   //       queryKey: ['travelList'],

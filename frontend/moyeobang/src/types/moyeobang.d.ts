@@ -421,6 +421,10 @@ interface Quiz {
   question: Question;
 }
 
+interface ResponsePostTravel {
+  travelId: Id;
+}
+
 interface PostTravel {
   travelName: TravelName;
   stratDate: StartDate;

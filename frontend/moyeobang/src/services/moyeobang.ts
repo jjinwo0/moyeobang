@@ -115,7 +115,7 @@ export default {
    * 여행 생성 api
    */
   postTravel: async (data: FormData) =>
-    axios.post<MoyeobangResponse<null>>('/travels', data, {
+    axios.post<MoyeobangResponse<ResponsePostTravel>>('/travels', data, {
       headers: {'Content-Type': 'multipart/form-data'},
     }),
 
@@ -136,8 +136,14 @@ export default {
   /**
    * 여행 나가기 api
    */
-  deleteTravel: async (travelId: Id) =>
-    axios.delete<MoyeobangResponse<null>>(`/travels/${travelId}/leave`),
+  leaveTravel: async (travelId: Id, memberId: Id) =>
+    axios.post<MoyeobangResponse<null>>(
+      `/travels/${travelId}/leave`,
+      {memberId: memberId},
+      {
+        headers: {'Content-type': 'application/json'},
+      }
+    ),
 
   /**
    * 참가자 퀴즈 제출
