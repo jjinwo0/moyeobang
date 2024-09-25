@@ -34,7 +34,7 @@ class GetTravelsServiceTest {
         assertThat(responses).extracting(
                 "travelId", "travelName", "travelImg", "participantCount"
         ).containsExactlyInAnyOrder(
-                tuple(travel1.id(), travel1.title(), travel1.backgroundImageUrl(), travel1.getParticipantCount()),
+                tuple(travel2.id(), travel1.title(), travel1.backgroundImageUrl(), travel1.getParticipantCount()),
                 tuple(travel2.id(), travel2.title(), travel2.backgroundImageUrl(), travel2.getParticipantCount()),
                 tuple(travel3.id(), travel3.title(), travel3.backgroundImageUrl(), travel3.getParticipantCount())
         );
