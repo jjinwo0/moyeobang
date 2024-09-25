@@ -1,6 +1,7 @@
 package com.ssafy.moyeobang.payment.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -17,6 +18,8 @@ import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.SsePort;
 import com.ssafy.moyeobang.payment.application.port.out.UpdateMemberBalancePort;
+import com.ssafy.moyeobang.payment.error.ErrorCode;
+import com.ssafy.moyeobang.payment.error.PaymentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -47,6 +50,9 @@ public class OfflinePaymentServiceTest {
         when(loadTravelAccountPort.loadTravelAccount(any(String.class)))
                 .thenReturn(travelAccount);
 
+        when(loadTravelAccountPort.loadMemberCount(any(String.class)))
+                .thenReturn(3);
+
         PaymentResult paymentResult = new PaymentResult(1);
         when(processPaymentPort.processPayment(any(TravelAccount.class), any(Store.class), any(Money.class),
                 any(String.class)))
@@ -56,8 +62,33 @@ public class OfflinePaymentServiceTest {
         boolean result = offlinePaymentService.confirmPayment(command);
 
         // Then
+        verify(loadTravelAccountPort).loadMemberCount(any(String.class));
         assertThat(result).isTrue();
         verify(ssePort).sendPaymentSuccess(eq("payment-123"), any(PaymentResult.class));
+    }
+
+    @DisplayName("멤버가 없는 경우 PaymentException이 발생한다.")
+    @Test
+    void confirmPaymentFailsWhenNoMembers() {
+        // Given
+        PaymentCommand command = new PaymentCommand(
+                "payment-123",
+                "account-123",
+                new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
+                Money.of(10000L)
+        );
+
+        TravelAccount travelAccount = new TravelAccount("account-123", Money.of(20000L));
+
+        when(loadTravelAccountPort.loadTravelAccount(any(String.class)))
+                .thenReturn(travelAccount);
+
+        // Mocking loadMemberCount to throw PaymentException
+        when(loadTravelAccountPort.loadMemberCount(any(String.class)))
+                .thenThrow(new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL));
+
+        // When & Then
+        assertThrows(PaymentException.class, () -> offlinePaymentService.confirmPayment(command));
     }
 
     @DisplayName("결제가 실패하면 SSE 실패 메시지를 보낸다.")
