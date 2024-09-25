@@ -12,7 +12,7 @@ import moyeobang from '@/services/moyeobang';
 import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
 import Spinner from '@/components/Sipnner/Spinner';
 import { proportionData } from '@/data/data';
-import isAccountBalanceByGroup from '@/util/typeGaurd';
+import { isAccountBalanceByGroup } from '@/util/typeGaurd';
 import CardSlider from '@/components/Account/CardSlider/CardSlider';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
@@ -51,7 +51,6 @@ const accountCardStyle = css`
     max-width: 100%;
     display:flex;
     justify-content: center;
-    /* padding: 20px; */
 `;
 
 const transactionListStyle = css`
@@ -75,7 +74,7 @@ export default function groupAccount() {
   const allList = profileData.map((member) => member.memberId)
   type SelectedMember = MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
-
+  const [index, setIndex] = useState<number>(0);
   const {data : transactionData} = useSuspenseQuery({
     queryKey: ['transactionList', accountId, selectedMember ],
     queryFn: () => moyeobang.getTransactionList(Number(accountId), selectedMember),
@@ -122,6 +121,7 @@ export default function groupAccount() {
 
   function handleIndexChange(index:number) {
     console.log('카드번호 :' , index)
+    setIndex(index)
   }
 
   return (
@@ -144,14 +144,14 @@ export default function groupAccount() {
           {isAccountBalanceByGroup(accountData)  ?
             <CardSlider 
             account={accountData} 
-            consumptionProportionByCategory={proportionData.comsuptionByCategory}
+            consumptionProportionByCategory={proportionData.consumptionByCategory}
             consumptionProportionByMember={proportionData.consumptionByMember}
             dots={[0,1,2]}
             onChange={handleIndexChange}
             /> :
             <CardSlider 
             account={accountData}
-            consumptionProportionByMember={proportionData.consumptionByMember}
+            consumptionProportionByCategory={proportionData.consumptionByCategory}
             dots={[0,1]}
             onChange={handleIndexChange}
             />

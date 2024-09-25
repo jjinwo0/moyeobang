@@ -108,7 +108,8 @@ type PaymentRequestId = string;
 type TravelAccountNumber = string;
 type IsNew = boolean;
 type TotalMoney = number;
-type TotalComsumption = number;
+type TotalConsumption = number;
+type TotalSpent = number;
 type AccountId = number;
 
 interface ParticipantInfo {
@@ -128,7 +129,7 @@ interface OrderItems {
 interface AccountBalanceByGroup {
   currentBalance: CurrentBalance;
   totalAmount: TotalMoney;
-  totalComsumption: TotalComsumption;
+  totalSpent: TotalSpent;
   usagePercentage: UsagePercentage;
 }
 
@@ -137,7 +138,7 @@ interface AccountBalanceBymemberId {
   simpleUserProfile: ParticipantInfo;
   personalCurrentBalance: PersonalCurrentBalance;
   personalTotalAmount: TotalMoney;
-  personalTotalSpent: TotalComsumption;
+  personalTotalSpent: TotalSpent;
   personalUsagePercentage: PersonalUsagePercentage;
   needsAdditionalDeposit: NeedsAdditionalDeposit;
 }

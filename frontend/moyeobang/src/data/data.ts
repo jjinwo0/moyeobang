@@ -368,7 +368,7 @@ export const chatData = JSON.parse(cleanContent);
 
 
 export const proportionData = {
-	comsuptionByCategory : [
+	consumptionByCategory : [
 		{
 		categoryName : '액티비티',
 		proportion : 20.5,
@@ -380,7 +380,7 @@ export const proportionData = {
 		balance:121000
 		},
 		{
-		categoryName : '할공, 호텔',
+		categoryName : '항공, 호텔',
 		proportion : 38.3,
 		balance:121000
 		},
@@ -392,7 +392,7 @@ export const proportionData = {
 	],
 	consumptionByMember: [
 		{
-		member : {
+      member : {
       memberId: 3,
       memberName: "전가현",
       profileImage: profileImageUrl
@@ -403,7 +403,7 @@ export const proportionData = {
 		{
       member : {
         memberId: 3,
-        memberName: "전가현",
+        memberName: "강두홍",
         profileImage: profileImageUrl
         },
 		proportion : 38.3,
@@ -412,7 +412,7 @@ export const proportionData = {
     {
       member : {
         memberId: 3,
-        memberName: "전가현",
+        memberName: "김훈민",
         profileImage: profileImageUrl
         },
 		proportion : 38.3,
@@ -421,7 +421,7 @@ export const proportionData = {
     {
       member : {
         memberId: 3,
-        memberName: "전가현",
+        memberName: "박진우",
         profileImage: profileImageUrl
         },
 		proportion : 38.3,
