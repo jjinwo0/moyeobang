@@ -12,16 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetAccountBalanceResponse;
-import com.ssafy.moyeobang.account.application.port.in.GetAccountBalanceQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 class GetAccountBalanceControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private GetAccountBalanceQuery getAccountBalanceQuery;
 
     @DisplayName("모임 통장 공금 잔액 조회 API")
     @Test

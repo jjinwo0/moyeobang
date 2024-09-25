@@ -12,16 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.moyeobang.travel.adapter.in.web.response.GetQuizQuestionResponse;
-import com.ssafy.moyeobang.travel.application.port.in.GetQuizQuestionQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class GetQuizQuestionControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private GetQuizQuestionQuery getQuizQuestionQuery;
 
     @DisplayName("여행 참가 퀴즈 조회 API")
     @Test

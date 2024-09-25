@@ -16,17 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ssafy.moyeobang.travel.adapter.in.web.response.GetTravelsResponse;
 import com.ssafy.moyeobang.travel.adapter.in.web.response.ParticipantInfo;
-import com.ssafy.moyeobang.travel.application.port.in.GetTravelsQuery;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class GetTravelsControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private GetTravelsQuery getTravelsQuery;
 
     @DisplayName("여행 목록 조회 API")
     @Test
