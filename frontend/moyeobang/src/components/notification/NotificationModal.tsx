@@ -3,6 +3,7 @@ import React from 'react';
 import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
 import HurryNotification from './HurryNotification';
 import PublicRequest from './PublicRequest';
+import TimeNotification from './TimeNotification';
 
 interface NotificationModalProps {
   onXClick: () => void;
@@ -36,6 +37,7 @@ export default function NotificationModal({onXClick}: NotificationModalProps) {
         <div css={notificationStyle}>
           <HurryNotification />
           <PublicRequest />
+          <TimeNotification />
         </div>
       </div>
     </>
