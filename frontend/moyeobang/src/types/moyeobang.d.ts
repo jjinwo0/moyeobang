@@ -650,17 +650,20 @@ interface TravelLocation {
 
 interface ConsumptionCategory {
   categoryName: CategoryName;
-  percent: CategoryPercent;
+  proportion: CategoryPercent;
+  balance: CurrentBalance;
 }
 
-interface ParticipantConsumption {
-  name: ParticipantName;
-  amount: ParticipantAmount;
-}
 
 interface ImgSummary {
   imgUrl: ImgUrl;
   locationName: LocationName;
+}
+
+interface ConsumptionByMember {
+  categoryName: ParticipantInfo;
+  proportion: UsagePercentage;
+  balance: ParticipantAmount;
 }
 
 interface TravelSummary {
@@ -668,9 +671,9 @@ interface TravelSummary {
   totalAmount: TotalAmount;
   amountUsed: TotalComsumption;
   amountComparison: AmountComparison;
-  consumptionCategory: ConsumptionCategory[];
+  consumptionByCategory: ConsumptionCategory[];
   consumptionTag: ConsumptionTag[];
-  participantsConsumption: ParticipantConsumption[];
+  consumptionByMember: ConsumptionByMember[];
   imgSummary: ImgSummary[];
 }
 

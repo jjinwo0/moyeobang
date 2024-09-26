@@ -111,8 +111,8 @@ export default function ConsumptionSummary({
     totalAmount,
     amountUsed,
     amountComparison,
-    consumptionCategory,
-    participantsConsumption,
+    consumptionByCategory,
+    consumptionByMember,
     consumptionTag,
   } = travelData;
 
@@ -179,14 +179,14 @@ export default function ConsumptionSummary({
 
         <div css={pieChartStyle}>
           <h3>소비 카테고리</h3>
-          <PieChartComponent consumptionCategory={consumptionCategory} />
+          <PieChartComponent consumptionByCategory={consumptionByCategory} />
         </div>
       </div>
 
       <div css={tagsContainerStyle}>
         <div css={rankingBoxStyle}>
           <h3>소비 랭크</h3>
-          <ConsumptionRank participantsConsumption={participantsConsumption} />
+          <ConsumptionRank consumptionByMember={consumptionByMember} />
         </div>
 
         <div css={tagsBoxStyle}>
