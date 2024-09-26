@@ -19,9 +19,9 @@ public class TravelQueryRepositoryImpl implements TravelQueryRepository {
     @Override
     public List<TravelInfo> findTravelInfosBy(Long memberId) {
         return queryFactory.select(travelInfo())
-                .from(travelJpaEntity)
-                .join(memberTravelJpaEntity).on(memberTravelJpaEntity.travel.eq(travelJpaEntity))
+                .from(memberTravelJpaEntity)
                 .join(memberTravelJpaEntity.member, memberJpaEntity)
+                .join(memberTravelJpaEntity.travel, travelJpaEntity)
                 .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
                 .join(travelAccountJpaEntity).on(travelAccountJpaEntity.travel.eq(travelJpaEntity))
                 .where(memberTravelJpaEntity.member.id.eq(memberId))
@@ -31,12 +31,12 @@ public class TravelQueryRepositoryImpl implements TravelQueryRepository {
     @Override
     public Optional<TravelInfo> findTravelInfoBy(Long id) {
         TravelInfo travelInfo = queryFactory.select(travelInfo())
-                .from(travelJpaEntity)
-                .join(memberTravelJpaEntity).on(memberTravelJpaEntity.travel.eq(travelJpaEntity))
+                .from(memberTravelJpaEntity)
                 .join(memberTravelJpaEntity.member, memberJpaEntity)
+                .join(memberTravelJpaEntity.travel, travelJpaEntity)
                 .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
                 .join(travelAccountJpaEntity).on(travelAccountJpaEntity.travel.eq(travelJpaEntity))
-                .where(travelJpaEntity.id.eq(id))
+                .where(memberTravelJpaEntity.travel.id.eq(id))
                 .fetchOne();
 
         return Optional.ofNullable(travelInfo);
