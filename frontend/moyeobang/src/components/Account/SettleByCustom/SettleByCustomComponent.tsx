@@ -55,9 +55,21 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         },
      });
 
-    // 초기 참여자 정산 데이터 설정
+    // 처음 details=[] 이렇게 들어옴. 초기 참여자 정산 데이터 설정
     useEffect(()=> {
-        if (profileData.length > 0 && details) {
+
+        if (!details) {
+            const initialSettle = profileData.map(member => {
+                return {
+                    participantInfo : member,
+                    money : totalMoney/profileData.length ,
+                    isChecked: true,
+                    isDecided:false, // 초기 아무도 확정아님.
+                };
+            })
+            setSettleData(initialSettle);
+            setRemainMoney(0);
+        } else if (profileData.length > 0 && details) {
             const initialSettle = profileData.map(member => {
                 const prevMember = details.find((detail) => detail.participant.memberId === member.memberId);
                 return {
@@ -65,7 +77,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     money : prevMember ? prevMember.money : 0,
                     isChecked: prevMember ? true : false,
                     isDecided:false, // 초기 아무도 확정아님.
-                }
+        }
         });
             setSettleData(initialSettle);
         }

@@ -10,7 +10,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import moyeobang from '@/services/moyeobang'
-import ResultByPos from '@/components/QrByPos/ResultByPos'
 import ResultByReceiptComponenet from '@/components/Account/SettleByReceipt/ResultByReceiptComponent'
 
 const layoutStyle = css`
@@ -68,7 +67,7 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
-  console.log('거래 상세 데이터', transactionDetailData)
+  // console.log('거래 상세 데이터', transactionDetailData)
 
   function handleUpdateReceipt() {
     setOpentUpdateModal(true);

@@ -24,8 +24,8 @@ const dotsContainerStyle=css`
 `;
 
 const dotStyle= (isActive:boolean) => css`
-  width: ${isActive ? '12px' : '8px'};
-  height: ${isActive ? '12px' : '8px'};
+  width: ${isActive ? '12px' : '10px'};
+  height: ${isActive ? '12px' : '10px'};
   background-color: ${isActive ? colors.third : colors.gray};
   border-radius:50%;
   bottom:0;
@@ -85,7 +85,7 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
               )}
               {activeCardIndex === 1 &&
               <ChartCard 
-                title={'전체 소비 내역'} 
+                title={'전체 소비 금액'} 
                 money={Number(account.totalSpent)} 
                 data={consumptionProportionByCategory} 
               />}
@@ -108,7 +108,7 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
               )}
               {activeCardIndex === 1 && 
               <ChartCard
-              title={'전체 소비 내역'}
+              title={`${account.simpleUserProfile.memberName} 소비 금액`}
               money={account.personalTotalSpent}
               data={consumptionProportionByCategory}
               />}

@@ -30,7 +30,11 @@ interface ConnectMessage {
     message:string;
 }
 
-export default function QrPay( ) {
+interface QrPayProps {
+    onClose:VoidFunction;
+}
+
+export default function QrPay({onClose}:QrPayProps) {
 
     const [paymentRequestId] = useState<string>(uuidv4());
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
@@ -104,13 +108,14 @@ export default function QrPay( ) {
 
     function handleClose() {
         setOpenCompleteModal(false);
+        onClose();
     }   
 
 
     return (
     <>
         {openCompleteModal && resultMessage ? (
-            <PayCompletedModal transactionId={Number(resultMessage.transactionId)} onClose={handleClose} />
+            <PayCompletedModal transactionId={Number(resultMessage.transactionId)} onClose={handleClose}/>
         ) : (
             <>
                 <div css={qrContainerStyle}>
