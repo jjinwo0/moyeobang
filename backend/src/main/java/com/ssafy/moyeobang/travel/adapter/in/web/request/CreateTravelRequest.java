@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.travel.adapter.in.web.in;
+package com.ssafy.moyeobang.travel.adapter.in.web.request;
 
 import java.time.LocalDate;
 import java.util.List;

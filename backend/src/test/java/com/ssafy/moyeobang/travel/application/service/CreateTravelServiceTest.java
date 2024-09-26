@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
+import com.ssafy.moyeobang.travel.adapter.in.web.response.CreateTravelResponse;
 import com.ssafy.moyeobang.travel.application.domain.BackgroundImage;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;

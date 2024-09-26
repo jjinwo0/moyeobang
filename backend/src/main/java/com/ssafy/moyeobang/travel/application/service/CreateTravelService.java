@@ -1,7 +1,7 @@
 package com.ssafy.moyeobang.travel.application.service;
 
 import com.ssafy.moyeobang.common.annotation.UseCase;
-import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
+import com.ssafy.moyeobang.travel.adapter.in.web.response.CreateTravelResponse;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelUseCase;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
