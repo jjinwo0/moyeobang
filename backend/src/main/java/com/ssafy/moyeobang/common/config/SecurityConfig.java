@@ -11,11 +11,15 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -56,6 +60,14 @@ public class SecurityConfig {
                                         endpoint -> endpoint.userService(oAuth2CustomService))
                                 .successHandler(oAuth2SuccessHandler())
                                 .failureHandler(oAuth2FailureHandler())
+                )
+                .addFilterAfter(new SecurityContextPersistenceFilter(), SecurityContextPersistenceFilter.class)
+                // /api로 시작하는 url인 경우 401 상태 코드를 반환하도록 예외 처리
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .defaultAuthenticationEntryPointFor(
+                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                                new AntPathRequestMatcher("/api/**")
+                        )
                 )
                 .build();
     }
