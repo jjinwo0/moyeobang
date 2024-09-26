@@ -46,4 +46,31 @@ public class PaymentService implements PaymentUseCase {
         ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
         return true;
     }
+
+    @Override
+    @Transactional
+    public boolean processPayment(PaymentCommand command) {
+        TravelAccount travelAccount = loadTravelAccountPort.loadTravelAccount(command.travelAccountNumber());
+
+        boolean canPayment = !travelAccount.couldNotWithdraw(command.paymentRequestMoney());
+
+        if (!canPayment) {
+            // PG 서버로 api 응답 결제 실패
+            // ssePort.sendPaymentFailure(command.paymentRequestId(), "Payment failed");
+            return false;
+        }
+
+        int travelMemberCount = loadTravelAccountPort.loadMemberCount(command.travelAccountNumber());
+
+        Money splitMoney = command.paymentRequestMoney().divide(travelMemberCount);
+
+        updateMemberBalancePort.updateMemberBalances(command.travelAccountNumber(), splitMoney);
+
+        PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.toStoreDomain(),
+                command.paymentRequestMoney(), command.paymentRequestId());
+        
+        // PG 서버로 api 응답 결제 성공
+//        ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
+        return false;
+    }
 }

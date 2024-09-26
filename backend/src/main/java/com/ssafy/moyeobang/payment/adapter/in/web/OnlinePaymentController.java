@@ -23,7 +23,7 @@ public class OnlinePaymentController {
     private final PaymentUseCase paymentUseCase;
 
     @PostMapping("/process")
-    public ApiResult<Boolean> confirmPayment(@RequestBody OfflinePaymentRequest request) {
+    public ApiResult<Boolean> processPayment(@RequestBody OfflinePaymentRequest request) {
 
         OnlineStoreCommand onlineStoreCommand = OnlineStoreCommand.of(
                 request.placeId(),
@@ -40,7 +40,7 @@ public class OnlinePaymentController {
                 onlineStoreCommand,
                 request.amount()
         );
-        boolean paymentSuccess = paymentUseCase.confirmPayment(command);
+        boolean paymentSuccess = paymentUseCase.processPayment(command);
         return success(paymentSuccess);
     }
 }
