@@ -138,8 +138,15 @@ export default function CreateTravel({
     const newform = new FormData();
 
     // 필수 필드 유효성 검사
-    if (!travelName || !dateRange[0] || !dateRange[1]) {
-      alert('모든 필드를 입력해주세요');
+    if (
+      !travelName ||
+      !dateRange[0] ||
+      !dateRange[1] ||
+      !travelPlaceList ||
+      !quizQuestion ||
+      !quizAnswer
+    ) {
+      alert('필수 상항을 모두 입력해주세요');
       return;
     }
 
