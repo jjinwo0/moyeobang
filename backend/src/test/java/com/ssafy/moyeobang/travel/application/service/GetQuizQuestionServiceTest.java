@@ -12,11 +12,11 @@ import com.ssafy.moyeobang.travel.application.port.out.LoadTravelPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 
-class QuizServiceTest {
+class GetQuizQuestionServiceTest {
 
     private final LoadTravelPort loadTravelPort = mock(LoadTravelPort.class);
 
-    private final QuizService quizService = new QuizService(loadTravelPort);
+    private final GetQuizQuestionService getQuizQuestionService = new GetQuizQuestionService(loadTravelPort);
 
     @DisplayName("여행 참가 퀴즈 질문을 조회한다.")
     @ParameterizedTest
@@ -27,7 +27,7 @@ class QuizServiceTest {
                 .willReturn(travel);
 
         //when
-        GetQuizQuestionResponse response = quizService.getQuizQuestion(travel.id());
+        GetQuizQuestionResponse response = getQuizQuestionService.getQuizQuestion(travel.id());
 
         //then
         assertThat(response.question()).isEqualTo(travel.getQuestion());
