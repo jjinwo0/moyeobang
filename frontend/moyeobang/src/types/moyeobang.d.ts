@@ -884,4 +884,5 @@ interface CustomMarker {
   types?: string[]; // 장소 유형 정보
   reviews?: Review[]; // Review 타입의 배열
   detailedOpeningHours?: string[]; // 자세한 영업 시간 정보
+  photos?: string[];
 }

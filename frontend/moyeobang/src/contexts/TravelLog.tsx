@@ -85,6 +85,12 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
     travelPlaceList[0]
   );
 
+  const [showMapSearch, setShowMapSearch] = useState<boolean>(false);
+  const handleShowMapSearch = () => {
+    setShowMapSearch(!showMapSearch);
+  };
+  
+
   // scheduleDayNum 실제 day를 알 수 있다.
   // scheduleDayNum-1을 하면 인덱스를 알 수 있다.
   const [scheduleDayNum, setScheduleDayNum] = useState<number | null>();
@@ -108,6 +114,9 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         setScheduleDayNum,
         selectedMarker,
         setSelectedMarker,
+        showMapSearch,
+        setShowMapSearch,
+        handleShowMapSearch,
       }}
     >
       {children}

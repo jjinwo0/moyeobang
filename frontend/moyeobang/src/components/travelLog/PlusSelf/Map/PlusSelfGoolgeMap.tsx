@@ -32,6 +32,26 @@ const translateTypes = (types: string[]) => {
   return types.map(type => (typesKo as Record<string, string>)[type] || type);
 };
 
+// 마커 생성 함수
+const createMarker = (
+  result: google.maps.places.PlaceResult
+): CustomMarker | null => {
+  const location = result.geometry?.location;
+  if (location) {
+    return {
+      position: {lat: location.lat(), lng: location.lng()},
+      title: result.name || '',
+      placeId: result.place_id || '',
+      address: result.formatted_address || '',
+      rating: result.rating,
+      openingHours: result.opening_hours?.weekday_text || [],
+      types: translateTypes(result.types || []),
+      photos: result.photos?.map(photo => photo.getUrl()) || [], // 사진 추가
+    };
+  }
+  return null;
+};
+
 // PlusSelfGoogleMap 컴포넌트
 const PlusSelfGoogleMap = forwardRef(
   ({searchLocation}: {searchLocation: string | undefined}, ref) => {
@@ -40,6 +60,7 @@ const PlusSelfGoogleMap = forwardRef(
     const [isInteraction, setIsInteraction] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
     const {selectedPlace} = useTravelLogContext();
+    const {showMapSearch, setShowMapSearch} = useTravelLogContext();
     const {selectedMarker, setSelectedMarker} = useTravelLogContext();
     const [defaultMarker, setDefaultMarker] = useState<google.maps.Icon | null>(
       null
@@ -101,31 +122,22 @@ const PlusSelfGoogleMap = forwardRef(
               'formatted_address',
               'rating',
               'types',
+              'photos', // 사진 필드 추가
             ],
           };
 
           service.textSearch(request, (results, status) => {
             if (status === 'OK' && results) {
               const nearbyMarkers = results.map(result => {
-                const location = result.geometry?.location;
-                if (location) {
-                  bounds.extend(location);
-
-                  const marker: CustomMarker = {
-                    position: {lat: location.lat(), lng: location.lng()},
-                    title: result.name || '',
-                    placeId: result.place_id || '',
-                    address: result.formatted_address || '',
-                    rating: result.rating,
-                    openingHours: result.opening_hours?.weekday_text || [],
-                    types: translateTypes(result.types || []),
-                  };
+                const marker = createMarker(result);
+                if (marker) {
+                  bounds.extend(marker.position);
 
                   service.getDetails(
                     {
                       placeId: result.place_id ?? '',
                       language: 'ko',
-                      fields: ['reviews', 'opening_hours'],
+                      fields: ['reviews', 'opening_hours', 'photos'], // 사진 필드 추가
                     },
                     (placeDetails, detailsStatus) => {
                       if (detailsStatus === 'OK' && placeDetails) {
@@ -138,6 +150,9 @@ const PlusSelfGoogleMap = forwardRef(
                           })) || [];
                         marker.detailedOpeningHours =
                           placeDetails.opening_hours?.weekday_text || [];
+                        marker.photos =
+                          placeDetails.photos?.map(photo => photo.getUrl()) ||
+                          []; // 사진 추가
 
                         setMarkers(prevMarkers =>
                           prevMarkers.map(m =>
@@ -147,9 +162,8 @@ const PlusSelfGoogleMap = forwardRef(
                       }
                     }
                   );
-                  return marker;
                 }
-                return null;
+                return marker;
               });
 
               setMarkers(
@@ -189,32 +203,22 @@ const PlusSelfGoogleMap = forwardRef(
                     'formatted_address',
                     'rating',
                     'types',
+                    'photos', // 사진 필드 추가
                   ],
                 };
 
                 service.textSearch(request, (results, status) => {
                   if (status === 'OK' && results) {
                     const searchMarkers = results.map(result => {
-                      const location = result.geometry?.location;
-                      if (location) {
-                        bounds.extend(location);
-
-                        const marker: CustomMarker = {
-                          position: {lat: location.lat(), lng: location.lng()},
-                          title: result.name || '',
-                          placeId: result.place_id || '',
-                          address: result.formatted_address || '',
-                          rating: result.rating,
-                          openingHours:
-                            result.opening_hours?.weekday_text || [],
-                          types: result.types,
-                        };
+                      const marker = createMarker(result);
+                      if (marker) {
+                        bounds.extend(marker.position);
 
                         service.getDetails(
                           {
                             placeId: result.place_id ?? '',
                             language: 'ko',
-                            fields: ['reviews', 'opening_hours'],
+                            fields: ['reviews', 'opening_hours', 'photos'], // 사진 필드 추가
                           },
                           (placeDetails, detailsStatus) => {
                             if (detailsStatus === 'OK' && placeDetails) {
@@ -227,6 +231,10 @@ const PlusSelfGoogleMap = forwardRef(
                                 })) || [];
                               marker.detailedOpeningHours =
                                 placeDetails.opening_hours?.weekday_text || [];
+                              marker.photos =
+                                placeDetails.photos?.map(photo =>
+                                  photo.getUrl()
+                                ) || []; // 사진 추가
 
                               setMarkers(prevMarkers =>
                                 prevMarkers.map(m =>
@@ -238,9 +246,8 @@ const PlusSelfGoogleMap = forwardRef(
                             }
                           }
                         );
-                        return marker;
                       }
-                      return null;
+                      return marker;
                     });
 
                     setMarkers(
@@ -328,7 +335,7 @@ const PlusSelfGoogleMap = forwardRef(
                 />
               ))}
             </GoogleMap>
-            {selectedMarker && (
+            {selectedMarker && showMapSearch && (
               <div css={MapDetailLayout}>
                 <MarkerDetail />
               </div>

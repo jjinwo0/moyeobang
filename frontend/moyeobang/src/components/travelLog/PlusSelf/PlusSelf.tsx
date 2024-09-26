@@ -24,10 +24,11 @@ export default function PlusSelf({
   handleShowPlusSelf,
   handleShowMapSearch,
   handleSearchLocation,
-  searchLocation,
-  setSearchLocation,
+  // searchLocation,
+  // setSearchLocation,
 }: PlusSelfProps) {
   const {travelPlaceList} = useTravelDetailStore();
+  const {searchLocation, setSearchLocation} = useTravelLogContext();
   const [AMPMSelection, setAMPMSelection] = useState<'AM' | 'PM'>('AM');
   const handleAMPMSelection = () => {
     setAMPMSelection(prev => (prev === 'AM' ? 'PM' : 'AM'));
@@ -47,19 +48,24 @@ export default function PlusSelf({
     }
   };
 
-  const handlePlaceSelection = (place: string) => {
-    setSelectedPlace(place);
-    // setSearchLocation(prev => `${place} ${prev}`);
-  };
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const toggleDropdown = () => setIsDropdownOpen(prev => !prev);
+
+  const handlePlaceSelection = (place: string) => {
+    setSelectedPlace(place);
+    toggleDropdown();
+  };
 
   const {selectedPlace, setSelectedPlace} = useTravelLogContext();
 
   const [scheduleName, setScheduleName] = useState<string | undefined>(
     searchLocation
   );
+
+  const handleSave = () => {
+    // [todo] 저장 로직 추가
+    handleShowPlusSelf();
+  };
 
   // searchLocation이 변할 때마다 scheduleName을 업데이트
   useEffect(() => {
@@ -103,6 +109,7 @@ export default function PlusSelf({
                 type="text"
                 name=""
                 id=""
+                value={searchLocation}
                 css={PlusSelfStyle.LocationInputStyle}
                 placeholder="여행 장소 검색"
                 onChange={e => handleSearchLocation(e)}
@@ -193,7 +200,12 @@ export default function PlusSelf({
 
         {/* 저장, 삭제 버튼 */}
         <div css={PlusSelfStyle.btnLayout}>
-          <Btn buttonStyle={{size: 'small', style: 'blue'}}>저장</Btn>
+          <Btn
+            buttonStyle={{size: 'small', style: 'blue'}}
+            onClick={handleSave}
+          >
+            저장
+          </Btn>
         </div>
       </div>
     </>

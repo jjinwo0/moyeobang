@@ -1,5 +1,5 @@
 import {useTravelLogContext} from '@/contexts/TravelLog';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSpring, animated} from 'react-spring';
 import {useSwipeable} from 'react-swipeable';
 import {css} from '@emotion/react';
@@ -14,6 +14,7 @@ import reviewIcon from '@/assets/icons/reviewIcon.png';
 
 export default function MarkerDetail() {
   const {selectedMarker, setSelectedMarker} = useTravelLogContext();
+  const {setSearchLocation, handleShowMapSearch} = useTravelLogContext();
   console.log('[*]marker 정보', selectedMarker);
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -23,8 +24,9 @@ export default function MarkerDetail() {
   const swipeHandlers = useSwipeable({
     onSwipedUp: () => setIsExpanded(true),
     onSwipedDown: () => setIsExpanded(false),
-    preventScrollOnSwipe: true,
+    preventScrollOnSwipe: false,
     trackTouch: true,
+    delta: 10,
   });
 
   const springProps = useSpring({
@@ -50,46 +52,17 @@ export default function MarkerDetail() {
     return stars;
   };
 
+  const handleDetailClose = () => {
+    setSearchLocation(selectedMarker.title);
+    handleShowMapSearch();
+  };
+
   return (
-    <animated.div {...swipeHandlers} style={springProps}>
-      {/* {
-    "position": {
-        "lat": 37.8731321,
-        "lng": 127.7522193
-    },
-    "title": "스타벅스 춘천후석로DT점",
-    "placeId": "ChIJO1mAOQDlYjUReSmwWHqxbRg",
-    "address": "대한민국 강원특별자치도 춘천시 후평동 24-1",
-    "rating": 4,
-    "openingHours": [],
-    "types": [
-        "cafe",
-        "food",
-        "store",
-        "point_of_interest",
-        "establishment"
-    ],
-    "reviews": [
-        {
-            "authorName": "MK Kim",
-            "authorProfilePhoto": "https://lh3.googleusercontent.com/a/ACg8ocJR9k0MnM-FGzqKujb8U_6twlmWiuVnvO6j50ESfE-eNhqabg=s128-c0x00000000-cc-rp-mo-ba6",
-            "reviewText": "아주 붐비지는 않는..브런치하기도 좋은..매장이네요",
-            "rating": 4
-        }
-    ],
-    "detailedOpeningHours": [
-        "월요일: 오전 7:00 ~ 오후 11:00",
-        "화요일: 오전 7:00 ~ 오후 11:00",
-        "수요일: 오전 7:00 ~ 오후 11:00",
-        "목요일: 오전 7:00 ~ 오후 11:00",
-        "금요일: 오전 7:00 ~ 오후 11:00",
-        "토요일: 오전 7:00 ~ 오후 11:00",
-        "일요일: 오전 7:00 ~ 오후 11:00"
-    ]
-} */}
+    <animated.div style={springProps}>
       {!isExpanded ? (
-        <div css={MarkerDetailStyle.markerDetailStyle}>
-          <div>
+        // 축소된 상태
+        <div css={MarkerDetailStyle.markerDetailStyle} {...swipeHandlers}>
+          <div id="springLine">
             <img
               src={springLine}
               alt="springLine"
@@ -123,19 +96,28 @@ export default function MarkerDetail() {
             </div>
           </div>
           <div css={MarkerDetailStyle.BtnLayout}>
-            <Btn buttonStyle={{style: 'blue', size: 'big'}}>장소확정</Btn>
+            <Btn
+              buttonStyle={{style: 'blue', size: 'big'}}
+              onClick={handleDetailClose}
+            >
+              장소확정
+            </Btn>
           </div>
         </div>
       ) : (
+        // 확대된 상태
         <div css={MarkerDetailStyle.markerDetailStyle}>
-          <div>
-            <img
-              src={springLine}
-              alt="springLine"
-              style={{marginBottom: '10px'}}
-            />
-          </div>
-          <div css={MarkerDetailStyle.MapDetailContentLayout}>
+          <div
+            css={MarkerDetailStyle.MapDetailContentLayout}
+            {...swipeHandlers}
+          >
+            <div id="springLine">
+              <img
+                src={springLine}
+                alt="springLine"
+                style={{marginBottom: '10px'}}
+              />
+            </div>
             <div css={MarkerDetailStyle.LongMapDetailHeader}>
               <div id="title">{selectedMarker.title}</div>
               <div id="rating">
@@ -161,36 +143,56 @@ export default function MarkerDetail() {
                 </div>
                 <div>{selectedMarker.address}</div>
               </div>
-              <div id="reviews">
-                <div id="reviews-header">
+            </div>
+          </div>
+
+          <div css={MarkerDetailStyle.ReviewsLayout}>
+            <div id="reviews-header">
+              <img
+                src={reviewIcon}
+                alt="reviewIcon"
+                style={{width: '20px', height: '20px'}}
+              />
+              <div>Reviews</div>
+            </div>
+            <div id="reviews">
+              <div id="reviews-images">
+                {selectedMarker.photos.slice(0, 3).map((photo: string) => (
                   <img
-                    src={reviewIcon}
-                    alt="reviewIcon"
-                    style={{width: '20px', height: '20px'}}
-                  />
-                  <div>Reviews</div>
-                </div>
-                <div id="reviews-images">
-                  <img
-                    src={selectedMarker.reviews[0].authorProfilePhoto}
+                    key={photo}
+                    src={photo}
                     alt="reviewImage"
                     style={{width: '100px', height: '100px'}}
                   />
-                </div>
-                <div id="reviews-content">
-                  {selectedMarker.reviews.map((review) => (
-                    <div key={review.authorName}>
+                ))}
+              </div>
+              <div id="reviews-content">
+                {selectedMarker.reviews.map((review: Review) => (
+                  <div key={review.authorName}>
+                    <div id="reviews-content-header">
                       <div>{review.authorName}</div>
-                      <div>{review.reviewText}</div>
-                      <div>{review.rating}</div>
+                      <div>
+                        <img
+                          src={blueStar}
+                          alt="blueStar"
+                          style={{width: '13px', height: '13px'}}
+                        />
+                        {review.rating}
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    <div style={{lineHeight: '1.3'}}>{review.reviewText}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
           <div css={MarkerDetailStyle.BtnLayout}>
-            <Btn buttonStyle={{style: 'blue', size: 'big'}}>장소확정</Btn>
+            <Btn
+              buttonStyle={{style: 'blue', size: 'big'}}
+              onClick={handleDetailClose}
+            >
+              장소확정
+            </Btn>
           </div>
         </div>
       )}
