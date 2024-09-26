@@ -1,5 +1,5 @@
 import { colors } from "@/styles/colors";
-import activity from '@/assets/icons/amusementPark.webp';
+import activity from '@/assets/icons/amusementpark.png';
 import airplane from '@/assets/icons/airplane.webp';
 import coffee from '@/assets/icons/coffe.webp';
 import restaurant from '@/assets/icons/restaurant.webp';
@@ -16,7 +16,7 @@ export const colorList = [
     colors.fifth, 
     colors.customBlue, 
     colors.second, 
-    colors.first
+    colors.first,
 ]
 
 
@@ -41,7 +41,7 @@ export function getCategoryImageAndColor(category: string) {
         case '식당':
             return {
                 image: restaurant,
-                color: colorList[2]
+                color: colorList[3]
             };
         case '쇼핑':
             return {
@@ -51,7 +51,7 @@ export function getCategoryImageAndColor(category: string) {
         case '액티비티':
             return {
                 image: activity,
-                color: colorList[3]
+                color: colorList[2]
             };
         default:
             return {

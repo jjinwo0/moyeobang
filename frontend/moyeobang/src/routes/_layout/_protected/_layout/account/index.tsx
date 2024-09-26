@@ -74,7 +74,7 @@ const chartListStyle=css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap:5px;
+  gap:10px;
 
   max-height: 390px; 
   overflow-y: auto; 
@@ -137,7 +137,6 @@ export default function groupAccount() {
   }  
 
   function handleIndexChange(index:number) {
-    console.log('카드번호 :' , index)
     setIndex(index)
   }
 
