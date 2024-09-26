@@ -1,7 +1,9 @@
 package com.ssafy.moyeobang.payment.adapter.out;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClientInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travelaccount.TravelAccountRepositoryInPayment;
@@ -15,6 +17,7 @@ import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.error.ErrorCode;
 import com.ssafy.moyeobang.payment.error.PaymentException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -41,7 +44,8 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
 
     @Override
     public TravelAccount loadTravelAccount(String accountNumber) {
-        Long balance = bankApiClientInPayment.getBalance(accountNumber);
+        TravelAccountJpaEntity travelAccountEntity = getTravelAccount(accountNumber);
+        Long balance = bankApiClientInPayment.getBalance(accountNumber, travelAccountEntity.getTravel().getTravelKey());
 
         return TravelAccount.of(
                 accountNumber,
@@ -50,17 +54,37 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
     }
 
     @Override
-    public PaymentResult processPayment(TravelAccount travelAccount, Store store, Money paymentRequestMoney) {
+    public int loadMemberCount(String accountNumber) {
+        TravelAccountJpaEntity travelAccountEntity = getTravelAccount(accountNumber);
+        List<MemberTravelJpaEntity> memberTravels = travelAccountEntity.getTravel().getMemberTravelJpaEntities();
+
+        if (memberTravels.isEmpty()) {
+            throw new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL);
+        }
+        return memberTravels.size();
+    }
+
+    @Override
+    public PaymentResult processPayment(TravelAccount travelAccount, Store store, Money paymentRequestMoney,
+                                        String paymentRequestId) {
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(travelAccount.getAccountNumber());
 
+        List<MemberTravelJpaEntity> memberTravels = travelAccountEntity.getTravel().getMemberTravelJpaEntities();
+
+        if (memberTravels.isEmpty()) {
+            throw new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL);
+        }
+
         WithdrawJpaEntity withdraw = createPaymentWithdraw(travelAccountEntity, store,
-                Money.subtract(travelAccount.getBalance(), paymentRequestMoney).getAmount(), paymentRequestMoney);
+                Money.subtract(travelAccount.getBalance(), paymentRequestMoney).getAmount(), paymentRequestMoney,
+                paymentRequestId, store.getStoreAccountNumber());
 
         WithdrawJpaEntity savedWithdraw = withdrawRepository.save(withdraw);
 
         bankApiClientInPayment.payment(
-                travelAccount.getAccountNumber(),
                 store.getStoreAccountNumber(),
+                travelAccount.getAccountNumber(),
+                travelAccountEntity.getTravel().getTravelKey(),
                 paymentRequestMoney.getAmount()
         );
 
@@ -74,17 +98,21 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
 
     private WithdrawJpaEntity createPaymentWithdraw(TravelAccountJpaEntity travelAccount, Store store,
                                                     long balanceSnapshot,
-                                                    Money paymentRequestMoney) {
+                                                    Money paymentRequestMoney, String paymentRequestId,
+                                                    String targetAccountNumber) {
         return WithdrawJpaEntity.builder()
                 .title(store.getStoreName())
                 .latitude(store.getLatitude())
                 .longitude(store.getLongitude())
                 .amount(paymentRequestMoney.getAmount())
                 .balanceSnapshot(balanceSnapshot)
+                .targetAccountNumber(targetAccountNumber)
                 .travelAccount(travelAccount)
                 .placeId(store.getStoreId())
                 .placeName(store.getStoreName())
                 .placeAddress(store.getStoreAddress())
+                .settleType(SettleType.CUSTOM)
+                .paymentRequestId(paymentRequestId)
                 .build();
     }
 

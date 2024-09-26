@@ -15,17 +15,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ssafy.moyeobang.account.adapter.in.web.request.SendMoneyRequest;
 import com.ssafy.moyeobang.account.application.port.in.SendMoneyCommand;
-import com.ssafy.moyeobang.account.application.port.in.SendMoneyUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 class SendMoneyControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private SendMoneyUseCase sendMoneyUseCase;
 
     @DisplayName("공금 입금 API")
     @Test

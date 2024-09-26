@@ -1,0 +1,12 @@
+[[check-travel-quiz-answer]]
+=== 여행 참가 퀴즈 정답 제출
+
+==== HTTP Request
+
+include::{snippets}/check-travel-quiz-answer/http-request.adoc[]
+include::{snippets}/check-travel-quiz-answer/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/check-travel-quiz-answer/http-response.adoc[]
+include::{snippets}/check-travel-quiz-answer/response-fields.adoc[]
