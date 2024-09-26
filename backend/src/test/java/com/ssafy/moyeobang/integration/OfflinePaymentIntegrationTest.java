@@ -125,7 +125,8 @@ public class OfflinePaymentIntegrationTest extends IntegrationTestSupport {
         assertThat(updatedMember1.getBalance()).isEqualTo(4000L);
         assertThat(updatedMember2.getBalance()).isEqualTo(4000L);
 
-        Long updatedBalance = bankApiClientInPayment.getBalance(accountNumber);
+        Long updatedBalance = bankApiClientInPayment.getBalance(accountNumber,
+                travelAccountJpaEntity.getTravel().getTravelKey());
         assertThat(updatedBalance).isLessThan(10000L);
 
         SseEmitter emitter = sseUtils.getEmitter("payment-123");
