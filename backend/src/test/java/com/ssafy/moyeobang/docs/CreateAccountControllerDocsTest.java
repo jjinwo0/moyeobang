@@ -15,17 +15,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ssafy.moyeobang.account.adapter.in.web.request.CreateAccountRequest;
 import com.ssafy.moyeobang.account.adapter.in.web.response.CreateAccountResponse;
-import com.ssafy.moyeobang.account.application.port.in.CreateAccountUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 class CreateAccountControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private CreateAccountUseCase createAccountUseCase;
 
     @DisplayName("여행 계좌 생성 API")
     @Test

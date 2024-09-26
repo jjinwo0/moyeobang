@@ -15,17 +15,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ssafy.moyeobang.travel.adapter.in.web.request.CheckQuizAnswerRequest;
 import com.ssafy.moyeobang.travel.application.port.in.CheckQuizAnswerCommand;
-import com.ssafy.moyeobang.travel.application.port.in.CheckQuizAnswerUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class CheckQuizAnswerControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private CheckQuizAnswerUseCase checkQuizAnswerUseCase;
 
     @DisplayName("여행 참가 퀴즈 정답 제출 API")
     @Test

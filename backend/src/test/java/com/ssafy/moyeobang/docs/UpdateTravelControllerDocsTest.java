@@ -16,21 +16,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ssafy.moyeobang.travel.adapter.in.web.request.UpdateTravelRequest;
 import com.ssafy.moyeobang.travel.application.port.in.UpdateTravelInCommand;
-import com.ssafy.moyeobang.travel.application.port.in.UpdateTravelUseCase;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class UpdateTravelControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private UpdateTravelUseCase updateTravelUseCase;
 
     @DisplayName("여행 수정 API")
     @Test
