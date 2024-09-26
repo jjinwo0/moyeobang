@@ -18,18 +18,13 @@ import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Settle;
 import com.ssafy.moyeobang.account.application.domain.Settles;
 import com.ssafy.moyeobang.account.application.domain.Withdrawal;
-import com.ssafy.moyeobang.account.application.port.in.GetTransactionHistoryQuery;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class GetTransactionHistoryControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private GetTransactionHistoryQuery getTransactionHistoryQuery;
 
     @DisplayName("결제 내역 상세 조회 API - 영수증")
     @Test

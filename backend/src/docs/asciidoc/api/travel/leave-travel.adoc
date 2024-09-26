@@ -1,0 +1,12 @@
+[[leave-travel]]
+=== 여행 탈퇴
+
+==== HTTP Request
+
+include::{snippets}/leave-travel/http-request.adoc[]
+include::{snippets}/leave-travel/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/leave-travel/http-response.adoc[]
+include::{snippets}/leave-travel/response-fields.adoc[]

@@ -41,3 +41,13 @@ include::api/payment/sse-connect/httpie-request.adoc[]
 include::api/payment/sse-connect/query-parameters.adoc[]
 include::api/payment/sse-connect/request-body.adoc[]
 include::api/payment/sse-connect/response-body.adoc[]
+
+[[travel-API]]
+== Travel API
+
+include::api/travel/create-travel.adoc[]
+include::api/travel/get-travels.adoc[]
+include::api/travel/update-travel.adoc[]
+include::api/travel/get-travel-quiz-question.adoc[]
+include::api/travel/check-travel-quiz-answer.adoc[]
+include::api/travel/leave-travel.adoc[]

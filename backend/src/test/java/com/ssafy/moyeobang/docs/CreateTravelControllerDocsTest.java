@@ -14,24 +14,19 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.moyeobang.travel.adapter.in.web.in.CreateTravelRequest;
-import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
+import com.ssafy.moyeobang.travel.adapter.in.web.request.CreateTravelRequest;
+import com.ssafy.moyeobang.travel.adapter.in.web.response.CreateTravelResponse;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
-import com.ssafy.moyeobang.travel.application.port.in.CreateTravelUseCase;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class CreateTravelControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private CreateTravelUseCase createTravelUseCase;
 
     @DisplayName("여행 생성 API")
     @Test
