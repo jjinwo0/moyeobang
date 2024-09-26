@@ -3,7 +3,7 @@ package com.ssafy.moyeobang.payment.application.service;
 import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
-import com.ssafy.moyeobang.payment.application.port.in.OnlinePaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
@@ -25,7 +25,7 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     @Transactional
-    public boolean confirmPayment(OnlinePaymentCommand command) {
+    public boolean confirmPayment(PaymentCommand command) {
         TravelAccount travelAccount = loadTravelAccountPort.loadTravelAccount(command.travelAccountNumber());
 
         boolean canPayment = !travelAccount.couldNotWithdraw(command.paymentRequestMoney());

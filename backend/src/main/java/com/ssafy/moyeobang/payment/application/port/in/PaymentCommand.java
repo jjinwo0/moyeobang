@@ -6,12 +6,13 @@ import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.Store;
 import jakarta.validation.constraints.NotNull;
 
-public record OnlinePaymentCommand(@NotNull String paymentRequestId, @NotNull String travelAccountNumber,
-                                   @NotNull StoreCommand storeCommand,
-                                   @NotNull Money paymentRequestMoney) {
+public record PaymentCommand(@NotNull String paymentRequestId, @NotNull String travelAccountNumber,
+                             @NotNull StoreCommand storeCommand,
+                             @NotNull Money paymentRequestMoney) {
 
-    public OnlinePaymentCommand(String paymentRequestId, String travelAccountNumber, StoreCommand storeCommand,
-                                Long amount) {
+    public PaymentCommand(String paymentRequestId, String travelAccountNumber,
+                          StoreCommand storeCommand,
+                          Long amount) {
         this(paymentRequestId, travelAccountNumber, storeCommand, Money.of(amount));
 
         validate(this);

@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
-import com.ssafy.moyeobang.payment.application.port.in.OnlinePaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
 import com.ssafy.moyeobang.support.WebAdapterTestSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +37,7 @@ public class OfflinePaymentControllerTest extends WebAdapterTestSupport {
                 "target-acc-002"
         );
 
-        given(paymentUseCase.confirmPayment(any(OnlinePaymentCommand.class)))
+        given(paymentUseCase.confirmPayment(any(PaymentCommand.class)))
                 .willReturn(true);
 
         mockMvc.perform(
