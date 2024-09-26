@@ -28,9 +28,9 @@ public class BankApiClientInPayment {
                 .asText();
     }
 
-    public void payment(String targetAccountNumber, String sourceAccountNumber, long amount) {
+    public void payment(String targetAccountNumber, String sourceAccountNumber, String travelKey, long amount) {
         PaymentRequest request = new PaymentRequest(
-                Headers.withCommonUserKey("updateDemandDepositAccountTransfer", now()),
+                Headers.withCommonUserKey("updateDemandDepositAccountTransfer", travelKey, now()),
                 targetAccountNumber,
                 sourceAccountNumber,
                 amount
@@ -39,9 +39,9 @@ public class BankApiClientInPayment {
         postWithoutResponse("/demandDeposit/updateDemandDepositAccountTransfer", request);
     }
 
-    public Long getBalance(String accountNumber) {
+    public Long getBalance(String accountNumber, String travelKey) {
         GetBalanceRequest request = new GetBalanceRequest(
-                Headers.withCommonUserKey("inquireDemandDepositAccountBalance", now()),
+                Headers.withCommonUserKey("inquireDemandDepositAccountBalance", travelKey, now()),
                 accountNumber
         );
 

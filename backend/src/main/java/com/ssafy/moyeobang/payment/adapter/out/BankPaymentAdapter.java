@@ -44,7 +44,8 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
 
     @Override
     public TravelAccount loadTravelAccount(String accountNumber) {
-        Long balance = bankApiClientInPayment.getBalance(accountNumber);
+        TravelAccountJpaEntity travelAccountEntity = getTravelAccount(accountNumber);
+        Long balance = bankApiClientInPayment.getBalance(accountNumber, travelAccountEntity.getTravel().getTravelKey());
 
         return TravelAccount.of(
                 accountNumber,
@@ -83,6 +84,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
         bankApiClientInPayment.payment(
                 store.getStoreAccountNumber(),
                 travelAccount.getAccountNumber(),
+                travelAccountEntity.getTravel().getTravelKey(),
                 paymentRequestMoney.getAmount()
         );
 

@@ -80,7 +80,7 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
         String accountNumber = newTravelAccount.getAccountNumber();
 
-        Long balance = bankApiClientInPayment.getBalance(accountNumber);
+        Long balance = bankApiClientInPayment.getBalance(accountNumber, newTravelAccount.getTravel().getTravelKey());
 
         // when
         TravelAccount resultTravelAccount = bankPaymentAdapter.loadTravelAccount(accountNumber);
@@ -105,7 +105,8 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
         String accountNumber = travelAccountJpaEntity.getAccountNumber();
 
-        Long balance = bankApiClientInPayment.getBalance(accountNumber);
+        Long balance = bankApiClientInPayment.getBalance(accountNumber,
+                travelAccountJpaEntity.getTravel().getTravelKey());
         TravelAccount travelAccount = TravelAccount.of(accountNumber, Money.of(balance));
 
         String paymentRequestId = "payment-001";
