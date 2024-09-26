@@ -4,6 +4,9 @@ import com.ssafy.moyeobang.common.config.jwt.TokenManager;
 import com.ssafy.moyeobang.common.config.oauth.MemberRepositoryInOAuth;
 import com.ssafy.moyeobang.common.config.oauth.OAuth2CustomService;
 import com.ssafy.moyeobang.common.config.oauth.OAuth2SuccessHandler;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -51,6 +55,7 @@ public class SecurityConfig {
                                 .userInfoEndpoint(
                                         endpoint -> endpoint.userService(oAuth2CustomService))
                                 .successHandler(oAuth2SuccessHandler())
+                                .failureHandler(oAuth2FailureHandler())
                 )
                 .build();
     }
@@ -74,5 +79,13 @@ public class SecurityConfig {
                 memberRepository,
                 tokenManager
         );
+    }
+
+    private AuthenticationFailureHandler oAuth2FailureHandler() {
+
+        return (request, response, e) -> {
+            String errorMessage = URLEncoder.encode("authorization_request_not_found", StandardCharsets.UTF_8);
+            response.sendRedirect("/login?error=" + errorMessage + "&code=" + response.getStatus());
+        };
     }
 }
