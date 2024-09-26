@@ -9,6 +9,7 @@ import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/Settl
 import { useSuspenseQuery } from "@tanstack/react-query";
 import moyeobang from '@/services/moyeobang';
 
+
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/settle/')({
   component: Settle
 })  
@@ -61,7 +62,7 @@ export default function Settle() {
   function isSettledParticipantByCustom(
     detail: SettledItemByReceipt[] | SettledParticipantByCustom[]
   ): detail is SettledParticipantByCustom[] {
-    return (detail as SettledParticipantByCustom[])[0]!.participant !== undefined;
+    return Array.isArray(detail) && detail.length > 0 && (detail as SettledParticipantByCustom[])[0].participant!== undefined;
   }
 
   return (
@@ -91,8 +92,9 @@ export default function Settle() {
               paymentName={transactionDetailData.paymentName}
               createdAt={transactionDetailData.createdAt}
               totalMoney={transactionDetailData.money}
-              details={transactionDetailData.details}
+              details={transactionDetailData.details} 
               acceptedNumber={transactionDetailData.acceptedNumber}
+              isUpdate={method ? true : false} // method있으면 수정 | 없으면 새로 생성
             />
           }
         </div>
