@@ -108,7 +108,8 @@ type PaymentRequestId = string;
 type TravelAccountNumber = string;
 type IsNew = boolean;
 type TotalMoney = number;
-type TotalComsumption = number;
+type TotalConsumption = number;
+type TotalSpent = number;
 type AccountId = number;
 
 interface ParticipantInfo {
@@ -128,18 +129,18 @@ interface OrderItems {
 interface AccountBalanceByGroup {
   currentBalance: CurrentBalance;
   totalAmount: TotalMoney;
-  totalComsumption: TotalComsumption;
+  totalSpent: TotalSpent;
   usagePercentage: UsagePercentage;
 }
 
 // 모임 통장 개인 잔액 조회
 interface AccountBalanceBymemberId {
-  participant: ParticipantInfo;
+  simpleUserProfile: ParticipantInfo;
   personalCurrentBalance: PersonalCurrentBalance;
-  personalTotalMoney: TotalMoney;
-  personalTotalConsumption: TotalComsumption;
+  personalTotalAmount: TotalMoney;
+  personalTotalSpent: TotalSpent;
   personalUsagePercentage: PersonalUsagePercentage;
-  needsAdditionalDeposit?: NeedsAdditionalDeposit;
+  needsAdditionalDeposit: NeedsAdditionalDeposit;
 }
 
 // 여행 일정 조회
@@ -439,4 +440,23 @@ interface Member {
 
 interface submitQuiz {
   answer: QuizAnswer;
+}
+
+// [모임통장] 소비 비율 차트 데이터
+interface ConsumptionProportionByCategory {
+  categoryName:string;
+  proportion:number;
+  balance:number;
+}
+
+interface ConsumptionProportionByMember {
+  member:ParticipantInfo;
+  proportion:number;
+  balance:number;
+}
+
+// 전체일때 
+interface ConsumptionProportionData {
+  consumptionByCategory:ConsumptionByCategory[];
+  consumptionByMember:ConsumptionByMember[];
 }
