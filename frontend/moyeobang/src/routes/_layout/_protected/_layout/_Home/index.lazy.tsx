@@ -190,7 +190,7 @@ function Index() {
   // const {data:travelData} = useSuspenseQuery({
   //   queryKey: ['travelList'],
   //   //memberId는 쥬스탄드에서 꺼내쓰기!
-  //   queryFn: () => moyeobang.getTravelList(memberId),
+  //   queryFn: () => moyeobang.getTravelList(4), // 일단은 4번 회원 데이터 조회
   // });
 
   // const data = travelData?.data.data;
@@ -204,14 +204,14 @@ function Index() {
   // console.log(today);
 
   // 날짜를 변환한 후 비교
-  const upcomingTrips = data.filter(
-    item => normalizeDate(new Date(item.startDate)) > today
+  const upcomingTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) => normalizeDate(new Date(item.startDate)) > today
   );
-  const pastTrips = data.filter(
-    item => normalizeDate(new Date(item.endDate)) < today
+  const pastTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) => normalizeDate(new Date(item.endDate)) < today
   );
-  const currentTrips = data.filter(
-    item =>
+  const currentTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) =>
       normalizeDate(new Date(item.startDate)) <= today &&
       normalizeDate(new Date(item.endDate)) >= today
   );

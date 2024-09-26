@@ -292,6 +292,7 @@ export default function TravelCard({
               travelPlaceList: travelPlaceList,
               quizQuestion: quizQuestion,
               quizAnswer: quizAnswer,
+              selectedImage: travelImg,
             }}
           />
         </div>

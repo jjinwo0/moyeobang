@@ -23,6 +23,7 @@ const podiumStyle = (rank: number) => css`
   font-size: 16px;
   position: relative;
   /* cursor: pointer; */
+  order: ${rank === 1 ? 2 : rank === 2 ? 1 : 3};
 `;
 
 const rankStyle = css`
@@ -58,19 +59,19 @@ const amountStyle = css`
   padding: 5px 10px; /* 박스 안 여백 */
   border-radius: 5px; /* 둥근 모서리 */
   font-size: 12px;
-  font-family: 'regular';
+  font-family: 'medium';
   white-space: nowrap; /* 긴 텍스트도 한 줄에 표시 */
   z-index: 100;
 `;
 
 const countStyle = css`
   position: absolute;
-  top: -50px; /* 금액 바로 위에 위치 */
+  top: -45px; /* 금액 바로 위에 위치 */
   left: 50%;
   transform: translateX(-50%); /* 중앙 정렬 */
   background-color: ${colors.lightGray}; /* 배경색 */
   color: ${colors.black}; /* 텍스트 색상 */
-  padding: 5px 10px; /* 박스 안 여백 */
+  padding: 5px 8px; /* 박스 안 여백 */
   border-radius: 5px; /* 둥근 모서리 */
   font-size: 12px;
   font-family: 'regular';

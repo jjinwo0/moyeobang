@@ -27,6 +27,7 @@ import useModalStore from '@/store/useModalStore';
 import MapSearch from './MapSearch';
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
+import {css} from '@emotion/react';
 import moyeobang from '@/services/moyeobang';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
@@ -45,6 +46,15 @@ interface CreateTravelProps {
     selectedImage?: string | null;
   };
 }
+
+const colseButtonStyle = css`
+  color: red;
+  font-size: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-bottom: 85px;
+`;
 
 export default function CreateTravel({
   onClose,
@@ -98,7 +108,7 @@ export default function CreateTravel({
       endDate: dateRange[1],
       travelPlaceList: travelPlaceList,
       quizQuestion: quizQuestion,
-      quizAnser: quizAnswer,
+      quizAnswer: quizAnswer,
     };
 
     newFormData.append('request', JSON.stringify(requestData));
@@ -202,7 +212,7 @@ export default function CreateTravel({
   };
 
   useEffect(() => {
-    console.log(initialData);
+    console.log('초기데이터', initialData);
     if (isCalendarOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -378,13 +388,34 @@ export default function CreateTravel({
                   alt="사진 추가"
                   onClick={handlePhotoClick}
                 />
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{display: 'none'}}
-                  onChange={handleFileChange}
-                />
+                {selectedImage && (
+                  <button
+                    css={colseButtonStyle}
+                    className="close-button"
+                    onClick={() => {
+                      setSelectedImage(null);
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = ''; // 파일 선택기 초기화
+                      }
+                    }}
+                    style={{
+                      color: 'red',
+                      fontSize: '20px',
+                      border: 'none',
+                      background: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    &times;
+                  </button>
+                )}
               </div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{display: 'none'}}
+                onChange={handleFileChange}
+              />
             </div>
 
             <div css={btnContainerStyle}>
