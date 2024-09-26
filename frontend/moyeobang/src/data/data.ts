@@ -375,18 +375,33 @@ export const proportionData = {
 		balance:80000
 		},
 		{
-		categoryName : '식당, 카페',
-		proportion : 38.3,
+		categoryName : '식당',
+		proportion : 9.5,
 		balance:121000
 		},
+    {
+      categoryName : '카페',
+      proportion : 5.0,
+      balance:121000
+    },
+    {
+      categoryName : '쇼핑',
+      proportion : 3.3,
+      balance:121000
+      },
 		{
-		categoryName : '항공, 호텔',
-		proportion : 38.3,
+		categoryName : '호텔',
+		proportion : 9.0,
 		balance:121000
 		},
+    {
+      categoryName : '항공',
+      proportion : 22.2,
+      balance:121000
+    },
 		{
-		categoryName : '해당 없음',
-		proportion : 38.3,
+		categoryName : '기타',
+		proportion : 30.5,
 		balance:121000
 		}
 	],

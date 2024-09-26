@@ -3,7 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import { colors } from '@/styles/colors';
 import { css } from '@emotion/react';
 import { isConsumptionByMember } from '@/util/typeGaurd';
-import { colorList } from '@/util/typeGaurd';
+import { colorList } from '@/util/chartCategoryList';
 
 const titleStyle=css`
     font-family:'regular';

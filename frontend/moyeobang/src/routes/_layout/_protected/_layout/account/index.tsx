@@ -14,6 +14,7 @@ import Spinner from '@/components/Sipnner/Spinner';
 import { proportionData } from '@/data/data';
 import { isAccountBalanceByGroup } from '@/util/typeGaurd';
 import CardSlider from '@/components/Account/CardSlider/CardSlider';
+import ChartDetailCard from '@/components/Account/Chart/ChartDetailCard';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
@@ -58,6 +59,22 @@ const transactionListStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  max-height: 390px; 
+  overflow-y: auto; 
+  width: 100%;
+
+  &::-webkit-scrollbar {
+    display: none; 
+  }
+`;
+
+const chartListStyle=css`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:5px;
 
   max-height: 390px; 
   overflow-y: auto; 
@@ -157,12 +174,41 @@ export default function groupAccount() {
             />
           }
         </div>
-        <div css={transactionListStyle}>
-            {transactionListData.reverse().map((tran, index) => 
-                <TransactionCard key={index} {...tran} />
-            )}
+          {isAccountBalanceByGroup(accountData) ? 
+          (
+              index === 0 ? 
+              <div css={transactionListStyle}>
+                {transactionListData.reverse().map((tran, index) => 
+                    <TransactionCard key={index} {...tran} /> 
+                )}
+              </div> :
+                index === 1 ?
+                <div css={chartListStyle}>
+                  {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
+                  <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
+                  )}
+                </div> :
+                <div css={chartListStyle}>
+                {proportionData.consumptionByMember.sort((a,b) => b.proportion -a.proportion).map((member, index) =>
+                <ChartDetailCard key={index} title={member.member.memberName} proportion={member.proportion} balance={member.balance} profileImage={member.member.profileImage} colorIndex={index}/>
+                )}
+                </div>
+              ) :
+                index === 0 ? 
+                <div css={transactionListStyle}>
+                {transactionListData.reverse().map((tran, index) => 
+                    <TransactionCard key={index} {...tran} />
+                )}
+                </div> :
+                index === 1 ?
+                <div css={transactionListStyle}>
+                  {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
+                  <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance} colortIndex={index}/>
+                )}
+                </div> :
+                undefined
+        }
         </div>
-    </div>
     <Navbar/>
     </>
   )
