@@ -42,7 +42,7 @@ VALUES (1, '9993247649535796'),
 
 INSERT INTO quiz (travel_id, question, answer)
 VALUES (1, '김훈민의 발 사이즈는?', '235'),
-       (2, '김용수의 키는', '155');
+       (2, '김용수의 키는?', '155');
 
 -- INSERT INTO deposit (amount, balance_snapshot, created_at, updated_at, member_id, travel_account_id, created_by, modified_by)
 -- VALUES (200000, 200000, '2023-09-02 09:00:00', '2023-09-02 09:00:00', 1, 1, 'admin', 'admin'),

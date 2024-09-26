@@ -36,6 +36,7 @@ public class TravelQueryRepositoryImpl implements TravelQueryRepository {
                 .join(memberTravelJpaEntity.travel, travelJpaEntity)
                 .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
                 .join(travelAccountJpaEntity).on(travelAccountJpaEntity.travel.eq(travelJpaEntity))
+                .distinct()
                 .where(memberTravelJpaEntity.travel.id.eq(id))
                 .fetchOne();
 
