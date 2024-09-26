@@ -11,6 +11,7 @@ import {ko} from 'date-fns/locale';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
+import profile from "@/routes/_layout/_protected/_layout/profile/$memberName";
 
 export interface CustomSettle {
     participantInfo: ParticipantInfo
@@ -28,12 +29,13 @@ interface SettleByCustomComponenetProps {
     details: SettledParticipantByCustom[];
     acceptedNumber:AcceptedNumber;
     // splitMethod: SplitMethod; // 'custom'
+    isUpdate:boolean;
 }
 
 // 결제 후 데이터
 // money(totalMoney), transactionId, createdAt, paymentName, 와 모임통장 회원 정보 필요
 
-export default function SettleByCustomComponent({transactionId, totalMoney, paymentName, createdAt, details, acceptedNumber} : SettleByCustomComponenetProps) {
+export default function SettleByCustomComponent({transactionId, totalMoney, paymentName, createdAt, details, acceptedNumber, isUpdate} : SettleByCustomComponenetProps) {
     const [ settleData , setSettleData ] = useState<CustomSettle[]>([]);
     const [ remainMoney, setRemainMoney ] = useState<number>(0);
     const [ isAll, setIsAll ] = useState<boolean>(true);
@@ -42,6 +44,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
     const [ confirmData, setConfirmData ] = useState<CustomSettle[]>([]);
     const navigate = useNavigate({from:'/account/$transactionId/settle'});
     const queryClient = useQueryClient();
+    console.log(isUpdate)
 
 
     const {mutate: updateCustom } = useMutation({
@@ -51,14 +54,14 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             queryKey: ['transactionDetail', transactionId],
             refetchType: 'all',
         });
-        await navigate({to: '/account/$transactionId/detail'});
+        await navigate({to: `/account/${transactionId.toString()}/detail`});
         },
      });
 
-    // 처음 details=[] 이렇게 들어옴. 초기 참여자 정산 데이터 설정
-    useEffect(()=> {
 
-        if (!details) {
+    useEffect(()=> {
+        // 새로 들어온거 details=[] 여기에 default 1/n해주기
+        if (!isUpdate) {
             const initialSettle = profileData.map(member => {
                 return {
                     participantInfo : member,
@@ -69,19 +72,24 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             })
             setSettleData(initialSettle);
             setRemainMoney(0);
-        } else if (profileData.length > 0 && details) {
+        } 
+        // 수정일 때 details있음.
+        else if (details && details.length > 0) {
+            console.log(profileData)
             const initialSettle = profileData.map(member => {
+                console.log(member.memberId)
                 const prevMember = details.find((detail) => detail.participant.memberId === member.memberId);
                 return {
                     participantInfo : member,
                     money : prevMember ? prevMember.money : 0,
                     isChecked: prevMember ? true : false,
                     isDecided:false, // 초기 아무도 확정아님.
-        }
+                }
         });
             setSettleData(initialSettle);
+            console.log(initialSettle)
         }
-    }, [profileData])
+    }, [profileData, details, totalMoney, isUpdate])
 
     // 총액만큼 정산되어야 정산 가능.
     useEffect(() => {
@@ -253,12 +261,12 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     <Btn 
                     buttonStyle={{ size:'big', style:'blue'}}
                     onClick={handleConfirm}
-                    >정산하기
+                    >{ isUpdate ? '수정 완료' : '정산하기'}
                     </Btn> 
                 ) : ( 
                     <Btn 
                     buttonStyle={{ size:'big', style:'gray'}}
-                    >정산하기
+                    >{ isUpdate ? '수정 완료' : '정산하기'}
                     </Btn>
                 )
                 }
