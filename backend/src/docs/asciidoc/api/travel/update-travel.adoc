@@ -1,0 +1,12 @@
+[[update-travel]]
+=== 여행 수정
+
+==== HTTP Request
+
+include::{snippets}/update-travel/http-request.adoc[]
+include::{snippets}/update-travel/request-parts.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-travel/http-response.adoc[]
+include::{snippets}/update-travel/response-fields.adoc[]
