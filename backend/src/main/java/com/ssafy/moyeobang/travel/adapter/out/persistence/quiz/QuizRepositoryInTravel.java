@@ -8,5 +8,5 @@ import org.springframework.data.repository.query.Param;
 public interface QuizRepositoryInTravel extends JpaRepository<QuizJpaEntity, Long> {
 
     @Query("delete QuizJpaEntity q where q.travel.id = :travelId")
-    void deleteBy(@Param("travelId") Long travelId);
+    int deleteBy(@Param("travelId") Long travelId);
 }

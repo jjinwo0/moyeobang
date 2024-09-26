@@ -4,9 +4,11 @@ import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.travel.QuizJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelPlaceJpaEntity;
+import com.ssafy.moyeobang.travel.adapter.out.persistence.member.MemberTravelRepositoryInTravel;
 import com.ssafy.moyeobang.travel.adapter.out.persistence.quiz.QuizRepositoryInTravel;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelPort;
+import com.ssafy.moyeobang.travel.application.port.out.LeaveTravelPort;
 import com.ssafy.moyeobang.travel.application.port.out.UpdateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.UpdateTravelPort;
 import com.ssafy.moyeobang.travel.error.TravelNotFoundException;
@@ -15,11 +17,12 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelPort {
+public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelPort, LeaveTravelPort {
 
     private final TravelRepositoryInTravel travelRepository;
     private final TravelPlaceRepositoryInTravel travelPlaceRepository;
     private final QuizRepositoryInTravel quizRepository;
+    private final MemberTravelRepositoryInTravel memberTravelRepository;
 
     @Override
     public Long createTravel(CreateTravelOutCommand command) {
@@ -46,6 +49,11 @@ public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelP
         updateQuiz(command, travel);
 
         return true;
+    }
+
+    @Override
+    public boolean leaveTravel(Long travelId, Long memberId) {
+        return memberTravelRepository.deleteBy(travelId, memberId) == 1;
     }
 
     private void updateTravelPlaces(UpdateTravelOutCommand command, TravelJpaEntity travel) {
