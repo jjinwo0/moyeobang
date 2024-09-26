@@ -36,11 +36,10 @@ const imageContainerStyle= (colorName:string) => css`
     }
 `;
 
-const imageStyle= (colorName? :string) => css`
+const imageStyle= (isMember? :string) => css`
     border-radius: 50%;
-    width: 75%;
-    height: 75%;
-    background-color: ${colorName};
+    width: ${isMember ? '100%' : '80%'};
+    height: ${isMember ? '100%' : '80%'};
     box-sizing:border-box;
     object-fit:cover;
 `;
@@ -89,8 +88,8 @@ export default function ChartDetailCard({profileImage, colorIndex, title, propor
             <div css={ profileImage ? imageContainerStyle(colorList[colorIndex]) : imageContainerStyle(color)}>
                 <div id="imageBackgroundStyle">
                     {profileImage ? 
-                    <img src={profileImage} alt={title} css={imageStyle} /> : 
-                    <img src={image} alt={title} css={imageStyle} />}
+                    <img src={profileImage} alt={title} css={imageStyle(true)} /> : 
+                    <img src={image} alt={title} css={imageStyle(false)} />}
                 </div>
             </div>
             <div css={textStyle}>

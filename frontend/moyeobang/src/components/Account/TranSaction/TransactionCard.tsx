@@ -28,7 +28,7 @@ export default function TransactionCard({
 
     return(
         <Link 
-        to={`/account/${transactionId}/detail`}
+        to={transactionType==='입금' ? undefined : `/account/${transactionId}/detail`}
         css={layoutStyle}>
             <div css={upContainerStyle}>
                 <div css={textContainerStyle} >

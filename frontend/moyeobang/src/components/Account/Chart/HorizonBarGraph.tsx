@@ -4,6 +4,7 @@ import { colors } from '@/styles/colors';
 import { css } from '@emotion/react';
 import { isConsumptionByMember } from '@/util/typeGaurd';
 import { colorList } from '@/util/chartCategoryList';
+import { getCategoryImageAndColor } from '@/util/chartCategoryList';
 
 const titleStyle=css`
     font-family:'regular';
@@ -31,14 +32,13 @@ function transformChart(data : (ConsumptionProportionByCategory[] | ConsumptionP
 }
 
 interface HorizonBarGraphProps {
-  data: ConsumptionProportionByCategory[] | ConsumptionProportionByMember[];
+  data?: ConsumptionProportionByCategory[] | ConsumptionProportionByMember[];
 }
 
-export default function HorizonBarGraph({data}: HorizonBarGraphProps) {
+export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
 
   // 차트만들 데이터로 변환.
   const chartData = transformChart(data)
-  console.log(chartData) // {name: '소비비율', 액티비티: 20.5, 식당, 카페: 38.3, 할공, 호텔: 38.3, 해당 없음: 38.3}
 
   return (
     <div style={{ width: '100%', height: '60px' }}> 
@@ -81,7 +81,7 @@ export default function HorizonBarGraph({data}: HorizonBarGraphProps) {
               key={key} 
               dataKey={key} 
               stackId="a" 
-              fill={colorList[index]}  
+              fill={ isConsumptionByMember(data[0]) ? colorList[index] : getCategoryImageAndColor(key).color}  
               radius={ index===0 ? [20, 0, 0, 20] : index===arr.length-1 ? [0, 20, 20, 0] : undefined} 
               />
             ))}
