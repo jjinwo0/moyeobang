@@ -22,8 +22,8 @@ public class TravelQueryRepositoryImpl implements TravelQueryRepository {
                 .from(memberTravelJpaEntity)
                 .join(memberTravelJpaEntity.member, memberJpaEntity)
                 .join(memberTravelJpaEntity.travel, travelJpaEntity)
-                .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
                 .join(travelAccountJpaEntity).on(travelAccountJpaEntity.travel.eq(travelJpaEntity))
+                .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
                 .where(memberTravelJpaEntity.member.id.eq(memberId))
                 .fetch();
     }
@@ -34,8 +34,8 @@ public class TravelQueryRepositoryImpl implements TravelQueryRepository {
                 .from(memberTravelJpaEntity)
                 .join(memberTravelJpaEntity.member, memberJpaEntity)
                 .join(memberTravelJpaEntity.travel, travelJpaEntity)
-                .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
                 .join(travelAccountJpaEntity).on(travelAccountJpaEntity.travel.eq(travelJpaEntity))
+                .join(quizJpaEntity).on(quizJpaEntity.travel.eq(travelJpaEntity))
                 .distinct()
                 .where(memberTravelJpaEntity.travel.id.eq(id))
                 .fetchOne();
