@@ -20,6 +20,28 @@ include::api/account/get-transaction-histories.adoc[]
 include::api/account/get-transaction-history-receipt.adoc[]
 include::api/account/get-transaction-history-custom.adoc[]
 
+[[payment-API]]
+== Payment API
+
+== Confirm Payment API
+include::api/payment/payment-confirm/curl-request.adoc[]
+include::api/payment/payment-confirm/http-request.adoc[]
+include::api/payment/payment-confirm/http-response.adoc[]
+include::api/payment/payment-confirm/httpie-request.adoc[]
+include::api/payment/payment-confirm/request-body.adoc[]
+include::api/payment/payment-confirm/request-fields.adoc[]
+include::api/payment/payment-confirm/response-body.adoc[]
+include::api/payment/payment-confirm/response-fields.adoc[]
+
+== Sse Connect API
+include::api/payment/sse-connect/curl-request.adoc[]
+include::api/payment/sse-connect/http-request.adoc[]
+include::api/payment/sse-connect/http-response.adoc[]
+include::api/payment/sse-connect/httpie-request.adoc[]
+include::api/payment/sse-connect/query-parameters.adoc[]
+include::api/payment/sse-connect/request-body.adoc[]
+include::api/payment/sse-connect/response-body.adoc[]
+
 [[travel-API]]
 == Travel API
 

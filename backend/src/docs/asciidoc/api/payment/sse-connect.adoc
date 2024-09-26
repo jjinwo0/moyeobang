@@ -1,0 +1,11 @@
+[[sse-connect]]
+=== 오프라인 결제 전 SSE 연결
+
+==== HTTP Request
+
+include::{snippets}/sse-connect/http-request.adoc[]
+include::{snippets}/sse-connect/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/sse-connect/http-response.adoc[]

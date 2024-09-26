@@ -52,6 +52,8 @@ public class WithdrawJpaEntity extends BaseEntity {
 
     private String placeAddress;
 
+    private String paymentRequestId;
+
     @Enumerated(EnumType.STRING)
     private SettleType settleType;
 
@@ -72,6 +74,7 @@ public class WithdrawJpaEntity extends BaseEntity {
                               String placeId,
                               String placeName,
                               String placeAddress,
+                              String paymentRequestId,
                               SettleType settleType,
                               TravelAccountJpaEntity travelAccount) {
         this.title = title;
@@ -80,13 +83,11 @@ public class WithdrawJpaEntity extends BaseEntity {
         this.targetAccountNumber = targetAccountNumber;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.placeId = placeId;
-        this.placeName = placeName;
-        this.placeAddress = placeAddress;
         this.settleType = settleType;
         this.travelAccount = travelAccount;
         this.placeId = placeId;
         this.placeName = placeName;
         this.placeAddress = placeAddress;
+        this.paymentRequestId = paymentRequestId;
     }
 }

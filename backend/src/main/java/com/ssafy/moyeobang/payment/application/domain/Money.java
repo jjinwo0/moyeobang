@@ -24,6 +24,10 @@ public class Money {
         return new Money(a.amount.subtract(b.amount));
     }
 
+    public Money divide(int size) {
+        return new Money(this.amount.divide(BigInteger.valueOf(size)));
+    }
+
     public boolean isPositiveOrZero() {
         return this.amount.compareTo(BigInteger.ZERO) >= 0;
     }

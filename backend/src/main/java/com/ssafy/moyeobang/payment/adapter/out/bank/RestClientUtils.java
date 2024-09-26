@@ -6,6 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.ssafy.moyeobang.payment.error.ErrorCode;
+import com.ssafy.moyeobang.payment.error.PaymentException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestClient;
@@ -31,20 +33,21 @@ abstract class RestClientUtils {
     }
 
     public static void postWithoutResponse(String uri, Object request) {
-        log.info("postWithoutResponse : {} ", request);
-        restClient().post()
+        String responseBody = restClient().post()
                 .uri(uri)
                 .contentType(APPLICATION_JSON)
                 .body(request)
-                .retrieve();
-    }
-
-    public static void postWithResponse(String uri, Object request) {
-        restClient().post()
-                .uri(uri)
-                .contentType(APPLICATION_JSON)
-                .body(request)
-                .retrieve();
+                .retrieve()
+                .body(String.class);
+        try {
+            JsonNode jsonResponse = MAPPER.readTree(responseBody);
+            if (!"H0000".equals(jsonResponse.get("Header").get("responseCode").asText())) {
+                log.info("Error in SSAFY Bank");
+                throw new PaymentException(ErrorCode.TRAVEL_ACCOUNT_CANNOT_ACCESS);
+            }
+        } catch (JsonProcessingException e) {
+            log.info("JSON parsing error");
+        }
     }
 
     public static <T> List<T> postConvertResponseToList(String uri, Object request, Class<T> clazz) {
