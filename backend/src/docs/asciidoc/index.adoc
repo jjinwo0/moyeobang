@@ -25,3 +25,4 @@ include::api/account/get-transaction-history-custom.adoc[]
 
 include::api/travel/create-travel.adoc[]
 include::api/travel/get-travels.adoc[]
+include::api/travel/update-travel.adoc[]
