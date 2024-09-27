@@ -519,7 +519,134 @@ type AcceptedNumber = string;
 type PaymentRequestId = string;
 type TravelAccountNumber = string;
 type IsNew = boolean;
+type TotalMoney = number;
+type TotalConsumption = number;
+type TotalSpent = number;
 type AccountId = number;
+
+interface ParticipantInfo {
+  memberId: MemberId;
+  memberName: Nickname;
+  profileImage: ProfileImage;
+}
+
+interface OrderItems {
+  orderItemId: OrderItemId;
+  orderItemTitle: OrderItemTitle;
+  orderItemQuantity: OrderItemquantity;
+  orderItemPrice: OrderItemPrice;
+}
+
+// 모임 통장 공금 잔액 조회
+interface AccountBalanceByGroup {
+  currentBalance: CurrentBalance;
+  totalAmount: TotalMoney;
+  totalSpent: TotalSpent;
+  usagePercentage: UsagePercentage;
+}
+
+// 모임 통장 개인 잔액 조회
+interface AccountBalanceBymemberId {
+  simpleUserProfile: ParticipantInfo;
+  personalCurrentBalance: PersonalCurrentBalance;
+  personalTotalAmount: TotalMoney;
+  personalTotalSpent: TotalSpent;
+  personalUsagePercentage: PersonalUsagePercentage;
+  needsAdditionalDeposit: NeedsAdditionalDeposit;
+}
+
+// 여행 일정 조회
+// schedules 상세 타입 지정
+// MatchedTransaction 지정
+interface MatchedTransaction {
+  transactionId: Id;
+  paymentName: string;
+  totalPrice: number;
+  paymentTime: string;
+  splitMethod: SplitMethod;
+  participantsInfo: ParticipantsInfo[];
+}
+
+// 1. schedule type 지정
+type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
+
+// 1) 추가된 일정
+interface PlusSelfSchedule {
+  scheduleId: Id;
+  scheduleTitle: ScheduleTitle;
+  scheduleLocation: ScheduleLocation;
+  scheduleTime: scheduleTime;
+  predictedBudget: PredictedBudget;
+  completion: Completion;
+  memo: Memo;
+  scheduleImg?: ScheduleImg;
+  matchedTransaction: MatchedTransaction | null;
+}
+
+// 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
+interface PaidAutoSchedule {
+  transactionId: Id;
+  paymentName: PaymentName;
+  totalPrice: Amount;
+  paymentTime: PaymentTime;
+  splitMethod: SplitMethod;
+  participantsInfo: ParticipantsInfo[];
+}
+
+// 2. 실제 여행 일정 조회 data 타입 지정
+type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
+
+// 여행 일정 조회
+// schedules 상세 타입 지정
+// MatchedTransaction 지정
+interface MatchedTransaction {
+  transactionId: Id;
+  paymentName: string;
+  totalPrice: number;
+  paymentTime: string;
+  splitMethod: SplitMethod;
+  participantsInfo: ParticipantsInfo[];
+}
+
+// 1. schedule type 지정
+type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
+
+// 1) 추가된 일정
+interface PlusSelfSchedule {
+  scheduleId: Id;
+  scheduleTitle: ScheduleTitle;
+  scheduleLocation: ScheduleLocation;
+  scheduleTime: scheduleTime;
+  predictedBudget: PredictedBudget;
+  completion: Completion;
+  memo: Memo;
+  scheduleImg?: ScheduleImg;
+  matchedTransaction: MatchedTransaction | null;
+}
+
+// 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
+interface PaidAutoSchedule {
+  transactionId: Id;
+  paymentName: PaymentName;
+  totalPrice: Amount;
+  paymentTime: PaymentTime;
+  splitMethod: SplitMethod;
+  participantsInfo: ParticipantsInfo[];
+}
+
+// 2. 실제 여행 일정 조회 data 타입 지정
+type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
+
+// 결제 내역 전체 조회 GET
+interface TransactionList {
+  transactionId: TransactionId;
+  paymentName: PaymentName;
+  money: Money;
+  participants: ParticipantInfo[]; // 정산한 사람들(default)
+  transactionType: TransactionType;
+  createdAt: CreatedAt;
+  currentBalance: CurrentBalance;
+}
 
 // 상세 조회 영수증 정산 'receipt'의 details
 interface SettledItemByReceipt {
@@ -751,4 +878,23 @@ interface PostDepositAccount {
 
 interface ResponsePostDepositAccount {
   accountBalance: CurrentBalance;
+}
+
+// [모임통장] 소비 비율 차트 데이터
+interface ConsumptionProportionByCategory {
+  categoryName:string;
+  proportion:number;
+  balance:number;
+}
+
+interface ConsumptionProportionByMember {
+  member:ParticipantInfo;
+  proportion:number;
+  balance:number;
+}
+
+// 전체일때 
+interface ConsumptionProportionData {
+  consumptionByCategory:ConsumptionByCategory[];
+  consumptionByMember:ConsumptionByMember[];
 }

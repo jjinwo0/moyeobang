@@ -1,24 +1,17 @@
 import React from 'react';
-import activity from '@/assets/icons/amusementPark.webp';
-import cafe from '@/assets/icons/coffeIcon.png';
-import hotel from '@/assets/icons/hotel.webp';
-import exception from '@/assets/icons/cloud.webp';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/colors';
-
-const chartCategory = [
-    {id:1, image:activity},
-    {id:2, image:cafe},
-    {id:3, image:hotel},
-    {id:4, image:exception}
-]
+import { colorList } from '@/util/chartCategoryList';
+import { getCategoryImageAndColor } from '@/util/chartCategoryList';
 
 const layoutStyle=css`
+    padding-top:10px;
     display:flex;
     flex-direction:row;
     justify-content:space-between;
     width:330px;
     height:70px;
+    padding:5px;
 `;
 
 const imageContainerStyle= (colorName:string) => css`
@@ -31,13 +24,22 @@ const imageContainerStyle= (colorName:string) => css`
     align-items:center;
     justify-content:center;
     padding: 5px;
+
+    #imageBackgroundStyle {
+        background-color: ${colors.white};
+        border-radius: 50%;
+        width: 55px;
+        height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 `;
 
-const imageStyle= (imagePx : number) => css`
+const imageStyle= (isMember? :string) => css`
     border-radius: 50%;
-    width: ${imagePx}px;
-    height: ${imagePx}px;
-    background-color: ${colors.white};
+    width: ${isMember ? '100%' : '80%'};
+    height: ${isMember ? '100%' : '80%'};
     box-sizing:border-box;
     object-fit:cover;
 `;
@@ -70,31 +72,24 @@ const moneyStyle=css`
 `;
 
 interface ChartImageProps {
-    imageId : number;
-    imagePx : number;
-    colorId: number;
     title: string;
-    percent: number;
-    money:Money;
+    proportion: number;
+    balance:Money;
+    profileImage?:ProfileImage;
+    colorIndex?:number;
 }
 
-export default function CategoryCard({imageId, imagePx, colorId, title, percent, money}:ChartImageProps) {
+export default function ChartDetailCard({profileImage, colorIndex, title, proportion, balance}:ChartImageProps) {
 
-    const getColor = (colorId: number) => {
-        if (colorId === 1) return colors.fourth;
-        if (colorId === 2) return colors.third;
-        if (colorId === 3) return colors.customGreenBlue;
-        return colors.gray;
-    };
-
-    const colorName = getColor(colorId)
-
+    const {image, color} = getCategoryImageAndColor(title);
 
     return (
         <div css={layoutStyle}>
-            <div css={imageContainerStyle(colorName)}>
-                <div>
-                    <img src={chartCategory[imageId-1].image} alt={title} css={imageStyle(imagePx)} />
+            <div css={ profileImage ? imageContainerStyle(colorList[colorIndex]) : imageContainerStyle(color)}>
+                <div id="imageBackgroundStyle">
+                    {profileImage ? 
+                    <img src={profileImage} alt={title} css={imageStyle(true)} /> : 
+                    <img src={image} alt={title} css={imageStyle(false)} />}
                 </div>
             </div>
             <div css={textStyle}>
@@ -102,11 +97,11 @@ export default function CategoryCard({imageId, imagePx, colorId, title, percent,
                     {title}
                 </div>
                 <div css={percentStyle}> 
-                    {percent}%
+                    {proportion}%
                 </div>
             </div>
             <div css={moneyStyle}>
-                {money}원
+                {balance}원
             </div>
         </div>
     )

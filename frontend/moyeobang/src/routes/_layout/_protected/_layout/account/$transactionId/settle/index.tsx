@@ -9,6 +9,7 @@ import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/Settl
 import { useSuspenseQuery } from "@tanstack/react-query";
 import moyeobang from '@/services/moyeobang';
 
+
 export const Route = createFileRoute('/_layout/_protected/_layout/account/$transactionId/settle/')({
   component: Settle
 })  
@@ -37,6 +38,8 @@ export default function Settle() {
     method === 'custom' ? 'right' : 'left'
     );
   
+  const isUpdate : boolean = method==='custom'
+  
   // 정산 내역 상세 조회 get API
   const {data} = useSuspenseQuery({
   queryKey: ['transactionDetail', accountId, transactionId],
@@ -59,9 +62,10 @@ export default function Settle() {
 
   // 타입 가드 함수
   function isSettledParticipantByCustom(
-    detail: SettledItemByReceipt[] | SettledParticipantByCustom[]
-  ): detail is SettledParticipantByCustom[] {
-    return (detail as SettledParticipantByCustom[])[0]!.participant !== undefined;
+    details: SettledItemByReceipt[] | SettledParticipantByCustom[]
+  ): details is SettledParticipantByCustom[] {
+    console.log(details)
+    return Array.isArray(details) && details.length > 0 && (details as SettledParticipantByCustom[])[0].participant!== undefined;
   }
 
   return (
@@ -85,14 +89,15 @@ export default function Settle() {
               acceptedNumber={transactionDetailData.acceptedNumber}
             />
           }
-          { activeComponent === 'right' && isSettledParticipantByCustom(transactionDetailData.details) &&
+          { activeComponent === 'right' &&
             <SettleByCustomComponent
               transactionId={Number(transactionId)}
               paymentName={transactionDetailData.paymentName}
               createdAt={transactionDetailData.createdAt}
               totalMoney={transactionDetailData.money}
-              details={transactionDetailData.details}
+              details={isSettledParticipantByCustom(transactionDetailData.details) ? transactionDetailData.details : []} 
               acceptedNumber={transactionDetailData.acceptedNumber}
+              isUpdate={isUpdate} // method있으면 수정 | 없으면 새로 생성
             />
           }
         </div>

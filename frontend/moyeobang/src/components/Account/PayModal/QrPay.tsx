@@ -26,21 +26,24 @@ interface ResultMessage {
     transactionId: TransactionId;
 }
 
-interface ConnectMessage {
-    message:string;
+type ConnectMessage=string;
+
+interface QrPayProps {
+    onClose:VoidFunction;
 }
 
-export default function QrPay( ) {
+export default function QrPay({onClose}:QrPayProps) {
 
     const [paymentRequestId] = useState<string>(uuidv4());
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [resultMessage, setResultMessage] = useState<ResultMessage| null>(null);
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
+    console.log(paymentRequestId)
 
 
     const data : QrData= {
         paymentRequestId: paymentRequestId,
-        sourceAccountNumber: '0018418012115489'
+        sourceAccountNumber: '9993247649535796'
     }
 
     // new EventSource(url, options)
@@ -57,8 +60,8 @@ export default function QrPay( ) {
 
         // 각 이벤트 이름에 맞는 메시지를 처리
         eventSource.addEventListener('connect', (event:any) => {
-            const parsedData : ConnectMessage = event.data;
-            console.log('연결 성공 여부:', parsedData.message);
+            const connectMessage : ConnectMessage = event.data;
+            console.log('연결 성공 여부:', connectMessage);
         });
 
         eventSource.addEventListener('payment-success', (event:any) => {
@@ -104,13 +107,14 @@ export default function QrPay( ) {
 
     function handleClose() {
         setOpenCompleteModal(false);
+        onClose();
     }   
 
 
     return (
     <>
         {openCompleteModal && resultMessage ? (
-            <PayCompletedModal transactionId={Number(resultMessage.transactionId)} onClose={handleClose} />
+            <PayCompletedModal transactionId={Number(resultMessage.transactionId)} onClose={handleClose}/>
         ) : (
             <>
                 <div css={qrContainerStyle}>

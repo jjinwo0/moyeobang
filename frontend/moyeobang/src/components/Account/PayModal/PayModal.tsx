@@ -46,7 +46,7 @@ export default function PayModal({onXClick} : QRPayProps) {
             />
             {activeComponenet==='left' ? 
             (
-                <QrPay />
+                <QrPay onClose={onXClick} />
             ) :
             (
                 <QRScan />  

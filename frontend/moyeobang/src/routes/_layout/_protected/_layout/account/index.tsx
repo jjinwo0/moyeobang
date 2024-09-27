@@ -5,12 +5,16 @@ import { useState } from "react";
 import Navbar from "@/components/common/navBar/Navbar";
 import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
-import AccountCard from '@/components/Account/AccountCard/AccountCard';
+// import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
 import { profileData} from "@/data/data";
 import moyeobang from '@/services/moyeobang';
 import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
 import Spinner from '@/components/Sipnner/Spinner';
+import { proportionData } from '@/data/data';
+import { isAccountBalanceByGroup } from '@/util/typeGaurd';
+import CardSlider from '@/components/Account/CardSlider/CardSlider';
+import ChartDetailCard from '@/components/Account/Chart/ChartDetailCard';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
@@ -34,7 +38,7 @@ const profileListStyle = css`
     padding: 10px 0;
     padding-left:10px;
     box-sizing:border-box;
-    gap: 15px;
+    gap: 10px;
     width: 370px;
 
     overflow-x: auto;
@@ -48,7 +52,6 @@ const accountCardStyle = css`
     max-width: 100%;
     display:flex;
     justify-content: center;
-    /* padding: 20px; */
 `;
 
 const transactionListStyle = css`
@@ -64,15 +67,31 @@ const transactionListStyle = css`
   &::-webkit-scrollbar {
     display: none; 
   }
-`
+`;
+
+const chartListStyle=css`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:10px;
+
+  max-height: 390px; 
+  overflow-y: auto; 
+  width: 100%;
+
+  &::-webkit-scrollbar {
+    display: none; 
+  }
+`;
+
 const accountId = 1;
 export default function groupAccount() {
 
   const allList = profileData.map((member) => member.memberId)
   type SelectedMember = MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
-  const [member, setMember] = useState<MemberId | null>(null);
-
+  const [index, setIndex] = useState<number>(0);
   const {data : transactionData} = useSuspenseQuery({
     queryKey: ['transactionList', accountId, selectedMember ],
     queryFn: () => moyeobang.getTransactionList(Number(accountId), selectedMember),
@@ -87,23 +106,16 @@ export default function groupAccount() {
 
   //get 모임 통장 개인별 잔액
   const { data : accountDataByMember } = useQuery({
-    queryKey: ['accountByMemberId', accountId, member],
+    queryKey: ['accountByMemberId', accountId, selectedMember[0]],
     queryFn: () => {
-      if ( selectedMember.length==1 && member) {
-        return moyeobang.getAccountStateBymemberId(accountId, member)
+      if ( selectedMember.length==1 && selectedMember[0]) {
+        return moyeobang.getAccountStateBymemberId(accountId, selectedMember[0])
       }
     },
     enabled: selectedMember.length==1 && selectedMember !== undefined && accountId !== undefined,// 개인별
   });
 
   const transactionListData = transactionData.data.data;
-
-  // 타입 가드 함수
-  function isAccountBalanceByGroup(
-    accountData: AccountBalanceByGroup | AccountBalanceBymemberId
-  ): accountData is AccountBalanceByGroup {
-    return (accountData as AccountBalanceByGroup).totalAmount !== undefined;
-  }
 
   const accountData = selectedMember.length > 1 
     ? accountDataByGroup?.data.data 
@@ -117,13 +129,16 @@ export default function groupAccount() {
     if (memberId) {
         // 해당 memberId get요청
         setSelectedMember([memberId])
-        setMember(memberId)
     } else {
         // 전체 조회
         const allList = profileData.map((member) => member.memberId)
         setSelectedMember(allList)
     }
   }  
+
+  function handleIndexChange(index:number) {
+    setIndex(index)
+  }
 
   return (
     <>
@@ -142,27 +157,57 @@ export default function groupAccount() {
         ))}
         </div>
         <div css={accountCardStyle} >
-          {isAccountBalanceByGroup(accountData)  ? 
-            <AccountCard 
-            currentBalance={accountData.currentBalance}
-            travelAccountNumber={'333333-12-8912312'}
-            travelName={'아기돼지 오형제'}
-            /> 
-            :
-            <AccountCard 
-            currentBalance={accountData.personalCurrentBalance}
-            travelAccountNumber={'333333-12-8912312'}
-            travelName={'아기돼지 오형제'}
-            memberName={'가현'}
+          {isAccountBalanceByGroup(accountData)  ?
+            <CardSlider 
+            account={accountData} 
+            consumptionProportionByCategory={proportionData.consumptionByCategory}
+            consumptionProportionByMember={proportionData.consumptionByMember}
+            dots={[0,1,2]}
+            onChange={handleIndexChange}
+            /> :
+            <CardSlider 
+            account={accountData}
+            consumptionProportionByCategory={proportionData.consumptionByCategory}
+            dots={[0,1]}
+            onChange={handleIndexChange}
             />
           }
         </div>
-        <div css={transactionListStyle}>
-            {transactionListData.reverse().map((tran, index) => 
-                <TransactionCard key={index} {...tran} />
-            )}
+          {isAccountBalanceByGroup(accountData) ? 
+          (
+              index === 0 ? 
+              <div css={transactionListStyle}>
+                {transactionListData.reverse().map((tran, index) => 
+                    <TransactionCard key={index} {...tran} /> 
+                )}
+              </div> :
+                index === 1 ?
+                <div css={chartListStyle}>
+                  {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
+                  <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
+                  )}
+                </div> :
+                <div css={chartListStyle}>
+                {proportionData.consumptionByMember.sort((a,b) => b.proportion -a.proportion).map((member, index) =>
+                <ChartDetailCard key={index} title={member.member.memberName} proportion={member.proportion} balance={member.balance} profileImage={member.member.profileImage} colorIndex={index}/>
+                )}
+                </div>
+              ) :
+                index === 0 ? 
+                <div css={transactionListStyle}>
+                {transactionListData.reverse().map((tran, index) => 
+                    <TransactionCard key={index} {...tran} />
+                )}
+                </div> :
+                index === 1 ?
+                <div css={transactionListStyle}>
+                  {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
+                  <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance} colortIndex={index}/>
+                )}
+                </div> :
+                undefined
+        }
         </div>
-    </div>
     <Navbar/>
     </>
   )

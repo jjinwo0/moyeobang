@@ -16,8 +16,8 @@ const cardLayoutStyle = css`
     gap:10px;
 `
 
-
 const titleStyle = css`
+    margin-top:10px;
     font-family: 'bold';
     font-size: 24px;
     color: ${colors.fifth};
@@ -33,20 +33,28 @@ const accountStyle = css`
 
 const chartContainerStyle=css`
     width:100%;
-    flex-grow: 1;
+    height:100px;
     display: flex;
     align-items: center;
+    justify-content:center;
+    margin-bottom:25px;
 `;
 
-export default function ChartCard() {
+interface ChartCardProps {
+    title:string;
+    data : ConsumptionProportionByCategory[] | ConsumptionProportionByMember[];
+    money : Money;
+}
+
+export default function ChartCard({title, data, money} : ChartCardProps) {
 
 
     return (
         <div css={cardLayoutStyle}>
-            <div css={titleStyle} >{'전체 소비 내역'}</div>
-            <div css={accountStyle} >{'21,5000원'}</div>
+            <div css={titleStyle} >{title}</div>
+            <div css={accountStyle} >{money}원</div>
             <div css={chartContainerStyle}>
-                <HorizonBarGraph />
+                <HorizonBarGraph data={data}/>
             </div>
         </div>
     )

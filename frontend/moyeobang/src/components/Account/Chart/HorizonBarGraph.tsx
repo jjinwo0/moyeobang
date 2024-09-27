@@ -1,31 +1,10 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { colors } from '@/styles/colors';
 import { css } from '@emotion/react';
-import { RIGHT } from 'react-swipeable';
-
-const rawData = [
-  {
-    name: '소비 비율',
-    '가현': 40,
-    '두홍': 24,
-    '지연': 10,
-    '두열': 16,
-  },
-];
-
-// 값 합계를 구하고, 각 값을 100으로 정규화
-const total = rawData[0]['가현'] + rawData[0]['두홍'] + rawData[0]['지연'] + rawData[0]['두열'];
-
-const data = [
-  {
-    name: '소비%',
-    '가현': ((rawData[0]['가현'] / total) * 100).toFixed(1),
-    '두홍': ((rawData[0]['두홍'] / total) * 100).toFixed(1),
-    '지연': ((rawData[0]['지연'] / total) * 100).toFixed(1),
-    '두열': ((rawData[0]['두열'] / total) * 100).toFixed(1),
-  },
-];
+import { isConsumptionByMember } from '@/util/typeGaurd';
+import { colorList } from '@/util/chartCategoryList';
+import { getCategoryImageAndColor } from '@/util/chartCategoryList';
 
 const titleStyle=css`
     font-family:'regular';
@@ -35,16 +14,41 @@ const titleStyle=css`
     padding-right:10px;
 `;
 
-export default function HorizonBarGraph() {
+// 차트에 쓰일 데이터로 변환
+function transformChart(data : (ConsumptionProportionByCategory[] | ConsumptionProportionByMember[])) {
+
+  const transformedData = data.reduce((acc, item) => {
+
+    if (isConsumptionByMember(item)) {
+      acc[item.member.memberName] = item.proportion;
+    } else {
+      acc[item.categoryName] = item.proportion;
+    }
+
+    return acc;
+  }, {} as Record<string, number>); // key가 문자열이고 값이 숫자임을 명시.
+
+  return [{name:'소비비율', ...transformedData}]
+}
+
+interface HorizonBarGraphProps {
+  data?: ConsumptionProportionByCategory[] | ConsumptionProportionByMember[];
+}
+
+export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
+
+  // 차트만들 데이터로 변환.
+  const chartData = transformChart(data)
+
   return (
-    <div style={{ width: '100%', height: '100px' }}> 
+    <div style={{ width: '100%', height: '60px' }}> 
         <div css={titleStyle}>
-            사용 금액 21,5000 (100%) 기준
+            {isConsumptionByMember(data[0]) ? '멤버별 입금 비율' : '카테고리별 소비 비율'}
         </div>
       <ResponsiveContainer width="100%" height="100%"> 
         <BarChart
         layout="vertical"
-          data={data}
+          data={chartData}
           margin={{
             top: 0,
             right: 0,
@@ -53,17 +57,34 @@ export default function HorizonBarGraph() {
           }} 
           barGap={0} // 막대 그룹 간 간격 조정
         >
-        {/* 그리드 제거 */}
-          {/* <CartesianGrid strokeDasharray="3 3" /> */}
-          <XAxis type="number" domain={[0, 100]} tick={false}  axisLine={false} tickLine={false} padding={{ left:0, right: 5 }} />
-          <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} tick={false} />
+          <XAxis 
+          type="number" 
+          domain={[0, 100]} 
+          tick={false}  
+          axisLine={false} 
+          tickLine={false} 
+          height={0}
+          />
+          <YAxis 
+          type="category" 
+          dataKey="name" 
+          axisLine={false} 
+          tickLine={false} 
+          tick={false} 
+          width={0}
+          />
           <Tooltip />
-          {/* 해당 색에 대한 설명 제거 */}
-          {/* <Legend /> */} 
-          <Bar dataKey="가현" stackId="a" fill={`${colors.gray}`} radius={[10, 0, 0, 10]}/>
-          <Bar dataKey="두홍" stackId="a" fill={`${colors.customGreenBlue}`}/>
-          <Bar dataKey="지연" stackId="a" fill={`${colors.third}`}/>
-          <Bar dataKey="두열" stackId="a" fill={`${colors.fourth}`} radius={[0, 10, 10, 0]}/>
+          {chartData.length > 0 && Object.keys(chartData[0])
+            .filter((key) => key !== 'name') // 'name' 키는 제외
+            .map((key, index, arr) => (
+              <Bar 
+              key={key} 
+              dataKey={key} 
+              stackId="a" 
+              fill={ isConsumptionByMember(data[0]) ? colorList[index] : getCategoryImageAndColor(key).color}  
+              radius={ index===0 ? [20, 0, 0, 20] : index===arr.length-1 ? [0, 20, 20, 0] : undefined} 
+              />
+            ))}
         </BarChart>
       </ResponsiveContainer>
     </div>

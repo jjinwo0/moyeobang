@@ -6,7 +6,7 @@ import {colors} from '@/styles/colors';
 import MapComponent from './MapComponent';
 import ConsumptionRank from './ConsumptionRank';
 import restaurantIcon from '@/assets/icons/dish.webp';
-import coffeeIcon from '@/assets/icons/coffeIcon.png';
+import coffeeIcon from '@/assets/icons/coffe.webp';
 import shoppingCartIcon from '@/assets/icons/shoppingCart.webp';
 import shoppingBagIcon from '@/assets/icons/shoppingBag.webp';
 import bangBang from '@/assets/icons/bangBang.png';
