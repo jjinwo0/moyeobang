@@ -13,31 +13,31 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.moyeobang.travel.adapter.in.web.request.LeaveTravelRequest;
-import com.ssafy.moyeobang.travel.application.port.in.LeaveTravelCommand;
+import com.ssafy.moyeobang.travel.adapter.in.web.request.ParticipateTravelRequest;
+import com.ssafy.moyeobang.travel.application.port.in.ParticipateTravelCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-public class LeaveTravelControllerDocsTest extends RestDocsSupport {
+public class ParticipateTravelControllerDocsTest extends RestDocsSupport {
 
-    @DisplayName("여행 탈퇴 API")
+    @DisplayName("여행 참여 API")
     @Test
-    void leaveTravel() throws Exception {
-        LeaveTravelRequest request = new LeaveTravelRequest(1L);
+    void participateTravel() throws Exception {
+        ParticipateTravelRequest request = new ParticipateTravelRequest(1L);
 
-        given(leaveTravelUseCase.leaveTravel(any(LeaveTravelCommand.class)))
+        given(participateTravelUseCase.participateTravel(any(ParticipateTravelCommand.class)))
                 .willReturn(true);
 
         mockMvc.perform(
-                        post("/api/travels/{travelsId}/leave", "1")
+                        post("/api/travels/{travelsId}/participate", "1")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("leave-travel",
+                .andDo(document("participate-travel",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestFields(

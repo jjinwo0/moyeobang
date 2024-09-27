@@ -12,6 +12,7 @@ import com.ssafy.moyeobang.travel.adapter.out.persistence.quiz.QuizRepositoryInT
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelPort;
 import com.ssafy.moyeobang.travel.application.port.out.LeaveTravelPort;
+import com.ssafy.moyeobang.travel.application.port.out.ParticipateTravelPort;
 import com.ssafy.moyeobang.travel.application.port.out.UpdateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.UpdateTravelPort;
 import com.ssafy.moyeobang.travel.error.MemberNotFoundException;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelPort, LeaveTravelPort {
+public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelPort, ParticipateTravelPort, LeaveTravelPort {
 
     private final MemberRepositoryInTravel memberRepository;
     private final MemberTravelRepositoryInTravel memberTravelRepository;
@@ -62,6 +63,17 @@ public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelP
 
         updateTravelPlaces(command, travel);
         updateQuiz(command, travel);
+
+        return true;
+    }
+
+    @Override
+    public boolean participateTravel(Long travelId, Long memberId) {
+        TravelJpaEntity travel = getTravelBy(travelId);
+        MemberJpaEntity member = getMemberBy(memberId);
+
+        MemberTravelJpaEntity memberTravel = createMemberTravel(travel, member);
+        memberTravelRepository.save(memberTravel);
 
         return true;
     }
