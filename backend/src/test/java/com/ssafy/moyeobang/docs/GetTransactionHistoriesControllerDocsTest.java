@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse;
-import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse.ParticipantInfo;
+import com.ssafy.moyeobang.account.adapter.in.web.response.ParticipantInfo;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
