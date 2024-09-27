@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
 import Confetti from "../Confetti/Confetti";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 export interface CustomSettle {
     participantInfo: ParticipantInfo
@@ -46,10 +47,11 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
     const queryClient = useQueryClient();
     const [isOpenPresentModal, setIsOpenPresentModal] = useState<boolean>(false);
     const [presentMoney, setPresentMoney] = useState<number>(0);
-
+    const {travelId} = useTravelDetailStore();
+    
     // 직접 정산 API
     const {mutate: updateCustom } = useMutation({
-        mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: PostTransactionDetailByCustom}) => moyeobang.postSettleByCustom(transactionId, data),
+        mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByCustom}) => moyeobang.postSettleByCustom(transactionId, travelId, data),
         onSuccess: async () => {
         await queryClient.invalidateQueries({
             queryKey: ['transactionDetail', transactionId],
@@ -126,7 +128,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             acceptedNumber: acceptedNumber,
         }
         console.log('POST 전송 데이터 확인',spendData)
-        updateCustom({transactionId, data:spendData})
+        updateCustom({transactionId, travelId,  data:spendData})
         setIsOpenFinalModal(false);
     }
 
