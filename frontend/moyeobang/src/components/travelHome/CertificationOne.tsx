@@ -95,6 +95,7 @@ export default function CertificationOne({
 
   const handleCertification = () => {
     console.log('verifyNumber', verifyNumber);
+    //[todo] 인증번호 추후 수정 가능(하드코딩)
     if (verifyNumber === '6495') {
       alert('인증에 성공하였습니다.');
       onVerify(); // 부모에게 인증 완료 알리기
