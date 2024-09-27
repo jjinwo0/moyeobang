@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-public record CreateTravelOutCommand(@NotNull String title,
+public record CreateTravelOutCommand(@NotNull Long creatorId,
+                                     @NotNull String title,
                                      @NotNull LocalDate startDate,
                                      @NotNull LocalDate endDate,
                                      @NotNull List<String> travelPlaces,
@@ -14,13 +15,15 @@ public record CreateTravelOutCommand(@NotNull String title,
                                      @NotNull String quizAnswer,
                                      String backgroundImageUrl) {
 
-    public CreateTravelOutCommand(String title,
+    public CreateTravelOutCommand(Long creatorId,
+                                  String title,
                                   LocalDate startDate,
                                   LocalDate endDate,
                                   List<String> travelPlaces,
                                   String quizQuestion,
                                   String quizAnswer,
                                   String backgroundImageUrl) {
+        this.creatorId = creatorId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;

@@ -1,6 +1,5 @@
 package com.ssafy.moyeobang.travel.adapter.out.persistence.travel;
 
-import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import autoparams.AutoSource;
@@ -16,7 +15,6 @@ import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,13 +49,14 @@ class TravelPersistenceAdapterTest extends PersistenceAdapterTestSupport {
     }
 
     @DisplayName("여행 제목, 여행 시작일, 여행 종료일을 바탕으로 여행을 생성한다.")
-    @Test
-    void createTravel() {
+    @ParameterizedTest
+    @AutoSource
+    void createTravel(MemberJpaEntity member, LocalDate startDate, LocalDate endDate) {
         //given
-        LocalDate startDate = now();
-        LocalDate endDate = now().plusDays(1);
+        memberRepository.save(member);
 
         CreateTravelOutCommand command = new CreateTravelOutCommand(
+                member.getId(),
                 "즐거운 제주도 여행",
                 startDate,
                 endDate,

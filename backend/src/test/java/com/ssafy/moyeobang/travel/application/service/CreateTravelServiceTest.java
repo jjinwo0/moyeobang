@@ -35,6 +35,7 @@ class CreateTravelServiceTest {
                 .willReturn(1L);
 
         CreateTravelInCommand command = new CreateTravelInCommand(
+                1L,
                 "즐거운 제주도 여행",
                 LocalDate.now(),
                 LocalDate.now().plusDays(1),
