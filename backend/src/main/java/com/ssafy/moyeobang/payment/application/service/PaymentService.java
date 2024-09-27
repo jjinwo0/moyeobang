@@ -5,11 +5,14 @@ import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
+import com.ssafy.moyeobang.payment.application.port.out.ConfirmPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.SsePort;
 import com.ssafy.moyeobang.payment.application.port.out.UpdateMemberBalancePort;
+import com.ssafy.moyeobang.payment.error.ErrorCode;
+import com.ssafy.moyeobang.payment.error.PaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentService implements PaymentUseCase {
 
     private final SsePort ssePort;
+    private final ConfirmPaymentPort confirmPaymentPort;
     private final ProcessPaymentPort processPaymentPort;
     private final LoadTravelAccountPort loadTravelAccountPort;
     private final UpdateMemberBalancePort updateMemberBalancePort;
@@ -49,15 +53,14 @@ public class PaymentService implements PaymentUseCase {
 
     @Override
     @Transactional
-    public boolean processPayment(PaymentCommand command) {
+    public PaymentResult processPayment(PaymentCommand command) {
         TravelAccount travelAccount = loadTravelAccountPort.loadTravelAccount(command.travelAccountNumber());
 
         boolean canPayment = !travelAccount.couldNotWithdraw(command.paymentRequestMoney());
 
         if (!canPayment) {
-            // PG 서버로 api 응답 결제 실패
-            // ssePort.sendPaymentFailure(command.paymentRequestId(), "Payment failed");
-            return false;
+            confirmPaymentPort.confirmPaymentFailure(command.paymentRequestId());
+            throw new PaymentException(ErrorCode.INSUFFICIENT_BALANCE_IN_TRAVEL_ACCOUNT);
         }
 
         int travelMemberCount = loadTravelAccountPort.loadMemberCount(command.travelAccountNumber());
@@ -68,9 +71,7 @@ public class PaymentService implements PaymentUseCase {
 
         PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.toStoreDomain(),
                 command.paymentRequestMoney(), command.paymentRequestId());
-        
-        // PG 서버로 api 응답 결제 성공
-//        ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
-        return false;
+        confirmPaymentPort.confirmPaymentSuccess(command.paymentRequestId());
+        return paymentResult;
     }
 }

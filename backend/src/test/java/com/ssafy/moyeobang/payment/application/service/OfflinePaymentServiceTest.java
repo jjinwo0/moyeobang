@@ -13,6 +13,7 @@ import com.ssafy.moyeobang.payment.application.domain.Store;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 import com.ssafy.moyeobang.payment.application.port.in.OfflineStoreCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
+import com.ssafy.moyeobang.payment.application.port.out.ConfirmPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
@@ -27,11 +28,12 @@ public class OfflinePaymentServiceTest {
 
     private final SsePort ssePort = mock(SsePort.class);
     private final ProcessPaymentPort processPaymentPort = mock(ProcessPaymentPort.class);
+    private final ConfirmPaymentPort confirmPaymentPort = mock(ConfirmPaymentPort.class);
     private final LoadTravelAccountPort loadTravelAccountPort = mock(LoadTravelAccountPort.class);
     private final UpdateMemberBalancePort updateMemberBalancePort = mock(UpdateMemberBalancePort.class);
 
     private final PaymentService offlinePaymentService = new PaymentService(
-            ssePort, processPaymentPort, loadTravelAccountPort, updateMemberBalancePort
+            ssePort, confirmPaymentPort, processPaymentPort, loadTravelAccountPort, updateMemberBalancePort
     );
 
     @DisplayName("결제가 성공적으로 이루어지면 SSE 성공 메시지를 보낸다.")

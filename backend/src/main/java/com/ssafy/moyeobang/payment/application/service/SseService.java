@@ -14,7 +14,7 @@ public class SseService implements SseUseCase {
 
     @Override
     public SseEmitter connect(String transactionId) {
-        SseEmitter emitter = new SseEmitter(180000L);
+        SseEmitter emitter = new SseEmitter(300000L);
         ssePort.addSseEmitter(transactionId, emitter);
         ssePort.sendConnectedMessage(transactionId);
         return emitter;
