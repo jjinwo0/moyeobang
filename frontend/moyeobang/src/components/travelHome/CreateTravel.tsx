@@ -111,7 +111,11 @@ export default function CreateTravel({
       quizAnswer: quizAnswer,
     };
 
-    newFormData.append('request', JSON.stringify(requestData));
+    // JSON 데이터를 문자열로 변환하여 추가하고 Content-Type을 application/json으로 설정
+    newFormData.append(
+      'request',
+      new Blob([JSON.stringify(requestData)], {type: 'application/json'})
+    );
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
       if (file) {
@@ -121,10 +125,6 @@ export default function CreateTravel({
 
     setFormData(newFormData); // formData 상태 업데이트
 
-    // FormData의 내용을 확인하기 위해 entries() 사용
-    // for (let pair of formData.entries()) {
-    //   console.log(pair[0] + ': ' + pair[1]);
-    // }
     if (isEditMode) {
       // 수정 모드일 때는 onSubmit 함수 호출
       onClose();

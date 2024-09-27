@@ -10,10 +10,8 @@ import inviteIcon from '@/assets/icons/inviteIcon.png';
 import blackPaperIcon from '@/assets/icons/blackPaperIcon.png';
 import ConfirmQuiz from '../quiz/ConfirmQuiz';
 import CreateTravel from './CreateTravel.tsx';
-import useTravelStore from '@/store/useTravelStore';
-import {useTravelContext} from '@/context/TravelDataContext'; // TravelDataContext import
-import useModalStore from '@/store/useModalStore.ts';
-import TravelSummaryModal from '../travelSummary/travelSummaryModal.tsx';
+// import TravelSummaryModal from '../travelSummary/travelSummaryModal.tsx';
+import TravelSummaryModal from '../travelSummary/TravelSummaryModal';
 
 const overlayStyle = css`
   width: 100%; /* 흰색 박스 크기 */
@@ -136,7 +134,6 @@ export default function TravelCard({
   const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
   // const navigate = useNavigate();
   const [editModal, setEditModal] = useState<boolean>(false);
-  const {setTravelData} = useTravelStore();
   // const {nowTravelData} = useTravelContext(); // useTravelContext로 데이터 가져오기
 
   // travelImg 있으면 보여주고 아니면 default 값

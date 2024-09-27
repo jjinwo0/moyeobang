@@ -15,36 +15,6 @@ interface QuizComponentProps {
   travelName: string;
 }
 
-const data = {
-  travelName: '여행제목1',
-  startDate: '2024-09-10T12:34:56Z',
-  endDate: '2024-09-13T12:34:56Z',
-  travelPlaceList: ['강원도 춘천시', '제주도 서귀포시'],
-  accountId: 1,
-  accountNumber: '123456789123',
-  participantsInfo: [
-    {
-      memberId: 1,
-      memberName: '홍길동',
-      profileImage: 'https://example.com/images/honggildong.jpg',
-    },
-    {
-      memberId: 2,
-      memberName: '김철수',
-      profileImage: 'https://example.com/images/kimcheolsu.jpg',
-    },
-    {
-      memberId: 3,
-      memberName: '이영희',
-      profileImage: 'https://example.com/images/leeyounghee.jpg',
-    },
-    {
-      memberId: 4,
-      memberName: '박민수',
-      profileImage: 'https://example.com/images/parkminsu.jpg',
-    },
-  ],
-};
 
 // 모달 스타일
 const modalOverlayStyle = css`

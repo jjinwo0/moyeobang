@@ -111,13 +111,13 @@ export default function AuthVerification({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 추가
 
-  // useEffect(() => {
-  //   // formData가 제대로 전달되었는지 확인
-  //   console.log('Received FormData:');
-  //   for (let pair of formData.entries()) {
-  //     console.log(pair[0] + ': ' + pair[1]);
-  //   }
-  // }, [formData]);
+  useEffect(() => {
+    // formData가 제대로 전달되었는지 확인
+    console.log('Received FormData:');
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+  }, [formData]);
 
   // 체크박스 클릭 시 이미지 토글
   const handleCheckToggle = (index: number) => {
@@ -149,9 +149,6 @@ export default function AuthVerification({
   //[todo] 여행 생성 api 연결 필요
   const queryClient = useQueryClient();
 
-  for (let pair of formData.entries()) {
-    console.log(pair[0], pair[1]);
-  }
 
   const {mutate: postTravel} = useMutation({
     mutationFn: async (formData: FormData) => {

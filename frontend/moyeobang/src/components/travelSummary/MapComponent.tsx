@@ -125,6 +125,7 @@ import {GoogleMap, useJsApiLoader} from '@react-google-maps/api';
 import axios from 'axios';
 // import hearIcon from '@/assets/icons/hearIcon.png';
 import hearIcon from '@/assets/icons/heartIcon.webp';
+import Spinner from '@/components/Sipnner/Spinner';
 
 interface MapProps {
   locationList: {latitude: number; longitude: number}[];
@@ -145,7 +146,7 @@ export default function MapComponent({
   });
 
   const mapRef = useRef<google.maps.Map | null>(null);
-  const [center, setCenter] = useState<Coordinates | null>(null);
+  // const [center, setCenter] = useState<Coordinates | null>(null);
 
   // Geocoding API를 이용해 장소 이름에서 위도, 경도를 가져오는 함수
   const getCoordinatesFromPlace = async (
@@ -238,7 +239,7 @@ export default function MapComponent({
   };
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (
