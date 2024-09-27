@@ -495,7 +495,7 @@ interface Travel {
   travelId: Id;
   travelName: TravelName;
   travelImg: ImgUrl | null;
-  participantsCount: ParticipantsCount;
+  participantCount: ParticipantsCount;
   startDate: StartDate;
   endDate: EndDate;
   travelPlaceList: Place[];

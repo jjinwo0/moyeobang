@@ -21,7 +21,7 @@ const data: Travel[] = [
     travelId: 1,
     travelName: '여행이름1',
     travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
-    participantsCount: 4,
+    participantCount: 4,
     startDate: '2024-09-10T12:34:56Z',
     endDate: '2024-09-13T12:34:56Z',
     travelPlaceList: ['제주도'],
@@ -56,7 +56,7 @@ const data: Travel[] = [
     travelId: 2,
     travelName: '여행제목2',
     travelImg: null,
-    participantsCount: 4,
+    participantCount: 4,
     startDate: '2024-09-23T12:34:56Z',
     endDate: '2024-09-23T12:34:56Z',
     travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
@@ -186,14 +186,16 @@ function Index() {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
 
-  // //[todo] get으로 여행 목록 전체 조회하기
-  // const {data:travelData} = useSuspenseQuery({
-  //   queryKey: ['travelList'],
-  //   //memberId는 쥬스탄드에서 꺼내쓰기!
-  //   queryFn: () => moyeobang.getTravelList(4), // 일단은 4번 회원 데이터 조회
-  // });
+  //[todo] get으로 여행 목록 전체 조회하기
+  const {data:travelData} = useSuspenseQuery({
+    queryKey: ['travelList'],
+    //memberId는 쥬스탄드에서 꺼내쓰기!
+    queryFn: () => moyeobang.getTravelList(4), // 일단은 4번 회원 데이터 조회
+  });
 
-  // const data = travelData?.data.data;
+  const data = travelData?.data.data;
+
+  console.log(data);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -289,7 +291,7 @@ function Index() {
                   startDate={trip.startDate}
                   endDate={trip.endDate}
                   travelPlaceList={trip.travelPlaceList}
-                  participantsCount={trip.participantsCount}
+                  participantsCount={trip.participantCount}
                   quizQuestion={trip.quizQuestion} // quizQuestion 전달
                   quizAnswer={trip.quizAnswer} // quizAnswer 전달
                   onClick={() => clickTravelCard(trip)}
@@ -321,7 +323,7 @@ function Index() {
                   startDate={item.startDate}
                   endDate={item.endDate}
                   travelPlaceList={item.travelPlaceList}
-                  participantsCount={item.participantsCount}
+                  participantsCount={item.participantCount}
                   quizQuestion={item.quizQuestion}
                   quizAnswer={item.quizAnswer}
                   onClick={() => clickTravelCard(item)}

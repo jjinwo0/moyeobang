@@ -114,17 +114,23 @@ export default {
   /**
    * 여행 생성 api
    */
-  postTravel: async (data: FormData) =>
+  postTravel: async (data: FormData, memberId:number) =>
     axios.post<MoyeobangResponse<ResponsePostTravel>>('/travels', data, {
       headers: {'Content-Type': 'multipart/form-data'},
+      params: {
+        memberId: memberId,
+      },
     }),
 
   /**
    * 여행 정보 수정 api
    */
-  putTravel: async (travelId: Id, data: FormData) =>
+  putTravel: async (travelId: Id, data: FormData, memberId:number) =>
     axios.put<MoyeobangResponse<null>>(`/travels/${travelId}`, data, {
       headers: {'Content-Type': 'multipart/form-data'},
+      params: {
+        memberId: memberId,
+      },
     }),
 
   /**
@@ -171,4 +177,13 @@ export default {
     axios.post<MoyeobangResponse<ResponsePostDepositAccount >>(`/accounts/${accountId}/deposit`, data, {
       headers: {'Content-Type': 'application/json'},
     }),
+
+
+  /**
+   * 1원입금 요청 api
+   */
+  postDepositAccountOne : async(accountNumber:string, bankName:string) =>
+    axios.post<MoyeobangResponse<null>>('auth/account/verify/initiate', {accountNumber:accountNumber, bankName:bankName},{
+      headers: {'Content-Type': 'application/json'},
+    })
 };

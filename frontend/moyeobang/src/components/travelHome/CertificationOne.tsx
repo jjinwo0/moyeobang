@@ -78,6 +78,7 @@ export default function CertificationOne({
   const handleVerify = () => {
     if (accountNumber.length > 0) {
       // 계좌번호가 입력되어 있을 때만 실행
+      
       setCertificationVisible(true);
       setCheckButton(true);
     } else {
