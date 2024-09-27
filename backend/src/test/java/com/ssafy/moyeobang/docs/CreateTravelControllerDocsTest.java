@@ -49,6 +49,7 @@ public class CreateTravelControllerDocsTest extends RestDocsSupport {
                         multipart("/api/travels")
                                 .part(new MockPart("request", "request", objectMapper.writeValueAsBytes(request), MediaType.APPLICATION_JSON))
                                 .file(new MockMultipartFile("backgroundImage", "backgroundImage".getBytes()))
+                                .param("memberId", "1")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

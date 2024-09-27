@@ -23,6 +23,7 @@ public class CreateTravelService implements CreateTravelUseCase {
         String imageUrl = uploadImagePort.uploadImage(inCommand.backgroundImage());
 
         CreateTravelOutCommand outCommand = new CreateTravelOutCommand(
+                inCommand.memberId(),
                 inCommand.title(),
                 inCommand.startDate(),
                 inCommand.endDate(),
