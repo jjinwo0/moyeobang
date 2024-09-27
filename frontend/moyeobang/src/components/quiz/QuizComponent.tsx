@@ -177,13 +177,15 @@ export default function QuizComponent({
               buttonStyle={{style: 'blue', size: 'middle'}}
               onClick={() => onsubmitQuiz(travelId, answer)}
             >
-              제출
+              여행참여
             </Btn>
           </div>
         </div>
       </div>
 
-      {confirmModal && <IsCorrectQuiz isCorrect={isCorrect} onClose={closeIsCorrectQuiz} />}
+      {confirmModal && (
+        <IsCorrectQuiz isCorrect={isCorrect} onClose={closeIsCorrectQuiz} />
+      )}
     </>
   );
 }

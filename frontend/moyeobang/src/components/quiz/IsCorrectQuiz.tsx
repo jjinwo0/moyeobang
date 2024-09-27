@@ -1,10 +1,10 @@
 import React from 'react';
-import { css } from '@emotion/react';
+import {css} from '@emotion/react';
 import bangBang from '@/assets/icons/bangBang.png';
-import sadBangbang from '@/assets/icons/sadBangbang.png'
+import sadBangbang from '@/assets/icons/sadBangbang.png';
 import Btn from '@/components/common/btn/Btn';
 import closeButton from '@/assets/icons/closeButton.png';
-import { useRouter } from '@tanstack/react-router';
+import {useRouter} from '@tanstack/react-router';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -39,7 +39,7 @@ const closeButtonStyle = css`
   cursor: pointer;
 
   img {
-    width: 15px;  /* 이미지의 크기를 명확하게 설정 */
+    width: 15px; /* 이미지의 크기를 명확하게 설정 */
     height: 15px; /* 이미지의 크기를 명확하게 설정 */
   }
 `;
@@ -73,11 +73,17 @@ const textStyle = css`
   }
 `;
 
-export default function IsCorrectQuiz({ isCorrect,onClose }: { isCorrect: boolean;onClose: () => void;}) {
+export default function IsCorrectQuiz({
+  isCorrect,
+  onClose,
+}: {
+  isCorrect: boolean;
+  onClose: () => void;
+}) {
   const router = useRouter();
   const handleClose = () => {
     // console.log('close');
-    router.navigate({ to: '/' });
+    router.navigate({to: '/'});
   };
   return (
     <div css={modalOverlayStyle}>
@@ -86,7 +92,8 @@ export default function IsCorrectQuiz({ isCorrect,onClose }: { isCorrect: boolea
           <img src={closeButton} alt="closeButton" />
         </div>
         <div css={logoStyle}>
-        <img src={isCorrect ? bangBang : sadBangbang} alt="quizResultIcon" /> {/* 조건부 이미지 렌더링 */}
+          <img src={isCorrect ? bangBang : sadBangbang} alt="quizResultIcon" />{' '}
+          {/* 조건부 이미지 렌더링 */}
           <p>모여방</p>
         </div>
         <div css={textStyle}>
@@ -102,8 +109,19 @@ export default function IsCorrectQuiz({ isCorrect,onClose }: { isCorrect: boolea
             </>
           )}
         </div>
-        {isCorrect && <Btn buttonStyle={{ style: 'blue', size: 'middle' }}>여행참여</Btn>}
-        {!isCorrect && <Btn buttonStyle={{ style: 'blue', size: 'middle' }} onClick={onClose}>다시도전</Btn>}
+        {isCorrect && (
+          <Btn
+            buttonStyle={{style: 'blue', size: 'middle'}}
+            onClick={handleClose}
+          >
+            확인
+          </Btn>
+        )}
+        {!isCorrect && (
+          <Btn buttonStyle={{style: 'blue', size: 'middle'}} onClick={onClose}>
+            다시도전
+          </Btn>
+        )}
       </div>
     </div>
   );
