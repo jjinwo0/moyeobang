@@ -194,7 +194,7 @@ export default function CreateTravel({
   const queryClient = useQueryClient();
   const {mutate: putTravel} = useMutation({
     mutationFn: (formData: FormData) =>
-      moyeobang.putTravel(travelId!, formData,memberId), //travelId!로 타입을 단언
+      moyeobang.putTravel(travelId!, formData), //travelId!로 타입을 단언
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['travelList'],

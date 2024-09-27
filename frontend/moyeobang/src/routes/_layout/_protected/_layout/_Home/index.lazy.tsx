@@ -190,7 +190,7 @@ function Index() {
   const {data:travelData} = useSuspenseQuery({
     queryKey: ['travelList'],
     //memberId는 쥬스탄드에서 꺼내쓰기!
-    queryFn: () => moyeobang.getTravelList(4), // 일단은 4번 회원 데이터 조회
+    queryFn: () => moyeobang.getTravelList(1), // [*todo]일단은 4번 회원 데이터 조회
   });
 
   const data = travelData?.data.data;

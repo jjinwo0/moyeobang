@@ -97,6 +97,14 @@ const closeButtonStyle = css`
   cursor: pointer; /* 클릭할 수 있게 커서 변경 */
 `;
 
+const detailStyle = css`
+  font-family: 'medium';
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: ${colors.lightBlack};
+`;
+
+
 export default function QuizComponent({
   question,
   travelId,
@@ -105,23 +113,24 @@ export default function QuizComponent({
   const [answer, setAnswer] = useState(''); // 입력된 답을 관리할 상태
   const router = useRouter(); // TanStack Router 사용
 
-  // // [todo] 퀴즈 제출 api 연결
-  // const {mutate: postQuiz} = useMutation({
-  //   mutationFn: ({travelId, answer}: {travelId: number; answer: string}) =>
-  //     moyeobang.postQuiz(travelId, {answer}),
-  //   onSuccess: (response) => {
-  //     const {data} = response.data;
-  //     if(data === true) {
-  //       alert('정답입니다! 여행을 함께하세요!')
-  //       router.navigate({to: '/'}); // 홈으로 리다이렉트
-  //     } else {
-  //       alert('오답입니다. 다시 시도하세요.')
-  //     }
-  //   },
-  //   onError: () => {
-  //     alert('퀴즈 제출에 실패했습니다.');
-  //   },
-  // });
+  // [todo] 퀴즈 제출 api 연결
+  const {mutate: postQuiz} = useMutation({
+    mutationFn: ({travelId, answer}: {travelId: number; answer: string}) =>
+      moyeobang.postQuiz(travelId, {answer}),
+    onSuccess: (response) => {
+      console.log('response', response);
+      const {data} = response.data;
+      if(data === true) {
+        alert('정답입니다! 여행을 함께하세요!')
+        router.navigate({to: '/'}); // 홈으로 리다이렉트
+      } else {
+        alert('오답입니다. 다시 시도하세요.')
+      }
+    },
+    onError: () => {
+      alert('퀴즈 제출에 실패했습니다.');
+    },
+  });
 
   // close 버튼 클릭 시 홈으로 이동
   const handleClose = () => {
@@ -129,7 +138,7 @@ export default function QuizComponent({
   };
 
   const onsubmitQuiz = (travelId: Id, answer: string) => {
-    // postQuiz({travelId, answer});
+    postQuiz({travelId, answer});
   };
 
   return (
@@ -138,7 +147,7 @@ export default function QuizComponent({
         <img src={CloseButton} css={closeButtonStyle} onClick={handleClose} />
         <p css={travelTitleStyle}>{travelName}</p>
         <p css={descripitionStyle}>여행에 초대되셨습니다</p>
-        <p>퀴즈를 풀고 여행을 함께 해보세요!</p>
+        <p css={detailStyle}>퀴즈를 풀고 여행을 함께 해보세요!</p>
         <div css={quizStyle}>
           <span css={englishStyle}>Q</span>
           <span css={textStyle}>{question}</span>

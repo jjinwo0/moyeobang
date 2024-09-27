@@ -807,6 +807,7 @@ interface TravelSummary {
 // 퀴즈 관련
 interface Quiz {
   question: Question;
+  travelName: TravelName;
 }
 
 interface ResponsePostTravel {

@@ -125,12 +125,9 @@ export default {
   /**
    * 여행 정보 수정 api
    */
-  putTravel: async (travelId: Id, data: FormData, memberId:number) =>
+  putTravel: async (travelId: Id, data: FormData) =>
     axios.put<MoyeobangResponse<null>>(`/travels/${travelId}`, data, {
       headers: {'Content-Type': 'multipart/form-data'},
-      params: {
-        memberId: memberId,
-      },
     }),
 
   /**

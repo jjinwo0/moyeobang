@@ -25,14 +25,14 @@ function QuizPage() {
   const location = useLocation(); // 현재 location 정보를 가져옴
   const [travelId, setTravelId] = useState<number | null>(null);
 
-  // //[todo] get으로 초대퀴즈 조회하기
-  // const {data: quizData} = useQuery({
-  //   queryKey: ['quiz'],
-  //   queryFn: () => moyeobang.getTravelQuiz(travelId!),
-  //   enabled: travelId !== null
-  // });
+  //[todo] get으로 초대퀴즈 조회하기
+  const {data: quizData} = useQuery({
+    queryKey: ['quiz'],
+    queryFn: () => moyeobang.getTravelQuiz(travelId!),
+    enabled: travelId !== null
+  });
 
-  // const data = quizData?.data.data;
+  const data = quizData?.data.data;
 
   useEffect(() => {
     const pathSegments = location.pathname.split('/'); // URL 경로를 '/'로 분리

@@ -52,8 +52,12 @@ const dateStyle = css`
 `;
 
 const locationStyle = css`
+  width: 290px;
   font-size: 20px;
   font-family: 'semibold';
+  white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
 `;
 
 const settingIconStyle = css`
