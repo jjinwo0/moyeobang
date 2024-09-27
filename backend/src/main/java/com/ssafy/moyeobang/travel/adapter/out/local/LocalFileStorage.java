@@ -3,7 +3,6 @@ package com.ssafy.moyeobang.travel.adapter.out.local;
 import static java.util.UUID.randomUUID;
 import static org.springframework.util.StringUtils.getFilenameExtension;
 
-import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.travel.application.domain.BackgroundImage;
 import com.ssafy.moyeobang.travel.application.port.out.UploadImagePort;
 import com.ssafy.moyeobang.travel.error.FileStoreException;
@@ -14,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import org.springframework.beans.factory.annotation.Value;
 
-@PersistenceAdapter
 public class LocalFileStorage implements UploadImagePort {
 
     @Value("${moyeobang.storage.path}")
