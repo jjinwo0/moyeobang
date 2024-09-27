@@ -8,13 +8,13 @@ import Btn from '../common/btn/Btn';
 import CloseButton from '@/assets/icons/closeButton.png';
 import {useMutation} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import IsCorrectQuiz from './IsCorrectQuiz';
 
 interface QuizComponentProps {
   question: string;
   travelId: number;
   travelName: string;
 }
-
 
 // 모달 스타일
 const modalOverlayStyle = css`
@@ -104,7 +104,6 @@ const detailStyle = css`
   color: ${colors.lightBlack};
 `;
 
-
 export default function QuizComponent({
   question,
   travelId,
@@ -112,19 +111,24 @@ export default function QuizComponent({
 }: QuizComponentProps) {
   const [answer, setAnswer] = useState(''); // 입력된 답을 관리할 상태
   const router = useRouter(); // TanStack Router 사용
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
 
   // [todo] 퀴즈 제출 api 연결
   const {mutate: postQuiz} = useMutation({
     mutationFn: ({travelId, answer}: {travelId: number; answer: string}) =>
       moyeobang.postQuiz(travelId, {answer}),
-    onSuccess: (response) => {
+    onSuccess: response => {
       console.log('response', response);
       const {data} = response.data;
-      if(data === true) {
-        alert('정답입니다! 여행을 함께하세요!')
-        router.navigate({to: '/'}); // 홈으로 리다이렉트
+      setConfirmModal(true);
+      if (data === true) {
+        setIsCorrect(true);
+        // alert('정답입니다! 여행을 함께하세요!')
+        // router.navigate({to: '/'}); // 홈으로 리다이렉트
       } else {
-        alert('오답입니다. 다시 시도하세요.')
+        // alert('오답입니다. 다시 시도하세요.')
+        setIsCorrect(false);
       }
     },
     onError: () => {
@@ -139,38 +143,47 @@ export default function QuizComponent({
 
   const onsubmitQuiz = (travelId: Id, answer: string) => {
     postQuiz({travelId, answer});
+    setAnswer('');
+  };
+
+  const closeIsCorrectQuiz = () => {
+    setConfirmModal(false);
   };
 
   return (
-    <div css={modalOverlayStyle}>
-      <div css={modalContentStyle}>
-        <img src={CloseButton} css={closeButtonStyle} onClick={handleClose} />
-        <p css={travelTitleStyle}>{travelName}</p>
-        <p css={descripitionStyle}>여행에 초대되셨습니다</p>
-        <p css={detailStyle}>퀴즈를 풀고 여행을 함께 해보세요!</p>
-        <div css={quizStyle}>
-          <span css={englishStyle}>Q</span>
-          <span css={textStyle}>{question}</span>
-        </div>
-        <div css={quizStyle}>
-          <span css={englishStyle}>A</span>
-          <div css={quizInputStyle}>
-            <QuizInput
-              placeholder="여행 퀴즈 답을 입력하세요"
-              value={answer}
-              onChange={e => setAnswer(e.target.value)}
-            />
+    <>
+      <div css={modalOverlayStyle}>
+        <div css={modalContentStyle}>
+          <img src={CloseButton} css={closeButtonStyle} onClick={handleClose} />
+          <p css={travelTitleStyle}>{travelName}</p>
+          <p css={descripitionStyle}>여행에 초대되셨습니다</p>
+          <p css={detailStyle}>퀴즈를 풀고 여행을 함께 해보세요!</p>
+          <div css={quizStyle}>
+            <span css={englishStyle}>Q</span>
+            <span css={textStyle}>{question}</span>
+          </div>
+          <div css={quizStyle}>
+            <span css={englishStyle}>A</span>
+            <div css={quizInputStyle}>
+              <QuizInput
+                placeholder="여행 퀴즈 답을 입력하세요"
+                value={answer}
+                onChange={e => setAnswer(e.target.value)}
+              />
+            </div>
+          </div>
+          <div css={buttonStyle}>
+            <Btn
+              buttonStyle={{style: 'blue', size: 'middle'}}
+              onClick={() => onsubmitQuiz(travelId, answer)}
+            >
+              제출
+            </Btn>
           </div>
         </div>
-        <div css={buttonStyle}>
-          <Btn
-            buttonStyle={{style: 'blue', size: 'middle'}}
-            onClick={() => onsubmitQuiz(travelId, answer)}
-          >
-            여행 참여
-          </Btn>
-        </div>
       </div>
-    </div>
+
+      {confirmModal && <IsCorrectQuiz isCorrect={isCorrect} onClose={closeIsCorrectQuiz} />}
+    </>
   );
 }
