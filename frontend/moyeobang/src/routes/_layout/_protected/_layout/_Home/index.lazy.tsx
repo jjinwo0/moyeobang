@@ -177,7 +177,7 @@ const plusStyle = css`
   right: 25px; /* 오른쪽에서 25px 떨어진 위치 */
   width: 48px;
   height: 48px;
-  z-index: 100; /* 다른 요소 위에 위치하도록 설정 */
+  z-index: 50; /* 다른 요소 위에 위치하도록 설정 */
 `;
 
 function Index() {
