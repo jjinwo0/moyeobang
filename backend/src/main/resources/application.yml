@@ -23,6 +23,13 @@ moyeobang:
   storage:
     path: ./images
 
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAVVZON63HMZBYSHXO
+      secretKey: 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
+    s3:
+      bucket: moyeobang-ssafy
 
 ---
 spring:
