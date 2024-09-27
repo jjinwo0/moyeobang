@@ -4,6 +4,7 @@ import com.ssafy.moyeobang.common.annotation.UseCase;
 import com.ssafy.moyeobang.travel.adapter.in.web.response.CreateTravelResponse;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelUseCase;
+import com.ssafy.moyeobang.travel.application.port.out.CreateTravelEventPublishPort;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelPort;
 import com.ssafy.moyeobang.travel.application.port.out.UploadImagePort;
@@ -17,6 +18,8 @@ public class CreateTravelService implements CreateTravelUseCase {
 
     private final UploadImagePort uploadImagePort;
     private final CreateTravelPort createTravelPort;
+
+    private final CreateTravelEventPublishPort createTravelEventPublishPort;
 
     @Override
     public CreateTravelResponse createTravel(CreateTravelInCommand inCommand) {
@@ -33,6 +36,10 @@ public class CreateTravelService implements CreateTravelUseCase {
                 imageUrl
         );
 
-        return new CreateTravelResponse(createTravelPort.createTravel(outCommand));
+        Long travelId = createTravelPort.createTravel(outCommand);
+
+        createTravelEventPublishPort.publish(travelId);
+
+        return new CreateTravelResponse(travelId);
     }
 }
