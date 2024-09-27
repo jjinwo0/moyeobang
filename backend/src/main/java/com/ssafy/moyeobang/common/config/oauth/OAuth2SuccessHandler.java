@@ -74,7 +74,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 refreshTokenDetail.expireTime()
         );
 
-        clearAuthenticationAttributes(request);
+        clearAuthenticationAttributes(request, response);
 
         log.info("targetUrl: {}", targetUrl);
         log.info("accessTokenDetail: {}", accessTokenDetail);
@@ -87,7 +87,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     // 인증 관련 설정값 제거
-    private void clearAuthenticationAttributes(HttpServletRequest request) {
+    private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
     }
 
