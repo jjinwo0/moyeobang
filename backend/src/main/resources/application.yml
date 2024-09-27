@@ -19,10 +19,6 @@ spring:
       host: 127.0.0.1
       port: 6379
 
-moyeobang:
-  storage:
-    path: ./images
-
 cloud:
   aws:
     credentials:
@@ -83,4 +79,4 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
