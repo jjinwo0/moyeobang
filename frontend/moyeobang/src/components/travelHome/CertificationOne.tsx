@@ -86,7 +86,7 @@ export default function CertificationOne({
 
       setTimeout(() => {
         setCertificationVisible(true); // 1.5초 후에 상태 변경
-      }, 1500); 
+      }, 1500);
       setCheckButton(true);
     } else {
       alert('계좌번호를 입력해주세요');
@@ -94,14 +94,14 @@ export default function CertificationOne({
   };
 
   const handleCertification = () => {
-    if(verifyNumber==='6495'){
-      alert('인증에 성공하였습니다.')
+    console.log('verifyNumber', verifyNumber);
+    if (verifyNumber === '6495') {
+      alert('인증에 성공하였습니다.');
       onVerify(); // 부모에게 인증 완료 알리기
-    } else{
-      alert('인증번호를 다시 확인해주세요')
+    } else {
+      alert('인증번호를 다시 확인해주세요');
     }
   };
-
 
   // //[todo] 계좌인증 성공 시 싸피뱅크에서 입금 내역 조회
   // const {mutate: postDepositAccountOne} = useMutation({
@@ -150,14 +150,16 @@ export default function CertificationOne({
           <img src={certificationExample} />
         </div>
 
-        <LineInput placeholder="인증번호 4자리를 입력해주세요" />
+        <LineInput
+          placeholder="인증번호 4자리를 입력해주세요"
+          value={verifyNumber}
+          onChange={e => setVerifyNumber(e.target.value)}
+        />
         {checkButton && (
           <div css={btnStyle}>
             <Btn
               buttonStyle={{style: 'blue', size: 'big'}}
               onClick={handleCertification} // 인증 번호 확인 클릭 시 호출
-              value={verifyNumber}
-              onChange={e => setVerifyNumber(e.target.value)}
             >
               인증번호 확인
             </Btn>
