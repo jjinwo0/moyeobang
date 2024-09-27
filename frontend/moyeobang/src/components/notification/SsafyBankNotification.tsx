@@ -118,7 +118,7 @@ export default function SsafyBankNotification({
         <p id="title">싸피뱅크 입금 알림</p>
       </div>
 
-      <span css={nameStyle}>모여방 1234</span>
+      <span css={nameStyle}>모여방 6495</span>
       <span css={descriptionStyle}> 님이 계좌로 1원을 입금했습니다.</span>
     </div>
   );

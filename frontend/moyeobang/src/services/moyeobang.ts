@@ -180,7 +180,15 @@ export default {
    * 1원입금 요청 api
    */
   postDepositAccountOne : async(accountNumber:string, bankName:string) =>
-    axios.post<MoyeobangResponse<null>>('auth/account/verify/initiate', {accountNumber:accountNumber, bankName:bankName},{
+    axios.post<MoyeobangResponse<null>>('/auth/account/verify/initiate', {accountNumber:accountNumber, bankName:bankName},{
+      headers: {'Content-Type': 'application/json'},
+    }),
+  
+  /**
+   * 1원입금 확인 api
+   */
+  postDepositAccountOneConfirm : async(accountNumber:string, enteredDepositorName:string) =>
+    axios.post<MoyeobangResponse<null>>('/auth/account/verify/confirm', {accountNumber:accountNumber, enteredDepositorName:enteredDepositorName},{
       headers: {'Content-Type': 'application/json'},
     })
 };

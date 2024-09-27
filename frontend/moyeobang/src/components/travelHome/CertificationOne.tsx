@@ -4,6 +4,8 @@ import LineInput from '../common/Inputs/LineInput';
 import Btn from '../common/btn/Btn';
 import certificationExample from '@/assets/icons/certificationExample.png';
 import SsafyBankNotification from '../notification/SsafyBankNotification';
+import {useMutation} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 const containerStyle = css`
   display: flex;
@@ -78,8 +80,12 @@ export default function CertificationOne({
   const handleVerify = () => {
     if (accountNumber.length > 0) {
       // 계좌번호가 입력되어 있을 때만 실행
-      
-      setCertificationVisible(true);
+      // postDepositAccountOne({accountNumber, bankName: '싸피뱅크'});
+      //[todo] 지금은 여기에 있는데 추후에 바꿔야함
+
+      setTimeout(() => {
+        setCertificationVisible(true); // 1.5초 후에 상태 변경
+      }, 1500); 
       setCheckButton(true);
     } else {
       alert('계좌번호를 입력해주세요');
@@ -89,6 +95,24 @@ export default function CertificationOne({
   const handleCertification = () => {
     onVerify(); // 부모에게 인증 완료 알리기
   };
+
+
+  // //[todo] 계좌인증 성공 시 싸피뱅크에서 입금 내역 조회
+  // const {mutate: postDepositAccountOne} = useMutation({
+  //   mutationFn: async({accountNumber, bankName}: {accountNumber: string, bankName: string}) => {
+  //     await moyeobang.postDepositAccountOne(accountNumber, bankName);
+  //   },
+  //   onSuccess: response => {
+  //     console.log('response', response);
+  //     const {status} = response as unknown as {status: string};
+  //     if(status === 'SUCCESS'){
+  //       console.log('계좌인증 성공');
+  //       //[todo] 싸피뱅크에서 입금 내역 조회해야함
+  //     } else{
+  //       alert('계좌인증 실패');
+  //     }
+  //   }
+  // })
 
   return (
     <>

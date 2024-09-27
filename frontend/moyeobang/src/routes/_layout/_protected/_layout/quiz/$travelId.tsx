@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import QuizComponent from '@/components/quiz/QuizComponent';
 import {useQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import Sipnner from '@/components/Sipnner/Spinner';
 
 export const Route = createFileRoute(
   '/_layout/_protected/_layout/quiz/$travelId'
@@ -41,7 +42,7 @@ function QuizPage() {
   }, [location.pathname]);
 
   if (!travelId) {
-    return <p>올바르지 않은 접근입니다.</p>;
+    return <Sipnner />;
   }
 
   return (
