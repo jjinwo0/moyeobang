@@ -76,6 +76,7 @@ export default function CertificationOne({
     useState<boolean>(false);
   const [checkButton, setCheckButton] = useState<boolean>(false);
   const [accountNumber, setAccountNumber] = useState<string>(''); // 계좌번호 상태 추가
+  const [verifyNumber, setVerifyNumber] = useState<string>(''); // 인증번호 상태 추가
 
   const handleVerify = () => {
     if (accountNumber.length > 0) {
@@ -93,7 +94,12 @@ export default function CertificationOne({
   };
 
   const handleCertification = () => {
-    onVerify(); // 부모에게 인증 완료 알리기
+    if(verifyNumber==='6495'){
+      alert('인증에 성공하였습니다.')
+      onVerify(); // 부모에게 인증 완료 알리기
+    } else{
+      alert('인증번호를 다시 확인해주세요')
+    }
   };
 
 
@@ -150,6 +156,8 @@ export default function CertificationOne({
             <Btn
               buttonStyle={{style: 'blue', size: 'big'}}
               onClick={handleCertification} // 인증 번호 확인 클릭 시 호출
+              value={verifyNumber}
+              onChange={e => setVerifyNumber(e.target.value)}
             >
               인증번호 확인
             </Btn>
