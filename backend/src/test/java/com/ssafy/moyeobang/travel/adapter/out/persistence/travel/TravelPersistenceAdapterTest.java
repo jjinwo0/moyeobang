@@ -9,6 +9,7 @@ import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.support.PersistenceAdapterTestSupport;
 import com.ssafy.moyeobang.travel.adapter.out.persistence.member.MemberRepositoryInTravel;
 import com.ssafy.moyeobang.travel.adapter.out.persistence.member.MemberTravelRepositoryInTravel;
+import com.ssafy.moyeobang.travel.adapter.out.persistence.quiz.QuizRepositoryInTravel;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -38,10 +39,14 @@ class TravelPersistenceAdapterTest extends PersistenceAdapterTestSupport {
     private TravelPlaceRepositoryInTravel travelPlaceRepository;
 
     @Autowired
+    private QuizRepositoryInTravel quizRepository;
+
+    @Autowired
     private EntityManager entityManager;
 
     @AfterEach
     void tearDown() {
+        quizRepository.deleteAllInBatch();
         memberTravelRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
         travelPlaceRepository.deleteAllInBatch();
