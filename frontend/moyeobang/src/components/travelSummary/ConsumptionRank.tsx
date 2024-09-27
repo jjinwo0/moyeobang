@@ -18,15 +18,12 @@ const podiumStyle = (rank: number) => css`
   align-items: flex-end; /* 막대 안에 등수를 아래쪽으로 배치 */
   background-color: rgba(175, 255, 255, 0.7);
   width: 60px;
-  height: ${rank === 1 ? '85px' : rank === 2 ? '55px' : '35px'};
+  height: ${rank === 1 ? '90px' : rank === 2 ? '60px' : '30px'};
   border: solid 1px ${colors.second};
   font-size: 16px;
   position: relative;
-  order: ${rank === 1
-    ? 2
-    : rank === 2
-      ? 1
-      : 3}; /* 1등은 가운데로, 2등은 왼쪽, 3등은 오른쪽 */
+  /* cursor: pointer; */
+  order: ${rank === 1 ? 2 : rank === 2 ? 1 : 3};
 `;
 
 const rankStyle = css`
@@ -38,31 +35,43 @@ const rankStyle = css`
 `;
 
 const nameStyle = css`
-  position: absolute;
-  bottom: 100%; /* 막대 위로 올리기 */
   font-size: 14px;
   font-family: 'regular';
   text-align: center;
   width: 100%;
-  transform: translateY(-10px); /* 막대와의 거리 조절 */
+  margin-top: 10px;
 `;
 
 const imageStyle = css`
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%; /* 둥근 이미지 */
   border: 2px solid ${colors.second}; /* stroke 효과 */
-  margin-top: 5px;
+  margin: 5px;
 `;
 
 const amountStyle = css`
   position: absolute;
-  bottom: 110%; /* 막대 위로 더 띄우기 */
+  top: -25px; /* 막대 바로 위에 위치 */
+  left: 50%;
+  transform: translateX(-50%); /* 중앙 정렬 */
+  color: ${colors.black}; /* 텍스트 색상 */
+  padding: 5px 10px; /* 박스 안 여백 */
+  border-radius: 5px; /* 둥근 모서리 */
+  font-size: 12px;
+  font-family: 'medium';
+  white-space: nowrap; /* 긴 텍스트도 한 줄에 표시 */
+  z-index: 100;
+`;
+
+const countStyle = css`
+  position: absolute;
+  top: -45px; /* 금액 바로 위에 위치 */
   left: 50%;
   transform: translateX(-50%); /* 중앙 정렬 */
   background-color: ${colors.lightGray}; /* 배경색 */
   color: ${colors.black}; /* 텍스트 색상 */
-  padding: 5px 10px; /* 박스 안 여백 */
+  padding: 5px 8px; /* 박스 안 여백 */
   border-radius: 5px; /* 둥근 모서리 */
   font-size: 12px;
   font-family: 'regular';
@@ -71,31 +80,77 @@ const amountStyle = css`
   z-index: 100;
 `;
 
-interface Participant {
-  name: string;
-  amount: number;
+const modalOverlayStyle = css`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const modalContentStyle = css`
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 60%; /* 부모 컨테이너의 너비에 맞추기 */
+  text-align: center;
+  overflow-x: auto; /* 가로 스크롤 가능 */
+  white-space: nowrap; /* 자식 요소들을 한 줄에 배치 */
+  &::-webkit-scrollbar {
+    display: none; /* 스크롤바 숨기기 */
+  }
+`;
+
+const participantContainerStyle = css`
+  display: inline-block; /* 가로로 나열되도록 설정 */
+  margin-right: 10px; /* 참가자 간 간격 */
+`;
+
+interface ParticipantInfo {
+  memberId: number;
+  memberName: string;
+  profileImage: string;
 }
 
+interface ConsumptionByMember {
+  categoryName: ParticipantInfo;
+  proportion: number;
+  balance: number;
+}
 interface ConsumptionRankProps {
-  participantsConsumption: Participant[];
+  consumptionByMember: ConsumptionByMember[];
 }
 
 export default function ConsumptionRank({
-  participantsConsumption,
+  consumptionByMember,
 }: ConsumptionRankProps) {
   const [clickedParticipant, setClickedParticipant] = useState<number | null>(
     null
   ); // 클릭된 참가자 상태
+  const [modalIsOpen, setModalIsOpen] = useState(false); // 모달 상태
   const containerRef = useRef<HTMLDivElement>(null); // 컨테이너 참조 생성
 
-  // amount로 정렬 후 상위 3명의 데이터를 추출
-  const topThree = [...participantsConsumption]
-    .sort((a, b) => b.amount - a.amount) // amount 기준 내림차순 정렬
-    .slice(0, 3); // 상위 3명만 추출
+  // 상위 3개의 고유 금액을 추출
+  const uniqueBalances = Array.from(
+    new Set(consumptionByMember.map(member => member.balance))
+  )
+    .sort((a, b) => b - a)
+    .slice(0, 3);
+
+  // 상위 3개의 금액에 해당하는 참가자들을 추출
+  const topParticipants = consumptionByMember.filter(member =>
+    uniqueBalances.includes(member.balance)
+  );
 
   // 참가자를 클릭했을 때 실행되는 함수
-  const handleClick = (index: number) => {
-    setClickedParticipant(index === clickedParticipant ? null : index); // 클릭된 참가자를 토글
+  const handleClick = (balance: number) => {
+    setClickedParticipant(balance === clickedParticipant ? null : balance); // 클릭된 금액을 토글
+    setModalIsOpen(true); // 모달 열기
   };
 
   // 영역 밖을 클릭했을 때 툴팁을 숨기는 함수
@@ -105,6 +160,7 @@ export default function ConsumptionRank({
       !containerRef.current.contains(event.target as Node)
     ) {
       setClickedParticipant(null); // 영역 밖 클릭 시 툴팁 숨기기
+      setModalIsOpen(false); // 모달 닫기
     }
   };
 
@@ -118,28 +174,57 @@ export default function ConsumptionRank({
 
   return (
     <div css={podiumContainerStyle} ref={containerRef}>
-      {topThree.map((participant, index) => (
+      {uniqueBalances.map((balance, index) => (
         <div
           key={index}
           css={podiumStyle(index + 1)}
-          onClick={() => handleClick(index)} // 클릭 이벤트 추가
+          onClick={() => handleClick(balance)} // 클릭 이벤트 추가
         >
           {/* 등수를 막대 안에 배치 */}
           <div css={rankStyle}>{index + 1}</div>
-          {/* 사람 이름과 bangBang 이미지를 막대 위로 표시 */}
-          {clickedParticipant === index && (
-            <div css={amountStyle}>
-              {participant.name}
-              <br />
-              {participant.amount.toLocaleString()}원
-            </div>
-          )}
-          <div css={nameStyle}>
-            {participant.name}
-            <img src={bangBang} alt="BangBang" css={imageStyle} />
+          {/* 금액을 막대 위로 표시 */}
+          <div css={amountStyle}>{balance.toLocaleString()}원</div>
+          {/* 해당 금액에 해당하는 참가자 수를 금액 위로 표시 */}
+          <div css={countStyle}>
+            {
+              topParticipants.filter(
+                participant => participant.balance === balance
+              ).length
+            }
+            명
           </div>
         </div>
       ))}
+      {modalIsOpen && (
+        <div css={modalOverlayStyle} onClick={() => setModalIsOpen(false)}>
+          <div css={modalContentStyle} onClick={e => e.stopPropagation()}>
+            <h2>멤버</h2>
+            {clickedParticipant !== null && (
+              <div>
+                {topParticipants
+                  .filter(
+                    participant => participant.balance === clickedParticipant
+                  )
+                  .map(participant => (
+                    <div
+                      key={participant.categoryName.memberId}
+                      css={participantContainerStyle}
+                    >
+                      <img
+                        src={participant.categoryName.profileImage}
+                        alt={participant.categoryName.memberName}
+                        css={imageStyle}
+                      />
+                      <div css={nameStyle}>
+                        {participant.categoryName.memberName}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,25 +10,8 @@ import inviteIcon from '@/assets/icons/inviteIcon.png';
 import blackPaperIcon from '@/assets/icons/blackPaperIcon.png';
 import ConfirmQuiz from '../quiz/ConfirmQuiz';
 import CreateTravel from './CreateTravel.tsx';
-import useTravelStore from '@/store/useTravelStore';
-import {useTravelContext} from '@/context/TravelDataContext'; // TravelDataContext import
-import useModalStore from '@/store/useModalStore.ts';
-import TravelSummaryModal from '../travelSummary/travelSummaryModal.tsx';
-
-const cardStyle = css`
-  display: flex;
-  flex-direction: column;
-  width: 328px;
-  height: 158px;
-  border-radius: 10px;
-  background-image: url(${defalutSky});
-  background-size: cover;
-  position: relative; /* 자식 요소를 절대 위치로 배치할 수 있도록 함 */
-  padding: 16px;
-  margin: 16px 0; /* 위아래로 16px의 간격 추가 */
-  overflow: hidden; /* 내부 콘텐츠가 박스 밖으로 나가지 않게 함 */
-  box-sizing: border-box;
-`;
+// import TravelSummaryModal from '../travelSummary/travelSummaryModal.tsx';
+import TravelSummaryModal from '../travelSummary/TravelSummaryModal';
 
 const overlayStyle = css`
   width: 100%; /* 흰색 박스 크기 */
@@ -45,10 +28,14 @@ const overlayStyle = css`
 `;
 
 const titleStyle = css`
+  max-width: 200px;
   font-size: 24px;
   font-family: 'bold';
   color: ${colors.fifth};
   margin-bottom: 15px;
+  white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
 `;
 
 const participantsStyle = css`
@@ -125,6 +112,7 @@ interface TravelCardProps {
   quizAnswer: string;
   onClick?: () => void;
   activeTab?: string;
+  travelImg: string | null;
 }
 
 export default function TravelCard({
@@ -137,6 +125,7 @@ export default function TravelCard({
   quizQuestion,
   quizAnswer,
   onClick,
+  travelImg,
   activeTab,
 }: TravelCardProps) {
   const [settingButtonClick, setSettingButtonClick] = useState<boolean>(false);
@@ -145,8 +134,23 @@ export default function TravelCard({
   const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
   // const navigate = useNavigate();
   const [editModal, setEditModal] = useState<boolean>(false);
-  const {setTravelData} = useTravelStore();
   // const {nowTravelData} = useTravelContext(); // useTravelContext로 데이터 가져오기
+
+  // travelImg 있으면 보여주고 아니면 default 값
+  const cardStyle = css`
+    display: flex;
+    flex-direction: column;
+    width: 328px;
+    height: 158px;
+    border-radius: 10px;
+    background-image: url(${travelImg ? travelImg : defalutSky});
+    background-size: cover;
+    position: relative;
+    padding: 16px;
+    margin: 16px 0;
+    overflow: hidden;
+    box-sizing: border-box;
+  `;
 
   const formatDate = (date: string | Date) => {
     if (typeof date === 'string') {
@@ -285,6 +289,7 @@ export default function TravelCard({
               travelPlaceList: travelPlaceList,
               quizQuestion: quizQuestion,
               quizAnswer: quizAnswer,
+              selectedImage: travelImg,
             }}
           />
         </div>

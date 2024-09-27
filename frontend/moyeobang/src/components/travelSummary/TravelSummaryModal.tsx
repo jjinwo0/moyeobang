@@ -34,11 +34,27 @@ const travelSummary: TravelSummary = {
   totalAmount: 1000000, // 전체 예산
   amountUsed: 950000, // 총 사용 금액(여행 끝나고)
   amountComparison: 900000,
-  consumptionCategory: [
-    {categoryName: '음식점', percent: 40},
-    {categoryName: '카페', percent: 25},
-    {categoryName: '마트', percent: 25},
-    {categoryName: '기념품', percent: 10},
+  consumptionByCategory: [
+    {
+      categoryName: '액티비티',
+      proportion: 15.5,
+      balance: 80000,
+    },
+    {
+      categoryName: '식당, 카페',
+      proportion: 35,
+      balance: 121000,
+    },
+    {
+      categoryName: '할공, 호텔',
+      proportion: 25.5,
+      balance: 121000,
+    },
+    {
+      categoryName: '기타',
+      proportion: 15,
+      balance: 121000,
+    },
   ],
   consumptionTag: [
     '맛집탐방 했나방',
@@ -46,18 +62,60 @@ const travelSummary: TravelSummary = {
     '장바구니 가득 채웠나방',
     '맥시멀리스트인가방',
   ], // 소비 태그 (문구는 프론트에서 정하는건가...?)
-  participantsConsumption: [
+  consumptionByMember: [
     {
-      name: '지연',
-      amount: 1000000,
+      categoryName: {
+        memberId: 1,
+        memberName: '두홍',
+        profileImage: bangBang,
+      },
+      proportion: 30,
+      balance: 300000,
     },
     {
-      name: '가현',
-      amount: 900000,
+      categoryName: {
+        memberId: 2,
+        memberName: '가현',
+        profileImage: bangBang,
+      },
+      proportion: 20,
+      balance: 200000,
     },
     {
-      name: '두홍',
-      amount: 1500000,
+      categoryName: {
+        memberId: 3,
+        memberName: '지연',
+        profileImage: bangBang,
+      },
+      proportion: 15,
+      balance: 150000,
+    },
+    {
+      categoryName: {
+        memberId: 4,
+        memberName: '두열',
+        profileImage: bangBang,
+      },
+      proportion: 15,
+      balance: 150000,
+    },
+    {
+      categoryName: {
+        memberId: 5,
+        memberName: '훈민',
+        profileImage: bangBang,
+      },
+      proportion: 10,
+      balance: 100000,
+    },
+    {
+      categoryName: {
+        memberId: 6,
+        memberName: '진우',
+        profileImage: bangBang,
+      },
+      proportion: 10,
+      balance: 100000,
     },
   ],
   imgSummary: [
@@ -105,7 +163,7 @@ const modalOverlayStyle = css`
 `;
 
 const modalContentStyle = css`
-  padding: 20px;
+  padding: 10px 20px;
   flex-grow: 1;
   text-align: center;
 
@@ -127,10 +185,15 @@ const titleStyle = css`
     margin-bottom: 0;
     display: inline;
   }
+
+  margin-bottom: 5px;
 `;
 
 const travelNameStyle = css`
   color: ${colors.fifth};
+  border: 3px solid ${colors.customBlue};
+  border-radius: 20px;
+  padding: 5px 10px;
 `;
 
 const blackTextStyle = css`
@@ -147,7 +210,7 @@ const travelPlaceStyle = css`
 
 const modalTitleStyle = css`
   margin-top: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const mapContainerStyle = css`

@@ -1,10 +1,10 @@
-import React, {useState, InputHTMLAttributes} from 'react';
-import {css} from '@emotion/react';
-import {colors} from '@/styles/colors';
+import React, { useState, InputHTMLAttributes } from 'react';
+import { css } from '@emotion/react';
+import { colors } from '@/styles/colors';
 import deleteCircle from '@/assets/icons/deleteCircle.png'; // 삭제 아이콘 경로
 
 type LineInputProps = InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
+  label?: string;
 };
 
 const inputContainerStyle = css`
@@ -54,28 +54,37 @@ const deleteIconStyle = css`
   cursor: pointer;
 `;
 
-export default function LineInput({label, ...props}: LineInputProps) {
+export default function LineInput({ label, value, onChange, ...props }: LineInputProps) {
   const [inputValue, setInputValue] = useState<string>(''); // 입력 값을 관리하는 상태
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    // 부모가 onChange를 전달했다면 그것을 우선 사용, 그렇지 않으면 로컬 상태 업데이트
+    if (onChange) {
+      onChange(e);
+    } else {
+      setInputValue(e.target.value);
+    }
   };
 
   const clearInput = () => {
-    setInputValue(''); // 입력 값을 지우는 함수
+    if (onChange) {
+      onChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>); // 부모 상태를 빈 문자열로 업데이트
+    } else {
+      setInputValue(''); // 로컬 상태를 빈 문자열로 업데이트
+    }
   };
 
   return (
     <label css={inputContainerStyle}>
-      <span css={labelStyle}>{label}</span>
+      {label && <span css={labelStyle}>{label}</span>}
       <input
         type="text"
         {...props}
-        value={inputValue}
+        value={value !== undefined ? value : inputValue} // 부모가 value를 전달하면 그 값을 사용, 없으면 로컬 상태 사용
         onChange={handleInputChange}
         css={lineInputStyle}
       />
-      {inputValue && (
+      {(value !== undefined ? value : inputValue) && (
         <img
           src={deleteCircle}
           alt="삭제 아이콘"

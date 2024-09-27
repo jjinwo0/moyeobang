@@ -27,6 +27,7 @@ import useModalStore from '@/store/useModalStore';
 import MapSearch from './MapSearch';
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
+import {css} from '@emotion/react';
 import moyeobang from '@/services/moyeobang';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
@@ -45,6 +46,15 @@ interface CreateTravelProps {
     selectedImage?: string | null;
   };
 }
+
+const colseButtonStyle = css`
+  color: red;
+  font-size: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-bottom: 85px;
+`;
 
 export default function CreateTravel({
   onClose,
@@ -98,10 +108,14 @@ export default function CreateTravel({
       endDate: dateRange[1],
       travelPlaceList: travelPlaceList,
       quizQuestion: quizQuestion,
-      quizAnser: quizAnswer,
+      quizAnswer: quizAnswer,
     };
 
-    newFormData.append('request', JSON.stringify(requestData));
+    // JSON 데이터를 문자열로 변환하여 추가하고 Content-Type을 application/json으로 설정
+    newFormData.append(
+      'request',
+      new Blob([JSON.stringify(requestData)], {type: 'application/json'})
+    );
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
       if (file) {
@@ -111,10 +125,6 @@ export default function CreateTravel({
 
     setFormData(newFormData); // formData 상태 업데이트
 
-    // FormData의 내용을 확인하기 위해 entries() 사용
-    // for (let pair of formData.entries()) {
-    //   console.log(pair[0] + ': ' + pair[1]);
-    // }
     if (isEditMode) {
       // 수정 모드일 때는 onSubmit 함수 호출
       onClose();
@@ -128,8 +138,15 @@ export default function CreateTravel({
     const newform = new FormData();
 
     // 필수 필드 유효성 검사
-    if (!travelName || !dateRange[0] || !dateRange[1]) {
-      alert('모든 필드를 입력해주세요');
+    if (
+      !travelName ||
+      !dateRange[0] ||
+      !dateRange[1] ||
+      !travelPlaceList ||
+      !quizQuestion ||
+      !quizAnswer
+    ) {
+      alert('필수 상항을 모두 입력해주세요');
       return;
     }
 
@@ -202,7 +219,7 @@ export default function CreateTravel({
   };
 
   useEffect(() => {
-    console.log(initialData);
+    console.log('초기데이터', initialData);
     if (isCalendarOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -378,13 +395,34 @@ export default function CreateTravel({
                   alt="사진 추가"
                   onClick={handlePhotoClick}
                 />
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{display: 'none'}}
-                  onChange={handleFileChange}
-                />
+                {selectedImage && (
+                  <button
+                    css={colseButtonStyle}
+                    className="close-button"
+                    onClick={() => {
+                      setSelectedImage(null);
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = ''; // 파일 선택기 초기화
+                      }
+                    }}
+                    style={{
+                      color: 'red',
+                      fontSize: '20px',
+                      border: 'none',
+                      background: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    &times;
+                  </button>
+                )}
               </div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{display: 'none'}}
+                onChange={handleFileChange}
+              />
             </div>
 
             <div css={btnContainerStyle}>

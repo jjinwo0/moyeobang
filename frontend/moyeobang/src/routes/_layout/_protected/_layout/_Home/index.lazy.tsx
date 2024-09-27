@@ -19,8 +19,8 @@ import AllowNotification from '@/components/notification/AllowNotification';
 const data: Travel[] = [
   {
     travelId: 1,
-    travelName: '여행제목1',
-    travelImg: null,
+    travelName: '여행이름1',
+    travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
     participantsCount: 4,
     startDate: '2024-09-10T12:34:56Z',
     endDate: '2024-09-13T12:34:56Z',
@@ -177,7 +177,7 @@ const plusStyle = css`
   right: 25px; /* 오른쪽에서 25px 떨어진 위치 */
   width: 48px;
   height: 48px;
-  z-index: 100; /* 다른 요소 위에 위치하도록 설정 */
+  z-index: 50; /* 다른 요소 위에 위치하도록 설정 */
 `;
 
 function Index() {
@@ -190,7 +190,7 @@ function Index() {
   // const {data:travelData} = useSuspenseQuery({
   //   queryKey: ['travelList'],
   //   //memberId는 쥬스탄드에서 꺼내쓰기!
-  //   queryFn: () => moyeobang.getTravelList(memberId),
+  //   queryFn: () => moyeobang.getTravelList(4), // 일단은 4번 회원 데이터 조회
   // });
 
   // const data = travelData?.data.data;
@@ -204,14 +204,14 @@ function Index() {
   // console.log(today);
 
   // 날짜를 변환한 후 비교
-  const upcomingTrips = data.filter(
-    item => normalizeDate(new Date(item.startDate)) > today
+  const upcomingTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) => normalizeDate(new Date(item.startDate)) > today
   );
-  const pastTrips = data.filter(
-    item => normalizeDate(new Date(item.endDate)) < today
+  const pastTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) => normalizeDate(new Date(item.endDate)) < today
   );
-  const currentTrips = data.filter(
-    item =>
+  const currentTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) =>
       normalizeDate(new Date(item.startDate)) <= today &&
       normalizeDate(new Date(item.endDate)) >= today
   );
@@ -238,6 +238,7 @@ function Index() {
     setTravelData({
       travelId: travel.travelId,
       travelName: travel.travelName,
+      travelImg: travel.travelImg,
       startDate: travel.startDate,
       endDate: travel.endDate,
       travelPlaceList: travel.travelPlaceList,
@@ -292,6 +293,7 @@ function Index() {
                   quizQuestion={trip.quizQuestion} // quizQuestion 전달
                   quizAnswer={trip.quizAnswer} // quizAnswer 전달
                   onClick={() => clickTravelCard(trip)}
+                  travelImg={trip.travelImg}
                 />
               ))}
             </div>
@@ -324,6 +326,7 @@ function Index() {
                   quizAnswer={item.quizAnswer}
                   onClick={() => clickTravelCard(item)}
                   activeTab={activeTab}
+                  travelImg={item.travelImg}
                 />
               ))
             ) : (

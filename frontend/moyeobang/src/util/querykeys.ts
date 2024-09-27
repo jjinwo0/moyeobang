@@ -8,4 +8,5 @@ export default {
   // TRAVELLIST:'travelList',
   // QUIZ:'quiz',
   // ACCOUNTNUMBER:'accountNumber',
+  // CURRENTBALANCE: 'currentBalance',
 };

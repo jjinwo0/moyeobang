@@ -148,7 +148,7 @@ export default {
   /**
    * 참가자 퀴즈 제출
    */
-  postQuiz: async (travelId: Id, data: submitQuiz) =>
+  postQuiz: async (travelId: Id, data: SubmitQuiz) =>
     axios.post<MoyeobangResponse<boolean>>(`/travels/${travelId}/quiz`, data, {
       headers: {'Content-Type': 'application/json'},
     }),
@@ -162,4 +162,13 @@ export default {
       {travelId: travelId},
       {headers: {'Content-Type': 'application/json'}}
     ),
+
+  
+  /**
+   * 공금입금
+   */
+  postDepositAccount : async(accountId:number, data:PostDepositAccount) =>
+    axios.post<MoyeobangResponse<ResponsePostDepositAccount >>(`/accounts/${accountId}/deposit`, data, {
+      headers: {'Content-Type': 'application/json'},
+    }),
 };

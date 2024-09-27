@@ -72,7 +72,8 @@
 import React, {useEffect} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
-import {css} from '@emotion/react';
+import {css, keyframes} from '@emotion/react';
+import bangBang from '@/assets/icons/bangBang.png'
 
 interface AddressComponent {
   long_name: string;
@@ -102,7 +103,7 @@ const fetchCityData = async (cityName: string): Promise<CityResult[]> => {
     return response.data.results;
   } catch (error) {
     console.error(error); // 에러 메시지 로그
-    // return [];
+    return [];
   }
 };
 
@@ -145,6 +146,30 @@ const dropdownStyle = css`
   }
 `;
 
+// 애니메이션 정의: 이미지를 회전시키는 애니메이션
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+// 로딩 상태에서 bangBang 이미지 스타일
+const loadingSpinnerStyle = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+
+  img {
+    width: 50px;
+    height: 50px;
+    animation: ${rotate} 1.5s linear infinite; /* 이미지를 1.5초마다 회전 */
+  }
+`;
+
 export default function MapSearch({cityName, onSelectCity}: MapSearchProps) {
   useEffect(() => {
     console.log('*cityName 값:', cityName);
@@ -159,7 +184,11 @@ export default function MapSearch({cityName, onSelectCity}: MapSearchProps) {
 
   return (
     <div css={containerStyle}>
-      {isLoading && <div>Loading...</div>}
+      {isLoading && (
+        <div css={loadingSpinnerStyle}>
+          <img src={bangBang} alt="Loading..." />
+        </div>
+      )}
       {error && <div>Error occurred!</div>}
       {data && (
         <div css={dropdownStyle}>
