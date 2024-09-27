@@ -47,6 +47,7 @@ class SettleServiceTest {
         // 요청 데이터
         settleCommand = new SettleCommand(
                 10L,
+                100L,
                 "testTransaction",
                 10000,
                 List.of(1L, 2L, 3L)

@@ -15,7 +15,16 @@ VALUES (1, '9993274339436066', 'SSAFY BANK'),
        (6, '9990066034542704', 'SSAFY BANK');
 
 INSERT INTO travel (title, travel_key)
-VALUES ('제주도 여행', '563cc390-6a0c-407b-b8cd-f1ee2d0cd7ce');
+VALUES ('제주도 여행', '563cc390-6a0c-407b-b8cd-f1ee2d0cd7ce'),
+       ('싸피 여행', '563cc390-6a0c-407b-b8cd-f1ee2d0cd7ce');
+
+INSERT INTO travel_place (travel_id, name)
+VALUES (1, '제주도'),
+       (2, '서울특별시'),
+       (2, '대전광역시'),
+       (2, '광주광역시'),
+       (2, '경상북도 구미'),
+       (2, '부산광역시');
 
 INSERT INTO member_travel (balance, member_id, travel_id)
 VALUES (0, 1, 1),
@@ -23,13 +32,17 @@ VALUES (0, 1, 1),
        (0, 3, 1),
        (0, 4, 1),
        (0, 5, 1),
-       (0, 6, 1);
+       (0, 6, 1),
+       (0, 1, 2),
+       (0, 3, 2);
 
 INSERT INTO travel_account (travel_id, account_number)
-VALUES (1, '9993247649535796');
+VALUES (1, '9993247649535796'),
+       (2, '9997097385463465');
 
 INSERT INTO quiz (travel_id, question, answer)
-VALUES (1, '김훈민의 발 사이즈는?', '235')
+VALUES (1, '김훈민의 발 사이즈는?', '235'),
+       (2, '김용수의 키는?', '155');
 
 -- INSERT INTO deposit (amount, balance_snapshot, created_at, updated_at, member_id, travel_account_id, created_by, modified_by)
 -- VALUES (200000, 200000, '2023-09-02 09:00:00', '2023-09-02 09:00:00', 1, 1, 'admin', 'admin'),
