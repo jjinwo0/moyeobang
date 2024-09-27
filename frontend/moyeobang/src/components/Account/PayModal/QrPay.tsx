@@ -48,7 +48,7 @@ export default function QrPay({onClose}:QrPayProps) {
 
     // new EventSource(url, options)
     const fetchSEE = () => {
-        const eventSource = new EventSourcePolyfill(`http://localhost:8080/api/payment/connect?paymentRequestId=${paymentRequestId}`, {
+        const eventSource = new EventSourcePolyfill(`https://j11c102.p.ssafy.io/api/payment/connect?paymentRequestId=${paymentRequestId}`, {
             // headers: {
             //     Authorization: `Bearer ${token}`, 
             // },
