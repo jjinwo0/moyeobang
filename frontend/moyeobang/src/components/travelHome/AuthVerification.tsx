@@ -111,13 +111,13 @@ export default function AuthVerification({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 추가
 
-  // useEffect(() => {
-  //   // formData가 제대로 전달되었는지 확인
-  //   console.log('Received FormData:');
-  //   for (let pair of formData.entries()) {
-  //     console.log(pair[0] + ': ' + pair[1]);
-  //   }
-  // }, [formData]);
+  useEffect(() => {
+    // formData가 제대로 전달되었는지 확인
+    console.log('Received FormData:');
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+  }, [formData]);
 
   // 체크박스 클릭 시 이미지 토글
   const handleCheckToggle = (index: number) => {
@@ -146,27 +146,28 @@ export default function AuthVerification({
     setShowModal(false); // 인증 완료 후 모달 닫기
   };
 
-  // //[todo] 여행 생성 api 연결 필요
-  // const queryClient = useQueryClient();
+  //[todo] 여행 생성 api 연결 필요
+  const queryClient = useQueryClient();
 
-  // const { mutate: postTravel } = useMutation({
-  //   mutationFn: async (formData: FormData) => {
-  //     const response = await moyeobang.postTravel(formData);
-  //     return response.data; // Axios의 response.data 반환
-  //   },
-  //   onSuccess: async (response: MoyeobangResponse<ResponsePostTravel>) => {
-  //     const { travelId } = response.data; // 응답에서 travelId 추출
 
-  //     // travelList 쿼리 무효화 및 재요청
-  //     await queryClient.invalidateQueries({
-  //       queryKey: ['travelList'],
-  //       refetchType: 'all',
-  //     });
+  const {mutate: postTravel} = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const response = await moyeobang.postTravel(formData);
+      return response.data; // Axios의 response.data 반환
+    },
+    onSuccess: async (response: MoyeobangResponse<ResponsePostTravel>) => {
+      const {travelId} = response.data; // 응답에서 travelId 추출
 
-  //     // travelId를 사용해 postAccount 호출
-  //     postAccount(travelId);
-  //   },
-  // });
+      // travelList 쿼리 무효화 및 재요청
+      await queryClient.invalidateQueries({
+        queryKey: ['travelList'],
+        refetchType: 'all',
+      });
+
+      // travelId를 사용해 postAccount 호출
+      // postAccount(travelId);
+    },
+  });
 
   // //[todo] 여행 계좌 생성
   // const {mutate:postAccount} = useMutation({
@@ -182,7 +183,7 @@ export default function AuthVerification({
   const handleCompleteClick = () => {
     if (isVerified && isAllTermsAgreed) {
       //[todo] 여행 생성 함수 호출
-      // postTravel(formData);
+      postTravel(formData);
 
       onClose(); // 완료 버튼이 파란색일 때만 모달 닫기
     } else {

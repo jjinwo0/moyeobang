@@ -1,6 +1,6 @@
 import {css} from '@emotion/react';
 import React from 'react';
-import siren from '@/assets/icons/siren.webp';
+import exclamationMark from '@/assets/icons/exclamationMark.png';
 
 const containerStyle = css`
   width: 100%;
@@ -13,8 +13,8 @@ const contentStyle = css`
   padding: 20px;
 
   img {
-    width: 34px;
-    margin-right: 20px; /* 이미지와 텍스트 사이 간격 */
+    width: 40px;
+    margin-right: 12px; /* 이미지와 텍스트 사이 간격 */
   }
 `;
 
@@ -26,7 +26,6 @@ const titleStyle = css`
 const textStyle = css`
   font-family: 'regular';
   font-size: 18px;
-  margin-left: 5px; /* 제목과 텍스트 사이의 간격 */
 `;
 
 const timeStyle = css`
@@ -35,29 +34,21 @@ const timeStyle = css`
   margin-bottom: 5px;
 `;
 
-const requestStyle = css`
-  font-family: 'regular';
-  font-size: 18px;
-  margin-top: 3px;
-`;
-
 const travelName: string = '아기돼지오형제';
 
-const memberName: MemberName = '훈민';
-
-export default function HurryNotification() {
+export default function TimeNotification() {
   return (
     <div css={containerStyle}>
       <div css={contentStyle}>
-        <img src={siren} alt="Notification Icon" />
+        <img src={exclamationMark} alt="Notification Icon" />
         <div>
-          <p css={timeStyle}>2024.09.03 13:10</p>
-          <span css={titleStyle}>{travelName}</span>
+          <p css={timeStyle}>2024.09.03 20:00</p>
+          <span css={textStyle}>하루를 마무리하는 현재</span>
+          <span css={titleStyle}> {travelName}</span>
           <span css={textStyle}>
-            에서 <span css={titleStyle}>{memberName}</span>님의 몫이
-            300,000원(20%) 밖에 남지 않았어요!
+            에 300,000원 남아있어요!
+            <br />
           </span>
-          <p css={requestStyle}>개인입금을 통해 통장에 돈을 채워주세요!</p>
         </div>
       </div>
     </div>

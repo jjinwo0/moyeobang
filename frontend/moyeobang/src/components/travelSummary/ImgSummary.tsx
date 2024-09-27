@@ -63,9 +63,6 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
     font-family: 'semibold';
   `;
 
-  const firstLineStyle = css`
-    margin-bottom: 3px;
-  `;
 
   const informationImgStyle = css`
     position: absolute;
@@ -143,14 +140,13 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
         {/* 팝업을 감싸는 div에 ref 추가 */}
         <div css={popUpStyle} ref={popupRef}>
           {message && (
-            <MessagePopup
-              message={
-                <>
-                  <p css={firstLineStyle}>업로드한 사진 8개를</p>
-                  <p>랜덤으로 보여줍니다.</p>
-                </>
-              }
-            />
+            <MessagePopup>
+              <>
+                {/* <p css={firstLineStyle}>업로드한 사진 8개를</p>
+                <p>랜덤으로 보여줍니다.</p> */}
+                <p>업로드한 사진 8개를 <br />랜덤으로 보여줍니다.</p>
+              </>
+            </MessagePopup>
           )}
         </div>
         <img

@@ -2,15 +2,9 @@ import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 
 interface TravelState
-  extends Omit<
-    Travel,
-    'quizQuestion' | 'quizAnswer' | 'travelImg' | 'participantsCount'
-  > {
+  extends Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantsCount'> {
   setTravelData: (
-    data: Omit<
-      Travel,
-      'quizQuestion' | 'quizAnswer' | 'travelImg' | 'participantsCount'
-    >
+    data: Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantsCount'>
   ) => void;
 }
 
@@ -19,6 +13,7 @@ const useTravelDetailStore = create<TravelState>()(
     set => ({
       travelId: 0,
       travelName: '',
+      travelImg: null,
       startDate: '',
       endDate: '',
       travelPlaceList: [],
@@ -28,6 +23,7 @@ const useTravelDetailStore = create<TravelState>()(
       setTravelData: ({
         travelId,
         travelName,
+        travelImg,
         startDate,
         endDate,
         travelPlaceList,
@@ -38,6 +34,7 @@ const useTravelDetailStore = create<TravelState>()(
         set({
           travelId,
           travelName,
+          travelImg,
           startDate,
           endDate,
           travelPlaceList,

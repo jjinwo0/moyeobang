@@ -19,7 +19,7 @@ const modalOverlayStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 101; /* 다른 요소 위에 표시되도록 설정 */
+  z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
 `;
 
 const modalContentStyle = css`
