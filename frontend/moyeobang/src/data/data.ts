@@ -3,24 +3,34 @@ import profileImageUrl from '@/assets/images/profile.jpg'
 export const profileData : ParticipantInfo[] = [
     {   
         memberId : 1,
-        memberName: "홍길동",
+        memberName: "김두열",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 2,
-        memberName: "홍길동",
+        memberName: "김훈민",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 3,
-        memberName: "홍길동",
+        memberName: "박진우",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 4,
-        memberName: "홍길동",
+        memberName: "전가현",
         profileImage : profileImageUrl,
     },
+    {   
+      memberId : 5,
+      memberName: "강두홍",
+      profileImage : profileImageUrl,
+  },
+  {   
+      memberId : 6,
+      memberName: "유지연",
+      profileImage : profileImageUrl,
+  },
   ]
   
   export const transactions = [

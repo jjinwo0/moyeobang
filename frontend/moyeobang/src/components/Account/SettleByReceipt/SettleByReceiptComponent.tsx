@@ -22,22 +22,73 @@ const layoutStyle = css`
     gap:30px;
     align-items: center;
 `;
-
+// 이안에 로딩창. 이미지 사진, 웹캠 있음. z-index:0
 const cameraStyle = css`
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index:1;
+    position:relative; 
+    // 웹캠
     video {
         width:390px;
         height:600px;
         object-fit: cover;
+        z-index:1;
     }
+    // 찍힌 이미지 이미지위에 로딩선 올라와야함. relative설정.
     img {
         height:600px;
         object-fit: cover;
+        position:relative;
+        z-index:1;
     }
+`;
+// webcam위에 네모 영역
+const rectangleStyle=css`
+    z-index:2;
+    background-color:transparent;
+    border: solid 3px ${colors.third};
+    width:300px;
+    height:500px;
+    position:absolute;
+`;
+// loading선 이미지위에 올라오기때문에 absolute설정.
+const loadingStyle=css`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index:3;
+
+    #line{
+        position: absolute;
+        width: 100%;
+        height: 20px;
+        // 그라데이션 효과
+        background: linear-gradient(
+        to bottom,
+        ${colors.third} 0%,      
+        rgba(255, 255, 255, 0) 100% 
+    );
+        animation: moveUpDown 3s infinite ease-in-out;     
+    }
+    
+    @keyframes moveUpDown {
+    0% {
+      top: 0;
+    }
+    50% {
+      top: calc(100% - 20px);
+    }
+    100% {
+      top: 0;
+    }
+  }
 `;
 
 const buttonStyle = css`
@@ -134,7 +185,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
                 console.error(error);
                 setError('OCR 처리 중 오류가 발생했습니다.')
             } finally {
-                setIsLoading(false);
+                // setIsLoading(false);
             }
         }
 
@@ -173,7 +224,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
             let parsedData;
             try {
                 parsedData = JSON.parse(jsonString); // JSON 형식의 데이터만 추출해서 파싱
-                console.log(parsedData)
+                // console.log(parsedData)
             } catch (parseError) {
                 console.error("JSON 파싱 오류:", parseError);
                 setError("영수증 처리 중 오류가 발생했습니다.");
@@ -183,9 +234,11 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
             // extractItems를 통해 데이터 변환
             if (parsedData && parsedData.items) {
                 const results = extractItems(parsedData, transactionId, createdAt, money, paymentName, address, acceptedNumber); 
-                console.log('영수증 ocr 결과', results)
+                // console.log('영수증 ocr 결과', results)
                 setResults(results)
+                setIsLoading(false);
                 setOpenResultModal(true);
+                console.log('loading:', isLoading)
 
             } else {
                 console.error('영수증 처리 오류 발생');
@@ -208,6 +261,10 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
         setImageSrc('');
     }
 
+    useEffect(() => {
+        console.log('isLoading:', isLoading);
+    }, [isLoading]);
+
     return (
         <div css={layoutStyle}>
            {results && openResultModal ? (
@@ -216,13 +273,23 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
             <>
                 <div css={cameraStyle}>
                     {imageSrc ? (
-                        <img src={imageSrc} alt="capture_img" />
+                        <>
+                            <img src={imageSrc} alt="capture_img" />
+                            {isLoading && (
+                                <div css={loadingStyle}>
+                                    <div id='line' />
+                                </div> 
+                            )}
+                        </>
                     ) : (
+                        <>
                         <Webcam 
                         ref={webcamRef} 
                         screenshotFormat="image/jpeg"
                         videoConstraints={{ facingMode: "environment" }} // 모바일 후면 카메라 사용
                         />
+                        <div css={rectangleStyle} />
+                        </>
                     )}
                 </div>
                 <div css={buttonStyle}>

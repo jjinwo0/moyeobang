@@ -2,8 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
-import Btn from "../common/btn/Btn";
-import ResultByPos from "./ResultByPos";
+// import ResultByPos from "./ResultByPos";
 import HeaderWithXButton from "../common/Header/HeaderWithXbutton";
 
 const qrReaderLayoutStyle = css`
@@ -63,16 +62,16 @@ const textBoxStyle= css`
 interface QrScanByPosProps {
     onClose : () => void;
     paymentData : PosPay;
+    onResult: (resultData:PaymentProps) => void;
 }
 
-export default function QrScanByPos({onClose, paymentData } : QrScanByPosProps) {
+export default function QrScanByPos({onClose, paymentData, onResult } : QrScanByPosProps) {
     
     const scanner = useRef<QrScanner>();
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
-    const [ resultData, setResultData ] = useState< PaymentProps| null>(null);
-    const [openResultModal, setOpenResultModal] = useState<boolean>(false);
+    // const [openResultModal, setOpenResultModal] = useState<boolean>(false);
 
     // 결과 
     const [scannedResult, setScannedResult] = useState<QrData | null>();
@@ -87,8 +86,12 @@ export default function QrScanByPos({onClose, paymentData } : QrScanByPosProps) 
 
             // 결제 데이터 합치기
             const payData : PaymentProps= {...data, ...paymentData}
-            setResultData(payData) // 결제 전체 데이터
-            setOpenResultModal(true) // 결제 모달 열기
+
+            if (payData) {
+                onResult(payData); // 상위로 데이터 보내기
+                onClose() // QR스캔 닫기
+            }
+            // setOpenResultModal(true) // 결제 모달 열기
 
         } catch (error) {
             console.log(error)
@@ -157,11 +160,11 @@ export default function QrScanByPos({onClose, paymentData } : QrScanByPosProps) 
                 </div>
                 </>
             }
-                { openResultModal && resultData &&(
+                {/* { openResultModal && resultData &&(
                     <p css={resultStyle}>
                        <ResultByPos {...resultData} />
                     </p>
-                )}
+                )} */}
         </div>
     ) 
 }     

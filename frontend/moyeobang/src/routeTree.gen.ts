@@ -14,9 +14,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
-import { Route as PosLayoutImport } from './routes/pos/_layout'
+import { Route as PosIndexImport } from './routes/pos/index'
 import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
-import { Route as PosLayoutIndexImport } from './routes/pos/_layout/index'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
 import { Route as LayoutProtectedLayoutTravelLogIndexImport } from './routes/_layout/_protected/_layout/travelLog/index'
@@ -30,7 +29,6 @@ import { Route as LayoutProtectedLayoutAccountTransactionIdDetailLayoutIndexImpo
 
 // Create Virtual Routes
 
-const PosImport = createFileRoute('/pos')()
 const LayoutProtectedLayoutHomeIndexLazyImport = createFileRoute(
   '/_layout/_protected/_layout/_Home/',
 )()
@@ -40,29 +38,19 @@ const LayoutProtectedLayoutAccountTransactionIdDetailImport = createFileRoute(
 
 // Create/Update Routes
 
-const PosRoute = PosImport.update({
-  path: '/pos',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const LayoutRoute = LayoutImport.update({
   id: '/_layout',
   getParentRoute: () => rootRoute,
 } as any)
 
-const PosLayoutRoute = PosLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => PosRoute,
+const PosIndexRoute = PosIndexImport.update({
+  path: '/pos/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const LayoutProtectedRoute = LayoutProtectedImport.update({
   id: '/_protected',
   getParentRoute: () => LayoutRoute,
-} as any)
-
-const PosLayoutIndexRoute = PosLayoutIndexImport.update({
-  path: '/',
-  getParentRoute: () => PosLayoutRoute,
 } as any)
 
 const LayoutEntranceIndexRoute = LayoutEntranceIndexImport.update({
@@ -158,19 +146,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProtectedImport
       parentRoute: typeof LayoutImport
     }
-    '/pos': {
-      id: '/pos'
+    '/pos/': {
+      id: '/pos/'
       path: '/pos'
       fullPath: '/pos'
-      preLoaderRoute: typeof PosImport
+      preLoaderRoute: typeof PosIndexImport
       parentRoute: typeof rootRoute
-    }
-    '/pos/_layout': {
-      id: '/pos/_layout'
-      path: '/pos'
-      fullPath: '/pos'
-      preLoaderRoute: typeof PosLayoutImport
-      parentRoute: typeof PosRoute
     }
     '/_layout/_protected/_layout': {
       id: '/_layout/_protected/_layout'
@@ -185,13 +166,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/entrance'
       preLoaderRoute: typeof LayoutEntranceIndexImport
       parentRoute: typeof LayoutImport
-    }
-    '/pos/_layout/': {
-      id: '/pos/_layout/'
-      path: '/'
-      fullPath: '/pos/'
-      preLoaderRoute: typeof PosLayoutIndexImport
-      parentRoute: typeof PosLayoutImport
     }
     '/_layout/_protected/_layout/profile/$memberName': {
       id: '/_layout/_protected/_layout/profile/$memberName'
@@ -358,33 +332,10 @@ const LayoutRouteChildren: LayoutRouteChildren = {
 const LayoutRouteWithChildren =
   LayoutRoute._addFileChildren(LayoutRouteChildren)
 
-interface PosLayoutRouteChildren {
-  PosLayoutIndexRoute: typeof PosLayoutIndexRoute
-}
-
-const PosLayoutRouteChildren: PosLayoutRouteChildren = {
-  PosLayoutIndexRoute: PosLayoutIndexRoute,
-}
-
-const PosLayoutRouteWithChildren = PosLayoutRoute._addFileChildren(
-  PosLayoutRouteChildren,
-)
-
-interface PosRouteChildren {
-  PosLayoutRoute: typeof PosLayoutRouteWithChildren
-}
-
-const PosRouteChildren: PosRouteChildren = {
-  PosLayoutRoute: PosLayoutRouteWithChildren,
-}
-
-const PosRouteWithChildren = PosRoute._addFileChildren(PosRouteChildren)
-
 export interface FileRoutesByFullPath {
   '': typeof LayoutProtectedLayoutRouteWithChildren
-  '/pos': typeof PosLayoutRouteWithChildren
+  '/pos': typeof PosIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
-  '/pos/': typeof PosLayoutIndexRoute
   '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
@@ -398,7 +349,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof LayoutProtectedRouteWithChildren
-  '/pos': typeof PosLayoutIndexRoute
+  '/pos': typeof PosIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
   '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
@@ -414,11 +365,9 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/_protected': typeof LayoutProtectedRouteWithChildren
-  '/pos': typeof PosRouteWithChildren
-  '/pos/_layout': typeof PosLayoutRouteWithChildren
+  '/pos/': typeof PosIndexRoute
   '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
-  '/pos/_layout/': typeof PosLayoutIndexRoute
   '/_layout/_protected/_layout/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/_layout/_protected/_layout/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/_layout/_protected/_layout/account/': typeof LayoutProtectedLayoutAccountIndexRoute
@@ -437,7 +386,6 @@ export interface FileRouteTypes {
     | ''
     | '/pos'
     | '/entrance'
-    | '/pos/'
     | '/profile/$memberName'
     | '/quiz/$travelId'
     | '/account'
@@ -464,11 +412,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_layout'
     | '/_layout/_protected'
-    | '/pos'
-    | '/pos/_layout'
+    | '/pos/'
     | '/_layout/_protected/_layout'
     | '/_layout/entrance/'
-    | '/pos/_layout/'
     | '/_layout/_protected/_layout/profile/$memberName'
     | '/_layout/_protected/_layout/quiz/$travelId'
     | '/_layout/_protected/_layout/account/'
@@ -484,12 +430,12 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
-  PosRoute: typeof PosRouteWithChildren
+  PosIndexRoute: typeof PosIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
-  PosRoute: PosRouteWithChildren,
+  PosIndexRoute: PosIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -505,7 +451,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_layout",
-        "/pos"
+        "/pos/"
       ]
     },
     "/_layout": {
@@ -522,18 +468,8 @@ export const routeTree = rootRoute
         "/_layout/_protected/_layout"
       ]
     },
-    "/pos": {
-      "filePath": "pos",
-      "children": [
-        "/pos/_layout"
-      ]
-    },
-    "/pos/_layout": {
-      "filePath": "pos/_layout.tsx",
-      "parent": "/pos",
-      "children": [
-        "/pos/_layout/"
-      ]
+    "/pos/": {
+      "filePath": "pos/index.tsx"
     },
     "/_layout/_protected/_layout": {
       "filePath": "_layout/_protected/_layout.tsx",
@@ -552,10 +488,6 @@ export const routeTree = rootRoute
     "/_layout/entrance/": {
       "filePath": "_layout/entrance/index.tsx",
       "parent": "/_layout"
-    },
-    "/pos/_layout/": {
-      "filePath": "pos/_layout/index.tsx",
-      "parent": "/pos/_layout"
     },
     "/_layout/_protected/_layout/profile/$memberName": {
       "filePath": "_layout/_protected/_layout/profile/$memberName.tsx",
