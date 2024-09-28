@@ -24,4 +24,10 @@ public class MemberInfoService implements MemberInfoUseCase {
 
         return loadMemberInfoPort.loadMemberInfo(findMemberId);
     }
+
+    @Override
+    public MemberInfo getMemberInfoOthers(Long id) {
+
+        return loadMemberInfoPort.loadMemberInfo(id);
+    }
 }

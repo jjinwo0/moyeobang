@@ -7,10 +7,7 @@ import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.member.application.domain.MemberInfo;
 import com.ssafy.moyeobang.member.application.port.in.MemberInfoUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @WebAdapter
 @RestController
@@ -20,11 +17,22 @@ public class MemberInfoController {
 
     private final MemberInfoUseCase memberInfoUseCase;
 
+    /**
+     * 내 프로필 조회
+     * @param authorization
+     * @return
+     */
     @GetMapping("/user/me/profile")
     public ApiResult<?> getMemberInfo(@RequestHeader String authorization) {
 
         MemberInfo findMemberProfile = memberInfoUseCase.getMemberInfo(authorization);
 
         return success(findMemberProfile);
+    }
+
+    @GetMapping("/user/{userId}/profile")
+    public ApiResult<?> getMemberInfoOthers(@PathVariable("userId") Long id){
+
+        MemberInfo findMemberInfo = memberInfoUseCase.getMemberInfoOthers(id);
     }
 }
