@@ -42,7 +42,7 @@ export default function Settle() {
   
   // 정산 내역 상세 조회 get API
   const {data} = useSuspenseQuery({
-  queryKey: ['transactionDetail', accountId, transactionId],
+  queryKey: ['transactionDetail', transactionId],
   queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
   });
 

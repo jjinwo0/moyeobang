@@ -26,14 +26,14 @@ interface QRPayProps {
 export default function PayModal({onXClick} : QRPayProps) {
     const [ activeComponenet, setActiveComponent ] = useState<string>('left');
 
-
     function handleLeft() {
         setActiveComponent('left')
-    }
+    };
 
     function handleRight() {
         setActiveComponent('right')
-    }
+    };
+
     return (
         <>
         <HeaderWithXButton onXClick={onXClick} />
