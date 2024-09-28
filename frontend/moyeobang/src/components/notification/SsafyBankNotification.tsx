@@ -68,10 +68,12 @@ const descriptionStyle = css`
 
 interface SsafyBankNotificationProps {
   setCertificationVisible: (visible: boolean) => void;
+  randomVerifyNumber: string;
 }
 
 export default function SsafyBankNotification({
   setCertificationVisible,
+  randomVerifyNumber,
 }: SsafyBankNotificationProps) {
   const [startY, setStartY] = useState<number | null>(null);
   const [currentY, setCurrentY] = useState<number | null>(null);
@@ -128,7 +130,7 @@ export default function SsafyBankNotification({
         <p id="title">싸피뱅크 입금 알림</p>
       </div>
 
-      <span css={nameStyle}>모여방 6495</span>
+      <span css={nameStyle}>모여방 {randomVerifyNumber}</span>
       <span css={descriptionStyle}> 님이 계좌로 1원을 입금했습니다.</span>
     </div>
   );

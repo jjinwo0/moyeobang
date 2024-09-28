@@ -77,13 +77,21 @@ export default function CertificationOne({
   const [checkButton, setCheckButton] = useState<boolean>(false);
   const [accountNumber, setAccountNumber] = useState<string>(''); // 계좌번호 상태 추가
   const [verifyNumber, setVerifyNumber] = useState<string>(''); // 인증번호 상태 추가
+  const [randomVerifyNumber, setRandomVerifyNumber] = useState<string>(''); // 랜덤한 인증번호 상태 추가
+
+
+    // 랜덤한 인증번호 생성 함수
+    const generateRandomVerifyNumber = () => {
+      const randomNum = Math.floor(1000 + Math.random() * 9000); // 1000부터 9999 사이의 숫자를 생성
+      return randomNum.toString();
+    };
 
   const handleVerify = () => {
     if (accountNumber.length > 0) {
       // 계좌번호가 입력되어 있을 때만 실행
       // postDepositAccountOne({accountNumber, bankName: '싸피뱅크'});
       //[todo] 지금은 여기에 있는데 추후에 바꿔야함
-
+      setRandomVerifyNumber(generateRandomVerifyNumber()); // 랜덤한 인증번호 생성 후 상태 업데이트
       setTimeout(() => {
         setCertificationVisible(true); // 1.5초 후에 상태 변경
       }, 1500);
@@ -96,7 +104,7 @@ export default function CertificationOne({
   const handleCertification = () => {
     console.log('verifyNumber', verifyNumber);
     //[todo] 인증번호 추후 수정 가능(하드코딩)
-    if (verifyNumber === '6495') {
+    if (verifyNumber === randomVerifyNumber) {
       alert('인증에 성공하였습니다.');
       onVerify(); // 부모에게 인증 완료 알리기
     } else {
@@ -170,6 +178,7 @@ export default function CertificationOne({
       {isCertificationVisible && (
         <SsafyBankNotification
           setCertificationVisible={setCertificationVisible}
+          randomVerifyNumber={randomVerifyNumber}
         />
       )}{' '}
       {/* 인증 완료 시 컴포넌트 표시 */}
