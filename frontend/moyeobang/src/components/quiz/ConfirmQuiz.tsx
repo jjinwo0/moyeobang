@@ -128,8 +128,16 @@ export default function ConfirmQuiz({
     alert('초대 링크가 복사되었습니다.');
   };
 
+  // 모달 바깥을 클릭했는지 확인하는 함수
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    // e.target이 모달의 내용 부분이 아닐 때 onClose를 호출
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div css={modalOverlayStyle}>
+    <div css={modalOverlayStyle} onClick={handleOverlayClick}>
       <div css={modalContentStyle}>
         {/* 초대 링크와 복사 버튼 */}
         <div>초대퀴즈</div>

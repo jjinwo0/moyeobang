@@ -63,7 +63,7 @@ export default function ExitTravel({
   const queryClient = useQueryClient();
   const {mutate: leaveTravel} = useMutation({
     //zustand에서 멤버Id 꺼내와서 넣기
-    mutationFn: (travelId: Id) => moyeobang.leaveTravel(travelId,memberId),
+    mutationFn: (travelId: Id) => moyeobang.leaveTravel(travelId, memberId),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['travelList'],
@@ -78,8 +78,16 @@ export default function ExitTravel({
     // leaveTravel(travelId);
   };
 
+  // 모달 바깥을 클릭했는지 확인하는 함수
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    // e.target이 모달의 내용 부분이 아닐 때 onClose를 호출
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div css={modalOverlayStyle}>
+    <div css={modalOverlayStyle} onClick={handleOverlayClick}>
       <div css={modalContentStyle}>
         {travelTitle}
         <p>여행모임을</p>
