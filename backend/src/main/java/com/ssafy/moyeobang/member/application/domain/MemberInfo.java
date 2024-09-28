@@ -14,10 +14,12 @@ public class MemberInfo {
 
     private String image;
 
+    private String bankName;
+
     private String accountNumber;
 
-    public static MemberInfo of(Long id, String name, String image, String accountNumber) {
+    public static MemberInfo of(Long id, String name, String image, String bankName, String accountNumber) {
 
-        return new MemberInfo(id, name, image, accountNumber);
+        return new MemberInfo(id, name, image, bankName, accountNumber);
     }
 }
