@@ -34,5 +34,7 @@ public class MemberInfoController {
     public ApiResult<?> getMemberInfoOthers(@PathVariable("userId") Long id){
 
         MemberInfo findMemberInfo = memberInfoUseCase.getMemberInfoOthers(id);
+
+        return success(findMemberInfo);
     }
 }
