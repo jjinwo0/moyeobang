@@ -287,38 +287,6 @@
 //   acceptedNumber:AcceptedNumber;
 // }
 
-// interface Info {
-//   memberId: MemberId;
-//   money: Money;
-// }
-
-// interface PostTransactionDetailByCustom {
-//   paymentName: PaymentName;
-//   money: Money;
-//   info: Info[];
-//   splitMethod: SplitMethod;
-//   acceptedNumber:AcceptedNumber;
-// }
-
-// // 상세 조회 영수증 정산 'receipt'의 details
-// interface PostSettledItemByReceipt {
-//   orderItemId: OrderItemId;
-//   orderItemTitle: OrderItemTitle;
-//   orderItemPrice: OrderItemPrice;
-//   orderItemQuantity: OrderItemQuantity;
-//   participants: MemberId[];
-// }
-
-// interface PostTransactionDetailByReceipt {
-//   paymentName: PaymentName;
-//   address: Adress;
-//   money: Money;
-//   createdAt: CreatedAt;
-//   acceptedNumber: AcceptedNumber;
-//   details: PostSettledItemByReceipt[];
-//   splitMethod: SplitMethod; // 'receipt'
-// }
-
 // interface ChatItem {
 //   item_name: string;
 //   quantity: number;
@@ -454,6 +422,7 @@ type ParticipantsCount = number;
 type CurrentBalance = number;
 type TotalAmount = number;
 type TotalMoney = number;
+type Money = number;
 type TotalComsumption = number;
 type UsagePercentage = number;
 type NeedsAdditionalDeposit = boolean;
@@ -483,6 +452,20 @@ type ImgUrl = string;
 type LocationName = string;
 type CategoryName = string;
 type InvitationLink = string;
+
+// API 요청 응답 타입
+interface MoyeobangResponse<T> {
+  status: string;
+  data: T;
+  error: ErrorResponse | null;
+}
+
+// 에러 응답 타입
+interface ErrorResponse {
+  status: number;
+  code: number;
+  message: string;
+}
 
 interface ParticipantInfo {
   memberId: Id;
@@ -530,31 +513,6 @@ interface ParticipantInfo {
   profileImage: ProfileImage;
 }
 
-interface OrderItems {
-  orderItemId: OrderItemId;
-  orderItemTitle: OrderItemTitle;
-  orderItemQuantity: OrderItemquantity;
-  orderItemPrice: OrderItemPrice;
-}
-
-// 모임 통장 공금 잔액 조회
-interface AccountBalanceByGroup {
-  currentBalance: CurrentBalance;
-  totalAmount: TotalMoney;
-  totalSpent: TotalSpent;
-  usagePercentage: UsagePercentage;
-}
-
-// 모임 통장 개인 잔액 조회
-interface AccountBalanceBymemberId {
-  simpleUserProfile: ParticipantInfo;
-  personalCurrentBalance: PersonalCurrentBalance;
-  personalTotalAmount: TotalMoney;
-  personalTotalSpent: TotalSpent;
-  personalUsagePercentage: PersonalUsagePercentage;
-  needsAdditionalDeposit: NeedsAdditionalDeposit;
-}
-
 // 여행 일정 조회
 // schedules 상세 타입 지정
 // MatchedTransaction 지정
@@ -636,76 +594,6 @@ interface PaidAutoSchedule {
 
 // 2. 실제 여행 일정 조회 data 타입 지정
 type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
-
-// 결제 내역 전체 조회 GET
-interface TransactionList {
-  transactionId: TransactionId;
-  paymentName: PaymentName;
-  money: Money;
-  participants: ParticipantInfo[]; // 정산한 사람들(default)
-  transactionType: TransactionType;
-  createdAt: CreatedAt;
-  currentBalance: CurrentBalance;
-}
-
-// 상세 조회 영수증 정산 'receipt'의 details
-interface SettledItemByReceipt {
-  orderItemId: OrderItemId;
-  orderItemTitle: OrderItemTitle;
-  orderItemPrice: OrderItemPrice;
-  orderItemQuantity: OrderItemQuantity;
-  participants: ParticipantInfo[];
-}
-
-// 상세 조회 직접 정산 'custom' 의 details
-interface SettledParticipantByCustom {
-  participant: ParticipantInfo;
-  money: Money;
-}
-
-// 공통 타입 정의
-interface BaseTransactionDetail {
-  transactionId: TransactionId;
-  paymentName: PaymentName;
-  address: Adress;
-  money: Money;
-  createdAt: CreatedAt;
-  acceptedNumber: AcceptedNumber;
-}
-
-// 정산 완료 영수증 (N분의 1)
-interface TransactionDetailByReceipt extends BaseTransactionDetail {
-  details: SettledItemByReceipt[];
-  splitMethod: SplitMethod; // 'receipt'
-}
-
-// 정산 완료 (직접 정산)
-interface TransactionDetailByCustom extends BaseTransactionDetail {
-  details: SettledParticipantByCustom[];
-  splitMethod: SplitMethod; // 'custom'
-}
-
-type TransactionDetailProps =
-  | TransactionDetailByReceipt
-  | TransactionDetailByCustom;
-
-// 모임 통장 공금 잔액 조회
-interface AccountBalanceByGroup {
-  currentBalance: CurrentBalance;
-  totalAmount: TotalMoney;
-  totalComsumption: TotalComsumption;
-  usagePercentage: UsagePercentage;
-}
-
-// 모임 통장 개인 잔액 조회
-interface AccountBalanceByMemberId {
-  participant: ParticipantInfo;
-  personalCurrentBalance: PersonalCurrentBalance;
-  personalTotalMoney: TotalMoney;
-  personalTotalConsumption: TotalComsumption;
-  personalUsagePercentage: PersonalUsagePercentage;
-  needsAdditionalDeposit?: NeedsAdditionalDeposit;
-}
 
 // 일정 관련
 interface MatchedTransaction {
@@ -744,31 +632,6 @@ type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
 // 여행 일정 조회
 type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
 
-// 결제 내역 전체 조회 GET
-interface TransactionList {
-  transactionId: TransactionId;
-  paymentName: PaymentName;
-  money: Money;
-  participants: ParticipantInfo[];
-  transactionType: TransactionType;
-  createdAt: CreatedAt;
-  currentBalance: CurrentBalance;
-}
-
-// API 요청 응답 타입
-interface MoyeobangResponse<T> {
-  status: string;
-  data: T;
-  error: ErrorResponse | null;
-}
-
-// 에러 응답 타입
-interface ErrorResponse {
-  status: number;
-  code: number;
-  message: string;
-}
-
 // 기타 관련 인터페이스
 interface TravelLocation {
   latitude: Latitude;
@@ -780,7 +643,6 @@ interface ConsumptionCategory {
   proportion: CategoryPercent;
   balance: CurrentBalance;
 }
-
 
 interface ImgSummary {
   imgUrl: ImgUrl;
@@ -838,39 +700,6 @@ interface SubmitQuiz {
   answer: QuizAnswer;
 }
 
-interface QrData {
-  paymentRequestId: PaymentRequestId;
-  sourceAccountNumber: string;
-}
-
-interface PosPay {
-  placeId: number;
-  placeName: string;
-  placeAddress: Adress;
-  amount: Money;
-  latitude: Latitude;
-  longitude: Longitude;
-  targetAccountNumber: string;
-}
-
-interface PosOrderItem {
-  title: string;
-  amount: number;
-  quantity: number;
-}
-
-interface PaymentProps {
-  paymentRequestId: string;
-  sourceAccountNumber: string;
-  placeId: string;
-  placeName: string;
-  placeAddress: string;
-  amount: Money;
-  latitude: number;
-  longitude: number;
-  targetAccountNumber: string;
-}
-
 interface PostDepositAccount {
   memberId: Id;
   amount: Money;
@@ -879,6 +708,7 @@ interface PostDepositAccount {
 interface ResponsePostDepositAccount {
   accountBalance: CurrentBalance;
 }
+
 
 // [모임통장] 소비 비율 차트 데이터
 interface ConsumptionProportionByCategory {
@@ -897,4 +727,154 @@ interface ConsumptionProportionByMember {
 interface ConsumptionProportionData {
   consumptionByCategory:ConsumptionByCategory[];
   consumptionByMember:ConsumptionByMember[];
+}
+
+
+// [모임통장]
+
+interface OrderItems {
+  orderItemId: OrderItemId;
+  orderItemTitle: OrderItemTitle;
+  orderItemQuantity: OrderItemquantity;
+  orderItemPrice: OrderItemPrice;
+}
+
+// [모임 통장] 공금 잔액 조회
+interface AccountBalanceByGroup {
+  currentBalance: CurrentBalance;
+  totalAmount: TotalMoney;
+  totalSpent: TotalSpent;
+  usagePercentage: UsagePercentage;
+}
+
+// [모임 통장] 개인 잔액 조회
+interface AccountBalanceBymemberId {
+  simpleUserProfile: ParticipantInfo;
+  personalCurrentBalance: PersonalCurrentBalance;
+  personalTotalAmount: TotalMoney;
+  personalTotalSpent: TotalSpent;
+  personalUsagePercentage: PersonalUsagePercentage;
+  needsAdditionalDeposit: NeedsAdditionalDeposit;
+}
+
+// [모임 통장] 결제 내역 전체 조회 GET
+interface TransactionList {
+  transactionId: TransactionId;
+  paymentName: PaymentName;
+  money: Money;
+  participants: ParticipantInfo[]; // 정산한 사람들(default)
+  transactionType: TransactionType;
+  createdAt: CreatedAt;
+  currentBalance: CurrentBalance;
+}
+
+// [모임 통장] 상세 조회 영수증 정산 'receipt'의 details
+interface SettledItemByReceipt {
+  orderItemId: OrderItemId;
+  orderItemTitle: OrderItemTitle;
+  orderItemPrice: OrderItemPrice;
+  orderItemQuantity: OrderItemQuantity;
+  participants: ParticipantInfo[];
+}
+
+// [모임 통장] 상세 조회 직접 정산 'custom' 의 details
+interface SettledParticipantByCustom {
+  participant: ParticipantInfo;
+  money: Money;
+}
+
+// [모임 통장] 상세 공통 타입 정의
+interface BaseTransactionDetail {
+  transactionId: TransactionId;
+  paymentName: PaymentName;
+  address: Adress;
+  money: Money;
+  createdAt: CreatedAt;
+  acceptedNumber: AcceptedNumber;
+}
+
+// [모임 통장] +영수증 정산 상세
+interface TransactionDetailByReceipt extends BaseTransactionDetail {
+  details: SettledItemByReceipt[];
+  splitMethod: SplitMethod; // 'receipt'
+}
+
+// [모임 통장] +직접 정산 상세 
+interface TransactionDetailByCustom extends BaseTransactionDetail {
+  details: SettledParticipantByCustom[];
+  splitMethod: SplitMethod; // 'custom'
+}
+
+// [모임 통장] 결제내역 상세 통합 타입
+type TransactionDetailProps =
+  | TransactionDetailByReceipt
+  | TransactionDetailByCustom;
+
+// [모임통장] 정산 POST 요청
+interface Info {
+  memberId: MemberId;
+  money: Money;
+}
+
+interface PostTransactionDetailByCustom {
+  paymentName: PaymentName;
+  money: Money;
+  info: Info[];
+  splitMethod: SplitMethod; //'custom'
+  acceptedNumber:AcceptedNumber;
+}
+  
+// 상세 조회 영수증 정산 'receipt'의 details
+interface PostSettledItemByReceipt {
+  orderItemId: OrderItemId;
+  orderItemTitle: OrderItemTitle;
+  orderItemPrice: OrderItemPrice;
+  orderItemQuantity: OrderItemQuantity;
+  participants: MemberId[];
+}
+
+interface PostTransactionDetailByReceipt {
+  paymentName: PaymentName;
+  address: Adress;
+  money: Money;
+  createdAt: CreatedAt;
+  acceptedNumber: AcceptedNumber;
+  details: PostSettledItemByReceipt[];
+  splitMethod: SplitMethod; // 'receipt'
+}
+
+// QR정산
+interface QrData {
+  paymentRequestId: PaymentRequestId;
+  sourceAccountNumber: string;
+}
+
+// pos기
+interface PosPay {
+  placeId: number;
+  placeName: string;
+  placeAddress: Adress;
+  amount: Money;
+  latitude: Latitude;
+  longitude: Longitude;
+  targetAccountNumber: string;
+}
+
+interface PosOrderItem {
+  title: string;
+  amount: number;
+  quantity: number;
+}
+
+// pos기 결제 POST
+interface PaymentProps {
+  paymentRequestId: string;
+  sourceAccountNumber: string;
+  placeId: string;
+  placeName: string;
+  placeAddress: string;
+  amount: Money;
+  latitude: number;
+  longitude: number;
+  targetAccountNumber: string;
 }

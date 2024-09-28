@@ -15,6 +15,7 @@ import { proportionData } from '@/data/data';
 import { isAccountBalanceByGroup } from '@/util/typeGaurd';
 import CardSlider from '@/components/Account/CardSlider/CardSlider';
 import ChartDetailCard from '@/components/Account/Chart/ChartDetailCard';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
@@ -76,7 +77,7 @@ const chartListStyle=css`
   align-items: center;
   gap:10px;
 
-  max-height: 390px; 
+  height: 378px; 
   overflow-y: auto; 
   width: 100%;
 
@@ -85,15 +86,17 @@ const chartListStyle=css`
   }
 `;
 
-const accountId = 1;
 export default function groupAccount() {
 
   const allList = profileData.map((member) => member.memberId)
   type SelectedMember = MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
   const [index, setIndex] = useState<number>(0);
+  const {accountId} = useTravelDetailStore();
+
+  // get 모임 통장 거래 전체 리스트
   const {data : transactionData} = useSuspenseQuery({
-    queryKey: ['transactionList', accountId, selectedMember ],
+    queryKey: ['transactionList', accountId],
     queryFn: () => moyeobang.getTransactionList(Number(accountId), selectedMember),
   });
 
