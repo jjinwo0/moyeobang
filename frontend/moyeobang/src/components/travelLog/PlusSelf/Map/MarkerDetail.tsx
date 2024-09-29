@@ -14,7 +14,8 @@ import reviewIcon from '@/assets/icons/reviewIcon.png';
 
 export default function MarkerDetail() {
   const {selectedMarker, setSelectedMarker} = useTravelLogContext();
-  const {setSearchLocation, handleShowMapSearch} = useTravelLogContext();
+  const {setSearchLocation, handleShowMapSearch, setScheduleName} =
+    useTravelLogContext();
   console.log('[*]marker 정보', selectedMarker);
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -54,6 +55,7 @@ export default function MarkerDetail() {
 
   const handleDetailClose = () => {
     setSearchLocation(selectedMarker.title);
+    setScheduleName(selectedMarker.title);
     handleShowMapSearch();
   };
 

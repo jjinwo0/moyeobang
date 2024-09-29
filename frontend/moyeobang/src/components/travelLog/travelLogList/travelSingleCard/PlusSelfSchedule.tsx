@@ -10,6 +10,7 @@ import blueCheck from '@/assets/icons/blueCheck.png';
 import hamburgerBtn from '@/assets/icons/hamburgerButton.png';
 import informationBtn from '@/assets/icons/information.png';
 import MessagePopup from '@/components/common/messagePopup/MessagePopup';
+// import
 
 const scheduleCardLayout = css`
   width: 390px;
@@ -93,13 +94,12 @@ export default function Schedule({
   dragHandleProps: any;
   dayNum: number;
 }) {
+  
   const getTimeFromSchedule = (scheduleTime: string) => {
     return scheduleTime.split('T')[1].slice(0, 5); // "T" 이후의 시간 부분에서 앞 5글자만 추출 ("HH:MM")
   };
 
-  const [budget, setBudget] = useState<number | string>(
-    schedule.predictedBudget
-  ); // 초기값을 schedule의 predictedBudget으로 설정
+  const [budget, setBudget] = useState<number | string>(schedule.budget); // 초기값을 schedule의 predictedBudget으로 설정
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedBudget = parseInt(e.target.value, 10);
@@ -112,7 +112,7 @@ export default function Schedule({
 
   const handleBudgetBlur = () => {
     if (budget === '') {
-      setBudget(schedule.predictedBudget);
+      setBudget(schedule.budget);
     }
     // [todo] 예산 수정하는 api 연결하기
     console.log('전송할 예산:', budget);
@@ -149,7 +149,6 @@ export default function Schedule({
 
     setTravelSchedules(updatedSchedules);
   };
- 
 
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<JSX.Element | string | null>(
@@ -157,7 +156,7 @@ export default function Schedule({
   );
 
   const difference = schedule.matchedTransaction
-    ? schedule.predictedBudget - schedule.matchedTransaction.totalPrice
+    ? schedule.budget - schedule.matchedTransaction.totalPrice
     : 0;
   const differenceColor = difference < 0 ? colors.customRed : colors.customBlue;
 
@@ -177,7 +176,7 @@ export default function Schedule({
         <div>
           여기서는 N명이서 평균 <br />
           <span style={{color: colors.customBlue}}>
-            {schedule.predictedBudget}원
+            {schedule.budget}원
           </span>{' '}
           사용했나방
         </div>
@@ -227,7 +226,7 @@ export default function Schedule({
           ) : null}
 
           {/* 결제 비용인지 예상 비용인지 보여줌 */}
-          {schedule.matchedTransaction?.totalPrice ? (
+          {schedule.matchedTransaction ? (
             <>
               {/* 결제 비용 보여주기 */}
               <div css={oneLineStyle}>
@@ -272,11 +271,12 @@ export default function Schedule({
                   </div>
                   <Btn
                     buttonStyle={{size: 'sotiny', style: 'blue'}}
-                    onClick={() => {
+                    onClick={() =>
+                      schedule.matchedTransaction &&
                       handleDetailClick(
-                        schedule.matchedTransaction?.transactionId
-                      );
-                    }}
+                        schedule.matchedTransaction.transactionId
+                      )
+                    }
                   >
                     상세보기
                   </Btn>
@@ -290,7 +290,7 @@ export default function Schedule({
                       <img
                         key={index}
                         src={participant.profileImage}
-                        alt={`${participant.nickname}'s profile`}
+                        alt={`${participant.memberName}'s profile`}
                         style={{
                           width: '40px',
                           height: '40px',

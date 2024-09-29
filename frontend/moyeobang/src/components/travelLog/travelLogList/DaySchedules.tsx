@@ -4,6 +4,8 @@ import {colors} from '@/styles/colors';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import SingleTravelLog from './travelSingleCard/SingleTravelLog';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import PlusSelf from '@/components/travelLog/PlusSelf/PlusSelf';
+import ScheduleMapSearch from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearch';
 
 const travelDayTitleSytle = css`
   margin-top: 5px;
@@ -28,23 +30,31 @@ const dayDateStyle = css`
   line-height: 1;
 `;
 
+// [todo] 이게 왜 안보이지? 1일차만 보이고 나머지에서 안 보임
 const verticalLineStyle = css`
   border-left: 2px solid ${colors.lightGray};
   height: 100%;
   position: absolute;
   left: 24px;
   margin-top: 60px;
-  z-index: 1; /* 낮은 값으로 설정 */
+  z-index: 5; /* 낮은 값으로 설정 */
 `;
 
 export default function DaySchedules({
-  daySchedules,
+  date,
   dayNum,
 }: {
-  daySchedules: (PlusSelfSchedule | PaidAutoSchedule)[];
+  // daySchedules: (PlusSelfSchedule | PaidAutoSchedule)[];
   dayNum: number;
+  date: string;
 }) {
-  const {travelSchedules, setTravelSchedules} = useTravelLogContext();
+  const {travelSchedules, setTravelSchedules, showPlusSelf, showMapSearch} =
+    useTravelLogContext();
+  console.log('[*] dayNum', dayNum);
+
+  const daySchedules = travelSchedules[dayNum - 1]?.daySchedules ?? [];
+  console.log('[*] daySchedules', daySchedules);
+
   // onDragEnd 함수 추가
   const handleOnDragEnd = (result: any) => {
     const {source, destination} = result;
@@ -75,55 +85,60 @@ export default function DaySchedules({
     console.log('드래그 종료 위치:', destination.index);
   };
   return (
-    <>
-      <span css={verticalLineStyle}></span>
+    <div style={{width: '390px', height: '100%', position: 'relative'}}>
+      {daySchedules.length > 0 && <span css={verticalLineStyle}></span>}
       <div css={travelDayTitleSytle}>
         <span css={dayIdStyle}> DAY {dayNum} </span>
-        <span css={dayDateStyle}>09.01 (일)</span>
+        <span css={dayDateStyle}>{date}</span>
       </div>
       <div>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          {' '}
-          {/* onDragEnd 추가 */}
-          <Droppable droppableId="daySchedules">
-            {provided => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {daySchedules.map((schedule, index) => {
-                  return (
-                    <Draggable
-                      key={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
-                      draggableId={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
-                      index={index}
-                    >
-                      {provided => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          style={{
-                            ...provided.draggableProps.style,
-                            transform: provided.draggableProps.style?.transform,
-                            top: 0,
-                            left: 0,
-                            position: 'relative',
-                          }}
-                        >
-                          <SingleTravelLog
-                            schedule={schedule}
-                            scheduleNum={index + 1}
-                            dayNum={dayNum}
-                            dragHandleProps={provided.dragHandleProps}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        {daySchedules.length > 0 ? (
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            {' '}
+            {/* onDragEnd 추가 */}
+            <Droppable droppableId="daySchedules">
+              {provided => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {daySchedules.map((schedule, index: number) => {
+                    return (
+                      <Draggable
+                        key={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
+                        draggableId={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
+                        index={index}
+                      >
+                        {provided => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            style={{
+                              ...provided.draggableProps.style,
+                              transform:
+                                provided.draggableProps.style?.transform,
+                              top: 0,
+                              left: 0,
+                              position: 'relative',
+                            }}
+                          >
+                            <SingleTravelLog
+                              schedule={schedule}
+                              scheduleNum={index + 1}
+                              dayNum={dayNum}
+                              dragHandleProps={provided.dragHandleProps}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        ) : (
+          '아직 일정이 없습니다.'
+        )}
       </div>
-    </>
+    </div>
   );
 }

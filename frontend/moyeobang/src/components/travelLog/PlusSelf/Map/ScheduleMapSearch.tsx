@@ -2,18 +2,11 @@ import React, {useState, useRef} from 'react';
 import * as ScheduleMapSearchStyle from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearchStyle';
 import PlusSelfGoogleMap from '@/components/travelLog/PlusSelf/Map/PlusSelfGoolgeMap'; // PlusSelfGoogleMap 사용
 import SearchImg from '@/assets/icons/Search.png';
+import {useTravelLogContext} from '@/contexts/TravelLog';
 
-interface ScheduleMapSearchProps {
-  handleShowMapSearch: () => void; // 필요시 검색 창 닫기 핸들러
-  searchLocation: string | undefined; // 검색어 상태
-  setSearchLocation: (location: string | undefined) => void; // 검색어 업데이트
-}
-
-export default function ScheduleMapSearch({
-  handleShowMapSearch,
-  searchLocation,
-  setSearchLocation,
-}: ScheduleMapSearchProps) {
+export default function ScheduleMapSearch() {
+  const {handleShowMapSearch, searchLocation, setSearchLocation} =
+    useTravelLogContext();
   const [searchMap, setSearchMap] = useState(searchLocation); // 입력한 검색어를 관리하는 로컬 상태
   const googleMapRef = useRef<any>(null); // `PlusSelfGoogleMap`의 ref
 
@@ -51,7 +44,7 @@ export default function ScheduleMapSearch({
         <div css={ScheduleMapSearchStyle.MapLayout}>
           <PlusSelfGoogleMap
             ref={googleMapRef} // 부모에서 ref로 넘길 수 있음 (필요시)
-            searchLocation={searchLocation} // 검색된 위치를 지도 컴포넌트로 전달
+            searchLocation={searchLocation}
           />
         </div>
       </div>

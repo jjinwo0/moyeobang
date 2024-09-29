@@ -17,18 +17,17 @@ export default function SingleTravelLog({
 }: SingleTravelLogProps) {
   return (
     <div>
-      {'scheduleId' in schedule ? (
+      {schedule.isSelfPlus ? (
         <PlusSelfSchedule
-          schedule={schedule}
+          schedule={schedule as PlusSelfSchedule}
           scheduleNum={scheduleNum}
           dayNum={dayNum}
           dragHandleProps={dragHandleProps}
         ></PlusSelfSchedule>
       ) : (
-        // PaidAutoSchedule 처리
         <>
           <PaidAutoSchedule
-            schedule={schedule}
+            schedule={schedule as PaidAutoSchedule}
             scheduleNum={scheduleNum}
             dayNum={dayNum}
             dragHandleProps={dragHandleProps}

@@ -22,21 +22,7 @@ type PersonalUsagePercentage = number;
 type NeedsAdditionalDeposit = boolean;
 
 type ScheduleTitle = string;
-type ScheduleLocation = string;
-type PredictedBudget = number;
-type Completion = string;
-type Schedules = [];
-type scheduleTime = string;
-type totalPrice = number;
-type PaymentTime = string;
-type Details = string;
-type Memo = string;
-type PaymentName = string;
-type SplitMethod = string;
-
-type ScheduleTitle = string;
-type ScheduleLocation = string;
-type PredictedBudget = number;
+type Budget = number;
 type Completion = string;
 type Schedules = [];
 type scheduleTime = string;
@@ -186,16 +172,14 @@ interface MatchedTransaction {
   participantsInfo: ParticipantsInfo[];
 }
 
-// 1. schedule type 지정
-type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
-
 // 1) 추가된 일정
 interface PlusSelfSchedule {
   scheduleId: Id;
+  isSelfPlus: boolean;
   scheduleTitle: ScheduleTitle;
   scheduleLocation: ScheduleLocation;
   scheduleTime: scheduleTime;
-  predictedBudget: PredictedBudget;
+  budget: Budget;
   completion: Completion;
   memo: Memo;
   scheduleImg?: ScheduleImg;
@@ -205,7 +189,10 @@ interface PlusSelfSchedule {
 // 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
 interface PaidAutoSchedule {
   transactionId: Id;
+  isSelfPlus: boolean;
   paymentName: PaymentName;
+  latitude: Latitude;
+  longitude: Longitude;
   totalPrice: Amount;
   paymentTime: PaymentTime;
   splitMethod: SplitMethod;
@@ -213,48 +200,24 @@ interface PaidAutoSchedule {
 }
 
 // 2. 실제 여행 일정 조회 data 타입 지정
-type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
-
-// 여행 일정 조회
-// schedules 상세 타입 지정
-// MatchedTransaction 지정
-interface MatchedTransaction {
-  transactionId: Id;
-  paymentName: string;
-  totalPrice: number;
-  paymentTime: string;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantsInfo[];
-}
+type TravelLog = DaySchedules[];
 
 // 1. schedule type 지정
-type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
-
-// 1) 추가된 일정
-interface PlusSelfSchedule {
-  scheduleId: Id;
-  scheduleTitle: ScheduleTitle;
-  scheduleLocation: ScheduleLocation;
-  scheduleTime: scheduleTime;
-  predictedBudget: PredictedBudget;
-  completion: Completion;
-  memo: Memo;
-  scheduleImg?: ScheduleImg;
-  matchedTransaction: MatchedTransaction | null;
+interface DaySchedules {
+  dayNum: number;
+  dayDate: string;
+  daySchedules: (PlusSelfSchedule | PaidAutoSchedule)[];
 }
 
-// 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
-interface PaidAutoSchedule {
-  transactionId: Id;
-  paymentName: PaymentName;
-  totalPrice: Amount;
-  paymentTime: PaymentTime;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantsInfo[];
+// Location type 지정
+interface ScheduleLocation {
+  googlePlaceId: string;
+  title: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  category: string;
 }
-
-// 2. 실제 여행 일정 조회 data 타입 지정
-type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
 
 // 결제 내역 전체 조회 GET
 interface TransactionList {
@@ -623,31 +586,8 @@ interface MatchedTransaction {
 // 1. schedule type 지정
 type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
 
-// 1) 추가된 일정
-interface PlusSelfSchedule {
-  scheduleId: Id;
-  scheduleTitle: ScheduleTitle;
-  scheduleLocation: ScheduleLocation;
-  scheduleTime: scheduleTime;
-  predictedBudget: PredictedBudget;
-  completion: Completion;
-  memo: Memo;
-  scheduleImg?: ScheduleImg;
-  matchedTransaction: MatchedTransaction | null;
-}
-
-// 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
-interface PaidAutoSchedule {
-  transactionId: Id;
-  paymentName: PaymentName;
-  totalPrice: Amount;
-  paymentTime: PaymentTime;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantsInfo[];
-}
-
 // 2. 실제 여행 일정 조회 data 타입 지정
-type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
+type TravelLog = Schedules[];
 
 // 여행 일정 조회
 // schedules 상세 타입 지정
@@ -661,16 +601,13 @@ interface MatchedTransaction {
   participantsInfo: ParticipantsInfo[];
 }
 
-// 1. schedule type 지정
-type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
-
 // 1) 추가된 일정
 interface PlusSelfSchedule {
   scheduleId: Id;
   scheduleTitle: ScheduleTitle;
   scheduleLocation: ScheduleLocation;
   scheduleTime: scheduleTime;
-  predictedBudget: PredictedBudget;
+  budget: PredictedBudget;
   completion: Completion;
   memo: Memo;
   scheduleImg?: ScheduleImg;
