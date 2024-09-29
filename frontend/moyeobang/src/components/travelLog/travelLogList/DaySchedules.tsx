@@ -40,16 +40,27 @@ const verticalLineStyle = css`
   z-index: 5; /* 낮은 값으로 설정 */
 `;
 
+const noScheduleStyle = css`
+  font-size: 20px;
+  color: ${colors.black};
+  line-height: 1;
+  padding-left: 22px;
+`;
+
 export default function DaySchedules({
   date,
   dayNum,
 }: {
-  // daySchedules: (PlusSelfSchedule | PaidAutoSchedule)[];
   dayNum: number;
   date: string;
 }) {
-  const {travelSchedules, setTravelSchedules, showPlusSelf, showMapSearch} =
-    useTravelLogContext();
+  const {
+    travelSchedules,
+    setTravelSchedules,
+    showPlusSelf,
+    showMapSearch,
+    handleShowPlusSelf,
+  } = useTravelLogContext();
   console.log('[*] dayNum', dayNum);
 
   const daySchedules = travelSchedules[dayNum - 1]?.daySchedules ?? [];
@@ -68,14 +79,16 @@ export default function DaySchedules({
     const updatedTravelSchedules = [...travelSchedules];
 
     // 현재 dayId의 스케줄을 가져옴
-    const currentDaySchedules = Array.from(updatedTravelSchedules[dayId]);
+    const currentDaySchedules = Array.from(
+      updatedTravelSchedules[dayId].daySchedules
+    );
 
     // 드래그된 항목을 source에서 제거하고 destination으로 삽입
     const [movedItem] = currentDaySchedules.splice(source.index, 1);
     currentDaySchedules.splice(destination.index, 0, movedItem);
 
     // 변경된 스케줄을 updatedTravelSchedules에 다시 할당
-    updatedTravelSchedules[dayId] = currentDaySchedules;
+    updatedTravelSchedules[dayId].daySchedules = currentDaySchedules;
 
     // 상태 업데이트
     setTravelSchedules(updatedTravelSchedules);
@@ -136,7 +149,7 @@ export default function DaySchedules({
             </Droppable>
           </DragDropContext>
         ) : (
-          '아직 일정이 없습니다.'
+          <div css={noScheduleStyle}>아직 일정이 없습니다.</div>
         )}
       </div>
     </div>

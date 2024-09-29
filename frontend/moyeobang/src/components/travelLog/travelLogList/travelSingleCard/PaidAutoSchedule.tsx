@@ -68,7 +68,11 @@ export default function PaidAutoSchedule({
   };
 
   const router = useRouter();
-  const handleDetailClick = (transactionId: Id) => {
+  const handleDetailClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    transactionId: Id
+  ) => {
+    e.stopPropagation();
     router.navigate({to: `/account/detail/${transactionId}`});
   };
 
@@ -115,8 +119,8 @@ export default function PaidAutoSchedule({
                 <div>정산 참여자 : {schedule.participantsInfo.length}명</div>
                 <Btn
                   buttonStyle={{size: 'sotiny', style: 'blue'}}
-                  onClick={() => {
-                    handleDetailClick(schedule.transactionId);
+                  onClick={e => {
+                    handleDetailClick(e, schedule.transactionId);
                   }}
                 >
                   상세보기
@@ -131,7 +135,7 @@ export default function PaidAutoSchedule({
                     <img
                       key={index}
                       src={participant.profileImage}
-                      alt={`${participant.nickname}'s profile`}
+                      alt={`${participant.memberName}'s profile`}
                       style={{
                         width: '40px',
                         height: '40px',

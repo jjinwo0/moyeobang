@@ -1,6 +1,7 @@
 import React from 'react';
 import PlusSelfSchedule from './PlusSelfSchedule';
 import PaidAutoSchedule from './PaidAutoSchedule';
+import {useTravelLogContext} from '@/contexts/TravelLog';
 
 interface SingleTravelLogProps {
   schedule: PlusSelfSchedule | PaidAutoSchedule;
@@ -15,8 +16,13 @@ export default function SingleTravelLog({
   dayNum,
   dragHandleProps,
 }: SingleTravelLogProps) {
+  const {handleShowPlusSelf} = useTravelLogContext();
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    handleShowPlusSelf();
+  };
   return (
-    <div>
+    <div onClick={handleClick}>
       {schedule.isSelfPlus ? (
         <PlusSelfSchedule
           schedule={schedule as PlusSelfSchedule}

@@ -34,11 +34,37 @@ const travelLogListLayout = css`
   }
 `;
 
-
-const dayScheduleStyle = css`
+const noTravelDateStyle = css`
   min-width: 390px; /* DaySchedule의 너비를 390px로 맞춤 */
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: transform 0.3s ease-out;
+  font-size: 24px;
+  font-family: 'semibold';
+  color: ${colors.lightBlack};
+
+  #total-budget {
+    font-family: 'semibold';
+    color: ${colors.black};
+    margin-top: 5px;
+    padding: 13px;
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #no-travel-date {
+    font-family: 'semibold';
+    color: ${colors.lightBlack};
+    margin-top: 5px;
+    padding: 13px;
+    padding-left: 22px;
+  }
 `;
 
 export default function TravelLogList() {
@@ -54,6 +80,7 @@ export default function TravelLogList() {
     searchLocation,
     setSearchLocation,
     handleSearchLocation,
+    travelDates,
   } = useTravelLogContext();
 
   const handlers = useSwipeable({
@@ -77,27 +104,7 @@ export default function TravelLogList() {
     },
   });
 
-  const {travelName, startDate, endDate, travelPlaceList} =
-    useTravelDetailStore();
-  console.log('[*] 여행 시작일, 끝일', startDate, endDate);
-
-  // 여행 일수 계산
-  const travelDates = [];
-  const currentDate = new Date(startDate);
-  const lastDate = new Date(endDate);
-
-  while (currentDate <= lastDate) {
-    const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][
-      currentDate.getDay()
-    ];
-    travelDates.push(
-      `${currentDate.toISOString().split('T')[0]} (${dayOfWeek})`
-    ); // YYYY-MM-DD (요일) 형식으로 추가
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-
   const travelDays = travelDates.length;
-  console.log('[*] 여행 일수', travelDays, travelDates);
 
   return (
     <div {...handlers} css={travelLogListLayout}>
@@ -117,10 +124,21 @@ export default function TravelLogList() {
           );
         })}
 
-        <div css={dayScheduleStyle}>총 예산</div>
+        {travelDays > 0 ? (
+          <div css={noTravelDateStyle}>
+            <div id="total-budget">
+              <div style={{color: colors.fifth}}>
+                {travelDates.length}일 전체 예산
+              </div>
+              <div>50000원</div>
+            </div>
+          </div>
+        ) : (
+          <div css={noTravelDateStyle}>
+            <div id="no-travel-date">여행 기간이 설정되지 않았습니다.</div>
+          </div>
+        )}
       </div>
-
-     
     </div>
   );
 }

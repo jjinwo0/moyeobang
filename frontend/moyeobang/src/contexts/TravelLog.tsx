@@ -29,6 +29,7 @@ export type TravelLogContextType = {
   setScheduleName: React.Dispatch<React.SetStateAction<string | undefined>>;
   showPlusSelf: boolean;
   handleShowPlusSelf: () => void;
+  travelDates: string[];
 };
 
 // Provider 컴포넌트 생성
@@ -149,11 +150,27 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
     }
   };
 
-  const {travelPlaceList} = useTravelDetailStore();
+  const {travelPlaceList, startDate, endDate, travelName} = useTravelDetailStore();
 
   const [selectedPlace, setSelectedPlace] = useState<string | []>(
     travelPlaceList[0]
   );
+
+  // 여행 일수 계산
+  const travelDates = [];
+  const currentDate = new Date(startDate);
+  const lastDate = new Date(endDate);
+
+  while (currentDate <= lastDate) {
+    const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][
+      currentDate.getDay()
+    ];
+    travelDates.push(
+      `${currentDate.toISOString().split('T')[0]} (${dayOfWeek})`
+    ); // YYYY-MM-DD (요일) 형식으로 추가
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
 
   // 자신의 일정 추가 모달
   const [showPlusSelf, setShowPlusSelf] = useState<boolean>(false);
@@ -201,6 +218,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         setScheduleName,
         showPlusSelf,
         handleShowPlusSelf,
+        travelDates
       }}
     >
       {children}
