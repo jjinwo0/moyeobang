@@ -100,7 +100,7 @@ export default function CreateTravel({
   const [formData, setFormData] = useState<FormData>(new FormData());
 
   // 수정과 생성을 구분하여 처리
-  const handleNextClick = async() => {
+  const handleNextClick = async () => {
     if (!travelName || !dateRange[0] || !dateRange[1]) {
       alert('모든 필드를 입력해주세요');
       return;
@@ -132,6 +132,10 @@ export default function CreateTravel({
         const blob = await response.blob();
         newFormData.append('backgroundImage', blob, 'defaultSky.jpg'); // Blob을 사용하여 전송
       }
+    } else {
+      const response = await fetch(defaultImage);
+      const blob = await response.blob();
+      newFormData.append('backgroundImage', blob, 'defaultSky.jpg'); // Blob을 사용하여 전송
     }
 
     setFormData(newFormData); // formData 상태 업데이트
@@ -145,7 +149,7 @@ export default function CreateTravel({
     }
   };
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     const newform = new FormData();
 
     // 필수 필드 유효성 검사
@@ -170,7 +174,10 @@ export default function CreateTravel({
       quizAnswer: quizAnswer,
     };
 
-    newform.append('request', new Blob([JSON.stringify(request)], {type: 'application/json'}));
+    newform.append(
+      'request',
+      new Blob([JSON.stringify(request)], {type: 'application/json'})
+    );
 
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
@@ -181,7 +188,12 @@ export default function CreateTravel({
         const response = await fetch(defaultImage);
         const blob = await response.blob();
         newform.append('backgroundImage', blob, 'defaultSky.jpg'); // Blob을 사용하여 전송
+        // console.log('기본 배경 이미지가 Blob으로 추가되었습니다:', blob);
       }
+    } else {
+      const response = await fetch(defaultImage);
+      const blob = await response.blob();
+      newform.append('backgroundImage', blob, 'defaultSky.jpg'); // Blob을 사용하여 전송
     }
 
     // [todo] travelId가 존재하는 경우에만 mutate 호출
@@ -200,6 +212,7 @@ export default function CreateTravel({
         queryKey: ['travelList'],
         refetchType: 'all',
       });
+      console.log('수정 성공');
     },
   });
 

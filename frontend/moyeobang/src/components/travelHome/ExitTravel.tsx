@@ -53,6 +53,7 @@ interface ExitTravelProps {
   onClose: () => void;
   travelId: number;
 }
+const memberId = 4;
 
 export default function ExitTravel({
   travelTitle,
@@ -75,7 +76,7 @@ export default function ExitTravel({
   const handleExitTravel = (travelId: number) => {
     onClose();
     //[todo]나가기 API 호출 함수 추가해야함
-    // leaveTravel(travelId);
+    leaveTravel(travelId);
   };
 
   // 모달 바깥을 클릭했는지 확인하는 함수

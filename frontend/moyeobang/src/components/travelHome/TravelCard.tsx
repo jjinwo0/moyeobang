@@ -285,7 +285,7 @@ export default function TravelCard({
           <CreateTravel
             onClose={closeEditModal}
             isEditMode={true}
-            // travelId={travelId}
+            travelId={travelId}
             initialData={{
               travelName: travelName,
               startDate: formatDate(startDate),

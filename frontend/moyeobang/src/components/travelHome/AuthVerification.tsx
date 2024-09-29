@@ -90,7 +90,7 @@ const completeStyle = css`
   margin-right: 10px;
 `;
 
-const memberId = 4;
+const memberId: number = 4;
 
 interface AuthVerificationProps {
   onClose: () => void;
@@ -151,14 +151,20 @@ export default function AuthVerification({
   //[todo] 여행 생성 api 연결 필요
   const queryClient = useQueryClient();
 
-
   const {mutate: postTravel} = useMutation({
-    mutationFn: async (formData: FormData) => {
+    mutationFn: async ({
+      formData,
+      memberId,
+    }: {
+      formData: FormData;
+      memberId: number;
+    }) => {
       const response = await moyeobang.postTravel(formData, memberId);
       return response.data; // Axios의 response.data 반환
     },
     onSuccess: async (response: MoyeobangResponse<ResponsePostTravel>) => {
       const {travelId} = response.data; // 응답에서 travelId 추출
+      console.log(travelId, '여행생성 성공');
 
       // travelList 쿼리 무효화 및 재요청
       await queryClient.invalidateQueries({
@@ -185,7 +191,8 @@ export default function AuthVerification({
   const handleCompleteClick = () => {
     if (isVerified && isAllTermsAgreed) {
       //[todo] 여행 생성 함수 호출
-      postTravel(formData);
+      postTravel({formData, memberId});
+      console.log('여행 생성 호출');
 
       onClose(); // 완료 버튼이 파란색일 때만 모달 닫기
     } else {

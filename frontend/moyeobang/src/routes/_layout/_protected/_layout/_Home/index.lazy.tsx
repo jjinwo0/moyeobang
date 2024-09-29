@@ -187,10 +187,10 @@ function Index() {
   const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
 
   //[todo] get으로 여행 목록 전체 조회하기
-  const {data:travelData} = useSuspenseQuery({
+  const {data: travelData} = useSuspenseQuery({
     queryKey: ['travelList'],
     //memberId는 쥬스탄드에서 꺼내쓰기!
-    queryFn: () => moyeobang.getTravelList(1), // [*todo]일단은 4번 회원 데이터 조회
+    queryFn: () => moyeobang.getTravelList(4), // [*todo]일단은 4번 회원 데이터 조회
   });
 
   const data = travelData?.data.data;
