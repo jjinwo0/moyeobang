@@ -20,6 +20,10 @@ moyeobang:
   storage:
     path: ./images
 
+pg:
+  api:
+    url: http://localhost:8082/pg/payment
+
 
 ---
 spring:
