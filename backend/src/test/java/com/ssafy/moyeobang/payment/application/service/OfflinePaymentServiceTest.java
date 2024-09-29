@@ -87,7 +87,6 @@ public class OfflinePaymentServiceTest {
         when(loadTravelAccountPort.loadTravelAccount(any(String.class)))
                 .thenReturn(travelAccount);
 
-        // Mocking loadMemberCount to throw PaymentException
         when(loadTravelAccountPort.loadMemberCount(any(String.class)))
                 .thenThrow(new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL));
 
