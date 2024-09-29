@@ -8,7 +8,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse;
-import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse.ParticipantInfo;
+import com.ssafy.moyeobang.account.adapter.in.web.response.ParticipantInfo;
 import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Deposit;
