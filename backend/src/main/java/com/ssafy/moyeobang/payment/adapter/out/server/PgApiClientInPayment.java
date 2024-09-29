@@ -1,7 +1,6 @@
 package com.ssafy.moyeobang.payment.adapter.out.server;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.ssafy.moyeobang.payment.adapter.out.server.request.PaymentConfirmRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -13,24 +12,18 @@ import org.springframework.web.client.RestClient;
 @RequiredArgsConstructor
 public class PgApiClientInPayment {
 
-    private final RestClient restClient;
-
-    public PgApiClientInPayment() {
-        this.restClient = RestClient.builder()
-                .baseUrl("http://localhost:8082/pg/payment")
+    public boolean confirmPayment(String baseUrl, String paymentRequestId, boolean isCompleted) {
+        RestClient restClient = RestClient.builder()
+                .baseUrl(baseUrl)
                 .build();
-    }
-
-    public boolean confirmPayment(String paymentRequestId, boolean isCompleted) {
         try {
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("paymentRequestId", paymentRequestId);
-            requestBody.put("status", isCompleted ? "SUCCESS" : "FAILED");
+            PaymentConfirmRequest request = new PaymentConfirmRequest(paymentRequestId,
+                    isCompleted ? "SUCCESS" : "FAILED");
 
             restClient.post()
                     .uri("/confirm")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(requestBody)
+                    .body(request)
                     .retrieve()
                     .body(String.class);
 
