@@ -75,7 +75,7 @@ public class SettleService implements SettleUseCase {
         updateMemberTravelPort.decreaseMemberTravelAmount(
                 command.money(),
                 command.memberId(),
-                command.travelId()
+                order.getId()
         );
 
         return true;
