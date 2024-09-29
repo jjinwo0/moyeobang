@@ -10,20 +10,26 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
 
   data:
     redis:
       host: 127.0.0.1
       port: 6379
 
-moyeobang:
-  storage:
-    path: ./images
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAVVZON63HMZBYSHXO
+      secretKey: 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
+    s3:
+      bucket: moyeobang-ssafy
 
 pg:
   api:
     url: http://localhost:8082/pg/payment
-
 
 ---
 spring:
@@ -77,4 +83,4 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none

@@ -26,7 +26,4 @@ public record GetTransactionHistoriesResponse(Long transactionId,
                 transaction.getTimestamp()
         );
     }
-
-    public record ParticipantInfo(Long memberId, String memberName, String profileImage) {
-    }
 }

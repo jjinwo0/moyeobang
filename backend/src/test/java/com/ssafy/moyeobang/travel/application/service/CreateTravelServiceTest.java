@@ -4,11 +4,13 @@ import static java.io.InputStream.nullInputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
 
-import com.ssafy.moyeobang.travel.adapter.in.web.out.CreateTravelResponse;
+import com.ssafy.moyeobang.travel.adapter.in.web.response.CreateTravelResponse;
 import com.ssafy.moyeobang.travel.application.domain.BackgroundImage;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelInCommand;
+import com.ssafy.moyeobang.travel.application.port.out.CreateTravelEventPublishPort;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelPort;
 import com.ssafy.moyeobang.travel.application.port.out.UploadImagePort;
@@ -21,8 +23,9 @@ class CreateTravelServiceTest {
 
     private final UploadImagePort uploadImagePort = mock(UploadImagePort.class);
     private final CreateTravelPort createTravelPort = mock(CreateTravelPort.class);
+    private final CreateTravelEventPublishPort createTravelEventPublishPort = mock(CreateTravelEventPublishPort.class);
 
-    private final CreateTravelService createTravelService = new CreateTravelService(uploadImagePort, createTravelPort);
+    private final CreateTravelService createTravelService = new CreateTravelService(uploadImagePort, createTravelPort, createTravelEventPublishPort);
 
     @DisplayName("입력된 여행 정보를 바탕으로 여행을 생성한다.")
     @Test
@@ -34,7 +37,10 @@ class CreateTravelServiceTest {
         given(createTravelPort.createTravel(any(CreateTravelOutCommand.class)))
                 .willReturn(1L);
 
+        willDoNothing().given(createTravelEventPublishPort).publish(any(Long.class));
+
         CreateTravelInCommand command = new CreateTravelInCommand(
+                1L,
                 "즐거운 제주도 여행",
                 LocalDate.now(),
                 LocalDate.now().plusDays(1),

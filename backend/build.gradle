@@ -60,11 +60,14 @@ dependencies {
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
+    //AutoParams
+    testImplementation 'io.github.autoparams:autoparams:8.3.0'
+
     //Firebase
     implementation 'com.google.firebase:firebase-admin:9.2.0'           // Google Firebase Admin
 
-    //Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    //AWS S3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.530'
 }
 
 asciidoctor {

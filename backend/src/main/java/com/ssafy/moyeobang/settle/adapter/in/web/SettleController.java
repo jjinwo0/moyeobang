@@ -24,8 +24,9 @@ public class SettleController {
 
     private final SettleUseCase settleUseCase;
 
-    @PostMapping("/{transactionId}/settle")
+    @PostMapping("/{transactionId}/settle/{travelId}")
     public ApiResult<Boolean> settle(@PathVariable("transactionId") Long transactionId,
+                                     @PathVariable("travelId") Long travelId,
                                      @RequestBody SettleRequest request) {
 
         // todo: 리턴값 고정하고 값이 없을 때 errorResponse를 할 것인가?
@@ -33,6 +34,7 @@ public class SettleController {
                 .allMatch(item -> settleUseCase.balanceSettle(
                         new SettleCommand(
                                 transactionId,
+                                travelId,
                                 item.orderItemTitle(),
                                 item.orderItemPrice(),
                                 item.participants()
@@ -41,14 +43,16 @@ public class SettleController {
         );
     }
 
-    @PostMapping("/{transactionId}/settle/custom")
+    @PostMapping("/{transactionId}/settle/custom/{travelId}")
     public ApiResult<Boolean> customSettle(@PathVariable("transactionId") Long transactionId,
+                                           @PathVariable("travelId") Long travelId,
                                            @RequestBody CustomSettleRequest request) {
 
         return success(request.info().stream()
                 .allMatch(info -> settleUseCase.customBalanceSettle(
                         new CustomSettleCommand(
                                 transactionId,
+                                travelId,
                                 request.paymentName(),
                                 info.money(),
                                 info.memberId()

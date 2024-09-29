@@ -15,19 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse;
-import com.ssafy.moyeobang.account.adapter.in.web.response.GetTransactionHistoriesResponse.ParticipantInfo;
-import com.ssafy.moyeobang.account.application.port.in.GetTransactionHistoriesQuery;
+import com.ssafy.moyeobang.account.adapter.in.web.response.ParticipantInfo;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class GetTransactionHistoriesControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private GetTransactionHistoriesQuery getTransactionHistoriesQuery;
 
     @DisplayName("결제 내역 전체 조회 API")
     @Test

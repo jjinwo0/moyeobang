@@ -47,7 +47,7 @@ public class SettleService implements SettleUseCase {
                     .createMemberOrderHistory(command.amount(), new MappingInfo(id, order.getId()));
 
             updateMemberTravelPort
-                    .decreaseMemberTravelAmount(command.amount(), id, order.getId());
+                    .decreaseMemberTravelAmount(command.amount(), id, command.travelId());
         });
 
         return true;
@@ -75,7 +75,7 @@ public class SettleService implements SettleUseCase {
         updateMemberTravelPort.decreaseMemberTravelAmount(
                 command.money(),
                 command.memberId(),
-                1L
+                command.travelId()
         );
 
         return true;

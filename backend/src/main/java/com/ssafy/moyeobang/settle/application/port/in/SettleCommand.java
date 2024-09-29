@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 public record SettleCommand(@NotNull Long transactionId,
+                            @NotNull Long travelId,
                             @NotNull String title,
                             @Positive Integer amount,
                             @NotNull @Size(min = 1) List<Long> participants) {
