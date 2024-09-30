@@ -4,7 +4,7 @@ import axios from 'axios';
 const instance8081 = axios.create({
 //   baseURL: import.meta.env.VITE_BASEURL + '/api',
   baseURL: 'http://localhost:8081/van',
-  // baseURL: 'http://j11c201.p.ssafy.io:8081',
+  // baseURL: 'https://j11c102.p.ssafy.io/van',
   responseType: 'json',
   timeout: 4000,
 //   withCredentials: true,  //로그인 구현 후 사용 쿠키와 같은 자격 증명을 요청

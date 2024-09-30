@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
-// import PayCompletedModal from "./PayCompletedModal";
+import PayCompletedModal from "./PayCompletedModal";
 
 const qrReaderLayoutStyle = css`
     padding-top: 30px;
@@ -28,23 +28,17 @@ const qrBoxStyle = css`
     left: 12% !important;
 `;
 
-// const resultStyle = css`
-//   font-family:'semibold';
-//   text-align: center;
-//   font-size: 20px;
-// `;
-
-const smallText = css`
+const smallTextStyle = css`
     font-family: 'regular';
     font-size:15px;
 `;
 
-const bigText = css`
+const bigTextStyle = css`
     font-family: 'semibold';
     font-size:24px;
 `;
 
-const english = css`
+const englishStyle = css`
     font-family: 'english';
     font-size:32px;
 `;
@@ -70,9 +64,9 @@ export default function QrScan() {
 
     // 성공
     function onScanSuccuess( result : QrScanner.ScanResult ) {
-        console.log(result);
+
         setScannedResult(result?.data)
-        // 성공 sse 받아오기!
+
     }
 
     function onScanFail(error: string | Error) {
@@ -87,6 +81,7 @@ export default function QrScan() {
                 {
                     onDecodeError : onScanFail,
                     preferredCamera : "environment", // 후면지향
+                    maxScansPerSecond:2, // 1초당 2번 스캔
                     highlightScanRegion : true, // ? 알아보기
                     highlightCodeOutline : true, // QR주변 윤곽선 생성
                     overlay : qrBoxElement?.current || undefined,
@@ -122,16 +117,8 @@ export default function QrScan() {
         }
     }, [qrOn])
 
-    // 결제완료 => 모달 닫기
     // function handleClose() {
-    //     setScannedResult('');
-    //     onClose();
-    // }
-
-    // 결제완료 => 정산하기
-    // function handleSettle() {
-    //     handleClose()
-    //     console.log('결제완료')
+    //     setScannedResult('')
     // }
 
     return (
@@ -144,17 +131,14 @@ export default function QrScan() {
                 ref={qrBoxElement}>
                 </div>
                 <div css={textBoxStyle}>
-                <div css={smallText}>오프라인 결제 • 해외결제 • 싸피페이</div>
-                <div css={bigText}><span css={english}>QR</span>코드를 스캔하세요</div>
+                <div css={smallTextStyle}>오프라인 결제 • 해외결제 • 싸피페이</div>
+                <div css={bigTextStyle}><span css={englishStyle}>QR</span>코드를 스캔하세요</div>
                 </div>
                 </>
             }
                 { scannedResult && (
-                    <div>결제완료.!(QrScan컴포넌트)</div>
-                    // <PayCompletedModal onClose={handleClose} transactionId={transactionId}/>
-                    // <p css={resultStyle}>
-                    //     스캔 결과 : {scannedResult}
-                    // </p>
+                    // <PayCompletedModal transactionId={1} onClose={handleClose}/>
+                    <div>{scannedResult}</div>
                 )}
         </div>
     ) 

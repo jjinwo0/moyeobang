@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from '@emotion/react';
 import navBar from '@/assets/icons/navBar.png';
 import travelLog from '@/assets/icons/travelLog.webp';
@@ -7,6 +7,7 @@ import wallet from '@/assets/icons/wallet.png';
 import coin from '@/assets/icons/coin.png';
 import CalculatePopup from '../calculate/CalculatePopup';
 import { Link } from '@tanstack/react-router';
+import { useLocation } from '@tanstack/react-router';
 
 const footer = css`
   position: fixed;
@@ -100,11 +101,26 @@ const cal = css`
 
 // {onCalClick}: {onCalClick: () => void}
 export default function Navbar() {
-  const [selectedItem, setSelectedItem] = useState<string | null>('travel');
+
   const [showModal, setShowModal] = useState<string | boolean>(false);
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState<string>(location.pathname);
+
+  useEffect(()=> {
+    const currentPath = location.pathname;
+
+    if (currentPath.includes('/travelLog')) {
+      setActiveItem('travelLog')
+    } else if (currentPath.includes('/account')) {
+      setActiveItem('account')
+    }
+
+  }, [location.pathname])
+
   const onCalClick = () => {
     setShowModal(!showModal);
   };
+
   return (
     <>
       <div css={footer}>
@@ -114,8 +130,7 @@ export default function Navbar() {
         </div>
         <div css={nav}>
           <div 
-          css={travel(selectedItem === 'travel')}
-          onClick={() => setSelectedItem('travel')}
+          css={travel(activeItem === 'travelLog')}
           >
             <Link to={'/travelLog'} css={linkStyle} >
             <img src={travelLog} width={50} height={50} alt="여행 기록" />
@@ -123,8 +138,7 @@ export default function Navbar() {
             <p>여행기록</p>
           </div>
           <div 
-          css={account(selectedItem === 'account')}
-          onClick={() => setSelectedItem('account')}
+          css={account(activeItem === 'account')}
           >
             <Link to={'/account'} css={linkStyle} >
             <img src={wallet} width={50} height={50} />

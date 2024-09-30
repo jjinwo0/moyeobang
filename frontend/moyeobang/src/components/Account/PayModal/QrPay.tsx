@@ -58,22 +58,29 @@ export default function QrPay({onClose}:QrPayProps) {
         }
 
         // 각 이벤트 이름에 맞는 메시지를 처리
-        eventSource.addEventListener('connect', (event:any) => {
-            const connectMessage : ConnectMessage = event.data;
+        eventSource.addEventListener('connect', (event) => {
+
+            const messageEvent = event as MessageEvent<string>;
+            const connectMessage : ConnectMessage = messageEvent.data;
             console.log('connect 응답 결과:', connectMessage);
+
         });
 
-        eventSource.addEventListener('payment-success', (event:any) => {
-            const parsedData : ResultMessage = JSON.parse(event.data);
+        eventSource.addEventListener('payment-success', (event) => {
+            console.log('payment-success' , event)
+
+            const messageEvent = event as MessageEvent<string>;
+            const parsedData : ResultMessage = JSON.parse(messageEvent.data);
             console.log('payment-succes 응답 결과:', parsedData);
             setResultMessage(parsedData);                                                                                           
             setOpenCompleteModal(true);
         });
 
-        eventSource.onerror = (event:any) => {
+        eventSource.onerror = (event) => {
+            
             eventSource.close();
-            if (event.error) {
-                console.log('sse요청 error발생', event.error)
+            if (event) {
+                console.log('sse요청 error발생', event)
             }
 
             if (event.target.readyState === EventSource.CLOSED) {
@@ -97,18 +104,11 @@ export default function QrPay({onClose}:QrPayProps) {
         };
     }, []);
 
-    // openCompleteModal이 true가 되면 SSE 연결 종료
-    // useEffect(() => {
-    //     if (openCompleteModal && eventSource) {
-    //         eventSource.close();
-    //     }
-    // }, [openCompleteModal, eventSource]);
-
     // 정산완료후 닫기버튼! default 직접정산 1/n하기
     function handleClose() {
         setOpenCompleteModal(false);
         onClose();
-    }   
+    }
 
 
     return (

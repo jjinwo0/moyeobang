@@ -39,6 +39,14 @@ const columnStyle=css`
   padding-bottom:0px;
 `;
 
+const nameStyle=css`
+  display:flex;
+  justify-content:left;
+  padding-left:10px;
+  text-align:left;
+  width:100px;
+`;
+
 const listStyle=css`
   display:flex;
   flex-direction:column;
@@ -59,7 +67,7 @@ export default function TransactionDetail() {
   // 임시 accountId
   const accountId = 1;
   const { transactionId } = Route.useParams()
-  const [ openUpdateModal, setOpentUpdateModal] = useState<boolean>(false);
+  const [ openUpdateByReceiptModal, setOpentUpdateByReceiptModal] = useState<boolean>(false);
 
   const {data} = useSuspenseQuery({
     queryKey: ['transactionDetail', transactionId],
@@ -70,11 +78,11 @@ export default function TransactionDetail() {
   // console.log('거래 상세 데이터', transactionDetailData)
 
   function handleUpdateReceipt() {
-    setOpentUpdateModal(true);
+    setOpentUpdateByReceiptModal(true);
   }
 
   function handleClose() {
-    setOpentUpdateModal(false);
+    setOpentUpdateByReceiptModal(false);
   }
 
   // 타입 가드 함수
@@ -84,7 +92,7 @@ export default function TransactionDetail() {
     return (details as SettledParticipantByCustom[])[0].participant !== undefined;
   }
 
-  return openUpdateModal ? (
+  return openUpdateByReceiptModal ? (
     <ResultByReceiptComponenet 
       data={transactionDetailData as TransactionDetailByReceipt} 
       onClose={handleClose}
@@ -121,7 +129,7 @@ export default function TransactionDetail() {
         <>
           <div css={columnStyle}>
             <div>프로필</div>
-            <div>정산자</div>
+            <div css={nameStyle}>정산자</div>
             <div>정산금액</div>
           </div>
           <div css={listStyle}>
