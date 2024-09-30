@@ -278,15 +278,6 @@
 //   | TransactionDetailByReceipt
 //   | TransactionDetailByCustom;
 
-// interface CompleteTransaction {
-//   transactionId: TransactionId;
-//   money: Money;
-//   address: Adress;
-//   paymentName: PaymentName;
-//   createdAt: CreatedAt;
-//   acceptedNumber:AcceptedNumber;
-// }
-
 // interface ChatItem {
 //   item_name: string;
 //   quantity: number;
@@ -877,4 +868,20 @@ interface PaymentProps {
   latitude: number;
   longitude: number;
   targetAccountNumber: string;
+}
+
+// [모임 통장] 정산후 기본 정보
+interface CompleteTransaction {
+  transactionId: TransactionId;
+  money: Money;
+  address: Adress;
+  paymentName: PaymentName;
+  createdAt: CreatedAt;
+  acceptedNumber:AcceptedNumber;
+}
+
+interface OcrItem {
+  name: string;
+  count: number;
+  price: number;
 }
