@@ -20,8 +20,9 @@ interface QuizComponentProps {
 const modalOverlayStyle = css`
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 50;
+  /* width: 100%; */
+  width: 390px;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
@@ -35,7 +36,7 @@ const modalContentStyle = css`
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 68%;
+  width: 290px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center; /* 기본적으로 중앙 정렬 */
 `;

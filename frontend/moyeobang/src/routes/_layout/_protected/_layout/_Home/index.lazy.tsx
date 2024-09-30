@@ -15,6 +15,7 @@ import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import AllowNotification from '@/components/notification/AllowNotification';
+import querykeys from '@/util/querykeys';
 
 const data: Travel[] = [
   {
@@ -180,22 +181,33 @@ const plusStyle = css`
   z-index: 50; /* 다른 요소 위에 위치하도록 설정 */
 `;
 
+//[todo] 멤버 아이디 주스탄드에서 꺼내오기!!!
+const memberId: number = 4;
+
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
 
-  //[todo] get으로 여행 목록 전체 조회하기
-  const {data: travelData} = useSuspenseQuery({
-    queryKey: ['travelList'],
-    //memberId는 쥬스탄드에서 꺼내쓰기!
-    queryFn: () => moyeobang.getTravelList(4), // [*todo]일단은 4번 회원 데이터 조회
-  });
+  // //[todo] get으로 여행 목록 전체 조회하기
+  // const {data: travelData} = useSuspenseQuery({
+  //   queryKey: [querykeys.TRAVELLIST],
+  //   //memberId는 쥬스탄드에서 꺼내쓰기!
+  //   queryFn: () => moyeobang.getTravelList(4), // [*todo]일단은 4번 회원 데이터 조회
+  // });
 
+  const {data: travelData} = useSuspenseQuery({
+    queryKey: ['travelList', memberId],
+    // memberId는 Zustand에서 가져오기!
+    queryFn: () => {
+      console.log('getTravelList 호출');
+      return moyeobang.getTravelList(memberId); // [*todo] 일단은 4번 회원 데이터 조회
+    },
+  });
   const data = travelData?.data.data;
 
-  console.log(data);
+  // console.log(data);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {

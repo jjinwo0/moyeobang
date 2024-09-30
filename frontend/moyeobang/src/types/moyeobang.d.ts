@@ -781,7 +781,6 @@ interface ConsumptionCategory {
   balance: CurrentBalance;
 }
 
-
 interface ImgSummary {
   imgUrl: ImgUrl;
   locationName: LocationName;
@@ -883,19 +882,29 @@ interface ResponsePostDepositAccount {
 
 // [모임통장] 소비 비율 차트 데이터
 interface ConsumptionProportionByCategory {
-  categoryName:string;
-  proportion:number;
-  balance:number;
+  categoryName: string;
+  proportion: number;
+  balance: number;
 }
 
 interface ConsumptionProportionByMember {
-  member:ParticipantInfo;
-  proportion:number;
-  balance:number;
+  member: ParticipantInfo;
+  proportion: number;
+  balance: number;
 }
 
-// 전체일때 
+// 전체일때
 interface ConsumptionProportionData {
-  consumptionByCategory:ConsumptionByCategory[];
-  consumptionByMember:ConsumptionByMember[];
+  consumptionByCategory: ConsumptionByCategory[];
+  consumptionByMember: ConsumptionByMember[];
+}
+
+type BankName = string;
+
+interface ResponseGetProfile {
+  memberId: Id;
+  memberName: MemberName;
+  profileImage: ImgUrl;
+  bankName: BankName;
+  accountNumber: TravelAccountNumber;
 }

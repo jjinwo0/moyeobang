@@ -7,6 +7,7 @@ import Btn from '../common/btn/Btn';
 import BankAuth from './BankAuth';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import querykeys from '@/util/querykeys';
 
 // 스타일 정의
 
@@ -165,13 +166,15 @@ export default function AuthVerification({
     onSuccess: async (response: MoyeobangResponse<ResponsePostTravel>) => {
       const {travelId} = response.data; // 응답에서 travelId 추출
       console.log(travelId, '여행생성 성공');
+      if (travelId) {
+        // 여행 목록을 다시 가져오도록 GET 요청 수행
+        await queryClient.invalidateQueries({
+          queryKey: ['travelList', memberId],
+        });
 
-      // travelList 쿼리 무효화 및 재요청
-      await queryClient.invalidateQueries({
-        queryKey: ['travelList'],
-        refetchType: 'all',
-      });
-
+        // 모달 닫기
+        onClose();
+      }
       // travelId를 사용해 postAccount 호출
       // postAccount(travelId);
     },
@@ -188,7 +191,7 @@ export default function AuthVerification({
   //   }
   // })
 
-  const handleCompleteClick = () => {
+  const handleCompleteClick = async () => {
     if (isVerified && isAllTermsAgreed) {
       //[todo] 여행 생성 함수 호출
       postTravel({formData, memberId});

@@ -5,8 +5,9 @@ export default {
   RECEIPT: 'receipt',
   CUSTOM: 'custom',
   TRANSACTION_DETAIL: 'transactionDetail',
-  // TRAVELLIST:'travelList',
-  // QUIZ:'quiz',
+  TRAVELLIST: 'travelList',
+  QUIZ: 'quiz',
   // ACCOUNTNUMBER:'accountNumber',
   // CURRENTBALANCE: 'currentBalance',
+  // USERINFO:'userInfo'
 };
