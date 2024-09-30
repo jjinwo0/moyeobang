@@ -20,7 +20,7 @@ const containerStyle = css`
 
   h3 {
     font-family: 'semibold';
-    font-size: 13px;
+    font-size: 15px;
   }
 `;
 
