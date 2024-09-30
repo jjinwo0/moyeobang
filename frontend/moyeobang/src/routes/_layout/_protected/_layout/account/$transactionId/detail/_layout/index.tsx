@@ -62,7 +62,7 @@ export default function TransactionDetail() {
   const [ openUpdateModal, setOpentUpdateModal] = useState<boolean>(false);
 
   const {data} = useSuspenseQuery({
-    queryKey: ['transactionDetail', transactionId],
+    queryKey: ['transactionDetail', accountId, transactionId],
     queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
   });
 
