@@ -204,6 +204,8 @@ function Index() {
       console.log('getTravelList 호출');
       return moyeobang.getTravelList(memberId); // [*todo] 일단은 4번 회원 데이터 조회
     },
+    staleTime: 0,
+    refetchOnMount: true,
   });
   const data = travelData?.data.data;
 
@@ -299,6 +301,7 @@ function Index() {
               {currentTrips.map(trip => (
                 <TravelCard
                   key={trip.travelId}
+                  travelId={trip.travelId}
                   travelName={trip.travelName}
                   startDate={trip.startDate}
                   endDate={trip.endDate}

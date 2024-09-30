@@ -194,6 +194,8 @@ export default function TravelCard({
 
   const handleExitModalOpen = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 전파를 막음
+    console.log('나가기클릭');
+    console.log(travelId);
     setExitModal(true);
     setSettingButtonClick(prev => !prev);
   };
