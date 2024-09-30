@@ -27,7 +27,8 @@ public class CreateTravelScheduleService implements CreateTravelScheduleUseCase 
                 .max()
                 .orElse(0);
 
-        Location location = Location.of(command.location().address(), command.location().googlePlaceId(),
+        Location location = Location.of(command.location().title(), command.location().address(),
+                command.location().googlePlaceId(),
                 command.location().lat(), command.location().lng());
 
         // TODO : 예산 예측 로직 필요
