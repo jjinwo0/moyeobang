@@ -133,7 +133,7 @@ export default function PlusSelfSchedule({
   };
 
   // 완료 여부
-  const {travelSchedules, setTravelSchedules, isEditMode, setIsEditMode} =
+  const {travelSchedules, setTravelSchedules, scheduleEdit, setScheduleEdit} =
     useTravelLogContext();
   // API 미적용, UI만 보여주기
   const toggleCompletion = (e: React.MouseEvent<HTMLImageElement>) => {
@@ -202,7 +202,7 @@ export default function PlusSelfSchedule({
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     handleShowPlusSelf();
-    setIsEditMode(true);
+    setScheduleEdit(schedule.scheduleId);
   };
 
   return (

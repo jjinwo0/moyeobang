@@ -22,11 +22,12 @@ export default function PlusSelf() {
     setSearchLocation,
     selectedPlace,
     setSelectedPlace,
-    isEditMode,
-    setIsEditMode,
+    scheduleEdit,
+    setScheduleEdit,
     travelDates,
     scheduleDayNum,
     selectedMarker,
+    travelSchedules,
   } = useTravelLogContext();
   const [AMPMSelection, setAMPMSelection] = useState<'AM' | 'PM'>('AM');
   const handleAMPMSelection = () => {
@@ -62,7 +63,7 @@ export default function PlusSelf() {
   const resetForm = () => {
     setSearchLocation('');
     setScheduleName('');
-    setIsEditMode(false);
+    setScheduleEdit(null);
     setHour('');
     setMinute('');
     setMemo('');
@@ -109,8 +110,14 @@ export default function PlusSelf() {
         scheduleImg: selectedImage ?? '',
       };
       console.log('[*] scheduleData', scheduleData);
-      handleShowPlusSelf();
+      // [todo] 저장 로직 추가
+      if (scheduleEdit) {
+        // 수정 모드
+      } else {
+        // 추가 모드
+      }
     }
+    handleShowPlusSelf();
   };
 
   const handleXClick = () => {
@@ -134,6 +141,42 @@ export default function PlusSelf() {
     }
   }, [hour, minute, AMPMSelection, scheduleDayNum]);
 
+  // 타입 가드 함수
+  function isPlusSelfSchedule(
+    schedule: PlusSelfSchedule | PaidAutoSchedule
+  ): schedule is PlusSelfSchedule {
+    return (schedule as PlusSelfSchedule).scheduleId !== undefined;
+  }
+
+  useEffect(() => {
+    // [todo] 상세보기
+    if (scheduleEdit) {
+      if (scheduleDayNum) {
+        const schedule = travelSchedules[
+          scheduleDayNum - 1
+        ].daySchedules.filter(
+          schedule =>
+            isPlusSelfSchedule(schedule) && schedule.scheduleId === scheduleEdit
+        );
+        console.log('[*] schedule', schedule);
+        if (isPlusSelfSchedule(schedule[0])) {
+          setScheduleName(schedule[0].scheduleTitle || '');
+          setSearchLocation(schedule[0].scheduleLocation.title || '');
+
+          const [date, time] = schedule[0].scheduleTime.split('T');
+          const [hour, minute] = time.split(':');
+          const hourInt = parseInt(hour, 10);
+          setAMPMSelection(hourInt >= 12 ? 'PM' : 'AM');
+          setHour(hourInt > 12 ? hourInt - 12 : hourInt);
+          setMinute(minute || '');
+
+          setMemo(schedule[0].memo || '');
+          setSelectedImage(schedule[0].scheduleImg || '');
+        }
+      }
+    }
+  }, [scheduleEdit]);
+
   return (
     <>
       <div>
@@ -150,7 +193,6 @@ export default function PlusSelf() {
             <span>일정을</span>{' '}
             <span style={{color: colors.fifth}}>적어방</span>
           </div>
-          {isEditMode && <div>수정 모드</div>}
           {/* 1. 여행 장소 */}
           <div css={PlusSelfStyle.LocationInputLayout}>
             일정 장소

@@ -30,8 +30,8 @@ export type TravelLogContextType = {
   showPlusSelf: boolean;
   handleShowPlusSelf: () => void;
   travelDates: string[];
-  isEditMode: boolean;
-  setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  scheduleEdit: number | null;
+  setScheduleEdit: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 // Provider 컴포넌트 생성
@@ -82,8 +82,8 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
           transactionId: 78902,
           isSelfPlus: false,
           paymentName: '신주쿠 카페 결제',
-          latitude: 37.9243555,
-          longitude: 127.7672156,
+          latitude: 37.85294409999999,
+          longitude: 127.7113324,
           totalPrice: 25000,
           paymentTime: '2024-10-01T16:00:00',
           splitMethod: 'receipt', // 정산 방식
@@ -176,7 +176,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
 
   // 자신의 일정 추가 모달
   const [showPlusSelf, setShowPlusSelf] = useState<boolean>(false);
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [scheduleEdit, setScheduleEdit] = useState<number | null>(null);
 
   const handleShowPlusSelf = () => {
     setShowPlusSelf(!showPlusSelf);
@@ -192,7 +192,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
 
   // scheduleDayNum 실제 day를 알 수 있다.
   // scheduleDayNum-1을 하면 인덱스를 알 수 있다.
-  const [scheduleDayNum, setScheduleDayNum] = useState<number>(1);
+  const [scheduleDayNum, setScheduleDayNum] = useState<number | undefined>(1);
 
   // type ExtendedMarkerOptions = google.maps.Marker & {
   //   position?: {
@@ -237,8 +237,8 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         showPlusSelf,
         handleShowPlusSelf,
         travelDates,
-        isEditMode,
-        setIsEditMode,
+        scheduleEdit,
+        setScheduleEdit,
       }}
     >
       {children}
