@@ -81,7 +81,6 @@ public class CreateTravelScheduleIntegrationTest extends IntegrationTestSupport 
         List<ScheduleJpaEntity> savedSchedules = scheduleRepository.findByTravelId(travel.getId())
                 .orElseThrow(() -> new ScheduleException(
                         ErrorCode.TRAVEL_SCHEDULE_NOT_FOUND));
-        savedSchedules.forEach(schedule -> System.out.println("Saved schedule: " + schedule.getTitle()));
         assertThat(savedSchedules.size()).isEqualTo(2);
         assertThat(savedSchedules.get(1).getSequence()).isEqualTo(2);
     }
