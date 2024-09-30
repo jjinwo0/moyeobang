@@ -88,7 +88,7 @@ export default function TravelLogList() {
       setCurrentIndex((prevIndex: number) => {
         const newIndex = Math.min(prevIndex + 1, travelDays); // travelSchedules.length -> travelDays
         setScheduleDayNum(newIndex + 1); // 새로운 스케줄 번호 설정 (1부터 시작)
-        console.log('[*] 오른쪽', newIndex + 1);
+        console.log('[*] 오른쪽', newIndex);
 
         return newIndex;
       });
@@ -97,7 +97,7 @@ export default function TravelLogList() {
       setCurrentIndex((prevIndex: number) => {
         const newIndex = Math.max(prevIndex - 1, 0);
         setScheduleDayNum(newIndex + 1); // 새로운 스케줄 번호 설정 (1부터 시작)
-        console.log('[*] 왼쪽', newIndex + 1);
+        console.log('[*] 왼쪽', newIndex);
 
         return newIndex;
       });

@@ -38,6 +38,7 @@ const labelInputStyle = css`
 `;
 
 export default function TimeInput({label, ...props}: TimeInputProps) {
+
   return (
     <div css={timeContainerStyle}>
       <input type="text" {...props} css={timeInputStyle} placeholder={label} />

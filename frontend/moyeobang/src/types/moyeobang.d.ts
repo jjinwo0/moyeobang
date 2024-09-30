@@ -209,6 +209,14 @@ interface DaySchedules {
   daySchedules: (PlusSelfSchedule | PaidAutoSchedule)[];
 }
 
+type ExtendedMarkerOptions = google.maps.MarkerOptions & {
+  placeId?: string;
+  placeName?: string;
+  address?: string;
+  category?: string;
+  types?: string[]; // `types` 속성 추가
+};
+
 // Location type 지정
 interface ScheduleLocation {
   googlePlaceId: string;

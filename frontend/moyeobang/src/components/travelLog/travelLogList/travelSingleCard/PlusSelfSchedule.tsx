@@ -119,6 +119,10 @@ export default function PlusSelfSchedule({
     console.log('전송할 예산:', budget);
   };
 
+  const handleBudgetClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
   const router = useRouter();
   const handleDetailClick = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -129,7 +133,8 @@ export default function PlusSelfSchedule({
   };
 
   // 완료 여부
-  const {travelSchedules, setTravelSchedules} = useTravelLogContext();
+  const {travelSchedules, setTravelSchedules, isEditMode, setIsEditMode} =
+    useTravelLogContext();
   // API 미적용, UI만 보여주기
   const toggleCompletion = (e: React.MouseEvent<HTMLImageElement>) => {
     e.stopPropagation();
@@ -193,8 +198,15 @@ export default function PlusSelfSchedule({
     setShowPopup(prev => !prev);
   };
 
+  const {handleShowPlusSelf} = useTravelLogContext();
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    handleShowPlusSelf();
+    setIsEditMode(true);
+  };
+
   return (
-    <div css={scheduleCardLayout}>
+    <div css={scheduleCardLayout} onClick={handleClick}>
       {/* 체크리스트 완료 여부 */}
       <div css={checkBoxStyle}>
         <img
@@ -320,6 +332,7 @@ export default function PlusSelfSchedule({
                   style={{marginRight: '5px'}}
                   type="text"
                   value={budget}
+                  onClick={handleBudgetClick}
                   onChange={handleBudgetChange}
                   onFocus={handleBudgetFocus}
                   onBlur={handleBudgetBlur}

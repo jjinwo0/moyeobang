@@ -15,9 +15,9 @@ export type TravelLogContextType = {
   setSelectedPlace: React.Dispatch<React.SetStateAction<string | []>>;
   scheduleDayNum?: number;
   setScheduleDayNum: React.Dispatch<React.SetStateAction<number | undefined>>;
-  selectedMarker: google.maps.MarkerOptions | null;
+  selectedMarker: ExtendedMarkerOptions | null;
   setSelectedMarker: React.Dispatch<
-    React.SetStateAction<google.maps.MarkerOptions | null>
+    React.SetStateAction<ExtendedMarkerOptions | null>
   >;
   showMapSearch: boolean;
   setShowMapSearch: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,6 +30,8 @@ export type TravelLogContextType = {
   showPlusSelf: boolean;
   handleShowPlusSelf: () => void;
   travelDates: string[];
+  isEditMode: boolean;
+  setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 // Provider 컴포넌트 생성
@@ -65,12 +67,12 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
             participantsInfo: [
               {
                 memberId: 1,
-                nickname: '김훈민',
+                memberName: '김훈민',
                 profileImage: '/assets/images/profile.jpg',
               },
               {
                 memberId: 2,
-                nickname: '이수민',
+                memberName: '이수민',
                 profileImage: '/assets/images/profile.jpg',
               },
             ],
@@ -88,17 +90,17 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
           participantsInfo: [
             {
               memberId: 1,
-              nickname: '김훈민',
+              memberName: '김훈민',
               profileImage: '/images/profiles/1.png',
             },
             {
               memberId: 2,
-              nickname: '이수민',
+              memberName: '이수민',
               profileImage: '/images/profiles/2.png',
             },
             {
               memberId: '3',
-              nickname: '박지현',
+              memberName: '박지현',
               profileImage: '/images/profiles/3.png',
             },
           ],
@@ -150,7 +152,8 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
     }
   };
 
-  const {travelPlaceList, startDate, endDate, travelName} = useTravelDetailStore();
+  const {travelPlaceList, startDate, endDate, travelName} =
+    useTravelDetailStore();
 
   const [selectedPlace, setSelectedPlace] = useState<string | []>(
     travelPlaceList[0]
@@ -171,9 +174,9 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
-
   // 자신의 일정 추가 모달
   const [showPlusSelf, setShowPlusSelf] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   const handleShowPlusSelf = () => {
     setShowPlusSelf(!showPlusSelf);
@@ -189,11 +192,26 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
 
   // scheduleDayNum 실제 day를 알 수 있다.
   // scheduleDayNum-1을 하면 인덱스를 알 수 있다.
-  const [scheduleDayNum, setScheduleDayNum] = useState<number | undefined>();
+  const [scheduleDayNum, setScheduleDayNum] = useState<number>(1);
 
-  // 여기서 selectedMarker 상태를 추가
+  // type ExtendedMarkerOptions = google.maps.Marker & {
+  //   position?: {
+  //     lat: number;
+  //     lng: number;
+  //   };
+  //   googlePlaceId?: string;
+  //   placeName?: string;
+  //   address?: string;
+  //   category?: string;
+  // };
+
+  // // 여기서 selectedMarker 상태를 추가
+  // const [selectedMarker, setSelectedMarker] =
+  //   useState<ExtendedMarkerOptions | null>(null);
+
+  // `selectedMarker`를 이 확장된 타입으로 선언
   const [selectedMarker, setSelectedMarker] =
-    useState<google.maps.MarkerOptions | null>(null);
+    useState<ExtendedMarkerOptions | null>(null);
 
   return (
     <TravelLogContext.Provider
@@ -218,7 +236,9 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
         setScheduleName,
         showPlusSelf,
         handleShowPlusSelf,
-        travelDates
+        travelDates,
+        isEditMode,
+        setIsEditMode,
       }}
     >
       {children}
