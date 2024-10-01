@@ -10,15 +10,14 @@ const qrContainerStyle=css`
     background-color: ${colors.white};
     display:flex;
     flex-direction:column;
-    justify-content:center;
     align-items:center;
-    width: 200px;
-    height:350px;
-    padding: 0 10px;
+    width: 250px;
+    height:330px;
+    padding: 30px 10px;
     span {
-        // box-sizing:border-box;
-        font-family:'english';
-        margin-bottom:10px;
+        font-family: 'english';
+        font-size: 28px;
+        padding: 2px;
     }
 `;
 
@@ -34,10 +33,11 @@ const qrStyle = css`
 const titleStyle=css`
     padding:10px;
     font-size:24px;
+    font-family:'semibold';
 `;
 
 const contentStyle=css`
-    padding: 10px 0;
+    padding: 20px 0;
     font-size:14px;
 `;
 
@@ -51,6 +51,7 @@ export default function QrPayByOnline({data, onClickOutside} : QrPayByOnlineProp
 
     const modalRef = useRef<HTMLDivElement>(null)
     useOnClickOutside(modalRef, onClickOutside)
+    console.log(data)
 
     return (
         <Backdrop>
@@ -58,6 +59,7 @@ export default function QrPayByOnline({data, onClickOutside} : QrPayByOnlineProp
                 <div css={titleStyle}><span>QR</span>결제</div>
                 <QRCode value={JSON.stringify(data)} css={qrStyle} />
                 <div css={contentStyle}>카메라를 통해 <span>QR</span>을 스캔해주세요</div>
+                <div>결제 금액 : {data.amount.toLocaleString()}원</div>
             </div>
         </Backdrop>
     )
