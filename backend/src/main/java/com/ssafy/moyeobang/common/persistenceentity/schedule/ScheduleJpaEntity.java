@@ -35,9 +35,9 @@ public class ScheduleJpaEntity extends BaseEntity {
 
     private LocalDateTime startDateTime;
 
-    private LocalDateTime endDateTime;
-
     private String address;
+
+    private String googlePlaceId;
 
     private int budget;
 
@@ -47,6 +47,12 @@ public class ScheduleJpaEntity extends BaseEntity {
     private String imageUrl;
 
     private String memo;
+
+    private double latitude;
+
+    private double longitude;
+
+    private int sequence;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_id")
@@ -59,22 +65,28 @@ public class ScheduleJpaEntity extends BaseEntity {
     @Builder
     public ScheduleJpaEntity(String title,
                              LocalDateTime startDateTime,
-                             LocalDateTime endDateTime,
                              String address,
                              int budget,
                              ScheduleStatus complete,
                              String imageUrl,
                              String memo,
+                             double latitude,
+                             double longitude,
+                             String googlePlaceId,
+                             int sequence,
                              TravelJpaEntity travel,
                              WithdrawJpaEntity withdraw) {
         this.title = title;
         this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
         this.address = address;
         this.budget = budget;
         this.complete = complete;
         this.imageUrl = imageUrl;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.googlePlaceId = googlePlaceId;
         this.memo = memo;
+        this.sequence = sequence;
         this.travel = travel;
         this.withdraw = withdraw;
     }
