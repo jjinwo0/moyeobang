@@ -8,6 +8,7 @@ import BankAuth from './BankAuth';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import querykeys from '@/util/querykeys';
+import {useRouter} from '@tanstack/react-router';
 
 // 스타일 정의
 
@@ -160,21 +161,15 @@ export default function AuthVerification({
       formData: FormData;
       memberId: number;
     }) => {
-      const response = await moyeobang.postTravel(formData, memberId);
-      return response.data; // Axios의 response.data 반환
+      moyeobang.postTravel(formData, memberId);
     },
-    onSuccess: async (response: MoyeobangResponse<ResponsePostTravel>) => {
-      const {travelId} = response.data; // 응답에서 travelId 추출
-      console.log(travelId, '여행생성 성공');
-      if (travelId) {
-        // 여행 목록을 다시 가져오도록 GET 요청 수행
-        await queryClient.invalidateQueries({
-          queryKey: ['travelList', memberId],
-        });
-
-        // 모달 닫기
-        onClose();
-      }
+    onSuccess: async () => {
+      // const {travelId} = response.data; // 응답에서 travelId 추출
+      // 여행 목록을 다시 가져오도록 GET 요청 수행
+      await queryClient.invalidateQueries({
+        queryKey: ['travelList', memberId],
+        refetchType: 'all',
+      });
       // travelId를 사용해 postAccount 호출
       // postAccount(travelId);
     },
@@ -190,14 +185,17 @@ export default function AuthVerification({
   //     })
   //   }
   // })
+  const router = useRouter();
 
   const handleCompleteClick = async () => {
     if (isVerified && isAllTermsAgreed) {
       //[todo] 여행 생성 함수 호출
       postTravel({formData, memberId});
+
       console.log('여행 생성 호출');
 
       onClose(); // 완료 버튼이 파란색일 때만 모달 닫기
+      router.navigate({to: '/'});
     } else {
       alert('본인 인증 및 약관 동의를 모두 완료해야 합니다.');
     }

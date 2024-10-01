@@ -201,11 +201,8 @@ function Index() {
     queryKey: ['travelList', memberId],
     // memberId는 Zustand에서 가져오기!
     queryFn: () => {
-      console.log('getTravelList 호출');
       return moyeobang.getTravelList(memberId); // [*todo] 일단은 4번 회원 데이터 조회
     },
-    staleTime: 0,
-    refetchOnMount: true,
   });
   const data = travelData?.data.data;
 
