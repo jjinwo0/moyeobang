@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.personal.adapter.out.bank;
+package com.ssafy.moyeobang.verify.adapter.out.bank;
 
 import lombok.*;
 

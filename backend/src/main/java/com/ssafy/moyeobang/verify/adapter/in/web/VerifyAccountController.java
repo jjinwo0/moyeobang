@@ -1,10 +1,9 @@
-package com.ssafy.moyeobang.personal.adapter.in.web;
+package com.ssafy.moyeobang.verify.adapter.in.web;
 
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
-import com.ssafy.moyeobang.common.util.ApiUtils;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
-import com.ssafy.moyeobang.personal.adapter.in.web.request.VerifyInfo;
-import com.ssafy.moyeobang.personal.application.port.in.VerifyAccountUseCase;
+import com.ssafy.moyeobang.verify.adapter.in.web.request.VerifyInfo;
+import com.ssafy.moyeobang.verify.application.port.in.VerifyAccountUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

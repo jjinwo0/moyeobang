@@ -1,12 +1,10 @@
-package com.ssafy.moyeobang.personal.adapter.out.bank;
+package com.ssafy.moyeobang.verify.adapter.out.bank;
 
-import com.ssafy.moyeobang.personal.adapter.out.bank.request.SendVerifyRequest;
+import com.ssafy.moyeobang.verify.adapter.out.bank.request.SendVerifyRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
-import static com.ssafy.moyeobang.personal.adapter.out.bank.RestClientUtils.post;
+import static com.ssafy.moyeobang.verify.adapter.out.bank.RestClientUtils.post;
 import static java.time.LocalDateTime.now;
 
 @Component

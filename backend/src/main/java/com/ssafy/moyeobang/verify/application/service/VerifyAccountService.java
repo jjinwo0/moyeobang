@@ -1,9 +1,9 @@
-package com.ssafy.moyeobang.personal.application.service;
+package com.ssafy.moyeobang.verify.application.service;
 
 import com.ssafy.moyeobang.common.config.jwt.TokenManager;
-import com.ssafy.moyeobang.personal.adapter.out.bank.BankApiClientInVerify;
-import com.ssafy.moyeobang.personal.application.port.in.VerifyAccountUseCase;
-import com.ssafy.moyeobang.personal.application.port.out.LoadMemberKeyPort;
+import com.ssafy.moyeobang.verify.adapter.out.bank.BankApiClientInVerify;
+import com.ssafy.moyeobang.verify.application.port.in.VerifyAccountUseCase;
+import com.ssafy.moyeobang.verify.application.port.out.LoadMemberKeyPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.personal.application.port.out;
+package com.ssafy.moyeobang.verify.application.port.out;
 
 public interface LoadMemberKeyPort {
 

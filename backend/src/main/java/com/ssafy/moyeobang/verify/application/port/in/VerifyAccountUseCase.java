@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.personal.application.port.in;
+package com.ssafy.moyeobang.verify.application.port.in;
 
 public interface VerifyAccountUseCase {
 
