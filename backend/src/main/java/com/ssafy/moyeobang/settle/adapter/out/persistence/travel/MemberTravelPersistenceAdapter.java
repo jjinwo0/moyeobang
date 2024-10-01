@@ -1,11 +1,11 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.travel;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
+import com.ssafy.moyeobang.common.error.exception.EntityNotFoundException;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.travel.MemberTravel;
 import com.ssafy.moyeobang.settle.application.port.out.FindMemberTravelPort;
 import com.ssafy.moyeobang.settle.application.port.out.UpdateMemberTravelPort;
-import com.ssafy.moyeobang.settle.error.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
