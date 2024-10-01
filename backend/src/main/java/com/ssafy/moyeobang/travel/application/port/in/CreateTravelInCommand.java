@@ -8,7 +8,8 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
 
-public record CreateTravelInCommand(@NotNull String title,
+public record CreateTravelInCommand(@NotNull Long memberId,
+                                    @NotNull String title,
                                     @NotNull LocalDate startDate,
                                     @NotNull LocalDate endDate,
                                     @NotNull List<String> travelPlaces,
@@ -16,7 +17,8 @@ public record CreateTravelInCommand(@NotNull String title,
                                     @NotNull String quizAnswer,
                                     BackgroundImage backgroundImage) {
 
-    public CreateTravelInCommand(String title,
+    public CreateTravelInCommand(Long memberId,
+                                 String title,
                                  LocalDate startDate,
                                  LocalDate endDate,
                                  List<String> travelPlaces,
@@ -27,6 +29,7 @@ public record CreateTravelInCommand(@NotNull String title,
                                  InputStream inputStream,
                                  long size) {
         this(
+                memberId,
                 title,
                 startDate,
                 endDate,

@@ -11,6 +11,7 @@ import com.ssafy.moyeobang.travel.application.port.in.CreateTravelUseCase;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,9 +24,11 @@ public class CreateTravelController {
     private final CreateTravelUseCase createTravelUseCase;
 
     @PostMapping("/api/travels")
-    public ApiResult<CreateTravelResponse> createTravel(@RequestPart CreateTravelRequest request,
+    public ApiResult<CreateTravelResponse> createTravel(@RequestParam Long memberId,
+                                                        @RequestPart CreateTravelRequest request,
                                                         @RequestPart(required = false) MultipartFile backgroundImage) throws IOException {
         CreateTravelInCommand command = new CreateTravelInCommand(
+                memberId,
                 request.travelName(),
                 request.startDate(),
                 request.endDate(),

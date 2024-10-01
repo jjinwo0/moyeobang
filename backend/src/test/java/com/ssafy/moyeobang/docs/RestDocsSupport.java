@@ -13,6 +13,8 @@ import com.ssafy.moyeobang.travel.application.port.in.CheckQuizAnswerUseCase;
 import com.ssafy.moyeobang.travel.application.port.in.CreateTravelUseCase;
 import com.ssafy.moyeobang.travel.application.port.in.GetQuizQuestionQuery;
 import com.ssafy.moyeobang.travel.application.port.in.GetTravelsQuery;
+import com.ssafy.moyeobang.travel.application.port.in.LeaveTravelUseCase;
+import com.ssafy.moyeobang.travel.application.port.in.ParticipateTravelUseCase;
 import com.ssafy.moyeobang.travel.application.port.in.UpdateTravelUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,4 +79,9 @@ public abstract class RestDocsSupport {
     @MockBean
     protected UpdateTravelUseCase updateTravelUseCase;
 
+    @MockBean
+    protected ParticipateTravelUseCase participateTravelUseCase;
+
+    @MockBean
+    protected LeaveTravelUseCase leaveTravelUseCase;
 }

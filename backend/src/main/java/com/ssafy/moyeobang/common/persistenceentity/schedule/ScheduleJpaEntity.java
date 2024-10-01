@@ -31,13 +31,16 @@ public class ScheduleJpaEntity extends BaseEntity {
     @Column(name = "schedule_id")
     private Long id;
 
-    private String title;
+    @Column(name = "schedule_title")
+    private String scheduleTitle;
 
     private LocalDateTime startDateTime;
 
-    private LocalDateTime endDateTime;
+    private String title;
 
     private String address;
+
+    private String googlePlaceId;
 
     private int budget;
 
@@ -48,6 +51,12 @@ public class ScheduleJpaEntity extends BaseEntity {
 
     private String memo;
 
+    private double latitude;
+
+    private double longitude;
+
+    private int sequence;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_id")
     private TravelJpaEntity travel;
@@ -57,25 +66,47 @@ public class ScheduleJpaEntity extends BaseEntity {
     private WithdrawJpaEntity withdraw;
 
     @Builder
-    public ScheduleJpaEntity(String title,
+    public ScheduleJpaEntity(String scheduleTitle,
                              LocalDateTime startDateTime,
-                             LocalDateTime endDateTime,
+                             String title,
                              String address,
                              int budget,
                              ScheduleStatus complete,
                              String imageUrl,
                              String memo,
+                             double latitude,
+                             double longitude,
+                             String googlePlaceId,
+                             int sequence,
                              TravelJpaEntity travel,
                              WithdrawJpaEntity withdraw) {
-        this.title = title;
+        this.scheduleTitle = scheduleTitle;
         this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
+        this.title = title;
         this.address = address;
         this.budget = budget;
         this.complete = complete;
         this.imageUrl = imageUrl;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.googlePlaceId = googlePlaceId;
         this.memo = memo;
+        this.sequence = sequence;
         this.travel = travel;
         this.withdraw = withdraw;
+    }
+
+    public void updateSchedule(String scheduleTitle, LocalDateTime startDateTime, String title, String address,
+                               double latitude,
+                               double longitude, String googlePlaceId, String memo, String imageUrl) {
+        this.scheduleTitle = scheduleTitle;
+        this.startDateTime = startDateTime;
+        this.title = title;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.googlePlaceId = googlePlaceId;
+        this.memo = memo;
+        this.imageUrl = imageUrl;
     }
 }

@@ -13,45 +13,42 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.moyeobang.account.adapter.in.web.request.CreateAccountRequest;
-import com.ssafy.moyeobang.account.adapter.in.web.response.CreateAccountResponse;
+import com.ssafy.moyeobang.travel.adapter.in.web.request.ParticipateTravelRequest;
+import com.ssafy.moyeobang.travel.application.port.in.ParticipateTravelCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-class CreateAccountControllerDocsTest extends RestDocsSupport {
+public class ParticipateTravelControllerDocsTest extends RestDocsSupport {
 
-    @DisplayName("여행 계좌 생성 API")
+    @DisplayName("여행 참여 API")
     @Test
-    void createAccountTest() throws Exception {
-        CreateAccountRequest request = new CreateAccountRequest(1L);
-        CreateAccountResponse response = new CreateAccountResponse("0016174548358792");
+    void participateTravel() throws Exception {
+        ParticipateTravelRequest request = new ParticipateTravelRequest(1L);
 
-        given(createAccountUseCase.createAccount(any(Long.class)))
-                .willReturn(response);
+        given(participateTravelUseCase.participateTravel(any(ParticipateTravelCommand.class)))
+                .willReturn(true);
 
         mockMvc.perform(
-                        post("/api/accounts")
+                        post("/api/travels/{travelsId}/participate", "1")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("create-account",
+                .andDo(document("participate-travel",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestFields(
-                                        fieldWithPath("travelId").type(JsonFieldType.NUMBER)
-                                                .description("여행 id")
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER)
+                                                .description("멤버 id")
                                 ),
                                 responseFields(
                                         fieldWithPath("status").type(JsonFieldType.STRING)
                                                 .description("API 성공 여부"),
-                                        fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        fieldWithPath("data").type(JsonFieldType.BOOLEAN)
                                                 .description("응답"),
-                                        fieldWithPath("data.accountNumber").type(JsonFieldType.STRING)
-                                                .description("계좌 번호"),
                                         fieldWithPath("error").type(JsonFieldType.NULL)
                                                 .description("에러")
                                 )
