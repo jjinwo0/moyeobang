@@ -10,4 +10,6 @@ public interface NotificationUseCase {
     void sendBalanceCheckNotification() throws FirebaseMessagingException;
 
     void sendRemind(Long travelId, Long memberId, NotificationPayload payload);
+
+    void saveToken(Long memberId, String token);
 }
