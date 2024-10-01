@@ -8,12 +8,8 @@ import { colors } from "@/styles/colors";
 import { extractItems } from "@/util/receiptExtract";
 import FailByReceipt from "./FailByReceipt";
 import ResultByReceiptComponent from "./ResultByReceiptComponent";
-// import openAI from 'openai';
 
 // const api_url= "/api/custom/v1/34393/8f13443da4a5bb3449e36dac1ddda218c4f02d27884df6cd85905363c5603a72/general"
-const api_url="https://hg8ztt0qia.apigw.ntruss.com/custom/v1/34743/4c5ebcb57b64b15dbbe83c978831cada8722f0b26af56b22b4a47ce1ce418760/document/receipt"
-// const secret_key= import.meta.env.VITE_OCR_API_KEY;
-// const open_ai_key= import.meta.env.VITE_GPT_API_KEY;
 
 const layoutStyle = css`
     width:100%;
@@ -180,25 +176,28 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
                 }
             });
 
-            console.log(response.data.images[0].inferResult) // 영수증 이미지 인식 결과 'SUCCESS | FAILURE | ERROR"
-            console.log(response.data.images[0].receipt.result.subResults[0].items)
-
-            // 영수증 아이쳄 리스트 추출
-            const itemData : OcrItem[] = response.data.images[0].receipt.result.subResults[0].items.map((item:OcrApiItem) => {
-                return {name : item.name.text, count : Number(item.count ? item.count.text : 1), price:Number(item.price.price.text)}
-            })
-
-            console.log(2222,itemData)
-            // extractItems를 통해 데이터 변환
-            if (itemData) {
-                const results = extractItems(itemData, transactionId, createdAt, money, paymentName, address, acceptedNumber);
-                setResults(results);
-                setIsLoading(false);
-                setOpenResultModal(true);
+            // console.log(response.data.images[0].inferResult) // 영수증 이미지 인식 결과 'SUCCESS | FAILURE | ERROR"
+            if (response.data.images[0].inferResult==='SUCCESS') {
+                
+                console.log('subResults : ', response.data.images[0].receipt.result.subResults[0].items)
+    
+                // 영수증 아이쳄 리스트 추출
+                const itemData : OcrItem[] = response.data.images[0].receipt.result.subResults[0].items.map((item:OcrApiItem) => {
+                    return {name : (item.name ? item.name.text : '상품명을 입력해주세요'), count : Number(item.count ? item.count.text: 1), price: Number(item.price ? item.price.price.formatted.value : 0)}
+                })
+    
+                // extractItems를 통해 데이터 변환
+                if (itemData) {
+                    const results = extractItems(itemData, transactionId, createdAt, money, paymentName, address, acceptedNumber);
+                    setResults(results);
+                    setIsLoading(false);
+                    setOpenResultModal(true);
+                }
             }
 
         } catch (error) {
             console.log(error)
+            setError('영수증 인식 오류 발생')
         }
     }
 

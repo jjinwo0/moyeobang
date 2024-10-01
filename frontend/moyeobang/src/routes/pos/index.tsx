@@ -77,7 +77,7 @@ const buttonLayoutStyle = css`
 
 // createdAt, uuid(paymentRequestId), paymentName, address, money 필요
 export default function Pos() {
-  const [placeId, setPlaceId] = useState<number | undefined>()
+  const [placeId, setPlaceId] = useState<string>('')
   const [placeName, setPlaceName] = useState<PaymentName>('')
   const [amount, setAmount] = useState<Money>(0)
   const [placeAddress, setPlaceAddress] = useState<Adress>('')
@@ -93,13 +93,7 @@ export default function Pos() {
   
 
   function handlePlaceId(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.value === '') {
-      setPlaceId(undefined)
-    }
-    const newId = parseInt(e.target.value) // 숫자로변환
-    if (!isNaN(newId)) {
-      setPlaceId(newId)
-    }
+    setPlaceId(e.target.value)
   }
 
   function handlePlaceName(e: React.ChangeEvent<HTMLInputElement>) {
@@ -222,8 +216,8 @@ export default function Pos() {
           <div>
             <p>가맹점 id (placeId)</p>
             <input
-              type="number"
-              value={placeId !== undefined ? placeId : ''}
+              type="text"
+              value={placeId}
               onChange={handlePlaceId}
             />
           </div>

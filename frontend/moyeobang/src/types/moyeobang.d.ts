@@ -842,7 +842,7 @@ interface QrData {
 
 // pos기
 interface PosPay {
-  placeId: number;
+  placeId: string;
   placeName: string;
   placeAddress: Adress;
   amount: Money;

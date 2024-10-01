@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as PosIndexImport } from './routes/pos/index'
+import { Route as AirportIndexImport } from './routes/airport/index'
 import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
@@ -45,6 +46,11 @@ const LayoutRoute = LayoutImport.update({
 
 const PosIndexRoute = PosIndexImport.update({
   path: '/pos/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AirportIndexRoute = AirportIndexImport.update({
+  path: '/airport/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -145,6 +151,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof LayoutProtectedImport
       parentRoute: typeof LayoutImport
+    }
+    '/airport/': {
+      id: '/airport/'
+      path: '/airport'
+      fullPath: '/airport'
+      preLoaderRoute: typeof AirportIndexImport
+      parentRoute: typeof rootRoute
     }
     '/pos/': {
       id: '/pos/'
@@ -334,6 +347,7 @@ const LayoutRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '': typeof LayoutProtectedLayoutRouteWithChildren
+  '/airport': typeof AirportIndexRoute
   '/pos': typeof PosIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
   '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
@@ -349,6 +363,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof LayoutProtectedRouteWithChildren
+  '/airport': typeof AirportIndexRoute
   '/pos': typeof PosIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
   '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
@@ -365,6 +380,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/_protected': typeof LayoutProtectedRouteWithChildren
+  '/airport/': typeof AirportIndexRoute
   '/pos/': typeof PosIndexRoute
   '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
@@ -384,6 +400,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
+    | '/airport'
     | '/pos'
     | '/entrance'
     | '/profile/$memberName'
@@ -398,6 +415,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
+    | '/airport'
     | '/pos'
     | '/entrance'
     | '/profile/$memberName'
@@ -412,6 +430,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_layout'
     | '/_layout/_protected'
+    | '/airport/'
     | '/pos/'
     | '/_layout/_protected/_layout'
     | '/_layout/entrance/'
@@ -430,11 +449,13 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
+  AirportIndexRoute: typeof AirportIndexRoute
   PosIndexRoute: typeof PosIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
+  AirportIndexRoute: AirportIndexRoute,
   PosIndexRoute: PosIndexRoute,
 }
 
@@ -451,6 +472,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_layout",
+        "/airport/",
         "/pos/"
       ]
     },
@@ -467,6 +489,9 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/_protected/_layout"
       ]
+    },
+    "/airport/": {
+      "filePath": "airport/index.tsx"
     },
     "/pos/": {
       "filePath": "pos/index.tsx"
