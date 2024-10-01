@@ -19,7 +19,7 @@ public class TravelScheduleMapper {
     public TravelSchedule toNewSchedule(ScheduleJpaEntity entity) {
         return TravelSchedule.createNewSchedule(
                 entity.getTravel().getId(),
-                entity.getTitle(),
+                entity.getScheduleTitle(),
                 entity.getStartDateTime(),
                 entity.getBudget(),
                 entity.getImageUrl(), entity.getMemo(), createLocation(entity),
@@ -27,7 +27,8 @@ public class TravelScheduleMapper {
     }
 
     private Location createLocation(ScheduleJpaEntity entity) {
-        return Location.of(entity.getAddress(), entity.getGooglePlaceId(), entity.getLatitude(), entity.getLongitude());
+        return Location.of(entity.getTitle(), entity.getAddress(), entity.getGooglePlaceId(), entity.getLatitude(),
+                entity.getLongitude());
     }
 
 }
