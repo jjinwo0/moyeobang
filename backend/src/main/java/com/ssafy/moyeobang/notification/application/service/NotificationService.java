@@ -10,12 +10,11 @@ import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import com.ssafy.moyeobang.notification.application.port.out.FCMTokenPort;
 import com.ssafy.moyeobang.notification.application.port.out.LoadMemberPort;
 import com.ssafy.moyeobang.notification.application.port.out.LoadMemberTravelInfoInTravelPort;
+import com.ssafy.moyeobang.notification.application.port.out.LoadTravelPort;
+import com.ssafy.moyeobang.notification.error.FailedSendNotificationException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.ssafy.moyeobang.notification.application.port.out.LoadTravelPort;
-import com.ssafy.moyeobang.notification.error.FailedSendNotificationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -102,8 +101,9 @@ public class NotificationService implements NotificationUseCase {
 
         Member member = memberPort.findById(memberId);
 
-        if (!memberHasKey(member.getEmail()))
+        if (!memberHasKey(member.getEmail())) {
             throw new FailedSendNotificationException("입금 요청 전송에 실패했습니다.");
+        }
 
         String token = tokenPort.getToken(member.getEmail());
 
@@ -114,6 +114,12 @@ public class NotificationService implements NotificationUseCase {
                 .build();
 
         sender.send(message);
+    }
+
+    @Override
+    public void saveToken(Long memberId, String token) {
+
+        tokenPort.saveFCMToken(memberId, token);
     }
 
 

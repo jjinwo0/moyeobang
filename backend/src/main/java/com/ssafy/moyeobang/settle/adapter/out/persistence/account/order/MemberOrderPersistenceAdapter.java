@@ -1,6 +1,7 @@
 package com.ssafy.moyeobang.settle.adapter.out.persistence.account.order;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
+import com.ssafy.moyeobang.common.error.exception.EntityNotFoundException;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberOrderHistoryJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
@@ -8,7 +9,6 @@ import com.ssafy.moyeobang.settle.adapter.out.persistence.member.MemberRepositor
 import com.ssafy.moyeobang.settle.application.domain.order.MemberOrderHistory;
 import com.ssafy.moyeobang.settle.application.domain.order.MemberOrderHistory.MappingInfo;
 import com.ssafy.moyeobang.settle.application.port.out.CreateMemberOrderHistoryPort;
-import com.ssafy.moyeobang.settle.error.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
