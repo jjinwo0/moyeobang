@@ -5,6 +5,66 @@ import Btn from '@/components/common/btn/Btn'
 import QrScanByPos from '@/components/QrByPos/QrScanByPos'
 import ResultByPos from '@/components/QrByPos/ResultByPos'
 
+const starbucks: PosPay = {
+    placeId : 'starbucks-12',
+    placeName: '스타벅스 제주점',
+    placeAddress: '제주시 서대문로 12번길',
+    amount: 25000,
+    latitude:34.5,
+    longitude:90.2,
+    targetAccountNumber: '0012280102000441',
+  }
+
+const kurosiro: PosPay = {
+    placeId : 'kurosiro-186',
+    placeName: '쿠로시로 제주점',
+    placeAddress: '제주도 올레길 27번길',
+    amount: 20000,
+    latitude:34.5,
+    longitude:90.2,
+    targetAccountNumber: '0012280102000441',
+  }
+
+const abebeBakery: PosPay = {
+    placeId : 'starbucks-12',
+    placeName: '아베베 베이커리',
+    placeAddress: '제주시 제주로 올레시장',
+    amount: 34000,
+    latitude:34.5,
+    longitude:90.2,
+    targetAccountNumber: '0012280102000441',
+  }
+
+const surfing: PosPay = {
+    placeId : 'surfing-112',
+    placeName: '서핑시티 제주점',
+    placeAddress: '제주시 서귀포 중문 색달해수욕장',
+    amount: 66000,
+    latitude:34.5,
+    longitude:90.2,
+    targetAccountNumber: '0012280102000441',
+  }
+
+const suksungdo: PosPay = {
+    placeId : 'suksungdo-12',
+    placeName: '숙성도 제주점',
+    placeAddress: '제주시 제주 44번길',
+    amount: 82000,
+    latitude:34.5,
+    longitude:90.2,
+    targetAccountNumber: '0012280102000441',
+  }
+
+const farm: PosPay = {
+    placeId : 'farm-10',
+    placeName: '양떼 목장',
+    placeAddress: '제주도 서귀포',
+    amount: 50000,
+    latitude:34.5,
+    longitude:90.2,
+    targetAccountNumber: '0012280102000441',
+  }
+
 const Items = [
   {
     orderItemId: 1,
@@ -73,130 +133,25 @@ const buttonLayoutStyle = css`
   display: flex;
   flex-direction: column;
   gap: 5px;
-`
+`;
 
-// createdAt, uuid(paymentRequestId), paymentName, address, money 필요
+const storeLayoutStyle=css`
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+`;
+
+// uuid(paymentRequestId), paymentName, address, money 필요
 export default function Pos() {
-  const [placeId, setPlaceId] = useState<number | undefined>()
-  const [placeName, setPlaceName] = useState<PaymentName>('')
-  const [amount, setAmount] = useState<Money>(0)
-  const [placeAddress, setPlaceAddress] = useState<Adress>('')
-  const [latitude, setLatitude] = useState<number | undefined>()
-  const [longitude, setLongitude] = useState<number | undefined>()
-  const [targetAccountNumber, setTargetAccountNumber] = useState<string>('0012280102000441')
 
-  const [quantities, setQuantities] = useState<{ [key: number]: number }>({}) // 각 상품의 수량을 저장
+  // 가맹점 계좌번호 고정!
+  const targetAccountNumber = '0012280102000441'
+
   const [isOpenQrModal, setIsOpenQrModal] = useState<boolean>(false)
   const [data, setData] = useState<PosPay>() // requestId, 결제자 계좌 아이디 없는 data 즉 결제기 데이터
   const [isOpenResultModal, setIsOpenResultModal] = useState<boolean>(false);
   const [resultData, setResultData] = useState<PaymentProps>(); // 결제 최종 데이터 
-  
 
-  function handlePlaceId(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.value === '') {
-      setPlaceId(undefined)
-    }
-    const newId = parseInt(e.target.value) // 숫자로변환
-    if (!isNaN(newId)) {
-      setPlaceId(newId)
-    }
-  }
-
-  function handlePlaceName(e: React.ChangeEvent<HTMLInputElement>) {
-    setPlaceName(e.target.value)
-  }
-
-  function handlePlaceAddress(e: React.ChangeEvent<HTMLInputElement>) {
-    setPlaceAddress(e.target.value)
-  }
-
-  function handleAmount(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.value === '') {
-      setAmount(0)
-    }
-    const newAmount = parseInt(e.target.value) // 숫자로변환
-    if (!isNaN(newAmount)) {
-      setAmount(newAmount)
-    }
-  }
-
-  function handleLatitude(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.value === '') {
-      setLatitude(undefined)
-    }
-    const newLatitude = parseFloat(e.target.value) // 숫자로변환
-    if (!isNaN(newLatitude)) {
-      setLatitude(newLatitude)
-    }
-  }
-
-  function handleLongitude(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.value === '') {
-      setLongitude(undefined)
-    }
-    const newLongitude = parseFloat(e.target.value) // 숫자로변환
-    if (!isNaN(newLongitude)) {
-      setLongitude(newLongitude)
-    }
-  }
-
-  function handleTargetAccountNumber(e: React.ChangeEvent<HTMLInputElement>) {
-    setTargetAccountNumber(e.target.value)
-  }
-
-  // 수량 증가
-  function increaseQuantity(itemId: number) {
-    const itemPrice =
-      Items.find((item) => item.orderItemId === itemId)?.orderItemPrice || 0
-
-    setQuantities((prevQuantities) => {
-      const newQuantity = (prevQuantities[itemId] || 0) + 1
-      setAmount((prevAmount) =>
-        prevAmount ? prevAmount + itemPrice : itemPrice,
-      )
-      return {
-        ...prevQuantities,
-        [itemId]: newQuantity,
-      }
-    })
-  }
-
-  // 수량 감소
-  function decreaseQuantity(itemId: number) {
-    const itemPrice =
-      Items.find((item) => item.orderItemId === itemId)?.orderItemPrice || 0
-
-    setQuantities((prevQuantities) => {
-      const currentQuantity = prevQuantities[itemId] || 0
-      const newQuantity = currentQuantity >= 1 ? currentQuantity - 1 : 0
-
-      if (currentQuantity > 0) {
-        setAmount((prevAmount) => (prevAmount ? prevAmount - itemPrice : 0))
-      }
-
-      return {
-        ...prevQuantities,
-        [itemId]: newQuantity,
-      }
-    })
-  }
-
-  // 정산하기
-  function handleSettle() {
-    if (placeId && latitude && longitude && amount) {
-      const data: PosPay = {
-        placeId,
-        placeName,
-        placeAddress,
-        amount,
-        latitude,
-        longitude,
-        targetAccountNumber,
-      }
-      setData(data)
-      setIsOpenQrModal(true)
-    }
-  }
 
   function handleQrClose() {
     setIsOpenQrModal(false);
@@ -212,6 +167,14 @@ export default function Pos() {
   function handleOnClickOutside() {
     setIsOpenResultModal(false);
   }
+  
+  function handleOpen(data:PosPay) {
+    setData(data)
+  }
+
+  function handleSettle() {
+    setIsOpenQrModal(true)
+  }
 
   return (
     <div css={layoutStyle}>
@@ -219,90 +182,34 @@ export default function Pos() {
       {isOpenResultModal && resultData && <ResultByPos {...resultData} onClickOutside={handleOnClickOutside}/>}
       { !isOpenQrModal && !isOpenResultModal &&
         <>
-          <div>
-            <p>가맹점 id (placeId)</p>
-            <input
-              type="number"
-              value={placeId !== undefined ? placeId : ''}
-              onChange={handlePlaceId}
-            />
-          </div>
-          <div>
-            <p>가맹점 이름 (placeName)</p>
-            <input type="text" value={placeName} onChange={handlePlaceName} />
-          </div>
-          <div>
-            <p>가맹점 주소(placeAddress)</p>
-            <input
-              type="text"
-              value={placeAddress}
-              onChange={handlePlaceAddress}
-            />
-          </div>
-          <div>
-            <p>가맹점 계좌번호(targetAccountNumber)</p>
-            <input
-              type="text"
-              value={targetAccountNumber}
-              onChange={handleTargetAccountNumber}
-            />
-          </div>
-          <div>
-            <p>위도(latitude)</p>
-            <input
-              type="number"
-              value={latitude}
-              onChange={handleLatitude}
-              step="0.000001"
-            />
-          </div>
-          <div>
-            <p>경도(longitude)</p>
-            <input
-              type="number"
-              value={longitude}
-              onChange={handleLongitude}
-              step="0.000001"
-            />
-          </div>
-          <div>
-            <p>총금액(Money)</p>
-            <input type="number" value={amount} onChange={handleAmount} />
-          </div>
-
-          {Items.map((item) => (
-            <div key={item.orderItemId} css={boxStyle}>
-              <div>
-                <div>{item.orderItemTitle}</div>
-                <div>{item.orderItemPrice}원</div>
-                <div>수량: {quantities[item.orderItemId] || 0}</div>
-              </div>
-              <div css={buttonLayoutStyle}>
-                <div>
-                  <Btn
-                    buttonStyle={{ size: 'middle', style: 'blue' }}
-                    onClick={() => increaseQuantity(item.orderItemId)}
-                  >
-                    +
-                  </Btn>
-                </div>
-                <div>
-                  <Btn
-                    buttonStyle={{ size: 'middle', style: 'red' }}
-                    onClick={() => decreaseQuantity(item.orderItemId)}
-                  >
-                    -
-                  </Btn>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div css={storeLayoutStyle}>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(starbucks)}>스타벅스 제주점</Btn>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(kurosiro)}>쿠로시로</Btn>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(abebeBakery)}>아베베베이커리</Btn>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(surfing)}>제주 서핑</Btn>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(suksungdo)}>숙성도</Btn>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(farm)}>양떼 목장</Btn>
+        </div>
           <Btn
             buttonStyle={{ size: 'big', style: 'blue' }}
             onClick={handleSettle}
           >
             결제하기
           </Btn>
+          <div>
+            {data ? 
+            <>
+            <div>amount(결제금액) : {data.amount}</div>
+            <div>placeId(장소Id) : {data.placeId}</div>
+            <div>placeName(장소명) : {data.placeName}</div>
+            <div>placeAddress(주소) : {data.placeAddress}</div>
+            <div>latitude(위도) : {data.latitude}</div>
+            <div>longitude(경도) : {data.longitude}</div>
+            <div>targetAccountNumber(가맹점 계좌번호) : {data.targetAccountNumber}</div>
+            </> : 
+            undefined
+          }
+          </div>
         </>
       }
     </div>
