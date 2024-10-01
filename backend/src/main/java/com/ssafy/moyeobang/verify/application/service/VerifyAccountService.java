@@ -30,4 +30,14 @@ public class VerifyAccountService implements VerifyAccountUseCase {
 
         return client.sendVerify(accountNumber, memberKey);
     }
+
+    @Override
+    public String checkVerifyAccount(String token, String accountNumber, String authCode) {
+
+        Long findMemberId = tokenManager.getMemberId(token);
+
+        String memberKey = loadMemberKeyPort.loadMemberKey(findMemberId);
+
+        return client.verifyAccount(accountNumber, memberKey, authCode);
+    }
 }

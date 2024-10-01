@@ -1,6 +1,7 @@
 package com.ssafy.moyeobang.verify.adapter.out.bank;
 
 import com.ssafy.moyeobang.verify.adapter.out.bank.request.SendVerifyRequest;
+import com.ssafy.moyeobang.verify.adapter.out.bank.request.VerifyAccountRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +19,26 @@ public class BankApiClientInVerify {
         SendVerifyRequest request = new SendVerifyRequest(
                 HeaderFormat.createHeader(memberKey, "openAccountAuth", now()),
                 accountNo,
-                "moyeobang");
+                "SSAFY");
 
         return post("/accountAuth/openAccountAuth", request)
                 .path("REC")
                 .path("transactionUniqueNo")
                 .asLong();
+    }
+
+    public String verifyAccount(String accountNo, String memberKey, String authCode) {
+
+        VerifyAccountRequest request = new VerifyAccountRequest(
+                HeaderFormat.createHeader(memberKey, "checkAuthCode", now()),
+                accountNo,
+                "SSAFY",
+                authCode
+        );
+
+        return post("/accountAuth/checkAuthCode", request)
+                .path("REC")
+                .path("status")
+                .asText();
     }
 }
