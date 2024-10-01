@@ -10,7 +10,6 @@ public record CreateTravelScheduleCommand(
         String memo, String image_url) {
 
     public CreateTravelScheduleCommand {
-
         validate(this);
     }
 }

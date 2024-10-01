@@ -45,7 +45,7 @@ public class CreateTravelScheduleServiceTest {
                 0,
                 null,
                 null,
-                new Location("화순", "ChIJ1x9-lADvYjURbMl_CjjFXjAS", 35.0, 139.0),
+                new Location("화순여행", "화순", "ChIJ1x9-lADvYjURbMl_CjjFXjAS", 35.0, 139.0),
                 1
         ));
 

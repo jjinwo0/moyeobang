@@ -12,10 +12,8 @@ import com.ssafy.moyeobang.schedule.error.ErrorCode;
 import com.ssafy.moyeobang.schedule.error.ScheduleException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class CreateNewScheduleAdapter implements CreateNewSchedulePort, LoadExistingSchedulesPort {
@@ -45,7 +43,8 @@ public class CreateNewScheduleAdapter implements CreateNewSchedulePort, LoadExis
 
     private ScheduleJpaEntity createSchedule(TravelSchedule travelSchedule, TravelJpaEntity travelJpaEntity) {
         return ScheduleJpaEntity.builder()
-                .title(travelSchedule.getTitle())
+                .scheduleTitle(travelSchedule.getTitle())
+                .title(travelSchedule.getLocation().getTitle())
                 .startDateTime(travelSchedule.getScheduleStartTime())
                 .address(travelSchedule.getLocation().getAddress())
                 .googlePlaceId(travelSchedule.getLocation().getGooglePlaceId())

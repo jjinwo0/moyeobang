@@ -26,10 +26,9 @@ public class CreateTravelScheduleController {
     @PostMapping("/{travelId}/schedule")
     public ApiResult<Boolean> createTravelSchedule(@PathVariable long travelId, @RequestBody
     CreateTravelScheduleRequest createTravelScheduleRequest) {
+
         CreateTravelScheduleCommand command = createTravelScheduleRequest.toCommand(travelId);
-
         createTravelScheduleUseCase.createTravelSchedule(command);
-
         return success(true);
     }
 }

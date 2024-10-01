@@ -31,9 +31,12 @@ public class ScheduleJpaEntity extends BaseEntity {
     @Column(name = "schedule_id")
     private Long id;
 
-    private String title;
+    @Column(name = "schedule_title")
+    private String scheduleTitle;
 
     private LocalDateTime startDateTime;
+
+    private String title;
 
     private String address;
 
@@ -63,8 +66,9 @@ public class ScheduleJpaEntity extends BaseEntity {
     private WithdrawJpaEntity withdraw;
 
     @Builder
-    public ScheduleJpaEntity(String title,
+    public ScheduleJpaEntity(String scheduleTitle,
                              LocalDateTime startDateTime,
+                             String title,
                              String address,
                              int budget,
                              ScheduleStatus complete,
@@ -76,8 +80,9 @@ public class ScheduleJpaEntity extends BaseEntity {
                              int sequence,
                              TravelJpaEntity travel,
                              WithdrawJpaEntity withdraw) {
-        this.title = title;
+        this.scheduleTitle = scheduleTitle;
         this.startDateTime = startDateTime;
+        this.title = title;
         this.address = address;
         this.budget = budget;
         this.complete = complete;
@@ -89,5 +94,19 @@ public class ScheduleJpaEntity extends BaseEntity {
         this.sequence = sequence;
         this.travel = travel;
         this.withdraw = withdraw;
+    }
+
+    public void updateSchedule(String scheduleTitle, LocalDateTime startDateTime, String title, String address,
+                               double latitude,
+                               double longitude, String googlePlaceId, String memo, String imageUrl) {
+        this.scheduleTitle = scheduleTitle;
+        this.startDateTime = startDateTime;
+        this.title = title;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.googlePlaceId = googlePlaceId;
+        this.memo = memo;
+        this.imageUrl = imageUrl;
     }
 }
