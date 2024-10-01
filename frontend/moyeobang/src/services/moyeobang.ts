@@ -151,9 +151,10 @@ export default {
   /**
    * 참가자 퀴즈 제출
    */
-  postQuiz: async (travelId: Id, data: SubmitQuiz) =>
+  postQuiz: async (travelId: Id, data: SubmitQuiz, memberId: number) =>
     axios.post<MoyeobangResponse<boolean>>(`/travels/${travelId}/quiz`, data, {
       headers: {'Content-Type': 'application/json'},
+      params: {memberId},
     }),
 
   /**

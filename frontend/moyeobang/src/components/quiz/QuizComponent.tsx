@@ -105,6 +105,9 @@ const detailStyle = css`
   color: ${colors.lightBlack};
 `;
 
+//[todo] 나중엔 memberId 주스탄드에 저장된 거 꺼내서 쓰기!!!
+const memberId: number = 5;
+
 export default function QuizComponent({
   question,
   travelId,
@@ -117,8 +120,15 @@ export default function QuizComponent({
 
   // [todo] 퀴즈 제출 api 연결
   const {mutate: postQuiz} = useMutation({
-    mutationFn: ({travelId, answer}: {travelId: number; answer: string}) =>
-      moyeobang.postQuiz(travelId, {answer}),
+    mutationFn: ({
+      travelId,
+      answer,
+      memberId,
+    }: {
+      travelId: number;
+      answer: string;
+      memberId: number;
+    }) => moyeobang.postQuiz(travelId, {answer}, memberId),
     onSuccess: response => {
       console.log('response', response);
       const {data} = response.data;
@@ -142,8 +152,8 @@ export default function QuizComponent({
     router.navigate({to: '/'}); // 홈으로 리다이렉트
   };
 
-  const onsubmitQuiz = (travelId: Id, answer: string) => {
-    postQuiz({travelId, answer});
+  const onsubmitQuiz = (travelId: Id, answer: string, memberId: number) => {
+    postQuiz({travelId, answer, memberId});
     setAnswer('');
   };
 
@@ -176,7 +186,7 @@ export default function QuizComponent({
           <div css={buttonStyle}>
             <Btn
               buttonStyle={{style: 'blue', size: 'middle'}}
-              onClick={() => onsubmitQuiz(travelId, answer)}
+              onClick={() => onsubmitQuiz(travelId, answer, memberId)}
             >
               여행참여
             </Btn>
