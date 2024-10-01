@@ -116,11 +116,11 @@ export default function TravelLogList() {
           transition: 'transform 0.3s ease-out',
         }}
       >
-        {travelDates.map((date, index) => {
+        {travelDays > 0 && travelDates.map((date, index) => {
           return (
-            <>
+            <div key={`travel-log-list-${index}`}>
               <DaySchedules date={date} dayNum={index + 1} />
-            </>
+            </div>
           );
         })}
 

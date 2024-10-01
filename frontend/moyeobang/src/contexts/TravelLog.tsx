@@ -83,7 +83,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
           isSelfPlus: false,
           paymentName: '신주쿠 카페 결제',
           latitude: 37.85294409999999,
-          longitude: 127.7113324,
+          longitude: 127.7672156,
           totalPrice: 25000,
           paymentTime: '2024-10-01T16:00:00',
           splitMethod: 'receipt', // 정산 방식

@@ -6,6 +6,9 @@ import '@/styles/index.css';
 import {RouterProvider, createRouter} from '@tanstack/react-router';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {LoadScript} from '@react-google-maps/api';
+
+const mapAPI = import.meta.env.VITE_GOOGLE_API_KEY;
 
 // QueryClient 생성
 const queryClient = new QueryClient();
@@ -30,9 +33,11 @@ if (!rootElement.innerHTML) {
   root.render(
     // <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      {/* <ReactQueryDevtools initialIsOpen={false} />  */}
-      {/* Devtools 추가 */}
+      <LoadScript googleMapsApiKey={mapAPI}>
+        <RouterProvider router={router} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        {/* Devtools 추가 */}
+      </LoadScript>
     </QueryClientProvider>
     // </StrictMode>
   );

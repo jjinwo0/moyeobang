@@ -23,7 +23,7 @@ const plusStyle = css`
 
 export default function TravelLogMain() {
   const {handleShowMapSearch} = useTravelLogContext();
-  const {showMapSearch, showPlusSelf, setShowPlusSelf, handleShowPlusSelf} =
+  const {showMapSearch, showPlusSelf, handleShowPlusSelf} =
     useTravelLogContext();
 
   // 지도 검색 모달
