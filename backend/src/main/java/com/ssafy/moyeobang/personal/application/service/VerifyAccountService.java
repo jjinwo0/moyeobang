@@ -1,7 +1,9 @@
 package com.ssafy.moyeobang.personal.application.service;
 
+import com.ssafy.moyeobang.common.config.jwt.TokenManager;
 import com.ssafy.moyeobang.personal.adapter.out.bank.BankApiClientInVerify;
 import com.ssafy.moyeobang.personal.application.port.in.VerifyAccountUseCase;
+import com.ssafy.moyeobang.personal.application.port.out.LoadMemberKeyPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,17 @@ public class VerifyAccountService implements VerifyAccountUseCase {
 
     private final BankApiClientInVerify client;
 
+    private final TokenManager tokenManager;
+
+    private final LoadMemberKeyPort loadMemberKeyPort;
+
     @Override
     public Long verifyAccount(String token, String accountNumber, String bankName) {
 
-        return client.sendVerify(accountNumber, bankName);
+        Long findMemberId = tokenManager.getMemberId(token);
+
+        String memberKey = loadMemberKeyPort.loadMemberKey(findMemberId);
+
+        return client.sendVerify(accountNumber, memberKey);
     }
 }
