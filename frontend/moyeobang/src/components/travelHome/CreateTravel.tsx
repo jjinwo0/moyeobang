@@ -183,16 +183,6 @@ export default function CreateTravel({
       const file = fileInputRef.current?.files?.[0];
       if (file) {
         newform.append('backgroundImage', file);
-      } else if (initialData.selectedImage) {
-        //이미 여행에 이미지가 있을 경우 그 이미지 url을 다시 blob으로 변환해서 전송
-        const existingImageBlob = await fetch(initialData.selectedImage).then(
-          res => res.blob()
-        );
-        newform.append(
-          'backgroundImage',
-          existingImageBlob,
-          initialData.selectedImage
-        );
       } else {
         // 파일이 없을 경우 defaultImage를 Blob으로 변환 후 추가
         const response = await fetch(defaultImage);

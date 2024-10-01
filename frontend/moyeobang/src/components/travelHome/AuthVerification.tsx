@@ -161,17 +161,19 @@ export default function AuthVerification({
       formData: FormData;
       memberId: number;
     }) => {
-      moyeobang.postTravel(formData, memberId);
+      const response = await moyeobang.postTravel(formData, memberId);
+      return response.data;
     },
-    onSuccess: async () => {
-      // const {travelId} = response.data; // 응답에서 travelId 추출
+    onSuccess: async response => {
+      const {travelId} = response.data; // 응답에서 travelId 추출
+      console.log(travelId, '여행 생성 완료');
       // 여행 목록을 다시 가져오도록 GET 요청 수행
-      await queryClient.invalidateQueries({
-        queryKey: ['travelList', memberId],
-        refetchType: 'all',
-      });
-      // travelId를 사용해 postAccount 호출
-      // postAccount(travelId);
+      setTimeout(async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ['travelList', memberId],
+          refetchType: 'all',
+        });
+      }, 1000); // 500ms 지연
     },
   });
 
@@ -194,8 +196,9 @@ export default function AuthVerification({
 
       console.log('여행 생성 호출');
 
-      onClose(); // 완료 버튼이 파란색일 때만 모달 닫기
-      router.navigate({to: '/'});
+      // onclose();
+      await router.navigate({to: '/'});
+      onClose();
     } else {
       alert('본인 인증 및 약관 동의를 모두 완료해야 합니다.');
     }
