@@ -1,11 +1,12 @@
-package com.ssafy.moyeobang.payment.adapter.in.server;
+package com.ssafy.moyeobang.payment.adapter.in.web;
 
 import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
-import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
-import com.ssafy.moyeobang.payment.application.port.in.OfflineStoreCommand;
+import com.ssafy.moyeobang.payment.adapter.in.web.request.OnlinePaymentRequest;
+import com.ssafy.moyeobang.payment.adapter.in.web.response.OnlinePaymentResponse;
+import com.ssafy.moyeobang.payment.application.port.in.OnlineStoreCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor
-public class OfflinePaymentController {
+public class OnlinePaymentController {
 
     private final PaymentUseCase paymentUseCase;
 
-    @PostMapping("/confirm")
-    public ApiResult<Boolean> confirmPayment(@RequestBody OfflinePaymentRequest request) {
+    @PostMapping("/process")
+    public ApiResult<OnlinePaymentResponse> processPayment(@RequestBody OnlinePaymentRequest request) {
 
-        OfflineStoreCommand offlineStoreCommand = OfflineStoreCommand.createAndValidate(
+        OnlineStoreCommand onlineStoreCommand = OnlineStoreCommand.of(
                 request.placeId(),
                 request.placeName(),
                 request.placeAddress(),
@@ -37,10 +38,11 @@ public class OfflinePaymentController {
         PaymentCommand command = new PaymentCommand(
                 request.paymentRequestId(),
                 request.sourceAccountNumber(),
-                offlineStoreCommand,
+                onlineStoreCommand,
                 request.amount()
         );
-        boolean paymentSuccess = paymentUseCase.confirmPayment(command);
-        return success(paymentSuccess);
+        OnlinePaymentResponse onlinePaymentResponse = new OnlinePaymentResponse(
+                paymentUseCase.processPayment(command).transactionId());
+        return success(onlinePaymentResponse);
     }
 }

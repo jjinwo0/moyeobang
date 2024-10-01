@@ -10,7 +10,9 @@ public record PaymentCommand(@NotNull String paymentRequestId, @NotNull String t
                              @NotNull StoreCommand storeCommand,
                              @NotNull Money paymentRequestMoney) {
 
-    public PaymentCommand(String paymentRequestId, String travelAccountNumber, StoreCommand storeCommand, Long amount) {
+    public PaymentCommand(String paymentRequestId, String travelAccountNumber,
+                          StoreCommand storeCommand,
+                          Long amount) {
         this(paymentRequestId, travelAccountNumber, storeCommand, Money.of(amount));
 
         validate(this);

@@ -70,7 +70,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(travelAccount.getAccountNumber());
 
         List<MemberTravelJpaEntity> memberTravels = travelAccountEntity.getTravel().getMemberTravelJpaEntities();
-
+        
         if (memberTravels.isEmpty()) {
             throw new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL);
         }
