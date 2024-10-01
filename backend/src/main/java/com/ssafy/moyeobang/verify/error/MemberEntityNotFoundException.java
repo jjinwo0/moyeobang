@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.verify.application.error;
+package com.ssafy.moyeobang.verify.error;
 
 public class MemberEntityNotFoundException extends RuntimeException{
 
