@@ -11,8 +11,9 @@ import static org.mockito.Mockito.when;
 import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.Store;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
+import com.ssafy.moyeobang.payment.application.port.in.OfflineStoreCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
-import com.ssafy.moyeobang.payment.application.port.in.StoreCommand;
+import com.ssafy.moyeobang.payment.application.port.out.ConfirmPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
@@ -27,11 +28,12 @@ public class OfflinePaymentServiceTest {
 
     private final SsePort ssePort = mock(SsePort.class);
     private final ProcessPaymentPort processPaymentPort = mock(ProcessPaymentPort.class);
+    private final ConfirmPaymentPort confirmPaymentPort = mock(ConfirmPaymentPort.class);
     private final LoadTravelAccountPort loadTravelAccountPort = mock(LoadTravelAccountPort.class);
     private final UpdateMemberBalancePort updateMemberBalancePort = mock(UpdateMemberBalancePort.class);
 
-    private final OfflinePaymentService offlinePaymentService = new OfflinePaymentService(
-            ssePort, processPaymentPort, loadTravelAccountPort, updateMemberBalancePort
+    private final PaymentService offlinePaymentService = new PaymentService(
+            ssePort, confirmPaymentPort, processPaymentPort, loadTravelAccountPort, updateMemberBalancePort
     );
 
     @DisplayName("결제가 성공적으로 이루어지면 SSE 성공 메시지를 보낸다.")
@@ -41,7 +43,8 @@ public class OfflinePaymentServiceTest {
         PaymentCommand command = new PaymentCommand(
                 "payment-123",
                 "account-123",
-                new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
+                new OfflineStoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194,
+                        "target-acc-002"),
                 Money.of(10000L)
         );
 
@@ -74,7 +77,8 @@ public class OfflinePaymentServiceTest {
         PaymentCommand command = new PaymentCommand(
                 "payment-123",
                 "account-123",
-                new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
+                new OfflineStoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194,
+                        "target-acc-002"),
                 Money.of(10000L)
         );
 
@@ -83,7 +87,6 @@ public class OfflinePaymentServiceTest {
         when(loadTravelAccountPort.loadTravelAccount(any(String.class)))
                 .thenReturn(travelAccount);
 
-        // Mocking loadMemberCount to throw PaymentException
         when(loadTravelAccountPort.loadMemberCount(any(String.class)))
                 .thenThrow(new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL));
 
@@ -98,7 +101,8 @@ public class OfflinePaymentServiceTest {
         PaymentCommand command = new PaymentCommand(
                 "payment-123",
                 "account-123",
-                new StoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194, "target-acc-002"),
+                new OfflineStoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194,
+                        "target-acc-002"),
                 Money.of(30000L)
         );
 

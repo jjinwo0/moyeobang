@@ -27,6 +27,10 @@ cloud:
     s3:
       bucket: moyeobang-ssafy
 
+pg:
+  api:
+    url: http://localhost:8082/pg/payment
+
 ---
 spring:
   config:

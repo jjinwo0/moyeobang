@@ -15,17 +15,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ssafy.moyeobang.travel.adapter.in.web.request.LeaveTravelRequest;
 import com.ssafy.moyeobang.travel.application.port.in.LeaveTravelCommand;
-import com.ssafy.moyeobang.travel.application.port.in.LeaveTravelUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 public class LeaveTravelControllerDocsTest extends RestDocsSupport {
-
-    @MockBean
-    private LeaveTravelUseCase leaveTravelUseCase;
 
     @DisplayName("여행 탈퇴 API")
     @Test

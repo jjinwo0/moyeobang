@@ -1,43 +1,59 @@
 package com.ssafy.moyeobang.travel.adapter.out.persistence.travel;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.QuizJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelPlaceJpaEntity;
+import com.ssafy.moyeobang.travel.adapter.out.persistence.member.MemberRepositoryInTravel;
 import com.ssafy.moyeobang.travel.adapter.out.persistence.member.MemberTravelRepositoryInTravel;
 import com.ssafy.moyeobang.travel.adapter.out.persistence.quiz.QuizRepositoryInTravel;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.CreateTravelPort;
 import com.ssafy.moyeobang.travel.application.port.out.LeaveTravelPort;
+import com.ssafy.moyeobang.travel.application.port.out.ParticipateTravelPort;
 import com.ssafy.moyeobang.travel.application.port.out.UpdateTravelOutCommand;
 import com.ssafy.moyeobang.travel.application.port.out.UpdateTravelPort;
+import com.ssafy.moyeobang.travel.error.MemberNotFoundException;
 import com.ssafy.moyeobang.travel.error.TravelNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelPort, LeaveTravelPort {
+public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelPort, ParticipateTravelPort, LeaveTravelPort {
+
+    private final MemberRepositoryInTravel memberRepository;
+    private final MemberTravelRepositoryInTravel memberTravelRepository;
 
     private final TravelRepositoryInTravel travelRepository;
     private final TravelPlaceRepositoryInTravel travelPlaceRepository;
+
     private final QuizRepositoryInTravel quizRepository;
-    private final MemberTravelRepositoryInTravel memberTravelRepository;
 
     @Override
     public Long createTravel(CreateTravelOutCommand command) {
         TravelJpaEntity travel = createTravelJpaEntity(command);
         travelRepository.save(travel);
 
-        List<TravelPlaceJpaEntity> travelPlaces = createTravelPlacesJpaEntity(travel, command);
+        List<TravelPlaceJpaEntity> travelPlaces = createTravelPlacesJpaEntity(travel, command.travelPlaces());
         travelPlaceRepository.saveAll(travelPlaces);
+
+        MemberJpaEntity member = getMemberBy(command.creatorId());
+
+        MemberTravelJpaEntity memberTravel = createMemberTravel(travel, member);
+        memberTravelRepository.save(memberTravel);
+
+        QuizJpaEntity quiz = createQuizJpaEntity(travel, command.quizQuestion(), command.quizAnswer());
+        quizRepository.save(quiz);
 
         return travel.getId();
     }
 
     @Override
     public boolean updateTravel(UpdateTravelOutCommand command) {
-        TravelJpaEntity travel = getTravelBy(command);
+        TravelJpaEntity travel = getTravelBy(command.travelId());
         travel.updateTravel(
                 command.title(),
                 command.startDate(),
@@ -52,19 +68,30 @@ public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelP
     }
 
     @Override
+    public boolean participateTravel(Long travelId, Long memberId) {
+        TravelJpaEntity travel = getTravelBy(travelId);
+        MemberJpaEntity member = getMemberBy(memberId);
+
+        MemberTravelJpaEntity memberTravel = createMemberTravel(travel, member);
+        memberTravelRepository.save(memberTravel);
+
+        return true;
+    }
+
+    @Override
     public boolean leaveTravel(Long travelId, Long memberId) {
         return memberTravelRepository.deleteBy(travelId, memberId) == 1;
     }
 
     private void updateTravelPlaces(UpdateTravelOutCommand command, TravelJpaEntity travel) {
         travelPlaceRepository.deleteAllBy(command.travelId());
-        List<TravelPlaceJpaEntity> travelPlaces = createTravelPlacesJpaEntity(travel, command);
+        List<TravelPlaceJpaEntity> travelPlaces = createTravelPlacesJpaEntity(travel, command.travelPlaces());
         travelPlaceRepository.saveAll(travelPlaces);
     }
 
     private void updateQuiz(UpdateTravelOutCommand command, TravelJpaEntity travel) {
         quizRepository.deleteBy(command.travelId());
-        QuizJpaEntity quiz = createQuizJpaEntity(command, travel);
+        QuizJpaEntity quiz = createQuizJpaEntity(travel, command.quizQuestion(), command.quizAnswer());
         quizRepository.save(quiz);
     }
 
@@ -77,14 +104,8 @@ public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelP
                 .build();
     }
 
-    private List<TravelPlaceJpaEntity> createTravelPlacesJpaEntity(TravelJpaEntity travel, CreateTravelOutCommand command) {
-        return command.travelPlaces().stream()
-                .map(place -> createTravelPlaceJpaEntity(travel, place))
-                .toList();
-    }
-
-    private List<TravelPlaceJpaEntity> createTravelPlacesJpaEntity(TravelJpaEntity travel, UpdateTravelOutCommand command) {
-        return command.travelPlaces().stream()
+    private List<TravelPlaceJpaEntity> createTravelPlacesJpaEntity(TravelJpaEntity travel, List<String> travelPlaces) {
+        return travelPlaces.stream()
                 .map(place -> createTravelPlaceJpaEntity(travel, place))
                 .toList();
     }
@@ -96,16 +117,29 @@ public class TravelPersistenceAdapter implements CreateTravelPort, UpdateTravelP
                 .build();
     }
 
-    private QuizJpaEntity createQuizJpaEntity(UpdateTravelOutCommand command, TravelJpaEntity travel) {
+    private MemberTravelJpaEntity createMemberTravel(TravelJpaEntity travel, MemberJpaEntity member) {
+        return MemberTravelJpaEntity.builder()
+                .travel(travel)
+                .member(member)
+                .balance(0)
+                .build();
+    }
+
+    private QuizJpaEntity createQuizJpaEntity(TravelJpaEntity travel, String question, String answer) {
         return QuizJpaEntity.builder()
-                .question(command.quizQuestion())
-                .answer(command.quizAnswer())
+                .question(question)
+                .answer(answer)
                 .travel(travel)
                 .build();
     }
 
-    private TravelJpaEntity getTravelBy(UpdateTravelOutCommand command) {
-        return travelRepository.findById(command.travelId())
+    private TravelJpaEntity getTravelBy(Long travelId) {
+        return travelRepository.findById(travelId)
                 .orElseThrow(TravelNotFoundException::new);
+    }
+
+    private MemberJpaEntity getMemberBy(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
     }
 }

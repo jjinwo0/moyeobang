@@ -43,7 +43,7 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
     private final WithdrawRepositoryInAccount withdrawRepository;
 
     @Override
-    public String createAccount(Long travelId) {
+    public Long createAccount(Long travelId) {
         String travelKey = bankApiClient.createTravelKey();
 
         String accountNumber = bankApiClient.createAccount(travelKey);
@@ -52,10 +52,9 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
         travel.setTravelKey(travelKey);
 
         TravelAccountJpaEntity account = createTravelAccount(accountNumber, travel);
-
         travelAccountRepository.save(account);
 
-        return accountNumber;
+        return account.getId();
     }
 
     @Override
