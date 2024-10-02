@@ -20,6 +20,7 @@ import { Route as PosLayoutIndexImport } from './routes/pos/_layout/index'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
 import { Route as LayoutProtectedLayoutTravelLogIndexImport } from './routes/_layout/_protected/_layout/travelLog/index'
+import { Route as LayoutProtectedLayoutAccountConnectIndexImport } from './routes/_layout/_protected/_layout/accountConnect/index'
 import { Route as LayoutProtectedLayoutAccountIndexImport } from './routes/_layout/_protected/_layout/account/index'
 import { Route as LayoutProtectedLayoutQuizTravelIdImport } from './routes/_layout/_protected/_layout/quiz/$travelId'
 import { Route as LayoutProtectedLayoutProfileMemberNameImport } from './routes/_layout/_protected/_layout/profile/$memberName'
@@ -88,6 +89,12 @@ const LayoutProtectedLayoutHomeIndexLazyRoute =
 const LayoutProtectedLayoutTravelLogIndexRoute =
   LayoutProtectedLayoutTravelLogIndexImport.update({
     path: '/travelLog/',
+    getParentRoute: () => LayoutProtectedLayoutRoute,
+  } as any)
+
+const LayoutProtectedLayoutAccountConnectIndexRoute =
+  LayoutProtectedLayoutAccountConnectIndexImport.update({
+    path: '/accountConnect/',
     getParentRoute: () => LayoutProtectedLayoutRoute,
   } as any)
 
@@ -214,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProtectedLayoutAccountIndexImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
+    '/_layout/_protected/_layout/accountConnect/': {
+      id: '/_layout/_protected/_layout/accountConnect/'
+      path: '/accountConnect'
+      fullPath: '/accountConnect'
+      preLoaderRoute: typeof LayoutProtectedLayoutAccountConnectIndexImport
+      parentRoute: typeof LayoutProtectedLayoutImport
+    }
     '/_layout/_protected/_layout/travelLog/': {
       id: '/_layout/_protected/_layout/travelLog/'
       path: '/travelLog'
@@ -302,6 +316,7 @@ interface LayoutProtectedLayoutRouteChildren {
   LayoutProtectedLayoutProfileMemberNameRoute: typeof LayoutProtectedLayoutProfileMemberNameRoute
   LayoutProtectedLayoutQuizTravelIdRoute: typeof LayoutProtectedLayoutQuizTravelIdRoute
   LayoutProtectedLayoutAccountIndexRoute: typeof LayoutProtectedLayoutAccountIndexRoute
+  LayoutProtectedLayoutAccountConnectIndexRoute: typeof LayoutProtectedLayoutAccountConnectIndexRoute
   LayoutProtectedLayoutTravelLogIndexRoute: typeof LayoutProtectedLayoutTravelLogIndexRoute
   LayoutProtectedLayoutHomeIndexLazyRoute: typeof LayoutProtectedLayoutHomeIndexLazyRoute
   LayoutProtectedLayoutQuizInviteTravelIdRoute: typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
@@ -316,6 +331,8 @@ const LayoutProtectedLayoutRouteChildren: LayoutProtectedLayoutRouteChildren = {
     LayoutProtectedLayoutQuizTravelIdRoute,
   LayoutProtectedLayoutAccountIndexRoute:
     LayoutProtectedLayoutAccountIndexRoute,
+  LayoutProtectedLayoutAccountConnectIndexRoute:
+    LayoutProtectedLayoutAccountConnectIndexRoute,
   LayoutProtectedLayoutTravelLogIndexRoute:
     LayoutProtectedLayoutTravelLogIndexRoute,
   LayoutProtectedLayoutHomeIndexLazyRoute:
@@ -388,6 +405,7 @@ export interface FileRoutesByFullPath {
   '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
+  '/accountConnect': typeof LayoutProtectedLayoutAccountConnectIndexRoute
   '/travelLog': typeof LayoutProtectedLayoutTravelLogIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
@@ -403,6 +421,7 @@ export interface FileRoutesByTo {
   '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
+  '/accountConnect': typeof LayoutProtectedLayoutAccountConnectIndexRoute
   '/travelLog': typeof LayoutProtectedLayoutTravelLogIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
@@ -422,6 +441,7 @@ export interface FileRoutesById {
   '/_layout/_protected/_layout/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/_layout/_protected/_layout/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/_layout/_protected/_layout/account/': typeof LayoutProtectedLayoutAccountIndexRoute
+  '/_layout/_protected/_layout/accountConnect/': typeof LayoutProtectedLayoutAccountConnectIndexRoute
   '/_layout/_protected/_layout/travelLog/': typeof LayoutProtectedLayoutTravelLogIndexRoute
   '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/_layout/_protected/_layout/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
@@ -441,6 +461,7 @@ export interface FileRouteTypes {
     | '/profile/$memberName'
     | '/quiz/$travelId'
     | '/account'
+    | '/accountConnect'
     | '/travelLog'
     | '/'
     | '/quiz/invite/$travelId'
@@ -455,6 +476,7 @@ export interface FileRouteTypes {
     | '/profile/$memberName'
     | '/quiz/$travelId'
     | '/account'
+    | '/accountConnect'
     | '/travelLog'
     | '/'
     | '/quiz/invite/$travelId'
@@ -472,6 +494,7 @@ export interface FileRouteTypes {
     | '/_layout/_protected/_layout/profile/$memberName'
     | '/_layout/_protected/_layout/quiz/$travelId'
     | '/_layout/_protected/_layout/account/'
+    | '/_layout/_protected/_layout/accountConnect/'
     | '/_layout/_protected/_layout/travelLog/'
     | '/_layout/_protected/_layout/_Home/'
     | '/_layout/_protected/_layout/quiz/invite/$travelId'
@@ -542,6 +565,7 @@ export const routeTree = rootRoute
         "/_layout/_protected/_layout/profile/$memberName",
         "/_layout/_protected/_layout/quiz/$travelId",
         "/_layout/_protected/_layout/account/",
+        "/_layout/_protected/_layout/accountConnect/",
         "/_layout/_protected/_layout/travelLog/",
         "/_layout/_protected/_layout/_Home/",
         "/_layout/_protected/_layout/quiz/invite/$travelId",
@@ -567,6 +591,10 @@ export const routeTree = rootRoute
     },
     "/_layout/_protected/_layout/account/": {
       "filePath": "_layout/_protected/_layout/account/index.tsx",
+      "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/_protected/_layout/accountConnect/": {
+      "filePath": "_layout/_protected/_layout/accountConnect/index.tsx",
       "parent": "/_layout/_protected/_layout"
     },
     "/_layout/_protected/_layout/travelLog/": {

@@ -195,13 +195,13 @@ export default {
    */
   postDepositAccountOneConfirm: async (
     accountNumber: string,
-    enteredDepositorName: string
+    authCode: string
   ) =>
     axios.post<MoyeobangResponse<null>>(
       '/auth/account/verify/confirm',
       {
         accountNumber: accountNumber,
-        enteredDepositorName: enteredDepositorName,
+        authCode: authCode,
       },
       {
         headers: {'Content-Type': 'application/json'},
@@ -213,4 +213,10 @@ export default {
    */
   getMyProfile: async () =>
     axios.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile'),
+
+  /**
+   * 등록 계좌 삭제 api
+   */
+  deleteAccount: async () =>
+    axios.delete<MoyeobangResponse<null>>('/auth/account'),
 };

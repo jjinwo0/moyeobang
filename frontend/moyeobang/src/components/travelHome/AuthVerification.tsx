@@ -95,13 +95,15 @@ const completeStyle = css`
 const memberId: number = 4;
 
 interface AuthVerificationProps {
-  onClose: () => void;
-  formData: FormData;
+  isOnlyConnect?: boolean;
+  onClose?: () => void;
+  formData?: FormData;
 }
 
 export default function AuthVerification({
   onClose,
   formData,
+  isOnlyConnect,
 }: AuthVerificationProps) {
   // 각 체크박스의 상태 관리
   const [allChecked, setAllChecked] = useState<boolean>(false); // 전체 동의 상태
@@ -188,7 +190,7 @@ export default function AuthVerification({
   const router = useRouter();
 
   const handleCompleteClick = async () => {
-    if (isVerified && isAllTermsAgreed) {
+    if (isVerified && isAllTermsAgreed && formData && onClose) {
       //[todo] 여행 생성 함수 호출
       postTravel({formData, memberId});
 
@@ -199,6 +201,11 @@ export default function AuthVerification({
     } else {
       alert('본인 인증 및 약관 동의를 모두 완료해야 합니다.');
     }
+  };
+
+  const handleConnect = () => {
+    console.log('계좌연결하기');
+    router.navigate({to: '/'});
   };
 
   const isAllTermsAgreed = termsChecked.every(checked => checked); // 모든 이용약관 동의 됐는지 확인 하기 위해 every 메서드 사용
@@ -262,7 +269,7 @@ export default function AuthVerification({
               style: isVerified && isAllTermsAgreed ? 'blue' : 'gray',
               size: 'small',
             }}
-            onClick={handleCompleteClick} // 완료 클릭 시 처리
+            onClick={isOnlyConnect ? handleConnect : handleCompleteClick} // 완료 클릭 시 처리
           >
             완료
           </Btn>
