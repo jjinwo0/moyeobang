@@ -2,7 +2,7 @@ package com.ssafy.moyeobang.schedule.adapter.out.persistence;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleJpaEntity;
-import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleRepositoryInSchedule;
+import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleJpaRepositoryInSchedule;
 import com.ssafy.moyeobang.schedule.application.port.in.UpdateTravelScheduleCommand;
 import com.ssafy.moyeobang.schedule.application.port.out.UpdateSpecificSchedulePort;
 import com.ssafy.moyeobang.schedule.error.ErrorCode;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UpdateSpecificScheduleAdapter implements UpdateSpecificSchedulePort {
 
-    private final ScheduleRepositoryInSchedule scheduleRepository;
+    private final ScheduleJpaRepositoryInSchedule scheduleRepository;
 
 
     @Transactional

@@ -26,7 +26,7 @@ public class CreateNewScheduleAdapter implements CreateNewSchedulePort, LoadExis
 
     @Override
     public List<TravelSchedule> loadExistingSchedules(long travelId) {
-        List<ScheduleJpaEntity> scheduleJpaEntities = scheduleRepository.findByTravelId(travelId)
+        List<ScheduleJpaEntity> scheduleJpaEntities = scheduleJpaRepository.findByTravelId(travelId)
                 .orElseThrow(() -> new ScheduleException(ErrorCode.TRAVEL_SCHEDULE_NOT_FOUND));
         return travelScheduleMapper.toScheduleList(scheduleJpaEntities);
     }
