@@ -115,10 +115,20 @@ export default function QuizComponent({
   const [isCorrect, setIsCorrect] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
 
+  //[todo] memberId 주스탄드에서 꺼내기!!
+  const memberId: number = 5;
+
   // [todo] 퀴즈 제출 api 연결
   const {mutate: postQuiz} = useMutation({
-    mutationFn: ({travelId, answer}: {travelId: number; answer: string}) =>
-      moyeobang.postQuiz(travelId, {answer}),
+    mutationFn: ({
+      travelId,
+      answer,
+      memberId,
+    }: {
+      travelId: number;
+      answer: string;
+      memberId: number;
+    }) => moyeobang.postQuiz(travelId, {answer}, memberId),
     onSuccess: response => {
       console.log('response', response);
       const {data} = response.data;
@@ -143,7 +153,7 @@ export default function QuizComponent({
   };
 
   const onsubmitQuiz = (travelId: Id, answer: string) => {
-    postQuiz({travelId, answer});
+    postQuiz({travelId, answer, memberId});
     setAnswer('');
   };
 
