@@ -1,7 +1,7 @@
 package com.ssafy.moyeobang.schedule.application.port.in;
 
-import com.ssafy.moyeobang.schedule.adapter.in.web.response.DayScheduleResponse;
+import com.ssafy.moyeobang.schedule.adapter.in.web.response.TravelScheduleResponse;
 
 public interface GetTravelSchedulesUseCase {
-    DayScheduleResponse getTravelSchedules(long travelId);
+    TravelScheduleResponse getTravelSchedules(long travelId);
 }
