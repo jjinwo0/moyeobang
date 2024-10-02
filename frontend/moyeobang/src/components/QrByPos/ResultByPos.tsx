@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Backdrop from "../Account/FinalModal/Backdrop/Backdrop";
 import { css } from "@emotion/react";
 import { colors } from "@/styles/colors";
@@ -6,6 +6,7 @@ import Btn from "../common/btn/Btn";
 import type {HTMLAttributes, PropsWithChildren} from "react";
 import { useMutation } from "@tanstack/react-query";
 import moyeobang from "@/services/moyeobang";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
 
 const containerLayoutStyle=css`
     position:absolute;
@@ -39,15 +40,20 @@ type ResultByPos = PaymentProps & PropsWithChildren<HTMLAttributes<HTMLDivElemen
 
 export default function ResultByPos({
     paymentRequestId,
-    sourceAccountNumber,
+    travelAccountNumber,
     placeId,
     placeName,
     placeAddress,
     latitude,
     longitude,
     amount,
-    targetAccountNumber,
-    }:PaymentProps) {
+    storeAccountNumber,
+    onClickOutside,
+    }:ResultByPos) {
+
+    const modalRef = useRef<HTMLDivElement>(null);
+    useOnClickOutside(modalRef, onClickOutside);
+
 
     const {mutate: postPayment } = useMutation({
     mutationFn: ({data} : {data: PaymentProps}) => moyeobang.postPayByPos(data),
@@ -61,29 +67,29 @@ export default function ResultByPos({
         // api결제 요청
         const payData : PaymentProps = {
             paymentRequestId : paymentRequestId,
-            sourceAccountNumber : sourceAccountNumber,
+            travelAccountNumber : travelAccountNumber,
             placeId : placeId,
             placeName : placeName,
             placeAddress : placeAddress,
             amount:amount,
             latitude : latitude,
             longitude : longitude,
-            targetAccountNumber : targetAccountNumber,
+            storeAccountNumber : storeAccountNumber,
         }
         postPayment({data : payData})
     }
 
     return (
         <Backdrop>
-            <div css={containerLayoutStyle}>
+            <div ref={modalRef} css={containerLayoutStyle}>
                 <p>결제 uuid : {paymentRequestId}</p>
-                <p>모임통장 계좌번호 : {sourceAccountNumber}</p>
+                <p>모임통장 계좌번호 : {travelAccountNumber}</p>
                 <p>가맹점 id : {placeId}</p>
                 <p>가맹정 이름 : {placeName}</p>
                 <p>가맹점 주소 : {placeAddress}</p>
                 <p>워도 : {latitude}</p>
                 <p>경도 : {longitude}</p>
-                <p>가맹점 계좌번호 : {targetAccountNumber}</p>
+                <p>가맹점 계좌번호 : {storeAccountNumber}</p>
                 <div>
                     <Btn buttonStyle={{style:'blue', size:'big'}} onClick={handleSettle}>결제 하기</Btn>
                 </div>

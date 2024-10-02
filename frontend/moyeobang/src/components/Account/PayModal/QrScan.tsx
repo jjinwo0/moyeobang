@@ -2,7 +2,29 @@ import React, { useRef, useEffect, useState } from "react"
 import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
-// import PayCompletedModal from "./PayCompletedModal";
+import PayCompletedModal from "./PayCompletedModal";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
+import { useMutation } from "@tanstack/react-query";
+import moyeobang from "@/services/moyeobang";
+
+const storeData = [
+    {
+        placeId: 'airport-1',
+        placeName : '모여방윙스',
+        placeAddress: '제주시 특별자치도, 공항로 2 제주국제공항',
+        latitude: 0,
+        longitude: 0,
+        storeAccountNumber: '0012280102000441',
+    },
+    {
+        placeId: 'starbucks-1',
+        placeName : '호텔모여방',
+        placeAddress: '서울특별시 강남구 테헤란로 108길 42',
+        latitude: 0,
+        longitude: 0,
+        storeAccountNumber: '0012280102000441',
+    }
+]
 
 const qrReaderLayoutStyle = css`
     padding-top: 30px;
@@ -28,23 +50,17 @@ const qrBoxStyle = css`
     left: 12% !important;
 `;
 
-// const resultStyle = css`
-//   font-family:'semibold';
-//   text-align: center;
-//   font-size: 20px;
-// `;
-
-const smallText = css`
+const smallTextStyle = css`
     font-family: 'regular';
     font-size:15px;
 `;
 
-const bigText = css`
+const bigTextStyle = css`
     font-family: 'semibold';
     font-size:24px;
 `;
 
-const english = css`
+const englishStyle = css`
     font-family: 'english';
     font-size:32px;
 `;
@@ -64,19 +80,51 @@ export default function QrScan() {
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
+    const {accountNumber} = useTravelDetailStore();
+    const [successMessage, setSuccessMessage] = useState<string>('');
+    const [transactionId, setTransactionId] = useState<TransactionId>();
+
+    const {mutate: postPaymentByOnline } = useMutation({
+        mutationFn: ({data} : {data: PaymentProps}) => moyeobang.postPayByOnline(data),
+        onSuccess: async (response) => {
+            setSuccessMessage('success')
+            setTransactionId(response.data.data.transactionId)
+            console.log('결제 성공!')
+        },
+    });
 
     // 결과 
-    const [scannedResult, setScannedResult] = useState<string | undefined>("");
+    const [scannedResult, setScannedResult] = useState<OnlineQrData | null>(null);
 
     // 성공
-    function onScanSuccuess( result : QrScanner.ScanResult ) {
-        console.log(result);
-        setScannedResult(result?.data)
-        // 성공 sse 받아오기!
+    function onScanSuccuess( result : QrScanner.ScanResult ) {  
+
+        try {
+            if (result.data) {
+                const data = JSON.parse(result.data);
+                setScannedResult(data);
+                console.log('파싱된 QR 데이터', data)
+                
+                const stores = storeData.filter((store) => store.placeId === data.placeId)
+                const payData : PaymentProps = { 
+                    ...stores[0],
+                    ...data,
+                    travelAccountNumber: accountNumber
+                }
+                console.log('post요청 데이터:', payData)
+
+                // 결제 데이터 API 요청!
+                postPaymentByOnline({data:payData})
+            }
+
+
+        } catch (error) {
+            console.log('QR스캔 오류 발생', error)
+        }
     }
 
     function onScanFail(error: string | Error) {
-        console.log(error)
+        console.log('QR스캔 실패:',error)
     }
 
     useEffect(()=>{
@@ -87,6 +135,7 @@ export default function QrScan() {
                 {
                     onDecodeError : onScanFail,
                     preferredCamera : "environment", // 후면지향
+                    maxScansPerSecond:3, // 1초당 2번
                     highlightScanRegion : true, // ? 알아보기
                     highlightCodeOutline : true, // QR주변 윤곽선 생성
                     overlay : qrBoxElement?.current || undefined,
@@ -122,17 +171,9 @@ export default function QrScan() {
         }
     }, [qrOn])
 
-    // 결제완료 => 모달 닫기
-    // function handleClose() {
-    //     setScannedResult('');
-    //     onClose();
-    // }
-
-    // 결제완료 => 정산하기
-    // function handleSettle() {
-    //     handleClose()
-    //     console.log('결제완료')
-    // }
+    function handleClose() {
+        setSuccessMessage('');
+    }
 
     return (
         <div css={qrReaderLayoutStyle}>
@@ -144,17 +185,13 @@ export default function QrScan() {
                 ref={qrBoxElement}>
                 </div>
                 <div css={textBoxStyle}>
-                <div css={smallText}>오프라인 결제 • 해외결제 • 싸피페이</div>
-                <div css={bigText}><span css={english}>QR</span>코드를 스캔하세요</div>
+                <div css={smallTextStyle}>오프라인 결제 • 해외결제 • 싸피페이</div>
+                <div css={bigTextStyle}><span css={englishStyle}>QR</span>코드를 스캔하세요</div>
                 </div>
                 </>
             }
-                { scannedResult && (
-                    <div>결제완료.!(QrScan컴포넌트)</div>
-                    // <PayCompletedModal onClose={handleClose} transactionId={transactionId}/>
-                    // <p css={resultStyle}>
-                    //     스캔 결과 : {scannedResult}
-                    // </p>
+                { successMessage && transactionId && (
+                    <PayCompletedModal transactionId={transactionId} onClose={handleClose}/>
                 )}
         </div>
     ) 

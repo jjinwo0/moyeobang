@@ -51,7 +51,7 @@ type PublicDepositProps = AccountBalanceByGroup & {travelName: TravelName} & {
 };
 
 export default function PublicDeposit({
-  totalAmount,
+  totalMoney,
   travelName,
   budget,
 }: PublicDepositProps) {

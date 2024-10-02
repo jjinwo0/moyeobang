@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
 import Btn from "@/components/common/btn/Btn";
@@ -10,6 +10,7 @@ import { useState } from "react";
 import moyeobang from "@/services/moyeobang";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import HeaderWithBackButton from "@/components/common/Header/HeaderWithBackButton";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 const layoutStyle=css`
   position: absolute;
@@ -33,6 +34,7 @@ const upContainerStyle=css`
 `;
 
 const titleStyle=css`
+  color: ${colors.fifth};
   font-family:'semibold';
   font-size:24px;
 `;
@@ -61,7 +63,6 @@ const middleContainerStyle=css`
   &::-webkit-scrollbar {
         display: none;
     }
-  
 `;
 
 const buttonContainerStyle=css`
@@ -79,8 +80,11 @@ const buttonContainerStyle=css`
 
 const linkStyle =css`
   text-decoration: none;
-`
+`;
 
+const remainMessageStyle=css`
+  color: ${colors.customRed};
+`;
 
 interface ResultByReceiptComponentProps {
   data:TransactionDetailByReceipt;
@@ -92,17 +96,20 @@ interface ResultByReceiptComponentProps {
 // isNew : True (post) 처음 | isNew : false (fetch) 수정
 export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultByReceiptComponentProps) {
 
-  const [ updateDetails, setUpdateDetails] = useState<SettledItemByReceipt[]>(data.details);
+  const [ updateDetails, setUpdateDetails] = useState<SettledItemByReceipt[]>([]);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const {travelId} = useTravelDetailStore();
+  const [canSettle, setCanSettle] = useState<boolean>(false);
+  const [remianMoney, setRemainMoney] = useState<Money>(data.money);
 
   // 영수증 정산 update API
   const {mutate: updateSettleByReceipt } = useMutation({
-    mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: PostTransactionDetailByReceipt}) => 
-      moyeobang.postSettleByReceipt(transactionId, data),
+    mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByReceipt}) => 
+      moyeobang.postSettleByReceipt(transactionId, travelId, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['receipt'],
+        queryKey: ['transactionDetail', data.transactionId], // detail에 바로 업데이트
         refetchType: 'all',
       });
       await navigate({to: `/account/${data.transactionId}/detail`});
@@ -110,6 +117,15 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
     },
   });
 
+  // 항목당 한명이상의 참가자가 포함되었는지 & 남은 금액 0인지
+  function updateCanSettle(details: SettledItemByReceipt[], remainMoney:Money) {
+    const isAllDetailHaveParticipants = details.every(
+      (detail) => detail.participants.length > 0
+    );
+    setCanSettle(isAllDetailHaveParticipants && remainMoney===0)
+  }
+
+  // onChange
   function handleChange({
     itemId,
     title,
@@ -128,27 +144,38 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
 
         if (!prevDetails) return []; 
 
-        return prevDetails?.map((detail) => 
-          detail.orderItemId === itemId ?
-          {...detail,
-            orderItemTitle:title,
-            orderItemQuantity:quantity,
-            orderItemPrice:price,
-            participants:participants
-          } : detail
-        )
-      })
-    // console.log(updateDetails) // 이거 이용해서 데이터 변환
+        const details = prevDetails?.map((detail) => {
+          const updatedDetails = detail.orderItemId === itemId ?
+            {...detail,
+              orderItemTitle:title,
+              orderItemQuantity:quantity,
+              orderItemPrice:price,
+              participants:participants
+            } 
+            : detail
+
+          return updatedDetails;
+          });
+        
+        const remainingMoney = data.money - details.reduce((acc, detail) => acc+detail.orderItemPrice, 0);
+        setRemainMoney(remainingMoney)
+        setUpdateDetails(details);
+        updateCanSettle(details, remainingMoney);
+        return details;
+      });
   }
 
+  // 데이터 전송
   function handleSubmit() {
 
     // 회원 아이디만 넣은 details
-    const updatedDetail = updateDetails.map((detail) => {
-      const memberIds = detail.participants.map((part) => part.memberId)
-      return {
-        ...detail,
-        participants : memberIds
+    const updatedDetail = updateDetails && updateDetails.map((detail) => {
+      if (detail.orderItemPrice > 0) {
+        const memberIds = detail.participants.map((member) => member.memberId)
+        return {
+          ...detail,
+          participants : memberIds
+        }
       }
     })
 
@@ -162,7 +189,7 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
       details: updatedDetail,
       splitMethod:'receipt',
     }
-    updateSettleByReceipt({transactionId: data.transactionId , data : updatedReceipt})
+    updateSettleByReceipt({transactionId: data.transactionId, travelId:travelId, data : updatedReceipt})
     console.log('정산 클릭 정산될 데이터:', updatedReceipt)
   }
 
@@ -175,18 +202,40 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
     onClose();
   }
 
+  // 초기 데이터 설정
+  useEffect(()=>{
+    let totalMoney = data.money;
+    
+    const updateDetails = data.details.map((detail) => {
+
+      if (totalMoney >= detail.orderItemPrice) {
+        totalMoney -= detail.orderItemPrice;
+        return detail;
+      } else {
+        // 영수증 금액이 남은 금액 넘는 순간 나머지 0처리
+        const remainMoney = totalMoney;
+        totalMoney = 0;
+        return {...detail, orderItemPrice:remainMoney}
+      }
+    });
+    setUpdateDetails(updateDetails) // 총금액에 맡게 금액 조정
+    setRemainMoney(totalMoney) // 남은 금액
+  }, [data])
+
   return (
     <div css={layoutStyle}>
       <HeaderWithBackButton onClick={handleBackButton}/>
         <div css={upContainerStyle} >
           <div css={titleStyle}>{data.paymentName}</div>
-            <div css={amountStyle}>{data.money}원</div>
+            <div css={amountStyle}>총 금액 {data.money.toLocaleString()}원 / 남은 금액 {remianMoney.toLocaleString()}원</div>
             <div css={timeStyle}>
               {data.createdAt && format(data.createdAt, 'yyyy-MM-dd HH:mm', { locale: ko })}
-          </div>
+            </div>
+            <div css={remainMessageStyle}>{ remianMoney<0 && '금액을 초과했어요!😥 수정해주세요!'}</div>
+  
         </div>
         <div css={middleContainerStyle}>
-          {data.details.map((detail, index) => (
+          {updateDetails && updateDetails.map((detail, index) => (
             <UpdateCardByReceipt 
               key={index}
               itemId={detail.orderItemId}
@@ -203,8 +252,18 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
           <Btn buttonStyle={{size:'big', style:'greenBlue'}} onClick={handleRestart}>영수증 다시 찍기</Btn>
         </Link>
         { isNew ? 
-        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>정산 완료</Btn> : 
-        <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleSubmit}>수정 완료</Btn>}
+        <Btn 
+        buttonStyle={{size:'big', style: canSettle ? 'blue' : 'gray'}} 
+        onClick={handleSubmit} 
+        disabled={!canSettle}
+        >정산 완료
+        </Btn> : 
+        <Btn 
+        buttonStyle={{size:'big', style: canSettle ? 'blue' : 'gray'}} 
+        onClick={handleSubmit} 
+        disabled={!canSettle}
+        >수정 완료
+        </Btn>}
       </div>
     </div>
   )

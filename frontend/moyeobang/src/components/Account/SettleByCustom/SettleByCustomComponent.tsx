@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
 import Confetti from "../Confetti/Confetti";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 export interface CustomSettle {
     participantInfo: ParticipantInfo
@@ -46,10 +47,11 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
     const queryClient = useQueryClient();
     const [isOpenPresentModal, setIsOpenPresentModal] = useState<boolean>(false);
     const [presentMoney, setPresentMoney] = useState<number>(0);
-
+    const {travelId} = useTravelDetailStore();
+    
     // 직접 정산 API
     const {mutate: updateCustom } = useMutation({
-        mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: PostTransactionDetailByCustom}) => moyeobang.postSettleByCustom(transactionId, data),
+        mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByCustom}) => moyeobang.postSettleByCustom(transactionId, travelId, data),
         onSuccess: async () => {
         await queryClient.invalidateQueries({
             queryKey: ['transactionDetail', transactionId],
@@ -67,13 +69,13 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             const initialSettle = profileData.map(member => {
                 return {
                     participantInfo : member,
-                    money : totalMoney/profileData.length ,
+                    money :Math.floor(totalMoney/profileData.length),
                     isChecked: true,
                     isDecided:false, // 초기 아무도 확정아님.
                 };
             })
             setSettleData(initialSettle);
-            setRemainMoney(0);
+            setRemainMoney(totalMoney-Math.floor(totalMoney/profileData.length)*profileData.length);
         } 
         // 수정일 때 details있음.
         else if (details && details.length > 0) {
@@ -91,6 +93,15 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             setRemainMoney(0);
         }
     }, [profileData, details, totalMoney, isUpdate])
+
+    // 모여방 남은 금액 선물하기
+    useEffect(()=>{
+        if (remainMoney > 0 && remainMoney < profileData.length) {
+            setIsOpenPresentModal(true);
+            setPresentMoney(remainMoney);
+            setRemainMoney(0);
+        }
+    }, [remainMoney])
 
     // 총액만큼 정산되어야 정산 가능.
     useEffect(() => {
@@ -126,7 +137,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             acceptedNumber: acceptedNumber,
         }
         console.log('POST 전송 데이터 확인',spendData)
-        updateCustom({transactionId, data:spendData})
+        updateCustom({transactionId, travelId,  data:spendData})
         setIsOpenFinalModal(false);
     }
 
@@ -181,12 +192,8 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         // 체크된 사람들이 정산할 금액
         const dutchMoney = Math.floor( remainingAmount / checkedCount);
         const realRemain = remainingAmount - (dutchMoney*checkedCount);
-        setPresentMoney(realRemain);
+        setRemainMoney(realRemain); // 남은 돈 넣어주기
 
-        console.log('남은돈', realRemain)
-        if (realRemain) {
-            setIsOpenPresentModal(true);
-        }
         setSettleData(prevData =>
             prevData.map(user => 
                 user.isChecked && user.money==0 ? 
@@ -195,8 +202,6 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                 {...user, isDecided:true}
             )
         )
-        setRemainMoney(0);
-        setCanSettle(true);
     }
 
     function toggleAll() {

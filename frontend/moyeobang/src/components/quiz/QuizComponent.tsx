@@ -105,8 +105,7 @@ const detailStyle = css`
   color: ${colors.lightBlack};
 `;
 
-//[todo] 나중엔 memberId 주스탄드에 저장된 거 꺼내서 쓰기!!!
-const memberId: number = 5;
+
 
 export default function QuizComponent({
   question,
@@ -117,6 +116,9 @@ export default function QuizComponent({
   const router = useRouter(); // TanStack Router 사용
   const [isCorrect, setIsCorrect] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
+
+  //[todo] memberId 주스탄드에서 꺼내기!!
+  const memberId: number = 5;
 
   // [todo] 퀴즈 제출 api 연결
   const {mutate: postQuiz} = useMutation({

@@ -79,12 +79,11 @@ export default function CertificationOne({
   const [verifyNumber, setVerifyNumber] = useState<string>(''); // 인증번호 상태 추가
   const [randomVerifyNumber, setRandomVerifyNumber] = useState<string>(''); // 랜덤한 인증번호 상태 추가
 
-
-    // 랜덤한 인증번호 생성 함수
-    const generateRandomVerifyNumber = () => {
-      const randomNum = Math.floor(1000 + Math.random() * 9000); // 1000부터 9999 사이의 숫자를 생성
-      return randomNum.toString();
-    };
+  // 랜덤한 인증번호 생성 함수
+  const generateRandomVerifyNumber = () => {
+    const randomNum = Math.floor(1000 + Math.random() * 9000); // 1000부터 9999 사이의 숫자를 생성
+    return randomNum.toString();
+  };
 
   const handleVerify = () => {
     if (accountNumber.length > 0) {
@@ -101,9 +100,29 @@ export default function CertificationOne({
     }
   };
 
+  // //[todo] 1원 입금 인증번호 확인 api 확인
+  // const {mutate: postDepositAccountOneConfirm} = useMutation({
+  //   mutationFn: async ({
+  //     accountNumber,
+  //     authCode,
+  //   }: {
+  //     accountNumber: string;
+  //     authCode: string;
+  //   }) => await moyeobang.postDepositAccountOneConfirm(accountNumber, authCode),
+  //   onSuccess: () => {
+  //     console.log('인증성공');
+  //     alert('인증에 성공하였습니다.');
+  //   },
+  //   onError: () => {
+  //     alert('인증번호를 다시 확인해주세요.');
+  //   },
+  // });
+
   const handleCertification = () => {
+    // //[todo] 1원 입금 확인 api 연결
+    // postDepositAccountOneConfirm({accountNumber,authCode:verifyNumber})
     console.log('verifyNumber', verifyNumber);
-    //[todo] 인증번호 추후 수정 가능(하드코딩)
+
     if (verifyNumber === randomVerifyNumber) {
       alert('인증에 성공하였습니다.');
       onVerify(); // 부모에게 인증 완료 알리기
@@ -112,7 +131,7 @@ export default function CertificationOne({
     }
   };
 
-  // //[todo] 계좌인증 성공 시 싸피뱅크에서 입금 내역 조회
+  // //[todo] 1원입금 성공 시 싸피뱅크에서 입금 내역 조회
   // const {mutate: postDepositAccountOne} = useMutation({
   //   mutationFn: async({accountNumber, bankName}: {accountNumber: string, bankName: string}) => {
   //     await moyeobang.postDepositAccountOne(accountNumber, bankName);
@@ -121,10 +140,10 @@ export default function CertificationOne({
   //     console.log('response', response);
   //     const {status} = response as unknown as {status: string};
   //     if(status === 'SUCCESS'){
-  //       console.log('계좌인증 성공');
+  //       console.log('1원입금 성공');
   //       //[todo] 싸피뱅크에서 입금 내역 조회해야함
   //     } else{
-  //       alert('계좌인증 실패');
+  //       alert('1원입금 실패');
   //     }
   //   }
   // })

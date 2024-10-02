@@ -22,9 +22,9 @@ const data: Travel[] = [
     travelId: 1,
     travelName: '여행이름1',
     travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
-    participantCount: 4,
-    startDate: '2024-09-10T12:34:56Z',
-    endDate: '2024-09-13T12:34:56Z',
+    participantsCount: 4,
+    startDate: '2024-09-10',
+    endDate: '2024-09-13',
     travelPlaceList: ['제주도'],
     quizQuestion: '김훈민의 발사이즈는?',
     quizAnswer: '235',
@@ -57,10 +57,10 @@ const data: Travel[] = [
     travelId: 2,
     travelName: '여행제목2',
     travelImg: null,
-    participantCount: 4,
-    startDate: '2024-09-23T12:34:56Z',
-    endDate: '2024-09-23T12:34:56Z',
-    travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
+    participantsCount: 4,
+    startDate: '2023-09-01',
+    endDate: '2023-09-05',
+    travelPlaceList: ['춘천시', '함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
     accountId: 1,
@@ -217,12 +217,17 @@ function Index() {
   // console.log(today);
 
   // 날짜를 변환한 후 비교
-  const upcomingTrips = (data as unknown as Travel[]).filter(
-    (item: Travel) => normalizeDate(new Date(item.startDate)) > today
-  );
-  const pastTrips = (data as unknown as Travel[]).filter(
-    (item: Travel) => normalizeDate(new Date(item.endDate)) < today
-  );
+  const upcomingTrips = (data as unknown as Travel[])
+    .filter((item: Travel) => normalizeDate(new Date(item.startDate)) > today)
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+    ); // 시작 날짜 순으로 오름차순 정렬
+  const pastTrips = (data as unknown as Travel[])
+    .filter((item: Travel) => normalizeDate(new Date(item.endDate)) < today)
+    .sort(
+      (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+    ); // 종료 날짜 순으로 내림차순 정렬
   const currentTrips = (data as unknown as Travel[]).filter(
     (item: Travel) =>
       normalizeDate(new Date(item.startDate)) <= today &&
@@ -260,6 +265,13 @@ function Index() {
       participantsInfo: travel.participantsInfo,
     }); // 상태 저장
 
+    router.navigate({
+      to: `/travelLog`,
+    });
+  };
+
+  const closeTravelSummary = () => {
+    setTravelSummaryModal(false);
     router.navigate({to: `/travelLog`});
   };
 

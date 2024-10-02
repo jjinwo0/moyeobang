@@ -41,10 +41,11 @@ export default {
    */
   postSettleByCustom: async (
     transactionId: number,
+    travelId:number,
     data: PostTransactionDetailByCustom
   ) =>
     axios.post<MoyeobangResponse<null>>(
-      `/travel/accounts/transactions/${transactionId}/settle/custom`,
+      `/travel/accounts/transactions/${transactionId}/settle/custom/${travelId}`,
       data,
       {
         headers: {'Content-Type': 'application/json'},
@@ -53,26 +54,27 @@ export default {
   /**
    * 직접 정산 수정 fetch임 추후에
    */
-  putSettleByCustom: async (
-    transactionId: number,
-    data: PostTransactionDetailByCustom
-  ) =>
-    axios.post<MoyeobangResponse<null>>(
-      `/travel/accounts/transactions/${transactionId}/settle/custom`,
-      data,
-      {
-        headers: {'Content-Type': 'application/json'},
-      }
-    ),
+  // putSettleByCustom: async (
+  //   transactionId: number,
+  //   data: PostTransactionDetailByCustom
+  // ) =>
+  //   axios.post<MoyeobangResponse<null>>(
+  //     `/travel/accounts/transactions/${transactionId}/settle/custom`,
+  //     data,
+  //     {
+  //       headers: {'Content-Type': 'application/json'},
+  //     }
+  //   ),
   /**
-   * 영수증 정산
-   */
+ * 영수증 정산 
+ */
   postSettleByReceipt: async (
-    transactionId: number,
+    transactionId:number, 
+    travelId:number,
     data: PostTransactionDetailByReceipt
   ) =>
     axios.post<MoyeobangResponse<null>>(
-      `/travel/accounts/transactions/${transactionId}/settle`,
+      `/travel/accounts/transactions/${transactionId}/settle/${travelId}`,
       data,
       {
         headers: {'Content-Type': 'application/json'},
@@ -81,23 +83,33 @@ export default {
   /**
    * 영수증 정산 수정 fetch임 추후에
    */
-  putSettleByReceipt: async (
-    transactionId: number,
-    data: TransactionDetailByReceipt
-  ) =>
-    axios.post<MoyeobangResponse<null>>(
-      `/travel/accounts/transactions/${transactionId}/settle`,
-      data,
-      {
-        headers: {'Content-Type': 'application/json'},
-      }
-    ),
+  // putSettleByReceipt: async (
+  //   transactionId: number,
+  //   data: TransactionDetailByReceipt
+  // ) =>
+  //   axios.post<MoyeobangResponse<null>>(
+  //     `/travel/accounts/transactions/${transactionId}/settle`,
+  //     data,
+  //     {
+  //       headers: {'Content-Type': 'application/json'},
+  //     }
+  //   ),
 
   /**
    * pos기 결제 요청
    */
   postPayByPos: async (data: PaymentProps) =>
     axios8081.post<MoyeobangResponse<null>>('/payment/process', data, {
+      headers: {'Content-Type': 'application/json'},
+    }),
+      /**
+   * online 결제 요청
+   */
+    postPayByOnline: async (data: PaymentProps) =>
+    axios.post<MoyeobangResponse<{transactionId:TransactionId}>>(
+      '/payment/process',
+    data,
+    {
       headers: {'Content-Type': 'application/json'},
     }),
 
@@ -196,13 +208,13 @@ export default {
    */
   postDepositAccountOneConfirm: async (
     accountNumber: string,
-    enteredDepositorName: string
+    authCode: string
   ) =>
     axios.post<MoyeobangResponse<null>>(
       '/auth/account/verify/confirm',
       {
         accountNumber: accountNumber,
-        enteredDepositorName: enteredDepositorName,
+        authCode: authCode,
       },
       {
         headers: {'Content-Type': 'application/json'},
@@ -214,4 +226,10 @@ export default {
    */
   getMyProfile: async () =>
     axios.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile'),
+
+  /**
+   * 등록 계좌 삭제 api
+   */
+  deleteAccount: async () =>
+    axios.delete<MoyeobangResponse<null>>('/auth/account'),
 };
