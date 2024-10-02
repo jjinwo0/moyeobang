@@ -128,28 +128,6 @@ export default function PaidAutoSchedule({
                   상세보기
                 </Btn>
               </div>
-              {/* [todo] 향후에는 zustand에서 participantsInfo[].length와 동일하다면 전체 프로필을 보여주고*/}
-              {/* 다른 경우에는 해당 인원의 프로필만 보여주기 */}
-              {/* <div>{schedule.matchedTransaction.participantsInfo.length}</div> */}
-              <div>
-                {/* {schedule.participantsInfo.map(
-                  (participant: ParticipantInfo, index: number) => (
-                    <img
-                      key={index}
-                      src={participant.profileImage}
-                      alt={`${participant.memberName}'s profile`}
-                      style={{
-                        width: '40px',
-                        height: '40px',
-                        marginTop: '5px',
-                        marginRight: '5px',
-                        borderRadius: '45px',
-                        border: `2px solid ${colors.third}`,
-                      }}
-                    />
-                  )
-                )} */}
-              </div>
             </div>
           </div>
         </div>

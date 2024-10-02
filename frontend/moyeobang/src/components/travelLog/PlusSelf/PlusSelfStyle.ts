@@ -1,7 +1,6 @@
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 
-
 export const plusSelfLayout = css`
   z-index: 20;
   position: fixed;
@@ -94,8 +93,9 @@ export const imgLabelStyle = css`
 
 export const btnLayout = css`
   display: flex;
-  justify-content: flex-end;
-  width: 320px;
+  justify-content: space-around;
+  width: 390px;
+  margin-top: 20px;
 `;
 
 export const inputContainerStyle = css`

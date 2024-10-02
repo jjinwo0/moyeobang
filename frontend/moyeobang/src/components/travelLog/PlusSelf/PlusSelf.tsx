@@ -70,6 +70,12 @@ export default function PlusSelf() {
     setSelectedImage('');
   };
 
+  const handleDelete = () => {
+    // [todo] 삭제 로직 추가
+    resetForm();
+    handleShowPlusSelf();
+  };
+
   const handleSave = () => {
     // [todo] 저장 로직 추가
     resetForm();
@@ -318,9 +324,17 @@ export default function PlusSelf() {
           </div>
           {/* 저장, 삭제 버튼 */}
           <div css={PlusSelfStyle.btnLayout}>
+            {scheduleEdit && (
+              <Btn
+                buttonStyle={{size: 'middle', style: 'red'}}
+                onClick={handleDelete}
+              >
+                삭제
+              </Btn>
+            )}
             <Btn
               buttonStyle={{
-                size: 'small',
+                size: scheduleEdit ? 'middle' : 'big',
                 style: scheduleName === '' ? 'gray' : 'blue',
               }}
               onClick={handleSave}
