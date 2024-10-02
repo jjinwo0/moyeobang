@@ -13,16 +13,19 @@ public class Transaction {
     private String paymentName;
     private LocalDateTime paymentTime;
     private long totalPrice;
+    private double latitude;
+    private double longitude;
     private String paymentRequestId;
     private SettleType splitMethod;
     private List<Participant> participantsInfo;
     private boolean isMatched;
 
     public static Transaction create(long transactionId, String paymentName, LocalDateTime paymentTime,
-                                     long totalPrice,
+                                     long totalPrice, double latitude, double longitude,
                                      String paymentRequestId, SettleType splitMethod,
                                      List<Participant> participantsInfo, boolean isMatched) {
-        return new Transaction(transactionId, paymentName, paymentTime, totalPrice, paymentRequestId,
+        return new Transaction(transactionId, paymentName, paymentTime, totalPrice, latitude, longitude,
+                paymentRequestId,
                 splitMethod, participantsInfo, isMatched);
     }
 }

@@ -3,9 +3,11 @@ package com.ssafy.moyeobang.schedule.application.domain;
 import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleStatus;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class Schedule {
     private long travelId;

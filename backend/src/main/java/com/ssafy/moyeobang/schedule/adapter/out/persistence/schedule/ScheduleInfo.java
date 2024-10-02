@@ -1,34 +1,38 @@
 package com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule;
 
 import com.querydsl.core.annotations.QueryProjection;
+import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleStatus;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class Schedule {
-    private final long scheduleId;
+public class ScheduleInfo {
+    private final Long scheduleId;
     private final String scheduleTitle;
     private final LocalDateTime startDateTime;
     private final String title;
     private final String address;
     private final String googlePlaceId;
-    private final boolean isMatchedTransaction;
-    private final long budget;
-    private final String complete;
+    private final Boolean isMatchedTransaction;
+    private final Integer budget;
+    private final ScheduleStatus complete;
     private final String imageUrl;
     private final String memo;
     private final Double latitude;
     private final Double longitude;
     private final Integer sequence;
     private final Long travelId;
-    private final Long withdrawId;
-    private final String withdrawTitle;
+    private final WithdrawInfo withdrawInfo;
+    private final List<Long> participantIds;
 
     @QueryProjection
-    public Schedule(long scheduleId, String scheduleTitle, LocalDateTime startDateTime, String title, String address,
-                    String googlePlaceId, boolean isMatchedTransaction, long budget, String complete, String imageUrl,
-                    String memo, Double latitude, Double longitude, Integer sequence, Long travelId, Long withdrawId,
-                    String withdrawTitle) {
+    public ScheduleInfo(long scheduleId, String scheduleTitle, LocalDateTime startDateTime, String title,
+                        String address,
+                        String googlePlaceId, boolean isMatchedTransaction, int budget, ScheduleStatus complete,
+                        String imageUrl,
+                        String memo, Double latitude, Double longitude, Integer sequence, Long travelId,
+                        WithdrawInfo withdrawInfo, List<Long> participantIds) {
         this.scheduleId = scheduleId;
         this.scheduleTitle = scheduleTitle;
         this.startDateTime = startDateTime;
@@ -44,7 +48,7 @@ public class Schedule {
         this.longitude = longitude;
         this.sequence = sequence;
         this.travelId = travelId;
-        this.withdrawId = withdrawId;
-        this.withdrawTitle = withdrawTitle;
+        this.withdrawInfo = withdrawInfo;
+        this.participantIds = participantIds;
     }
 }
