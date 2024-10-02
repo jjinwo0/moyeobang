@@ -22,8 +22,8 @@ const data: Travel[] = [
     travelName: '여행이름1',
     travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
     participantsCount: 4,
-    startDate: '2024-09-10T12:34:56Z',
-    endDate: '2024-09-13T12:34:56Z',
+    startDate: '2024-09-10',
+    endDate: '2024-09-13',
     travelPlaceList: ['제주도'],
     quizQuestion: '김훈민의 발사이즈는?',
     quizAnswer: '235',
@@ -57,9 +57,9 @@ const data: Travel[] = [
     travelName: '여행제목2',
     travelImg: null,
     participantsCount: 4,
-    startDate: '2024-09-23T12:34:56Z',
-    endDate: '2024-09-23T12:34:56Z',
-    travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
+    startDate: '2023-09-01',
+    endDate: '2023-09-05',
+    travelPlaceList: ['춘천시', '함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
     accountId: 1,
@@ -247,6 +247,13 @@ function Index() {
       participantsInfo: travel.participantsInfo,
     }); // 상태 저장
 
+    router.navigate({
+      to: `/travelLog`,
+    });
+  };
+
+  const closeTravelSummary = () => {
+    setTravelSummaryModal(false);
     router.navigate({to: `/travelLog`});
   };
 

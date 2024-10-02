@@ -26,8 +26,8 @@ export default defineConfig({
       '/api': {
         target: 'https://vu6tvl2vzm.apigw.ntruss.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        secure: false,  // HTTPS 검증 비활성화
+        rewrite: path => path.replace(/^\/api/, ''),
+        secure: false, // HTTPS 검증 비활성화
       },
     },
   },

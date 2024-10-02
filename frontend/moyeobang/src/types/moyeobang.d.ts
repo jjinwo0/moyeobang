@@ -422,7 +422,7 @@ type PersonalTotalAmount = number;
 type PersonalTotalSpent = number;
 type PersonalUsagePercentage = number;
 type ScheduleTitle = string;
-type ScheduleLocation = string;
+// type ScheduleLocation = string;
 type PredictedBudget = number;
 type Completion = string;
 type ScheduleTime = string;
@@ -504,87 +504,30 @@ interface ParticipantInfo {
   profileImage: ProfileImage;
 }
 
-// 여행 일정 조회
-// schedules 상세 타입 지정
-// MatchedTransaction 지정
-interface MatchedTransaction {
-  transactionId: Id;
-  paymentName: string;
-  totalPrice: number;
-  paymentTime: string;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantsInfo[];
+interface OrderItems {
+  orderItemId: OrderItemId;
+  orderItemTitle: OrderItemTitle;
+  orderItemQuantity: OrderItemquantity;
+  orderItemPrice: OrderItemPrice;
 }
 
-// 1. schedule type 지정
-type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
-
-// 1) 추가된 일정
-interface PlusSelfSchedule {
-  scheduleId: Id;
-  scheduleTitle: ScheduleTitle;
-  scheduleLocation: ScheduleLocation;
-  scheduleTime: scheduleTime;
-  predictedBudget: PredictedBudget;
-  completion: Completion;
-  memo: Memo;
-  scheduleImg?: ScheduleImg;
-  matchedTransaction: MatchedTransaction | null;
+// 모임 통장 공금 잔액 조회
+interface AccountBalanceByGroup {
+  currentBalance: CurrentBalance;
+  totalMoney: TotalMoney;
+  totalComsumption: TotalComsumption;
+  usagePercentage: UsagePercentage;
 }
 
-// 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
-interface PaidAutoSchedule {
-  transactionId: Id;
-  paymentName: PaymentName;
-  totalPrice: Amount;
-  paymentTime: PaymentTime;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantsInfo[];
+// 모임 통장 개인 잔액 조회
+interface AccountBalanceBymemberId {
+  participant: ParticipantInfo;
+  personalCurrentBalance: PersonalCurrentBalance;
+  personalTotalMoney: TotalMoney;
+  personalTotalConsumption: TotalComsumption;
+  personalUsagePercentage: PersonalUsagePercentage;
+  needsAdditionalDeposit?: NeedsAdditionalDeposit;
 }
-
-// 2. 실제 여행 일정 조회 data 타입 지정
-type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
-
-// 여행 일정 조회
-// schedules 상세 타입 지정
-// MatchedTransaction 지정
-interface MatchedTransaction {
-  transactionId: Id;
-  paymentName: string;
-  totalPrice: number;
-  paymentTime: string;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantsInfo[];
-}
-
-// 1. schedule type 지정
-type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
-
-// 1) 추가된 일정
-interface PlusSelfSchedule {
-  scheduleId: Id;
-  scheduleTitle: ScheduleTitle;
-  scheduleLocation: ScheduleLocation;
-  scheduleTime: scheduleTime;
-  predictedBudget: PredictedBudget;
-  completion: Completion;
-  memo: Memo;
-  scheduleImg?: ScheduleImg;
-  matchedTransaction: MatchedTransaction | null;
-}
-
-// 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
-interface PaidAutoSchedule {
-  transactionId: Id;
-  paymentName: PaymentName;
-  totalPrice: Amount;
-  paymentTime: PaymentTime;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantsInfo[];
-}
-
-// 2. 실제 여행 일정 조회 data 타입 지정
-type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
 
 // 일정 관련
 interface MatchedTransaction {
@@ -595,33 +538,6 @@ interface MatchedTransaction {
   splitMethod: SplitMethod;
   participantsInfo: ParticipantInfo[];
 }
-
-// 1. 일정 타입
-interface PlusSelfSchedule {
-  scheduleId: Id;
-  scheduleTitle: ScheduleTitle;
-  scheduleLocation: ScheduleLocation;
-  scheduleTime: ScheduleTime;
-  predictedBudget: PredictedBudget;
-  completion: Completion;
-  memo: Memo;
-  scheduleImg?: ImgUrl;
-  matchedTransaction: MatchedTransaction | null;
-}
-
-interface PaidAutoSchedule {
-  transactionId: Id;
-  paymentName: PaymentName;
-  totalPrice: number;
-  paymentTime: PaymentTime;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantInfo[];
-}
-
-type Schedules = (PlusSelfSchedule | PaidAutoSchedule)[];
-
-// 여행 일정 조회
-type TravelLog = (PlusSelfSchedule | PaidAutoSchedule)[][];
 
 // 기타 관련 인터페이스
 interface TravelLocation {
@@ -700,26 +616,24 @@ interface ResponsePostDepositAccount {
   accountBalance: CurrentBalance;
 }
 
-
 // [모임통장] 소비 비율 차트 데이터
 interface ConsumptionProportionByCategory {
-  categoryName:string;
-  proportion:number;
-  balance:number;
+  categoryName: string;
+  proportion: number;
+  balance: number;
 }
 
 interface ConsumptionProportionByMember {
-  member:ParticipantInfo;
-  proportion:number;
-  balance:number;
+  member: ParticipantInfo;
+  proportion: number;
+  balance: number;
 }
 
-// 전체일때 
+// 전체일때
 interface ConsumptionProportionData {
-  consumptionByCategory:ConsumptionByCategory[];
-  consumptionByMember:ConsumptionByMember[];
+  consumptionByCategory: ConsumptionByCategory[];
+  consumptionByMember: ConsumptionByMember[];
 }
-
 
 // [모임통장]
 
@@ -790,7 +704,7 @@ interface TransactionDetailByReceipt extends BaseTransactionDetail {
   splitMethod: SplitMethod; // 'receipt'
 }
 
-// [모임 통장] +직접 정산 상세 
+// [모임 통장] +직접 정산 상세
 interface TransactionDetailByCustom extends BaseTransactionDetail {
   details: SettledParticipantByCustom[];
   splitMethod: SplitMethod; // 'custom'
@@ -812,9 +726,9 @@ interface PostTransactionDetailByCustom {
   money: Money;
   info: Info[];
   splitMethod: SplitMethod; //'custom'
-  acceptedNumber:AcceptedNumber;
+  acceptedNumber: AcceptedNumber;
 }
-  
+
 // 상세 조회 영수증 정산 'receipt'의 details
 interface PostSettledItemByReceipt {
   orderItemId: OrderItemId;
@@ -877,11 +791,41 @@ interface CompleteTransaction {
   address: Adress;
   paymentName: PaymentName;
   createdAt: CreatedAt;
-  acceptedNumber:AcceptedNumber;
+  acceptedNumber: AcceptedNumber;
 }
 
 interface OcrItem {
   name: string;
   count: number;
   price: number;
+}
+
+// Review 타입 정의
+interface Review {
+  authorName: string;
+  authorProfilePhoto: string;
+  reviewText: string;
+  rating?: number;
+}
+
+// OpeningHours 타입 정의
+interface OpeningHours {
+  detailedOpeningHours: string[];
+}
+
+// Marker 타입 정의
+interface CustomMarker {
+  position: {
+    lat: number;
+    lng: number;
+  };
+  title: string;
+  placeId: string;
+  address: string;
+  rating?: number;
+  openingHours?: string[]; // 간단한 영업 시간 정보
+  types?: string[]; // 장소 유형 정보
+  reviews?: Review[]; // Review 타입의 배열
+  detailedOpeningHours?: string[]; // 자세한 영업 시간 정보
+  photos?: string[];
 }

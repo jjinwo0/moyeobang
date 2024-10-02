@@ -8,14 +8,16 @@ import blueCheck from '@/assets/icons/blueCheck.png';
 import hamburgerBtn from '@/assets/icons/hamburgerButton.png';
 
 const scheduleCardLayout = css`
-  width: 390px;
+  width: 380px;
   display: flex;
   align-items: center;
   margin: 5px 0;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow:
+    0 3px 3px rgba(0, 0, 0, 0.2),
+    0 -3px 3px rgba(0, 0, 0, 0.2);
   padding: 5px 0;
   background-color: white;
-  margin-bottom: 10px;
 `;
 
 const checkBoxStyle = css`
@@ -68,7 +70,11 @@ export default function PaidAutoSchedule({
   };
 
   const router = useRouter();
-  const handleDetailClick = (transactionId: Id) => {
+  const handleDetailClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    transactionId: Id
+  ) => {
+    e.stopPropagation();
     router.navigate({to: `/account/detail/${transactionId}`});
   };
 
@@ -115,8 +121,8 @@ export default function PaidAutoSchedule({
                 <div>정산 참여자 : {schedule.participantsInfo.length}명</div>
                 <Btn
                   buttonStyle={{size: 'sotiny', style: 'blue'}}
-                  onClick={() => {
-                    handleDetailClick(schedule.transactionId);
+                  onClick={e => {
+                    handleDetailClick(e, schedule.transactionId);
                   }}
                 >
                   상세보기
@@ -126,12 +132,12 @@ export default function PaidAutoSchedule({
               {/* 다른 경우에는 해당 인원의 프로필만 보여주기 */}
               {/* <div>{schedule.matchedTransaction.participantsInfo.length}</div> */}
               <div>
-                {schedule.participantsInfo.map(
+                {/* {schedule.participantsInfo.map(
                   (participant: ParticipantInfo, index: number) => (
                     <img
                       key={index}
                       src={participant.profileImage}
-                      alt={`${participant.nickname}'s profile`}
+                      alt={`${participant.memberName}'s profile`}
                       style={{
                         width: '40px',
                         height: '40px',
@@ -142,7 +148,7 @@ export default function PaidAutoSchedule({
                       }}
                     />
                   )
-                )}
+                )} */}
               </div>
             </div>
           </div>
