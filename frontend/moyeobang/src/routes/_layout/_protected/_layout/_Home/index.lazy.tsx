@@ -217,12 +217,17 @@ function Index() {
   // console.log(today);
 
   // 날짜를 변환한 후 비교
-  const upcomingTrips = (data as unknown as Travel[]).filter(
-    (item: Travel) => normalizeDate(new Date(item.startDate)) > today
-  );
-  const pastTrips = (data as unknown as Travel[]).filter(
-    (item: Travel) => normalizeDate(new Date(item.endDate)) < today
-  );
+  const upcomingTrips = (data as unknown as Travel[])
+    .filter((item: Travel) => normalizeDate(new Date(item.startDate)) > today)
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+    ); // 시작 날짜 순으로 오름차순 정렬
+  const pastTrips = (data as unknown as Travel[])
+    .filter((item: Travel) => normalizeDate(new Date(item.endDate)) < today)
+    .sort(
+      (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+    ); // 종료 날짜 순으로 내림차순 정렬
   const currentTrips = (data as unknown as Travel[]).filter(
     (item: Travel) =>
       normalizeDate(new Date(item.startDate)) <= today &&
