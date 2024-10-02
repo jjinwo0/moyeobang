@@ -7,6 +7,8 @@ import Btn from '../common/btn/Btn';
 import BankAuth from './BankAuth';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import querykeys from '@/util/querykeys';
+import {useRouter} from '@tanstack/react-router';
 
 // 스타일 정의
 
@@ -90,14 +92,18 @@ const completeStyle = css`
   margin-right: 10px;
 `;
 
+const memberId: number = 4;
+
 interface AuthVerificationProps {
-  onClose: () => void;
-  formData: FormData;
+  isOnlyConnect?: boolean;
+  onClose?: () => void;
+  formData?: FormData;
 }
 
 export default function AuthVerification({
   onClose,
   formData,
+  isOnlyConnect,
 }: AuthVerificationProps) {
   // 각 체크박스의 상태 관리
   const [allChecked, setAllChecked] = useState<boolean>(false); // 전체 동의 상태
@@ -111,13 +117,13 @@ export default function AuthVerification({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 추가
 
-  useEffect(() => {
-    // formData가 제대로 전달되었는지 확인
-    console.log('Received FormData:');
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
-    }
-  }, [formData]);
+  // useEffect(() => {
+  //   // formData가 제대로 전달되었는지 확인
+  //   console.log('Received FormData:');
+  //   for (let pair of formData.entries()) {
+  //     console.log(pair[0] + ': ' + pair[1]);
+  //   }
+  // }, [formData]);
 
   // 체크박스 클릭 시 이미지 토글
   const handleCheckToggle = (index: number) => {
@@ -149,21 +155,26 @@ export default function AuthVerification({
   //[todo] 여행 생성 api 연결 필요
   const queryClient = useQueryClient();
 
-
   const {mutate: postTravel} = useMutation({
-    mutationFn: async (formData: FormData) => {
-      const response = await moyeobang.postTravel(formData);
-      return response.data; // Axios의 response.data 반환
+    mutationFn: async ({
+      formData,
+      memberId,
+    }: {
+      formData: FormData;
+      memberId: number;
+    }) => {
+      const response = await moyeobang.postTravel(formData, memberId);
+      return response.data;
     },
-    onSuccess: async (response: MoyeobangResponse<ResponsePostTravel>) => {
-      const {travelId} = response.data; // 응답에서 travelId 추출
-
-      // travelList 쿼리 무효화 및 재요청
-      await queryClient.invalidateQueries({
-        queryKey: ['travelList'],
-        refetchType: 'all',
-      });
-
+    onSuccess: async () => {
+      // const {travelId} = response.data; // 응답에서 travelId 추출
+      // 여행 목록을 다시 가져오도록 GET 요청 수행
+      setTimeout(async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ['travelList', memberId],
+          refetchType: 'all',
+        });
+      }, 1000); // 1초 (1000ms) 지연
       // travelId를 사용해 postAccount 호출
       // postAccount(travelId);
     },
@@ -179,16 +190,25 @@ export default function AuthVerification({
   //     })
   //   }
   // })
+  const router = useRouter();
 
-  const handleCompleteClick = () => {
-    if (isVerified && isAllTermsAgreed) {
+  const handleCompleteClick = async () => {
+    if (isVerified && isAllTermsAgreed && formData && onClose) {
       //[todo] 여행 생성 함수 호출
-      postTravel(formData);
+      postTravel({formData, memberId});
+
+      console.log('여행 생성 호출');
 
       onClose(); // 완료 버튼이 파란색일 때만 모달 닫기
+      router.navigate({to: '/'});
     } else {
       alert('본인 인증 및 약관 동의를 모두 완료해야 합니다.');
     }
+  };
+
+  const handleConnect = () => {
+    console.log('계좌연결하기');
+    router.navigate({to: '/'});
   };
 
   const isAllTermsAgreed = termsChecked.every(checked => checked); // 모든 이용약관 동의 됐는지 확인 하기 위해 every 메서드 사용
@@ -252,7 +272,7 @@ export default function AuthVerification({
               style: isVerified && isAllTermsAgreed ? 'blue' : 'gray',
               size: 'small',
             }}
-            onClick={handleCompleteClick} // 완료 클릭 시 처리
+            onClick={isOnlyConnect ? handleConnect : handleCompleteClick} // 완료 클릭 시 처리
           >
             완료
           </Btn>

@@ -48,7 +48,7 @@ export default function Header() {
         {isQROpen && <PayModal onXClick={handleQRClick} />}
 
         {/* Alarm 모달이 열리면 NotificationModal만 렌더링하고 Outlet은 렌더링하지 않음 */}
-        {isAlarmOpen && <NotificationModal onXClick={handleAlarmClick} />}
+        {isAlarmOpen && <NotificationModal onXClick={handleAlarmClick} onClose={handleAlarmClick}/>}
 
         {/* QR 또는 Alarm 모달이 열리지 않았을 때만 Outlet 렌더링 */}
         {!isQROpen && !isAlarmOpen && <Outlet />}
