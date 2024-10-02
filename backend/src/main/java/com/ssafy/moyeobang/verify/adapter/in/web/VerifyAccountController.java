@@ -1,5 +1,7 @@
 package com.ssafy.moyeobang.verify.adapter.in.web;
 
+import static com.ssafy.moyeobang.common.util.ApiUtils.success;
+
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.verify.adapter.in.web.request.CheckRequest;
@@ -9,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-
-import static com.ssafy.moyeobang.common.util.ApiUtils.success;
+import org.springframework.web.bind.annotation.RestController;
 
 @WebAdapter
+@RestController
 @RequiredArgsConstructor
 public class VerifyAccountController {
 
@@ -20,12 +22,13 @@ public class VerifyAccountController {
 
     /**
      * 1원 송금 API
+     *
      * @param token
-     * @param info
+     * @param request
      * @return
      */
     @PostMapping("/api/auth/account/verify/initiate")
-    public ApiResult<?> verifyAccount(@RequestHeader("Authorization")String token,
+    public ApiResult<?> verifyAccount(@RequestHeader("Authorization") String token,
                                       @RequestBody VerifyRequest request) {
 
         // todo: bankName 활용 과정이 없음
@@ -34,11 +37,11 @@ public class VerifyAccountController {
                         token,
                         request.accountNumber(),
                         request.bankName()
-        ));
+                ));
     }
 
     @PostMapping("/api/auth/account/verify/confirm")
-    public ApiResult<?> checkAuthCode(@RequestHeader("Authorization")String token,
+    public ApiResult<?> checkAuthCode(@RequestHeader("Authorization") String token,
                                       @RequestBody CheckRequest request) {
 
         return success(

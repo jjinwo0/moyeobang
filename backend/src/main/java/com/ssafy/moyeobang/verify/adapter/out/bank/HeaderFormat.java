@@ -1,15 +1,16 @@
 package com.ssafy.moyeobang.verify.adapter.out.bank;
 
-import lombok.*;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeaderFormat {
 
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -25,7 +26,7 @@ public class HeaderFormat {
     private String apiKey;
     private String userKey;
 
-    public static HeaderFormat createHeader(String userKey, String apiName, LocalDateTime transmissionDateTime){
+    public static HeaderFormat createHeader(String userKey, String apiName, LocalDateTime transmissionDateTime) {
 
         return HeaderFormat.builder()
                 .apiName(apiName)
