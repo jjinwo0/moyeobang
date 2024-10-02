@@ -44,10 +44,10 @@ public class SettleService implements SettleUseCase {
 
         command.participants().stream().forEach(id -> {
             createMemberOrderHistoryPort
-                    .createMemberOrderHistory(command.amount(), new MappingInfo(id, order.getId()));
+                    .createMemberOrderHistory(amount, new MappingInfo(id, order.getId()));
 
             updateMemberTravelPort
-                    .decreaseMemberTravelAmount(command.amount(), id, command.travelId());
+                    .decreaseMemberTravelAmount(amount, id, command.travelId());
         });
 
         return true;
@@ -75,9 +75,15 @@ public class SettleService implements SettleUseCase {
         updateMemberTravelPort.decreaseMemberTravelAmount(
                 command.money(),
                 command.memberId(),
-                order.getId()
+                command.travelId()
         );
 
         return true;
+    }
+
+    @Override
+    public boolean updateBalanceSettle(SettleCommand command) {
+
+        return false;
     }
 }

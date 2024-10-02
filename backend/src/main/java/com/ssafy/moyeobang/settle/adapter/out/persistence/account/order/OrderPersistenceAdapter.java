@@ -9,6 +9,7 @@ import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
 import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
 import com.ssafy.moyeobang.settle.application.port.out.FindOrderPort;
 import com.ssafy.moyeobang.settle.error.OrderNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -28,6 +29,14 @@ public class OrderPersistenceAdapter implements FindOrderPort, CreateOrderPort {
                 .orElseThrow(() -> new OrderNotFoundException("Order id[" + id + "] 주문 건 정보가 존재하지 않습니다."));
 
         return orderMapperInSettle.mapToDomain(findEntity);
+    }
+
+    @Override
+    public List<Order> findOrderListByTransactionId(Long transactionId) {
+
+        List<OrderJpaEntity> findOrderList = orderRepository.findByTransactionId(transactionId);
+
+        return orderMapperInSettle.mapToDomainList(findOrderList);
     }
 
     @Override
