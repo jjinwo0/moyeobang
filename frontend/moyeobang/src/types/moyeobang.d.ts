@@ -291,7 +291,7 @@
 
 // interface QrData {
 //   paymentRequestId: string; // 고유번호 uuidv4()
-//   sourceAccountNumber: string; // 결제 계좌번호
+//   travelAccountNumber: string; // 결제 계좌번호
 // }
 
 // interface PosPay {
@@ -301,7 +301,7 @@
 //   amount:Money;
 //   latitude: Latitude;
 //   longitude: Longitude;
-//   targetAccountNumber: string;
+//   storeAccountNumber: string;
 // }
 
 // interface PosOderItem {
@@ -312,14 +312,14 @@
 
 // interface PaymentProps {
 //   paymentRequestId: string;
-//   sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
+//   travelAccountNumber: string; // 결제자(모임통장) 계좌번호
 //   placeId: string;
 //   placeName: string;
 //   placeAddress: string;
 //   amount:Money;
 //   latitude: number;
 //   longitude: number;
-//   targetAccountNumber: string;
+//   storeAccountNumber: string;
 //   // OrderItems : OrderItems[];  // 없앰
 // }
 

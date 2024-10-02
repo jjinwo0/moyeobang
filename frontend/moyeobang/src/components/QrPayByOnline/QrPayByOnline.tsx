@@ -11,20 +11,20 @@ const qrContainerStyle=css`
     display:flex;
     flex-direction:column;
     align-items:center;
-    width: 250px;
-    height:330px;
+    width: 400px;
+    height:500px;
     padding: 30px 10px;
     span {
         font-family: 'english';
-        font-size: 28px;
+        font-size: 46px;
         padding: 2px;
     }
 `;
 
 const qrStyle = css`
     box-sizing:border-box;
-    width:150px;
-    height:150px;
+    width:300px;
+    height:300px;
     border-radius:10px;
     padding: 15px;
     border:solid 4px ${colors.third};
@@ -32,34 +32,40 @@ const qrStyle = css`
 
 const titleStyle=css`
     padding:10px;
-    font-size:24px;
+    font-size:40px;
     font-family:'semibold';
 `;
 
 const contentStyle=css`
     padding: 20px 0;
-    font-size:14px;
+    font-size:20px;
 `;
+
+const amountStyle=css`
+    padding: 20px 0;
+    font-size:24px;
+`;
+
 
 interface QrPayByOnlineProps {
     onClickOutside: VoidFunction;
-    data: Omit<PaymentProps, 'targetAccountNumber'>
+    qrData:OnlineQrData;
 }
 
 
-export default function QrPayByOnline({data, onClickOutside} : QrPayByOnlineProps) {
+export default function QrPayByOnline({qrData, onClickOutside} : QrPayByOnlineProps) {
 
     const modalRef = useRef<HTMLDivElement>(null)
     useOnClickOutside(modalRef, onClickOutside)
-    console.log(data)
+    console.log('QR 데이터 확인', qrData)
 
     return (
         <Backdrop>
             <div ref={modalRef} css={qrContainerStyle}>
                 <div css={titleStyle}><span>QR</span>결제</div>
-                <QRCode value={JSON.stringify(data)} css={qrStyle} />
+                <QRCode value={JSON.stringify(qrData)} css={qrStyle} />
                 <div css={contentStyle}>카메라를 통해 <span>QR</span>을 스캔해주세요</div>
-                <div>결제 금액 : {data.amount.toLocaleString()}원</div>
+                <div css={amountStyle}>결제 금액 : {qrData.amount.toLocaleString()}원</div>
             </div>
         </Backdrop>
     )

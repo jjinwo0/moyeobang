@@ -69,13 +69,13 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             const initialSettle = profileData.map(member => {
                 return {
                     participantInfo : member,
-                    money : totalMoney/profileData.length ,
+                    money :Math.floor(totalMoney/profileData.length),
                     isChecked: true,
                     isDecided:false, // 초기 아무도 확정아님.
                 };
             })
             setSettleData(initialSettle);
-            setRemainMoney(0);
+            setRemainMoney(totalMoney-Math.floor(totalMoney/profileData.length)*profileData.length);
         } 
         // 수정일 때 details있음.
         else if (details && details.length > 0) {
@@ -93,6 +93,15 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             setRemainMoney(0);
         }
     }, [profileData, details, totalMoney, isUpdate])
+
+    // 모여방 남은 금액 선물하기
+    useEffect(()=>{
+        if (remainMoney > 0 && remainMoney < profileData.length) {
+            setIsOpenPresentModal(true);
+            setPresentMoney(remainMoney);
+            setRemainMoney(0);
+        }
+    }, [remainMoney])
 
     // 총액만큼 정산되어야 정산 가능.
     useEffect(() => {
@@ -183,12 +192,8 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         // 체크된 사람들이 정산할 금액
         const dutchMoney = Math.floor( remainingAmount / checkedCount);
         const realRemain = remainingAmount - (dutchMoney*checkedCount);
-        setPresentMoney(realRemain);
+        setRemainMoney(realRemain); // 남은 돈 넣어주기
 
-        console.log('남은돈', realRemain)
-        if (realRemain) {
-            setIsOpenPresentModal(true);
-        }
         setSettleData(prevData =>
             prevData.map(user => 
                 user.isChecked && user.money==0 ? 
@@ -197,8 +202,6 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                 {...user, isDecided:true}
             )
         )
-        setRemainMoney(0);
-        setCanSettle(true);
     }
 
     function toggleAll() {

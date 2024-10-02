@@ -30,7 +30,7 @@ const nameStyle=css`
 `;
 
 const amountStyle=css`
-    width:100px;
+    width:120px;
     text-align:right;
     white-space: nowrap;      
     overflow: hidden;        
