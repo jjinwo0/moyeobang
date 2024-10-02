@@ -1,6 +1,8 @@
 import React from 'react';
 import PlusSelfSchedule from './PlusSelfSchedule';
 import PaidAutoSchedule from './PaidAutoSchedule';
+import {useTravelLogContext} from '@/contexts/TravelLog';
+import {css} from '@emotion/react';
 
 interface SingleTravelLogProps {
   schedule: PlusSelfSchedule | PaidAutoSchedule;
@@ -9,6 +11,14 @@ interface SingleTravelLogProps {
   dayNum: number;
 }
 
+const scheduleContentStyle = css`
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default function SingleTravelLog({
   schedule,
   scheduleNum,
@@ -16,19 +26,18 @@ export default function SingleTravelLog({
   dragHandleProps,
 }: SingleTravelLogProps) {
   return (
-    <div>
-      {'scheduleId' in schedule ? (
+    <div css={scheduleContentStyle}>
+      {schedule.isSelfPlus ? (
         <PlusSelfSchedule
-          schedule={schedule}
+          schedule={schedule as PlusSelfSchedule}
           scheduleNum={scheduleNum}
           dayNum={dayNum}
           dragHandleProps={dragHandleProps}
         ></PlusSelfSchedule>
       ) : (
-        // PaidAutoSchedule 처리
         <>
           <PaidAutoSchedule
-            schedule={schedule}
+            schedule={schedule as PaidAutoSchedule}
             scheduleNum={scheduleNum}
             dayNum={dayNum}
             dragHandleProps={dragHandleProps}

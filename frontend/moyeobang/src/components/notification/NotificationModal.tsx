@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import PublicRequest from './PublicRequest'; // Import your existing component
 import {css} from '@emotion/react';
+import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
 
 interface PublicRequestData {
   title: string;
@@ -24,7 +25,7 @@ const layoutStyle = css`
   z-index: 100;
 `;
 
-export default function NotificationModal() {
+export default function NotificationModal({onClose}: {onClose: () => void}) {
   const [publicRequestData, setPublicRequestData] =
     useState<PublicRequestData | null>(null);
 
@@ -100,5 +101,9 @@ export default function NotificationModal() {
     }
   };
 
-  return <div css={layoutStyle}>{renderComponent()}</div>;
+  return <div css={layoutStyle}>
+      <HeaderWithXButton onXClick={onClose}/>
+      {renderComponent()}
+    </div>
+  ;
 }

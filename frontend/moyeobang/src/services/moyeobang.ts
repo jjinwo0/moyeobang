@@ -15,8 +15,8 @@ export default {
    */
   getAccountStateBymemberId: async (accountId: number, memberId: number) =>
     axios.get<MoyeobangResponse<AccountBalanceBymemberId>>(
-      `/accounts/${accountId}/balance/member/${memberId}`,
-),
+      `/accounts/${accountId}/balance/member/${memberId}`
+    ),
   /**
    * 전체 결제 내역 전체 & 개별 조회
    */
@@ -99,10 +99,7 @@ export default {
    * pos기 결제 요청
    */
   postPayByPos: async (data: PaymentProps) =>
-    axios8081.post<MoyeobangResponse<null>>(
-      '/payment/process',
-    data,
-    {
+    axios8081.post<MoyeobangResponse<null>>('/payment/process', data, {
       headers: {'Content-Type': 'application/json'},
     }),
       /**
@@ -129,9 +126,12 @@ export default {
   /**
    * 여행 생성 api
    */
-  postTravel: async (data: FormData) =>
+  postTravel: async (data: FormData, memberId: number) =>
     axios.post<MoyeobangResponse<ResponsePostTravel>>('/travels', data, {
       headers: {'Content-Type': 'multipart/form-data'},
+      params: {
+        memberId: memberId,
+      },
     }),
 
   /**
@@ -163,9 +163,10 @@ export default {
   /**
    * 참가자 퀴즈 제출
    */
-  postQuiz: async (travelId: Id, data: SubmitQuiz) =>
+  postQuiz: async (travelId: Id, data: SubmitQuiz, memberId: number) =>
     axios.post<MoyeobangResponse<boolean>>(`/travels/${travelId}/quiz`, data, {
       headers: {'Content-Type': 'application/json'},
+      params: {memberId},
     }),
 
   /**
@@ -178,12 +179,57 @@ export default {
       {headers: {'Content-Type': 'application/json'}}
     ),
 
-  
   /**
    * 공금입금
    */
-  postDepositAccount : async(accountId:number, data:PostDepositAccount) =>
-    axios.post<MoyeobangResponse<ResponsePostDepositAccount >>(`/accounts/${accountId}/deposit`, data, {
-      headers: {'Content-Type': 'application/json'},
-    }),
+  postDepositAccount: async (accountId: number, data: PostDepositAccount) =>
+    axios.post<MoyeobangResponse<ResponsePostDepositAccount>>(
+      `/accounts/${accountId}/deposit`,
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
+
+  /**
+   * 1원입금 요청 api
+   */
+  postDepositAccountOne: async (accountNumber: string, bankName: string) =>
+    axios.post<MoyeobangResponse<null>>(
+      '/auth/account/verify/initiate',
+      {accountNumber: accountNumber, bankName: bankName},
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
+
+  /**
+   * 1원입금 확인 api
+   */
+  postDepositAccountOneConfirm: async (
+    accountNumber: string,
+    authCode: string
+  ) =>
+    axios.post<MoyeobangResponse<null>>(
+      '/auth/account/verify/confirm',
+      {
+        accountNumber: accountNumber,
+        authCode: authCode,
+      },
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
+
+  /**
+   * 나의 프로필 조회 api
+   */
+  getMyProfile: async () =>
+    axios.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile'),
+
+  /**
+   * 등록 계좌 삭제 api
+   */
+  deleteAccount: async () =>
+    axios.delete<MoyeobangResponse<null>>('/auth/account'),
 };

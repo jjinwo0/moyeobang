@@ -4,7 +4,13 @@ import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {useSwipeable} from 'react-swipeable';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
+import PlusBtn from '@/components/common/btn/PlustBtn';
 import DaySchedules from './DaySchedules';
+import PlusSelf from '@/components/travelLog/PlusSelf/PlusSelf';
+import ScheduleMapSearch from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearch';
+import sadBangBang from '@/assets/icons/sadBangbang.png';
+import bangBang from '@/assets/icons/bangbang.png';
 
 // travelLogListLayout을 390px 너비로 가로 스크롤 없이 설정
 const travelLogListLayout = css`
@@ -30,43 +36,165 @@ const travelLogListLayout = css`
   }
 `;
 
-const dayScheduleStyle = css`
+const noTravelDateStyle = css`
   min-width: 390px; /* DaySchedule의 너비를 390px로 맞춤 */
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: transform 0.3s ease-out;
+  font-size: 24px;
+  font-family: 'semibold';
+  color: ${colors.lightBlack};
+
+  #no-travel-date {
+    font-family: 'semibold';
+    font-size: 20px;
+    color: ${colors.lightBlack};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+  img {
+    width: 150px;
+    height: 150px;
+  }
+`;
+
+const predictedBudgetStyle = css`
+  min-width: 390px; /* DaySchedule의 너비를 390px로 맞춤 */
+  font-size: 22px;
+
+  #budget-title {
+    font-family: 'medium';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+    font-size: 24px;
+    text-decoration: underline;
+    text-underline-offset: 10px;
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+  }
+
+  #total-budget-info {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 2px solid ${colors.third};
+    border-radius: 45px;
+    padding: 10px;
+    font-family: 'semibold';
+  }
+  #total-budget-info-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
 `;
 
 export default function TravelLogList() {
-  const {travelSchedules, currentIndex, setCurrentIndex} =
-    useTravelLogContext();
+  const {
+    scheduleDayNum,
+    setScheduleDayNum,
+    currentIndex,
+    setCurrentIndex,
+    showPlusSelf,
+    handleShowPlusSelf,
+    showMapSearch,
+    handleShowMapSearch,
+    searchLocation,
+    setSearchLocation,
+    handleSearchLocation,
+    travelDates,
+  } = useTravelLogContext();
+
+  const [totalBudget, setTotalBudget] = useState<number>(50000);
 
   const handlers = useSwipeable({
-    onSwipedLeft: () =>
-      setCurrentIndex((prevIndex: number) =>
-        Math.min(prevIndex + 1, travelSchedules.length - 1)
-      ), // 왼쪽 스와이프하면 다음 페이지로 이동
-    onSwipedRight: () =>
-      setCurrentIndex((prevIndex: number) => Math.max(prevIndex - 1, 0)), // 오른쪽 스와이프하면 이전 페이지로 이동
+    onSwipedLeft: () => {
+      setCurrentIndex((prevIndex: number) => {
+        const newIndex = Math.min(prevIndex + 1, travelDays); // travelSchedules.length -> travelDays
+        setScheduleDayNum(newIndex + 1); // 새로운 스케줄 번호 설정 (1부터 시작)
+        console.log('[*] 오른쪽', newIndex);
+
+        return newIndex;
+      });
+    },
+    onSwipedRight: () => {
+      setCurrentIndex((prevIndex: number) => {
+        const newIndex = Math.max(prevIndex - 1, 0);
+        setScheduleDayNum(newIndex + 1); // 새로운 스케줄 번호 설정 (1부터 시작)
+        console.log('[*] 왼쪽', newIndex);
+
+        return newIndex;
+      });
+    },
   });
+
+  const travelDays = travelDates.length;
 
   return (
     <div {...handlers} css={travelLogListLayout}>
-      {travelSchedules.map(
-        (
-          scheduleGroup: (PlusSelfSchedule | PaidAutoSchedule)[],
-          index: number
-        ) => (
-          <div
-            css={[
-              dayScheduleStyle,
-              {transform: `translateX(-${currentIndex * 390}px)`},
-            ]} // 390px 단위로 스와이프
-            key={index}
-          >
-            <DaySchedules daySchedules={scheduleGroup} dayNum={index + 1} />
+      <div
+        css={{
+          display: 'flex',
+          width: `${(travelDays + 1) * 390}px`,
+          transform: `translateX(-${currentIndex * 390}px)`,
+          transition: 'transform 0.3s ease-out',
+        }}
+      >
+        {travelDays > 0 &&
+          travelDates.map((date, index) => {
+            return (
+              <div key={`travel-log-list-${index}`}>
+                <DaySchedules date={date} dayNum={index + 1} />
+              </div>
+            );
+          })}
+
+        {travelDays > 0 ? (
+          <div css={predictedBudgetStyle}>
+            <div id="budget-title">모여방이 추측한 예산은?</div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginTop: '90px',
+              }}
+            >
+              <div id="total-budget-info">
+                <img src={bangBang} alt="bangBang" />
+                <div id="total-budget-info-text">
+                  <div>{travelDates.length}일 전체 예산</div>
+                  <div style={{color: colors.fifth}}>
+                    {totalBudget.toLocaleString()}원
+                  </div>
+                </div>
+                <img src={bangBang} alt="bangBang" />
+              </div>
+            </div>
           </div>
-        )
-      )}
+        ) : (
+          <div css={noTravelDateStyle}>
+            <div id="no-travel-date">
+              <img src={sadBangBang} alt="sadBangBang" />
+              <span>여행 기간이 설정되지 않았습니다.</span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

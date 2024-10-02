@@ -15,6 +15,7 @@ import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import AllowNotification from '@/components/notification/AllowNotification';
+import querykeys from '@/util/querykeys';
 
 const data: Travel[] = [
   {
@@ -22,8 +23,8 @@ const data: Travel[] = [
     travelName: '여행이름1',
     travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
     participantsCount: 4,
-    startDate: '2024-09-10T12:34:56Z',
-    endDate: '2024-09-13T12:34:56Z',
+    startDate: '2024-09-10',
+    endDate: '2024-09-13',
     travelPlaceList: ['제주도'],
     quizQuestion: '김훈민의 발사이즈는?',
     quizAnswer: '235',
@@ -57,9 +58,9 @@ const data: Travel[] = [
     travelName: '여행제목2',
     travelImg: null,
     participantsCount: 4,
-    startDate: '2024-09-23T12:34:56Z',
-    endDate: '2024-09-23T12:34:56Z',
-    travelPlaceList: ['강원도 춘천시', '경상남도 함양군'],
+    startDate: '2023-09-01',
+    endDate: '2023-09-05',
+    travelPlaceList: ['춘천시', '함양군'],
     quizQuestion: '김용수의 키는?',
     quizAnswer: '155',
     accountId: 1,
@@ -180,6 +181,9 @@ const plusStyle = css`
   z-index: 50; /* 다른 요소 위에 위치하도록 설정 */
 `;
 
+//[todo] 멤버 아이디 주스탄드에서 꺼내오기!!!
+const memberId: number = 4;
+
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
@@ -187,13 +191,22 @@ function Index() {
   const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
 
   // //[todo] get으로 여행 목록 전체 조회하기
-  // const {data:travelData} = useSuspenseQuery({
-  //   queryKey: ['travelList'],
+  // const {data: travelData} = useSuspenseQuery({
+  //   queryKey: [querykeys.TRAVELLIST],
   //   //memberId는 쥬스탄드에서 꺼내쓰기!
-  //   queryFn: () => moyeobang.getTravelList(4), // 일단은 4번 회원 데이터 조회
+  //   queryFn: () => moyeobang.getTravelList(4), // [*todo]일단은 4번 회원 데이터 조회
   // });
 
-  // const data = travelData?.data.data;
+  const {data: travelData} = useSuspenseQuery({
+    queryKey: ['travelList', memberId],
+    // memberId는 Zustand에서 가져오기!
+    queryFn: () => {
+      return moyeobang.getTravelList(memberId); // [*todo] 일단은 4번 회원 데이터 조회
+    },
+  });
+  const data = travelData?.data.data;
+
+  // console.log(data);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -204,12 +217,17 @@ function Index() {
   // console.log(today);
 
   // 날짜를 변환한 후 비교
-  const upcomingTrips = (data as unknown as Travel[]).filter(
-    (item: Travel) => normalizeDate(new Date(item.startDate)) > today
-  );
-  const pastTrips = (data as unknown as Travel[]).filter(
-    (item: Travel) => normalizeDate(new Date(item.endDate)) < today
-  );
+  const upcomingTrips = (data as unknown as Travel[])
+    .filter((item: Travel) => normalizeDate(new Date(item.startDate)) > today)
+    .sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+    ); // 시작 날짜 순으로 오름차순 정렬
+  const pastTrips = (data as unknown as Travel[])
+    .filter((item: Travel) => normalizeDate(new Date(item.endDate)) < today)
+    .sort(
+      (a, b) => new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+    ); // 종료 날짜 순으로 내림차순 정렬
   const currentTrips = (data as unknown as Travel[]).filter(
     (item: Travel) =>
       normalizeDate(new Date(item.startDate)) <= today &&
@@ -247,6 +265,13 @@ function Index() {
       participantsInfo: travel.participantsInfo,
     }); // 상태 저장
 
+    router.navigate({
+      to: `/travelLog`,
+    });
+  };
+
+  const closeTravelSummary = () => {
+    setTravelSummaryModal(false);
     router.navigate({to: `/travelLog`});
   };
 
@@ -285,11 +310,12 @@ function Index() {
               {currentTrips.map(trip => (
                 <TravelCard
                   key={trip.travelId}
+                  travelId={trip.travelId}
                   travelName={trip.travelName}
                   startDate={trip.startDate}
                   endDate={trip.endDate}
                   travelPlaceList={trip.travelPlaceList}
-                  participantsCount={trip.participantsCount}
+                  participantsCount={trip.participantCount}
                   quizQuestion={trip.quizQuestion} // quizQuestion 전달
                   quizAnswer={trip.quizAnswer} // quizAnswer 전달
                   onClick={() => clickTravelCard(trip)}
@@ -321,7 +347,7 @@ function Index() {
                   startDate={item.startDate}
                   endDate={item.endDate}
                   travelPlaceList={item.travelPlaceList}
-                  participantsCount={item.participantsCount}
+                  participantsCount={item.participantCount}
                   quizQuestion={item.quizQuestion}
                   quizAnswer={item.quizAnswer}
                   onClick={() => clickTravelCard(item)}

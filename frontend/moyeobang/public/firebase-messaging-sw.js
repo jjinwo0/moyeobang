@@ -1,9 +1,13 @@
 // // 푸시 알림 처리하는 서비스워커
 
-// importScripts('https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js');
-// importScripts('https://www.gstatic.com/firebasejs/8.7.1/firebase-messaging.js');
+// import {initializeApp} from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js';
+// import {
+//   getMessaging,
+//   onBackgroundMessage,
+// } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-messaging-compat.js';
 
 // self.addEventListener('install', _ => {
+//   console.log('fcm sw install...');
 //   self.skipWaiting();
 // });
 
@@ -21,19 +25,19 @@
 //   measurementId: 'G-1NPCHWL974',
 // };
 
-// firebase.initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
+// const messaging = getMessaging(app);
 
-// const messaging = firebase.messaging();
-
-// messaging.onBackgroundMessage(payload => {
-//   const notificationTitle = payload.data.title;
+// onBackgroundMessage(messaging, payload => {
+//   const notificationTitle = payload.notification.title;
 //   const notificationOptions = {
-//     body: payload.data.body,
-//     icon: payload.data.image,
+//     body: payload.notification.body,
+//     icon: payload.notification.icon,
 //     data: {
-//       url: payload.data.click_action, // 알림 클릭시 이동할 URL
+//       url: payload.fcmOptions.link, // 알림 클릭시 이동할 URL
 //     },
 //   };
+
 //   self.registration.showNotification(notificationTitle, notificationOptions);
 // });
 
@@ -44,6 +48,6 @@
 //   // 알림에서 설정한 URL로 이동
 //   const clickActionUrl = event.notification.data.url;
 //   if (clickActionUrl) {
-//     event.waitUntil(clients.openWindow(clickActionUrl));
+//     event.waitUntil(self.clients.openWindow(clickActionUrl));
 //   }
 // });
