@@ -9,7 +9,10 @@ import com.ssafy.moyeobang.settle.application.port.in.SettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleUseCase;
 import com.ssafy.moyeobang.settle.application.port.out.CreateMemberOrderHistoryPort;
 import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
+import com.ssafy.moyeobang.settle.application.port.out.FindOrderPort;
+import com.ssafy.moyeobang.settle.application.port.out.LoadMemberOrderHistoryPort;
 import com.ssafy.moyeobang.settle.application.port.out.UpdateMemberTravelPort;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,10 @@ public class SettleService implements SettleUseCase {
     private final CreateMemberOrderHistoryPort createMemberOrderHistoryPort;
 
     private final UpdateMemberTravelPort updateMemberTravelPort;
+
+    private final FindOrderPort findOrderPort;
+
+    private final LoadMemberOrderHistoryPort loadMemberOrderHistoryPort;
 
     @Override
     public boolean balanceSettle(SettleCommand command) {
@@ -83,6 +90,8 @@ public class SettleService implements SettleUseCase {
 
     @Override
     public boolean updateBalanceSettle(SettleCommand command) {
+
+        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(command.transactionId());
 
         return false;
     }
