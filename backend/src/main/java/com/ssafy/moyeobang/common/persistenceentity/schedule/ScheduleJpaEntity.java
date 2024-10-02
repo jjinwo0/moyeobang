@@ -42,6 +42,9 @@ public class ScheduleJpaEntity extends BaseEntity {
 
     private String googlePlaceId;
 
+    @Column(name = "is_matched_transaction")
+    private boolean isMatchedTransaction = false;
+
     private int budget;
 
     @Enumerated(EnumType.STRING)
@@ -70,6 +73,7 @@ public class ScheduleJpaEntity extends BaseEntity {
                              LocalDateTime startDateTime,
                              String title,
                              String address,
+                             boolean isMatchedTransaction,
                              int budget,
                              ScheduleStatus complete,
                              String imageUrl,
@@ -83,6 +87,7 @@ public class ScheduleJpaEntity extends BaseEntity {
         this.scheduleTitle = scheduleTitle;
         this.startDateTime = startDateTime;
         this.title = title;
+        this.isMatchedTransaction = isMatchedTransaction;
         this.address = address;
         this.budget = budget;
         this.complete = complete;
