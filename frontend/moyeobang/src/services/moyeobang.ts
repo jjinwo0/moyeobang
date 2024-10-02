@@ -105,6 +105,16 @@ export default {
     {
       headers: {'Content-Type': 'application/json'},
     }),
+      /**
+   * online 결제 요청
+   */
+    postPayByOnline: async (data: PaymentProps) =>
+    axios.post<MoyeobangResponse<{transactionId:TransactionId}>>(
+      '/payment/process',
+    data,
+    {
+      headers: {'Content-Type': 'application/json'},
+    }),
 
   /**
    * 여행 목록 전체 조회

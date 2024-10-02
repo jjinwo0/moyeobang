@@ -111,7 +111,7 @@ export default function QrScanByPos({onClose, paymentData, onResult } : QrScanBy
                 {
                     onDecodeError : onScanFail,
                     preferredCamera : "environment", // 후면지향
-                    maxScansPerSecond:2,
+                    maxScansPerSecond:2, // 1초당 2번
                     highlightScanRegion : true, // ? 알아보기
                     highlightCodeOutline : true, // QR주변 윤곽선 생성
                     overlay : qrBoxElement?.current || undefined,

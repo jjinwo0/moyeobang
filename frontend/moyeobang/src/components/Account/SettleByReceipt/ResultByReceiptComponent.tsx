@@ -170,10 +170,12 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
 
     // 회원 아이디만 넣은 details
     const updatedDetail = updateDetails && updateDetails.map((detail) => {
-      const memberIds = detail.participants.map((part) => part.memberId)
-      return {
-        ...detail,
-        participants : memberIds
+      if (detail.orderItemPrice > 0) {
+        const memberIds = detail.participants.map((member) => member.memberId)
+        return {
+          ...detail,
+          participants : memberIds
+        }
       }
     })
 

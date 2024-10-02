@@ -3,6 +3,28 @@ import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
 import PayCompletedModal from "./PayCompletedModal";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
+import { useMutation } from "@tanstack/react-query";
+import moyeobang from "@/services/moyeobang";
+
+const storeData = [
+    {
+        placeId: 'airport-1',
+        placeName : '모여방윙스',
+        placeAddress: '제주시 특별자치도, 공항로 2 제주국제공항',
+        latitude: 0,
+        longitude: 0,
+        storeAccountNumber: '0012280102000441',
+    },
+    {
+        placeId: 'starbucks-1',
+        placeName : '호텔모여방',
+        placeAddress: '서울특별시 강남구 테헤란로 108길 42',
+        latitude: 0,
+        longitude: 0,
+        storeAccountNumber: '0012280102000441',
+    }
+]
 
 const qrReaderLayoutStyle = css`
     padding-top: 30px;
@@ -58,19 +80,51 @@ export default function QrScan() {
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
+    const {accountNumber} = useTravelDetailStore();
+    const [successMessage, setSuccessMessage] = useState<string>('');
+    const [transactionId, setTransactionId] = useState<TransactionId>();
+
+    const {mutate: postPaymentByOnline } = useMutation({
+        mutationFn: ({data} : {data: PaymentProps}) => moyeobang.postPayByOnline(data),
+        onSuccess: async (response) => {
+            setSuccessMessage('success')
+            setTransactionId(response.data.data.transactionId)
+            console.log('결제 성공!')
+        },
+    });
 
     // 결과 
-    const [scannedResult, setScannedResult] = useState<string | undefined>("");
+    const [scannedResult, setScannedResult] = useState<OnlineQrData | null>(null);
 
     // 성공
-    function onScanSuccuess( result : QrScanner.ScanResult ) {
+    function onScanSuccuess( result : QrScanner.ScanResult ) {  
 
-        setScannedResult(result?.data)
+        try {
+            if (result.data) {
+                const data = JSON.parse(result.data);
+                setScannedResult(data);
+                console.log('파싱된 QR 데이터', data)
+                
+                const stores = storeData.filter((store) => store.placeId === data.placeId)
+                const payData : PaymentProps = { 
+                    ...stores[0],
+                    ...data,
+                    travelAccountNumber: accountNumber
+                }
+                console.log('post요청 데이터:', payData)
 
+                // 결제 데이터 API 요청!
+                postPaymentByOnline({data:payData})
+            }
+
+
+        } catch (error) {
+            console.log('QR스캔 오류 발생', error)
+        }
     }
 
     function onScanFail(error: string | Error) {
-        console.log(error)
+        console.log('QR스캔 실패:',error)
     }
 
     useEffect(()=>{
@@ -81,7 +135,7 @@ export default function QrScan() {
                 {
                     onDecodeError : onScanFail,
                     preferredCamera : "environment", // 후면지향
-                    maxScansPerSecond:2, // 1초당 2번 스캔
+                    maxScansPerSecond:3, // 1초당 2번
                     highlightScanRegion : true, // ? 알아보기
                     highlightCodeOutline : true, // QR주변 윤곽선 생성
                     overlay : qrBoxElement?.current || undefined,
@@ -117,9 +171,9 @@ export default function QrScan() {
         }
     }, [qrOn])
 
-    // function handleClose() {
-    //     setScannedResult('')
-    // }
+    function handleClose() {
+        setSuccessMessage('');
+    }
 
     return (
         <div css={qrReaderLayoutStyle}>
@@ -136,9 +190,8 @@ export default function QrScan() {
                 </div>
                 </>
             }
-                { scannedResult && (
-                    // <PayCompletedModal transactionId={1} onClose={handleClose}/>
-                    <div>{scannedResult}</div>
+                { successMessage && transactionId && (
+                    <PayCompletedModal transactionId={transactionId} onClose={handleClose}/>
                 )}
         </div>
     ) 

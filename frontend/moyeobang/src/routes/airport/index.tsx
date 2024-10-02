@@ -20,7 +20,7 @@ const backgroundStyle=css`
 
 const buttonLayoutStyle=css`
     width:100%;
-    height:100px;
+    height:500px;
     position:fixed;
     bottom:0;
     div {
@@ -32,12 +32,7 @@ const buttonLayoutStyle=css`
 const airportData = {
     paymentRequestId: uuidv4(),
     placeId: '123-air',
-    placeName : '모여방윙스',
-    placeAddress: '',
     amount : 459000,
-    latitude: 0,
-    longitude: 0,
-    sourceAccountNumber: '0012280102000441'
 }
 
 export const Route = createFileRoute('/airport/')({
@@ -60,9 +55,10 @@ export default function AirportSite() {
             console.log('sse open')
         }
 
-        // 각 이벤트 이름에 맞는 메시지를 처리
-        eventSource.addEventListener('connect', (event:any) => {
-            const connectMessage : ConnectMessage = event.data;
+        eventSource.addEventListener('connect', (event) => {
+
+            const messageEvent = event as MessageEvent<string>;
+            const connectMessage : ConnectMessage = messageEvent.data;
             console.log('connect 응답 결과:', connectMessage);
         });
     }
@@ -77,7 +73,7 @@ export default function AirportSite() {
 
     return (
         <div css={backgroundStyle}>
-            { isQrModalOpen && <QrPayByOnline data={airportData} onClickOutside={handleClose} />}
+            { isQrModalOpen && <QrPayByOnline qrData={airportData} onClickOutside={handleClose} />}
             <img src={airportBackground} alt=""/>
             <div css={buttonLayoutStyle}>
                 <div onClick={handleClick}></div>

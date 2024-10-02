@@ -96,7 +96,7 @@ export default function groupAccount() {
 
   // get 모임 통장 거래 전체 리스트
   const {data : transactionData} = useSuspenseQuery({
-    queryKey: ['transactionList', accountId],
+    queryKey: ['transactionList', accountId, selectedMember],
     queryFn: () => moyeobang.getTransactionList(Number(accountId), selectedMember),
   });
 

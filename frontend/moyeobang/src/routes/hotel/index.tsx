@@ -10,7 +10,6 @@ const backgroundStyle=css`
     display:flex;
     justify-content:center;
     align-items:center;
-    // height:100vh;
     margin:0 auto;
     img {
         width:600px;
@@ -22,9 +21,9 @@ const backgroundStyle=css`
 const buttonLayoutStyle=css`
     position:fixed;
     bottom:230px;
-    right:100px;
-    width: 180px;
-    height:200px;
+    right:200px;
+    width: 350px;
+    height:700px;
     background-color:transparent;
     color:transparent;
     text-align:center;
@@ -34,15 +33,10 @@ const buttonLayoutStyle=css`
     }
 `;
 
-const hotelData = {
+const hotelQrData = {
     paymentRequestId: uuidv4(),
-    placeId: '123-hotel',
-    placeName : '호텔모여방',
-    placeAddress: '',
-    amount : 519883,
-    latitude: 0,
-    longitude: 0,
-    sourceAccountNumber: '0012280102000441'
+    placeId: 'starbucks-1',
+    amount:519883
 }
 
 export const Route = createFileRoute('/hotel/')({
@@ -65,7 +59,7 @@ export default function HotelSite() {
 
     return (
         <div css={backgroundStyle}>
-            {isQrModalOpen && <QrPayByOnline data={hotelData} onClickOutside={handleClose}/>}
+            {isQrModalOpen && <QrPayByOnline qrData={hotelQrData} onClickOutside={handleClose}/>}
             <img src={hotelBackground} alt="" />
             <div css={buttonLayoutStyle}>
                 <div onClick={handleClick}>예약 하기</div>

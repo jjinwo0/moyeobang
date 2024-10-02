@@ -42,12 +42,12 @@ export default function QrPay({onClose}:QrPayProps) {
 
     const data : QrData= {
         paymentRequestId: paymentRequestId,
-        sourceAccountNumber: '9993247649535796'
+        travelAccountNumber: '9993247649535796'
     }
 
     // new EventSource(url, options)
     const fetchSEE = () => {
-        const eventSource = new EventSourcePolyfill(`https://j11c102.p.ssafy.io/api/payment/connect?paymentRequestId=${paymentRequestId}`, {
+        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/payment/connect?paymentRequestId=${paymentRequestId}`, {
             // headers: {
             //     Authorization: `Bearer ${token}`, 
             // },
