@@ -8,7 +8,7 @@ import com.ssafy.moyeobang.schedule.adapter.in.web.response.MatchedTransactionRe
 import com.ssafy.moyeobang.schedule.adapter.in.web.response.ParticipantResponse;
 import com.ssafy.moyeobang.schedule.adapter.in.web.response.ScheduleResponse;
 import com.ssafy.moyeobang.schedule.adapter.in.web.response.TravelScheduleResponse;
-import com.ssafy.moyeobang.schedule.adapter.in.web.response.UnmatchedTransactionResponse;
+import com.ssafy.moyeobang.schedule.adapter.in.web.response.UnMatchedTransactionResponse;
 import com.ssafy.moyeobang.schedule.application.domain.Schedule;
 import com.ssafy.moyeobang.schedule.application.domain.Transaction;
 import com.ssafy.moyeobang.schedule.application.port.in.GetTravelSchedulesUseCase;
@@ -59,15 +59,13 @@ public class GetTravelSchedulesService implements GetTravelSchedulesUseCase {
             daySchedulesList.add(new DayScheduleResponse(dayNum++, date, scheduleDTOs));
         }
 
-        List<UnmatchedTransactionResponse> unmatchedTransactions = schedules.stream()
-                .filter(schedule -> schedule.getTransaction() != null && !schedule.getTransaction().isMatched())
-                .map(this::mapUnmatchedTransactionToDTO)
-                .collect(Collectors.toList());
-
-        return new TravelScheduleResponse(daySchedulesList, unmatchedTransactions);
+        return new TravelScheduleResponse(daySchedulesList);
     }
 
     private ScheduleResponse mapScheduleToDTO(Schedule schedule) {
+        MatchedTransactionResponse transactionDTO = null;
+        UnMatchedTransactionResponse transactionDTO2 = null;
+
         LocationResponse locationDTO = new LocationResponse(
                 schedule.getLocation().getGooglePlaceId(),
                 schedule.getLocation().getTitle(),
@@ -77,18 +75,34 @@ public class GetTravelSchedulesService implements GetTravelSchedulesUseCase {
                 "카테고리" // TODO : 카테고리 받아서 리턴하는 로직 추가 필요
         );
 
-        MatchedTransactionResponse transactionDTO = null;
-        if (schedule.getTransaction() != null && schedule.getTransaction().isMatched()) {
-            transactionDTO = new MatchedTransactionResponse(
-                    schedule.getTransaction().getTransactionId(),
-                    schedule.getTransaction().getPaymentName(),
-                    (int) schedule.getTransaction().getTotalPrice(),
-                    schedule.getTransaction().getPaymentTime(),
-                    schedule.getTransaction().getSplitMethod().name(),
-                    schedule.getTransaction().getParticipantsInfo().stream()
-                            .map(participant -> new ParticipantResponse(participant.getMemberId()))
-                            .collect(Collectors.toList())
-            );
+        if (schedule.getTransaction() != null) {
+            if (schedule.getTransaction().isMatched()) {
+                transactionDTO = new MatchedTransactionResponse(
+                        schedule.getTransaction().getTransactionId(),
+                        schedule.getTransaction().getPaymentName(),
+                        schedule.getTransaction().getLatitude(),
+                        schedule.getTransaction().getLongitude(),
+                        (int) schedule.getTransaction().getTotalPrice(),
+                        schedule.getTransaction().getPaymentTime(),
+                        schedule.getTransaction().getSplitMethod().name(),
+                        schedule.getTransaction().getParticipantsInfo().stream()
+                                .map(participant -> new ParticipantResponse(participant.getMemberId()))
+                                .collect(Collectors.toList())
+                );
+            } else {
+                transactionDTO2 = new UnMatchedTransactionResponse(
+                        schedule.getTransaction().getTransactionId(),
+                        schedule.getTransaction().getPaymentName(),
+                        schedule.getTransaction().getLatitude(),
+                        schedule.getTransaction().getLongitude(),
+                        (int) schedule.getTransaction().getTotalPrice(),
+                        schedule.getTransaction().getPaymentTime(),
+                        schedule.getTransaction().getSplitMethod().name(),
+                        schedule.getTransaction().getParticipantsInfo().stream()
+                                .map(participant -> new ParticipantResponse(participant.getMemberId()))
+                                .collect(Collectors.toList())
+                );
+            }
         }
 
         return new ScheduleResponse(
@@ -97,17 +111,19 @@ public class GetTravelSchedulesService implements GetTravelSchedulesUseCase {
                 locationDTO,
                 schedule.getScheduleStartTime(),
                 schedule.getBudget(),
+                schedule.getSequence(),
                 schedule.getCompletion().name(),
                 schedule.getMemo(),
                 schedule.getImageUrl(),
-                transactionDTO
+                transactionDTO,
+                transactionDTO2
         );
     }
 
-    private UnmatchedTransactionResponse mapUnmatchedTransactionToDTO(Schedule schedule) {
+    private UnMatchedTransactionResponse mapUnmatchedTransactionToDTO(Schedule schedule) {
         Transaction transaction = schedule.getTransaction();
 
-        return new UnmatchedTransactionResponse(
+        return new UnMatchedTransactionResponse(
                 transaction.getTransactionId(),
                 transaction.getPaymentName(),
                 schedule.getLocation().getLatitude(),
