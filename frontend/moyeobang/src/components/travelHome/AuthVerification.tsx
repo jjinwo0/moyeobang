@@ -163,15 +163,18 @@ export default function AuthVerification({
       formData: FormData;
       memberId: number;
     }) => {
-      moyeobang.postTravel(formData, memberId);
+      const response = await moyeobang.postTravel(formData, memberId);
+      return response.data;
     },
     onSuccess: async () => {
       // const {travelId} = response.data; // 응답에서 travelId 추출
       // 여행 목록을 다시 가져오도록 GET 요청 수행
-      await queryClient.invalidateQueries({
-        queryKey: ['travelList', memberId],
-        refetchType: 'all',
-      });
+      setTimeout(async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ['travelList', memberId],
+          refetchType: 'all',
+        });
+      }, 1000); // 1초 (1000ms) 지연
       // travelId를 사용해 postAccount 호출
       // postAccount(travelId);
     },
