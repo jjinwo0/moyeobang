@@ -8,7 +8,7 @@ const plusImg = css`
   height: 48px;
 `;
 
-const PlusBtn = ({onClick}) => {
+const PlusBtn = ({onClick,}) => {
   return (
     <span onClick={onClick}>
       <img src={plusButton} css={plusImg} />

@@ -1,17 +1,16 @@
-//
-
 import React from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import {useTravelLogContext} from '@/contexts/TravelLog';
 import SingleTravelLog from './travelSingleCard/SingleTravelLog';
+import {useTravelLogContext} from '@/contexts/TravelLog';
+import PlusSelf from '@/components/travelLog/PlusSelf/PlusSelf';
+import ScheduleMapSearch from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearch';
+import sadBangBang from '@/assets/icons/sadBangbang.png';
 
 const travelDayTitleSytle = css`
-  margin-top: 5px;
-  padding: 13px;
+  margin: 15px;
   padding-left: 22px;
-  align-content: end;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -30,23 +29,50 @@ const dayDateStyle = css`
   line-height: 1;
 `;
 
+// [todo] 이게 왜 안보이지? 1일차만 보이고 나머지에서 안 보임
 const verticalLineStyle = css`
   border-left: 2px solid ${colors.lightGray};
   height: 100%;
   position: absolute;
-  left: 24px;
+  left: 28px;
   margin-top: 60px;
-  z-index: 1; /* 낮은 값으로 설정 */
+  z-index: 5; /* 낮은 값으로 설정 */
+`;
+
+const noScheduleStyle = css`
+  font-size: 20px;
+  color: ${colors.black};
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  img {
+    margin-top: 30px;
+    width: 150px;
+    height: 150px;
+  }
 `;
 
 export default function DaySchedules({
-  daySchedules,
+  date,
   dayNum,
 }: {
-  daySchedules: (PlusSelfSchedule | PaidAutoSchedule)[];
   dayNum: number;
+  date: string;
 }) {
-  const {travelSchedules, setTravelSchedules} = useTravelLogContext();
+  const {
+    travelSchedules,
+    setTravelSchedules,
+    showPlusSelf,
+    showMapSearch,
+    handleShowPlusSelf,
+  } = useTravelLogContext();
+  console.log('[*] dayNum', dayNum);
+
+  const daySchedules = travelSchedules[dayNum - 1]?.daySchedules ?? [];
+  console.log('[*] daySchedules', daySchedules);
+
   // onDragEnd 함수 추가
   const handleOnDragEnd = (result: any) => {
     const {source, destination} = result;
@@ -60,14 +86,16 @@ export default function DaySchedules({
     const updatedTravelSchedules = [...travelSchedules];
 
     // 현재 dayId의 스케줄을 가져옴
-    const currentDaySchedules = Array.from(updatedTravelSchedules[dayId]);
+    const currentDaySchedules = Array.from(
+      updatedTravelSchedules[dayId].daySchedules
+    );
 
     // 드래그된 항목을 source에서 제거하고 destination으로 삽입
     const [movedItem] = currentDaySchedules.splice(source.index, 1);
     currentDaySchedules.splice(destination.index, 0, movedItem);
 
     // 변경된 스케줄을 updatedTravelSchedules에 다시 할당
-    updatedTravelSchedules[dayId] = currentDaySchedules;
+    updatedTravelSchedules[dayId].daySchedules = currentDaySchedules;
 
     // 상태 업데이트
     setTravelSchedules(updatedTravelSchedules);
@@ -77,53 +105,63 @@ export default function DaySchedules({
     console.log('드래그 종료 위치:', destination.index);
   };
   return (
-    <>
-      <span css={verticalLineStyle}></span>
+    <div style={{width: '390px', height: '100%', position: 'relative'}}>
+      {daySchedules.length > 0 && <span css={verticalLineStyle}></span>}
       <div css={travelDayTitleSytle}>
         <span css={dayIdStyle}> DAY {dayNum} </span>
-        <span css={dayDateStyle}>09.01 (일)</span>
+        <span css={dayDateStyle}>{date}</span>
       </div>
       <div>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          {' '}
-          {/* onDragEnd 추가 */}
-          <Droppable droppableId="daySchedules">
-            {provided => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {daySchedules.map((schedule, index) => (
-                  <Draggable
-                    key={index}
-                    draggableId={`schedule-${index}`}
-                    index={index}
-                  >
-                    {provided => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        style={{
-                          ...provided.draggableProps.style,
-                          transform: provided.draggableProps.style?.transform,
-                          top: 0,
-                          left: 0,
-                          position: 'relative',
-                        }}
+        {daySchedules.length > 0 ? (
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            {' '}
+            {/* onDragEnd 추가 */}
+            <Droppable droppableId="daySchedules">
+              {provided => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {daySchedules.map((schedule, index: number) => {
+                    return (
+                      <Draggable
+                        key={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
+                        draggableId={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
+                        index={index}
                       >
-                        <SingleTravelLog
-                          schedule={schedule}
-                          scheduleNum={index + 1}
-                          dayNum={dayNum}
-                          dragHandleProps={provided.dragHandleProps}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+                        {provided => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            style={{
+                              ...provided.draggableProps.style,
+                              transform:
+                                provided.draggableProps.style?.transform,
+                              top: 0,
+                              left: 0,
+                              position: 'relative',
+                            }}
+                          >
+                            <SingleTravelLog
+                              schedule={schedule}
+                              scheduleNum={index + 1}
+                              dayNum={dayNum}
+                              dragHandleProps={provided.dragHandleProps}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        ) : (
+          <div css={noScheduleStyle}>
+            <img src={sadBangBang} alt="sadBangBang" />
+            <span>아직 일정이 없습니다.</span>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }

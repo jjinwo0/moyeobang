@@ -38,8 +38,7 @@ export default function QrPay({onClose}:QrPayProps) {
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [resultMessage, setResultMessage] = useState<ResultMessage| null>(null);
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
-    console.log(paymentRequestId)
-
+    console.log('paymentRequestId : ', paymentRequestId)
 
     const data : QrData= {
         paymentRequestId: paymentRequestId,
@@ -48,7 +47,7 @@ export default function QrPay({onClose}:QrPayProps) {
 
     // new EventSource(url, options)
     const fetchSEE = () => {
-        const eventSource = new EventSourcePolyfill(`http://localhost:8080/api/payment/connect?paymentRequestId=${paymentRequestId}`, {
+        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/payment/connect?paymentRequestId=${paymentRequestId}`, {
             // headers: {
             //     Authorization: `Bearer ${token}`, 
             // },
@@ -61,12 +60,12 @@ export default function QrPay({onClose}:QrPayProps) {
         // 각 이벤트 이름에 맞는 메시지를 처리
         eventSource.addEventListener('connect', (event:any) => {
             const connectMessage : ConnectMessage = event.data;
-            console.log('연결 성공 여부:', connectMessage);
+            console.log('connect 응답 결과:', connectMessage);
         });
 
         eventSource.addEventListener('payment-success', (event:any) => {
             const parsedData : ResultMessage = JSON.parse(event.data);
-            console.log('paymentResult:', parsedData);
+            console.log('payment-succes 응답 결과:', parsedData);
             setResultMessage(parsedData);                                                                                           
             setOpenCompleteModal(true);
         });
@@ -105,6 +104,7 @@ export default function QrPay({onClose}:QrPayProps) {
     //     }
     // }, [openCompleteModal, eventSource]);
 
+    // 정산완료후 닫기버튼! default 직접정산 1/n하기
     function handleClose() {
         setOpenCompleteModal(false);
         onClose();

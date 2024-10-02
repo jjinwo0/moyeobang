@@ -12,15 +12,16 @@ import informationBtn from '@/assets/icons/information.png';
 import MessagePopup from '@/components/common/messagePopup/MessagePopup';
 
 const scheduleCardLayout = css`
-  width: 390px;
+  width: 380px;
   display: flex;
   align-items: center;
   margin: 5px 0;
-  border-bottom: 1.5px solid ${colors.lightGray};
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow:
+    0 3px 3px rgba(0, 0, 0, 0.2),
+    0 -3px 3px rgba(0, 0, 0, 0.2);
   padding: 5px 0;
   background-color: white;
-  margin-bottom: 10px;
 `;
 
 const checkBoxStyle = css`
@@ -82,7 +83,7 @@ const budgetInputStyle = css`
   }
 `;
 
-export default function Schedule({
+export default function PlusSelfSchedule({
   schedule,
   scheduleNum,
   dragHandleProps,
@@ -97,74 +98,68 @@ export default function Schedule({
     return scheduleTime.split('T')[1].slice(0, 5); // "T" 이후의 시간 부분에서 앞 5글자만 추출 ("HH:MM")
   };
 
-  const [budget, setBudget] = useState<number | string>(
-    schedule.predictedBudget
-  ); // 초기값을 schedule의 predictedBudget으로 설정
+  const [budget, setBudget] = useState<number | string>(schedule.budget); // 초기값을 schedule의 predictedBudget으로 설정
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     const updatedBudget = parseInt(e.target.value, 10);
     setBudget(updatedBudget);
   };
 
-  const handleBudgetFocus = () => {
+  const handleBudgetFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     setBudget(''); // 클릭 시 값 비우기
   };
 
-  const handleBudgetBlur = () => {
+  const handleBudgetBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     if (budget === '') {
-      setBudget(schedule.predictedBudget);
+      setBudget(schedule.budget);
     }
     // [todo] 예산 수정하는 api 연결하기
     console.log('전송할 예산:', budget);
   };
 
+  const handleBudgetClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
   const router = useRouter();
-  const handleDetailClick = (transactionId: Id) => {
+  const handleDetailClick = (
+    e: React.MouseEvent<HTMLDivElement>,
+    transactionId: Id
+  ) => {
+    e.stopPropagation();
     router.navigate({to: `/account/detail/${transactionId}`});
   };
 
   // 완료 여부
-  const {travelSchedules, setTravelSchedules} = useTravelLogContext();
+  const {travelSchedules, setTravelSchedules, scheduleEdit, setScheduleEdit} =
+    useTravelLogContext();
   // API 미적용, UI만 보여주기
-  const toggleCompletion = () => {
-    // 새로운 일정 리스트를 생성하고 completion을 토글
-    const updatedSchedules = travelSchedules.map(
-      (day: Schedules, index: number) => {
-        if (index + 1 === dayNum) {
-          return day.map((item: PlusSelfSchedule | PaidAutoSchedule) => {
-            // 'item'이 PlusSelfSchedule 타입인지 확인 (scheduleId가 있는지 확인)
-            if ('scheduleId' in item) {
+  const toggleCompletion = (e: React.MouseEvent<HTMLImageElement>) => {
+    e.stopPropagation();
+    const updatedSchedules = travelSchedules.map(day => {
+      if (day.dayNum === dayNum) {
+        return {
+          ...day,
+          daySchedules: day.daySchedules.map(schedule => {
+            if (schedule.isSelfPlus && 'completion' in schedule) {
               return {
-                ...item,
+                ...schedule,
                 completion:
-                  item.completion === 'completed' ? 'pending' : 'completed',
+                  schedule.completion === 'completed' ? 'pending' : 'completed',
               };
             }
-            return item;
-          });
-        }
-        return day;
+            return schedule;
+          }),
+        };
       }
-    );
+      return day;
+    });
 
     setTravelSchedules(updatedSchedules);
   };
-  // [todo] 실제 API 적용 후 완료 여부 변경
-  // const toggleCompletion = async (scheduleId: number) => {
-  //   try {
-  //     // 특정 일정의 완료 상태를 토글하는 API 호출
-  //     await axios.patch(`/api/travel/${travelId}/schedule/${scheduleId}/complete`);
-
-  //     // 성공적으로 완료 상태가 변경되면 전체 여행 일정을 다시 가져옴
-  //     const response = await axios.get(`/api/travel/${travelId}/schedules`);
-
-  //     // 최신 여행 일정으로 상태를 업데이트
-  //     setTravelSchedules(response.data);
-  //   } catch (error) {
-  //     console.error("Error toggling completion and fetching schedules:", error);
-  //     // 에러 처리 (알림이나 UI로 피드백을 줄 수 있음)
-  //   }
-  // };
 
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [popupMessage, setPopupMessage] = useState<JSX.Element | string | null>(
@@ -172,11 +167,12 @@ export default function Schedule({
   );
 
   const difference = schedule.matchedTransaction
-    ? schedule.predictedBudget - schedule.matchedTransaction.totalPrice
+    ? schedule.budget - schedule.matchedTransaction.totalPrice
     : 0;
   const differenceColor = difference < 0 ? colors.customRed : colors.customBlue;
 
-  const handleInfoClick = () => {
+  const handleInfoClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    e.stopPropagation();
     let message = null;
 
     if (schedule.matchedTransaction) {
@@ -192,7 +188,7 @@ export default function Schedule({
         <div>
           여기서는 N명이서 평균 <br />
           <span style={{color: colors.customBlue}}>
-            {schedule.predictedBudget}원
+            {schedule.budget}원
           </span>{' '}
           사용했나방
         </div>
@@ -203,8 +199,15 @@ export default function Schedule({
     setShowPopup(prev => !prev);
   };
 
+  const {handleShowPlusSelf} = useTravelLogContext();
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    handleShowPlusSelf();
+    setScheduleEdit(schedule.scheduleId);
+  };
+
   return (
-    <div css={scheduleCardLayout}>
+    <div css={scheduleCardLayout} onClick={handleClick}>
       {/* 체크리스트 완료 여부 */}
       <div css={checkBoxStyle}>
         <img
@@ -231,7 +234,7 @@ export default function Schedule({
         <div css={scheduleLetterStyle}>
           {/* 일정 이름 */}
           <div style={{fontFamily: 'semibold', fontSize: '24px'}}>
-            {scheduleNum}. {schedule.scheduleTitle}
+            {scheduleNum}. {schedule.scheduleTitle} <img src="" alt="" />
           </div>
 
           {/* 메모 */}
@@ -242,7 +245,7 @@ export default function Schedule({
           ) : null}
 
           {/* 결제 비용인지 예상 비용인지 보여줌 */}
-          {schedule.matchedTransaction?.totalPrice ? (
+          {schedule.matchedTransaction ? (
             <>
               {/* 결제 비용 보여주기 */}
               <div css={oneLineStyle}>
@@ -287,11 +290,13 @@ export default function Schedule({
                   </div>
                   <Btn
                     buttonStyle={{size: 'sotiny', style: 'blue'}}
-                    onClick={() => {
+                    onClick={e =>
+                      schedule.matchedTransaction &&
                       handleDetailClick(
-                        schedule.matchedTransaction?.transactionId
-                      );
-                    }}
+                        e as unknown as React.MouseEvent<HTMLDivElement>,
+                        schedule.matchedTransaction.transactionId
+                      )
+                    }
                   >
                     상세보기
                   </Btn>
@@ -299,13 +304,13 @@ export default function Schedule({
                 {/* [todo] 향후에는 zustand에서 participantsInfo[].length와 동일하다면 전체 프로필을 보여주고*/}
                 {/* 다른 경우에는 해당 인원의 프로필만 보여주기 */}
                 {/* <div>{schedule.matchedTransaction.participantsInfo.length}</div> */}
-                <div>
+                {/* <div>
                   {schedule.matchedTransaction.participantsInfo.map(
                     (participant: ParticipantInfo, index: number) => (
                       <img
                         key={index}
                         src={participant.profileImage}
-                        alt={`${participant.nickname}'s profile`}
+                        alt={`${participant.memberName}'s profile`}
                         style={{
                           width: '40px',
                           height: '40px',
@@ -317,7 +322,7 @@ export default function Schedule({
                       />
                     )
                   )}
-                </div>
+                </div> */}
               </div>
             </>
           ) : (
@@ -328,6 +333,7 @@ export default function Schedule({
                   style={{marginRight: '5px'}}
                   type="text"
                   value={budget}
+                  onClick={handleBudgetClick}
                   onChange={handleBudgetChange}
                   onFocus={handleBudgetFocus}
                   onBlur={handleBudgetBlur}

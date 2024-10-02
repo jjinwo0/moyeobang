@@ -1,40 +1,3 @@
-// export default {
-//   env: {
-//     browser: true,
-//     es2021: true,
-//   },
-//   extends: [
-//     "recommend",
-//     // "airbnb/hooks",
-//     "plugin:@typescript-eslint/recommended",
-//     "plugin:prettier/recommended",
-//     'plugin:@tanstack/query/recommended',
-//   ],
-//   parser: "@typescript-eslint/parser",
-//   parserOptions: {
-//     ecmaFeatures: {
-//       jsx: true,
-//     },
-//     ecmaVersion: "latest",
-//     sourceType: "module",
-//   },
-//   plugins: ["react", "@typescript-eslint", "simple-import-sort", "prettier", '@tanstack/query', "@emotion"],
-//   rules: {
-//     "prettier/prettier": "error",
-//     "import/extensions": "off",
-//     "import/no-unresolved": "off",
-//     "react/jsx-filename-extension": [1, { extensions: [".tsx"] }],
-//     "react/react-in-jsx-scope": "off",
-//     "simple-import-sort/imports": "error",
-//     "simple-import-sort/exports": "error",
-//     "@tanstack/query/exhaustive-deps": "error",
-//     "@tanstack/query/no-deprecated-options": "error",
-//     "@tanstack/query/prefer-query-object-syntax": "error",
-//     "@tanstack/query/stable-query-client": "error",
-//     "@emotion/jsx-import": "error"
-//   },
-// };
-
 {
   "env": {
     "browser": true,
@@ -64,6 +27,8 @@
     "@tanstack/query"
   ],
   "rules": {
+    // css 오류 무시
+    "react/no-unknown-property": ["error", {"ignore": ["css"]}],
     "prettier/prettier": "error", // Prettier 규칙 위반 시 오류 표시
     "react/react-in-jsx-scope": "off", // React 17+에서는 React import 필요 없음
     "react/prop-types": "off", // TypeScript 사용 시 PropTypes 사용 안 함
