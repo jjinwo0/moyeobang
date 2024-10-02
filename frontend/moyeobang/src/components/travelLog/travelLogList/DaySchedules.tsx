@@ -6,12 +6,11 @@ import SingleTravelLog from './travelSingleCard/SingleTravelLog';
 import {useTravelLogContext} from '@/contexts/TravelLog';
 import PlusSelf from '@/components/travelLog/PlusSelf/PlusSelf';
 import ScheduleMapSearch from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearch';
+import sadBangBang from '@/assets/icons/sadBangbang.png';
 
 const travelDayTitleSytle = css`
-  margin-top: 5px;
-  padding: 13px;
+  margin: 15px;
   padding-left: 22px;
-  align-content: end;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -35,7 +34,7 @@ const verticalLineStyle = css`
   border-left: 2px solid ${colors.lightGray};
   height: 100%;
   position: absolute;
-  left: 24px;
+  left: 28px;
   margin-top: 60px;
   z-index: 5; /* 낮은 값으로 설정 */
 `;
@@ -44,7 +43,15 @@ const noScheduleStyle = css`
   font-size: 20px;
   color: ${colors.black};
   line-height: 1;
-  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  img {
+    margin-top: 30px;
+    width: 150px;
+    height: 150px;
+  }
 `;
 
 export default function DaySchedules({
@@ -149,7 +156,10 @@ export default function DaySchedules({
             </Droppable>
           </DragDropContext>
         ) : (
-          <div css={noScheduleStyle}>아직 일정이 없습니다.</div>
+          <div css={noScheduleStyle}>
+            <img src={sadBangBang} alt="sadBangBang" />
+            <span>아직 일정이 없습니다.</span>
+          </div>
         )}
       </div>
     </div>

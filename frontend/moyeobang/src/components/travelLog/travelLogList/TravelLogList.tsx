@@ -9,6 +9,8 @@ import PlusBtn from '@/components/common/btn/PlustBtn';
 import DaySchedules from './DaySchedules';
 import PlusSelf from '@/components/travelLog/PlusSelf/PlusSelf';
 import ScheduleMapSearch from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearch';
+import sadBangBang from '@/assets/icons/sadBangbang.png';
+import bangBang from '@/assets/icons/bangbang.png';
 
 // travelLogListLayout을 390px 너비로 가로 스크롤 없이 설정
 const travelLogListLayout = css`
@@ -45,25 +47,59 @@ const noTravelDateStyle = css`
   font-family: 'semibold';
   color: ${colors.lightBlack};
 
-  #total-budget {
-    font-family: 'semibold';
-    color: ${colors.black};
-    margin-top: 5px;
-    padding: 13px;
-    padding-left: 22px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-  }
-
   #no-travel-date {
     font-family: 'semibold';
+    font-size: 20px;
     color: ${colors.lightBlack};
-    margin-top: 5px;
-    padding: 13px;
-    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+  img {
+    width: 150px;
+    height: 150px;
+  }
+`;
+
+const predictedBudgetStyle = css`
+  min-width: 390px; /* DaySchedule의 너비를 390px로 맞춤 */
+  font-size: 22px;
+
+  #budget-title {
+    font-family: 'medium';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+    font-size: 24px;
+    text-decoration: underline;
+    text-underline-offset: 10px;
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+  }
+
+  #total-budget-info {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 2px solid ${colors.third};
+    border-radius: 45px;
+    padding: 10px;
+    font-family: 'semibold';
+  }
+  #total-budget-info-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
 `;
 
@@ -82,6 +118,8 @@ export default function TravelLogList() {
     handleSearchLocation,
     travelDates,
   } = useTravelLogContext();
+
+  const [totalBudget, setTotalBudget] = useState<number>(50000);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -116,26 +154,44 @@ export default function TravelLogList() {
           transition: 'transform 0.3s ease-out',
         }}
       >
-        {travelDays > 0 && travelDates.map((date, index) => {
-          return (
-            <div key={`travel-log-list-${index}`}>
-              <DaySchedules date={date} dayNum={index + 1} />
-            </div>
-          );
-        })}
+        {travelDays > 0 &&
+          travelDates.map((date, index) => {
+            return (
+              <div key={`travel-log-list-${index}`}>
+                <DaySchedules date={date} dayNum={index + 1} />
+              </div>
+            );
+          })}
 
         {travelDays > 0 ? (
-          <div css={noTravelDateStyle}>
-            <div id="total-budget">
-              <div style={{color: colors.fifth}}>
-                {travelDates.length}일 전체 예산
+          <div css={predictedBudgetStyle}>
+            <div id="budget-title">모여방이 추측한 예산은?</div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginTop: '90px',
+              }}
+            >
+              <div id="total-budget-info">
+                <img src={bangBang} alt="bangBang" />
+                <div id="total-budget-info-text">
+                  <div>{travelDates.length}일 전체 예산</div>
+                  <div style={{color: colors.fifth}}>
+                    {totalBudget.toLocaleString()}원
+                  </div>
+                </div>
+                <img src={bangBang} alt="bangBang" />
               </div>
-              <div>50000원</div>
             </div>
           </div>
         ) : (
           <div css={noTravelDateStyle}>
-            <div id="no-travel-date">여행 기간이 설정되지 않았습니다.</div>
+            <div id="no-travel-date">
+              <img src={sadBangBang} alt="sadBangBang" />
+              <span>여행 기간이 설정되지 않았습니다.</span>
+            </div>
           </div>
         )}
       </div>

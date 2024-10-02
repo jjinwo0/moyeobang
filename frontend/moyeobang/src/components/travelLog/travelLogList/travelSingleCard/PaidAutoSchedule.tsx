@@ -8,14 +8,16 @@ import blueCheck from '@/assets/icons/blueCheck.png';
 import hamburgerBtn from '@/assets/icons/hamburgerButton.png';
 
 const scheduleCardLayout = css`
-  width: 390px;
+  width: 380px;
   display: flex;
   align-items: center;
   margin: 5px 0;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow:
+    0 3px 3px rgba(0, 0, 0, 0.2),
+    0 -3px 3px rgba(0, 0, 0, 0.2);
   padding: 5px 0;
   background-color: white;
-  margin-bottom: 10px;
 `;
 
 const checkBoxStyle = css`
@@ -130,7 +132,7 @@ export default function PaidAutoSchedule({
               {/* 다른 경우에는 해당 인원의 프로필만 보여주기 */}
               {/* <div>{schedule.matchedTransaction.participantsInfo.length}</div> */}
               <div>
-                {schedule.participantsInfo.map(
+                {/* {schedule.participantsInfo.map(
                   (participant: ParticipantInfo, index: number) => (
                     <img
                       key={index}
@@ -146,7 +148,7 @@ export default function PaidAutoSchedule({
                       }}
                     />
                   )
-                )}
+                )} */}
               </div>
             </div>
           </div>

@@ -22,7 +22,8 @@ const plusStyle = css`
 `;
 
 export default function TravelLogMain() {
-  const {handleShowMapSearch} = useTravelLogContext();
+  const {handleShowMapSearch, travelDates, scheduleDayNum} =
+    useTravelLogContext();
   const {showMapSearch, showPlusSelf, handleShowPlusSelf} =
     useTravelLogContext();
 
@@ -39,9 +40,9 @@ export default function TravelLogMain() {
 
         <Navbar />
       </div>
-      <div css={plusStyle}>
-        <PlusBtn onClick={handleShowPlusSelf} />
-      </div>
+      {scheduleDayNum < travelDates.length && (
+        <div css={plusStyle}>{<PlusBtn onClick={handleShowPlusSelf} />}</div>
+      )}
       {showPlusSelf && <PlusSelf />}
       {showMapSearch && <ScheduleMapSearch />}
     </>

@@ -1,17 +1,21 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {GoogleMap, Marker} from '@react-google-maps/api';
+import {GoogleMap, Marker, InfoWindow} from '@react-google-maps/api';
 import {useTravelLogContext} from '@/contexts/TravelLog';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import heartIcon from '@/assets/icons/heartIcon.webp';
+import currentLocationIcon from '@/assets/icons/blueDot.png';
 
 interface markerInfo {
   lat: number;
   lng: number;
   googlePlaceId?: string;
+  category?: string;
+  name?: string;
 }
+
 const containerStyle = {
   width: '100%',
-  height: '50vh', // 원하는 높이로 설정
+  height: '48vh', // 원하는 높이로 설정
 };
 
 const defaultCenter = {lat: 37.5665, lng: 126.978}; // 서울 기본 중심 좌표
@@ -23,9 +27,11 @@ export default function TravelMainMap() {
   const [currentLocation, setCurrentLocation] = useState<markerInfo | null>(
     null
   );
-  const googleMapRef = useRef<any>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [placeCoords, setPlaceCoords] = useState<markerInfo[]>([]);
+  const [selectedMarker, setSelectedMarker] = useState<markerInfo | null>(null);
+  const [selectedMarkerInfo, setSelectedMarkerInfo] =
+    useState<Pick<markerInfo, 'name' | 'category'>>();
 
   // 현재 위치 가져오기
   useEffect(() => {
@@ -58,11 +64,14 @@ export default function TravelMainMap() {
               lat: schedule.scheduleLocation.latitude,
               lng: schedule.scheduleLocation.longitude,
               googlePlaceId: schedule.scheduleLocation.googlePlaceId,
+              category: schedule.scheduleLocation.category,
+              name: schedule.scheduleLocation.title,
             };
           } else if ('transactionId' in schedule) {
             return {
               lat: schedule.latitude,
               lng: schedule.longitude,
+              name: schedule.paymentName,
             };
           }
           return null;
@@ -104,6 +113,24 @@ export default function TravelMainMap() {
     }
   }, [travelPlaceList]);
 
+  // 마커 클릭 시 설명 가져오기
+  const handleMarkerClick = (marker: markerInfo) => {
+    if (marker.googlePlaceId) {
+      const newSelectedMarkerInfo = {
+        name: marker.name,
+        category: marker.category,
+      };
+      setSelectedMarker(marker);
+      setSelectedMarkerInfo(newSelectedMarkerInfo);
+    } else {
+      const newSelectedMarkerInfo = {
+        name: marker.name,
+      };
+      setSelectedMarker(marker);
+      setSelectedMarkerInfo(newSelectedMarkerInfo);
+    }
+  };
+
   useEffect(() => {
     if (map) {
       if (markers.length > 0) {
@@ -131,6 +158,16 @@ export default function TravelMainMap() {
 
   return (
     <div>
+      <style>
+        {`
+          .gm-style-iw-c {
+            padding: 0 !important; /* InfoWindow 내부 패딩 조정 */
+          }
+          .gm-ui-hover-effect {
+           display: none !important;
+          }
+        `}
+      </style>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={defaultCenter} // 초기 렌더링 시 기본 중심을 서울로 설정
@@ -142,6 +179,10 @@ export default function TravelMainMap() {
           console.log('Map unmounted');
           setMap(null);
         }} // 페이지가 이동되거나 언마운트 시 map 상태 초기화
+        onClick={() => {
+          setSelectedMarker(null);
+          setSelectedMarkerInfo(undefined);
+        }} // 지도 클릭 시 InfoWindow 닫기
       >
         {markers.map((marker, index) => (
           <Marker
@@ -154,23 +195,61 @@ export default function TravelMainMap() {
             }}
             label={{
               text: `${index + 1}`, // 인덱스를 레이블로 표시
-              color: 'black', // 레이블 색상
+              color: 'white', // 레이블 색상
               fontSize: '12px', // 레이블 폰트 크기
+              fontFamily: 'semibold',
             }}
+            onClick={() => handleMarkerClick(marker)}
           />
         ))}
+        {selectedMarker && (
+          <InfoWindow
+            position={{
+              lat: selectedMarker.lat,
+              lng: selectedMarker.lng,
+            }}
+            onCloseClick={() => {
+              setSelectedMarker(null);
+              setSelectedMarkerInfo(undefined);
+            }} // InfoWindow 닫기
+            options={{
+              pixelOffset: new window.google.maps.Size(0, -30), // InfoWindow를 마커 위로 30픽셀 이동
+            }}
+          >
+            <div
+              style={{
+                margin: '0 5px 10px 5px',
+                padding: '0 10px',
+                maxWidth: '200px',
+                fontFamily: 'semibold',
+                fontSize: '16px',
+              }}
+            >
+              <p style={{padding: '0 0 5px 0'}}>
+                {' '}
+                장소 이름 : {selectedMarkerInfo?.name || ''}
+              </p>{' '}
+              {selectedMarkerInfo?.category && (
+                <p style={{margin: '0'}}>
+                  카테고리 : {selectedMarkerInfo?.category || ''}
+                </p>
+              )}
+            </div>
+          </InfoWindow>
+        )}
         {currentLocation && (
           <Marker
             position={{lat: currentLocation.lat, lng: currentLocation.lng}}
             title="Current Location"
             icon={{
-              url: heartIcon, // 현재 위치 마커 이미지
+              url: currentLocationIcon, // import한 이미지 사용
               scaledSize: new window.google.maps.Size(30, 30), // 이미지 크기 조정
             }}
             label={{
               text: '현재 위치', // 현재 위치 레이블
-              color: 'blue', // 레이블 색상
-              fontSize: '12px', // 레이블 폰트 크기
+              color: 'white', // 레이블 색상
+              fontSize: '8px', // 레이블 폰트 크기
+              fontFamily: 'semibold',
             }}
           />
         )}

@@ -2,6 +2,7 @@ import React from 'react';
 import PlusSelfSchedule from './PlusSelfSchedule';
 import PaidAutoSchedule from './PaidAutoSchedule';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import {css} from '@emotion/react';
 
 interface SingleTravelLogProps {
   schedule: PlusSelfSchedule | PaidAutoSchedule;
@@ -10,15 +11,22 @@ interface SingleTravelLogProps {
   dayNum: number;
 }
 
+const scheduleContentStyle = css`
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default function SingleTravelLog({
   schedule,
   scheduleNum,
   dayNum,
   dragHandleProps,
 }: SingleTravelLogProps) {
-  
   return (
-    <div>
+    <div css={scheduleContentStyle}>
       {schedule.isSelfPlus ? (
         <PlusSelfSchedule
           schedule={schedule as PlusSelfSchedule}

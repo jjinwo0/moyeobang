@@ -12,15 +12,16 @@ import informationBtn from '@/assets/icons/information.png';
 import MessagePopup from '@/components/common/messagePopup/MessagePopup';
 
 const scheduleCardLayout = css`
-  width: 390px;
+  width: 380px;
   display: flex;
   align-items: center;
   margin: 5px 0;
-  border-bottom: 1.5px solid ${colors.lightGray};
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow:
+    0 3px 3px rgba(0, 0, 0, 0.2),
+    0 -3px 3px rgba(0, 0, 0, 0.2);
   padding: 5px 0;
   background-color: white;
-  margin-bottom: 10px;
 `;
 
 const checkBoxStyle = css`
@@ -233,7 +234,7 @@ export default function PlusSelfSchedule({
         <div css={scheduleLetterStyle}>
           {/* 일정 이름 */}
           <div style={{fontFamily: 'semibold', fontSize: '24px'}}>
-            {scheduleNum}. {schedule.scheduleTitle}
+            {scheduleNum}. {schedule.scheduleTitle} <img src="" alt="" />
           </div>
 
           {/* 메모 */}
@@ -303,7 +304,7 @@ export default function PlusSelfSchedule({
                 {/* [todo] 향후에는 zustand에서 participantsInfo[].length와 동일하다면 전체 프로필을 보여주고*/}
                 {/* 다른 경우에는 해당 인원의 프로필만 보여주기 */}
                 {/* <div>{schedule.matchedTransaction.participantsInfo.length}</div> */}
-                <div>
+                {/* <div>
                   {schedule.matchedTransaction.participantsInfo.map(
                     (participant: ParticipantInfo, index: number) => (
                       <img
@@ -321,7 +322,7 @@ export default function PlusSelfSchedule({
                       />
                     )
                   )}
-                </div>
+                </div> */}
               </div>
             </>
           ) : (
