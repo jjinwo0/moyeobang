@@ -32,6 +32,7 @@ public class CheckQuizAnswerControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(
                         post("/api/travels/{travelsId}/quiz", "1")
+                                .param("memberId", "1")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )

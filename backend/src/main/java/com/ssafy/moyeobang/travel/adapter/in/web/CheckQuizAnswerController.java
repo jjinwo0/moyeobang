@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @WebAdapter
@@ -22,8 +23,9 @@ public class CheckQuizAnswerController {
 
     @PostMapping("/api/travels/{travelId}/quiz")
     public ApiResult<Boolean> checkQuizAnswer(@PathVariable("travelId") Long travelId,
+                                              @RequestParam Long memberId,
                                               @RequestBody CheckQuizAnswerRequest request) {
-        CheckQuizAnswerCommand command = new CheckQuizAnswerCommand(travelId, request.answer());
+        CheckQuizAnswerCommand command = new CheckQuizAnswerCommand(travelId, memberId, request.answer());
 
         return success(checkQuizAnswerUseCase.checkQuizAnswer(command));
     }
