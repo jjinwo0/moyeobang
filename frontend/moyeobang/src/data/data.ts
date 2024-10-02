@@ -3,24 +3,34 @@ import profileImageUrl from '@/assets/images/profile.jpg'
 export const profileData : ParticipantInfo[] = [
     {   
         memberId : 1,
-        memberName: "홍길동",
+        memberName: "김두열",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 2,
-        memberName: "홍길동",
+        memberName: "김훈민",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 3,
-        memberName: "홍길동",
+        memberName: "박진우",
         profileImage : profileImageUrl,
     },
     {   
         memberId : 4,
-        memberName: "홍길동",
+        memberName: "전가현",
         profileImage : profileImageUrl,
     },
+    {   
+      memberId : 5,
+      memberName: "강두홍",
+      profileImage : profileImageUrl,
+  },
+  {   
+      memberId : 6,
+      memberName: "유지연",
+      profileImage : profileImageUrl,
+  },
   ]
   
   export const transactions = [
@@ -365,3 +375,82 @@ const content = "```json\n{\n    \"approval_number\": \"POS 1039331\",\n    \"ad
 // 텍스트에서 불필요한 ```json과 개행 문자 제거
 const cleanContent = content.replace(/```json|```|\n/g, '');
 export const chatData = JSON.parse(cleanContent);
+
+
+export const proportionData = {
+	consumptionByCategory : [
+		{
+		categoryName : '액티비티',
+		proportion : 20.5,
+		balance:80000
+		},
+		{
+		categoryName : '식당',
+		proportion : 9.5,
+		balance:121000
+		},
+    {
+      categoryName : '카페',
+      proportion : 5.0,
+      balance:121000
+    },
+    {
+      categoryName : '쇼핑',
+      proportion : 3.3,
+      balance:121000
+      },
+		{
+		categoryName : '호텔',
+		proportion : 9.0,
+		balance:121000
+		},
+    {
+      categoryName : '항공',
+      proportion : 22.2,
+      balance:121000
+    },
+		{
+		categoryName : '기타',
+		proportion : 30.5,
+		balance:121000
+		}
+	],
+	consumptionByMember: [
+		{
+      member : {
+      memberId: 3,
+      memberName: "전가현",
+      profileImage: profileImageUrl
+      },
+		proportion : 38.3,
+		balance :23000
+		},
+		{
+      member : {
+        memberId: 3,
+        memberName: "강두홍",
+        profileImage: profileImageUrl
+        },
+		proportion : 38.3,
+		balance :23000
+		},
+    {
+      member : {
+        memberId: 3,
+        memberName: "김훈민",
+        profileImage: profileImageUrl
+        },
+		proportion : 38.3,
+		balance :23000
+		},
+    {
+      member : {
+        memberId: 3,
+        memberName: "박진우",
+        profileImage: profileImageUrl
+        },
+		proportion : 38.3,
+		balance :23000
+		},
+	]
+}

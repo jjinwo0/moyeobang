@@ -13,13 +13,13 @@ const pieStyle = css`
 `;
 
 interface PieChartProps {
-  consumptionCategory: {categoryName: string; percent: number}[];
+  consumptionByCategory: {categoryName: string; proportion: number}[];
 }
 
-export function PieChartComponent({consumptionCategory}: PieChartProps) {
-  const data = consumptionCategory.map(category => ({
+export function PieChartComponent({consumptionByCategory}: PieChartProps) {
+  const data = consumptionByCategory.map(category => ({
     name: category.categoryName,
-    value: category.percent,
+    value: category.proportion,
   }));
 
   const COLORS = [colors.third, colors.second, colors.fifth, colors.first];

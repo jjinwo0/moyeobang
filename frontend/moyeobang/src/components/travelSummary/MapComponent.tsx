@@ -125,6 +125,7 @@ import {GoogleMap, useJsApiLoader} from '@react-google-maps/api';
 import axios from 'axios';
 // import hearIcon from '@/assets/icons/hearIcon.png';
 import hearIcon from '@/assets/icons/heartIcon.webp';
+import Spinner from '@/components/Sipnner/Spinner';
 
 interface MapProps {
   locationList: {latitude: number; longitude: number}[];
@@ -145,7 +146,7 @@ export default function MapComponent({
   });
 
   const mapRef = useRef<google.maps.Map | null>(null);
-  const [center, setCenter] = useState<Coordinates | null>(null);
+  // const [center, setCenter] = useState<Coordinates | null>(null);
 
   // Geocoding API를 이용해 장소 이름에서 위도, 경도를 가져오는 함수
   const getCoordinatesFromPlace = async (
@@ -207,13 +208,38 @@ export default function MapComponent({
     }
   };
 
+  // 마커를 생성하는 함수
+  const createMarkers = (map: google.maps.Map) => {
+    console.log(locationList);
+    locationList.forEach(location => {
+      new google.maps.Marker({
+        map,
+        position: {lat: location.latitude, lng: location.longitude},
+        // icon: {
+        //   path: google.maps.SymbolPath.CIRCLE, // 기본 마커 대신 원형 심볼
+        //   fillColor: '#FF0000', // 마커 색상 (빨간색)
+        //   fillOpacity: 1, // 색상 불투명도
+        //   strokeWeight: 2, // 테두리 두께
+        //   strokeColor: '#FFFFFF', // 테두리 색상 (흰색)
+        //   scale: 8, // 크기 (값을 키워서 확대)
+        // },
+        icon: {
+          url: hearIcon, // hearIcon 이미지를 마커로 사용
+          size: new google.maps.Size(18, 18), // 원본 이미지 크기 설정
+          scaledSize: new google.maps.Size(18, 18), // 이미지 크기 조정
+        },
+      });
+    });
+  };
+
   const handleMapLoad = (map: google.maps.Map) => {
     mapRef.current = map;
     fetchAndSetBounds(map); // 지도 로드 시 travelPlaceList를 기준으로 fitBounds 적용
+    createMarkers(map);
   };
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (

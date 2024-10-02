@@ -1,23 +1,24 @@
 // 영수증 => 원래 데이터 형태로 변환해주는 함수
 
 export function extractItems(
-  parsedData: ChatJsonProps, 
+  itemsData: OcrItem[], 
   transactionId: TransactionId,
   createdAt: CreatedAt,
   money: Money,
   paymentName: PaymentName,
-  address: Adress
+  address: Adress,
+  acceptedNumber: AcceptedNumber
 ): TransactionDetailByReceipt {
 
-  let itemId = 1;
+  let itemId : number= 1;
 
-  const details = parsedData.items.map((product: ChatItem) => {
+  const details = itemsData.map((item: OcrItem) => {
 
     const orderItem : SettledItemByReceipt = {
       orderItemId: itemId,
-      orderItemTitle: product.item_name,
-      orderItemQuantity: product.quantity,
-      orderItemPrice: product.price,
+      orderItemTitle: item.name,
+      orderItemQuantity: item.count,
+      orderItemPrice: item.price,
       participants: [] // 빈 배열로 설정
     }
     
@@ -31,11 +32,12 @@ export function extractItems(
   const receiptData : TransactionDetailByReceipt = {
     transactionId: Number(transactionId),
     paymentName: paymentName,
-    adress: address, // address 필드 수정
+    address: address, // address 필드 수정
     money: money,
     details: details,
     createdAt: createdAt, // 시간
-    splitMethod:"receipt"
+    splitMethod:"receipt",
+    acceptedNumber:acceptedNumber
   };
 
   return receiptData

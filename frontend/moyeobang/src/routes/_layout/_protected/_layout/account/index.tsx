@@ -5,11 +5,17 @@ import { useState } from "react";
 import Navbar from "@/components/common/navBar/Navbar";
 import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
-import AccountCard from '@/components/Account/AccountCard/AccountCard';
+// import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
-import { profileData, transactions } from "@/data/data";
+import { profileData} from "@/data/data";
 import moyeobang from '@/services/moyeobang';
 import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
+import Spinner from '@/components/Sipnner/Spinner';
+import { proportionData } from '@/data/data';
+import { isAccountBalanceByGroup } from '@/util/typeGaurd';
+import CardSlider from '@/components/Account/CardSlider/CardSlider';
+import ChartDetailCard from '@/components/Account/Chart/ChartDetailCard';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: groupAccount
@@ -18,18 +24,23 @@ export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
 const layoutStyle = css`
     max-width: 100%;
     margin-top: 50px;
-
     display: flex;
     flex-direction: column;
+    align-items:center;
     height:100%;
-
+    gap:10px;
 `;
 
 const profileListStyle = css`
     display: flex;
     flex-direction: row;
-    padding: 15px;
-    gap: 15px;
+    justify-content:flex-start;
+    align-items:center;
+    padding: 10px 0;
+    padding-left:10px;
+    box-sizing:border-box;
+    gap: 10px;
+    width: 370px;
 
     overflow-x: auto;
 
@@ -42,7 +53,6 @@ const accountCardStyle = css`
     max-width: 100%;
     display:flex;
     justify-content: center;
-    padding: 20px;
 `;
 
 const transactionListStyle = css`
@@ -51,23 +61,42 @@ const transactionListStyle = css`
   flex-direction: column;
   align-items: center;
 
-  max-height: 400px; 
+  max-height: 390px; 
   overflow-y: auto; 
   width: 100%;
 
   &::-webkit-scrollbar {
     display: none; 
   }
-`
-const accountId = 1;
+`;
+
+const chartListStyle=css`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:10px;
+
+  height: 378px; 
+  overflow-y: auto; 
+  width: 100%;
+
+  &::-webkit-scrollbar {
+    display: none; 
+  }
+`;
+
 export default function groupAccount() {
 
   const allList = profileData.map((member) => member.memberId)
   type SelectedMember = MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
+  const [index, setIndex] = useState<number>(0);
+  const {accountId} = useTravelDetailStore();
 
+  // get 모임 통장 거래 전체 리스트
   const {data : transactionData} = useSuspenseQuery({
-    queryKey: ['transactionList', accountId, selectedMember ],
+    queryKey: ['transactionList', accountId, selectedMember],
     queryFn: () => moyeobang.getTransactionList(Number(accountId), selectedMember),
   });
 
@@ -80,32 +109,23 @@ export default function groupAccount() {
 
   //get 모임 통장 개인별 잔액
   const { data : accountDataByMember } = useQuery({
-    queryKey: ['accountByMemberId', accountId, selectedMember],
+    queryKey: ['accountByMemberId', accountId, selectedMember[0]],
     queryFn: () => {
-      if (!Array.isArray(selectedMember)) {
-        return moyeobang.getAccountStateBymemberId(accountId, selectedMember)
+      if ( selectedMember.length==1 && selectedMember[0]) {
+        return moyeobang.getAccountStateBymemberId(accountId, selectedMember[0])
       }
     },
-    enabled: selectedMember.length==1 // 개인별
+    enabled: selectedMember.length==1 && selectedMember !== undefined && accountId !== undefined,// 개인별
   });
 
   const transactionListData = transactionData.data.data;
-  // const transactionListData = transactions;
-
-
-  // 타입 가드 함수
-  function isAccountBalanceByGroup(
-    accountData: AccountBalanceByGroup | AccountBalanceBymemberId
-  ): accountData is AccountBalanceByGroup {
-    return (accountData as AccountBalanceByGroup).totalMoney !== undefined;
-  }
 
   const accountData = selectedMember.length > 1 
     ? accountDataByGroup?.data.data 
     : accountDataByMember?.data.data;
 
   if (!accountData) {
-    return <div>Loading...</div>;
+    return <Spinner/>;
   }
 
   function onMemberClick(memberId : MemberId | null) {
@@ -119,44 +139,78 @@ export default function groupAccount() {
     }
   }  
 
+  function handleIndexChange(index:number) {
+    setIndex(index)
+  }
+
   return (
     <>
     <div css={layoutStyle}>
         <div css={profileListStyle} >
         <AllImage
-        isSelected={Array.isArray(selectedMember)}
+        isSelected={selectedMember.length>1}
         onClick={() => onMemberClick(null)}
         />
         { profileData.map((profile, index) => (
             <ProfileImage 
             key={index} 
             {...profile} 
-            isSelected={Array.isArray(selectedMember) ? false : profile.memberId === selectedMember } 
+            isSelected={selectedMember.length!==1 ? false : selectedMember.includes(profile.memberId) } 
             onClick={() => onMemberClick(profile.memberId)} />
         ))}
         </div>
         <div css={accountCardStyle} >
-          {isAccountBalanceByGroup(accountData)  ? 
-            <AccountCard 
-            currentBalance={accountData.currentBalance}
-            travelAccountNumber={'333333-12-8912312'}
-            travelName={'아기돼지 오형제'}
-            /> 
-            :
-            <AccountCard 
-            currentBalance={accountData.personalCurrentBalance}
-            travelAccountNumber={'333333-12-8912312'}
-            travelName={'아기돼지 오형제'}
-            memberName={accountData.participant.memberName}
+          {isAccountBalanceByGroup(accountData)  ?
+            <CardSlider 
+            account={accountData} 
+            consumptionProportionByCategory={proportionData.consumptionByCategory}
+            consumptionProportionByMember={proportionData.consumptionByMember}
+            dots={[0,1,2]}
+            onChange={handleIndexChange}
+            /> :
+            <CardSlider 
+            account={accountData}
+            consumptionProportionByCategory={proportionData.consumptionByCategory}
+            dots={[0,1]}
+            onChange={handleIndexChange}
             />
           }
         </div>
-        <div css={transactionListStyle}>
-            {transactionListData.map((tran, index) => 
-                <TransactionCard key={index} {...tran} />
-            )}
+          {isAccountBalanceByGroup(accountData) ? 
+          (
+              index === 0 ? 
+              <div css={transactionListStyle}>
+                {transactionListData.reverse().map((tran, index) => 
+                    <TransactionCard key={index} {...tran} /> 
+                )}
+              </div> :
+                index === 1 ?
+                <div css={chartListStyle}>
+                  {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
+                  <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
+                  )}
+                </div> :
+                <div css={chartListStyle}>
+                {proportionData.consumptionByMember.sort((a,b) => b.proportion -a.proportion).map((member, index) =>
+                <ChartDetailCard key={index} title={member.member.memberName} proportion={member.proportion} balance={member.balance} profileImage={member.member.profileImage} colorIndex={index}/>
+                )}
+                </div>
+              ) :
+                index === 0 ? 
+                <div css={transactionListStyle}>
+                {transactionListData.reverse().map((tran, index) => 
+                    <TransactionCard key={index} {...tran} />
+                )}
+                </div> :
+                index === 1 ?
+                <div css={transactionListStyle}>
+                  {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
+                  <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance} colortIndex={index}/>
+                )}
+                </div> :
+                undefined
+        }
         </div>
-    </div>
     <Navbar/>
     </>
   )

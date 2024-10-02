@@ -71,7 +71,7 @@ export function BarChartComponent({totalAmount, amountUsed}: BarChartProps) {
               fontSize: 12,
               fill: colors.lightBlack,
             }}
-            tickFormatter={tick => tick} // X축에 표시할 레이블을 설정
+            tickFormatter={tick => tick || ''} // X축에 표시할 레이블을 설정
             interval={0} // 모든 레이블을 다 표시
             axisLine={false} // X축 선 숨기기
             tickLine={false} // X축 틱 라인 숨기기

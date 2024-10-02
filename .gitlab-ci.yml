@@ -1,0 +1,64 @@
+stages:
+  - test
+  - report
+
+unit_test_job:
+  stage: test
+  tags:
+    - test
+  script:
+    - cd ./backend
+    - mkdir -p src/main/resources/firebase
+    - curl -o src/main/resources/firebase/moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json https://moyeobang.s3.ap-southeast-2.amazonaws.com/moyeobang-d1dec-firebase-adminsdk-6uakm-bf0a8d2044.json
+    - ./gradlew test
+  artifacts:
+    when: always
+    paths:
+      - backend/build/test-results/test/
+    reports:
+      junit:
+        - backend/build/test-results/test/**/*.xml
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
+      when: on_success
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "frontend"
+      when: never
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+      when: never
+
+result_report_job:
+  stage: report
+  tags:
+    - test
+  script:
+    - |
+      TEST_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<tests" {} \; | wc -l)
+      FAIL_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<failure" {} \; | wc -l)
+      SKIP_COUNT=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -o "<skipped" {} \; | wc -l)
+      DURATION=$(find backend/build/test-results/test/ -name "*.xml" -exec grep -oP "(?<=time=\")[^\"]+" {} \; | awk "{sum+=\$1} END {print sum}")
+
+    - echo $TEST_COUNT
+    - echo $FAIL_COUNT
+    - echo $SKIP_COUNT
+    - echo $DURATION
+
+    - |
+      curl -v --request POST --header "PRIVATE-TOKEN: $TEAM_API_TOKEN" \
+      --data-urlencode "body=## Unit Test Results   
+      **✔ $TEST_COUNT tests**, **❌ $FAIL_COUNT failures**, **💤 $SKIP_COUNT skipped**   
+         
+      **⏱️ Time taken: ${DURATION}s**   
+         
+      Results for commit [$CI_COMMIT_SHORT_SHA]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)" \
+      "https://lab.ssafy.com/api/v4/projects/$CI_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes"
+
+  dependencies:
+    - unit_test_job
+
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "backend"
+      when: on_success
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "frontend"
+      when: never
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+      when: never

@@ -35,9 +35,15 @@ const timeStyle = css`
   margin-bottom: 5px;
 `;
 
+const requestStyle = css`
+  font-family: 'regular';
+  font-size: 18px;
+  margin-top: 3px;
+`;
+
 const travelName: string = '아기돼지오형제';
 
-const nickName: Nickname = '훈민';
+const memberName: MemberName = '훈민';
 
 export default function HurryNotification() {
   return (
@@ -48,11 +54,10 @@ export default function HurryNotification() {
           <p css={timeStyle}>2024.09.03 13:10</p>
           <span css={titleStyle}>{travelName}</span>
           <span css={textStyle}>
-            에서 <span css={titleStyle}>{nickName}</span>님의 몫이
+            에서 <span css={titleStyle}>{memberName}</span>님의 몫이
             300,000원(20%) 밖에 남지 않았어요!
-            <br />
-            개인입금을 통해 통장에 돈을 채워주세요!
           </span>
+          <p css={requestStyle}>개인입금을 통해 통장에 돈을 채워주세요!</p>
         </div>
       </div>
     </div>

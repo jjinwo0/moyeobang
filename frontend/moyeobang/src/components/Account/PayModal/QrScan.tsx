@@ -87,6 +87,7 @@ export default function QrScan() {
                 {
                     onDecodeError : onScanFail,
                     preferredCamera : "environment", // 후면지향
+                    maxScansPerSecond:2, // 1초당 2번
                     highlightScanRegion : true, // ? 알아보기
                     highlightCodeOutline : true, // QR주변 윤곽선 생성
                     overlay : qrBoxElement?.current || undefined,
@@ -150,7 +151,7 @@ export default function QrScan() {
                 </>
             }
                 { scannedResult && (
-                    <div>결제완료.</div>
+                    <div>결제완료.!(QrScan컴포넌트)</div>
                     // <PayCompletedModal onClose={handleClose} transactionId={transactionId}/>
                     // <p css={resultStyle}>
                     //     스캔 결과 : {scannedResult}

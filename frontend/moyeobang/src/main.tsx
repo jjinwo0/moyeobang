@@ -35,7 +35,7 @@ if (!rootElement.innerHTML) {
     <QueryClientProvider client={queryClient}>
       <LoadScript googleMapsApiKey={mapAPI}>
         <RouterProvider router={router} />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={true} />
         {/* Devtools 추가 */}
       </LoadScript>
     </QueryClientProvider>

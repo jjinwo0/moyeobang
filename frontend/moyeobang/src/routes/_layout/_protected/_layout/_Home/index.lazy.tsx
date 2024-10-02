@@ -10,18 +10,17 @@ import plusButton from '@/assets/icons/plusButton.png';
 import CreateTravel from '@/components/travelHome/CreateTravel.tsx';
 import useModalStore from '@/store/useModalStore';
 import NoTravel from '@/components/travelHome/NoTravel';
-import TravelSummaryModal from '@/components/travelSummary/travelSummaryModal';
-import useTravelStore from '@/store/useTravelStore';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import AllowNotification from '@/components/notification/AllowNotification';
 
 const data: Travel[] = [
   {
     travelId: 1,
-    travelName: '여행제목1',
-    travelImg: null,
+    travelName: '여행이름1',
+    travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
     participantsCount: 4,
     startDate: '2024-09-10',
     endDate: '2024-09-13',
@@ -33,22 +32,22 @@ const data: Travel[] = [
     participantsInfo: [
       {
         memberId: 1,
-        nickname: '홍길동',
+        memberName: '홍길동',
         profileImage: 'https://example.com/images/honggildong.jpg',
       },
       {
         memberId: 2,
-        nickname: '김철수',
+        memberName: '김철수',
         profileImage: 'https://example.com/images/kimcheolsu.jpg',
       },
       {
         memberId: 3,
-        nickname: '이영희',
+        memberName: '이영희',
         profileImage: 'https://example.com/images/leeyounghee.jpg',
       },
       {
         memberId: 4,
-        nickname: '박민수',
+        memberName: '박민수',
         profileImage: 'https://example.com/images/parkminsu.jpg',
       },
     ],
@@ -68,29 +67,36 @@ const data: Travel[] = [
     participantsInfo: [
       {
         memberId: 1,
-        nickname: '홍길동',
+        memberName: '홍길동',
         profileImage: 'https://example.com/images/honggildong.jpg',
       },
       {
         memberId: 2,
-        nickname: '김철수',
+        memberName: '김철수',
         profileImage: 'https://example.com/images/kimcheolsu.jpg',
       },
       {
         memberId: 3,
-        nickname: '이영희',
+        memberName: '이영희',
         profileImage: 'https://example.com/images/leeyounghee.jpg',
       },
       {
         memberId: 4,
-        nickname: '박민수',
+        memberName: '박민수',
         profileImage: 'https://example.com/images/parkminsu.jpg',
       },
     ],
   },
 ];
 
-const nickName: Nickname = '진우바오';
+const memberName: MemberName = '진우바오';
+
+const memberData: Member = {
+  memberId: 1,
+  memberName: '진우바오',
+  profileImage: 'https://example.com/images.jpg',
+  accountNumber: '123456789123', // 모여방과 연결된 계좌
+};
 
 const containerStyle = css`
   display: flex;
@@ -171,21 +177,23 @@ const plusStyle = css`
   right: 25px; /* 오른쪽에서 25px 떨어진 위치 */
   width: 48px;
   height: 48px;
-  z-index: 100; /* 다른 요소 위에 위치하도록 설정 */
+  z-index: 50; /* 다른 요소 위에 위치하도록 설정 */
 `;
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [travelSummaryModal, setTravelSummaryModal] = useState<boolean>(false);
-  // const {setNowTravelData} = useTravelContext();
+  const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
 
-  // //get으로 여행 목록 전체 조회하기
-  // const {data} = useSuspenseQuery({
+  // //[todo] get으로 여행 목록 전체 조회하기
+  // const {data:travelData} = useSuspenseQuery({
   //   queryKey: ['travelList'],
-  //   queryFn: () => moyeobang.getTravelList(),
+  //   //memberId는 쥬스탄드에서 꺼내쓰기!
+  //   queryFn: () => moyeobang.getTravelList(4), // 일단은 4번 회원 데이터 조회
   // });
+
+  // const data = travelData?.data.data;
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -193,16 +201,17 @@ function Index() {
   };
 
   const today = normalizeDate(new Date());
+  // console.log(today);
 
   // 날짜를 변환한 후 비교
-  const upcomingTrips = data.filter(
-    item => normalizeDate(new Date(item.startDate)) > today
+  const upcomingTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) => normalizeDate(new Date(item.startDate)) > today
   );
-  const pastTrips = data.filter(
-    item => normalizeDate(new Date(item.endDate)) < today
+  const pastTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) => normalizeDate(new Date(item.endDate)) < today
   );
-  const currentTrips = data.filter(
-    item =>
+  const currentTrips = (data as unknown as Travel[]).filter(
+    (item: Travel) =>
       normalizeDate(new Date(item.startDate)) <= today &&
       normalizeDate(new Date(item.endDate)) >= today
   );
@@ -223,17 +232,13 @@ function Index() {
     upcomingTrips.length === 0 &&
     pastTrips.length === 0;
 
-  const handleTravelSummary = (travel: Travel) => {
-    //여행 기록 페이지로 이동
-    clickTravelCard(travel);
-    setTravelSummaryModal(true);
-  };
-
   const router = useRouter();
   const clickTravelCard = (travel: Travel) => {
     console.log('Clicked travel:', travel.travelId); // 어떤 여행이 클릭되었는지 확인
     setTravelData({
+      travelId: travel.travelId,
       travelName: travel.travelName,
+      travelImg: travel.travelImg,
       startDate: travel.startDate,
       endDate: travel.endDate,
       travelPlaceList: travel.travelPlaceList,
@@ -249,12 +254,17 @@ function Index() {
 
   const closeTravelSummary = () => {
     setTravelSummaryModal(false);
+    router.navigate({to: `/travelLog`});
   };
 
   const goSettingPage = () => {
     router.navigate({
-      to: `/profile/${nickName}`,
+      to: `/profile/${memberName}`,
     });
+  };
+
+  const closePush = () => {
+    setPushNotification(false);
   };
 
   return (
@@ -262,13 +272,15 @@ function Index() {
       {/* <HeaderWithAlarmAndQR /> */}
       <div css={descriptionStyle}>
         <div css={nickNameTextContainer}>
-          <p css={nickNameStyle}>{nickName}의</p>
+          <p css={nickNameStyle}>{memberName}의</p>
           <span css={textStyle}>
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
         </div>
         <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
       </div>
+
+      {pushNotification && <AllowNotification onClose={closePush} />}
 
       {noTripsAvailable ? (
         <NoTravel />
@@ -288,6 +300,7 @@ function Index() {
                   quizQuestion={trip.quizQuestion} // quizQuestion 전달
                   quizAnswer={trip.quizAnswer} // quizAnswer 전달
                   onClick={() => clickTravelCard(trip)}
+                  travelImg={trip.travelImg}
                 />
               ))}
             </div>
@@ -310,6 +323,7 @@ function Index() {
               tripsToDisplay.map(item => (
                 <TravelCard
                   key={item.travelId}
+                  travelId={item.travelId}
                   travelName={item.travelName}
                   startDate={item.startDate}
                   endDate={item.endDate}
@@ -317,11 +331,9 @@ function Index() {
                   participantsCount={item.participantsCount}
                   quizQuestion={item.quizQuestion}
                   quizAnswer={item.quizAnswer}
-                  onClick={
-                    activeTab === 'past'
-                      ? () => handleTravelSummary(item)
-                      : () => clickTravelCard(item)
-                  }
+                  onClick={() => clickTravelCard(item)}
+                  activeTab={activeTab}
+                  travelImg={item.travelImg}
                 />
               ))
             ) : (
@@ -340,10 +352,6 @@ function Index() {
       <img src={plusButton} css={plusStyle} onClick={openModal} />
 
       {isModalOpen && <CreateTravel onClose={closeModal} />}
-
-      {travelSummaryModal && (
-        <TravelSummaryModal onClose={closeTravelSummary} />
-      )}
     </>
   );
 }

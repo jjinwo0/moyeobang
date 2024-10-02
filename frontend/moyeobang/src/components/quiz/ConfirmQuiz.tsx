@@ -3,14 +3,17 @@ import {css} from '@emotion/react';
 import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
 import clipboardIcon from '@/assets/icons/clipboardIcon.png';
+import {useSuspenseQuery} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
-const data: Quiz = {
-  id: 1,
-  question: '문제요',
-  answer: '답이어라',
+// const invitationLink: InvitationLink = 'https://yourapp.com/invite-link';
+
+// 초대 링크 생성 함수
+const createInvitaionLink = (travelId: number) => {
+  const baseUrl = window.location.origin;
+  const secureToken = Math.random().toString(36).substr(2); // 랜덤 토큰 생성
+  return `${baseUrl}/quiz/${travelId}?moyeobang=${secureToken}`;
 };
-
-const invitationLink: InvitationLink = 'https://yourapp.com/invite-link';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -106,10 +109,20 @@ const englishStyle = css`
 `;
 
 interface ConfirmQuizProps {
+  travelId: number;
   onClose: () => void;
+  quizQusetion: string;
+  quizAnswer: string;
 }
 
-export default function ConfirmQuiz({onClose}: ConfirmQuizProps) {
+export default function ConfirmQuiz({
+  onClose,
+  travelId,
+  quizQusetion,
+  quizAnswer,
+}: ConfirmQuizProps) {
+  const invitationLink = createInvitaionLink(travelId);
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(invitationLink);
     alert('초대 링크가 복사되었습니다.');
@@ -129,11 +142,11 @@ export default function ConfirmQuiz({onClose}: ConfirmQuizProps) {
 
         <div css={questionStyle}>
           <span css={englishStyle}>Q</span>
-          <span>{data.question}</span>
+          <span>{quizQusetion}</span>
         </div>
         <div css={answerStyle}>
           <span css={englishStyle}>A</span>
-          <span>{data.answer}</span>
+          <span>{quizAnswer}</span>
         </div>
 
         {/* 확인 버튼 */}

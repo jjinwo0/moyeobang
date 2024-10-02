@@ -11,6 +11,8 @@ import {ko} from 'date-fns/locale';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
+import Confetti from "../Confetti/Confetti";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 export interface CustomSettle {
     participantInfo: ParticipantInfo
@@ -26,13 +28,15 @@ interface SettleByCustomComponenetProps {
     totalMoney: Money;
     createdAt: CreatedAt;
     details: SettledParticipantByCustom[];
+    acceptedNumber:AcceptedNumber;
     // splitMethod: SplitMethod; // 'custom'
+    isUpdate:boolean;
 }
 
 // 결제 후 데이터
 // money(totalMoney), transactionId, createdAt, paymentName, 와 모임통장 회원 정보 필요
 
-export default function SettleByCustomComponent({transactionId, totalMoney, paymentName, createdAt, details} : SettleByCustomComponenetProps) {
+export default function SettleByCustomComponent({transactionId, totalMoney, paymentName, createdAt, details, acceptedNumber, isUpdate} : SettleByCustomComponenetProps) {
     const [ settleData , setSettleData ] = useState<CustomSettle[]>([]);
     const [ remainMoney, setRemainMoney ] = useState<number>(0);
     const [ isAll, setIsAll ] = useState<boolean>(true);
@@ -41,22 +45,41 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
     const [ confirmData, setConfirmData ] = useState<CustomSettle[]>([]);
     const navigate = useNavigate({from:'/account/$transactionId/settle'});
     const queryClient = useQueryClient();
-
-
+    const [isOpenPresentModal, setIsOpenPresentModal] = useState<boolean>(false);
+    const [presentMoney, setPresentMoney] = useState<number>(0);
+    const {travelId} = useTravelDetailStore();
+    
+    // 직접 정산 API
     const {mutate: updateCustom } = useMutation({
-        mutationFn: ({transactionId, data} : {transactionId: TransactionId, data: PostTransactionDetailByCustom}) => moyeobang.postSettleByCustom(transactionId, data),
+        mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByCustom}) => moyeobang.postSettleByCustom(transactionId, travelId, data),
         onSuccess: async () => {
         await queryClient.invalidateQueries({
             queryKey: ['transactionDetail', transactionId],
             refetchType: 'all',
         });
-        await navigate({to: '/account/$transactionId/detail'});
+        await navigate({to: `/account/${transactionId.toString()}/detail`});
         },
      });
 
-    // 초기 참여자 정산 데이터 설정
+
     useEffect(()=> {
-        if (profileData.length > 0 && details) {
+        // 새로 들어온거 details=[] 여기에 default 1/n해주기
+        if (!isUpdate) {
+
+            const initialSettle = profileData.map(member => {
+                return {
+                    participantInfo : member,
+                    money : totalMoney/profileData.length ,
+                    isChecked: true,
+                    isDecided:false, // 초기 아무도 확정아님.
+                };
+            })
+            setSettleData(initialSettle);
+            setRemainMoney(0);
+        } 
+        // 수정일 때 details있음.
+        else if (details && details.length > 0) {
+
             const initialSettle = profileData.map(member => {
                 const prevMember = details.find((detail) => detail.participant.memberId === member.memberId);
                 return {
@@ -65,10 +88,11 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     isChecked: prevMember ? true : false,
                     isDecided:false, // 초기 아무도 확정아님.
                 }
-        });
+            });
             setSettleData(initialSettle);
+            setRemainMoney(0);
         }
-    }, [profileData])
+    }, [profileData, details, totalMoney, isUpdate])
 
     // 총액만큼 정산되어야 정산 가능.
     useEffect(() => {
@@ -88,7 +112,6 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
     }
 
     // 최종확인에서 확인완료 후 정산하기 
-    // isNew(true) 처음 | isNew(false) 원래 데이터 들고옴
     function handleSettle() {
         const info = settleData
         .filter(user => user.money > 0) // 금액이 있는 유저
@@ -102,9 +125,10 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             money:totalMoney, 
             info : info,
             splitMethod : 'custom', 
+            acceptedNumber: acceptedNumber,
         }
-        console.log(spendData)
-        updateCustom({transactionId, data:spendData})
+        console.log('POST 전송 데이터 확인',spendData)
+        updateCustom({transactionId, travelId,  data:spendData})
         setIsOpenFinalModal(false);
     }
 
@@ -153,13 +177,23 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         
         // 체크된 사람이면서 아직 금액측정 안된사람
         const checkedCount = settleData.filter(user => user.isChecked && user.money===0).length; 
+        if (checkedCount===0) { return }
         const currentTotal = settleData.reduce((total, user) => total + (user.money>0? user.money : 0), 0); 
-        const remainingAmount = totalMoney - currentTotal
+        const remainingAmount = totalMoney - currentTotal // 전체 금액 - 현재까지 정산된 총금액
+        // 체크된 사람들이 정산할 금액
+        const dutchMoney = Math.floor( remainingAmount / checkedCount);
+        const realRemain = remainingAmount - (dutchMoney*checkedCount);
+        setPresentMoney(realRemain);
 
+        console.log('남은돈', realRemain)
+        if (realRemain) {
+            setIsOpenPresentModal(true);
+        }
         setSettleData(prevData =>
             prevData.map(user => 
                 user.isChecked && user.money==0 ? 
-                {...user, money: Math.ceil( remainingAmount / checkedCount), isDecided:true} :
+                // 소수점 버림
+                {...user, money: dutchMoney, isDecided:true} :
                 {...user, isDecided:true}
             )
         )
@@ -186,8 +220,13 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         setIsOpenFinalModal(false);
     }
 
+    function handleClosePresentModal() {
+        setIsOpenPresentModal(false);
+    }
+
     return (
         <>
+        { isOpenPresentModal && <Confetti remainMoney={presentMoney} onClose={handleClosePresentModal}/>}
         { isOpenFinalModal && 
             <FinalModal 
             onClickOutside={handleClickOutside} 
@@ -221,7 +260,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     key={index}
                     memberId={user.participantInfo.memberId}
                     profileImage={user.participantInfo.profileImage}
-                    nickname={user.participantInfo.nickname}
+                    memberName={user.participantInfo.memberName}
                     isChecked={user.isChecked}
                     isDecided={user.isDecided}
                     money={user.money}
@@ -238,12 +277,12 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     <Btn 
                     buttonStyle={{ size:'big', style:'blue'}}
                     onClick={handleConfirm}
-                    >정산하기
+                    >{ isUpdate ? '수정 완료' : '정산하기'}
                     </Btn> 
                 ) : ( 
                     <Btn 
                     buttonStyle={{ size:'big', style:'gray'}}
-                    >정산하기
+                    >{ isUpdate ? '수정 완료' : '정산하기'}
                     </Btn>
                 )
                 }

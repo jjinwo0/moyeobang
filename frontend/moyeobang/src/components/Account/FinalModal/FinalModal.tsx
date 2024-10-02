@@ -118,7 +118,7 @@ export default function FinalModal({onClickOutside, onClick, confirmData, totalM
                     key={index}
                     memberId={user.participantInfo.memberId}
                     profileImage={user.participantInfo.profileImage}
-                    nickname={user.participantInfo.nickname}
+                    memberName={user.participantInfo.memberName}
                     isChecked={true}
                     money={user.money}
                     />
