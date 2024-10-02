@@ -9,6 +9,8 @@ import SettingBox from '@/components/travelHome/SettingBox';
 // import {useLocation} from '@tanstack/react-router';
 import {useMatch} from '@tanstack/react-router';
 import BackButton from '@/components/common/Header/ButtonIcon/BackButton';
+import {useSuspenseQuery} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 export const Route = createFileRoute(
   '/_layout/_protected/_layout/profile/$memberName'
@@ -79,8 +81,27 @@ const blurStyle = css`
   z-index: 1;
 `;
 
+const data: ResponseGetProfile = {
+  memberId: 1,
+  memberName: '진우바오',
+  profileImage: 'https://example.com/images.jpg',
+  bankName: '싸피뱅크', // 일단 추가
+  accountNumber: '123456789123', // 모여방과 연결된 계좌
+};
+
 export default function profile() {
   // useMatch를 사용해 URL 파라미터로 전달된 nickName 가져오기
+
+  // //[todo] 프로필 조회 api 연결 필요(로그인 했을 때 바로 이 api 사용..?)
+  // const {data: UserProfile} = useSuspenseQuery({
+  //   queryKey: ['userInfo'],
+  //   queryFn: () => moyeobang.getMyProfile(),
+  // });
+
+  // const data = UserProfile?.data.data;
+
+  // console.log(data);
+
   const {
     params: {memberName}, // URL 파라미터에서 nickName 가져오기
   } = useMatch('/_layout/_protected/_layout/profile/$memberName'); // 라우트와 매칭

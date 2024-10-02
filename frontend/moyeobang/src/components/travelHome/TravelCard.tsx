@@ -52,8 +52,12 @@ const dateStyle = css`
 `;
 
 const locationStyle = css`
+  width: 290px;
   font-size: 20px;
   font-family: 'semibold';
+  white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
 `;
 
 const settingIconStyle = css`
@@ -190,6 +194,8 @@ export default function TravelCard({
 
   const handleExitModalOpen = (e: React.MouseEvent) => {
     e.stopPropagation(); // 이벤트 전파를 막음
+    console.log('나가기클릭');
+    console.log(travelId);
     setExitModal(true);
     setSettingButtonClick(prev => !prev);
   };
@@ -281,7 +287,7 @@ export default function TravelCard({
           <CreateTravel
             onClose={closeEditModal}
             isEditMode={true}
-            // travelId={travelId}
+            travelId={travelId}
             initialData={{
               travelName: travelName,
               startDate: formatDate(startDate),

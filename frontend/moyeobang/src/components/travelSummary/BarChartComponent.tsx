@@ -15,7 +15,6 @@ import {colors} from '@/styles/colors';
 const chartContainerStyle = css`
   width: 100%;
   height: 160px; /* 차트 높이 낮추기 */
-  // height: 100%;
 `;
 
 // Emotion 스타일 정의
@@ -30,6 +29,13 @@ interface BarChartProps {
   amountUsed: number;
 }
 
+// Adjust CustomLabelProps to handle optional types and undefined values
+interface CustomLabelProps {
+  x?: number | string;
+  y?: number | string;
+  value?: number | string;
+}
+
 export function BarChartComponent({totalAmount, amountUsed}: BarChartProps) {
   // 데이터 구조 설정
   const chartData = [
@@ -42,26 +48,20 @@ export function BarChartComponent({totalAmount, amountUsed}: BarChartProps) {
   const barColors = [colors.gray, colors.second, colors.first];
 
   // CustomLabel 컴포넌트: 각 막대 위에 커스텀 레이블 표시
-  const CustomLabel = (props: any) => {
-    const {x, y, value} = props;
-
-    return (
-      <text
-        x={x + 20} // 레이블 위치 조정
-        y={y - 5} // 레이블 위치 조정
-        css={labelStyle} // Emotion 스타일 적용
-        textAnchor="middle"
-      >
-        {value !== null && value !== undefined ? value : '0'}원
-      </text>
-    );
-  };
+  const CustomLabel = ({x, y, value}: CustomLabelProps) => (
+    <text
+      x={Number(x) + 20} // 레이블 위치 조정 (x를 숫자로 변환)
+      y={Number(y) - 5} // 레이블 위치 조정 (y를 숫자로 변환)
+      css={labelStyle} // Emotion 스타일 적용
+      textAnchor="middle"
+    >
+      {value !== null && value !== undefined ? `${value}원` : '0원'}
+    </text>
+  );
 
   return (
     <div css={chartContainerStyle}>
       <ResponsiveContainer width="100%" height={160}>
-        {' '}
-        {/* 차트 높이 조정 */}
         <BarChart data={chartData}>
           {/* X축 */}
           <XAxis
@@ -78,7 +78,7 @@ export function BarChartComponent({totalAmount, amountUsed}: BarChartProps) {
           />
           {/* Y축 추가하여 totalAmount에 맞춰 범위 설정 */}
           <YAxis domain={[0, totalAmount * 1.3]} hide={true} />{' '}
-          {/* 범위를 1.1배로 줄여서 그래프를 조금 낮춤 */}
+          {/* 범위를 1.3배로 조정 */}
           <Tooltip />
           <Bar dataKey="value" barSize={35} radius={[8, 8, 8, 8]}>
             {/* 막대 위에 값 표시 */}

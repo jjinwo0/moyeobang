@@ -211,7 +211,7 @@ export default function ConsumptionRank({
                       css={participantContainerStyle}
                     >
                       <img
-                        src={participant.categoryName.profileImage}
+                        src={participant.categoryName.profileImage || bangBang}
                         alt={participant.categoryName.memberName}
                         css={imageStyle}
                       />

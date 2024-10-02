@@ -2,9 +2,9 @@ import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 
 interface TravelState
-  extends Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantsCount'> {
+  extends Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantCount'> {
   setTravelData: (
-    data: Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantsCount'>
+    data: Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantCount'>
   ) => void;
 }
 

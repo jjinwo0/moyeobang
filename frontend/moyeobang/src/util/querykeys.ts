@@ -3,8 +3,9 @@ export default {
   ACCOUNT_BYMEMBERID: 'accountByMemberId',
   TRANSACTION_LIST: 'transactionList',
   TRANSACTION_DETAIL: 'transactionDetail',
-  // TRAVELLIST:'travelList',
-  // QUIZ:'quiz',
+  TRAVELLIST: 'travelList',
+  QUIZ: 'quiz',
   // ACCOUNTNUMBER:'accountNumber',
   // CURRENTBALANCE: 'currentBalance',
+  // USERINFO:'userInfo'
 };

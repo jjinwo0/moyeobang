@@ -68,10 +68,12 @@ const descriptionStyle = css`
 
 interface SsafyBankNotificationProps {
   setCertificationVisible: (visible: boolean) => void;
+  randomVerifyNumber: string;
 }
 
 export default function SsafyBankNotification({
   setCertificationVisible,
+  randomVerifyNumber,
 }: SsafyBankNotificationProps) {
   const [startY, setStartY] = useState<number | null>(null);
   const [currentY, setCurrentY] = useState<number | null>(null);
@@ -96,6 +98,16 @@ export default function SsafyBankNotification({
     setCurrentY(null);
   };
 
+    // 자동으로 3초 후에 슬라이드 아웃되도록 설정
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsSlidingOut(true);
+        setTimeout(() => setCertificationVisible(false), 300);
+      }, 3000); // 3초 후 슬라이드 아웃
+  
+      return () => clearTimeout(timer); // 컴포넌트가 언마운트될 때 타이머 제거
+    }, []);
+
   useEffect(() => {
     if (startY !== null) {
       window.addEventListener('touchmove', handleTouchMove);
@@ -118,7 +130,7 @@ export default function SsafyBankNotification({
         <p id="title">싸피뱅크 입금 알림</p>
       </div>
 
-      <span css={nameStyle}>모여방 1234</span>
+      <span css={nameStyle}>모여방 {randomVerifyNumber}</span>
       <span css={descriptionStyle}> 님이 계좌로 1원을 입금했습니다.</span>
     </div>
   );
