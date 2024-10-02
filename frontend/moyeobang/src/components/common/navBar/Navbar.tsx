@@ -89,6 +89,7 @@ const cal = css`
   justify-content: center;
   align-items: center;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.4);
+  z-index: 30;
 
   p {
     font-family: 'semibold';
