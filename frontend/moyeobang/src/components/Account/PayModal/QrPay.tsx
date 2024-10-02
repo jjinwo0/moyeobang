@@ -63,7 +63,6 @@ export default function QrPay({onClose}:QrPayProps) {
             const messageEvent = event as MessageEvent<string>;
             const connectMessage : ConnectMessage = messageEvent.data;
             console.log('connect 응답 결과:', connectMessage);
-
         });
 
         eventSource.addEventListener('payment-success', (event) => {

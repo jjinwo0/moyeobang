@@ -878,3 +878,22 @@ interface PaymentProps {
   longitude: number;
   targetAccountNumber: string;
 }
+
+// [모임 통장] 정산후 기본 정보
+interface CompleteTransaction {
+  transactionId: TransactionId;
+  money: Money;
+  address: Adress;
+  paymentName: PaymentName;
+  createdAt: CreatedAt;
+  acceptedNumber:AcceptedNumber;
+}
+
+interface OcrItem {
+  name: string;
+  count: number;
+  price: number;
+}
+
+// SSE
+type ConnectMessage = string

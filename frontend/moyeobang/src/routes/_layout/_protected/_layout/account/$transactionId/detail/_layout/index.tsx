@@ -75,7 +75,7 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
-  // console.log('거래 상세 데이터', transactionDetailData)
+  console.log('거래 상세 데이터', transactionDetailData) 
 
   function handleUpdateReceipt() {
     setOpentUpdateByReceiptModal(true);
@@ -107,8 +107,8 @@ export default function TransactionDetail() {
         adress={transactionDetailData.address}
         acceptedNumber={transactionDetailData.acceptedNumber}
       />
-      {transactionDetailData.splitMethod === 'receipt' &&
-        !isSettledParticipantByCustom(transactionDetailData.details) && (
+      {transactionDetailData.splitMethod === 'receipt' && 
+      (
           <>
             <div css={columnStyle}>
               <div>상품명</div>
@@ -116,7 +116,8 @@ export default function TransactionDetail() {
               <div>금액</div>
             </div>
             <div css={listStyle}>
-              {transactionDetailData.details.map((detail, index) => (
+              {!isSettledParticipantByCustom(transactionDetailData.details) &&
+                transactionDetailData.details.map((detail, index) => (
                 <DetailCardByReceipt key={index} {...detail} />
               ))}
             </div>
