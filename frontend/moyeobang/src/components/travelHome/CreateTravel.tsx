@@ -30,6 +30,7 @@ import dayjs from 'dayjs';
 import {css} from '@emotion/react';
 import moyeobang from '@/services/moyeobang';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import defaultImage from '@/assets/images/defaultSky.jpg';
 
 interface CreateTravelProps {
   onClose: () => void; // 모달을 닫는 함수
@@ -46,6 +47,9 @@ interface CreateTravelProps {
     selectedImage?: string | null;
   };
 }
+
+//[todo] 로그인 후 회원 아이디 받아오기
+const memberId = 4;
 
 const colseButtonStyle = css`
   color: red;
@@ -96,7 +100,7 @@ export default function CreateTravel({
   const [formData, setFormData] = useState<FormData>(new FormData());
 
   // 수정과 생성을 구분하여 처리
-  const handleNextClick = () => {
+  const handleNextClick = async () => {
     if (!travelName || !dateRange[0] || !dateRange[1]) {
       alert('모든 필드를 입력해주세요');
       return;
@@ -116,25 +120,36 @@ export default function CreateTravel({
       'request',
       new Blob([JSON.stringify(requestData)], {type: 'application/json'})
     );
+
+    console.log('requestData', requestData);
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
       if (file) {
         newFormData.append('backgroundImage', file);
+      } else {
+        // 파일이 없을 경우 defaultImage를 Blob으로 변환 후 추가
+        const response = await fetch(defaultImage);
+        const blob = await response.blob();
+        newFormData.append('backgroundImage', blob, 'defaultSky.jpg'); // Blob을 사용하여 전송
       }
+    } else {
+      const response = await fetch(defaultImage);
+      const blob = await response.blob();
+      newFormData.append('backgroundImage', blob, 'defaultSky.jpg'); // Blob을 사용하여 전송
     }
 
     setFormData(newFormData); // formData 상태 업데이트
 
     if (isEditMode) {
       // 수정 모드일 때는 onSubmit 함수 호출
-      onClose();
       handleSubmit();
+      onClose();
     } else {
       setStep(2); // 생성 모드일 때 다음 단계로 이동
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newform = new FormData();
 
     // 필수 필드 유효성 검사
@@ -159,33 +174,60 @@ export default function CreateTravel({
       quizAnswer: quizAnswer,
     };
 
-    newform.append('request', JSON.stringify(request));
+    newform.append(
+      'request',
+      new Blob([JSON.stringify(request)], {type: 'application/json'})
+    );
 
     if (selectedImage) {
       const file = fileInputRef.current?.files?.[0];
       if (file) {
         newform.append('backgroundImage', file);
       }
+      //[todo] 여행 수정 시 이미 이미지 파일 있는데 파일 선택 안했을 경우 다시 넘겨주기
+      // else if (initialData.selectedImage) {
+      //   //이미 여행에 이미지가 있을 경우 그 이미지 url을 다시 blob으로 변환해서 전송
+      //   const existingImageBlob = await fetch(initialData.selectedImage).then(
+      //     res => res.blob()
+      //   );
+      //   newform.append(
+      //     'backgroundImage',
+      //     existingImageBlob,
+      //     initialData.selectedImage
+      //   );
+      // }
+      else {
+        // 파일이 없을 경우 defaultImage를 Blob으로 변환 후 추가
+        const response = await fetch(defaultImage);
+        const blob = await response.blob();
+        newform.append('backgroundImage', blob, 'defaultSky.jpg'); // Blob을 사용하여 전송
+        // console.log('기본 배경 이미지가 Blob으로 추가되었습니다:', blob);
+      }
+    } else {
+      const response = await fetch(defaultImage);
+      const blob = await response.blob();
+      newform.append('backgroundImage', blob, 'defaultSky.jpg'); // Blob을 사용하여 전송
     }
 
-    // // [todo] travelId가 존재하는 경우에만 mutate 호출
-    // if (typeof travelId === 'number') {
-    //   putTravel(newform); // 바로 newform을 전달
-    // }
+    // [todo] travelId가 존재하는 경우에만 mutate 호출
+    if (typeof travelId === 'number') {
+      putTravel(newform); // 바로 newform을 전달
+    }
   };
 
-  // //[todo] 여행 수정 api 연결
-  // const queryClient = useQueryClient();
-  // const {mutate: patchTravel} = useMutation({
-  //   mutationFn: (formData: FormData) =>
-  //     moyeobang.patchTravel(travelId!, formData), //travelId!로 타입을 단언
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries({
-  //       queryKey: ['travelList'],
-  //       refetchType: 'all',
-  //     });
-  //   },
-  // });
+  //[todo] 여행 수정 api 연결
+  const queryClient = useQueryClient();
+  const {mutate: putTravel} = useMutation({
+    mutationFn: (formData: FormData) =>
+      moyeobang.putTravel(travelId!, formData), //travelId!로 타입을 단언
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['travelList'],
+        refetchType: 'all',
+      });
+      console.log('수정 성공');
+    },
+  });
 
   const handleCalendarClick = () => {
     setIsCalendarOpen(prev => !prev); // 달력 표시/숨기기 토글

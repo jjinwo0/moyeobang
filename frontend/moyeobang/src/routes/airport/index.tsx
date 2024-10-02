@@ -2,15 +2,14 @@ import { createFileRoute } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import airportBackground from '@/assets/icons/airportBackground.png';
 import { css } from '@emotion/react';
-import Btn from '@/components/common/btn/Btn';
 import { v4 as uuidv4 } from "uuid";
 import QrPayByOnline from '@/components/QrPayByOnline/QrPayByOnline';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 const backgroundStyle=css`
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
     margin:0 auto;
     img {
         width:600px;
@@ -20,19 +19,20 @@ const backgroundStyle=css`
 `;
 
 const buttonLayoutStyle=css`
+    width:100%;
+    height:500px;
     position:fixed;
-    bottom:30px;
+    bottom:0;
+    div {
+        width:100%;
+        height:100%;
+    }
 `;
 
 const airportData = {
     paymentRequestId: uuidv4(),
     placeId: '123-air',
-    placeName : '모여방윙스',
-    placeAddress: '',
     amount : 459000,
-    latitude: 0,
-    longitude: 0,
-    sourceAccountNumber: '0012280102000441'
 }
 
 export const Route = createFileRoute('/airport/')({
@@ -42,6 +42,26 @@ export const Route = createFileRoute('/airport/')({
 export default function AirportSite() {
 
     const [isQrModalOpen, setIsQrModalOpen] = useState<boolean>(false);
+    const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
+
+    const fetchSEE = () => {
+        const eventSource = new EventSourcePolyfill('https://j11c102.p.ssafy.io/pg/payment/connect'+`/payment/connect?paymentRequestId=${airportData.paymentRequestId}`, {
+            // headers: {
+            //     Authorization: `Bearer ${token}`, 
+            // },
+        })
+
+        eventSource.onopen = () => {
+            console.log('sse open')
+        }
+
+        eventSource.addEventListener('connect', (event) => {
+
+            const messageEvent = event as MessageEvent<string>;
+            const connectMessage : ConnectMessage = messageEvent.data;
+            console.log('connect 응답 결과:', connectMessage);
+        });
+    }
 
     function handleClick() {
         setIsQrModalOpen(true);
@@ -53,10 +73,10 @@ export default function AirportSite() {
 
     return (
         <div css={backgroundStyle}>
-            { isQrModalOpen && <QrPayByOnline data={airportData} onClickOutside={handleClose} />}
+            { isQrModalOpen && <QrPayByOnline qrData={airportData} onClickOutside={handleClose} />}
             <img src={airportBackground} alt=""/>
             <div css={buttonLayoutStyle}>
-                <Btn buttonStyle={{size:'big', style:'blue'}} onClick={handleClick}>항공권 결제하기</Btn>
+                <div onClick={handleClick}></div>
             </div>
         </div>
     )

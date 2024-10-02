@@ -40,14 +40,14 @@ type ResultByPos = PaymentProps & PropsWithChildren<HTMLAttributes<HTMLDivElemen
 
 export default function ResultByPos({
     paymentRequestId,
-    sourceAccountNumber,
+    travelAccountNumber,
     placeId,
     placeName,
     placeAddress,
     latitude,
     longitude,
     amount,
-    targetAccountNumber,
+    storeAccountNumber,
     onClickOutside,
     }:ResultByPos) {
 
@@ -67,14 +67,14 @@ export default function ResultByPos({
         // api결제 요청
         const payData : PaymentProps = {
             paymentRequestId : paymentRequestId,
-            sourceAccountNumber : sourceAccountNumber,
+            travelAccountNumber : travelAccountNumber,
             placeId : placeId,
             placeName : placeName,
             placeAddress : placeAddress,
             amount:amount,
             latitude : latitude,
             longitude : longitude,
-            targetAccountNumber : targetAccountNumber,
+            storeAccountNumber : storeAccountNumber,
         }
         postPayment({data : payData})
     }
@@ -83,13 +83,13 @@ export default function ResultByPos({
         <Backdrop>
             <div ref={modalRef} css={containerLayoutStyle}>
                 <p>결제 uuid : {paymentRequestId}</p>
-                <p>모임통장 계좌번호 : {sourceAccountNumber}</p>
+                <p>모임통장 계좌번호 : {travelAccountNumber}</p>
                 <p>가맹점 id : {placeId}</p>
                 <p>가맹정 이름 : {placeName}</p>
                 <p>가맹점 주소 : {placeAddress}</p>
                 <p>워도 : {latitude}</p>
                 <p>경도 : {longitude}</p>
-                <p>가맹점 계좌번호 : {targetAccountNumber}</p>
+                <p>가맹점 계좌번호 : {storeAccountNumber}</p>
                 <div>
                     <Btn buttonStyle={{style:'blue', size:'big'}} onClick={handleSettle}>결제 하기</Btn>
                 </div>

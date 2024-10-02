@@ -291,7 +291,7 @@
 
 // interface QrData {
 //   paymentRequestId: string; // 고유번호 uuidv4()
-//   sourceAccountNumber: string; // 결제 계좌번호
+//   travelAccountNumber: string; // 결제 계좌번호
 // }
 
 // interface PosPay {
@@ -301,7 +301,7 @@
 //   amount:Money;
 //   latitude: Latitude;
 //   longitude: Longitude;
-//   targetAccountNumber: string;
+//   storeAccountNumber: string;
 // }
 
 // interface PosOderItem {
@@ -312,14 +312,14 @@
 
 // interface PaymentProps {
 //   paymentRequestId: string;
-//   sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
+//   travelAccountNumber: string; // 결제자(모임통장) 계좌번호
 //   placeId: string;
 //   placeName: string;
 //   placeAddress: string;
 //   amount:Money;
 //   latitude: number;
 //   longitude: number;
-//   targetAccountNumber: string;
+//   storeAccountNumber: string;
 //   // OrderItems : OrderItems[];  // 없앰
 // }
 
@@ -464,22 +464,6 @@ interface ParticipantInfo {
   profileImage: ProfileImage;
 }
 
-// 여행 목록 관련 정보
-interface Travel {
-  travelId: Id;
-  travelName: TravelName;
-  travelImg: ImgUrl | null;
-  participantsCount: ParticipantsCount;
-  startDate: StartDate;
-  endDate: EndDate;
-  travelPlaceList: Place[];
-  quizQuestion: QuizQuestion;
-  quizAnswer: QuizAnswer;
-  accountId: AccountId;
-  accountNumber: AccountNumber;
-  participantsInfo: ParticipantInfo[];
-}
-
 type MemberId = number;
 type TransactionId = number;
 type WithdrawId = number;
@@ -551,204 +535,12 @@ interface ConsumptionCategory {
   balance: CurrentBalance;
 }
 
-interface ImgSummary {
-  imgUrl: ImgUrl;
-  locationName: LocationName;
-}
-
 interface ConsumptionByMember {
   categoryName: ParticipantInfo;
   proportion: UsagePercentage;
   balance: ParticipantAmount;
 }
 
-interface TravelSummary {
-  locationList: TravelLocation[];
-  totalAmount: TotalAmount;
-  amountUsed: TotalComsumption;
-  amountComparison: AmountComparison;
-  consumptionByCategory: ConsumptionCategory[];
-  consumptionTag: ConsumptionTag[];
-  consumptionByMember: ConsumptionByMember[];
-  imgSummary: ImgSummary[];
-}
-
-// 퀴즈 관련
-interface Quiz {
-  question: Question;
-}
-
-interface ResponsePostTravel {
-  travelId: Id;
-}
-
-interface ResponsePostAccount {
-  accountNumber: TravelAccountNumber;
-}
-
-interface PostTravel {
-  travelName: TravelName;
-  startDate: StartDate;
-  endDate: EndDate;
-  travelPlaceList: Place[];
-  quizQuestion: QuizQuestion;
-  quizAnswer: QuizAnswer;
-  travelImg: ImgUrl | null;
-}
-
-interface Member {
-  memberId: Id;
-  memberName: MemberName;
-  profileImage: ImgUrl;
-  accountNumber: TravelAccountNumber;
-}
-
-interface SubmitQuiz {
-  answer: QuizAnswer;
-}
-
-interface PostDepositAccount {
-  memberId: Id;
-  amount: Money;
-}
-
-interface ResponsePostDepositAccount {
-  accountBalance: CurrentBalance;
-}
-
-// [모임통장] 소비 비율 차트 데이터
-interface ConsumptionProportionByCategory {
-  categoryName: string;
-  proportion: number;
-  balance: number;
-}
-
-interface ConsumptionProportionByMember {
-  member: ParticipantInfo;
-  proportion: number;
-  balance: number;
-}
-
-// 전체일때
-interface ConsumptionProportionData {
-  consumptionByCategory: ConsumptionByCategory[];
-  consumptionByMember: ConsumptionByMember[];
-}
-
-// [모임통장]
-
-interface OrderItems {
-  orderItemId: OrderItemId;
-  orderItemTitle: OrderItemTitle;
-  orderItemQuantity: OrderItemquantity;
-  orderItemPrice: OrderItemPrice;
-}
-
-// [모임 통장] 공금 잔액 조회
-interface AccountBalanceByGroup {
-  currentBalance: CurrentBalance;
-  totalAmount: TotalMoney;
-  totalSpent: TotalSpent;
-  usagePercentage: UsagePercentage;
-}
-
-// [모임 통장] 개인 잔액 조회
-interface AccountBalanceBymemberId {
-  simpleUserProfile: ParticipantInfo;
-  personalCurrentBalance: PersonalCurrentBalance;
-  personalTotalAmount: TotalMoney;
-  personalTotalSpent: TotalSpent;
-  personalUsagePercentage: PersonalUsagePercentage;
-  needsAdditionalDeposit: NeedsAdditionalDeposit;
-}
-
-// [모임 통장] 결제 내역 전체 조회 GET
-interface TransactionList {
-  transactionId: TransactionId;
-  paymentName: PaymentName;
-  money: Money;
-  participants: ParticipantInfo[]; // 정산한 사람들(default)
-  transactionType: TransactionType;
-  createdAt: CreatedAt;
-  currentBalance: CurrentBalance;
-}
-
-// [모임 통장] 상세 조회 영수증 정산 'receipt'의 details
-interface SettledItemByReceipt {
-  orderItemId: OrderItemId;
-  orderItemTitle: OrderItemTitle;
-  orderItemPrice: OrderItemPrice;
-  orderItemQuantity: OrderItemQuantity;
-  participants: ParticipantInfo[];
-}
-
-// [모임 통장] 상세 조회 직접 정산 'custom' 의 details
-interface SettledParticipantByCustom {
-  participant: ParticipantInfo;
-  money: Money;
-}
-
-// [모임 통장] 상세 공통 타입 정의
-interface BaseTransactionDetail {
-  transactionId: TransactionId;
-  paymentName: PaymentName;
-  address: Adress;
-  money: Money;
-  createdAt: CreatedAt;
-  acceptedNumber: AcceptedNumber;
-}
-
-// [모임 통장] +영수증 정산 상세
-interface TransactionDetailByReceipt extends BaseTransactionDetail {
-  details: SettledItemByReceipt[];
-  splitMethod: SplitMethod; // 'receipt'
-}
-
-// [모임 통장] +직접 정산 상세
-interface TransactionDetailByCustom extends BaseTransactionDetail {
-  details: SettledParticipantByCustom[];
-  splitMethod: SplitMethod; // 'custom'
-}
-
-// [모임 통장] 결제내역 상세 통합 타입
-type TransactionDetailProps =
-  | TransactionDetailByReceipt
-  | TransactionDetailByCustom;
-
-// [모임통장] 정산 POST 요청
-interface Info {
-  memberId: MemberId;
-  money: Money;
-}
-
-interface PostTransactionDetailByCustom {
-  paymentName: PaymentName;
-  money: Money;
-  info: Info[];
-  splitMethod: SplitMethod; //'custom'
-  acceptedNumber: AcceptedNumber;
-}
-
-// 상세 조회 영수증 정산 'receipt'의 details
-interface PostSettledItemByReceipt {
-  orderItemId: OrderItemId;
-  orderItemTitle: OrderItemTitle;
-  orderItemPrice: OrderItemPrice;
-  orderItemQuantity: OrderItemQuantity;
-  participants: MemberId[];
-}
-
-interface PostTransactionDetailByReceipt {
-  paymentName: PaymentName;
-  address: Adress;
-  money: Money;
-  createdAt: CreatedAt;
-  acceptedNumber: AcceptedNumber;
-  details: PostSettledItemByReceipt[];
-  splitMethod: SplitMethod; // 'receipt'
-}
-
-// QR정산
 interface QrData {
   paymentRequestId: PaymentRequestId;
   sourceAccountNumber: string;
