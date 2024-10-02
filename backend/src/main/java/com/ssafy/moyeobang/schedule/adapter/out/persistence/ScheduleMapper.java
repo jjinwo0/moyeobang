@@ -1,7 +1,7 @@
 package com.ssafy.moyeobang.schedule.adapter.out.persistence;
 
-import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleJpaEntity;
-import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
+import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleInfo;
+import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.WithdrawInfo;
 import com.ssafy.moyeobang.schedule.application.domain.Location;
 import com.ssafy.moyeobang.schedule.application.domain.Participant;
 import com.ssafy.moyeobang.schedule.application.domain.Schedule;
@@ -12,55 +12,56 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduleMapper {
 
-    public List<Schedule> toDomainList(List<ScheduleJpaEntity> entities) {
-        return entities.stream()
+    public List<Schedule> toDomainList(List<ScheduleInfo> scheduleInfos) {
+        return scheduleInfos.stream()
                 .map(this::toDomain)
                 .toList();
     }
 
-    public Schedule toDomain(ScheduleJpaEntity entity) {
+    public Schedule toDomain(ScheduleInfo dto) {
 
         Location location = Location.of(
-                entity.getTitle(),
-                entity.getAddress(),
-                entity.getGooglePlaceId(),
-                entity.getLatitude(),
-                entity.getLongitude()
+                dto.getTitle(),
+                dto.getAddress(),
+                dto.getGooglePlaceId(),
+                dto.getLatitude(),
+                dto.getLongitude()
         );
 
         Transaction transaction = null;
-        if (entity.isMatchedTransaction() && entity.getWithdraw() != null) {
-            transaction = mapWithdrawToTransaction(entity.getWithdraw(), true);
-        } else if (!entity.isMatchedTransaction() && entity.getWithdraw() != null) {
-            transaction = mapWithdrawToTransaction(entity.getWithdraw(), false);
+        if (dto.getIsMatchedTransaction() && dto.getWithdrawInfo() != null) {
+            transaction = mapWithdrawToTransaction(dto.getWithdrawInfo(), dto.getParticipantIds(), true);
+        } else if (!dto.getIsMatchedTransaction() && dto.getWithdrawInfo() != null) {
+            transaction = mapWithdrawToTransaction(dto.getWithdrawInfo(), dto.getParticipantIds(), false);
         }
 
-        return Schedule.create(
-                entity.getTravel().getId(),
-                entity.getId(),
-                entity.getScheduleTitle(),
-                entity.getStartDateTime(),
-                entity.getBudget(),
-                entity.getComplete(),
-                entity.getImageUrl(),
-                entity.getMemo(),
-                location,
-                entity.getSequence(),
-                transaction
-        );
+        return Schedule.builder()
+                .travelId(dto.getTravelId())
+                .scheduleId(dto.getScheduleId())
+                .title(dto.getScheduleTitle())
+                .scheduleStartTime(dto.getStartDateTime())
+                .budget(dto.getBudget())
+                .completion(dto.getComplete())
+                .imageUrl(dto.getImageUrl())
+                .memo(dto.getMemo())
+                .sequence(dto.getSequence())
+                .location(location)
+                .transaction(transaction)
+                .build();
     }
 
-    private Transaction mapWithdrawToTransaction(WithdrawJpaEntity withdraw, boolean isMatched) {
-        List<Participant> participants = withdraw.getOrderJpaEntities().stream()
-                .flatMap(order -> order.getMemberOrderHistoryJpaEntities().stream())
-                .map(history -> Participant.of(history.getMemberId()))
+    private Transaction mapWithdrawToTransaction(WithdrawInfo withdraw, List<Long> participantIds, boolean isMatched) {
+        List<Participant> participants = participantIds.stream()
+                .map(Participant::of)
                 .toList();
 
         return Transaction.create(
-                withdraw.getId(),
-                withdraw.getTitle(),
+                withdraw.getWithdrawId(),
+                withdraw.getWithdrawTitle(),
                 withdraw.getCreatedAt(),
                 withdraw.getAmount(),
+                withdraw.getLatitude(),
+                withdraw.getLongitude(),
                 withdraw.getPaymentRequestId(),
                 withdraw.getSettleType(),
                 participants,
