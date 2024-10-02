@@ -10,7 +10,7 @@ import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleStatus;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.schedule.adapter.in.web.request.LocationInfo;
 import com.ssafy.moyeobang.schedule.adapter.in.web.request.UpdateTravelScheduleRequest;
-import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleRepositoryInSchedule;
+import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleJpaRepositoryInSchedule;
 import com.ssafy.moyeobang.schedule.adapter.out.persistence.travel.TravelRepositoryInSchedule;
 import com.ssafy.moyeobang.schedule.error.ErrorCode;
 import com.ssafy.moyeobang.schedule.error.ScheduleException;
@@ -28,7 +28,7 @@ public class UpdateTravelScheduleIntegrationTest extends IntegrationTestSupport 
     private int port;
 
     @Autowired
-    private ScheduleRepositoryInSchedule scheduleRepository;
+    private ScheduleJpaRepositoryInSchedule scheduleRepository;
 
     @Autowired
     private TravelRepositoryInSchedule travelRepository;
