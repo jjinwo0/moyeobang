@@ -19,6 +19,14 @@ import {routeTree} from './routeTree.gen'; // 라우트 트리 경로 확인
 // Create a new router instance
 const router = createRouter({routeTree});
 
+const libraries: (
+  | 'places'
+  | 'drawing'
+  | 'geometry'
+  | 'localContext'
+  | 'visualization'
+)[] = ['places'];
+
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
@@ -33,7 +41,7 @@ if (!rootElement.innerHTML) {
   root.render(
     // <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <LoadScript googleMapsApiKey={mapAPI}>
+      <LoadScript googleMapsApiKey={mapAPI} libraries={libraries}>
         <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={true} />
         {/* Devtools 추가 */}

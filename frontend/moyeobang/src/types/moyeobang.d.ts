@@ -530,20 +530,20 @@ interface AccountBalanceBymemberId {
 }
 
 // 일정 관련
-interface MatchedTransaction {
-  transactionId: Id;
-  paymentName: string;
-  totalPrice: number;
-  paymentTime: string;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantInfo[];
-}
+// interface MatchedTransaction {
+//   transactionId: Id;
+//   paymentName: string;
+//   totalPrice: number;
+//   paymentTime: string;
+//   splitMethod: SplitMethod;
+//   participantsInfo: ParticipantInfo[];
+// }
 
 // 기타 관련 인터페이스
-interface TravelLocation {
-  latitude: Latitude;
-  longitude: Longitude;
-}
+// interface TravelLocation {
+//   latitude: Latitude;
+//   longitude: Longitude;
+// }
 
 interface ConsumptionCategory {
   categoryName: CategoryName;

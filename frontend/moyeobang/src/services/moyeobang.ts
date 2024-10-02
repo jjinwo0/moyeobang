@@ -15,8 +15,8 @@ export default {
    */
   getAccountStateBymemberId: async (accountId: number, memberId: number) =>
     axios.get<MoyeobangResponse<AccountBalanceBymemberId>>(
-      `/accounts/${accountId}/balance/member/${memberId}`,
-),
+      `/accounts/${accountId}/balance/member/${memberId}`
+    ),
   /**
    * 전체 결제 내역 전체 & 개별 조회
    */
@@ -41,7 +41,7 @@ export default {
    */
   postSettleByCustom: async (
     transactionId: number,
-    travelId:number,
+    travelId: number,
     data: PostTransactionDetailByCustom
   ) =>
     axios.post<MoyeobangResponse<null>>(
@@ -66,11 +66,11 @@ export default {
   //     }
   //   ),
   /**
- * 영수증 정산 
- */
+   * 영수증 정산
+   */
   postSettleByReceipt: async (
-    transactionId:number, 
-    travelId:number,
+    transactionId: number,
+    travelId: number,
     data: PostTransactionDetailByReceipt
   ) =>
     axios.post<MoyeobangResponse<null>>(
@@ -99,10 +99,7 @@ export default {
    * pos기 결제 요청
    */
   postPayByPos: async (data: PaymentProps) =>
-    axios8081.post<MoyeobangResponse<null>>(
-      '/payment/process',
-    data,
-    {
+    axios8081.post<MoyeobangResponse<null>>('/payment/process', data, {
       headers: {'Content-Type': 'application/json'},
     }),
 
@@ -168,12 +165,39 @@ export default {
       {headers: {'Content-Type': 'application/json'}}
     ),
 
-  
   /**
    * 공금입금
    */
-  postDepositAccount : async(accountId:number, data:PostDepositAccount) =>
-    axios.post<MoyeobangResponse<ResponsePostDepositAccount >>(`/accounts/${accountId}/deposit`, data, {
+  postDepositAccount: async (accountId: number, data: PostDepositAccount) =>
+    axios.post<MoyeobangResponse<ResponsePostDepositAccount>>(
+      `/accounts/${accountId}/deposit`,
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
+  /**
+   * 여행 일정 추가
+   */
+  postTravelSchedule: async (travelId: Id, data: PostTravelSchedule) =>
+    axios.post<MoyeobangResponse<null>>(`/travel/${travelId}/schedule`, data, {
       headers: {'Content-Type': 'application/json'},
     }),
+
+  /**
+   * 여행 일정 수정
+   */
+  putTravelSchedule: async (
+    travelId: Id,
+    scheduleId: Id,
+    data: PostTravelSchedule
+  ) => {
+    axios.put<MoyeobangResponse<null>>(
+      `/travel/${travelId}/schedule/${scheduleId}`,
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    );
+  },
 };

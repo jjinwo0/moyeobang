@@ -40,7 +40,7 @@ export default function TravelLogMain() {
 
         <Navbar />
       </div>
-      {scheduleDayNum < travelDates.length && (
+      {scheduleDayNum <= travelDates.length && (
         <div css={plusStyle}>{<PlusBtn onClick={handleShowPlusSelf} />}</div>
       )}
       {showPlusSelf && <PlusSelf />}

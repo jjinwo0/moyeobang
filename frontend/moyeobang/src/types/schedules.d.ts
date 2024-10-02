@@ -57,10 +57,10 @@ interface PaidAutoSchedule {
   participantsInfo: ParticipantsInfo[];
 }
 
-// 2. 실제 여행 일정 조회 data 타입 지정
+// 실제 여행 일정 조회 data 타입 지정
 type TravelLog = DaySchedules[];
 
-// 1. schedule type 지정
+// schedule type 지정
 interface DaySchedules {
   dayNum: number;
   dayDate: string;
@@ -83,4 +83,18 @@ interface ScheduleLocation {
   latitude: number;
   longitude: number;
   category: string;
+}
+
+
+
+//여행 일정 API 관련 타입
+/**
+ * 여행 일정 추가 data 타입
+ */
+interface PostTravelSchedule {
+  scheduleTitle: string;
+  scheduleLocation: ScheduleLocation;
+  scheduleTime: string;
+  memo: string;
+  scheduleImg: string;
 }

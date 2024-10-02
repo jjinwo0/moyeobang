@@ -11,9 +11,11 @@ import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import searchImg from '@/assets/icons/Search.png';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 export default function PlusSelf() {
-  const {travelPlaceList} = useTravelDetailStore();
+  const {travelPlaceList, travelId} = useTravelDetailStore();
   const {
     handleShowPlusSelf,
     handleShowMapSearch,
@@ -43,6 +45,7 @@ export default function PlusSelf() {
   const [scheduleName, setScheduleName] = useState<string | undefined>(
     searchLocation
   );
+  const queryClient = useQueryClient();
 
   const handleAddImg = () => {
     // input[type="file"]을 클릭하는 로직 추가
@@ -70,15 +73,58 @@ export default function PlusSelf() {
     setSelectedImage('');
   };
 
+  // const handleMakeScheduleLocation = (selectedMarker:ExtendedMarkerOptions) => {
+  //   if(selectedMarker) {
+  //   const scheduleLocation: ScheduleLocation = {
+  //     googlePlaceId: selectedMarker?.placeId || '',
+  //     title: selectedMarker?.title || '',
+  //     address: selectedMarker?.address || '',
+  //     latitude:
+  //       typeof selectedMarker?.position?.lat === 'function'
+  //         ? selectedMarker.position.lat()
+  //         : selectedMarker?.position?.lat || 0,
+  //     longitude:
+  //       typeof selectedMarker?.position?.lng === 'function'
+  //         ? selectedMarker.position.lng()
+  //         : selectedMarker?.position?.lng || 0,
+  //     category: selectedMarker?.types ? selectedMarker.types[0] : '',
+  //     };
+  //     return scheduleLocation;
+  //   } else {
+  //     return {googlePlaceId: '', title: '', address: '', latitude: 0, longitude: 0, category: ''};
+  //   }
+  // };
+
   const handleDelete = () => {
     // [todo] 삭제 로직 추가
     resetForm();
     handleShowPlusSelf();
   };
 
+  /**
+   * 일정 추가 mutation 선언
+   */
+  const {mutate: postTravelSchedule} = useMutation({
+    mutationFn: ({
+      travelId,
+      scheduleData,
+    }: {
+      travelId: Id;
+      scheduleData: PostTravelSchedule;
+    }) => moyeobang.postTravelSchedule(travelId, scheduleData),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['travelSchedules'],
+        refetchType: 'all',
+      });
+      console.log('성공');
+      resetForm();
+      handleShowPlusSelf();
+    },
+  });
+
   const handleSave = () => {
     // [todo] 저장 로직 추가
-    resetForm();
     if (selectedMarker) {
       const scheduleLocation: ScheduleLocation = {
         googlePlaceId: selectedMarker?.placeId || '',
@@ -108,12 +154,12 @@ export default function PlusSelf() {
        * selectedImage
        */
 
-      const scheduleData = {
-        scheduleTitle: scheduleName,
-        scheduleLocation: scheduleLocation ?? '',
-        scheduleTime: dateTime ?? '',
-        memo: memo ?? '',
-        scheduleImg: selectedImage ?? '',
+      const scheduleData: PostTravelSchedule = {
+        scheduleTitle: scheduleName || '',
+        scheduleLocation: scheduleLocation || '',
+        scheduleTime: dateTime || '',
+        memo: memo || '',
+        scheduleImg: selectedImage || '',
       };
       console.log('[*] scheduleData', scheduleData);
       // [todo] 저장 로직 추가
@@ -121,9 +167,9 @@ export default function PlusSelf() {
         // 수정 모드
       } else {
         // 추가 모드
+        postTravelSchedule({travelId, scheduleData});
       }
     }
-    handleShowPlusSelf();
   };
 
   const handleXClick = () => {
@@ -261,7 +307,9 @@ export default function PlusSelf() {
           </div>
           {/* 3. 여행 시간 */}
           <div>
-            <div css={PlusSelfStyle.labelStyle}>시간</div>
+            <div css={PlusSelfStyle.labelStyle}>
+              <span style={{color: colors.customRed}}>*</span> 시간
+            </div>
             {/* 시간 선택 */}
             <div css={PlusSelfStyle.timeInputStyle}>
               <div css={PlusSelfStyle.AMPMSytle}>
@@ -335,10 +383,21 @@ export default function PlusSelf() {
             <Btn
               buttonStyle={{
                 size: scheduleEdit ? 'middle' : 'big',
-                style: scheduleName === '' ? 'gray' : 'blue',
+                style:
+                  scheduleName === '' ||
+                  dateTime === '' ||
+                  hour === '' ||
+                  minute === ''
+                    ? 'gray'
+                    : 'blue',
               }}
               onClick={handleSave}
-              disabled={scheduleName === ''}
+              disabled={
+                scheduleName === '' ||
+                dateTime === '' ||
+                hour === '' ||
+                minute === ''
+              }
             >
               저장
             </Btn>
