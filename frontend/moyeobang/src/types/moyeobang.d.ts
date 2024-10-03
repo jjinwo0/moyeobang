@@ -621,3 +621,8 @@ interface CustomMarker {
   detailedOpeningHours?: string[]; // 자세한 영업 시간 정보
   photos?: string[];
 }
+
+interface ResponsePostDepositAccount {
+  title: TravelName;
+  amount: TotalAmount;
+}
