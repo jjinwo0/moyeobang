@@ -105,6 +105,8 @@ const detailStyle = css`
   color: ${colors.lightBlack};
 `;
 
+
+
 export default function QuizComponent({
   question,
   travelId,
@@ -152,7 +154,7 @@ export default function QuizComponent({
     router.navigate({to: '/'}); // 홈으로 리다이렉트
   };
 
-  const onsubmitQuiz = (travelId: Id, answer: string) => {
+  const onsubmitQuiz = (travelId: Id, answer: string, memberId: number) => {
     postQuiz({travelId, answer, memberId});
     setAnswer('');
   };
@@ -186,7 +188,7 @@ export default function QuizComponent({
           <div css={buttonStyle}>
             <Btn
               buttonStyle={{style: 'blue', size: 'middle'}}
-              onClick={() => onsubmitQuiz(travelId, answer)}
+              onClick={() => onsubmitQuiz(travelId, answer, memberId)}
             >
               여행참여
             </Btn>

@@ -41,7 +41,7 @@ export default {
    */
   postSettleByCustom: async (
     transactionId: number,
-    travelId:number,
+    travelId: number,
     data: PostTransactionDetailByCustom
   ) =>
     axios.post<MoyeobangResponse<null>>(
@@ -66,11 +66,11 @@ export default {
   //     }
   //   ),
   /**
- * 영수증 정산 
- */
+   * 영수증 정산
+   */
   postSettleByReceipt: async (
-    transactionId:number, 
-    travelId:number,
+    transactionId: number,
+    travelId: number,
     data: PostTransactionDetailByReceipt
   ) =>
     axios.post<MoyeobangResponse<null>>(
@@ -102,16 +102,17 @@ export default {
     axios8081.post<MoyeobangResponse<null>>('/payment/process', data, {
       headers: {'Content-Type': 'application/json'},
     }),
-      /**
+  /**
    * online 결제 요청
    */
-    postPayByOnline: async (data: PaymentProps) =>
-    axios.post<MoyeobangResponse<{transactionId:TransactionId}>>(
+  postPayByOnline: async (data: PaymentProps) =>
+    axios.post<MoyeobangResponse<{transactionId: TransactionId}>>(
       '/payment/process',
-    data,
-    {
-      headers: {'Content-Type': 'application/json'},
-    }),
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
 
   /**
    * 여행 목록 전체 조회
@@ -180,12 +181,12 @@ export default {
     ),
 
   /**
-   * 공금입금
+   * 공금입금 요청
    */
-  postDepositAccount: async (accountId: number, data: PostDepositAccount) =>
+  postRequsetDepositAccount: async (accountId: number, totalAmount: number) =>
     axios.post<MoyeobangResponse<ResponsePostDepositAccount>>(
-      `/accounts/${accountId}/deposit`,
-      data,
+      `/accounts/${accountId}/deposit/request`,
+      {totalAmount},
       {
         headers: {'Content-Type': 'application/json'},
       }
@@ -232,4 +233,23 @@ export default {
    */
   deleteAccount: async () =>
     axios.delete<MoyeobangResponse<null>>('/auth/account'),
+
+  /**
+   * 공금입금 api
+   */
+  postDepositAccount: async (
+    accountId: number,
+    memberId: number,
+    amount: number
+  ) =>
+    axios.post<MoyeobangResponse<ResponseDepositAccount>>(
+      `/accounts/${accountId}/deposit`,
+      {
+        memberId: memberId,
+        amount: amount,
+      },
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
 };
