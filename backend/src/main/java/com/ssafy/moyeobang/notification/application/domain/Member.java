@@ -14,8 +14,10 @@ public class Member {
 
     private String token;
 
-    public static Member of(final Long id, final String email, final String token) {
+    private String memberKey;
 
-        return new Member(id, email, token);
+    public static Member of(final Long id, final String email, final String token, final String memberKey) {
+
+        return new Member(id, email, token, memberKey);
     }
 }
