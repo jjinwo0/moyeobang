@@ -82,7 +82,7 @@ export default {
       }
     ),
   /**
-   * 영수증 정산 수정 fetch임 추후에
+   * 영수증 정산 수정
    */
   updateSettleByReceipt: async (
     transactionId: number,
@@ -90,7 +90,7 @@ export default {
     data: PostTransactionDetailByReceipt
   ) =>
     axios.post<MoyeobangResponse<null>>(
-      `/travel/accounts/transactions/${transactionId}/settle/${travelId}`,
+      `/travel/accounts/transactions/${transactionId}/settle/update/${travelId}`,
       data,
       {
         headers: {'Content-Type': 'application/json'},
