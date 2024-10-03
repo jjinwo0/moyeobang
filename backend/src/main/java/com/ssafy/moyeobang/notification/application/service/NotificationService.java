@@ -6,11 +6,9 @@ import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPaylo
 import com.ssafy.moyeobang.notification.application.domain.Member;
 import com.ssafy.moyeobang.notification.application.domain.MemberTravel;
 import com.ssafy.moyeobang.notification.application.domain.Travel;
+import com.ssafy.moyeobang.notification.application.domain.TravelAccount;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
-import com.ssafy.moyeobang.notification.application.port.out.FCMTokenPort;
-import com.ssafy.moyeobang.notification.application.port.out.LoadMemberPort;
-import com.ssafy.moyeobang.notification.application.port.out.LoadMemberTravelInfoInTravelPort;
-import com.ssafy.moyeobang.notification.application.port.out.LoadTravelPort;
+import com.ssafy.moyeobang.notification.application.port.out.*;
 import com.ssafy.moyeobang.notification.error.FailedSendNotificationException;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +29,10 @@ public class NotificationService implements NotificationUseCase {
     private final LoadMemberPort memberPort;
 
     private final LoadTravelPort travelPort;
+
+    private final LoadTransactionInfoPort transactionInfoPort;
+
+    private final LoadTravelAccountPortInNotification loadTravelAccountPort;
 
     private final NotificationSender sender;
 
@@ -120,6 +122,40 @@ public class NotificationService implements NotificationUseCase {
     public void saveToken(Long memberId, String token) {
 
         tokenPort.saveFCMToken(memberId, token);
+    }
+
+    @Override
+    public String getTransactionInfo(Long memberId, Long transactionId) {
+
+        // 1. 회원 정보 확인
+        Member findMember = memberPort.findById(memberId);
+
+        // 2. 계좌 확인
+        String findAccountNo = memberPort.findAccountNoById(memberId);
+
+        // 3. transaction의 정보 확인
+        String findKey = transactionInfoPort.getKey(findMember.getToken(), findAccountNo, transactionId);
+
+        return findKey;
+    }
+
+    @Override
+    public void sendVerifyMessage(Long memberId, String authText, String key) {
+
+        Member findMember = memberPort.findById(memberId);
+
+        if (memberHasKey(findMember.getEmail())) {
+
+            String token = tokenPort.getToken(findMember.getEmail());
+
+            Message message = Message.builder()
+                    .putData("title", "[1원 인증]")
+                    .putData("content", "입금자명: " + authText + ", 인증코드: " + key)
+                    .setToken(token)
+                    .build();
+
+            sender.send(message);
+        }
     }
 
 

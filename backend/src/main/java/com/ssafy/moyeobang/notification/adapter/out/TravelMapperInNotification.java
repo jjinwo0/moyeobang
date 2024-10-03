@@ -9,6 +9,6 @@ public class TravelMapperInNotification {
 
     public Travel mapToDomain(TravelJpaEntity entity) {
 
-        return Travel.of(entity.getId(), entity.getTitle());
+        return Travel.of(entity.getId(), entity.getTitle(), entity.getTravelKey());
     }
 }
