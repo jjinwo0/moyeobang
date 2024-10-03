@@ -5,12 +5,13 @@ import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.account.Transaction;
 import com.ssafy.moyeobang.settle.application.port.out.FindTransactionPort;
+import com.ssafy.moyeobang.settle.application.port.out.UpdateWithdrawPort;
 import com.ssafy.moyeobang.settle.error.TransactionNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class TransactionPersistenceAdapter implements FindTransactionPort {
+public class TransactionPersistenceAdapter implements FindTransactionPort, UpdateWithdrawPort {
 
     private final WithdrawRepositoryInSettle withdrawRepository;
 
@@ -44,5 +45,27 @@ public class TransactionPersistenceAdapter implements FindTransactionPort {
         return withdrawRepository.findById(transactionId)
                 .orElseThrow(
                         () -> new TransactionNotFoundException("Withdraw id[" + transactionId + "] 정보를 찾을 수 없습니다."));
+    }
+
+    @Override
+    public void updateWithdrawToReceipt(Long transactionId) {
+
+        WithdrawJpaEntity findWithdrawEntity = withdrawRepository.findById(transactionId)
+                .orElseThrow(() -> new TransactionNotFoundException("Withdraw id[" + transactionId + "] 정보를 찾을 수 없습니다."));
+
+        findWithdrawEntity.updateSettleType("RECEIPT");
+
+        withdrawRepository.save(findWithdrawEntity);
+    }
+
+    @Override
+    public void updateWithdrawToCustom(Long transactionId) {
+
+        WithdrawJpaEntity findWithdrawEntity = withdrawRepository.findById(transactionId)
+                .orElseThrow(() -> new TransactionNotFoundException("Withdraw id[" + transactionId + "] 정보를 찾을 수 없습니다."));
+
+        findWithdrawEntity.updateSettleType("CUSTOM");
+
+        withdrawRepository.save(findWithdrawEntity);
     }
 }
