@@ -52,11 +52,11 @@ VALUES (1, '김훈민의 발 사이즈는?', '235'),
 
 -- 매칭 결제 내역 더미데이터
 INSERT INTO withdraw (withdraw_id, title, amount, balance_snapshot, target_account_number, latitude, longitude,
-                      place_id, place_name, place_address, payment_request_id, settle_type, travel_account_id)
+                      place_id, place_name, place_address, payment_request_id, withdraw_type, settle_type, travel_account_id, created_at)
 VALUES (1, '카페 결제', 5000, 100000, '9993274339436066', 37.7749, -122.4194, 'ChIJN1t_tDeuEmsRUsoyG83frY4', '스타벅스',
-        '서울시 강남구 스타벅스', 'REQ1001', 'RECEIPT', 1),
+        '서울시 강남구 스타벅스', 'REQ1001', 'CAFE', 'RECEIPT', 1, now()),
        (2, '식당 결제', 15000, 85000, '9997097385463465', 37.5665, 126.9780, 'ChIJ9TPcRgWuEmsRZtZQk5E_7Pc', '이태원 식당',
-        '서울시 용산구 이태원 식당', 'REQ1002', 'CUSTOM', 2);
+        '서울시 용산구 이태원 식당', 'REQ1002', 'RESTAURANT', 'CUSTOM', 2, now());
 
 INSERT INTO orders (order_id, title, amount, withdraw_id)
 VALUES (1, '카페 주문', 5000, 1),
@@ -77,11 +77,11 @@ VALUES (1, '카페 방문', '2023-10-01 10:00:00', '카페 방문', '서울시 �
 
 -- 매칭되지 않은 결제 더미 데이터
 INSERT INTO withdraw (withdraw_id, title, amount, balance_snapshot, target_account_number, latitude, longitude,
-                      place_id, place_name, place_address, payment_request_id, settle_type, travel_account_id)
+                      place_id, place_name, place_address, payment_request_id, withdraw_type, settle_type, travel_account_id, created_at)
 VALUES (3, '헬스장 결제', 30000, 70000, '9991234567890123', 37.1234, 127.5678,
-        'ChIJK1t_tDeuEmsRUsoxz1234frY4', '헬스장', '서울시 종로구 헬스장', 'REQ1003', 'RECEIPT', 1),
+        'ChIJK1t_tDeuEmsRUsoxz1234frY4', '헬스장', '서울시 종로구 헬스장', 'REQ1003', 'ETC', 'RECEIPT', 1, now()),
        (4, '영화관 결제', 20000, 80000, '9999876543210987', 37.9876, 126.5432,
-        'ChIJK2t_tDeuEmsRUsoxz5678frY4', '롯데시네마', '서울시 서초구 롯데시네마', 'REQ1004', 'CUSTOM', 2);
+        'ChIJK2t_tDeuEmsRUsoxz5678frY4', '롯데시네마', '서울시 서초구 롯데시네마', 'REQ1004', 'ACTIVITY', 'CUSTOM', 2, now());
 
 INSERT INTO orders (order_id, title, amount, withdraw_id)
 VALUES (3, '헬스장 주문', 30000, 3),
