@@ -133,6 +133,8 @@ public class SettleService implements SettleUseCase {
 
         List<MemberOrderHistory> findHistoryList = loadMemberOrderHistoryPort.findByOrderId(order.getId());
 
+        updateOrderPort.deleteOrder(order.getId());
+
         // 기존 개임 결제내역 delete
         // 개인별 정산 금액 rollback
         findHistoryList.forEach(
@@ -141,7 +143,5 @@ public class SettleService implements SettleUseCase {
                     updateMemberOrderHistoryPort.deleteMemberOrderHistory(history.getId());
                 }
         );
-
-        updateOrderPort.deleteOrder(order.getId());
     }
 }
