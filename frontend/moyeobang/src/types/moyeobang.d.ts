@@ -495,24 +495,6 @@ interface OrderItems {
   orderItemPrice: OrderItemPrice;
 }
 
-// 모임 통장 공금 잔액 조회
-interface AccountBalanceByGroup {
-  currentBalance: CurrentBalance;
-  totalMoney: TotalMoney;
-  totalComsumption: TotalComsumption;
-  usagePercentage: UsagePercentage;
-}
-
-// 모임 통장 개인 잔액 조회
-interface AccountBalanceBymemberId {
-  participant: ParticipantInfo;
-  personalCurrentBalance: PersonalCurrentBalance;
-  personalTotalMoney: TotalMoney;
-  personalTotalConsumption: TotalComsumption;
-  personalUsagePercentage: PersonalUsagePercentage;
-  needsAdditionalDeposit?: NeedsAdditionalDeposit;
-}
-
 // 일정 관련
 interface MatchedTransaction {
   transactionId: Id;
@@ -529,14 +511,14 @@ interface TravelLocation {
   longitude: Longitude;
 }
 
-interface ConsumptionCategory {
+interface ConsumptionByCategory {
   categoryName: CategoryName;
   proportion: CategoryPercent;
   balance: CurrentBalance;
 }
 
 interface ConsumptionByMember {
-  categoryName: ParticipantInfo;
+  participantInfo: ParticipantInfo;
   proportion: UsagePercentage;
   balance: ParticipantAmount;
 }

@@ -18,7 +18,7 @@ const qrContainerStyle = css`
     margin-top: 100px;
 `;
 
-const QRStyle = css`
+const QrCodeStyle = css`
     width: 100%;
     height: 100%;
 `;
@@ -119,7 +119,7 @@ export default function QrPay({onClose}:QrPayProps) {
         ) : (
             <>
                 <div css={qrContainerStyle}>
-                    <QRCode value={JSON.stringify(data)} css={QRStyle} />
+                    <QRCode value={JSON.stringify(data)} css={QrCodeStyle} />
                 </div>
                 <PayCard/>
             </>

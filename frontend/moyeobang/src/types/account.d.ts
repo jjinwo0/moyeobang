@@ -28,7 +28,7 @@ interface ConsumptionProportionByCategory {
 }
 
 interface ConsumptionProportionByMember {
-    member:ParticipantInfo;
+    participantInfo:ParticipantInfo;
     proportion:number;
     balance:number;
 }
