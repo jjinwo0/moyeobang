@@ -97,7 +97,7 @@ export default function TransactionDetail() {
     <ResultByReceiptComponenet 
       data={transactionDetailData as TransactionDetailByReceipt} 
       onClose={handleClose}
-      isNew={false}
+      isUpdate={true}
       />
   ) : (
     <div css={layoutStyle}>
