@@ -105,7 +105,7 @@
 // type Money = number;
 // type AcceptedNumber = string;
 // type PaymentRequestId = string;
-// type TravelAccountNumber = string;
+// type sourceAccountNumber = string;
 // type IsNew = boolean;
 // type TotalMoney = number;
 // type TotalComsumption = number;
@@ -291,7 +291,7 @@
 
 // interface QrData {
 //   paymentRequestId: string; // 고유번호 uuidv4()
-//   travelAccountNumber: string; // 결제 계좌번호
+//   sourceAccountNumber: string; // 결제 계좌번호
 // }
 
 // interface PosPay {
@@ -301,7 +301,7 @@
 //   amount:Money;
 //   latitude: Latitude;
 //   longitude: Longitude;
-//   storeAccountNumber: string;
+//   targetAccountNumber: string;
 // }
 
 // interface PosOderItem {
@@ -312,14 +312,14 @@
 
 // interface PaymentProps {
 //   paymentRequestId: string;
-//   travelAccountNumber: string; // 결제자(모임통장) 계좌번호
+//   sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
 //   placeId: string;
 //   placeName: string;
 //   placeAddress: string;
 //   amount:Money;
 //   latitude: number;
 //   longitude: number;
-//   storeAccountNumber: string;
+//   targetAccountNumber: string;
 //   // OrderItems : OrderItems[];  // 없앰
 // }
 
@@ -376,7 +376,7 @@
 // }
 
 // interface ResponsePostAccount {
-//   accountNumber: TravelAccountNumber;
+//   accountNumber: sourceAccountNumber;
 // }
 
 // interface PostTravel {
@@ -475,7 +475,7 @@ type OrderItemQuantity = number;
 type OrderItemPrice = number;
 type AcceptedNumber = string;
 type PaymentRequestId = string;
-type TravelAccountNumber = string;
+type sourceAccountNumber = string;
 type IsNew = boolean;
 type TotalMoney = number;
 type TotalConsumption = number;

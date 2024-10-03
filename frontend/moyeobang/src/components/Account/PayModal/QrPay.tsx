@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { css } from "@emotion/react";
 import QRCode from 'react-qr-code';
 import PayCard from "./PayCard";
@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { useEffect, useState } from "react";
 import PayCompletedModal from "./PayCompletedModal";
+import useCurrentTravelStore from "@/store/useCurrentTravelStore";
 
 const qrContainerStyle = css`
     width: 200px;
@@ -34,20 +35,20 @@ interface QrPayProps {
 
 export default function QrPay({onClose}:QrPayProps) {
 
-    const [paymentRequestId] = useState<string>(uuidv4());
+    const paymentRequestId = useRef<string>(uuidv4());
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [resultMessage, setResultMessage] = useState<ResultMessage| null>(null);
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
-    console.log('paymentRequestId : ', paymentRequestId)
+    const {accountNumber}= useCurrentTravelStore();
 
     const data : QrData= {
-        paymentRequestId: paymentRequestId,
-        travelAccountNumber: '9993247649535796'
+        paymentRequestId: paymentRequestId.current,
+        sourceAccountNumber: accountNumber,
     }
 
     // new EventSource(url, options)
     const fetchSEE = () => {
-        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/api/payment/connect?paymentRequestId=${paymentRequestId}`, {
+        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/api/payment/connect?paymentRequestId=${paymentRequestId.current}`, {
             // headers: {
             //     Authorization: `Bearer ${token}`, 
             // },
@@ -91,9 +92,10 @@ export default function QrPay({onClose}:QrPayProps) {
         setEventSource(eventSource);
     };
 
+    
     useEffect(() => {
         fetchSEE();
-
+        console.log('paymentRequestId : ', paymentRequestId.current)
         // 컴포넌트 언마운트 시 SSE 연결 종료
         return () => {
             if (eventSource) {

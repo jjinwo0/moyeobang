@@ -39,6 +39,6 @@ if (!rootElement.innerHTML) {
         {/* Devtools 추가 */}
       </LoadScript>
     </QueryClientProvider>
-    // </StrictMode>
+    // {/* </StrictMode> */}
   );
 }

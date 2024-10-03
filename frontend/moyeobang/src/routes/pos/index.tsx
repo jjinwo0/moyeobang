@@ -12,7 +12,7 @@ const starbucks: PosPay = {
     amount: 25000,
     latitude:34.5,
     longitude:90.2,
-    storeAccountNumber: '0012280102000441',
+    targetAccountNumber: '0012280102000441',
     tag:'카페'
   }
 
@@ -23,7 +23,7 @@ const kurosiro: PosPay = {
     amount: 20000,
     latitude:34.5,
     longitude:90.2,
-    storeAccountNumber: '0012280102000441',
+    targetAccountNumber: '0012280102000441',
     tag:'식당'
   }
 
@@ -34,7 +34,7 @@ const abebeBakery: PosPay = {
     amount: 34000,
     latitude:34.5,
     longitude:90.2,
-    storeAccountNumber: '0012280102000441',
+    targetAccountNumber: '0012280102000441',
     tag:'카페'
   }
 
@@ -45,7 +45,7 @@ const surfing: PosPay = {
     amount: 66000,
     latitude:34.5,
     longitude:90.2,
-    storeAccountNumber: '0012280102000441',
+    targetAccountNumber: '0012280102000441',
     tag:'액티비티'
   }
 
@@ -56,7 +56,7 @@ const suksungdo: PosPay = {
     amount: 82000,
     latitude:34.5,
     longitude:90.2,
-    storeAccountNumber: '0012280102000441',
+    targetAccountNumber: '0012280102000441',
     tag:'식당'
   }
 
@@ -67,7 +67,7 @@ const farm: PosPay = {
     amount: 50000,
     latitude:34.5,
     longitude:90.2,
-    storeAccountNumber: '0012280102000441',
+    targetAccountNumber: '0012280102000441',
     tag:'액티비티'
   }
 
@@ -113,7 +113,7 @@ const storeLayoutStyle=css`
 export default function Pos() {
 
   // 가맹점 계좌번호 고정!
-  // const storeAccountNumber = '0012280102000441'
+  // const targetAccountNumber = '0012280102000441'
 
   const [isOpenQrModal, setIsOpenQrModal] = useState<boolean>(false)
   const [data, setData] = useState<PosPay>() // requestId, 결제자 계좌 아이디 없는 data 즉 결제기 데이터
@@ -173,7 +173,7 @@ export default function Pos() {
             <div>placeAddress(주소) : {data.placeAddress}</div>
             <div>latitude(위도) : {data.latitude}</div>
             <div>longitude(경도) : {data.longitude}</div>
-            <div>storeAccountNumber(가맹점 계좌번호) : {data.storeAccountNumber}</div>
+            <div>targetAccountNumber(가맹점 계좌번호) : {data.targetAccountNumber}</div>
             <div>tag(카테고리 이름) : {data.tag}</div>
             </> : 
             undefined

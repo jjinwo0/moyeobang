@@ -8,7 +8,7 @@ type OrderItemQuantity = number;
 type OrderItemPrice = number;
 type AcceptedNumber = string;
 type PaymentRequestId = string;
-type TravelAccountNumber = string;
+type sourceAccountNumber = string;
 type TotalMoney = number;
 type TotalConsumption = number;
 type TotalSpent = number;
@@ -157,7 +157,7 @@ interface PostTransactionDetailByReceipt {
 // [모임통장] QR정산
 interface QrData {
     paymentRequestId: PaymentRequestId;
-    travelAccountNumber: string;
+    sourceAccountNumber: string;
 }
 
 // [모임통장] pos기
@@ -168,7 +168,7 @@ interface PosPay {
     amount: Money;
     latitude: Latitude;
     longitude: Longitude;
-    storeAccountNumber: string;
+    targetAccountNumber: string;
     tag:string;
 }
 
@@ -181,14 +181,14 @@ interface PosOrderItem {
 // pos기 결제 POST
 interface PaymentProps {
     paymentRequestId: string;
-    travelAccountNumber: string;
+    sourceAccountNumber: string;
     placeId: string;
     placeName: string;
     placeAddress: string;
     amount: Money;
     latitude: number;
     longitude: number;
-    storeAccountNumber: string;
+    targetAccountNumber: string;
     tag:string;
 }
 
