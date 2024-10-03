@@ -47,4 +47,9 @@ public class MemberOrderHistoryJpaEntity extends BaseEntity {
     public Long getMemberId() {
         return member.getId();
     }
+
+    public void updateAmount(long amount) {
+
+        this.amount = amount;
+    }
 }
