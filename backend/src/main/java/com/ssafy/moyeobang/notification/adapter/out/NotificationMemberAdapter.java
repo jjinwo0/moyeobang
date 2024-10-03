@@ -17,7 +17,7 @@ public class NotificationMemberAdapter implements FCMTokenPort, LoadMemberPort {
 
     private final MemberRepositoryInNotification memberRepository;
     private final MemberAccountRepositoryInNotification memberAccountRepository;
-    private final MemberMapperInNotificaion memberMapper;
+    private final MemberMapperInNotification memberMapper;
 
     @Override
     public String getToken(String email) {

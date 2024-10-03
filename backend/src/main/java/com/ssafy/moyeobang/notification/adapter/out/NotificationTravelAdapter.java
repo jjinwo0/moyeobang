@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.ssafy.moyeobang.notification.application.port.out.LoadTravelPort;
-import com.ssafy.moyeobang.notification.error.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -32,7 +30,7 @@ public class NotificationTravelAdapter implements LoadMemberTravelInfoInTravelPo
 
     private final TravelAccountRepositoryInNotification travelAccountRepository;
 
-    private final MemberMapperInNotificaion memberMapper;
+    private final MemberMapperInNotification memberMapper;
 
     private final MemberTravelMapperInNotification memberTravelMapper;
 
