@@ -82,6 +82,8 @@ import HurryNotification from './HurryNotification'; // 새로운 알림 컴포�
 import TimeNotification from './TimeNotification'; // 새로운 알림 컴포넌트
 import {css} from '@emotion/react';
 import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
+import sadBangbang from '@/assets/icons/sadBangbang.png';
+import sky from '@/assets/images/skyBackground.jpg';
 
 interface NotificationData {
   title: string;
@@ -100,6 +102,21 @@ const layoutStyle = css`
   flex-direction: column;
   align-items: center;
   z-index: 100;
+`;
+
+const emptyMessageStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-item: center;
+  font-family: 'semibold';
+  font-size: 24px;
+  // color: gray;
+  margin-top: 210px;
+
+  img {
+    width: 200px;
+  }
 `;
 
 export default function NotificationModal({onClose}: {onClose: () => void}) {
@@ -181,8 +198,15 @@ export default function NotificationModal({onClose}: {onClose: () => void}) {
   return (
     <div css={layoutStyle}>
       <HeaderWithXButton onXClick={onClose} />
-      {notifications.map((notification, index) =>
-        renderNotificationComponent(notification, index)
+      {notifications.length > 0 ? (
+        notifications.map((notification, index) =>
+          renderNotificationComponent(notification, index)
+        )
+      ) : (
+        <div css={emptyMessageStyle}>
+          <img src={sadBangbang} />
+          <p>아직 알림이 없습니다</p>
+        </div>
       )}
     </div>
   );
