@@ -6,8 +6,10 @@ import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.FCMTokenRequest;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
+import com.ssafy.moyeobang.notification.adapter.in.web.response.VerifyKey;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,5 +53,24 @@ public class NotificationController {
         notificationUseCase.saveToken(memberId, request.token());
 
         return success(true);
+    }
+
+    /**
+     * 1원 송금 내역 알림 서비스
+     * @param travelId
+     * @param transactionid
+     * @return
+     */
+    @GetMapping("/api/notification/verify/{transactionid}")
+    public ApiResult<VerifyKey> getVerifyKey(@PathVariable("memberId") Long memberId,
+                                             @PathVariable("transactionid") Long transactionid) {
+
+        String findKey = notificationUseCase.getTransactionInfo(memberId, transactionid);
+
+        String[] response = findKey.split(" ");
+
+        notificationUseCase.sendVerifyMessage(memberId, response[0], response[1]);
+
+        return success(new VerifyKey(response[0], response[1]));
     }
 }

@@ -12,7 +12,8 @@ public class MemberMapperInNotificaion {
         return Member.of(
                 memberJpaEntity.getId(),
                 memberJpaEntity.getEmail(),
-                memberJpaEntity.getFCMToken()
+                memberJpaEntity.getFCMToken(),
+                memberJpaEntity.getMemberKey()
         );
     }
 }
