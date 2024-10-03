@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,6 +56,9 @@ public class WithdrawJpaEntity extends BaseEntity {
     private String paymentRequestId;
 
     @Enumerated(EnumType.STRING)
+    private WithdrawType withdrawType;
+
+    @Enumerated(EnumType.STRING)
     private SettleType settleType;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -75,6 +79,7 @@ public class WithdrawJpaEntity extends BaseEntity {
                               String placeName,
                               String placeAddress,
                               String paymentRequestId,
+                              WithdrawType withdrawType,
                               SettleType settleType,
                               TravelAccountJpaEntity travelAccount) {
         this.title = title;
@@ -83,11 +88,24 @@ public class WithdrawJpaEntity extends BaseEntity {
         this.targetAccountNumber = targetAccountNumber;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.settleType = settleType;
-        this.travelAccount = travelAccount;
         this.placeId = placeId;
         this.placeName = placeName;
         this.placeAddress = placeAddress;
         this.paymentRequestId = paymentRequestId;
+        this.withdrawType = withdrawType;
+        this.settleType = settleType;
+        this.travelAccount = travelAccount;
+    }
+
+    public List<Long> getParticipantId() {
+        return orderJpaEntities.stream()
+                .map(OrderJpaEntity::getParticipantId)
+                .flatMap(Set::stream)
+                .distinct()
+                .toList();
+    }
+
+    public String getWithdrawTypeDescription() {
+        return withdrawType.getDescription();
     }
 }
