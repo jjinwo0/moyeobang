@@ -4,6 +4,7 @@ import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
+import com.ssafy.moyeobang.notification.adapter.in.web.request.FCMTokenRequest;
 import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPayload;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class NotificationController {
     /**
      * 회원 공금 입금 요구 API
      * todo: AccessToken 발급 시, memberId PathVariable 삭제
+     *
      * @param travelId
      * @param memberId
      * @param payload
@@ -39,6 +41,15 @@ public class NotificationController {
                                @RequestBody NotificationPayload payload) {
 
         notificationUseCase.sendRemind(travelId, memberId, payload);
+        return success(true);
+    }
+
+    @PostMapping("/api/notification/agree/{memberId}")
+    public ApiResult<?> saveFCMToken(@PathVariable("memberId") Long memberId,
+                                     @RequestBody FCMTokenRequest request) {
+
+        notificationUseCase.saveToken(memberId, request.token());
+
         return success(true);
     }
 }

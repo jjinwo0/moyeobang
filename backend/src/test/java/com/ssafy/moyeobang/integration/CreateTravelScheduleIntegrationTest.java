@@ -9,7 +9,7 @@ import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.schedule.adapter.in.web.request.CreateTravelScheduleRequest;
 import com.ssafy.moyeobang.schedule.adapter.in.web.request.LocationInfo;
-import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleRepositoryInSchedule;
+import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleJpaRepositoryInSchedule;
 import com.ssafy.moyeobang.schedule.adapter.out.persistence.travel.TravelRepositoryInSchedule;
 import com.ssafy.moyeobang.schedule.application.port.out.CreateNewSchedulePort;
 import com.ssafy.moyeobang.schedule.application.port.out.LoadExistingSchedulesPort;
@@ -31,7 +31,7 @@ public class CreateTravelScheduleIntegrationTest extends IntegrationTestSupport 
     private int port;
 
     @Autowired
-    private ScheduleRepositoryInSchedule scheduleRepository;
+    private ScheduleJpaRepositoryInSchedule scheduleRepository;
 
     @Autowired
     private TravelRepositoryInSchedule travelRepository;
