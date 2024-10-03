@@ -7,4 +7,6 @@ public interface SettleUseCase {
     boolean customBalanceSettle(CustomSettleCommand command);
 
     boolean updateBalanceSettle(SettleCommand command);
+
+    boolean updateBalanceSettleInCustom(CustomSettleCommand command);
 }

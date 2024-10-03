@@ -8,13 +8,14 @@ import com.ssafy.moyeobang.settle.application.domain.order.Order;
 import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
 import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
 import com.ssafy.moyeobang.settle.application.port.out.FindOrderPort;
+import com.ssafy.moyeobang.settle.application.port.out.UpdateOrderPort;
 import com.ssafy.moyeobang.settle.error.OrderNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class OrderPersistenceAdapter implements FindOrderPort, CreateOrderPort {
+public class OrderPersistenceAdapter implements FindOrderPort, CreateOrderPort, UpdateOrderPort {
 
     private final OrderRepositoryInSettle orderRepository;
 
@@ -49,5 +50,14 @@ public class OrderPersistenceAdapter implements FindOrderPort, CreateOrderPort {
         orderRepository.save(createOrderEntity);
 
         return orderMapperInSettle.mapToDomain(createOrderEntity);
+    }
+
+    @Override
+    public void deleteOrder(Long id) {
+
+        OrderJpaEntity findOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order id[" + id + "] 주문 건 정보가 존재하지 않습니다."));
+
+        orderRepository.delete(findOrder);
     }
 }

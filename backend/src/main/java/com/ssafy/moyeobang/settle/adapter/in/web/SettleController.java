@@ -60,4 +60,40 @@ public class SettleController {
                 ))
         );
     }
+
+    @PostMapping("/{transactionId}/settle/update/{travelId}")
+    public ApiResult<Boolean> updateSettle(@PathVariable("transactionId") Long transactionId,
+                                           @PathVariable("travelId") Long travelId,
+                                           @RequestBody SettleRequest request){
+
+        return success(request.details().stream()
+                .allMatch(item -> settleUseCase.updateBalanceSettle(
+                        new SettleCommand(
+                                transactionId,
+                                travelId,
+                                item.orderItemTitle(),
+                                item.orderItemPrice(),
+                                item.participants()
+                        ))
+                )
+        );
+    }
+
+    @PostMapping("/{transactionId}/settle/update/custom/{travelId}")
+    public ApiResult<Boolean> updateCustomSettle(@PathVariable("transactionId") Long transactionId,
+                                           @PathVariable("travelId") Long travelId,
+                                           @RequestBody CustomSettleRequest request){
+
+        return success(request.info().stream()
+                .allMatch(info -> settleUseCase.customBalanceSettle(
+                        new CustomSettleCommand(
+                                transactionId,
+                                travelId,
+                                request.paymentName(),
+                                info.money(),
+                                info.memberId()
+                        )
+                ))
+        );
+    }
 }
