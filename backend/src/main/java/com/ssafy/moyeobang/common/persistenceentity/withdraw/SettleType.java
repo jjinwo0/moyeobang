@@ -1,7 +1,9 @@
 package com.ssafy.moyeobang.common.persistenceentity.withdraw;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum SettleType {
 
@@ -18,9 +20,4 @@ public enum SettleType {
             return false;
         }
     }
-
-     public String getWithdrawTypeDescription() {
-
-        return description;
-     }
 }
