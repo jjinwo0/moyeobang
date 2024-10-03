@@ -46,10 +46,10 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
     public TravelAccount loadTravelAccount(String accountNumber) {
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(accountNumber);
         Long balance = bankApiClientInPayment.getBalance(accountNumber, travelAccountEntity.getTravel().getTravelKey());
-
         return TravelAccount.of(
                 accountNumber,
-                Money.of(balance)
+                Money.of(balance),
+                travelAccountEntity.getTravelId()
         );
     }
 
@@ -70,7 +70,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
         TravelAccountJpaEntity travelAccountEntity = getTravelAccount(travelAccount.getAccountNumber());
 
         List<MemberTravelJpaEntity> memberTravels = travelAccountEntity.getTravel().getMemberTravelJpaEntities();
-        
+
         if (memberTravels.isEmpty()) {
             throw new PaymentException(ErrorCode.NO_MEMBER_IN_TRAVEL);
         }

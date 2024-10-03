@@ -114,4 +114,15 @@ public class ScheduleJpaEntity extends BaseEntity {
         this.memo = memo;
         this.imageUrl = imageUrl;
     }
+
+    public void updateComplete() {
+        this.complete = ScheduleStatus.COMPLETE;
+    }
+
+    public void matchingTransaction(WithdrawJpaEntity withdraw) {
+        this.isMatchedTransaction = true;
+        this.complete = ScheduleStatus.COMPLETE;
+        this.withdraw = withdraw;
+    }
+
 }
