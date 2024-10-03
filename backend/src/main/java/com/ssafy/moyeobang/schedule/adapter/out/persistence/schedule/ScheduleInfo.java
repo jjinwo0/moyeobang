@@ -1,7 +1,9 @@
 package com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule;
 
 import com.querydsl.core.annotations.QueryProjection;
+import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleStatus;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -27,28 +29,33 @@ public class ScheduleInfo {
     private final List<Long> participantIds;
 
     @QueryProjection
-    public ScheduleInfo(long scheduleId, String scheduleTitle, LocalDateTime startDateTime, String title,
-                        String address,
-                        String googlePlaceId, boolean isMatchedTransaction, int budget, ScheduleStatus complete,
-                        String imageUrl,
-                        String memo, Double latitude, Double longitude, Integer sequence, Long travelId,
-                        WithdrawInfo withdrawInfo, List<Long> participantIds) {
-        this.scheduleId = scheduleId;
-        this.scheduleTitle = scheduleTitle;
-        this.startDateTime = startDateTime;
-        this.title = title;
-        this.address = address;
-        this.googlePlaceId = googlePlaceId;
-        this.isMatchedTransaction = isMatchedTransaction;
-        this.budget = budget;
-        this.complete = complete;
-        this.imageUrl = imageUrl;
-        this.memo = memo;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.sequence = sequence;
-        this.travelId = travelId;
-        this.withdrawInfo = withdrawInfo;
-        this.participantIds = participantIds;
+    public ScheduleInfo(ScheduleJpaEntity schedule,
+                        WithdrawJpaEntity withdraw) {
+        this.scheduleId = schedule.getId();
+        this.scheduleTitle = schedule.getTitle();
+        this.startDateTime = schedule.getStartDateTime();
+        this.title = schedule.getTitle();
+        this.address = schedule.getAddress();
+        this.googlePlaceId = schedule.getGooglePlaceId();
+        this.isMatchedTransaction = schedule.isMatchedTransaction();
+        this.budget = schedule.getBudget();
+        this.complete = schedule.getComplete();
+        this.imageUrl = schedule.getImageUrl();
+        this.memo = schedule.getMemo();
+        this.latitude = schedule.getLatitude();
+        this.longitude = schedule.getLongitude();
+        this.sequence = schedule.getSequence();
+        this.travelId = schedule.getTravel().getId();
+        this.withdrawInfo = new WithdrawInfo(
+                withdraw.getId(),
+                withdraw.getTitle(),
+                withdraw.getCreatedAt(),
+                withdraw.getAmount(),
+                withdraw.getLatitude(),
+                withdraw.getLongitude(),
+                withdraw.getPaymentRequestId(),
+                withdraw.getSettleType()
+        );
+        this.participantIds = withdraw.getParticipantId();
     }
 }
