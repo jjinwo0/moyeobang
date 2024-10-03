@@ -73,7 +73,7 @@ import React, {useEffect} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
 import {css, keyframes} from '@emotion/react';
-import bangBang from '@/assets/icons/bangBang.png'
+import bangBang from '@/assets/icons/bangBang.png';
 
 interface AddressComponent {
   long_name: string;
