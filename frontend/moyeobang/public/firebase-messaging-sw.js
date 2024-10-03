@@ -51,3 +51,19 @@
 //     event.waitUntil(self.clients.openWindow(clickActionUrl));
 //   }
 // });
+
+// firebase-messaging-sw.js
+
+self.addEventListener('install', event => {
+  console.log('Service Worker 설치 완료.');
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  console.log('Service Worker 활성화 완료.');
+});
+
+self.addEventListener('fetch', event => {
+  console.log('Service Worker에서 fetch 요청을 처리하고 있습니다.');
+  event.respondWith(fetch(event.request));
+});
