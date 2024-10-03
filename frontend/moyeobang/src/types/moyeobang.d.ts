@@ -541,57 +541,6 @@ interface ConsumptionByMember {
   balance: ParticipantAmount;
 }
 
-interface QrData {
-  paymentRequestId: PaymentRequestId;
-  sourceAccountNumber: string;
-}
-
-// pos기
-interface PosPay {
-  placeId: string;
-  placeName: string;
-  placeAddress: Adress;
-  amount: Money;
-  latitude: Latitude;
-  longitude: Longitude;
-  targetAccountNumber: string;
-}
-
-interface PosOrderItem {
-  title: string;
-  amount: number;
-  quantity: number;
-}
-
-// pos기 결제 POST
-interface PaymentProps {
-  paymentRequestId: string;
-  sourceAccountNumber: string;
-  placeId: string;
-  placeName: string;
-  placeAddress: string;
-  amount: Money;
-  latitude: number;
-  longitude: number;
-  targetAccountNumber: string;
-}
-
-// [모임 통장] 정산후 기본 정보
-interface CompleteTransaction {
-  transactionId: TransactionId;
-  money: Money;
-  address: Adress;
-  paymentName: PaymentName;
-  createdAt: CreatedAt;
-  acceptedNumber: AcceptedNumber;
-}
-
-interface OcrItem {
-  name: string;
-  count: number;
-  price: number;
-}
-
 // Review 타입 정의
 interface Review {
   authorName: string;

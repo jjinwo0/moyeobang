@@ -215,3 +215,4 @@ interface OnlineQrData {
     placeId: string;
     amount:number;
 }
+
