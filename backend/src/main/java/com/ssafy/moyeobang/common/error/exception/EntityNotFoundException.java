@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.settle.error;
+package com.ssafy.moyeobang.common.error.exception;
 
 import lombok.Getter;
 

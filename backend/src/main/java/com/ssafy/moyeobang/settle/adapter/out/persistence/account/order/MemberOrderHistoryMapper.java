@@ -5,6 +5,7 @@ import com.ssafy.moyeobang.common.persistenceentity.member.MemberOrderHistoryJpa
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.order.MemberOrderHistory;
 import com.ssafy.moyeobang.settle.application.domain.order.MemberOrderHistory.MappingInfo;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,5 +34,12 @@ public class MemberOrderHistoryMapper {
                 .member(memberEntity)
                 .order(orderEntity)
                 .build();
+    }
+
+    List<MemberOrderHistory> mapToDomainList(final List<MemberOrderHistoryJpaEntity> memberOrderHistoryList) {
+
+        return memberOrderHistoryList.stream()
+                .map(this::mapToDomain)
+                .toList();
     }
 }
