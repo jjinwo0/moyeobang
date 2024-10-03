@@ -18,4 +18,9 @@ public enum SettleType {
             return false;
         }
     }
+
+     public String getWithdrawTypeDescription() {
+
+        return description;
+     }
 }
