@@ -105,7 +105,16 @@ public class WithdrawJpaEntity extends BaseEntity {
                 .toList();
     }
 
-    public String getWithdrawTypeDescription() {
+    public void updateSettleType(String type) {
+
+        if (SettleType.isSettleType(type)) {
+
+            this.settleType = SettleType.valueOf(type);
+        }
+    }
+
+    public String getWithdrawTypeDescription () {
+
         return withdrawType.getDescription();
     }
 }
