@@ -632,3 +632,14 @@ interface ResponsePostDepositAccount {
 interface ResponseDepositAccount {
   accountBalance: number;
 }
+
+//1원입금 요청 응답
+interface ResponseDepositOne {
+  transactionId: number;
+}
+
+//1원입금 알림 요청 응답
+interface ResponseVerifyNotification {
+  authText: string;
+  key: string;
+}
