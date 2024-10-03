@@ -61,7 +61,7 @@ public class NotificationController {
      * @param transactionid
      * @return
      */
-    @PostMapping("/api/notification/verify/{transactionid}")
+    @PostMapping("/api/notification/verify/{memberId}/{transactionid}")
     public ApiResult<VerifyKey> getVerifyKey(@PathVariable("memberId") Long memberId,
                                              @PathVariable("transactionid") Long transactionid) {
 
