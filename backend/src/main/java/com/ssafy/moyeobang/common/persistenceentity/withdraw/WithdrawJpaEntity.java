@@ -99,4 +99,12 @@ public class WithdrawJpaEntity extends BaseEntity {
                 .distinct()
                 .toList();
     }
+
+    public void updateSettleType(String type) {
+
+        if (SettleType.isSettleType(type)) {
+
+            this.settleType = SettleType.valueOf(type);
+        }
+    }
 }

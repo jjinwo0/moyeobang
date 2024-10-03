@@ -33,6 +33,8 @@ public class SettleService implements SettleUseCase {
 
     private final UpdateMemberOrderHistoryPort updateMemberOrderHistoryPort;
 
+    private final UpdateWithdrawPort updateWithdrawPort;
+
     @Override
     public boolean balanceSettle(SettleCommand command) {
 
@@ -58,6 +60,8 @@ public class SettleService implements SettleUseCase {
             updateMemberTravelPort
                     .decreaseMemberTravelAmount(amount, id, command.travelId());
         });
+
+        updateWithdrawPort.updateWithdrawToReceipt(command.transactionId());
 
         return true;
     }
@@ -86,6 +90,8 @@ public class SettleService implements SettleUseCase {
                 command.memberId(),
                 command.travelId()
         );
+
+        updateWithdrawPort.updateWithdrawToCustom(command.transactionId());
 
         return true;
     }
