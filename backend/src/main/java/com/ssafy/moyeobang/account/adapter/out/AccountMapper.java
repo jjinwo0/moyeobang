@@ -4,14 +4,15 @@ import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Stream.concat;
 
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberInfo;
-import com.ssafy.moyeobang.account.application.domain.Member;
-import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Deposit;
+import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.Members;
+import com.ssafy.moyeobang.account.application.domain.Money;
 import com.ssafy.moyeobang.account.application.domain.Settle;
 import com.ssafy.moyeobang.account.application.domain.Settles;
 import com.ssafy.moyeobang.account.application.domain.Transaction;
 import com.ssafy.moyeobang.account.application.domain.Transactions;
+import com.ssafy.moyeobang.account.application.domain.WithdrawTag;
 import com.ssafy.moyeobang.account.application.domain.Withdrawal;
 import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
@@ -93,6 +94,7 @@ public class AccountMapper {
                 .balanceSnapshot(Money.of(withdrawal.getBalanceSnapshot()))
                 .title(withdrawal.getTitle())
                 .address(withdrawal.getPlaceAddress())
+                .tag(WithdrawTag.findBy(withdrawal.getWithdrawTypeDescription()))
                 .settleType(withdrawal.getSettleType().name())
                 .settles(new Settles(settles))
                 .build();
