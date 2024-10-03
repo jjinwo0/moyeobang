@@ -105,7 +105,7 @@
 // type Money = number;
 // type AcceptedNumber = string;
 // type PaymentRequestId = string;
-// type TravelAccountNumber = string;
+// type sourceAccountNumber = string;
 // type IsNew = boolean;
 // type TotalMoney = number;
 // type TotalComsumption = number;
@@ -291,7 +291,7 @@
 
 // interface QrData {
 //   paymentRequestId: string; // 고유번호 uuidv4()
-//   travelAccountNumber: string; // 결제 계좌번호
+//   sourceAccountNumber: string; // 결제 계좌번호
 // }
 
 // interface PosPay {
@@ -301,7 +301,7 @@
 //   amount:Money;
 //   latitude: Latitude;
 //   longitude: Longitude;
-//   storeAccountNumber: string;
+//   targetAccountNumber: string;
 // }
 
 // interface PosOderItem {
@@ -312,14 +312,14 @@
 
 // interface PaymentProps {
 //   paymentRequestId: string;
-//   travelAccountNumber: string; // 결제자(모임통장) 계좌번호
+//   sourceAccountNumber: string; // 결제자(모임통장) 계좌번호
 //   placeId: string;
 //   placeName: string;
 //   placeAddress: string;
 //   amount:Money;
 //   latitude: number;
 //   longitude: number;
-//   storeAccountNumber: string;
+//   targetAccountNumber: string;
 //   // OrderItems : OrderItems[];  // 없앰
 // }
 
@@ -376,7 +376,7 @@
 // }
 
 // interface ResponsePostAccount {
-//   accountNumber: TravelAccountNumber;
+//   accountNumber: sourceAccountNumber;
 // }
 
 // interface PostTravel {
@@ -475,7 +475,7 @@ type OrderItemQuantity = number;
 type OrderItemPrice = number;
 type AcceptedNumber = string;
 type PaymentRequestId = string;
-type TravelAccountNumber = string;
+type sourceAccountNumber = string;
 type IsNew = boolean;
 type TotalMoney = number;
 type TotalConsumption = number;
@@ -495,24 +495,6 @@ interface OrderItems {
   orderItemPrice: OrderItemPrice;
 }
 
-// 모임 통장 공금 잔액 조회
-interface AccountBalanceByGroup {
-  currentBalance: CurrentBalance;
-  totalMoney: TotalMoney;
-  totalComsumption: TotalComsumption;
-  usagePercentage: UsagePercentage;
-}
-
-// 모임 통장 개인 잔액 조회
-interface AccountBalanceBymemberId {
-  participant: ParticipantInfo;
-  personalCurrentBalance: PersonalCurrentBalance;
-  personalTotalMoney: TotalMoney;
-  personalTotalConsumption: TotalComsumption;
-  personalUsagePercentage: PersonalUsagePercentage;
-  needsAdditionalDeposit?: NeedsAdditionalDeposit;
-}
-
 // 일정 관련
 interface MatchedTransaction {
   transactionId: Id;
@@ -529,14 +511,14 @@ interface TravelLocation {
   longitude: Longitude;
 }
 
-interface ConsumptionCategory {
+interface ConsumptionByCategory {
   categoryName: CategoryName;
   proportion: CategoryPercent;
   balance: CurrentBalance;
 }
 
 interface ConsumptionByMember {
-  categoryName: ParticipantInfo;
+  participantInfo: ParticipantInfo;
   proportion: UsagePercentage;
   balance: ParticipantAmount;
 }

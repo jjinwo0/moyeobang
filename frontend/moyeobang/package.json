@@ -14,8 +14,6 @@
   "dependencies": {
     "@babel/preset-react": "^7.24.7",
     "@emotion/babel-preset-css-prop": "^11.12.0",
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
     "@googlemaps/react-wrapper": "^1.1.42",
     "@react-google-maps/api": "^2.19.3",
     "@tanstack/react-query": "^5.55.0",
