@@ -3,6 +3,7 @@ package com.ssafy.moyeobang.schedule.adapter.out.persistence;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
+import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleJpaRepositoryInSchedule;
 import com.ssafy.moyeobang.schedule.adapter.out.persistence.schedule.ScheduleRepositoryInSchedule;
 import com.ssafy.moyeobang.schedule.adapter.out.persistence.travel.TravelRepositoryInSchedule;
 import com.ssafy.moyeobang.schedule.application.domain.TravelSchedule;
@@ -21,10 +22,11 @@ public class CreateNewScheduleAdapter implements CreateNewSchedulePort, LoadExis
     private final ScheduleRepositoryInSchedule scheduleRepository;
     private final TravelScheduleMapper travelScheduleMapper;
     private final TravelRepositoryInSchedule travelRepositoryInSchedule;
+    private final ScheduleJpaRepositoryInSchedule scheduleJpaRepository;
 
     @Override
     public List<TravelSchedule> loadExistingSchedules(long travelId) {
-        List<ScheduleJpaEntity> scheduleJpaEntities = scheduleRepository.findByTravelId(travelId)
+        List<ScheduleJpaEntity> scheduleJpaEntities = scheduleJpaRepository.findByTravelId(travelId)
                 .orElseThrow(() -> new ScheduleException(ErrorCode.TRAVEL_SCHEDULE_NOT_FOUND));
         return travelScheduleMapper.toScheduleList(scheduleJpaEntities);
     }
@@ -37,7 +39,7 @@ public class CreateNewScheduleAdapter implements CreateNewSchedulePort, LoadExis
                         ErrorCode.TRAVEL_NOT_FOUND));
 
         ScheduleJpaEntity scheduleJpaEntity = createSchedule(travelSchedule, travelJpaEntity);
-        scheduleRepository.save(scheduleJpaEntity);
+        scheduleJpaRepository.save(scheduleJpaEntity);
     }
 
 

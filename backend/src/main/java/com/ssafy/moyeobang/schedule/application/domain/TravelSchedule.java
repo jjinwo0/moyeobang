@@ -17,6 +17,7 @@ public class TravelSchedule {
     private String memo;
     private Location location;
     private Integer sequence;
+    private Transaction transaction;
 
 
     public static TravelSchedule createNewSchedule(long travelId, String title, LocalDateTime startTime,
@@ -24,7 +25,6 @@ public class TravelSchedule {
                                                    int sequence) {
         return new TravelSchedule(travelId, title, startTime, budget, ScheduleStatus.INCOMPLETE, imageUrl, memo,
                 location,
-                sequence);
+                sequence, null);
     }
-
 }

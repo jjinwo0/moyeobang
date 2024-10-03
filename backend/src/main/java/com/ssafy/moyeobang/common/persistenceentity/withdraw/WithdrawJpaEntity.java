@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -89,5 +90,13 @@ public class WithdrawJpaEntity extends BaseEntity {
         this.placeName = placeName;
         this.placeAddress = placeAddress;
         this.paymentRequestId = paymentRequestId;
+    }
+
+    public List<Long> getParticipantId() {
+        return orderJpaEntities.stream()
+                .map(OrderJpaEntity::getParticipantId)
+                .flatMap(Set::stream)
+                .distinct()
+                .toList();
     }
 }

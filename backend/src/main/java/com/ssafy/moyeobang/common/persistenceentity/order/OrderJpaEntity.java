@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +52,10 @@ public class OrderJpaEntity extends BaseEntity {
         this.title = title;
         this.amount = amount;
         this.withdraw = withdraw;
+    }
+
+    public Set<Long> getParticipantId() {
+        return getSettle().keySet();
     }
 
     public Map<Long, Long> getSettle() {
