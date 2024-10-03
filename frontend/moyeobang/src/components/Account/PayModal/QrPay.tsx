@@ -47,7 +47,7 @@ export default function QrPay({onClose}:QrPayProps) {
 
     // new EventSource(url, options)
     const fetchSEE = () => {
-        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/payment/connect?paymentRequestId=${paymentRequestId}`, {
+        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`api/payment/connect?paymentRequestId=${paymentRequestId}`, {
             // headers: {
             //     Authorization: `Bearer ${token}`, 
             // },

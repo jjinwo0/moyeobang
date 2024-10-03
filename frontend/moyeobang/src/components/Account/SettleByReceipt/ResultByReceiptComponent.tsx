@@ -88,14 +88,15 @@ const remainMessageStyle=css`
 
 interface ResultByReceiptComponentProps {
   data:TransactionDetailByReceipt;
-  isNew:boolean;
+  isUpdate:boolean;
   onClose:VoidFunction;
 }
 
 // 영수증 인식 결과
 // isNew : True (post) 처음 | isNew : false (fetch) 수정
-export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultByReceiptComponentProps) {
+export default function ResultByReceiptComponenet({data, isUpdate, onClose}:ResultByReceiptComponentProps) {
 
+  console.log('isUpdate', isUpdate)
   const [ updateDetails, setUpdateDetails] = useState<SettledItemByReceipt[]>([]);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -204,7 +205,7 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
       splitMethod:'receipt',
     }
 
-    if ( isNew ) {
+    if ( isUpdate ) {
       updateSettleByReceipt({transactionId: data.transactionId, travelId:travelId, data : updatedReceipt})
     } else {
       postSettleByReceipt({transactionId: data.transactionId, travelId:travelId, data : updatedReceipt})
@@ -267,21 +268,21 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
           ))}
        </div>
       <div css={buttonContainerStyle}>
-        <Link to={`/account/${data.transactionId}/settle`} css={linkStyle}>
+        <Link to={`/account/${data.transactionId}/settle`} search={{ method: isUpdate ? 'custom' : '' }} css={linkStyle}>
           <Btn buttonStyle={{size:'big', style:'greenBlue'}} onClick={handleRestart}>영수증 다시 찍기</Btn>
         </Link>
-        { isNew ? 
-        <Btn 
-        buttonStyle={{size:'big', style: canSettle ? 'blue' : 'gray'}} 
-        onClick={handleSubmit} 
-        disabled={!canSettle}
-        >정산 완료
-        </Btn> : 
+        { isUpdate ? 
         <Btn 
         buttonStyle={{size:'big', style: canSettle ? 'blue' : 'gray'}} 
         onClick={handleSubmit} 
         disabled={!canSettle}
         >수정 완료
+        </Btn> : 
+        <Btn 
+        buttonStyle={{size:'big', style: canSettle ? 'blue' : 'gray'}} 
+        onClick={handleSubmit} 
+        disabled={!canSettle}
+        >정산 완료
         </Btn>}
       </div>
     </div>

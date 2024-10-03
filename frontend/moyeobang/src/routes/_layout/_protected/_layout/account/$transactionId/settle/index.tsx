@@ -86,6 +86,7 @@ export default function Settle() {
               paymentName={transactionDetailData.paymentName}
               createdAt={transactionDetailData.createdAt}
               acceptedNumber={transactionDetailData.acceptedNumber}
+              isUpdate={isUpdate} // method있으면 수정 | 없으면 새로 생성
             />
           }
           { activeComponent === 'right' &&
