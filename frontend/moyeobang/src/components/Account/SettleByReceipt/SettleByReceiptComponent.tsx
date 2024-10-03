@@ -108,9 +108,9 @@ const buttonStyle = css`
     }
 `;
 
-type SettleByReceiptComponentProps = DefaultCompleteTransaction
+type SettleByReceiptComponentProps = DefaultCompleteTransaction & {isUpdate:boolean}
 
-export default function SettleByReceiptComponent({transactionId, money, paymentName, address, createdAt, acceptedNumber} : SettleByReceiptComponentProps) {
+export default function SettleByReceiptComponent({transactionId, money, paymentName, address, createdAt, acceptedNumber, isUpdate} : SettleByReceiptComponentProps) {
 
     const webcamRef = useRef<Webcam>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -219,7 +219,7 @@ export default function SettleByReceiptComponent({transactionId, money, paymentN
     return (
         <div css={layoutStyle}>
            {results && openResultModal ? (
-            <ResultByReceiptComponent data={results} onClose={handleClose} isNew={true} />
+            <ResultByReceiptComponent data={results} onClose={handleClose} isUpdate={isUpdate} />
         ) : (
             <>
                 <div css={cameraStyle}>
