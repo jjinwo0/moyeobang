@@ -119,7 +119,7 @@ export default function QrPay({onClose}:QrPayProps) {
                 <div css={qrContainerStyle}>
                     <QRCode value={JSON.stringify(data)} css={QRStyle} />
                 </div>
-                <PayCard />
+                <PayCard/>
             </>
         )}
     </>

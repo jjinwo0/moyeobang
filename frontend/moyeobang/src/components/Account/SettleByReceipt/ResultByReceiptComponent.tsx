@@ -106,6 +106,20 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
   // 영수증 정산 update API
   const {mutate: updateSettleByReceipt } = useMutation({
     mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByReceipt}) => 
+      moyeobang.updateSettleByReceipt(transactionId, travelId, data),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['transactionDetail', data.transactionId], // detail에 바로 업데이트
+        refetchType: 'all',
+      });
+      await navigate({to: `/account/${data.transactionId}/detail`});
+      onClose();
+    },
+  });
+
+  // 영수증 정산 post API
+  const {mutate: postSettleByReceipt } = useMutation({
+    mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByReceipt}) => 
       moyeobang.postSettleByReceipt(transactionId, travelId, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -169,15 +183,15 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
   function handleSubmit() {
 
     // 회원 아이디만 넣은 details
-    const updatedDetail = updateDetails && updateDetails.map((detail) => {
-      if (detail.orderItemPrice > 0) {
+    const updatedDetail = updateDetails
+    ?.filter(detail => detail.orderItemPrice>0)
+    .map((detail) => {
         const memberIds = detail.participants.map((member) => member.memberId)
         return {
           ...detail,
           participants : memberIds
-        }
-      }
-    })
+        };
+      });
 
     // 보낼 데이터
     const updatedReceipt : PostTransactionDetailByReceipt = {
@@ -189,7 +203,12 @@ export default function ResultByReceiptComponenet({data, isNew, onClose}:ResultB
       details: updatedDetail,
       splitMethod:'receipt',
     }
-    updateSettleByReceipt({transactionId: data.transactionId, travelId:travelId, data : updatedReceipt})
+
+    if ( isNew ) {
+      updateSettleByReceipt({transactionId: data.transactionId, travelId:travelId, data : updatedReceipt})
+    } else {
+      postSettleByReceipt({transactionId: data.transactionId, travelId:travelId, data : updatedReceipt})
+    }
     console.log('정산 클릭 정산될 데이터:', updatedReceipt)
   }
 

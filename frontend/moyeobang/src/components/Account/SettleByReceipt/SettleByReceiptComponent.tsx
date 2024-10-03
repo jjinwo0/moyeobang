@@ -108,7 +108,7 @@ const buttonStyle = css`
     }
 `;
 
-type SettleByReceiptComponentProps = CompleteTransaction
+type SettleByReceiptComponentProps = DefaultCompleteTransaction
 
 export default function SettleByReceiptComponent({transactionId, money, paymentName, address, createdAt, acceptedNumber} : SettleByReceiptComponentProps) {
 

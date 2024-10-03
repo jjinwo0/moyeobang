@@ -52,19 +52,20 @@ export default {
       }
     ),
   /**
-   * 직접 정산 수정 fetch임 추후에
+   * 직접 정산 수정
    */
-  // putSettleByCustom: async (
-  //   transactionId: number,
-  //   data: PostTransactionDetailByCustom
-  // ) =>
-  //   axios.post<MoyeobangResponse<null>>(
-  //     `/travel/accounts/transactions/${transactionId}/settle/custom`,
-  //     data,
-  //     {
-  //       headers: {'Content-Type': 'application/json'},
-  //     }
-  //   ),
+  updateSettleByCustom: async (
+    transactionId: number,
+    travelId: number,
+    data: PostTransactionDetailByCustom
+  ) =>
+    axios.post<MoyeobangResponse<null>>(
+      `/travel/accounts/transactions/${transactionId}/settle/update/custom/${travelId}`,
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
   /**
    * 영수증 정산
    */
@@ -83,18 +84,18 @@ export default {
   /**
    * 영수증 정산 수정 fetch임 추후에
    */
-  // putSettleByReceipt: async (
-  //   transactionId: number,
-  //   data: TransactionDetailByReceipt
-  // ) =>
-  //   axios.post<MoyeobangResponse<null>>(
-  //     `/travel/accounts/transactions/${transactionId}/settle`,
-  //     data,
-  //     {
-  //       headers: {'Content-Type': 'application/json'},
-  //     }
-  //   ),
-
+  updateSettleByReceipt: async (
+    transactionId: number,
+    travelId: number,
+    data: PostTransactionDetailByReceipt
+  ) =>
+    axios.post<MoyeobangResponse<null>>(
+      `/travel/accounts/transactions/${transactionId}/settle/${travelId}`,
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
   /**
    * pos기 결제 요청
    */

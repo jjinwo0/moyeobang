@@ -169,6 +169,7 @@ interface PosPay {
     latitude: Latitude;
     longitude: Longitude;
     storeAccountNumber: string;
+    tag:string;
 }
 
 interface PosOrderItem {
@@ -188,10 +189,11 @@ interface PaymentProps {
     latitude: number;
     longitude: number;
     storeAccountNumber: string;
+    tag:string;
 }
 
 // [모임 통장] 정산후 기본 정보
-interface CompleteTransaction {
+interface DefaultCompleteTransaction {
     transactionId: TransactionId;
     money: Money;
     address: Adress;

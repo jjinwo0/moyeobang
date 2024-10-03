@@ -13,6 +13,7 @@ const starbucks: PosPay = {
     latitude:34.5,
     longitude:90.2,
     storeAccountNumber: '0012280102000441',
+    tag:'카페'
   }
 
 const kurosiro: PosPay = {
@@ -23,6 +24,7 @@ const kurosiro: PosPay = {
     latitude:34.5,
     longitude:90.2,
     storeAccountNumber: '0012280102000441',
+    tag:'식당'
   }
 
 const abebeBakery: PosPay = {
@@ -33,6 +35,7 @@ const abebeBakery: PosPay = {
     latitude:34.5,
     longitude:90.2,
     storeAccountNumber: '0012280102000441',
+    tag:'카페'
   }
 
 const surfing: PosPay = {
@@ -43,6 +46,7 @@ const surfing: PosPay = {
     latitude:34.5,
     longitude:90.2,
     storeAccountNumber: '0012280102000441',
+    tag:'액티비티'
   }
 
 const suksungdo: PosPay = {
@@ -53,6 +57,7 @@ const suksungdo: PosPay = {
     latitude:34.5,
     longitude:90.2,
     storeAccountNumber: '0012280102000441',
+    tag:'식당'
   }
 
 const farm: PosPay = {
@@ -63,6 +68,7 @@ const farm: PosPay = {
     latitude:34.5,
     longitude:90.2,
     storeAccountNumber: '0012280102000441',
+    tag:'액티비티'
   }
 
 export const Route = createFileRoute('/pos/')({
@@ -168,6 +174,7 @@ export default function Pos() {
             <div>latitude(위도) : {data.latitude}</div>
             <div>longitude(경도) : {data.longitude}</div>
             <div>storeAccountNumber(가맹점 계좌번호) : {data.storeAccountNumber}</div>
+            <div>tag(카테고리 이름) : {data.tag}</div>
             </> : 
             undefined
           }
