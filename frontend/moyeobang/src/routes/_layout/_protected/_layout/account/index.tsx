@@ -5,7 +5,6 @@ import { useState } from "react";
 import Navbar from "@/components/common/navBar/Navbar";
 import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
-// import AccountCard from '@/components/Account/AccountCard/AccountCard';
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
 import { profileData} from "@/data/data";
 import moyeobang from '@/services/moyeobang';
@@ -16,9 +15,10 @@ import { isAccountBalanceByGroup } from '@/util/typeGaurd';
 import CardSlider from '@/components/Account/CardSlider/CardSlider';
 import ChartDetailCard from '@/components/Account/Chart/ChartDetailCard';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
+import sadBangBang from '@/assets/icons/sadBangbang.png'
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
-  component: groupAccount
+  component: AccountMain
 })
 
 const layoutStyle = css`
@@ -86,13 +86,28 @@ const chartListStyle=css`
   }
 `;
 
-export default function groupAccount() {
+const emptyTransactionStyle=css`
+  padding-top:100px;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  img {
+    width:100px;
+    hegith:100px;
+  }
+`;
+export default function AccountMain() {
 
   const allList = profileData.map((member) => member.memberId)
   type SelectedMember = MemberId[]; 
   const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
   const [index, setIndex] = useState<number>(0);
   const {accountId} = useTravelDetailStore();
+  const {participantsInfo} = useTravelDetailStore();
 
   // get 모임 통장 거래 전체 리스트
   const {data : transactionData} = useSuspenseQuery({
@@ -147,11 +162,11 @@ export default function groupAccount() {
     <>
     <div css={layoutStyle}>
         <div css={profileListStyle} >
-        <AllImage
-        isSelected={selectedMember.length>1}
-        onClick={() => onMemberClick(null)}
-        />
-        { profileData.map((profile, index) => (
+          <AllImage
+          isSelected={selectedMember.length>1}
+          onClick={() => onMemberClick(null)}
+          />
+        { participantsInfo.map((profile, index) => (
             <ProfileImage 
             key={index} 
             {...profile} 
@@ -165,51 +180,44 @@ export default function groupAccount() {
             account={accountData} 
             consumptionProportionByCategory={proportionData.consumptionByCategory}
             consumptionProportionByMember={proportionData.consumptionByMember}
-            dots={[0,1,2]}
+            dots={transactionListData.length>0 ? [0,1,2] : [0]}
             onChange={handleIndexChange}
             /> :
             <CardSlider 
             account={accountData}
             consumptionProportionByCategory={proportionData.consumptionByCategory}
-            dots={[0,1]}
+            dots={transactionListData.length>0 ? [0,1] : [0]}
             onChange={handleIndexChange}
             />
           }
         </div>
-          {isAccountBalanceByGroup(accountData) ? 
-          (
-              index === 0 ? 
-              <div css={transactionListStyle}>
-                {transactionListData.reverse().map((tran, index) => 
-                    <TransactionCard key={index} {...tran} /> 
-                )}
-              </div> :
-                index === 1 ?
-                <div css={chartListStyle}>
-                  {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
-                  <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
-                  )}
-                </div> :
-                <div css={chartListStyle}>
-                {proportionData.consumptionByMember.sort((a,b) => b.proportion -a.proportion).map((member, index) =>
-                <ChartDetailCard key={index} title={member.member.memberName} proportion={member.proportion} balance={member.balance} profileImage={member.member.profileImage} colorIndex={index}/>
-                )}
-                </div>
-              ) :
-                index === 0 ? 
-                <div css={transactionListStyle}>
-                {transactionListData.reverse().map((tran, index) => 
-                    <TransactionCard key={index} {...tran} />
-                )}
-                </div> :
-                index === 1 ?
-                <div css={transactionListStyle}>
-                  {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
-                  <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance} colortIndex={index}/>
-                )}
-                </div> :
-                undefined
+        <>
+        {index===0 && <div css={transactionListStyle}>
+          { transactionListData.length >0 ? 
+            transactionListData.reverse().map((tran, index) => 
+                <TransactionCard key={index} {...tran} /> 
+            )
+          : 
+            <div css={emptyTransactionStyle}>
+              <img src={sadBangBang} alt="" />
+              아직 결제내역이 없어요
+            </div>
+            }
+          </div>
         }
+        {index===1 && <div css={chartListStyle}>
+          {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
+          <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
+          )}
+        </div>
+        }
+        {index==2 && <div css={chartListStyle}>
+          {proportionData.consumptionByMember.sort((a,b) => b.proportion -a.proportion).map((member, index) =>
+          <ChartDetailCard key={index} title={member.member.memberName} proportion={member.proportion} balance={member.balance} profileImage={member.member.profileImage} colorIndex={index}/>
+          )}
+          </div>
+        }
+        </>
         </div>
     <Navbar/>
     </>
