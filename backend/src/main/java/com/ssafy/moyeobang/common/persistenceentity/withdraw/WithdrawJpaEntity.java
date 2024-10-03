@@ -56,6 +56,9 @@ public class WithdrawJpaEntity extends BaseEntity {
     private String paymentRequestId;
 
     @Enumerated(EnumType.STRING)
+    private WithdrawType withdrawType;
+
+    @Enumerated(EnumType.STRING)
     private SettleType settleType;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -76,6 +79,7 @@ public class WithdrawJpaEntity extends BaseEntity {
                               String placeName,
                               String placeAddress,
                               String paymentRequestId,
+                              WithdrawType withdrawType,
                               SettleType settleType,
                               TravelAccountJpaEntity travelAccount) {
         this.title = title;
@@ -84,12 +88,13 @@ public class WithdrawJpaEntity extends BaseEntity {
         this.targetAccountNumber = targetAccountNumber;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.settleType = settleType;
-        this.travelAccount = travelAccount;
         this.placeId = placeId;
         this.placeName = placeName;
         this.placeAddress = placeAddress;
         this.paymentRequestId = paymentRequestId;
+        this.withdrawType = withdrawType;
+        this.settleType = settleType;
+        this.travelAccount = travelAccount;
     }
 
     public List<Long> getParticipantId() {
@@ -98,5 +103,9 @@ public class WithdrawJpaEntity extends BaseEntity {
                 .flatMap(Set::stream)
                 .distinct()
                 .toList();
+    }
+
+    public String getWithdrawTypeDescription() {
+        return withdrawType.getDescription();
     }
 }

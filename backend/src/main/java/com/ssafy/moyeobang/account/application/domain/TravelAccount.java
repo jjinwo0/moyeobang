@@ -3,6 +3,7 @@ package com.ssafy.moyeobang.account.application.domain;
 import static java.time.LocalDateTime.now;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
@@ -50,11 +51,7 @@ public class TravelAccount {
     }
 
     public Optional<Withdrawal> findTransactionBy(Long transactionId) {
-        return transactions.getTransactions().stream()
-                .filter(transaction -> transaction.getType().equals(TransactionType.WITHDRAWAL))
-                .filter(transaction -> transaction.getTransactionId().equals(transactionId))
-                .findFirst()
-                .map(Withdrawal.class::cast);
+        return transactions.findTransactionBy(transactionId);
     }
 
     public Money getBalanceFor(Member member) {
@@ -70,5 +67,13 @@ public class TravelAccount {
 
     public Money getWithdrawAmountFor(Member member) {
         return transactions.getWithdrawalBalanceFor(member);
+    }
+
+    public WithdrawTagStatistics getWithdrawTagStatistics(Set<Long> memberIds) {
+        Map<WithdrawTag, Money> statistics = transactions.getWithdrawTagStatistics(
+                members.getMembers(memberIds)
+        );
+
+        return new WithdrawTagStatistics(statistics);
     }
 }
