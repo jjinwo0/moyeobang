@@ -36,6 +36,8 @@ public class MemberTravelPersistenceAdapter implements FindMemberTravelPort, Upd
                         "Member[" + memberId + "]이 참여한 여행 [" + travelId + "]의 정보가 없습니다."));
 
         findEntity.addBalance(amount);
+
+        memberTravelRepository.save(findEntity);
     }
 
     @Override
@@ -47,5 +49,7 @@ public class MemberTravelPersistenceAdapter implements FindMemberTravelPort, Upd
                         "Member[" + memberId + "]이 참여한 여행 [" + travelId + "]의 정보가 없습니다."));
 
         findEntity.subtractBalance(amount);
+
+        memberTravelRepository.save(findEntity);
     }
 }
