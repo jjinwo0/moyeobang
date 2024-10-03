@@ -48,6 +48,7 @@ export default function ResultByPos({
     longitude,
     amount,
     storeAccountNumber,
+    tag,
     onClickOutside,
     }:ResultByPos) {
 
@@ -75,6 +76,7 @@ export default function ResultByPos({
             latitude : latitude,
             longitude : longitude,
             storeAccountNumber : storeAccountNumber,
+            tag:tag
         }
         postPayment({data : payData})
     }
@@ -90,6 +92,7 @@ export default function ResultByPos({
                 <p>워도 : {latitude}</p>
                 <p>경도 : {longitude}</p>
                 <p>가맹점 계좌번호 : {storeAccountNumber}</p>
+                <p>카데고리 태그: {tag}</p>
                 <div>
                     <Btn buttonStyle={{style:'blue', size:'big'}} onClick={handleSettle}>결제 하기</Btn>
                 </div>

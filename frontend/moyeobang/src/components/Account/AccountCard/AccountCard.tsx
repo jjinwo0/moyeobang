@@ -2,6 +2,7 @@ import React from "react"
 import backgroundImage from '@/assets/images/skyBackground.jpg'
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors"
+import useTravelDetailStore from "@/store/useTravelDetailStore"
 
 const cardLayoutStyle = css`
     width: 330px;
@@ -60,20 +61,21 @@ const balanceStyle = css`
 `;
 
 interface AccountCardProps {
-    travelName:TravelName
-    travelAccountNumber:TravelAccountNumber;
     memberName?:ParticipantName
     currentBalance:CurrentBalance;   
 }
 
-export default function AccountCard({travelName, travelAccountNumber, memberName, currentBalance} :AccountCardProps ) {
+export default function AccountCard({memberName, currentBalance} :AccountCardProps ) {
+
+    const {travelName} = useTravelDetailStore();
+    const {accountNumber} = useTravelDetailStore();
 
     return (
 
         <div css={cardLayoutStyle}>
             <div css={overlayStyle}>
                     <div css={titleStyle} >{travelName}</div>
-                    <div css={accountStyle} >{travelAccountNumber}</div>
+                    <div css={accountStyle} >{accountNumber}</div>
                     { memberName ? <div css={nameStyle}>{memberName}</div> : undefined}
                     <div css={balanceStyle} >{currentBalance.toLocaleString()}원</div>
             </div>

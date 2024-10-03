@@ -2,6 +2,9 @@ import React from "react"
 import backgroundImage from '@/assets/images/skyBackground.jpg'
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors"
+import useTravelDetailStore from "@/store/useTravelDetailStore"
+import { useSuspenseQuery } from "@tanstack/react-query";
+import moyeobang from "@/services/moyeobang"
 
 const cardLayoutStyle = css`
     width: 330px;
@@ -45,9 +48,15 @@ const timeStyle = css`
     color: ${colors.gray};
 `;
 
+const locationLayoutStyle = css`
+    display:flex;
+    flex-direction:row;
+    gap:5px;
+`;
+
 const locationStyle = css`
     font-family: 'semibold';
-    font-size: 20px;
+    font-size: 16px;
 `;
 
 const balanceStyle = css`
@@ -56,16 +65,43 @@ const balanceStyle = css`
     text-align: right;
 `;
 
-export default function PayCard() {
+interface PaycardProps {
+    currentMoney:Money;
+}
+
+export default function PayCard({currentMoney}:PaycardProps) {
+
+    
+    const {travelName} = useTravelDetailStore();
+    const {startDate} = useTravelDetailStore();
+    const {endDate} = useTravelDetailStore();
+    const {travelPlaceList} = useTravelDetailStore();
+    const {accountId} = useTravelDetailStore();
+    
+    // get 모임 통장 전체 잔액 
+    const { data } = useSuspenseQuery({
+        queryKey: ['accoutByGroup', accountId],
+        queryFn: () => moyeobang.getAccountState(accountId),
+    });
+
+    const accountData = data.data.data;
 
     return (
 
         <div css={cardLayoutStyle}>
             <div css={overlayStyle}>
-            <div css={titleStyle} >아기돼지 오형제</div>
-            <div css={timeStyle} >2024-01-02~2024-09-02</div>
-            <div css={locationStyle} >제주도</div>
-            <div css={balanceStyle} >90000원</div>
+            <div css={titleStyle}>{travelName}</div>
+            <div css={timeStyle}>{startDate}~{endDate}</div>
+            <div css={locationLayoutStyle}>{travelPlaceList.map((place, index) => {
+
+                if (index===travelPlaceList.length-1) {
+                    return <div key={index} css={locationStyle}>{place}</div>
+                } else {
+                    return <div key={index} css={locationStyle}>{place},</div>
+                }
+            }
+            )}</div>
+            <div css={balanceStyle} >{accountData.currentBalance.toLocaleString()}원</div>
             </div>
         </div>
     )

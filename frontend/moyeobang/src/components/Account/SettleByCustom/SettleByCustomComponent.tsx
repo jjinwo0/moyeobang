@@ -50,7 +50,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
     const {travelId} = useTravelDetailStore();
     
     // 직접 정산 API
-    const {mutate: updateCustom } = useMutation({
+    const {mutate: postCustom } = useMutation({
         mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByCustom}) => moyeobang.postSettleByCustom(transactionId, travelId, data),
         onSuccess: async () => {
         await queryClient.invalidateQueries({
@@ -60,6 +60,18 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         await navigate({to: `/account/${transactionId.toString()}/detail`});
         },
      });
+
+        // 직접 정산 API
+    const {mutate: updateCustom } = useMutation({
+        mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByCustom}) => moyeobang.updateSettleByCustom(transactionId, travelId, data),
+        onSuccess: async () => {
+        await queryClient.invalidateQueries({
+            queryKey: ['transactionDetail', transactionId],
+            refetchType: 'all',
+        });
+        await navigate({to: `/account/${transactionId.toString()}/detail`});
+        },
+    });
 
 
     useEffect(()=> {
@@ -136,8 +148,13 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             splitMethod : 'custom', 
             acceptedNumber: acceptedNumber,
         }
-        console.log('POST 전송 데이터 확인',spendData)
-        updateCustom({transactionId, travelId,  data:spendData})
+
+        console.log('직접 정산 POST 데이터',spendData)
+        if (isUpdate) {
+            updateCustom({transactionId, travelId,  data:spendData})
+        } else {
+            postCustom({transactionId, travelId,  data:spendData})
+        }
         setIsOpenFinalModal(false);
     }
 
