@@ -55,8 +55,6 @@ public class WithdrawJpaEntity extends BaseEntity {
 
     private String paymentRequestId;
 
-    private String tag;
-
     @Enumerated(EnumType.STRING)
     private WithdrawType withdrawType;
 
@@ -115,7 +113,7 @@ public class WithdrawJpaEntity extends BaseEntity {
         }
     }
 
-    public String getWithdrawTypeDescription () {
+    public String getWithdrawTypeDescription() {
 
         return withdrawType.getDescription();
     }
