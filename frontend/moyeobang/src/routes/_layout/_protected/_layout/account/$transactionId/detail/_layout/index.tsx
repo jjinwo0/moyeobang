@@ -76,7 +76,7 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
-  console.log('detail 데이터', transactionDetailData) 
+  // console.log('detail 데이터', transactionDetailData) 
 
   function handleUpdateReceipt() {
     setOpentUpdateByReceiptModal(true);
