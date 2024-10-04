@@ -137,7 +137,7 @@ function Index() {
   });
   const data = travelData?.data.data;
 
-  // console.log(data);
+  console.log(data);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -283,9 +283,9 @@ function Index() {
 
           <div css={containerStyle}>
             {tripsToDisplay.length > 0 ? (
-              tripsToDisplay.map(item => (
+              tripsToDisplay.map((item, index) => (
                 <TravelCard
-                  key={item.travelId}
+                  key={`${item.travelId}-${index}`}
                   travelId={item.travelId}
                   travelName={item.travelName}
                   startDate={item.startDate}
