@@ -13,6 +13,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
@@ -39,8 +40,10 @@ class OfflinePaymentControllerDocsTest extends RestDocsSupport {
                 37.7749,
                 -122.4194,
                 10000L,
+                WithdrawType.ETC,
                 "source-account-123",
                 "store-acc-002"
+
         );
         given(paymentUseCase.confirmPayment(any(PaymentCommand.class)))
                 .willReturn(true);
@@ -69,6 +72,8 @@ class OfflinePaymentControllerDocsTest extends RestDocsSupport {
                                         .description("가게 경도"),
                                 fieldWithPath("amount").type(JsonFieldType.NUMBER)
                                         .description("결제 금액"),
+                                fieldWithPath("tag").type(JsonFieldType.STRING)
+                                        .description("결제 태그"),
                                 fieldWithPath("sourceAccountNumber").type(JsonFieldType.STRING)
                                         .description("결제 출발 계좌 번호"),
                                 fieldWithPath("targetAccountNumber").type(JsonFieldType.STRING)

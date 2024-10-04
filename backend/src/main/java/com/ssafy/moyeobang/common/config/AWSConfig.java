@@ -1,4 +1,4 @@
-package com.ssafy.moyeobang.travel.config;
+package com.ssafy.moyeobang.common.config;
 
 import static com.amazonaws.regions.Regions.AP_SOUTHEAST_2;
 
