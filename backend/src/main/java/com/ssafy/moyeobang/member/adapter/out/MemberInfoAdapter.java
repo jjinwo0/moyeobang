@@ -39,6 +39,6 @@ public class MemberInfoAdapter implements LoadMemberInfoPort {
     private MemberAccountJpaEntity findAccountById(Long id) {
 
         return memberAccountRepository.findByMemberId(id)
-                .orElseThrow(() -> new EntityNotFoundException("[" + id + "] 해당하는 회원의 계좌 정보를 찾을 수 없습니다."));
+                .orElse(null);
     }
 }
