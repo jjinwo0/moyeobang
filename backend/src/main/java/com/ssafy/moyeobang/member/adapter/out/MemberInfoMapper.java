@@ -10,6 +10,17 @@ public class MemberInfoMapper {
 
     public MemberInfo mapToDomain(MemberJpaEntity entity, MemberAccountJpaEntity accountEntity) {
 
+        if (accountEntity == null) {
+
+            return MemberInfo.of(
+                    entity.getId(),
+                    entity.getUsername(),
+                    entity.getProfile(),
+                    null,
+                    null
+            );
+        }
+
         return MemberInfo.of(
                 entity.getId(),
                 entity.getUsername(),
