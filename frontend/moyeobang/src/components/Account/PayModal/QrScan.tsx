@@ -12,17 +12,19 @@ const storeData = [
         placeId: 'airport-1',
         placeName : '모여방윙스',
         placeAddress: '제주시 특별자치도, 공항로 2 제주국제공항',
-        latitude: 0,
-        longitude: 0,
-        targetAccountNumber: '0012280102000441',
+        latitude: 33.5070772,
+        longitude: 126.4934311,
+        targetAccountNumber: '0018418012115489',
+        tag:'AIRPLANE'
     },
     {
-        placeId: 'starbucks-1',
+        placeId: 'hotel-1',
         placeName : '호텔모여방',
-        placeAddress: '서울특별시 강남구 테헤란로 108길 42',
-        latitude: 0,
-        longitude: 0,
-        targetAccountNumber: '0012280102000441',
+        placeAddress: '제주특별자치도 제주시 특별자치도, 애월읍 하귀동남3길',
+        latitude: 33.5042779,
+        longitude: 126.519838,
+        targetAccountNumber: '0018418012115489',
+        tag:'ACCOMMODATION'
     }
 ]
 
