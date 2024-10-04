@@ -98,7 +98,7 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
         memberRepository.save(member);
 
         TravelJpaEntity travel = createTravel();
-        travelRepository.save(travel);
+        TravelJpaEntity travelJpaEntity = travelRepository.save(travel);
 
         TravelAccountJpaEntity travelAccountJpaEntity = createTravelAccount(member, travel);
         travelAccountRepository.save(travelAccountJpaEntity);
@@ -107,10 +107,11 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
         Long balance = bankApiClientInPayment.getBalance(accountNumber,
                 travelAccountJpaEntity.getTravel().getTravelKey());
-        TravelAccount travelAccount = TravelAccount.of(accountNumber, Money.of(balance));
+        TravelAccount travelAccount = TravelAccount.of(accountNumber, Money.of(balance), travelJpaEntity.getId());
 
         String paymentRequestId = "payment-001";
-        Store store = new Store("store-001", "Sample Store", "Sample Address", 37.7749, -122.4194, "store-acc-002");
+        Store store = new Store("store-001", "Sample Store", "Sample Address", 37.7749, -122.4194, "store-acc-002",
+                "카페");
         Money paymentRequestMoney = Money.of(10000L);
 
         // when

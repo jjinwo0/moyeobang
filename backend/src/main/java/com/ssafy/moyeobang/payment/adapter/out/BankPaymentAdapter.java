@@ -77,7 +77,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
 
         WithdrawJpaEntity withdraw = createPaymentWithdraw(travelAccountEntity, store,
                 Money.subtract(travelAccount.getBalance(), paymentRequestMoney).getAmount(), paymentRequestMoney,
-                paymentRequestId, store.getStoreAccountNumber());
+                paymentRequestId, store.getStoreAccountNumber(), store.getTag());
 
         WithdrawJpaEntity savedWithdraw = withdrawRepository.save(withdraw);
 
@@ -99,7 +99,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
     private WithdrawJpaEntity createPaymentWithdraw(TravelAccountJpaEntity travelAccount, Store store,
                                                     long balanceSnapshot,
                                                     Money paymentRequestMoney, String paymentRequestId,
-                                                    String targetAccountNumber) {
+                                                    String targetAccountNumber, String tag) {
         return WithdrawJpaEntity.builder()
                 .title(store.getStoreName())
                 .latitude(store.getLatitude())
@@ -113,6 +113,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
                 .placeAddress(store.getStoreAddress())
                 .settleType(SettleType.CUSTOM)
                 .paymentRequestId(paymentRequestId)
+                .tag(tag)
                 .build();
     }
 
