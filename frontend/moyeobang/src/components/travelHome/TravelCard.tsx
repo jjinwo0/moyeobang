@@ -112,11 +112,13 @@ interface TravelCardProps {
   endDate: string | Date;
   travelPlaceList: string[];
   participantsCount: number;
+  participantsInfo?: ParticipantInfo[];
   quizQuestion: string;
   quizAnswer: string;
   onClick?: () => void;
   activeTab?: string;
   travelImg: string | null;
+  accountId?: number;
 }
 
 export default function TravelCard({
@@ -125,9 +127,11 @@ export default function TravelCard({
   startDate,
   endDate,
   travelPlaceList,
+  participantsInfo,
   participantsCount,
   quizQuestion,
   quizAnswer,
+  accountId,
   onClick,
   travelImg,
   activeTab,
@@ -308,7 +312,9 @@ export default function TravelCard({
             startDate={formatDate(startDate)}
             endDate={formatDate(endDate)}
             travelPlaceList={travelPlaceList}
+            participantsInfo={participantsInfo || []}
             onClose={closeSummaryModal}
+            accountId={accountId || 0}
           />
         </div>
       )}

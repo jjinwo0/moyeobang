@@ -294,6 +294,8 @@ function Index() {
                   onClick={() => clickTravelCard(item)}
                   activeTab={activeTab}
                   travelImg={item.travelImg}
+                  participantsInfo={item.participantsInfo}
+                  accountId={item.accountId}
                 />
               ))
             ) : (

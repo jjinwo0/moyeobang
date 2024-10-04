@@ -197,12 +197,20 @@ export default {
    * 1원입금 요청 api
    */
   postDepositAccountOne: async (accountNumber: string, bankName: string) =>
-    axios.post<MoyeobangResponse<null>>(
+    axios.post<MoyeobangResponse<ResponseDepositOne>>(
       '/auth/account/verify/initiate',
       {accountNumber: accountNumber, bankName: bankName},
       {
         headers: {'Content-Type': 'application/json'},
       }
+    ),
+
+  /**
+   * 1원입금 인증 코드 알림 api
+   */
+  postVerifyNotification: async (memberId: number, transactionId: number) =>
+    axios.post<MoyeobangResponse<ResponseVerifyNotification>>(
+      `/notification/verify/${memberId}/${transactionId}`
     ),
 
   /**
