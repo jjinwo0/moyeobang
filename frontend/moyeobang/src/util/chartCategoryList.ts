@@ -23,7 +23,7 @@ export const colorList = [
 // 카테고리와 색깔을 반환하는 함수
 export function getCategoryImageAndColor(category: string) {
     switch (category) {
-        case '호텔':
+        case '숙박':
             return {
                 image: hotel,
                 color: colorList[1] 

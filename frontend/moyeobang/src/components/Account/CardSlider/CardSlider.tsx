@@ -5,6 +5,7 @@ import { useSwipeable } from "react-swipeable";
 import AccountCard from "../AccountCard/AccountCard";
 import ChartCard from "../Chart/ChartCard";
 import { isAccountBalanceByGroup } from "@/util/typeGaurd";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 const sliderStyle= (activeCardIndex : number) => css`
     transform: translateX(-${activeCardIndex * 1}px);
@@ -78,8 +79,6 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
             <>
               {activeCardIndex === 0 && (
                 <AccountCard
-                  travelName={'아기돼지 오형제'}
-                  travelAccountNumber={'333-333-3333'}
                   currentBalance={account.currentBalance}
                 />
               )}
@@ -100,8 +99,6 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
             <>
               {activeCardIndex === 0 && (
                 <AccountCard
-                  travelName={'아기돼지 오형제'}
-                  travelAccountNumber={'333-3333-3333'}
                   currentBalance={account.personalCurrentBalance}
                   memberName={account.simpleUserProfile.memberName}
                 />

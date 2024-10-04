@@ -82,7 +82,7 @@ export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
               dataKey={key} 
               stackId="a" 
               fill={ isConsumptionByMember(data[0]) ? colorList[index] : getCategoryImageAndColor(key).color}  
-              radius={ index===0 ? [20, 0, 0, 20] : index===arr.length-1 ? [0, 20, 20, 0] : undefined} 
+              radius={ arr.length===1 ? [20, 20, 20, 20] : index===0 ? [20, 0, 0, 20] : index===arr.length-1 ? [0, 20, 20, 0] : undefined} 
               />
             ))}
         </BarChart>

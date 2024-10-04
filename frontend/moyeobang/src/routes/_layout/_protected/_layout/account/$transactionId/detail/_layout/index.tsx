@@ -11,6 +11,7 @@ import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import moyeobang from '@/services/moyeobang'
 import ResultByReceiptComponenet from '@/components/Account/SettleByReceipt/ResultByReceiptComponent'
+import useTravelDetailStore from '@/store/useTravelDetailStore'
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -64,10 +65,10 @@ export const Route = createFileRoute('/_layout/_protected/_layout/account/$trans
 })
 
 export default function TransactionDetail() {
-  // 임시 accountId
-  const accountId = 1;
+
   const { transactionId } = Route.useParams()
   const [ openUpdateByReceiptModal, setOpentUpdateByReceiptModal] = useState<boolean>(false);
+  const {accountId} = useTravelDetailStore();
 
   const {data} = useSuspenseQuery({
     queryKey: ['transactionDetail', accountId, transactionId],
@@ -75,7 +76,7 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
-  console.log('거래 상세 데이터', transactionDetailData) 
+  console.log('detail 데이터', transactionDetailData) 
 
   function handleUpdateReceipt() {
     setOpentUpdateByReceiptModal(true);
@@ -96,7 +97,7 @@ export default function TransactionDetail() {
     <ResultByReceiptComponenet 
       data={transactionDetailData as TransactionDetailByReceipt} 
       onClose={handleClose}
-      isNew={false}
+      isUpdate={true}
       />
   ) : (
     <div css={layoutStyle}>

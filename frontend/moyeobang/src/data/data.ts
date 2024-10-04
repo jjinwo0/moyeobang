@@ -400,7 +400,7 @@ export const proportionData = {
       balance:121000
       },
 		{
-		categoryName : '호텔',
+		categoryName : '숙박',
 		proportion : 9.0,
 		balance:121000
 		},
