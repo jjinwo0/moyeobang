@@ -64,6 +64,7 @@ const percentStyle=css`
 `;
 
 const moneyStyle=css`
+    width:130px;
     font-family:'semibold';
     font-size:20px;
     display:flex;

@@ -1,18 +1,19 @@
-type MemberId = number;
-type TransactionId = number;
-type TransactionType = string;
-type Adress = string;
-type OrderItemId = number;
-type OrderItemTitle = string;
-type OrderItemQuantity = number;
-type OrderItemPrice = number;
-type AcceptedNumber = string;
-type PaymentRequestId = string;
-type sourceAccountNumber = string;
-type TotalMoney = number;
-type TotalConsumption = number;
-type TotalSpent = number;
-type AccountId = number;
+// type MemberId = number;
+// type TransactionId = number;
+// type TransactionType = string;
+// type Adress = string;
+// type OrderItemId = number;
+// type OrderItemTitle = string;
+// type OrderItemQuantity = number;
+// type OrderItemPrice = number;
+// type AcceptedNumber = string;
+// type PaymentRequestId = string;
+// type sourceAccountNumber = string;
+// type TotalMoney = number;
+// type TotalConsumption = number;
+// type TotalSpent = number;
+// type AccountId = number;
+// type Nickname = string;
 
 interface ParticipantInfo {
   memberId: MemberId;
@@ -23,20 +24,14 @@ interface ParticipantInfo {
 // [모임통장] 소비 비율 차트 데이터
 interface ConsumptionProportionByCategory {
     categoryName:string;
-    proportion:number;
+    proportion:string;
     balance:number;
 }
 
 interface ConsumptionProportionByMember {
     participantInfo:ParticipantInfo;
-    proportion:number;
+    proportion:string;
     balance:number;
-}
-
-// 전체일때 
-interface ConsumptionProportionData {
-    consumptionByCategory:ConsumptionByCategory[];
-    consumptionByMember:ConsumptionByMember[];
 }
 
 
@@ -44,7 +39,7 @@ interface ConsumptionProportionData {
 interface OrderItems {
     orderItemId: OrderItemId;
     orderItemTitle: OrderItemTitle;
-    orderItemQuantity: OrderItemquantity;
+    orderItemQuantity: OrderItemQuantity;
     orderItemPrice: OrderItemPrice;
 }
 
