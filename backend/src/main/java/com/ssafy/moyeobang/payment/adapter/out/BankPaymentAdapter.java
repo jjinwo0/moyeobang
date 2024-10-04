@@ -20,7 +20,9 @@ import com.ssafy.moyeobang.payment.error.ErrorCode;
 import com.ssafy.moyeobang.payment.error.PaymentException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPaymentPort, CreateAccountPort {
@@ -81,7 +83,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
                 paymentRequestId, store.getStoreAccountNumber(), store.getTag());
 
         WithdrawJpaEntity savedWithdraw = withdrawRepository.save(withdraw);
-
+        log.debug("ProcessPayment Saved withdraw: {}", savedWithdraw);
         bankApiClientInPayment.payment(
                 store.getStoreAccountNumber(),
                 travelAccount.getAccountNumber(),

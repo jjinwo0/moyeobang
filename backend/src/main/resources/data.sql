@@ -83,9 +83,9 @@ INSERT INTO schedule (schedule_title, start_date_time, title, address, google_pl
                       is_matched_transaction, budget, complete, image_url, memo, latitude, longitude, sequence,
                       travel_id, withdraw_id, created_at)
 VALUES ('카페 방문', '2023-10-01 10:00:00', '카페 방문', '서울시 강남구 스타벅스', 'ChIJN1t_tDeuEmsRUsoyG83frY4', TRUE, 5000,
-        'COMPLETE', 'http://image.url/cafe.jpg', '친구들과 카페에서 만남', 37.7749, -122.4194, 1, 1, 1, now()),
+        'COMPLETE', 'http://image.url/cafe.jpg', '친구들과 카페에서 만남', 37.7749, -122.4194, 1, 1, 1, '2024-10-04 12:00:00'),
        ('식당 방문', '2023-10-02 12:30:00', '식당 방문', '서울시 용산구 이태원 식당', 'ChIJ9TPcRgWuEmsRZtZQk5E_7Pc', TRUE, 15000,
-        'INCOMPLETE', 'http://image.url/restaurant.jpg', '가족과 식사', 37.5665, 126.9780, 2, 1, 2, DATE_SUB(now(), INTERVAL 1 SECOND));
+        'INCOMPLETE', 'http://image.url/restaurant.jpg', '가족과 식사', 37.5665, 126.9780, 2, 1, 2, '2024-10-04 13:00:00');
 
 -- 매칭되지 않은 결제 더미 데이터
 INSERT INTO withdraw (title, amount, balance_snapshot, target_account_number, latitude, longitude,
