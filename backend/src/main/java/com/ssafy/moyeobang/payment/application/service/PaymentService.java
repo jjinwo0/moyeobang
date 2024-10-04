@@ -35,7 +35,7 @@ public class PaymentService implements PaymentUseCase {
     private final LoadTravelAccountPort loadTravelAccountPort;
     private final UpdateMemberBalancePort updateMemberBalancePort;
     private final UpdateScheduleTransactionPort updateScheduleTransactionPort;
-    private LocationUtils locationUtils;
+    private final LocationUtils locationUtils;
 
     @Override
     @Transactional

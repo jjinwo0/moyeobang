@@ -1,10 +1,13 @@
 package com.ssafy.moyeobang.common.util;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 하버사인 공식 계산을 위해 사용하는 유틸 클래스
  *
  * @author hunmin
  */
+@Component
 public class LocationUtils {
 
     private static final double EARTH_RADIUS = 6371.0;
