@@ -25,6 +25,7 @@ public class ScheduleInfo {
     private final Double longitude;
     private final Integer sequence;
     private final Long travelId;
+    private final String category;
     private final WithdrawInfo withdrawInfo;
     private final List<Long> participantIds;
 
@@ -46,6 +47,7 @@ public class ScheduleInfo {
         this.longitude = schedule.getLongitude();
         this.sequence = schedule.getSequence();
         this.travelId = schedule.getTravel().getId();
+        this.category = schedule.getCategory();
         this.withdrawInfo = new WithdrawInfo(
                 withdraw.getId(),
                 withdraw.getTitle(),

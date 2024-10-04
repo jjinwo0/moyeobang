@@ -72,7 +72,7 @@ public class GetTravelSchedulesService implements GetTravelSchedulesUseCase {
                 schedule.getLocation().getAddress(),
                 schedule.getLocation().getLatitude(),
                 schedule.getLocation().getLongitude(),
-                "카테고리" // TODO : 카테고리 받아서 리턴하는 로직 추가 필요
+                schedule.getLocation().getCategory()
         );
 
         if (schedule.getTransaction() != null) {

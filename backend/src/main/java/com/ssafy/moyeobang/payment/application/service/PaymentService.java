@@ -1,18 +1,25 @@
 package com.ssafy.moyeobang.payment.application.service;
 
 import com.ssafy.moyeobang.common.annotation.UseCase;
+import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleStatus;
+import com.ssafy.moyeobang.common.util.LocationUtils;
 import com.ssafy.moyeobang.payment.application.domain.Money;
+import com.ssafy.moyeobang.payment.application.domain.ScheduleLocation;
+import com.ssafy.moyeobang.payment.application.domain.Store;
 import com.ssafy.moyeobang.payment.application.domain.TravelAccount;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
 import com.ssafy.moyeobang.payment.application.port.out.ConfirmPaymentPort;
+import com.ssafy.moyeobang.payment.application.port.out.LoadSchedulesPort;
 import com.ssafy.moyeobang.payment.application.port.out.LoadTravelAccountPort;
 import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.application.port.out.SsePort;
 import com.ssafy.moyeobang.payment.application.port.out.UpdateMemberBalancePort;
+import com.ssafy.moyeobang.payment.application.port.out.UpdateScheduleTransactionPort;
 import com.ssafy.moyeobang.payment.error.ErrorCode;
 import com.ssafy.moyeobang.payment.error.PaymentException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentService implements PaymentUseCase {
 
     private final SsePort ssePort;
+    private final LoadSchedulesPort loadSchedulesPort;
     private final ConfirmPaymentPort confirmPaymentPort;
     private final ProcessPaymentPort processPaymentPort;
     private final LoadTravelAccountPort loadTravelAccountPort;
     private final UpdateMemberBalancePort updateMemberBalancePort;
+    private final UpdateScheduleTransactionPort updateScheduleTransactionPort;
+    private final LocationUtils locationUtils;
 
     @Override
     @Transactional
@@ -47,8 +57,33 @@ public class PaymentService implements PaymentUseCase {
 
         PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.toStoreDomain(),
                 command.paymentRequestMoney(), command.paymentRequestId());
-        ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
+
+        List<ScheduleLocation> scheduleLocations = loadSchedulesPort.loadSchedules(travelAccount.getTravelId());
+
+        int maxSequence = findMaxSequence(scheduleLocations);
+
+        Store store = command.toStoreDomain();
+        for (ScheduleLocation schedule : scheduleLocations) {
+            if (schedule.getStatus() == ScheduleStatus.INCOMPLETE) {
+                double distance = locationUtils.calculateDistance(schedule.getLatitude(), schedule.getLongitude(),
+                        store.getLatitude(), store.getLongitude());
+                if (distance <= 1) {
+                    updateScheduleTransactionPort.matchingScheduleTransaction(schedule.getScheduleId(),
+                            paymentResult.transactionId());
+                    ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
+                    return true;
+                }
+            }
+        }
+        updateScheduleTransactionPort.createUnmatchingScheduleTransaction(paymentResult.transactionId(), maxSequence);
         return true;
+    }
+
+    private static int findMaxSequence(List<ScheduleLocation> scheduleLocations) {
+        return scheduleLocations.stream()
+                .mapToInt(ScheduleLocation::getSequence)
+                .max()
+                .orElse(0);
     }
 
     @Override
@@ -74,4 +109,6 @@ public class PaymentService implements PaymentUseCase {
         confirmPaymentPort.confirmPaymentSuccess(command.paymentRequestId());
         return paymentResult;
     }
+
+
 }

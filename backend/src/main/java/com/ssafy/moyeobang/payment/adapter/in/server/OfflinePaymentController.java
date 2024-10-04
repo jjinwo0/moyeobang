@@ -31,14 +31,16 @@ public class OfflinePaymentController {
                 request.placeAddress(),
                 request.latitude(),
                 request.longitude(),
-                request.targetAccountNumber()
+                request.targetAccountNumber(),
+                request.tag()
         );
 
         PaymentCommand command = new PaymentCommand(
                 request.paymentRequestId(),
                 request.sourceAccountNumber(),
                 offlineStoreCommand,
-                request.amount()
+                request.amount(),
+                request.tag()
         );
         boolean paymentSuccess = paymentUseCase.confirmPayment(command);
         return success(paymentSuccess);
