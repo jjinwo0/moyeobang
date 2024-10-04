@@ -39,7 +39,7 @@ export default function QrPay({onClose}:QrPayProps) {
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [resultMessage, setResultMessage] = useState<ResultMessage| null>(null);
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
-    const {accountNumber}= useCurrentTravelStore();
+    const {accountNumber}= useCurrentTravelStore(); // '0012280102000441'
 
     const data : QrData= {
         paymentRequestId: paymentRequestId.current,

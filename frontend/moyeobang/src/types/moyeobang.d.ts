@@ -443,6 +443,7 @@ type ImgUrl = string;
 type LocationName = string;
 type CategoryName = string;
 type InvitationLink = string;
+type Nickname = string;
 
 // API 요청 응답 타입
 interface MoyeobangResponse<T> {
@@ -477,7 +478,6 @@ type AcceptedNumber = string;
 type PaymentRequestId = string;
 type sourceAccountNumber = string;
 type IsNew = boolean;
-type TotalMoney = number;
 type TotalConsumption = number;
 type TotalSpent = number;
 type AccountId = number;
@@ -491,7 +491,7 @@ interface ParticipantInfo {
 interface OrderItems {
   orderItemId: OrderItemId;
   orderItemTitle: OrderItemTitle;
-  orderItemQuantity: OrderItemquantity;
+  orderItemQuantity: OrderItemQuantity;
   orderItemPrice: OrderItemPrice;
 }
 

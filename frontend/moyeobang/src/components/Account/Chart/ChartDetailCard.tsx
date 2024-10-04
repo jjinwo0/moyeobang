@@ -64,6 +64,7 @@ const percentStyle=css`
 `;
 
 const moneyStyle=css`
+    width:130px;
     font-family:'semibold';
     font-size:20px;
     display:flex;
@@ -73,7 +74,7 @@ const moneyStyle=css`
 
 interface ChartImageProps {
     title: string;
-    proportion: number;
+    proportion: string;
     balance:Money;
     profileImage?:ProfileImage;
     colorIndex?:number;
@@ -101,7 +102,7 @@ export default function ChartDetailCard({profileImage, colorIndex, title, propor
                 </div>
             </div>
             <div css={moneyStyle}>
-                {balance}원
+                {balance.toLocaleString()}원
             </div>
         </div>
     )
