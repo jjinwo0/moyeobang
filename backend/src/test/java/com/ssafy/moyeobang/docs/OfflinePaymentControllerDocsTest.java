@@ -39,8 +39,10 @@ class OfflinePaymentControllerDocsTest extends RestDocsSupport {
                 37.7749,
                 -122.4194,
                 10000L,
+                "카페",
                 "source-account-123",
                 "store-acc-002"
+
         );
         given(paymentUseCase.confirmPayment(any(PaymentCommand.class)))
                 .willReturn(true);
@@ -69,6 +71,8 @@ class OfflinePaymentControllerDocsTest extends RestDocsSupport {
                                         .description("가게 경도"),
                                 fieldWithPath("amount").type(JsonFieldType.NUMBER)
                                         .description("결제 금액"),
+                                fieldWithPath("tag").type(JsonFieldType.STRING)
+                                        .description("결제 태그"),
                                 fieldWithPath("sourceAccountNumber").type(JsonFieldType.STRING)
                                         .description("결제 출발 계좌 번호"),
                                 fieldWithPath("targetAccountNumber").type(JsonFieldType.STRING)

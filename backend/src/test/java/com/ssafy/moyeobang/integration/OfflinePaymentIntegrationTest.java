@@ -107,7 +107,8 @@ public class OfflinePaymentIntegrationTest extends IntegrationTestSupport {
                 -122.4194,
                 10000L,
                 accountNumber,
-                "store-acc-002"
+                "store-acc-002",
+                "target-acc-002"
         );
 
         JsonNode paymentResponse = post(port, "/api/payment/confirm", paymentRequest);

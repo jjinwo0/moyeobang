@@ -33,6 +33,7 @@ public class OfflinePaymentControllerTest extends WebAdapterTestSupport {
                 37.7749,
                 -122.4194,
                 10000L,
+                "카페",
                 "source-acc-001",
                 "target-acc-002"
         );
