@@ -4,6 +4,7 @@ import { colors } from "@/styles/colors"
 import { useSuspenseQuery } from "@tanstack/react-query";
 import moyeobang from "@/services/moyeobang"
 import useCurrentTravelStore from "@/store/useCurrentTravelStore"
+import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 const cardLayoutStyle = (travelImg:string) => css`
     width: 330px;
@@ -64,15 +65,18 @@ const balanceStyle = css`
     text-align: right;
 `;
 
-export default function PayCard() {
+interface PayCardProps {
+    isHome:boolean;
+}
+export default function PayCard({isHome} : PayCardProps) {
 
     
-    const {travelName} = useCurrentTravelStore();
-    const {startDate} = useCurrentTravelStore();
-    const {endDate} = useCurrentTravelStore();
-    const {travelPlaceList} = useCurrentTravelStore();
-    const {accountId} = useCurrentTravelStore();
-    const {travelImg} = useCurrentTravelStore();
+    const {travelName} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
+    const {startDate} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
+    const {endDate} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
+    const {travelPlaceList} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
+    const {accountId} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
+    const {travelImg} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
     
     // get 모임 통장 전체 잔액 
     const { data } = useSuspenseQuery({

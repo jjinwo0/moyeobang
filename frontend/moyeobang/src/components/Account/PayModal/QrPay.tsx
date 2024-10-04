@@ -8,6 +8,8 @@ import { EventSourcePolyfill } from "event-source-polyfill";
 import { useEffect, useState } from "react";
 import PayCompletedModal from "./PayCompletedModal";
 import useCurrentTravelStore from "@/store/useCurrentTravelStore";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
+import { useLocation } from "@tanstack/react-router";
 
 const qrContainerStyle = css`
     width: 200px;
@@ -39,7 +41,10 @@ export default function QrPay({onClose}:QrPayProps) {
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [resultMessage, setResultMessage] = useState<ResultMessage| null>(null);
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
-    const {accountNumber}= useCurrentTravelStore(); // '0012280102000441'
+    const location = useLocation();
+    const isHome = location.pathname ==='/'
+    // home에서 연거면 현재 진행중인 여행. account에서 연거면 해당 여행
+    const {accountNumber}= isHome ? useTravelDetailStore() : useCurrentTravelStore(); // '0012280102000441'
 
     const data : QrData= {
         paymentRequestId: paymentRequestId.current,
@@ -121,7 +126,7 @@ export default function QrPay({onClose}:QrPayProps) {
                 <div css={qrContainerStyle}>
                     <QRCode value={JSON.stringify(data)} css={QrCodeStyle} />
                 </div>
-                <PayCard/>
+                <PayCard isHome={isHome}/>
             </>
         )}
     </>
