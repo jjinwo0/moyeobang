@@ -97,7 +97,7 @@ const emptyTransactionStyle=css`
   gap:10px;
   img {
     width:100px;
-    hegith:100px;
+    height:100px;
   }
 `;
 export default function AccountMain() {
@@ -146,7 +146,6 @@ export default function AccountMain() {
   });
 
   // console.log('소비카테고리', DataByCategory.data.data)
-  // console.log('멤버별소비비율', DataByMembers.data.data)
   const proportionDataByMembers = DataByMembers.data.data;
 
   const proportionDataByCategory = DataByCategory.data.data;
@@ -225,13 +224,13 @@ export default function AccountMain() {
         }
         {index===1 && <div css={chartListStyle}>
           {proportionDataByCategory.sort((a,b) => Number(b.proportion)-Number(a.proportion)).map((category, index) => 
-          <ChartDetailCard key={index} title={category.categoryName} proportion={Number(category.proportion)} balance={category.balance}/>
+          <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
           )}
         </div>
         }
         {index==2 && <div css={chartListStyle}>
           {proportionDataByMembers.sort((a,b) => Number(b.proportion)-Number(a.proportion)).map((member, index) =>
-          <ChartDetailCard key={index} title={member.participantInfo.memberName} proportion={Number(member.proportion)} balance={member.balance} profileImage={member.participantInfo.profileImage} colorIndex={index}/>
+          <ChartDetailCard key={index} title={member.participantInfo.memberName} proportion={member.proportion} balance={member.balance} profileImage={member.participantInfo.profileImage} colorIndex={index}/>
           )}
           </div>
         }

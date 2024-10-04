@@ -12,8 +12,8 @@ const starbucks: PosPay = {
     amount: 25000,
     latitude:34.5,
     longitude:90.2,
-    targetAccountNumber: '0012280102000441',
-    tag:'카페'
+    targetAccountNumber: '0018418012115489',
+    tag:'CAFE'
   }
 
 const kurosiro: PosPay = {
@@ -23,8 +23,8 @@ const kurosiro: PosPay = {
     amount: 20000,
     latitude:34.5,
     longitude:90.2,
-    targetAccountNumber: '0012280102000441',
-    tag:'식당'
+    targetAccountNumber: '0018418012115489',
+    tag:'RESTAURANT'
   }
 
 const abebeBakery: PosPay = {
@@ -34,8 +34,8 @@ const abebeBakery: PosPay = {
     amount: 34000,
     latitude:34.5,
     longitude:90.2,
-    targetAccountNumber: '0012280102000441',
-    tag:'카페'
+    targetAccountNumber: '0018418012115489',
+    tag:'CAFE'
   }
 
 const surfing: PosPay = {
@@ -45,8 +45,8 @@ const surfing: PosPay = {
     amount: 66000,
     latitude:34.5,
     longitude:90.2,
-    targetAccountNumber: '0012280102000441',
-    tag:'액티비티'
+    targetAccountNumber: '0018418012115489',
+    tag:'ACTIVITY'
   }
 
 const suksungdo: PosPay = {
@@ -56,8 +56,8 @@ const suksungdo: PosPay = {
     amount: 82000,
     latitude:34.5,
     longitude:90.2,
-    targetAccountNumber: '0012280102000441',
-    tag:'식당'
+    targetAccountNumber: '0018418012115489',
+    tag:'RESTAURANT'
   }
 
 const farm: PosPay = {
@@ -67,8 +67,8 @@ const farm: PosPay = {
     amount: 50000,
     latitude:34.5,
     longitude:90.2,
-    targetAccountNumber: '0012280102000441',
-    tag:'액티비티'
+    targetAccountNumber: '0018418012115489',
+    tag:'ACTIVITY'
   }
 
 export const Route = createFileRoute('/pos/')({
@@ -114,6 +114,7 @@ export default function Pos() {
 
   // 가맹점 계좌번호 고정!
   // const targetAccountNumber = '0012280102000441'
+  // 신규 const targetAccountNumber '0018418012115489'
 
   const [isOpenQrModal, setIsOpenQrModal] = useState<boolean>(false)
   const [data, setData] = useState<PosPay>() // requestId, 결제자 계좌 아이디 없는 data 즉 결제기 데이터

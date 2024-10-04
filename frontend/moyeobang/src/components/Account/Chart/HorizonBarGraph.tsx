@@ -14,8 +14,25 @@ const titleStyle=css`
     padding-right:10px;
 `;
 
+const RechartContainerStyle=css`
+  width:100%;
+  height:100%;
+  .recharts-surface {
+    /* width:100px; */
+  }
+`;
+
+const layoutStyle=css`
+  width:100%;
+  height:60px;
+`;
+
 // 차트에 쓰일 데이터로 변환
 function transformChart(data : (ConsumptionProportionByCategory[] | ConsumptionProportionByMember[])) {
+
+  // const sortedData = [...data].sort((a,b) => {
+  //   const aValue = isConsumptionByMember
+  // })
 
   const transformedData = data.reduce((acc, item) => {
 
@@ -48,14 +65,13 @@ export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
   const keys = Object.keys(chartData[0]).filter((key) => key != 'name');
   const zeroIndex = keys.findIndex((key) => chartData[0][key]===0); // 0이 없으면 -1반환.
   const endIndex = zeroIndex !== -1? zeroIndex : keys.length
-  console.log(121212, endIndex)
 
   return (
-    <div style={{ width: '100%', height: '60px' }}> 
+    <div css={layoutStyle}> 
         <div css={titleStyle}>
             {isConsumptionByMember(data[0]) ? '멤버별 입금 비율(100%기준)' : '카테고리별 소비 비율(100%기준)'}
         </div>
-      <ResponsiveContainer width="100%" height="100%"> 
+      <ResponsiveContainer css={RechartContainerStyle}> 
         <BarChart
         layout="vertical"
           data={chartData}

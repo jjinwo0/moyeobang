@@ -14,7 +14,7 @@ const storeData = [
         placeAddress: '제주시 특별자치도, 공항로 2 제주국제공항',
         latitude: 0,
         longitude: 0,
-        targetAccountNumber: '0012280102000441',
+        targetAccountNumber: '0018418012115489',
     },
     {
         placeId: 'starbucks-1',
@@ -22,7 +22,7 @@ const storeData = [
         placeAddress: '서울특별시 강남구 테헤란로 108길 42',
         latitude: 0,
         longitude: 0,
-        targetAccountNumber: '0012280102000441',
+        targetAccountNumber: '0018418012115489',
     }
 ]
 
