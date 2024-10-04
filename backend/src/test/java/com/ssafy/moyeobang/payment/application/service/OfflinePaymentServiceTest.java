@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleStatus;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.common.util.LocationUtils;
 import com.ssafy.moyeobang.payment.application.domain.Money;
 import com.ssafy.moyeobang.payment.application.domain.ScheduleLocation;
@@ -58,9 +59,9 @@ public class OfflinePaymentServiceTest {
                 "payment-123",
                 "account-123",
                 new OfflineStoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194,
-                        "target-acc-002", "카페"),
+                        "target-acc-002", WithdrawType.ETC),
                 Money.of(10000L),
-                "카페"
+                WithdrawType.ETC
         );
 
         TravelAccount travelAccount = new TravelAccount("account-123", Money.of(20000L), 1L);
@@ -102,9 +103,9 @@ public class OfflinePaymentServiceTest {
                 "payment-123",
                 "account-123",
                 new OfflineStoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194,
-                        "target-acc-002", "카페"),
+                        "target-acc-002", WithdrawType.ETC),
                 Money.of(10000L),
-                "카페"
+                WithdrawType.ETC
         );
 
         TravelAccount travelAccount = new TravelAccount("account-123", Money.of(20000L), 1L);
@@ -127,9 +128,9 @@ public class OfflinePaymentServiceTest {
                 "payment-123",
                 "account-123",
                 new OfflineStoreCommand("store-001", "Sample Store", "1234 Address", 37.7749, -122.4194,
-                        "target-acc-002", "카페"),
+                        "target-acc-002", WithdrawType.ETC),
                 Money.of(30000L),
-                "카페"
+                WithdrawType.ETC
         );
 
         TravelAccount travelAccount = new TravelAccount("account-123", Money.of(20000L), 1L);

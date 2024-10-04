@@ -13,6 +13,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
@@ -39,7 +40,7 @@ class OfflinePaymentControllerDocsTest extends RestDocsSupport {
                 37.7749,
                 -122.4194,
                 10000L,
-                "카페",
+                WithdrawType.ETC,
                 "source-account-123",
                 "store-acc-002"
 

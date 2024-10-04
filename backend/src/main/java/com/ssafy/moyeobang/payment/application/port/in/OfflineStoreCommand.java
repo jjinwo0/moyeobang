@@ -2,6 +2,7 @@ package com.ssafy.moyeobang.payment.application.port.in;
 
 import static com.ssafy.moyeobang.common.util.ValidationUtils.validate;
 
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.payment.application.domain.Store;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,11 +13,12 @@ public record OfflineStoreCommand(
         @NotNull Double latitude,
         @NotNull Double longitude,
         @NotNull String targetAccountNumber,
-        String tag) implements StoreCommand {
+        WithdrawType tag) implements StoreCommand {
 
     public static OfflineStoreCommand createAndValidate(String placeId, String placeName, String placeAddress,
                                                         Double latitude,
-                                                        Double longitude, String targetAccountNumber, String tag) {
+                                                        Double longitude, String targetAccountNumber,
+                                                        WithdrawType tag) {
         OfflineStoreCommand offlineStoreCommand = new OfflineStoreCommand(placeId, placeName, placeAddress, latitude,
                 longitude,
                 targetAccountNumber, tag);

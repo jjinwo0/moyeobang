@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentCommand;
 import com.ssafy.moyeobang.payment.application.port.in.PaymentUseCase;
@@ -34,7 +35,7 @@ public class OnlinePaymentControllerTest extends WebAdapterTestSupport {
                 37.7749,
                 -122.4194,
                 10000L,
-                "카페",
+                WithdrawType.ETC,
                 "source-acc-001",
                 "target-acc-002"
         );

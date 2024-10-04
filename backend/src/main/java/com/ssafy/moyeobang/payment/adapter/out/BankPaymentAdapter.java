@@ -5,6 +5,7 @@ import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClientInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travelaccount.TravelAccountRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.withdraw.WithdrawRepositoryInPayment;
@@ -99,7 +100,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
     private WithdrawJpaEntity createPaymentWithdraw(TravelAccountJpaEntity travelAccount, Store store,
                                                     long balanceSnapshot,
                                                     Money paymentRequestMoney, String paymentRequestId,
-                                                    String targetAccountNumber, String tag) {
+                                                    String targetAccountNumber, WithdrawType tag) {
         return WithdrawJpaEntity.builder()
                 .title(store.getStoreName())
                 .latitude(store.getLatitude())
@@ -113,7 +114,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
                 .placeAddress(store.getStoreAddress())
                 .settleType(SettleType.CUSTOM)
                 .paymentRequestId(paymentRequestId)
-                .tag(tag)
+                .withdrawType(tag)
                 .build();
     }
 

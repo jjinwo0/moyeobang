@@ -8,6 +8,7 @@ import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.common.util.SseUtils;
 import com.ssafy.moyeobang.payment.adapter.in.server.request.OfflinePaymentRequest;
 import com.ssafy.moyeobang.payment.adapter.out.UpdateMemberBalanceAdapter;
@@ -106,7 +107,7 @@ public class OfflinePaymentIntegrationTest extends IntegrationTestSupport {
                 37.7749,
                 -122.4194,
                 10000L,
-                accountNumber,
+                WithdrawType.ETC,
                 "store-acc-002",
                 "target-acc-002"
         );

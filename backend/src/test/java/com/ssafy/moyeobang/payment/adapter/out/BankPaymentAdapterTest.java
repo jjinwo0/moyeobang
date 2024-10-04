@@ -6,6 +6,7 @@ import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClientInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.member.MemberRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travel.TravelRepositoryInPayment;
@@ -111,7 +112,7 @@ public class BankPaymentAdapterTest extends PersistenceAdapterTestSupport {
 
         String paymentRequestId = "payment-001";
         Store store = new Store("store-001", "Sample Store", "Sample Address", 37.7749, -122.4194, "store-acc-002",
-                "카페");
+                WithdrawType.ETC);
         Money paymentRequestMoney = Money.of(10000L);
 
         // when
