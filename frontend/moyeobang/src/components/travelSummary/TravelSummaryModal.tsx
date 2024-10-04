@@ -11,6 +11,8 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko'; // 한국어 요일을 위해 한국어 로케일 임포트
 import weekday from 'dayjs/plugin/weekday'; // 요일 계산을 위한 플러그인
 import updateLocale from 'dayjs/plugin/updateLocale'; // 요일 출력 수정용 플러그인
+import {useSuspenseQuery} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 const travelSummary: TravelSummary = {
   locationList: [
@@ -252,6 +254,8 @@ interface TravelSummaryProps {
   startDate: string;
   endDate: string;
   travelPlaceList: string[];
+  participantsInfo: ParticipantInfo[];
+  accountId: number;
   onClose: () => void;
 }
 
@@ -260,14 +264,49 @@ export default function TravelSummaryModal({
   startDate,
   endDate,
   travelPlaceList,
+  participantsInfo,
+  accountId,
   onClose,
 }: TravelSummaryProps) {
   // const {travelName, startDate, endDate, travelPlaceList} =
   //   useTravelDetailStore();
   const [currentSlide, setCurrentSlide] = useState(0); // 슬라이드 상태
   const slideCount = 2; // 슬라이드 개수
+  const memberIds = participantsInfo.map(p => p.memberId);
+  type SelectedMember = MemberId[];
+  const [selectedMember] = useState<SelectedMember>(memberIds);
+
+  // get 멤버별&전체 카테고리별 소비 비율
+  const {data: DataByCategory} = useSuspenseQuery({
+    queryKey: ['categoryProportionList', accountId, selectedMember],
+    queryFn: () =>
+      moyeobang.getComsuptionStaticByCategory(
+        Number(accountId),
+        selectedMember
+      ),
+  });
+
+  // get 멤버별&전체 카테고리별 소비 비율
+  const {data: DataByMembers} = useSuspenseQuery({
+    queryKey: ['membersProportionList', accountId],
+    queryFn: () => moyeobang.getComsuptionStaticByMembers(Number(accountId)),
+  });
+
+  //get 모임통장 잔액조회
+  const {data: AccountMoneyData} = useSuspenseQuery({
+    queryKey: ['accountByGroup', accountId],
+    queryFn: () => moyeobang.getAccountState(Number(accountId)),
+  });
+
   const slides = [
-    <ConsumptionSummary travelData={travelSummary} />,
+    <ConsumptionSummary
+      key="consumptionSummary"
+      travelData={travelSummary}
+      categoryData={DataByCategory?.data.data || []}
+      memberData={DataByMembers?.data.data || []}
+      totalMoney={AccountMoneyData?.data.data.totalAmount}
+      totalConsumption={AccountMoneyData?.data.data.totalSpent}
+    />,
     <ImgSummary travelImg={travelSummary.imgSummary} />,
   ]; // 슬라이드에 표시할 컴포넌트들
 

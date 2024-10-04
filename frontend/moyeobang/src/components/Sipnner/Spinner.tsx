@@ -1,6 +1,6 @@
 import React from 'react';
 import bangbang from '@/assets/icons/bangBang.png';
-import { css } from '@emotion/react';
+import {css} from '@emotion/react';
 
 const spinnerContainerStyle = css`
   position: fixed;
@@ -23,7 +23,8 @@ const spinnerImageStyle = css`
   animation: bounce 0.7s infinite ease-in-out;
 
   @keyframes bounce {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0); /* 원래 위치 */
     }
     50% {
@@ -35,7 +36,7 @@ const spinnerImageStyle = css`
 export default function Spinner() {
   return (
     <div css={spinnerContainerStyle}>
-      <img src={bangbang} alt="Loading" css={spinnerImageStyle} />
+      <img src={bangbang} css={spinnerImageStyle} />
     </div>
   );
 }
