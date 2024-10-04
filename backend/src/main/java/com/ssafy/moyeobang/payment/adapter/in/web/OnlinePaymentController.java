@@ -32,14 +32,16 @@ public class OnlinePaymentController {
                 request.placeAddress(),
                 request.latitude(),
                 request.longitude(),
-                request.targetAccountNumber()
+                request.targetAccountNumber(),
+                request.tag()
         );
 
         PaymentCommand command = new PaymentCommand(
                 request.paymentRequestId(),
                 request.sourceAccountNumber(),
                 onlineStoreCommand,
-                request.amount()
+                request.amount(),
+                request.tag()
         );
         OnlinePaymentResponse onlinePaymentResponse = new OnlinePaymentResponse(
                 paymentUseCase.processPayment(command).transactionId());

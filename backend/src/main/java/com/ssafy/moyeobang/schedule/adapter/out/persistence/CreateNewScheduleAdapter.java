@@ -57,6 +57,7 @@ public class CreateNewScheduleAdapter implements CreateNewSchedulePort, LoadExis
                 .latitude(travelSchedule.getLocation().getLatitude())
                 .longitude(travelSchedule.getLocation().getLongitude())
                 .sequence(travelSchedule.getSequence())
+                .category(travelSchedule.getLocation().getCategory())
                 .travel(travelJpaEntity)
                 .build();
     }

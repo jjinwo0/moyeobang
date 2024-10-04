@@ -12,4 +12,8 @@ public interface NotificationUseCase {
     void sendRemind(Long travelId, Long memberId, NotificationPayload payload);
 
     void saveToken(Long memberId, String token);
+
+    String getTransactionInfo(Long memberId, Long transactionId);
+
+    void sendVerifyMessage(Long memberId, String authText, String key);
 }

@@ -17,4 +17,5 @@ public class PaymentRequest {
     private long amount;
     private String sourceAccountNumber;
     private String targetAccountNumber;
+    private String tag;
 }

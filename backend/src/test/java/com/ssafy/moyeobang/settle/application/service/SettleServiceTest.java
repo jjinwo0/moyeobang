@@ -15,6 +15,8 @@ import com.ssafy.moyeobang.settle.application.port.out.CreateMemberOrderHistoryP
 import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
 import com.ssafy.moyeobang.settle.application.port.out.UpdateMemberTravelPort;
 import java.util.List;
+
+import com.ssafy.moyeobang.settle.application.port.out.UpdateWithdrawPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,9 @@ class SettleServiceTest {
 
     @Mock
     private UpdateMemberTravelPort updateMemberTravelPort;
+
+    @Mock
+    private UpdateWithdrawPort updateWithdrawPort;
 
     @InjectMocks
     private SettleService settleService;
@@ -85,6 +90,8 @@ class SettleServiceTest {
         // updateMemberTravelPort decreaseMemberTravelAmount 메서드가 회원 별로 각 1번씩 총 3번 호출되는지 확인
         verify(updateMemberTravelPort, times(3)).decreaseMemberTravelAmount(eq(3333), anyLong(), anyLong());
 
+        verify(updateWithdrawPort, times(1)).updateWithdrawToReceipt(anyLong());
+
         // balanceSettle 메서드의 결과가 true인지 확인
         assertThat(result).isTrue();
     }
@@ -118,6 +125,8 @@ class SettleServiceTest {
         verify(createMemberOrderHistoryPort, times(3)).createMemberOrderHistory(eq(3333), any());
         // 호출 시 참여하는 회원의 ID값 captor 적재
         verify(updateMemberTravelPort, times(3)).decreaseMemberTravelAmount(eq(3333), idCaptor.capture(), anyLong());
+
+        verify(updateWithdrawPort, times(1)).updateWithdrawToReceipt(anyLong());
 
         // 주문 참여자 ID 확보
         List<Long> allIds = idCaptor.getAllValues();

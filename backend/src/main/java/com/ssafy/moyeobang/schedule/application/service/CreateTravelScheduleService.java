@@ -29,7 +29,7 @@ public class CreateTravelScheduleService implements CreateTravelScheduleUseCase 
 
         Location location = Location.of(command.location().title(), command.location().address(),
                 command.location().googlePlaceId(),
-                command.location().lat(), command.location().lng());
+                command.location().lat(), command.location().lng(), command.location().category());
 
         // TODO : 예산 예측 로직 필요
         TravelSchedule newSchedule = TravelSchedule.createNewSchedule(

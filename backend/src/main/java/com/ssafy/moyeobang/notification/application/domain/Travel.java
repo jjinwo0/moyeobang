@@ -12,7 +12,9 @@ public class Travel {
 
     private String title;
 
-    public static Travel of(Long id, String title) {
-        return new Travel(id, title);
+    private String travelKey;
+
+    public static Travel of(Long id, String title, String travelKey) {
+        return new Travel(id, title, travelKey);
     }
 }

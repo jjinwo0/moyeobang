@@ -28,7 +28,7 @@ public class TravelScheduleMapper {
 
     private Location createLocation(ScheduleJpaEntity entity) {
         return Location.of(entity.getTitle(), entity.getAddress(), entity.getGooglePlaceId(), entity.getLatitude(),
-                entity.getLongitude());
+                entity.getLongitude(), entity.getCategory());
     }
 
 }

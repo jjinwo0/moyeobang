@@ -1,5 +1,6 @@
 package com.ssafy.moyeobang.payment.application.domain;
 
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,10 +14,11 @@ public class Store {
     private double latitude;
     private double longitude;
     private String storeAccountNumber;
+    private WithdrawType tag;
 
 
     public static Store of(String storeId, String storeName, String storeAddress, double latitude, double longitude,
-                           String storeAccountNumber) {
-        return new Store(storeId, storeName, storeAddress, latitude, longitude, storeAccountNumber);
+                           String storeAccountNumber, WithdrawType tag) {
+        return new Store(storeId, storeName, storeAddress, latitude, longitude, storeAccountNumber, tag);
     }
 }
