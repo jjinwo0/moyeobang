@@ -13,10 +13,11 @@ public class Store {
     private double latitude;
     private double longitude;
     private String storeAccountNumber;
+    private String tag;
 
 
     public static Store of(String storeId, String storeName, String storeAddress, double latitude, double longitude,
-                           String storeAccountNumber) {
-        return new Store(storeId, storeName, storeAddress, latitude, longitude, storeAccountNumber);
+                           String storeAccountNumber, String tag) {
+        return new Store(storeId, storeName, storeAddress, latitude, longitude, storeAccountNumber, tag);
     }
 }

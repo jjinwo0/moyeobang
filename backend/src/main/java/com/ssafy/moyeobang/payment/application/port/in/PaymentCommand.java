@@ -8,12 +8,12 @@ import jakarta.validation.constraints.NotNull;
 
 public record PaymentCommand(@NotNull String paymentRequestId, @NotNull String travelAccountNumber,
                              @NotNull StoreCommand storeCommand,
-                             @NotNull Money paymentRequestMoney) {
+                             @NotNull Money paymentRequestMoney, String tag) {
 
     public PaymentCommand(String paymentRequestId, String travelAccountNumber,
                           StoreCommand storeCommand,
-                          Long amount) {
-        this(paymentRequestId, travelAccountNumber, storeCommand, Money.of(amount));
+                          Long amount, String tag) {
+        this(paymentRequestId, travelAccountNumber, storeCommand, Money.of(amount), tag);
 
         validate(this);
     }

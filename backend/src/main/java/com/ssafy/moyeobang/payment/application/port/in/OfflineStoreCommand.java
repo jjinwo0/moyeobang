@@ -11,20 +11,21 @@ public record OfflineStoreCommand(
         @NotNull String placeAddress,
         @NotNull Double latitude,
         @NotNull Double longitude,
-        @NotNull String targetAccountNumber) implements StoreCommand {
+        @NotNull String targetAccountNumber,
+        String tag) implements StoreCommand {
 
     public static OfflineStoreCommand createAndValidate(String placeId, String placeName, String placeAddress,
                                                         Double latitude,
-                                                        Double longitude, String targetAccountNumber) {
+                                                        Double longitude, String targetAccountNumber, String tag) {
         OfflineStoreCommand offlineStoreCommand = new OfflineStoreCommand(placeId, placeName, placeAddress, latitude,
                 longitude,
-                targetAccountNumber);
+                targetAccountNumber, tag);
         validate(offlineStoreCommand);
         return offlineStoreCommand;
     }
 
 
     public Store toDomain() {
-        return Store.of(placeId, placeName, placeAddress, latitude, longitude, targetAccountNumber);
+        return Store.of(placeId, placeName, placeAddress, latitude, longitude, targetAccountNumber, tag);
     }
 }

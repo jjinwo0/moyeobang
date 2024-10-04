@@ -8,6 +8,7 @@ public record OfflinePaymentRequest(
         double latitude,
         double longitude,
         long amount,
+        String tag,
         String sourceAccountNumber,
         String targetAccountNumber) {
 }

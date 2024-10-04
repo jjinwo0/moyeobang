@@ -11,8 +11,10 @@ public class Location {
     private String googlePlaceId;
     private double latitude;
     private double longitude;
+    private String category;
 
-    public static Location of(String title, String address, String googlePlaceId, double latitude, double longitude) {
-        return new Location(title, address, googlePlaceId, latitude, longitude);
+    public static Location of(String title, String address, String googlePlaceId, double latitude, double longitude,
+                              String category) {
+        return new Location(title, address, googlePlaceId, latitude, longitude, category);
     }
 }

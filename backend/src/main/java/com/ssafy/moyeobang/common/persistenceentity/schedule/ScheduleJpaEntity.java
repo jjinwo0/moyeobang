@@ -60,6 +60,8 @@ public class ScheduleJpaEntity extends BaseEntity {
 
     private int sequence;
 
+    private String category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_id")
     private TravelJpaEntity travel;
@@ -82,6 +84,7 @@ public class ScheduleJpaEntity extends BaseEntity {
                              double longitude,
                              String googlePlaceId,
                              int sequence,
+                             String category,
                              TravelJpaEntity travel,
                              WithdrawJpaEntity withdraw) {
         this.scheduleTitle = scheduleTitle;
@@ -97,6 +100,7 @@ public class ScheduleJpaEntity extends BaseEntity {
         this.googlePlaceId = googlePlaceId;
         this.memo = memo;
         this.sequence = sequence;
+        this.category = category;
         this.travel = travel;
         this.withdraw = withdraw;
     }
@@ -116,7 +120,11 @@ public class ScheduleJpaEntity extends BaseEntity {
     }
 
     public void updateComplete() {
-        this.complete = ScheduleStatus.COMPLETE;
+        if (this.complete == ScheduleStatus.COMPLETE) {
+            this.complete = ScheduleStatus.INCOMPLETE;
+        } else {
+            this.complete = ScheduleStatus.COMPLETE;
+        }
     }
 
     public void matchingTransaction(WithdrawJpaEntity withdraw) {
