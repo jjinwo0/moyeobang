@@ -2,13 +2,11 @@ import React from 'react';
 import doubleButton from '@/assets/icons/doubleButton.png';
 import blankCheckInput from '@/assets/icons/blackBlankCheck.png';
 import checkInput from '@/assets/icons/blackCheck.png';
-import { profileData } from '@/data/data';
 import { css } from '@emotion/react';
 import { colors } from '@/styles/colors';
 import { useState, useEffect } from 'react';
-import { OrderItemId, OrderItemQuantity } from '@/types/ex';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import { OrderItemPrice, OrderItemTitle } from '@/types/account';
 
 const cardLayoutStyle=css`
     display:flex;
@@ -132,7 +130,8 @@ export default function UpdateCardByReceipt({
     const [quantity, setQuantity]=useState(itemQuantity);
     const [price, setPrice]=useState(itemPrice);
     const [selectedParticipants, setSelectedParticipants] = useState(participants);
-    const participantsCount:number = profileData.length
+    const {participantsInfo} = useTravelDetailStore();
+    const participantsCount:number = participantsInfo.length
 
     const [isOpen, setIsOpen] = useState(false);
     const [isAll, setIsAll] = useState(false);
@@ -145,7 +144,7 @@ export default function UpdateCardByReceipt({
         if (isAll) {
             setSelectedParticipants([]);
         } else {
-            setSelectedParticipants(profileData);
+            setSelectedParticipants(participantsInfo);
         }
         setIsAll(!isAll);
     }
@@ -162,7 +161,7 @@ export default function UpdateCardByReceipt({
             // 제거하기
             setSelectedParticipants((prev) => prev?.filter(prev => prev.memberId !== memberId))
         } else {
-            setSelectedParticipants((prev) => [...prev, profileData.find(prev => prev.memberId===memberId)!])
+            setSelectedParticipants((prev) => [...prev, participantsInfo.find(prev => prev.memberId===memberId)!])
         }
     }
 
@@ -224,7 +223,7 @@ export default function UpdateCardByReceipt({
                     <img onClick={handleAll} src={blankCheckInput} alt="" />
                 )}</div>
                 <div css={carouselStyle}>
-                    {profileData.map((profile, index) => (
+                    {participantsInfo.map((profile, index) => (
                         <ProfileImage 
                             key={index} 
                             profileImage={profile.profileImage} 

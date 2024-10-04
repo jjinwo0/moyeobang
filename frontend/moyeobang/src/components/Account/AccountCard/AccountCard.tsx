@@ -1,13 +1,12 @@
 import React from "react"
-import backgroundImage from '@/assets/images/skyBackground.jpg'
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors"
 import useTravelDetailStore from "@/store/useTravelDetailStore"
 
-const cardLayoutStyle = css`
+const cardLayoutStyle = (travelImg:string) =>  css`
     width: 330px;
     height: 200px;
-    background-image: url(${backgroundImage});
+    background-image: url(${travelImg});
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-size: cover;
     position: relative;
@@ -69,10 +68,11 @@ export default function AccountCard({memberName, currentBalance} :AccountCardPro
 
     const {travelName} = useTravelDetailStore();
     const {accountNumber} = useTravelDetailStore();
-
+    const {travelImg} = useTravelDetailStore();
+    
     return (
 
-        <div css={cardLayoutStyle}>
+        <div css={cardLayoutStyle(travelImg)}>
             <div css={overlayStyle}>
                     <div css={titleStyle} >{travelName}</div>
                     <div css={accountStyle} >{accountNumber}</div>

@@ -46,9 +46,17 @@ const profileListStyle = css`
     overflow-x:auto;
     padding-top:5px;
     padding-bottom: 10px;
+
+    // 스크롤바 제거
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+    
+    &::-webkit-scrollbar {
+        display: none; 
+    }
 `;
 
-export default function DetailCardByReceipt({orderItemTitle, orderItemPrice, orderItemQuantity, participants}:SettledItemInfo) {
+export default function DetailCardByReceipt({orderItemTitle, orderItemPrice, orderItemQuantity, participants}:SettledItemByReceipt) {
 
     return (
         <div>

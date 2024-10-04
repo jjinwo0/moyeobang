@@ -13,5 +13,5 @@ export function isConsumptionByMember(
     consumptionData: ConsumptionProportionByCategory | ConsumptionProportionByMember
     ): consumptionData is ConsumptionProportionByMember {
 
-    return (consumptionData as ConsumptionProportionByMember).member !== undefined;
+    return (consumptionData as ConsumptionProportionByMember).participantInfo !== undefined;
 }
