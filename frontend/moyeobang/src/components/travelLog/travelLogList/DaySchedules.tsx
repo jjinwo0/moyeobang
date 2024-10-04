@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';

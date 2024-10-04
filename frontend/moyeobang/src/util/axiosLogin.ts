@@ -1,38 +1,58 @@
-// import axios from 'axios';
-// import {useAuthContext} from '@/contexts/AuthContext';
-// import { getCookie } from '@/util/cookie';
-// const {accessToken} = useAuthContext();
+import axios from 'axios';
+import {useAuthContext} from '@/contexts/AuthContext';
+import {getCookie} from '@/util/cookie';
+const {accessToken, setAccessToken, handleLogout, loginProvider, setLoginProvider, isLogin, setIsLogin} = useAuthContext();
 
-// const axiosLogin = axios.create({
-//   baseURL: import.meta.env.VITE_BASEURL,
-//   responseType: 'json',
-//   timeout: 4000,
-// });
+const axiosLogin = axios.create({
+  baseURL: import.meta.env.VITE_BASEURL,
+  responseType: 'json',
+  timeout: 4000,
+});
+axiosLogin.interceptors.request.use(
+  async config => {
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
 
-// axiosLogin.interceptors.request.use(
-//   async config => {
-//     if (accessToken) {
-//       config.headers.Authorization = `Bearer ${accessToken}`;
-//     }
-//     return config;
-//   },
-//   error => {
-//     return Promise.reject(error);
-//   }
-// );
+axiosLogin.interceptors.response.use(
+  response => {
+    return response;
+  },
+  async error => {
+    // 원래 로그인 요청
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const refreshToken = getCookie('refreshToken');
+      console.log('[*] refreshToken', refreshToken);
 
-// axiosLogin.interceptors.response.use(response => {
-//   return response;
-// },
-// async (error) => {
-//   const originalRequest = error.config;
-//   if(error.response.status === 401 && !originalRequest._retry){
-//     originalRequest._retry = true;
+      try {
+        let response; // 초기화
+        if (loginProvider === 'google') {
+          response = await axiosLogin.post(`/oauth2/authorization/google`, {refreshToken});
+        } else if (loginProvider === 'kakao') {
+          response = await axiosLogin.post(`/oauth2/authorization/kakao`, {refreshToken});
+        }
+        if (response) {
+          const newAccessToken = response.data.accessToken;
+          setAccessToken(newAccessToken);
 
-//     const refreshToken = getCookie('refreshToken')
-//   }
-// }
-
-// );
-
-// export default axiosLogin;
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosLogin(originalRequest);
+        }
+      } catch (refreshError) {
+        // 리프레시 토큰 만료
+        console.log('Failed to refresh access token:', refreshError);
+        handleLogout();
+      }
+      return Promise.reject(error);
+    }
+  }
+);
+export default axiosLogin;
