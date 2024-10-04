@@ -50,61 +50,68 @@ INSERT INTO quiz (travel_id, question, answer)
 VALUES (1, '김훈민의 발 사이즈는?', '235'),
        (2, '김용수의 키는?', '155');
 
+INSERT INTO deposit (amount, balance_snapshot, created_at, updated_at, member_id, travel_account_id, created_by,
+                     modified_by)
+VALUES (200000, 200000, '2023-09-02 09:00:00', '2023-09-02 09:00:00', 1, 1, 'admin', 'admin'),
+       (200000, 400000, '2023-09-02 10:30:00', '2023-09-02 10:30:00', 2, 1, 'admin', 'admin'),
+       (200000, 600000, '2023-09-02 12:00:00', '2023-09-02 12:00:00', 3, 1, 'admin', 'admin'),
+       (200000, 800000, '2023-09-02 13:00:00', '2023-09-02 13:00:00', 4, 1, 'admin', 'admin'),
+       (200000, 800000, '2023-09-02 13:00:00', '2023-09-02 13:00:00', 5, 1, 'admin', 'admin'),
+       (200000, 800000, '2023-09-02 13:00:00', '2023-09-02 13:00:00', 6, 1, 'admin', 'admin'),
+       (200000, 200000, '2023-09-02 09:00:00', '2023-09-02 09:00:00', 1, 2, 'admin', 'admin'),
+       (200000, 400000, '2023-09-02 09:00:00', '2023-09-02 09:00:00', 3, 2, 'admin', 'admin');
+
 -- 매칭 결제 내역 더미데이터
-INSERT INTO withdraw (withdraw_id, title, amount, balance_snapshot, target_account_number, latitude, longitude,
-                      place_id, place_name, place_address, payment_request_id, withdraw_type, settle_type, travel_account_id, created_at)
-VALUES (1, '카페 결제', 5000, 100000, '9993274339436066', 37.7749, -122.4194, 'ChIJN1t_tDeuEmsRUsoyG83frY4', '스타벅스',
+INSERT INTO withdraw (title, amount, balance_snapshot, target_account_number, latitude, longitude,
+                      place_id, place_name, place_address, payment_request_id, withdraw_type, settle_type,
+                      travel_account_id, created_at)
+VALUES ('카페 결제', 5000, 100000, '9993274339436066', 37.7749, -122.4194, 'ChIJN1t_tDeuEmsRUsoyG83frY4', '스타벅스',
         '서울시 강남구 스타벅스', 'REQ1001', 'CAFE', 'RECEIPT', 1, now()),
-       (2, '식당 결제', 15000, 85000, '9997097385463465', 37.5665, 126.9780, 'ChIJ9TPcRgWuEmsRZtZQk5E_7Pc', '이태원 식당',
+       ('식당 결제', 15000, 85000, '9997097385463465', 37.5665, 126.9780, 'ChIJ9TPcRgWuEmsRZtZQk5E_7Pc', '이태원 식당',
         '서울시 용산구 이태원 식당', 'REQ1002', 'RESTAURANT', 'CUSTOM', 2, now());
 
-INSERT INTO orders (order_id, title, amount, withdraw_id)
-VALUES (1, '카페 주문', 5000, 1),
-       (2, '식당 주문', 15000, 2);
+INSERT INTO orders (title, amount, withdraw_id)
+VALUES ('카페 주문', 5000, 1),
+       ('식당 주문', 15000, 2);
 
-INSERT INTO member_order_history (member_order_history_id, amount, member_id, order_id)
-VALUES (1, 2500, 1, 1),
-       (2, 2500, 2, 1),
-       (3, 15000, 1, 2);
+INSERT INTO member_order_history (amount, member_id, order_id)
+VALUES (2500, 1, 1),
+       (2500, 2, 1),
+       (15000, 1, 2);
 
-INSERT INTO schedule (schedule_id, schedule_title, start_date_time, title, address, google_place_id,
+INSERT INTO schedule (schedule_title, start_date_time, title, address, google_place_id,
                       is_matched_transaction, budget, complete, image_url, memo, latitude, longitude, sequence,
-                      travel_id, withdraw_id)
-VALUES (1, '카페 방문', '2023-10-01 10:00:00', '카페 방문', '서울시 강남구 스타벅스', 'ChIJN1t_tDeuEmsRUsoyG83frY4', TRUE, 5000,
-        'COMPLETE', 'http://image.url/cafe.jpg', '친구들과 카페에서 만남', 37.7749, -122.4194, 1, 1, 1),
-       (2, '식당 방문', '2023-10-02 12:30:00', '식당 방문', '서울시 용산구 이태원 식당', 'ChIJ9TPcRgWuEmsRZtZQk5E_7Pc', TRUE, 15000,
-        'INCOMPLETE', 'http://image.url/restaurant.jpg', '가족과 식사', 37.5665, 126.9780, 2, 1, 2);
+                      travel_id, withdraw_id, created_at)
+VALUES ('카페 방문', '2023-10-01 10:00:00', '카페 방문', '서울시 강남구 스타벅스', 'ChIJN1t_tDeuEmsRUsoyG83frY4', TRUE, 5000,
+        'COMPLETE', 'http://image.url/cafe.jpg', '친구들과 카페에서 만남', 37.7749, -122.4194, 1, 1, 1, now()),
+       ('식당 방문', '2023-10-02 12:30:00', '식당 방문', '서울시 용산구 이태원 식당', 'ChIJ9TPcRgWuEmsRZtZQk5E_7Pc', TRUE, 15000,
+        'INCOMPLETE', 'http://image.url/restaurant.jpg', '가족과 식사', 37.5665, 126.9780, 2, 1, 2, DATE_SUB(now(), INTERVAL 1 SECOND));
 
 -- 매칭되지 않은 결제 더미 데이터
-INSERT INTO withdraw (withdraw_id, title, amount, balance_snapshot, target_account_number, latitude, longitude,
-                      place_id, place_name, place_address, payment_request_id, withdraw_type, settle_type, travel_account_id, created_at)
-VALUES (3, '헬스장 결제', 30000, 70000, '9991234567890123', 37.1234, 127.5678,
+INSERT INTO withdraw (title, amount, balance_snapshot, target_account_number, latitude, longitude,
+                      place_id, place_name, place_address, payment_request_id, withdraw_type, settle_type,
+                      travel_account_id, created_at)
+VALUES ('헬스장 결제', 30000, 70000, '9991234567890123', 37.1234, 127.5678,
         'ChIJK1t_tDeuEmsRUsoxz1234frY4', '헬스장', '서울시 종로구 헬스장', 'REQ1003', 'ETC', 'RECEIPT', 1, now()),
-       (4, '영화관 결제', 20000, 80000, '9999876543210987', 37.9876, 126.5432,
+       ('영화관 결제', 20000, 80000, '9999876543210987', 37.9876, 126.5432,
         'ChIJK2t_tDeuEmsRUsoxz5678frY4', '롯데시네마', '서울시 서초구 롯데시네마', 'REQ1004', 'ACTIVITY', 'CUSTOM', 2, now());
 
-INSERT INTO orders (order_id, title, amount, withdraw_id)
-VALUES (3, '헬스장 주문', 30000, 3),
-       (4, '영화관 주문', 20000, 4);
+INSERT INTO orders (title, amount, withdraw_id)
+VALUES ('헬스장 주문', 30000, 3),
+       ('영화관 주문', 20000, 4);
 
-INSERT INTO member_order_history (member_order_history_id, amount, member_id, order_id)
-VALUES (4, 15000, 3, 3),
-       (5, 15000, 4, 3),
-       (6, 20000, 3, 4);
+INSERT INTO member_order_history (amount, member_id, order_id)
+VALUES (15000, 3, 3),
+       (15000, 4, 3),
+       (20000, 3, 4);
 
-INSERT INTO schedule (schedule_id, schedule_title, start_date_time, title, address, google_place_id,
+INSERT INTO schedule (schedule_title, start_date_time, title, address, google_place_id,
                       is_matched_transaction, budget, complete, image_url, memo, latitude, longitude, sequence,
                       travel_id, withdraw_id)
-VALUES (3, NULL, '2023-10-03 15:00:00', NULL, NULL, NULL, FALSE, 0, 'INCOMPLETE', NULL, NULL, 37.1234, 127.5678, 3, 1,
-        3),
-       (4, NULL, '2023-10-04 18:00:00', NULL, NULL, NULL, FALSE, 0, 'INCOMPLETE', NULL, NULL, 37.9876, 126.5432, 4, 2,
-        4);
+VALUES (NULL, '2023-10-03 15:00:00', NULL, NULL, NULL, FALSE, 0, 'INCOMPLETE', NULL, NULL, 37.1234, 127.5678, 3, 1, 3),
+       (NULL, '2023-10-04 18:00:00', NULL, NULL, NULL, FALSE, 0, 'INCOMPLETE', NULL, NULL, 37.9876, 126.5432, 4, 2, 4);
 
--- INSERT INTO deposit (amount, balance_snapshot, created_at, updated_at, member_id, travel_account_id, created_by, modified_by)
--- VALUES (200000, 200000, '2023-09-02 09:00:00', '2023-09-02 09:00:00', 1, 1, 'admin', 'admin'),
---        (200000, 400000, '2023-09-02 10:30:00', '2023-09-02 10:30:00', 2, 1, 'admin', 'admin'),
---        (200000, 600000, '2023-09-02 12:00:00', '2023-09-02 12:00:00', 3, 1, 'admin', 'admin'),
---        (200000, 800000, '2023-09-02 13:00:00', '2023-09-02 13:00:00', 4, 1, 'admin', 'admin');
+
 --
 -- INSERT INTO withdraw (latitude, longitude, amount, balance_snapshot, travel_account_id, place_address, place_id, place_name, target_account_number, title,
 --                       settle_type)

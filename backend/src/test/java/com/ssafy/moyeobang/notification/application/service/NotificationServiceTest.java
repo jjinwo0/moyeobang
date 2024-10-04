@@ -73,8 +73,8 @@ class NotificationServiceTest {
         // given
         NotificationPayload payload = new NotificationPayload("입금 요청", 5000);
 
-        Member member1 = Member.of(1L, "test1@ssafy.com", "testToken1");
-        Member member2 = Member.of(2L, "test2@ssafy.com", "testToken2");
+        Member member1 = Member.of(1L, "test1@ssafy.com", "testToken1", "memberKey1");
+        Member member2 = Member.of(2L, "test2@ssafy.com", "testToken2", "memberKey2");
 
         when(memberTravelPort.findMemberIdByMemberTravelEntity(any()))
                 .thenReturn(List.of(member1, member2));
@@ -128,10 +128,10 @@ class NotificationServiceTest {
     void 잔액_알림_전송() {
 
         // given
-        Member member1 = Member.of(10L, "test1@ssafy.com", "testToken1");
-        Member member2 = Member.of(20L, "test2@ssafy.com", "testToken2");
-        Member member3 = Member.of(30L, "test3@ssafy.com", "testToken3");
-        Member member4 = Member.of(40L, "test4@ssafy.com", "testToken4");
+        Member member1 = Member.of(10L, "test1@ssafy.com", "testToken1", "memberKey1");
+        Member member2 = Member.of(20L, "test2@ssafy.com", "testToken2", "memberKey2");
+        Member member3 = Member.of(30L, "test3@ssafy.com", "testToken3", "memberKey3");
+        Member member4 = Member.of(40L, "test4@ssafy.com", "testToken4", "memberKey4");
 
         MemberTravel memberTravel1 = MemberTravel.of(1L, 100L, 10L, 50000);
         MemberTravel memberTravel2 = MemberTravel.of(1L, 100L, 20L, 50000);

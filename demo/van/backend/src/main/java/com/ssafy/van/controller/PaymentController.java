@@ -24,8 +24,8 @@ public class PaymentController {
 
     @PostMapping("/process")
     public ResponseEntity<ApiResult> processPayment(@RequestBody PaymentRequest paymentRequest) {
-        String mainServiceUrl = "http://localhost:8080/api/payment/confirm";
-        log.info("Payment request: {}", paymentRequest);
+        String mainServiceUrl = "https://j11c102.p.ssafy.io/api/payment/confirm";
+        log.info("VAN Payment request: {}", paymentRequest);
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(mainServiceUrl, paymentRequest, String.class);
             ApiResult responseData = objectMapper.readValue(response.getBody(), ApiResult.class);
@@ -33,6 +33,7 @@ public class PaymentController {
             return ResponseEntity.ok(apiResult);
         } catch (Exception e) {
             ApiResult errorResponse = new ApiResult("ERROR", null, "Payment failed.");
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }

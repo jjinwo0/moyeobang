@@ -25,7 +25,8 @@ public class ScheduleMapper {
                 dto.getAddress(),
                 dto.getGooglePlaceId(),
                 dto.getLatitude(),
-                dto.getLongitude()
+                dto.getLongitude(),
+                dto.getCategory()
         );
 
         Transaction transaction = null;

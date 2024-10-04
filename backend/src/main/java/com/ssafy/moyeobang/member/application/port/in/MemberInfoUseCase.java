@@ -7,4 +7,6 @@ public interface MemberInfoUseCase {
     MemberInfo getMemberInfo(String token);
 
     MemberInfo getMemberInfoOthers(Long id);
+
+    Long createMemberAccount(String accountNo, Long memberId);
 }

@@ -85,7 +85,7 @@ public class SettleController {
                                            @RequestBody CustomSettleRequest request){
 
         return success(request.info().stream()
-                .allMatch(info -> settleUseCase.customBalanceSettle(
+                .allMatch(info -> settleUseCase.updateBalanceSettleInCustom(
                         new CustomSettleCommand(
                                 transactionId,
                                 travelId,

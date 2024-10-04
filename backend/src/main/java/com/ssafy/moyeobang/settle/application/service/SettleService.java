@@ -33,6 +33,8 @@ public class SettleService implements SettleUseCase {
 
     private final UpdateMemberOrderHistoryPort updateMemberOrderHistoryPort;
 
+    private final UpdateWithdrawPort updateWithdrawPort;
+
     @Override
     public boolean balanceSettle(SettleCommand command) {
 
@@ -58,6 +60,8 @@ public class SettleService implements SettleUseCase {
             updateMemberTravelPort
                     .decreaseMemberTravelAmount(amount, id, command.travelId());
         });
+
+        updateWithdrawPort.updateWithdrawToReceipt(command.transactionId());
 
         return true;
     }
@@ -86,6 +90,8 @@ public class SettleService implements SettleUseCase {
                 command.memberId(),
                 command.travelId()
         );
+
+        updateWithdrawPort.updateWithdrawToCustom(command.transactionId());
 
         return true;
     }
@@ -127,6 +133,8 @@ public class SettleService implements SettleUseCase {
 
         List<MemberOrderHistory> findHistoryList = loadMemberOrderHistoryPort.findByOrderId(order.getId());
 
+        updateOrderPort.deleteOrder(order.getId());
+
         // 기존 개임 결제내역 delete
         // 개인별 정산 금액 rollback
         findHistoryList.forEach(
@@ -135,7 +143,5 @@ public class SettleService implements SettleUseCase {
                     updateMemberOrderHistoryPort.deleteMemberOrderHistory(history.getId());
                 }
         );
-
-        updateOrderPort.deleteOrder(order.getId());
     }
 }

@@ -55,6 +55,8 @@ public class WithdrawJpaEntity extends BaseEntity {
 
     private String paymentRequestId;
 
+    private String tag;
+
     @Enumerated(EnumType.STRING)
     private WithdrawType withdrawType;
 
@@ -105,7 +107,16 @@ public class WithdrawJpaEntity extends BaseEntity {
                 .toList();
     }
 
-    public String getWithdrawTypeDescription() {
+    public void updateSettleType(String type) {
+
+        if (SettleType.isSettleType(type)) {
+
+            this.settleType = SettleType.valueOf(type);
+        }
+    }
+
+    public String getWithdrawTypeDescription () {
+
         return withdrawType.getDescription();
     }
 }
