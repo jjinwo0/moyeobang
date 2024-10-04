@@ -21,9 +21,10 @@ import com.ssafy.moyeobang.payment.error.ErrorCode;
 import com.ssafy.moyeobang.payment.error.PaymentException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Slf4j
 @UseCase
 @RequiredArgsConstructor
 public class PaymentService implements PaymentUseCase {
@@ -57,7 +58,7 @@ public class PaymentService implements PaymentUseCase {
 
         PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.toStoreDomain(),
                 command.paymentRequestMoney(), command.paymentRequestId());
-
+        log.debug("confirmPayment, processPaymentPort => paymentResult : {}", paymentResult);
         List<ScheduleLocation> scheduleLocations = loadSchedulesPort.loadSchedules(travelAccount.getTravelId());
 
         int maxSequence = findMaxSequence(scheduleLocations);
@@ -75,6 +76,7 @@ public class PaymentService implements PaymentUseCase {
                 }
             }
         }
+        ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
         updateScheduleTransactionPort.createUnmatchingScheduleTransaction(paymentResult.transactionId(), maxSequence);
         return true;
     }
