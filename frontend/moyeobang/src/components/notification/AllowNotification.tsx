@@ -66,7 +66,20 @@ export default function AllowNotification({onClose}: AllowNotificationProps) {
   //   } else {
   //     console.error('Service Worker is not ready.');
   //   }
+  //   onClose();
   // };
+
+  const handleAllowClick = async () => {
+    onClose();
+    // console.log('승인');
+    try {
+      // "승인" 버튼 클릭 시 푸시 알림 권한을 요청하고 FCM 토큰을 받아옴
+      await requestPermissionAndSaveToken();
+      console.log('Notification permission granted and token saved.');
+    } catch (error) {
+      console.error('Error requesting permission or saving token:', error);
+    }
+  };
 
   return (
     <div css={modalOverlayStyle}>
@@ -84,8 +97,8 @@ export default function AllowNotification({onClose}: AllowNotificationProps) {
           </Btn>
           <Btn
             buttonStyle={{style: 'blue', size: 'middle'}}
-            // onClick={handleAllowClick}
-            onClick={onClose}
+            onClick={handleAllowClick}
+            // onClick={onClose}
           >
             승인
           </Btn>

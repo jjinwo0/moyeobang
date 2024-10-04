@@ -93,11 +93,11 @@ export default function CertificationOne({
     if (accountNumber.length > 0) {
       // 계좌번호가 입력되어 있을 때만 실행
       postDepositAccountOne({accountNumber, bankName: '싸피뱅크', memberId});
-      // //[todo] 지금은 여기에 있는데 추후에 바꿔야함
-      // setRandomVerifyNumber(generateRandomVerifyNumber()); // 랜덤한 인증번호 생성 후 상태 업데이트
-      // setTimeout(() => {
-      //   setCertificationVisible(true); // 1.5초 후에 상태 변경
-      // }, 1500);
+      //[todo] 지금은 여기에 있는데 추후에 바꿔야함
+      setRandomVerifyNumber(generateRandomVerifyNumber()); // 랜덤한 인증번호 생성 후 상태 업데이트
+      setTimeout(() => {
+        setCertificationVisible(true); // 1.5초 후에 상태 변경
+      }, 1500);
       setCheckButton(true);
     } else {
       alert('계좌번호를 입력해주세요');
@@ -127,8 +127,8 @@ export default function CertificationOne({
     // postDepositAccountOneConfirm({accountNumber,authCode:verifyNumber})
     console.log('verifyNumber', verifyNumber);
 
-    if (verifyNumber === notificationKey) {
-      // if (verifyNumber === randomVerifyNumber) {
+    // if (verifyNumber === notificationKey) {
+    if (verifyNumber === randomVerifyNumber) {
       alert('인증에 성공하였습니다.');
       onVerify(); // 부모에게 인증 완료 알리기
     } else {

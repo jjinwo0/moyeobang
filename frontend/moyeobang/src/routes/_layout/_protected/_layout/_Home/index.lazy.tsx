@@ -31,6 +31,8 @@ const containerStyle = css`
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  /* height: 100%; */
 `;
 
 const descriptionStyle = css`
@@ -77,7 +79,7 @@ const profileImageStyle = css`
 `;
 
 const buttonStyle = css`
-  margin-top: 45px;
+  margin-top: 30px;
 `;
 
 const noTravelStyle = css`
@@ -85,6 +87,7 @@ const noTravelStyle = css`
   align-items: center; /* 세로축 정렬을 중앙으로 설정 */
   margin-top: 130px;
   margin-left: 5px;
+  margin-bottom: 100px;
 `;
 
 const noTravelTextStyle = css`
@@ -134,7 +137,7 @@ function Index() {
   });
   const data = travelData?.data.data;
 
-  // console.log(data);
+  console.log(data);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -280,9 +283,9 @@ function Index() {
 
           <div css={containerStyle}>
             {tripsToDisplay.length > 0 ? (
-              tripsToDisplay.map(item => (
+              tripsToDisplay.map((item, index) => (
                 <TravelCard
-                  key={item.travelId}
+                  key={`${item.travelId}-${index}`}
                   travelId={item.travelId}
                   travelName={item.travelName}
                   startDate={item.startDate}
