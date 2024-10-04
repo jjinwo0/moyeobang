@@ -16,6 +16,7 @@ public class Withdrawal extends Transaction {
     private final String address;
     private final String settleType;
     private final Settles settles;
+    private final WithdrawTag tag;
 
     @Override
     public TransactionType getType() {

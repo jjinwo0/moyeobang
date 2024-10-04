@@ -5,6 +5,7 @@ import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.settle.application.domain.order.Order;
 import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -41,5 +42,12 @@ public class OrderMapperInSettle {
                 .amount(orderInfo.amount())
                 .withdraw(withdrawEntity)
                 .build();
+    }
+
+    List<Order> mapToDomainList(final List<OrderJpaEntity> orderJpaEntityList) {
+
+        return orderJpaEntityList.stream()
+                .map(this::mapToDomain)
+                .toList();
     }
 }
