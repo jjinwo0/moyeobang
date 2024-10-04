@@ -29,7 +29,7 @@ public class PgApiClientInPayment {
 
             return true;
         } catch (Exception e) {
-            log.debug(e.getMessage());
+            log.info(e.getMessage());
             return false;
         }
     }

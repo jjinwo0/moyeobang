@@ -58,7 +58,7 @@ public class PaymentService implements PaymentUseCase {
 
         PaymentResult paymentResult = processPaymentPort.processPayment(travelAccount, command.toStoreDomain(),
                 command.paymentRequestMoney(), command.paymentRequestId());
-        log.debug("confirmPayment, processPaymentPort => paymentResult : {}", paymentResult);
+        log.info("confirmPayment, processPaymentPort => paymentResult : {}", paymentResult);
         List<ScheduleLocation> scheduleLocations = loadSchedulesPort.loadSchedules(travelAccount.getTravelId());
 
         int maxSequence = findMaxSequence(scheduleLocations);
