@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
@@ -70,7 +70,7 @@ export default function DaySchedules({
   } = useTravelLogContext();
   console.log('[*] dayNum', dayNum);
 
-  const daySchedules = travelSchedules[dayNum - 1]?.daySchedules ?? [];
+  const daySchedules = travelSchedules[dayNum - 1]?.daySchedules || [];
   console.log('[*] daySchedules', daySchedules);
 
   // onDragEnd 함수 추가
@@ -122,8 +122,8 @@ export default function DaySchedules({
                   {daySchedules.map((schedule, index: number) => {
                     return (
                       <Draggable
-                        key={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
-                        draggableId={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
+                        key={`schedule-${schedule.scheduleId}`}
+                        draggableId={`schedule-${ schedule.scheduleId}`}
                         index={index}
                       >
                         {provided => (

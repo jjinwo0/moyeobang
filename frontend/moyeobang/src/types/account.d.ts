@@ -1,18 +1,18 @@
-type MemberId = number;
-type TransactionId = number;
-type TransactionType = string;
-type Adress = string;
-type OrderItemId = number;
-type OrderItemTitle = string;
-type OrderItemQuantity = number;
-type OrderItemPrice = number;
-type AcceptedNumber = string;
-type PaymentRequestId = string;
-type TravelAccountNumber = string;
-type TotalMoney = number;
-type TotalConsumption = number;
-type TotalSpent = number;
-type AccountId = number;
+// type MemberId = number;
+// type TransactionId = number;
+// type TransactionType = string;
+// type Adress = string;
+// type OrderItemId = number;
+// type OrderItemTitle = string;
+// type OrderItemQuantity = number;
+// type OrderItemPrice = number;
+// type AcceptedNumber = string;
+// type PaymentRequestId = string;
+// type TravelAccountNumber = string;
+// type TotalMoney = number;
+// type TotalConsumption = number;
+// type TotalSpent = number;
+// type AccountId = number;
 
 interface ParticipantInfo {
   memberId: MemberId;

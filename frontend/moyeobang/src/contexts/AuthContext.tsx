@@ -5,9 +5,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 type AuthContextType = {
   accessToken: string | null;
-  refreshToken: string | null;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
-  setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
   handleLoginToken: (accessToken: string, refreshToken: string) => void;
   handleLogout: () => void;
   loginProvider: string | null;
@@ -45,9 +43,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     <AuthContext.Provider
       value={{
         accessToken,
-        refreshToken,
         setAccessToken,
-        setRefreshToken,
         handleLoginToken,
         handleLogout,
         loginProvider,

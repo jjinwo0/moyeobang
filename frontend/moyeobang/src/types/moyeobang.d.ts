@@ -421,17 +421,12 @@ type PersonalCurrentBalance = number;
 type PersonalTotalAmount = number;
 type PersonalTotalSpent = number;
 type PersonalUsagePercentage = number;
-type ScheduleTitle = string;
 // type ScheduleLocation = string;
 type PredictedBudget = number;
-type Completion = string;
-type ScheduleTime = string;
 type TotalPrice = number;
 type PaymentTime = string;
 type Details = string;
-type Memo = string;
 type PaymentName = string;
-type SplitMethod = string;
 type Latitude = number;
 type Longitude = number;
 type AmountComparison = number;
@@ -477,57 +472,14 @@ type AcceptedNumber = string;
 type PaymentRequestId = string;
 type TravelAccountNumber = string;
 type IsNew = boolean;
-type TotalMoney = number;
 type TotalConsumption = number;
 type TotalSpent = number;
 type AccountId = number;
 
-interface ParticipantInfo {
-  memberId: MemberId;
-  memberName: Nickname;
-  profileImage: ProfileImage;
-}
 
-interface OrderItems {
-  orderItemId: OrderItemId;
-  orderItemTitle: OrderItemTitle;
-  orderItemQuantity: OrderItemquantity;
-  orderItemPrice: OrderItemPrice;
-}
 
-// 모임 통장 공금 잔액 조회
-interface AccountBalanceByGroup {
-  currentBalance: CurrentBalance;
-  totalMoney: TotalMoney;
-  totalComsumption: TotalComsumption;
-  usagePercentage: UsagePercentage;
-}
 
-// 모임 통장 개인 잔액 조회
-interface AccountBalanceBymemberId {
-  participant: ParticipantInfo;
-  personalCurrentBalance: PersonalCurrentBalance;
-  personalTotalMoney: TotalMoney;
-  personalTotalConsumption: TotalComsumption;
-  personalUsagePercentage: PersonalUsagePercentage;
-  needsAdditionalDeposit?: NeedsAdditionalDeposit;
-}
 
-// 일정 관련
-// interface MatchedTransaction {
-//   transactionId: Id;
-//   paymentName: string;
-//   totalPrice: number;
-//   paymentTime: string;
-//   splitMethod: SplitMethod;
-//   participantsInfo: ParticipantInfo[];
-// }
-
-// 기타 관련 인터페이스
-// interface TravelLocation {
-//   latitude: Latitude;
-//   longitude: Longitude;
-// }
 
 interface ConsumptionCategory {
   categoryName: CategoryName;
@@ -561,35 +513,6 @@ interface PosOrderItem {
   title: string;
   amount: number;
   quantity: number;
-}
-
-// pos기 결제 POST
-interface PaymentProps {
-  paymentRequestId: string;
-  sourceAccountNumber: string;
-  placeId: string;
-  placeName: string;
-  placeAddress: string;
-  amount: Money;
-  latitude: number;
-  longitude: number;
-  targetAccountNumber: string;
-}
-
-// [모임 통장] 정산후 기본 정보
-interface CompleteTransaction {
-  transactionId: TransactionId;
-  money: Money;
-  address: Adress;
-  paymentName: PaymentName;
-  createdAt: CreatedAt;
-  acceptedNumber: AcceptedNumber;
-}
-
-interface OcrItem {
-  name: string;
-  count: number;
-  price: number;
 }
 
 // Review 타입 정의

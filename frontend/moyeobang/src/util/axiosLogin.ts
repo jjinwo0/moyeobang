@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {useAuthContext} from '@/contexts/AuthContext';
 import {getCookie} from '@/util/cookie';
+
+function createAxiosLogin() {
 const {accessToken, setAccessToken, handleLogout, loginProvider, setLoginProvider, isLogin, setIsLogin} = useAuthContext();
 
 const axiosLogin = axios.create({
@@ -8,7 +10,7 @@ const axiosLogin = axios.create({
   responseType: 'json',
   timeout: 4000,
 });
-axiosLogin.interceptors.request.use(
+axiosLogin.interceptors.request.use( 
   async config => {
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -21,6 +23,7 @@ axiosLogin.interceptors.request.use(
 );
 
 axiosLogin.interceptors.response.use(
+  
   response => {
     return response;
   },
@@ -53,6 +56,8 @@ axiosLogin.interceptors.response.use(
       }
       return Promise.reject(error);
     }
-  }
-);
-export default axiosLogin;
+                  }
+    );
+  return axiosLogin;
+}
+export default createAxiosLogin;

@@ -38,101 +38,129 @@ export type TravelLogContextType = {
 export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
   const initialDaySchedule: TravelLog = [
     {
-      dayNum: 1,
-      dayDate: '2024-10-01',
-      daySchedules: [
-        {
-          scheduleId: 67890,
-          isSelfPlus: true,
-          scheduleTitle: '도쿄 타워 방문',
-          scheduleLocation: {
-            googlePlaceId: 'ChIJ1x9-lADvYjURbMl_CjjFXjg',
-            title: '소울로스터리커피',
-            address: '대한민국 강원특별자치도 춘천시 소양강로 538',
-            latitude: 37.9243555,
-            longitude: 127.7672156,
-            category: '카페',
-          },
-          scheduleTime: '2024-10-01T10:00:00',
-          budget: 50000,
-          completion: 'completed',
-          memo: '도쿄 타워가서 누구보다 신나게 놀아야지',
-          scheduleImg: '',
-          matchedTransaction: {
-            transactionId: 78901,
-            paymentName: '도쿄 타워 입장료 결제',
-            totalPrice: 50000,
-            paymentTime: '2024-10-01T12:15:00',
-            splitMethod: 'custom', // 결제 내역 상세조회랑 동일, 정산 방식: "receipt" (영수증 정산) 또는 "custom" (default(1/n), 사용자 지정)
-            participantsInfo: [
-              {
-                memberId: 1,
-                memberName: '김훈민',
-                profileImage: '/assets/images/profile.jpg',
-              },
-              {
-                memberId: 2,
-                memberName: '이수민',
-                profileImage: '/assets/images/profile.jpg',
-              },
-            ],
-          },
-        },
-        {
-          transactionId: 78902,
-          isSelfPlus: false,
-          paymentName: '신주쿠 카페 결제',
-          latitude: 37.85294409999999,
-          longitude: 127.7672156,
-          totalPrice: 25000,
-          paymentTime: '2024-10-01T16:00:00',
-          splitMethod: 'receipt', // 정산 방식
-          participantsInfo: [
+        "dayNum": 1,
+        "dayDate": "2023-10-01",
+        "daySchedules": [
             {
-              memberId: 1,
-              memberName: '김훈민',
-              profileImage: '/images/profiles/1.png',
-            },
-            {
-              memberId: 2,
-              memberName: '이수민',
-              profileImage: '/images/profiles/2.png',
-            },
-            {
-              memberId: '3',
-              memberName: '박지현',
-              profileImage: '/images/profiles/3.png',
-            },
-          ],
-        },
-      ],
+                "scheduleId": 1,
+                "scheduleTitle": "카페 방문",
+                "scheduleLocation": {
+                    "googlePlaceId": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+                    "title": "스타벅스",
+                    "address": "서울시 강남구 스타벅스",
+                    "latitude": 37.7749,
+                    "longitude": -122.4194,
+                    "category": "카페"
+                    },
+                "scheduleTime": "2023-10-01T10:00:00",
+                "budget": 5000,
+                "sequence": 1,
+                "completion": "COMPLETE",
+                "memo": "친구들과 카페에서 만남",
+                "scheduleImg": "http://image.url/cafe.jpg",
+                "matchedTransaction": {
+                    "transactionId": 1,
+                    "paymentName": "카페 결제",
+                    "latitude": 37.7749,
+                    "longitude": -122.4194,
+                    "totalPrice": 5000,
+                    "paymentTime": "2023-10-01T10:00:00",
+                    "splitMethod": "RECEIPT",
+                    "participantsInfo": [
+                        {
+                            "memberId": 1
+                        },
+                        {
+                            "memberId": 2
+                        }
+                    ]
+                },
+                "unmatchedTransaction": null
+            }
+        ]
     },
     {
-      dayNum: 2,
-      dayDate: '2024-10-02',
-      daySchedules: [
-        {
-          scheduleId: 67891,
-          isSelfPlus: true,
-          scheduleTitle: '시부야 거리 탐방',
-          scheduleLocation: {
-            googlePlaceId: 'ChIJ1x9-lADvYjURbMl_CjjFXjg',
-            title: '소울로스터리커피',
-            address: '대한민국 강원특별자치도 춘천시 소양강로 538',
-            latitude: 37.9243555,
-            longitude: 127.7672156,
-            category: '카페',
-          },
-          scheduleTime: '2024-10-02T13:00:00',
-          budget: 30000,
-          completion: 'pending',
-          memo: '',
-          matchedTransaction: null,
-          scheduleImg: '',
-        },
-      ],
+        "dayNum": 2,
+        "dayDate": "2023-10-02",
+        "daySchedules": [
+            {
+                "scheduleId": 2,
+                "scheduleTitle": "식당 방문",
+                "scheduleLocation": {
+                    "googlePlaceId": "ChIJ9TPcRgWuEmsRZtZQk5E_7Pc",
+                    "title": "식당 방문",
+                    "address": "서울시 용산구 이태원 식당",
+                    "latitude": 37.5665,
+                    "longitude": 126.978,
+                    "category": "카테고리"
+                },
+                "scheduleTime": "2023-10-02T12:30:00",
+                "budget": 15000,
+                "sequence": 2,
+                "completion": "INCOMPLETE",
+                "memo": "가족과 식사",
+                "scheduleImg": "http://image.url/restaurant.jpg",
+                "matchedTransaction": {
+                    "transactionId": 2,
+                    "paymentName": "식당 결제",
+                    "latitude": 37.5665,
+                    "longitude": 126.978,
+                    "totalPrice": 15000,
+                    "paymentTime": "2023-10-02T12:30:00",
+                    "splitMethod": "CUSTOM",
+                    "participantsInfo": [
+                        {
+                            "memberId": 1
+                        }
+                    ]
+                },
+                "unmatchedTransaction": null
+            }
+        ]
     },
-  ];
+    {
+        "dayNum": 3,
+        "dayDate": "2023-10-03",
+        "daySchedules": [
+            {
+                "scheduleId": 3,
+                "scheduleTitle": null,
+                "scheduleLocation": {
+                    "googlePlaceId": null,
+                    "title": null,
+                    "address": null,
+                    "latitude": 37.1234,
+                    "longitude": 127.5678,
+                    "category": "카테고리"
+                },
+                "scheduleTime": "2023-10-03T15:00:00",
+                "budget": 0,
+                "sequence": 3,
+                "completion": "INCOMPLETE",
+                "memo": null,
+                "scheduleImg": null,
+                "matchedTransaction": null,
+                "unmatchedTransaction": {
+                    "transactionId": 3,
+                    "paymentName": "헬스장 결제",
+                    "latitude": 37.1234,
+                    "longitude": 127.5678,
+                    "totalPrice": 30000,
+                    "paymentTime": "시간채우기",
+                    "splitMethod": "RECEIPT",
+                    "participantsInfo": [
+                        {
+                            "memberId": 3
+                        },
+                        {
+                            "memberId": 4
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+]
 
   const [travelSchedules, setTravelSchedules] =
     useState<TravelLog>(initialDaySchedule);

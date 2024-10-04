@@ -22,7 +22,7 @@ const plusStyle = css`
 `;
 
 export default function TravelLogMain() {
-  const {handleShowMapSearch, travelDates, scheduleDayNum} =
+  const {travelDates, scheduleDayNum} =
     useTravelLogContext();
   const {showMapSearch, showPlusSelf, handleShowPlusSelf} =
     useTravelLogContext();

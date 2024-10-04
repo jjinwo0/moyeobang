@@ -60,7 +60,7 @@ export default function PaidAutoSchedule({
   dayNum,
   dragHandleProps,
 }: {
-  schedule: PaidAutoSchedule;
+  schedule: DaySchedule;
   scheduleNum: number;
   dayNum: number;
   dragHandleProps: any;
@@ -75,7 +75,7 @@ export default function PaidAutoSchedule({
     transactionId: Id
   ) => {
     e.stopPropagation();
-    router.navigate({to: `/account/detail/${transactionId}`});
+    router.navigate({to: `/account/${transactionId}/detail`});
   };
 
   return (
@@ -93,19 +93,19 @@ export default function PaidAutoSchedule({
             color: colors.lightBlack,
           }}
         >
-          {getTimeFromSchedule(schedule.paymentTime)}
+          {getTimeFromSchedule(schedule.unmatchedTransaction?.paymentTime || '')}
         </span>
       </div>
       <div css={scheduleLetterLayout}>
         <div css={scheduleLetterStyle}>
           <div style={{fontSize: '24px'}}>
-            {scheduleNum}. {schedule.paymentName}
+            {scheduleNum}. {schedule.unmatchedTransaction?.paymentName}
           </div>
           <div css={oneLineStyle}>
             <span>결제 비용</span>{' '}
             <span style={{color: colors.fifth}}>
               {' '}
-              {schedule.totalPrice.toLocaleString()}원
+              {schedule.unmatchedTransaction?.totalPrice.toLocaleString()}원
             </span>
           </div>
           <div>
@@ -118,11 +118,11 @@ export default function PaidAutoSchedule({
                   alignItems: 'center',
                 }}
               >
-                <div>정산 참여자 : {schedule.participantsInfo.length}명</div>
+                <div>정산 참여자 : {schedule.unmatchedTransaction?.participantsInfo.length}명</div>
                 <Btn
                   buttonStyle={{size: 'sotiny', style: 'blue'}}
                   onClick={e => {
-                    handleDetailClick(e, schedule.transactionId);
+                    handleDetailClick(e, schedule.unmatchedTransaction?.transactionId || 0);
                   }}
                 >
                   상세보기

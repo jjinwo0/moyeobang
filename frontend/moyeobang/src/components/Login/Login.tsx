@@ -6,7 +6,6 @@ import skyBackground from '@/assets/images/skyBackground.jpg';
 import bangBang from '@/assets/icons/bangBang.png';
 import kakaoLogin from '@/assets/icons/kakaoLogin.png';
 import googleLogin from '@/assets/icons/googleLogin.png';
-import axiosLogin from '@/util/axiosLogin';
 
 const LoginStyle = css`
   width: 390px;
@@ -52,7 +51,7 @@ const LoginStyle = css`
 
 export default function Login() {
   const {handleLogin} = useLogin();
-  
+
   return (
     <div css={LoginStyle}>
       <div id="sky-blur">
