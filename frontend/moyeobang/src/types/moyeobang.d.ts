@@ -415,7 +415,7 @@ type TotalAmount = number;
 type TotalMoney = number;
 type Money = number;
 type TotalComsumption = number;
-type UsagePercentage = number;
+type UsagePercentage = string;
 type NeedsAdditionalDeposit = boolean;
 type PersonalCurrentBalance = number;
 type PersonalTotalAmount = number;
@@ -435,7 +435,7 @@ type SplitMethod = string;
 type Latitude = number;
 type Longitude = number;
 type AmountComparison = number;
-type CategoryPercent = number;
+type CategoryPercent = string;
 type ParticipantName = string;
 type ParticipantAmount = number;
 type ConsumptionTag = string;
@@ -562,4 +562,15 @@ interface ResponsePostDepositAccount {
 //공금입금 응답
 interface ResponseDepositAccount {
   accountBalance: number;
+}
+
+//1원입금 요청 응답
+interface ResponseDepositOne {
+  transactionId: number;
+}
+
+//1원입금 알림 요청 응답
+interface ResponseVerifyNotification {
+  authText: string;
+  key: string;
 }
