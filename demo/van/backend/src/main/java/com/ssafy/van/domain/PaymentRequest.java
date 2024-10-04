@@ -15,7 +15,7 @@ public class PaymentRequest {
     private double latitude;
     private double longitude;
     private long amount;
+    private WithdrawType tag;
     private String sourceAccountNumber;
     private String targetAccountNumber;
-    private String tag;
 }

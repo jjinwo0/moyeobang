@@ -87,6 +87,10 @@ spring:
     hibernate:
       ddl-auto: none
 
+logging:
+  level:
+    root: debug
+
 pg:
   api:
     url: https://j11c102.p.ssafy.io/pg/payment
