@@ -12,6 +12,8 @@ const travelLogMainLayout = css`
   height: 100vh;
   position: relative;
 `;
+
+
 const plusStyle = css`
   position: fixed;
   bottom: 90px;
@@ -40,7 +42,7 @@ export default function TravelLogMain() {
 
         <Navbar />
       </div>
-      {scheduleDayNum <= travelDates.length && (
+      {scheduleDayNum && scheduleDayNum <= travelDates.length && (
         <div css={plusStyle}>{<PlusBtn onClick={handleShowPlusSelf} />}</div>
       )}
       {showPlusSelf && <PlusSelf />}

@@ -95,7 +95,7 @@ export const btnLayout = css`
   display: flex;
   justify-content: space-around;
   width: 390px;
-  margin-top: 20px;
+  margin: 5px 0;
 `;
 
 export const inputContainerStyle = css`

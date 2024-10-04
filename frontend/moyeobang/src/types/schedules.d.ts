@@ -31,8 +31,8 @@ interface ScheduleLocation {
   googlePlaceId: string | null;
   title: string | null;
   address: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  lat: number | null;
+  lng: number | null;
   category: string | null;
 }
 
@@ -95,5 +95,5 @@ interface PostTravelSchedule {
   scheduleLocation: ScheduleLocation;
   scheduleTime: string;
   memo: string;
-  scheduleImg: string;
+  image_url: string;
 }

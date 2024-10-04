@@ -146,7 +146,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
                     "latitude": 37.1234,
                     "longitude": 127.5678,
                     "totalPrice": 30000,
-                    "paymentTime": "시간채우기",
+                    "paymentTime": "2023-10-03T15:00:00",
                     "splitMethod": "RECEIPT",
                     "participantsInfo": [
                         {

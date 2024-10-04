@@ -103,8 +103,6 @@ const predictedBudgetStyle = css`
   }
 `;
 
-
-
 export default function TravelLogList() {
   const {
     scheduleDayNum,
@@ -144,20 +142,25 @@ export default function TravelLogList() {
     },
   });
 
-  const travelLogListLayout = css`
+  const travelDays = travelDates.length;
+
+  const travelLogLayout = css`
     display: flex;
-    width: (travelDays + 1) * 390px;
-    transform: translateX(-${currentIndex * 390}px);
+    width: ${`${(travelDays + 1) * 390}px`};
+    transform: ${`translateX(-${currentIndex * 390}px)`};
     transition: transform 0.3s ease-out;
   `;
 
-  const travelDays = travelDates.length;
-
   return (
-    <div {...handlers} css={travelLogListLayout}>
-      <div css={travelLogListLayout}>
+    <div css={travelLogListLayout}>
+      <div
+      css={travelLogLayout}
+        {...handlers}
+      >
         {travelDays > 0 &&
           travelDates.map((date, index) => {
+            console.log('[*] date', date);
+
             return (
               <div key={`travel-log-list-${index}`}>
                 <DaySchedules date={date} dayNum={index + 1} />

@@ -130,11 +130,11 @@ export default function PlusSelf() {
         googlePlaceId: selectedMarker?.placeId || '',
         title: selectedMarker?.title || '',
         address: selectedMarker?.address || '',
-        latitude:
+        lat:
           typeof selectedMarker?.position?.lat === 'function'
             ? selectedMarker.position.lat()
             : selectedMarker?.position?.lat || 0,
-        longitude:
+        lng:
           typeof selectedMarker?.position?.lng === 'function'
             ? selectedMarker.position.lng()
             : selectedMarker?.position?.lng || 0,
@@ -159,7 +159,7 @@ export default function PlusSelf() {
         scheduleLocation: scheduleLocation || '',
         scheduleTime: dateTime || '',
         memo: memo || '',
-        scheduleImg: selectedImage || '',
+        image_url: selectedImage || '',
       };
       console.log('[*] scheduleData', scheduleData);
       // [todo] 저장 로직 추가
@@ -185,7 +185,7 @@ export default function PlusSelf() {
   useEffect(() => {
     if (scheduleDayNum) {
       const date = travelDates[scheduleDayNum - 1].split(' ')[0]; // 요일 제거
-      const time = `${AMPMSelection === 'AM' ? String(hour).padStart(2, '0') : String(Number(hour) + 12).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00`;
+      const time = `${AMPMSelection === 'AM' ? String(hour).padStart(2, '0') : String(Number(hour) + 12).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
       if (hour !== '' && minute !== '') {
         setDateTime(`${date}T${time}`);
         console.log('[*] selected Marker', selectedMarker);
@@ -194,10 +194,8 @@ export default function PlusSelf() {
   }, [hour, minute, AMPMSelection, scheduleDayNum]);
 
   // 타입 가드 함수
-  function isPlusSelfSchedule(
-    schedule: PlusSelfSchedule | PaidAutoSchedule
-  ): schedule is PlusSelfSchedule {
-    return (schedule as PlusSelfSchedule).scheduleId !== undefined;
+  function isPlusSelfSchedule(schedule: DaySchedule): schedule is DaySchedule {
+    return (schedule as DaySchedule).scheduleId !== undefined;
   }
 
   useEffect(() => {
@@ -213,9 +211,9 @@ export default function PlusSelf() {
         console.log('[*] schedule', schedule);
         if (isPlusSelfSchedule(schedule[0])) {
           setScheduleName(schedule[0].scheduleTitle || '');
-          setSearchLocation(schedule[0].scheduleLocation.title || '');
+          setSearchLocation(schedule[0]?.scheduleLocation?.title || '');
 
-          const [date, time] = schedule[0].scheduleTime.split('T');
+          const [date, time] = schedule[0].scheduleTime?.split('T') || [];
           const [hour, minute] = time.split(':');
           const hourInt = parseInt(hour, 10);
           setAMPMSelection(hourInt >= 12 ? 'PM' : 'AM');
