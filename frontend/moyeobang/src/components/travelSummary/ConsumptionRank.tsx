@@ -118,8 +118,8 @@ interface ParticipantInfo {
 }
 
 interface ConsumptionByMember {
-  categoryName: ParticipantInfo;
-  proportion: number;
+  participantInfo: ParticipantInfo;
+  proportion: string;
   balance: number;
 }
 interface ConsumptionRankProps {
@@ -134,7 +134,7 @@ export default function ConsumptionRank({
   ); // 클릭된 참가자 상태
   const [modalIsOpen, setModalIsOpen] = useState(false); // 모달 상태
   const containerRef = useRef<HTMLDivElement>(null); // 컨테이너 참조 생성
-
+  console.log('멤버', consumptionByMember);
   // 상위 3개의 고유 금액을 추출
   const uniqueBalances = Array.from(
     new Set(consumptionByMember.map(member => member.balance))
@@ -207,16 +207,18 @@ export default function ConsumptionRank({
                   )
                   .map(participant => (
                     <div
-                      key={participant.categoryName.memberId}
+                      key={participant.participantInfo.memberId}
                       css={participantContainerStyle}
                     >
                       <img
-                        src={participant.categoryName.profileImage || bangBang}
-                        alt={participant.categoryName.memberName}
+                        src={
+                          participant.participantInfo.profileImage || bangBang
+                        }
+                        alt={participant.participantInfo.memberName}
                         css={imageStyle}
                       />
                       <div css={nameStyle}>
-                        {participant.categoryName.memberName}
+                        {participant.participantInfo.memberName}
                       </div>
                     </div>
                   ))}
