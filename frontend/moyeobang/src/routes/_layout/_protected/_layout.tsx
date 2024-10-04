@@ -5,6 +5,8 @@ import {css} from '@emotion/react';
 import {useState} from 'react';
 import PayModal from '@/components/Account/PayModal/PayModal';
 import NotificationModal from '@/components/notification/NotificationModal';
+import useCurrentTravelStore from '@/store/useCurrentTravelStore';
+import NotTravelModal from '@/components/Account/PayModal/NotTravelModal';
 
 export const Route = createFileRoute('/_layout/_protected/_layout')({
   component: Header,
@@ -18,6 +20,7 @@ const layoutStyle = css`
 export default function Header() {
   const [isQROpen, setIsQROpen] = useState(false);
   const [isAlarmOpen, setIsAlarmOpen] = useState(false);
+  const {accountId} = useCurrentTravelStore();
 
   const {pathname} = useLocation();
 
@@ -45,7 +48,9 @@ export default function Header() {
       )}
       <div css={layoutStyle}>
         {/* QR 모달이 열리면 PayModal만 렌더링하고 Outlet은 렌더링하지 않음 */}
-        {isQROpen && <PayModal onXClick={handleQRClick} />}
+        <>
+        {isQROpen ? accountId===0 ? <NotTravelModal onClickOutside={handleQRClick}/> : <PayModal onXClick={handleQRClick}/> : undefined}
+        </>
 
         {/* Alarm 모달이 열리면 NotificationModal만 렌더링하고 Outlet은 렌더링하지 않음 */}
         {isAlarmOpen && <NotificationModal onXClick={handleAlarmClick} onClose={handleAlarmClick}/>}

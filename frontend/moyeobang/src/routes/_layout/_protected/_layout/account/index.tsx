@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router'
 import { css } from '@emotion/react'
 import { useState } from "react";
@@ -10,6 +10,7 @@ import { profileData} from "@/data/data";
 import moyeobang from '@/services/moyeobang';
 import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
 import Spinner from '@/components/Sipnner/Spinner';
+import { proportionData } from '@/data/data';
 import { isAccountBalanceByGroup } from '@/util/typeGaurd';
 import CardSlider from '@/components/Account/CardSlider/CardSlider';
 import ChartDetailCard from '@/components/Account/Chart/ChartDetailCard';
@@ -96,7 +97,7 @@ const emptyTransactionStyle=css`
   gap:10px;
   img {
     width:100px;
-    height:100px;
+    hegith:100px;
   }
 `;
 export default function AccountMain() {
@@ -130,32 +131,6 @@ export default function AccountMain() {
       }
     },
     enabled: selectedMember.length==1 && selectedMember !== undefined && accountId !== undefined,// 개인별
-  });
-
-  // get 멤버별&전체 카테고리별 소비 비율 
-  const {data : DataByCategory} = useSuspenseQuery({
-    queryKey: ['categoryProportionList', accountId, selectedMember],
-    queryFn: () => moyeobang.getComsuptionStaticByCategory(Number(accountId), selectedMember),
-  });
-
-  // get 멤버별&전체별 소비 비율 
-  const {data : DataByMembers} = useSuspenseQuery({
-    queryKey: ['membersProportionList', accountId],
-    queryFn: () => moyeobang.getComsuptionStaticByMembers(Number(accountId)),
-  });
-
-  const proportionDataByMembers = DataByMembers.data.data;
-  
-  const proportionDataByCategory = DataByCategory.data.data;
-  // console.log('소비카테고리별 비율', proportionDataByCategory)
-  // console.log('멤버별&전체별 소비 비율 ', proportionDataByMembers)
-
-  const sortedProportionDataByMemebers = proportionDataByMembers.sort((a,b) => {
-    return parseFloat(b.proportion) - parseFloat(a.proportion);
-  });
-
-  const sortedProportionDataByCategory = proportionDataByCategory.sort((a,b) => {
-    return parseFloat(b.proportion) - parseFloat(a.proportion);
   });
 
   const transactionListData = transactionData.data.data;
@@ -203,14 +178,14 @@ export default function AccountMain() {
           {isAccountBalanceByGroup(accountData)  ?
             <CardSlider 
             account={accountData} 
-            consumptionProportionByCategory={sortedProportionDataByCategory}
-            consumptionProportionByMember={sortedProportionDataByMemebers}
+            consumptionProportionByCategory={proportionData.consumptionByCategory}
+            consumptionProportionByMember={proportionData.consumptionByMember}
             dots={transactionListData.length>0 ? [0,1,2] : [0]}
             onChange={handleIndexChange}
             /> :
             <CardSlider 
             account={accountData}
-            consumptionProportionByCategory={sortedProportionDataByCategory}
+            consumptionProportionByCategory={proportionData.consumptionByCategory}
             dots={transactionListData.length>0 ? [0,1] : [0]}
             onChange={handleIndexChange}
             />
@@ -231,14 +206,14 @@ export default function AccountMain() {
           </div>
         }
         {index===1 && <div css={chartListStyle}>
-          {sortedProportionDataByCategory.map((category, index) => 
+          {proportionData.consumptionByCategory.sort((a,b) => b.proportion - a.proportion).map((category, index) => 
           <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
           )}
         </div>
         }
         {index==2 && <div css={chartListStyle}>
-          {sortedProportionDataByMemebers.map((member, index) =>
-          <ChartDetailCard key={index} title={member.participantInfo.memberName} proportion={member.proportion} balance={member.balance} profileImage={member.participantInfo.profileImage} colorIndex={index}/>
+          {proportionData.consumptionByMember.sort((a,b) => b.proportion -a.proportion).map((member, index) =>
+          <ChartDetailCard key={index} title={member.member.memberName} proportion={member.proportion} balance={member.balance} profileImage={member.member.profileImage} colorIndex={index}/>
           )}
           </div>
         }
