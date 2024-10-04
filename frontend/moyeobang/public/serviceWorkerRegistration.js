@@ -43,6 +43,7 @@
 //             vapidKey:
 //               'BGVbiPhLWWxijrc2jfn9lTyDs-kcSfSinb2bUmEoDXSc8ljx6sWtur9k82vmjBLND06SSeb10oq-rw7zmzrpoPY',
 //           });
+//           console.log('currentToken', currentToken);
 //           if (currentToken) {
 //             console.log('FCM Token:', currentToken);
 //             sessionStorage.setItem('fcmToken', currentToken);

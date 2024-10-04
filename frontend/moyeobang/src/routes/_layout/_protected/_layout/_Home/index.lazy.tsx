@@ -31,6 +31,8 @@ const containerStyle = css`
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  /* height: 100%; */
 `;
 
 const descriptionStyle = css`
@@ -77,7 +79,7 @@ const profileImageStyle = css`
 `;
 
 const buttonStyle = css`
-  margin-top: 45px;
+  margin-top: 30px;
 `;
 
 const noTravelStyle = css`
@@ -85,6 +87,7 @@ const noTravelStyle = css`
   align-items: center; /* 세로축 정렬을 중앙으로 설정 */
   margin-top: 130px;
   margin-left: 5px;
+  margin-bottom: 100px;
 `;
 
 const noTravelTextStyle = css`
@@ -115,7 +118,7 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
+  const [pushNotification, setPushNotification] = useState<boolean>(true); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
 
   // //[todo] get으로 여행 목록 전체 조회하기
