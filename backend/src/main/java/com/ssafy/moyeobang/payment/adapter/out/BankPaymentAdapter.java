@@ -83,7 +83,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
                 paymentRequestId, store.getStoreAccountNumber(), store.getTag());
 
         WithdrawJpaEntity savedWithdraw = withdrawRepository.save(withdraw);
-        log.debug("ProcessPayment Saved withdraw: {}", savedWithdraw);
+        log.info("ProcessPayment Saved withdraw: {}", savedWithdraw);
         bankApiClientInPayment.payment(
                 store.getStoreAccountNumber(),
                 travelAccount.getAccountNumber(),
