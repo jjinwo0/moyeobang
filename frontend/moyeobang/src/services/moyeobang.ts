@@ -1,5 +1,6 @@
 import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
+import { isSettledParticipantByCustom } from '@/util/typeGaurd'; // 정산 상세 details 타입 확인
 
 export default {
   // 모임 통장
@@ -32,7 +33,7 @@ export default {
   /**
    * 전체 결제 내역 상세 조회
    */
-  getTransactionDetail: async (accountId: number, transactionId?: number) =>
+  getTransactionDetail: async (accountId: number, transactionId: number) => 
     axios.get<MoyeobangResponse<TransactionDetailProps>>(
       `/accounts/${accountId}/transactions/${transactionId}`
     ),
