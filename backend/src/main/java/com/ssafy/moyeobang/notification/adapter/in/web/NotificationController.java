@@ -9,11 +9,7 @@ import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPaylo
 import com.ssafy.moyeobang.notification.adapter.in.web.response.VerifyKey;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @WebAdapter
