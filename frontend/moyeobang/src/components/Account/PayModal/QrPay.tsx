@@ -45,6 +45,8 @@ export default function QrPay({onClose}:QrPayProps) {
     const isHome = location.pathname ==='/'
     // home에서 연거면 현재 진행중인 여행. account에서 연거면 해당 여행
     const {accountNumber}= isHome ? useTravelDetailStore() : useCurrentTravelStore(); // '0012280102000441'
+    const {accountId}= isHome ? useTravelDetailStore() : useCurrentTravelStore();
+    const {travelId}= isHome ? useTravelDetailStore() : useCurrentTravelStore();
 
     const data : QrData= {
         paymentRequestId: paymentRequestId.current,
@@ -120,7 +122,7 @@ export default function QrPay({onClose}:QrPayProps) {
     return (
     <>
         {openCompleteModal && resultMessage ? (
-            <PayCompletedModal transactionId={Number(resultMessage.transactionId)} onClose={handleClose}/>
+            <PayCompletedModal travelId={travelId} accountId={accountId} transactionId={Number(resultMessage.transactionId)} onClose={handleClose}/>
         ) : (
             <>
                 <div css={qrContainerStyle}>

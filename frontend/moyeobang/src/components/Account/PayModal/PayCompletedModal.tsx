@@ -50,15 +50,16 @@ const linkStyle = css`
 `;
 
 interface PayCompletedModalProps {
+    travelId:Id;
+    accountId:AccountId;
     transactionId:TransactionId;
     onClose: VoidFunction;
 }
 
 // ! api 연결 후 transactionId 임시 제거하기
-export default function PayCompletedModal({transactionId, onClose} : PayCompletedModalProps) {
+export default function PayCompletedModal({travelId, accountId, transactionId, onClose} : PayCompletedModalProps) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const {accountId, travelId} = useTravelDetailStore();
 
     // 닫기 누를시 이 데이터 이용해 정산해주기.
     const {data} = useSuspenseQuery({
