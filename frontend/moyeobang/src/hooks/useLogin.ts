@@ -7,8 +7,9 @@ export const useLogin = () => {
 
   // 로그인 요청 함수
   const handleLogin = async (provider: string) => {
+
     try {
-      const response = await axiosLogin.post(
+      const response = await axiosLogin.get(
         `/oauth2/authorization/${provider}`
       );
       console.log('[*] response', response);

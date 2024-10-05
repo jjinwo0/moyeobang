@@ -8,7 +8,7 @@ export type TravelLogContextType = {
   travelSchedules: TravelLog;
   currentIndex: number;
   setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
-  setTravelSchedules: React.Dispatch<React.SetStateAction<TravelLog>>;
+  setTravelSchedules: React.Dispatch<React.SetStateAction<TravelLog | undefined>>;
   searchLocation?: string;
   setSearchLocation: React.Dispatch<React.SetStateAction<string | undefined>>;
   selectedPlace: string | [];
@@ -36,134 +36,134 @@ export type TravelLogContextType = {
 
 // Provider 컴포넌트 생성
 export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
-  const initialDaySchedule: TravelLog = [
-    {
-        "dayNum": 1,
-        "dayDate": "2023-10-01",
-        "daySchedules": [
-            {
-                "scheduleId": 1,
-                "scheduleTitle": "카페 방문",
-                "scheduleLocation": {
-                    "googlePlaceId": "ChIJN1t_tDeuEmsRUsoyG83frY4",
-                    "title": "스타벅스",
-                    "address": "서울시 강남구 스타벅스",
-                    "latitude": 37.7749,
-                    "longitude": -122.4194,
-                    "category": "카페"
-                    },
-                "scheduleTime": "2023-10-01T10:00:00",
-                "budget": 5000,
-                "sequence": 1,
-                "completion": "COMPLETE",
-                "memo": "친구들과 카페에서 만남",
-                "scheduleImg": "http://image.url/cafe.jpg",
-                "matchedTransaction": {
-                    "transactionId": 1,
-                    "paymentName": "카페 결제",
-                    "latitude": 37.7749,
-                    "longitude": -122.4194,
-                    "totalPrice": 5000,
-                    "paymentTime": "2023-10-01T10:00:00",
-                    "splitMethod": "RECEIPT",
-                    "participantsInfo": [
-                        {
-                            "memberId": 1
-                        },
-                        {
-                            "memberId": 2
-                        }
-                    ]
-                },
-                "unmatchedTransaction": null
-            }
-        ]
-    },
-    {
-        "dayNum": 2,
-        "dayDate": "2023-10-02",
-        "daySchedules": [
-            {
-                "scheduleId": 2,
-                "scheduleTitle": "식당 방문",
-                "scheduleLocation": {
-                    "googlePlaceId": "ChIJ9TPcRgWuEmsRZtZQk5E_7Pc",
-                    "title": "식당 방문",
-                    "address": "서울시 용산구 이태원 식당",
-                    "latitude": 37.5665,
-                    "longitude": 126.978,
-                    "category": "카테고리"
-                },
-                "scheduleTime": "2023-10-02T12:30:00",
-                "budget": 15000,
-                "sequence": 2,
-                "completion": "INCOMPLETE",
-                "memo": "가족과 식사",
-                "scheduleImg": "http://image.url/restaurant.jpg",
-                "matchedTransaction": {
-                    "transactionId": 2,
-                    "paymentName": "식당 결제",
-                    "latitude": 37.5665,
-                    "longitude": 126.978,
-                    "totalPrice": 15000,
-                    "paymentTime": "2023-10-02T12:30:00",
-                    "splitMethod": "CUSTOM",
-                    "participantsInfo": [
-                        {
-                            "memberId": 1
-                        }
-                    ]
-                },
-                "unmatchedTransaction": null
-            }
-        ]
-    },
-    {
-        "dayNum": 3,
-        "dayDate": "2023-10-03",
-        "daySchedules": [
-            {
-                "scheduleId": 3,
-                "scheduleTitle": null,
-                "scheduleLocation": {
-                    "googlePlaceId": null,
-                    "title": null,
-                    "address": null,
-                    "latitude": 37.1234,
-                    "longitude": 127.5678,
-                    "category": "카테고리"
-                },
-                "scheduleTime": "2023-10-03T15:00:00",
-                "budget": 0,
-                "sequence": 3,
-                "completion": "INCOMPLETE",
-                "memo": null,
-                "scheduleImg": null,
-                "matchedTransaction": null,
-                "unmatchedTransaction": {
-                    "transactionId": 3,
-                    "paymentName": "헬스장 결제",
-                    "latitude": 37.1234,
-                    "longitude": 127.5678,
-                    "totalPrice": 30000,
-                    "paymentTime": "2023-10-03T15:00:00",
-                    "splitMethod": "RECEIPT",
-                    "participantsInfo": [
-                        {
-                            "memberId": 3
-                        },
-                        {
-                            "memberId": 4
-                        }
-                    ]
-                }
-            }
-        ]
-    }
-]
+//   const initialDaySchedule: TravelLog = [
+//     {
+//         "dayNum": 1,
+//         "dayDate": "2023-10-01",
+//         "daySchedules": [
+//             {
+//                 "scheduleId": 1,
+//                 "scheduleTitle": "카페 방문",
+//                 "scheduleLocation": {
+//                     "googlePlaceId": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+//                     "title": "스타벅스",
+//                     "address": "서울시 강남구 스타벅스",
+//                     "latitude": 37.7749,
+//                     "longitude": -122.4194,
+//                     "category": "카페"
+//                     },
+//                 "scheduleTime": "2023-10-01T10:00:00",
+//                 "budget": 5000,
+//                 "sequence": 1,
+//                 "completion": "COMPLETE",
+//                 "memo": "친구들과 카페에서 만남",
+//                 "scheduleImg": "http://image.url/cafe.jpg",
+//                 "matchedTransaction": {
+//                     "transactionId": 1,
+//                     "paymentName": "카페 결제",
+//                     "latitude": 37.7749,
+//                     "longitude": -122.4194,
+//                     "totalPrice": 5000,
+//                     "paymentTime": "2023-10-01T10:00:00",
+//                     "splitMethod": "RECEIPT",
+//                     "participantsInfo": [
+//                         {
+//                             "memberId": 1
+//                         },
+//                         {
+//                             "memberId": 2
+//                         }
+//                     ]
+//                 },
+//                 "unmatchedTransaction": null
+//             }
+//         ]
+//     },
+//     {
+//         "dayNum": 2,
+//         "dayDate": "2023-10-02",
+//         "daySchedules": [
+//             {
+//                 "scheduleId": 2,
+//                 "scheduleTitle": "식당 방문",
+//                 "scheduleLocation": {
+//                     "googlePlaceId": "ChIJ9TPcRgWuEmsRZtZQk5E_7Pc",
+//                     "title": "식당 방문",
+//                     "address": "서울시 용산구 이태원 식당",
+//                     "latitude": 37.5665,
+//                     "longitude": 126.978,
+//                     "category": "카테고리"
+//                 },
+//                 "scheduleTime": "2023-10-02T12:30:00",
+//                 "budget": 15000,
+//                 "sequence": 2,
+//                 "completion": "INCOMPLETE",
+//                 "memo": "가족과 식사",
+//                 "scheduleImg": "http://image.url/restaurant.jpg",
+//                 "matchedTransaction": {
+//                     "transactionId": 2,
+//                     "paymentName": "식당 결제",
+//                     "latitude": 37.5665,
+//                     "longitude": 126.978,
+//                     "totalPrice": 15000,
+//                     "paymentTime": "2023-10-02T12:30:00",
+//                     "splitMethod": "CUSTOM",
+//                     "participantsInfo": [
+//                         {
+//                             "memberId": 1
+//                         }
+//                     ]
+//                 },
+//                 "unmatchedTransaction": null
+//             }
+//         ]
+//     },
+//     {
+//         "dayNum": 3,
+//         "dayDate": "2023-10-03",
+//         "daySchedules": [
+//             {
+//                 "scheduleId": 3,
+//                 "scheduleTitle": null,
+//                 "scheduleLocation": {
+//                     "googlePlaceId": null,
+//                     "title": null,
+//                     "address": null,
+//                     "latitude": 37.1234,
+//                     "longitude": 127.5678,
+//                     "category": "카테고리"
+//                 },
+//                 "scheduleTime": "2023-10-03T15:00:00",
+//                 "budget": 0,
+//                 "sequence": 3,
+//                 "completion": "INCOMPLETE",
+//                 "memo": null,
+//                 "scheduleImg": null,
+//                 "matchedTransaction": null,
+//                 "unmatchedTransaction": {
+//                     "transactionId": 3,
+//                     "paymentName": "헬스장 결제",
+//                     "latitude": 37.1234,
+//                     "longitude": 127.5678,
+//                     "totalPrice": 30000,
+//                     "paymentTime": "2023-10-03T15:00:00",
+//                     "splitMethod": "RECEIPT",
+//                     "participantsInfo": [
+//                         {
+//                             "memberId": 3
+//                         },
+//                         {
+//                             "memberId": 4
+//                         }
+//                     ]
+//                 }
+//             }
+//         ]
+//     }
+// ]
 
   const [travelSchedules, setTravelSchedules] =
-    useState<TravelLog>(initialDaySchedule);
+    useState<TravelLog>();
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -180,7 +180,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
     }
   };
 
-  const {travelPlaceList, startDate, endDate, travelName} =
+  const {travelPlaceList, startDate, endDate} =
     useTravelDetailStore();
 
   const [selectedPlace, setSelectedPlace] = useState<string | []>(
@@ -222,21 +222,6 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
   // scheduleDayNum-1을 하면 인덱스를 알 수 있다.
   const [scheduleDayNum, setScheduleDayNum] = useState<number | undefined>(1);
 
-  // type ExtendedMarkerOptions = google.maps.Marker & {
-  //   position?: {
-  //     lat: number;
-  //     lng: number;
-  //   };
-  //   googlePlaceId?: string;
-  //   placeName?: string;
-  //   address?: string;
-  //   category?: string;
-  // };
-
-  // // 여기서 selectedMarker 상태를 추가
-  // const [selectedMarker, setSelectedMarker] =
-  //   useState<ExtendedMarkerOptions | null>(null);
-
   // `selectedMarker`를 이 확장된 타입으로 선언
   const [selectedMarker, setSelectedMarker] =
     useState<ExtendedMarkerOptions | null>(null);
@@ -244,7 +229,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
   return (
     <TravelLogContext.Provider
       value={{
-        travelSchedules,
+        travelSchedules: travelSchedules || [],
         currentIndex,
         setCurrentIndex,
         setTravelSchedules,

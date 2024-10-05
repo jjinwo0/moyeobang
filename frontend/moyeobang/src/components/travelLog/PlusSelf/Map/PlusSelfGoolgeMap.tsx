@@ -49,11 +49,12 @@ const PlusSelfGoogleMap = forwardRef(
     const [markers, setMarkers] = useState<CustomMarker[]>([]);
     const [isInteraction, setIsInteraction] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
-    const {selectedPlace, selectedMarker, setSelectedMarker, scheduleEdit} =
+    const {selectedPlace, selectedMarker, setSelectedMarker, scheduleEdit, scheduleDayNum, travelSchedules} =
       useTravelLogContext();
     const [defaultMarker, setDefaultMarker] = useState<google.maps.Icon | null>(
       null
     );
+
 
     // Provide a method for parents to change the map center
     useImperativeHandle(ref, () => ({

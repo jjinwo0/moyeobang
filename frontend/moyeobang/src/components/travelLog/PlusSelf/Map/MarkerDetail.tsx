@@ -56,6 +56,7 @@ export default function MarkerDetail() {
   const handleDetailClose = () => {
     setSearchLocation(selectedMarker?.title || '');
     handleShowMapSearch();
+    setSelectedMarker(null);
   };
 
   return (
