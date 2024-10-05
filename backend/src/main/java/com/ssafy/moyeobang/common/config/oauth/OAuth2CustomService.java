@@ -1,6 +1,7 @@
 package com.ssafy.moyeobang.common.config.oauth;
 
 import com.ssafy.moyeobang.common.config.oauth.dto.CustomOAuth2User;
+import com.ssafy.moyeobang.common.config.oauth.dto.GoogleResponse;
 import com.ssafy.moyeobang.common.config.oauth.dto.KakaoResponse;
 import com.ssafy.moyeobang.common.config.oauth.dto.OAuth2Response;
 import com.ssafy.moyeobang.common.config.oauth.dto.OAuth2UserDto;
@@ -34,6 +35,8 @@ public class OAuth2CustomService extends DefaultOAuth2UserService {
 
         if (registrationId.equals("kakao")) {
             response = new KakaoResponse(user.getAttributes());
+        } else if (registrationId.equals("google")) {
+            response = new GoogleResponse(user.getAttributes());
         } else {
             return null;
         }
