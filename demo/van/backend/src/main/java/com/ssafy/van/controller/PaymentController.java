@@ -24,8 +24,7 @@ public class PaymentController {
 
     @PostMapping("/process")
     public ResponseEntity<ApiResult> processPayment(@RequestBody PaymentRequest paymentRequest) {
-//        String mainServiceUrl = "https://j11c102.p.ssafy.io/api/payment/confirm";
-        String mainServiceUrl = "http://localhost:8080/api/payment/confrim";
+        String mainServiceUrl = "http://localhost:8080/api/payment/confirm";
         log.info("VAN Payment request: {}", paymentRequest);
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(mainServiceUrl, paymentRequest, String.class);
