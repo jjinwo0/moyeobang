@@ -183,10 +183,6 @@ export default function TravelMainMap() {
           setSelectedMarker(null);
           setSelectedMarkerInfo(undefined);
         }} // 지도 클릭 시 InfoWindow 닫기
-        options={{
-          mapTypeControl: false, // 지도 위성 모드 설정 버튼 숨기기
-          fullscreenControl: false, // 최대화 버튼 숨기기
-        }}
       >
         {markers.map((marker, index) => (
           <Marker

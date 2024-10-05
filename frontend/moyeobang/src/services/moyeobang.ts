@@ -243,6 +243,12 @@ export default {
     }),
 
   /**
+   * 여행 일정 조회
+   */
+  getTravelSchedules: async (travelId: Id) =>
+    axios.get<MoyeobangResponse<TravelLog>>(`travel/${travelId}/schedules`),
+
+  /**
    * 여행 일정 수정
    */
   putTravelSchedule: async (

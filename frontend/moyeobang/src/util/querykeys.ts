@@ -7,5 +7,5 @@ export default {
   QUIZ: 'quiz',
   // ACCOUNTNUMBER:'accountNumber',
   // CURRENTBALANCE: 'currentBalance',
-  TRAVEL_SCHEDULE: 'travelSchedule',
+  TRAVEL_SCHEDULES: 'travelSchedules',
 };
