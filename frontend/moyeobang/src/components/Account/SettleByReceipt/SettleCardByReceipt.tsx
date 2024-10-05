@@ -117,7 +117,7 @@ interface UpdateCardByReceiptProps {
 }
 
 // 해당 계좌의 회원들 다 가져와야함. profileData GET요청
-export default function UpdateCardByReceipt({
+export default function SettleCardByReceipt({
     onChange,
     itemId,
     itemTitle,
@@ -156,7 +156,8 @@ export default function UpdateCardByReceipt({
 
         // 이미 있었으면 true 반환 => 제거해야함
         // 없었으면 false 반환 => 추가해줘야함
-        const isSelected = selectedParticipants?.some((prev) => prev.memberId===memberId)
+        const isSelected = selectedParticipants?.some((prev) => prev.memberId===memberId);
+
         if (isSelected) {
             // 제거하기
             setSelectedParticipants((prev) => prev?.filter(prev => prev.memberId !== memberId))
@@ -172,21 +173,28 @@ export default function UpdateCardByReceipt({
         } else {
             const newAmount = parseInt(event.target.value, 10); //문자열을 정수로 변환 10진수
             // is (Not-a-Number) 확인
-            // if (!isNaN(newAmount) && newAmount >= totalAmount) 
-            setPrice(newAmount)
+            if (!isNaN(newAmount) && newAmount >= 0) {
+                setPrice(newAmount)
+            } else {
+                setPrice(0);
+            }
         }
     }
 
     function handleTitleChange(event:React.ChangeEvent<HTMLInputElement>) {
-        setTitle(event.target.value)
+        setTitle(event.target.value);
     }
 
     function handleQuantityChange(event:React.ChangeEvent<HTMLInputElement>) {
         if (event.target.value==='') {
-            setQuantity(0)
+            setQuantity(0);
         } else {
             const newQuantity = parseInt(event.target.value, 10);
-            setQuantity(newQuantity)
+            if (!isNaN(newQuantity) && newQuantity>=0) {
+                setQuantity(newQuantity);
+            } else {
+                setQuantity(0);
+            }
         }
     }
 
@@ -202,8 +210,10 @@ export default function UpdateCardByReceipt({
             });
         }
 
-        if ( selectedParticipants.length === participantsCount) {
+        if ( selectedParticipants.length>0 && selectedParticipants.length === participantsCount) {
             setIsAll(true);
+        } else {
+            setIsAll(false);
         }
 
     }, [title, quantity, price, selectedParticipants]);

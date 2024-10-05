@@ -45,6 +45,8 @@ const imageStyle= (isMember? :string) => css`
 `;
 
 const textStyle=css`
+    width:100px;
+    padding-left:10px;
     display:flex;
     flex-direction:column;
     align-items:flex-start;

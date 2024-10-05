@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import airportBackground from '@/assets/icons/airportBackground.png';
 import { css } from '@emotion/react';
 import { v4 as uuidv4 } from "uuid";
@@ -31,7 +31,7 @@ const buttonLayoutStyle=css`
 
 const airportData = {
     paymentRequestId: uuidv4(),
-    placeId: '123-air',
+    placeId: 'airport-1',
     amount : 459000,
 }
 
@@ -59,8 +59,31 @@ export default function AirportSite() {
 
             const messageEvent = event as MessageEvent<string>;
             const connectMessage : ConnectMessage = messageEvent.data;
-            console.log('connect 응답 결과:', connectMessage);
+            console.log('connect:', connectMessage);
         });
+
+        eventSource.addEventListener('payment-success', (event) => {
+            console.log('payment-success' , event)
+
+            const messageEvent = event as MessageEvent<string>;
+            const parsedData = JSON.parse(messageEvent.data);
+            console.log('payment-succes:', parsedData);
+        });
+
+        eventSource.onerror = (event) => {
+            
+        eventSource.close();
+            if (event) {
+                console.log('sse요청 error발생', event)
+            }
+
+            if (event.target.readyState === EventSource.CLOSED) {
+                console.log('see연결 종료')
+            }
+        };
+
+        // eventSource 상태에 저장
+        setEventSource(eventSource);
     }
 
     function handleClick() {
@@ -70,6 +93,18 @@ export default function AirportSite() {
     function handleClose() {
         setIsQrModalOpen(false)
     }
+
+    useEffect(() => {
+        fetchSEE();
+
+        // 컴포넌트 언마운트 시 SSE 연결 종료
+        return () => {
+            if (eventSource) {
+                eventSource.close();
+                console.log('sse 연결 종료')
+            }
+        };
+    }, []);
 
     return (
         <div css={backgroundStyle}>
