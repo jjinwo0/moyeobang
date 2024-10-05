@@ -1,9 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React, {useState} from 'react';
 import {useRouter} from '@tanstack/react-router';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 import Btn from '@/components/common/btn/Btn';
 import blueBlankCheck from '@/assets/icons/blueBlankCheck.png';
 import blueCheck from '@/assets/icons/blueCheck.png';
@@ -94,13 +97,12 @@ export default function PlusSelfSchedule({
   dragHandleProps: any;
   dayNum: number;
 }) {
+  const queryClient = useQueryClient();
   const getTimeFromSchedule = (scheduleTime: string) => {
     return scheduleTime.split('T')[1].slice(0, 5); // "T" 이후의 시간 부분에서 앞 5글자만 추출 ("HH:MM")
   };
 
-  const [budget, setBudget] = useState<number | string>(
-    schedule.budget || ''
-  ); // 초기값을 schedule의 predictedBudget으로 설정
+  const [budget, setBudget] = useState<number | string>(schedule.budget || ''); // 초기값을 schedule의 predictedBudget으로 설정
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -135,32 +137,48 @@ export default function PlusSelfSchedule({
     router.navigate({to: `/account/detail/${transactionId}`});
   };
 
-  // 완료 여부
+  // [todo] 완료 여부
   const {travelSchedules, setTravelSchedules, scheduleEdit, setScheduleEdit} =
     useTravelLogContext();
+  const {travelId} = useTravelDetailStore();
+
+  // const {mutate: patchTravelScheduleCompletion} = useMutation({
+  //   mutationFn: (scheduleId: Id) =>
+  //     moyeobang.patchTravelScheduleCompletion(scheduleId),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({queryKey: ['travelSchedules']});
+  //     queryClient
+  //       .fetchQuery({queryKey: ['travelSchedules']})
+  //       .then((data: any) => {
+  //         console.log('[*] data', data);
+  //         // setTravelSchedules(data.data.data.schedules);
+  //       });
+  //   },
+  // });
+
+  const {mutate: patchTravelScheduleCompletion} = useMutation({
+    mutationFn: (scheduleId: Id) =>
+      moyeobang.patchTravelScheduleCompletion(scheduleId),
+    onSuccess: async () => {
+      // API 요청이 성공한 후 fetchQuery로 최신 데이터 요청
+      try {
+        const data = await queryClient.fetchQuery({
+          queryKey: ['travelSchedules'],
+          queryFn: () => moyeobang.getTravelSchedules(travelId),
+        });
+        console.log('[*] 변경 completed 데이터', data.data.data.schedules);
+        // 최신 데이터로 Context 업데이트
+        setTravelSchedules(data.data.data.schedules);
+      } catch (error) {
+        console.error('Error fetching travel schedules:', error);
+      }
+    },
+  });
+
   // API 미적용, UI만 보여주기
   const toggleCompletion = (e: React.MouseEvent<HTMLImageElement>) => {
     e.stopPropagation();
-    const updatedSchedules = travelSchedules.map(day => {
-      if (day.dayNum === dayNum) {
-        return {
-          ...day,
-          daySchedules: day.daySchedules.map(schedule => {
-            if ('completion' in schedule) {
-              return {
-                ...schedule,
-                completion:
-                  schedule.completion === 'completed' ? 'pending' : 'completed',
-              };
-            }
-            return schedule;
-          }),
-        };
-      }
-      return day;
-    });
-
-    setTravelSchedules(updatedSchedules);
+    patchTravelScheduleCompletion(schedule.scheduleId as Id);
   };
 
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -169,7 +187,8 @@ export default function PlusSelfSchedule({
   );
 
   const difference = schedule.matchedTransaction
-    ? (schedule.budget || 0) - schedule.matchedTransaction.totalPrice: 0;
+    ? (schedule.budget || 0) - schedule.matchedTransaction.totalPrice
+    : 0;
   const differenceColor = difference < 0 ? colors.customRed : colors.customBlue;
 
   const handleInfoClick = (e: React.MouseEvent<HTMLImageElement>) => {
@@ -212,7 +231,7 @@ export default function PlusSelfSchedule({
       {/* 체크리스트 완료 여부 */}
       <div css={checkBoxStyle}>
         <img
-          src={schedule.completion === 'completed' ? blueCheck : blueBlankCheck}
+          src={schedule.completion === 'COMPLETE' ? blueCheck : blueBlankCheck}
           alt="체크리스트"
           style={{width: '30px', height: '30px', margin: '5px'}}
           onClick={toggleCompletion}

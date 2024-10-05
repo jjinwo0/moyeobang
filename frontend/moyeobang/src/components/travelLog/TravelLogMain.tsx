@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from '@emotion/react';
 import {
   useSuspenseQuery,
@@ -38,16 +38,21 @@ export default function TravelLogMain() {
 
   // [todo] 여행 일정 조회
 
-  const {data} = useSuspenseQuery({
+  const {data: travelSchedulesData} = useSuspenseQuery({
     queryKey: ['travelSchedules', travelId],
-    queryFn: () => moyeobang.getTravelSchedules(travelId),
+    queryFn: async () => {
+      const response = await moyeobang.getTravelSchedules(travelId);
+      const responseSchedules = response.data.data.schedules;
+      setTravelSchedules(responseSchedules);
+      return response;
+    },
   });
 
-  const responseSchedules = data.data.data.schedules;
-  setTravelSchedules(responseSchedules);
-
-
   // 지도 검색 모달
+
+  useEffect(() => {
+    console.log('[*] 변경 travelSchedules', travelSchedules);
+  }, [travelSchedules]);
 
   return (
     <>

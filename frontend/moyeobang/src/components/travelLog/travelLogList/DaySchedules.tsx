@@ -75,7 +75,7 @@ export default function DaySchedules({
 
   const updateSequence = (dayNum: number, scheduleId: number, newSequence: number) => {
     setTravelSchedules((prevSchedules) => {
-      const updatedSchedules = prevSchedules.map((daySchedule) => {
+      const updatedSchedules = prevSchedules?.map((daySchedule) => {
         if (daySchedule.dayNum === dayNum) {
           const updatedDaySchedules = daySchedule.daySchedules.map((schedule) => {
             if (schedule.scheduleId === scheduleId) {
