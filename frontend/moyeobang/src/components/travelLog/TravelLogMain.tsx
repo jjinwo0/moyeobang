@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
 import {css} from '@emotion/react';
+import {
+  useSuspenseQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
+import moyeobang from '@/services/moyeobang';
 import TravelLogList from '@/components/travelLog/travelLogList/TravelLogList';
 import Navbar from '@/components/common/navBar/Navbar';
 import PlusBtn from '@/components/common/btn/PlustBtn';
@@ -12,6 +19,7 @@ const travelLogMainLayout = css`
   height: 100vh;
   position: relative;
 `;
+
 const plusStyle = css`
   position: fixed;
   bottom: 90px;
@@ -22,10 +30,22 @@ const plusStyle = css`
 `;
 
 export default function TravelLogMain() {
-  const {handleShowMapSearch, travelDates, scheduleDayNum} =
+  const {travelId} = useTravelDetailStore();
+  const {travelDates, scheduleDayNum, travelSchedules, setTravelSchedules} =
     useTravelLogContext();
   const {showMapSearch, showPlusSelf, handleShowPlusSelf} =
     useTravelLogContext();
+
+  // [todo] 여행 일정 조회
+
+  const {data} = useSuspenseQuery({
+    queryKey: ['travelSchedules', travelId],
+    queryFn: () => moyeobang.getTravelSchedules(travelId),
+  });
+
+  const responseSchedules = data.data.data.schedules;
+  setTravelSchedules(responseSchedules);
+
 
   // 지도 검색 모달
 
@@ -40,7 +60,7 @@ export default function TravelLogMain() {
 
         <Navbar />
       </div>
-      {scheduleDayNum < travelDates.length && (
+      {scheduleDayNum && scheduleDayNum <= travelDates.length && (
         <div css={plusStyle}>{<PlusBtn onClick={handleShowPlusSelf} />}</div>
       )}
       {showPlusSelf && <PlusSelf />}

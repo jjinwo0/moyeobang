@@ -42,6 +42,16 @@ const textStyle = css`
     font-size: 16px;
 `;
 
+const adressStyle=css`
+    font-family:'regular';
+    font-size: 16px;
+    width:240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align:right;
+`;
+
 export default function TransactionDetailDefaultCard({
     paymentName,
     money,
@@ -68,8 +78,7 @@ export default function TransactionDetailDefaultCard({
                 </div>
                 <div css={boxStyle}>
                     <div css={labelStyle}>주소</div>
-                    <div css={textStyle}>{adress
-                        }</div>
+                    <div css={adressStyle}>{adress}</div>
                 </div>
             </div>
         

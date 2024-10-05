@@ -24,7 +24,7 @@ import Btn from '../common/btn/Btn';
 import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import calendarIcon from '@/assets/icons/calendar.png';
 import useModalStore from '@/store/useModalStore';
-import MapSearch from './MapSearch';
+import MapSearch from '@/components/travelHome/MapSearch';
 import CustomCalendar from './CustomCalendar';
 import dayjs from 'dayjs';
 import {css} from '@emotion/react';

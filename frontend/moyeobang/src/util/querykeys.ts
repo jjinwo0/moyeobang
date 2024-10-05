@@ -9,5 +9,5 @@ export default {
   MEMBERS_PROPORTION_LIST:'membersProportionList'
   // ACCOUNTNUMBER:'accountNumber',
   // CURRENTBALANCE: 'currentBalance',
-  // USERINFO:'userInfo'
+  TRAVEL_SCHEDULES: 'travelSchedules',
 };

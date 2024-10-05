@@ -1,4 +1,6 @@
 /** @jsxImportSource @emotion/react */
+import {useMutation} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 import React, {useState} from 'react';
 import Btn from '../btn/Btn';
 import {bluefont, colors} from '@/styles/colors';
@@ -56,8 +58,23 @@ export default function PersonalDeposit({
     setValue(e.target.value); // 사용자가 입력한 값을 업데이트
   };
 
+  const {mutate: postDepositAccount} = useMutation({
+    mutationFn: ({
+      accountId,
+      memberId,
+      amount,
+    }: {
+      accountId: Id;
+      memberId: Id;
+      amount: number;
+    }) => {
+      return moyeobang.postDepositAccount(accountId, memberId, amount);
+    },
+  });
+
   const handleOnclick = () => {
     // api로 개인 입금 시키기
+
     setValue(0);
   };
 

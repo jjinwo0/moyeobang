@@ -11,9 +11,11 @@ import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import searchImg from '@/assets/icons/Search.png';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import moyeobang from '@/services/moyeobang';
 
 export default function PlusSelf() {
-  const {travelPlaceList} = useTravelDetailStore();
+  const {travelPlaceList, travelId} = useTravelDetailStore();
   const {
     handleShowPlusSelf,
     handleShowMapSearch,
@@ -43,6 +45,7 @@ export default function PlusSelf() {
   const [scheduleName, setScheduleName] = useState<string | undefined>(
     searchLocation
   );
+  const queryClient = useQueryClient();
 
   const handleAddImg = () => {
     // input[type="file"]을 클릭하는 로직 추가
@@ -70,19 +73,68 @@ export default function PlusSelf() {
     setSelectedImage('');
   };
 
+  // const handleMakeScheduleLocation = (selectedMarker:ExtendedMarkerOptions) => {
+  //   if(selectedMarker) {
+  //   const scheduleLocation: ScheduleLocation = {
+  //     googlePlaceId: selectedMarker?.placeId || '',
+  //     title: selectedMarker?.title || '',
+  //     address: selectedMarker?.address || '',
+  //     latitude:
+  //       typeof selectedMarker?.position?.lat === 'function'
+  //         ? selectedMarker.position.lat()
+  //         : selectedMarker?.position?.lat || 0,
+  //     longitude:
+  //       typeof selectedMarker?.position?.lng === 'function'
+  //         ? selectedMarker.position.lng()
+  //         : selectedMarker?.position?.lng || 0,
+  //     category: selectedMarker?.types ? selectedMarker.types[0] : '',
+  //     };
+  //     return scheduleLocation;
+  //   } else {
+  //     return {googlePlaceId: '', title: '', address: '', latitude: 0, longitude: 0, category: ''};
+  //   }
+  // };
+
+  const handleDelete = () => {
+    // [todo] 삭제 로직 추가
+    resetForm();
+    handleShowPlusSelf();
+  };
+
+  /**
+   * 일정 추가 mutation 선언
+   */
+  const {mutate: postTravelSchedule} = useMutation({
+    mutationFn: ({
+      travelId,
+      scheduleData,
+    }: {
+      travelId: Id;
+      scheduleData: PostTravelSchedule;
+    }) => moyeobang.postTravelSchedule(travelId, scheduleData),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['travelSchedules'],
+        refetchType: 'all',
+      });
+      console.log('성공');
+      resetForm();
+      handleShowPlusSelf();
+    },
+  });
+
   const handleSave = () => {
     // [todo] 저장 로직 추가
-    resetForm();
     if (selectedMarker) {
       const scheduleLocation: ScheduleLocation = {
         googlePlaceId: selectedMarker?.placeId || '',
         title: selectedMarker?.title || '',
         address: selectedMarker?.address || '',
-        latitude:
+        lat:
           typeof selectedMarker?.position?.lat === 'function'
             ? selectedMarker.position.lat()
             : selectedMarker?.position?.lat || 0,
-        longitude:
+        lng:
           typeof selectedMarker?.position?.lng === 'function'
             ? selectedMarker.position.lng()
             : selectedMarker?.position?.lng || 0,
@@ -102,12 +154,12 @@ export default function PlusSelf() {
        * selectedImage
        */
 
-      const scheduleData = {
-        scheduleTitle: scheduleName,
-        scheduleLocation: scheduleLocation ?? '',
-        scheduleTime: dateTime ?? '',
-        memo: memo ?? '',
-        scheduleImg: selectedImage ?? '',
+      const scheduleData: PostTravelSchedule = {
+        scheduleTitle: scheduleName || '',
+        scheduleLocation: scheduleLocation || '',
+        scheduleTime: dateTime || '',
+        memo: memo || '',
+        image_url: selectedImage || '',
       };
       console.log('[*] scheduleData', scheduleData);
       // [todo] 저장 로직 추가
@@ -115,9 +167,9 @@ export default function PlusSelf() {
         // 수정 모드
       } else {
         // 추가 모드
+        postTravelSchedule({travelId, scheduleData});
       }
     }
-    handleShowPlusSelf();
   };
 
   const handleXClick = () => {
@@ -133,7 +185,7 @@ export default function PlusSelf() {
   useEffect(() => {
     if (scheduleDayNum) {
       const date = travelDates[scheduleDayNum - 1].split(' ')[0]; // 요일 제거
-      const time = `${AMPMSelection === 'AM' ? String(hour).padStart(2, '0') : String(Number(hour) + 12).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00`;
+      const time = `${AMPMSelection === 'AM' ? String(hour).padStart(2, '0') : String(Number(hour) + 12).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
       if (hour !== '' && minute !== '') {
         setDateTime(`${date}T${time}`);
         console.log('[*] selected Marker', selectedMarker);
@@ -142,10 +194,8 @@ export default function PlusSelf() {
   }, [hour, minute, AMPMSelection, scheduleDayNum]);
 
   // 타입 가드 함수
-  function isPlusSelfSchedule(
-    schedule: PlusSelfSchedule | PaidAutoSchedule
-  ): schedule is PlusSelfSchedule {
-    return (schedule as PlusSelfSchedule).scheduleId !== undefined;
+  function isPlusSelfSchedule(schedule: DaySchedule): schedule is DaySchedule {
+    return (schedule as DaySchedule).scheduleId !== undefined;
   }
 
   useEffect(() => {
@@ -161,9 +211,9 @@ export default function PlusSelf() {
         console.log('[*] schedule', schedule);
         if (isPlusSelfSchedule(schedule[0])) {
           setScheduleName(schedule[0].scheduleTitle || '');
-          setSearchLocation(schedule[0].scheduleLocation.title || '');
+          setSearchLocation(schedule[0]?.scheduleLocation?.title || '');
 
-          const [date, time] = schedule[0].scheduleTime.split('T');
+          const [date, time] = schedule[0].scheduleTime?.split('T') || [];
           const [hour, minute] = time.split(':');
           const hourInt = parseInt(hour, 10);
           setAMPMSelection(hourInt >= 12 ? 'PM' : 'AM');
@@ -255,7 +305,9 @@ export default function PlusSelf() {
           </div>
           {/* 3. 여행 시간 */}
           <div>
-            <div css={PlusSelfStyle.labelStyle}>시간</div>
+            <div css={PlusSelfStyle.labelStyle}>
+              <span style={{color: colors.customRed}}>*</span> 시간
+            </div>
             {/* 시간 선택 */}
             <div css={PlusSelfStyle.timeInputStyle}>
               <div css={PlusSelfStyle.AMPMSytle}>
@@ -318,13 +370,32 @@ export default function PlusSelf() {
           </div>
           {/* 저장, 삭제 버튼 */}
           <div css={PlusSelfStyle.btnLayout}>
+            {scheduleEdit && (
+              <Btn
+                buttonStyle={{size: 'middle', style: 'red'}}
+                onClick={handleDelete}
+              >
+                삭제
+              </Btn>
+            )}
             <Btn
               buttonStyle={{
-                size: 'small',
-                style: scheduleName === '' ? 'gray' : 'blue',
+                size: scheduleEdit ? 'middle' : 'big',
+                style:
+                  scheduleName === '' ||
+                  dateTime === '' ||
+                  hour === '' ||
+                  minute === ''
+                    ? 'gray'
+                    : 'blue',
               }}
               onClick={handleSave}
-              disabled={scheduleName === ''}
+              disabled={
+                scheduleName === '' ||
+                dateTime === '' ||
+                hour === '' ||
+                minute === ''
+              }
             >
               저장
             </Btn>
