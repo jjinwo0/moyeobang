@@ -17,6 +17,7 @@ public class MemberInfoMapper {
                     entity.getUsername(),
                     entity.getProfile(),
                     null,
+                    null,
                     null
             );
         }
@@ -25,6 +26,7 @@ public class MemberInfoMapper {
                 entity.getId(),
                 entity.getUsername(),
                 entity.getProfile(),
+                accountEntity.getId(),
                 accountEntity.getBankName(),
                 accountEntity.getAccountNumber()
         );
