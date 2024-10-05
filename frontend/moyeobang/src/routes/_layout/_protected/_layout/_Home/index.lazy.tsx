@@ -16,7 +16,7 @@ import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import AllowNotification from '@/components/notification/AllowNotification';
 import useCurrentTravelStore from '@/store/useCurrentTravelStore';
-import {useFcmTokenContext} from '@/contexts/FcmToken';
+import useFcmTStore from '@/store/useFcmStore';
 
 const memberName: MemberName = '진우바오';
 
@@ -119,15 +119,10 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [isFcmToken, setIsFcmToken] = useState<boolean>(true);
-  const [pushNotification, setPushNotification] = useState<boolean>(isFcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
+  const {isfcmToken} = useFcmTStore();
+  const [pushNotification, setPushNotification] =
+    useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
-  const {fcmToken} = useFcmTokenContext();
-
-  if (fcmToken) {
-    setIsFcmToken(false);
-    console.log(fcmToken);
-  }
 
   // //[todo] get으로 여행 목록 전체 조회하기
   // const {data: travelData} = useSuspenseQuery({

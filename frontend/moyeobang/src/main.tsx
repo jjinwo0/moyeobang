@@ -7,7 +7,6 @@ import {RouterProvider, createRouter} from '@tanstack/react-router';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {LoadScript} from '@react-google-maps/api';
-import {FcmTokenProvider, useFcmTokenContext} from './contexts/FcmToken';
 
 const mapAPI = import.meta.env.VITE_GOOGLE_API_KEY;
 
@@ -42,15 +41,13 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     // <StrictMode>
-    <FcmTokenProvider>
-      <QueryClientProvider client={queryClient}>
-        <LoadScript googleMapsApiKey={mapAPI} libraries={libraries}>
-          <RouterProvider router={router} />
-          <ReactQueryDevtools initialIsOpen={true} />
-          {/* Devtools 추가 */}
-        </LoadScript>
-      </QueryClientProvider>
-    </FcmTokenProvider>
+    <QueryClientProvider client={queryClient}>
+      <LoadScript googleMapsApiKey={mapAPI} libraries={libraries}>
+        <RouterProvider router={router} />
+        <ReactQueryDevtools initialIsOpen={true} />
+        {/* Devtools 추가 */}
+      </LoadScript>
+    </QueryClientProvider>
     // {/* </StrictMode> */}
   );
 }

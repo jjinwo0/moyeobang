@@ -3,7 +3,7 @@ import {css} from '@emotion/react';
 import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
 import {requestPermissionAndSaveToken} from '@/services/notificationService';
-// import {useFcmTokenContext} from '@/contexts/FcmToken';
+import useFcmStore from '@/store/useFcmStore';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -70,14 +70,13 @@ export default function AllowNotification({onClose}: AllowNotificationProps) {
   //   onClose();
   // };
 
-  // const {setFcmToken} = useFcmTokenContext();
-
+  const {setIsFcmToken} = useFcmStore();
   const handleAllowClick = async () => {
     onClose();
     // console.log('승인');
     try {
       // "승인" 버튼 클릭 시 푸시 알림 권한을 요청하고 FCM 토큰을 받아옴
-      await requestPermissionAndSaveToken();
+      await requestPermissionAndSaveToken(setIsFcmToken);
       console.log('Notification permission granted and token saved.');
     } catch (error) {
       console.error('Error requesting permission or saving token:', error);
