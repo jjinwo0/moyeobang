@@ -48,16 +48,21 @@ public class ScheduleInfo {
         this.sequence = schedule.getSequence();
         this.travelId = schedule.getTravel().getId();
         this.category = schedule.getCategory();
-        this.withdrawInfo = new WithdrawInfo(
-                withdraw.getId(),
-                withdraw.getTitle(),
-                withdraw.getCreatedAt(),
-                withdraw.getAmount(),
-                withdraw.getLatitude(),
-                withdraw.getLongitude(),
-                withdraw.getPaymentRequestId(),
-                withdraw.getSettleType()
-        );
-        this.participantIds = withdraw.getParticipantId();
+        if (withdraw != null) {
+            this.withdrawInfo = new WithdrawInfo(
+                    withdraw.getId(),
+                    withdraw.getTitle(),
+                    withdraw.getCreatedAt(),
+                    withdraw.getAmount(),
+                    withdraw.getLatitude(),
+                    withdraw.getLongitude(),
+                    withdraw.getPaymentRequestId(),
+                    withdraw.getSettleType()
+            );
+            this.participantIds = withdraw.getParticipantId();
+        } else {
+            this.withdrawInfo = null;
+            this.participantIds = null;
+        }
     }
 }
