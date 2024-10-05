@@ -31,20 +31,21 @@ const plusStyle = css`
 
 export default function TravelLogMain() {
   const {travelId} = useTravelDetailStore();
-  const {travelDates, scheduleDayNum} = useTravelLogContext();
+  const {travelDates, scheduleDayNum, travelSchedules, setTravelSchedules} =
+    useTravelLogContext();
   const {showMapSearch, showPlusSelf, handleShowPlusSelf} =
     useTravelLogContext();
 
-  const queryClient = useQueryClient();
-  console.log('[*] travelId', travelId);
+  // [todo] 여행 일정 조회
 
   const {data} = useSuspenseQuery({
     queryKey: ['travelSchedules', travelId],
     queryFn: () => moyeobang.getTravelSchedules(travelId),
   });
 
-  const travelSchedules = data;
-  console.log('[*] travelSchedules', travelSchedules);
+  const responseSchedules = data.data.data.schedules;
+  setTravelSchedules(responseSchedules);
+
 
   // 지도 검색 모달
 

@@ -5,7 +5,7 @@ import {useTravelLogContext} from '@/contexts/TravelLog';
 import {css} from '@emotion/react';
 
 interface SingleTravelLogProps {
-  schedule: PlusSelfSchedule | PaidAutoSchedule;
+  schedule: DaySchedule;
   scheduleNum: number;
   dragHandleProps: any;
   dayNum: number;
@@ -27,7 +27,7 @@ export default function SingleTravelLog({
 }: SingleTravelLogProps) {
   return (
     <div css={scheduleContentStyle}>
-      {schedule.matchedTransaction !== null ? (
+      {schedule.unmatchedTransaction == null ? (
         <PlusSelfSchedule
           schedule={schedule}
           scheduleNum={scheduleNum}

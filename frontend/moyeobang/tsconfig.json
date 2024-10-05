@@ -4,7 +4,11 @@
     "paths": {
       "@/*": ["*"]
     }, // 경로 별칭 설정
-    "typeRoots": ["./node_modules/@types", "./src/@types", "@emotion/react/types/css-prop"], // 타입 루트 경로 설정
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types",
+      "@emotion/react/types/css-prop"
+    ], // 타입 루트 경로 설정
     "jsx": "react-jsx", // JSX 처리
     "jsxImportSource": "@emotion/react", // Emotion에서 JSX 처리
     "target": "ES2020", // ES2020 타겟
@@ -12,7 +16,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"], // 라이브러리 설정
     "module": "ESNext", // ESNext 모듈 시스템 설정
     "skipLibCheck": false, // 모든 타입 정의 파일 검사
-    "esModuleInterop": false, // ESModule과 CommonJS 호환성 끔
+    "esModuleInterop": true, // ESModule과 CommonJS 호환성 끔
     "moduleResolution": "Node", // Node 방식의 모듈 해석
     "allowSyntheticDefaultImports": true, // 기본 import 허용
     "allowImportingTsExtensions": true, // .ts 확장자 import 허용
@@ -20,6 +24,7 @@
     "moduleDetection": "force", // 강제 모듈 탐지
     "noEmit": true, // 컴파일 후 파일을 출력하지 않음
     "outDir": "./dist", // 출력 디렉토리 설정
+    "resolveJsonModule": true,
 
     /* Linting 설정 */
     "strict": true, // 엄격한 타입 체크

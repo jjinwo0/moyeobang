@@ -97,3 +97,11 @@ interface PostTravelSchedule {
   memo: string;
   image_url: string;
 }
+
+
+/**
+ * 여행 일정 조회 data 타입
+ */
+interface GetTravelSchedules {
+  schedules: Schedules[];
+}

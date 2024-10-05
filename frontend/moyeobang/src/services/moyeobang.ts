@@ -181,12 +181,31 @@ export default {
     ),
 
   /**
-   * 공금입금
+   * 공금 입금 요청
    */
-  postDepositAccount: async (accountId: number, totalAmount: number) =>
+  postResquestDepositAccount: async (accountId: number, totalAmount: number) =>
     axios.post<MoyeobangResponse<ResponsePostDepositAccount>>(
       `/accounts/${accountId}/deposit/request`,
       {totalAmount},
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
+
+  /**
+   * 공금입금 api
+   */
+  postDepositAccount: async (
+    accountId: number,
+    memberId: number,
+    amount: number
+  ) =>
+    axios.post<MoyeobangResponse<ResponseDepositAccount>>(
+      `/accounts/${accountId}/deposit`,
+      {
+        memberId: memberId,
+        amount: amount,
+      },
       {
         headers: {'Content-Type': 'application/json'},
       }
@@ -246,7 +265,9 @@ export default {
    * 여행 일정 조회
    */
   getTravelSchedules: async (travelId: Id) =>
-    axios.get<MoyeobangResponse<TravelLog>>(`travel/${travelId}/schedules`),
+    axios.get<MoyeobangResponse<GetTravelSchedules>>(
+      `travel/${travelId}/schedules`
+    ),
 
   /**
    * 여행 일정 수정

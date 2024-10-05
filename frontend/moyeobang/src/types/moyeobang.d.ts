@@ -545,7 +545,17 @@ interface CustomMarker {
   photos?: string[];
 }
 
+/**
+ * 공금 입금 요청
+ */
 interface ResponsePostDepositAccount {
   title: TravelName;
   amount: TotalAmount;
+}
+
+/**
+ * 공금 입금
+ */
+interface ResponseDepositAccount {
+  accountBalance: number;
 }
