@@ -9,9 +9,11 @@ import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPaylo
 import com.ssafy.moyeobang.notification.adapter.in.web.response.VerifyKey;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @WebAdapter
 @RestController
 @RequiredArgsConstructor
@@ -49,7 +51,6 @@ public class NotificationController {
     public ApiResult<?> saveFCMToken(@PathVariable("memberId") Long memberId,
                                      @RequestBody FCMTokenRequest request) {
 
-        log.info("saveFCMToken {}", memberId);
         notificationUseCase.saveToken(memberId, request.token());
 
         return success(true);
