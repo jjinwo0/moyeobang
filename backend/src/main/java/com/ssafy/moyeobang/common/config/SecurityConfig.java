@@ -4,7 +4,6 @@ import com.ssafy.moyeobang.common.config.jwt.TokenManager;
 import com.ssafy.moyeobang.common.config.oauth.MemberRepositoryInOAuth;
 import com.ssafy.moyeobang.common.config.oauth.OAuth2CustomService;
 import com.ssafy.moyeobang.common.config.oauth.OAuth2SuccessHandler;
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -54,7 +53,7 @@ public class SecurityConfig {
                         auth -> auth.loginPage("/login")
                                 .authorizationEndpoint(
                                         endpoint -> endpoint
-                                                .baseUri("/oauth2/authorization")
+                                                .baseUri("api/oauth2/authorization")
                                 )
                                 .userInfoEndpoint(
                                         endpoint -> endpoint.userService(oAuth2CustomService))
