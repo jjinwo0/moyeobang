@@ -3,6 +3,7 @@ import {css} from '@emotion/react';
 import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
 import {requestPermissionAndSaveToken} from '@/services/notificationService';
+// import {useFcmTokenContext} from '@/contexts/FcmToken';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -68,6 +69,8 @@ export default function AllowNotification({onClose}: AllowNotificationProps) {
   //   }
   //   onClose();
   // };
+
+  // const {setFcmToken} = useFcmTokenContext();
 
   const handleAllowClick = async () => {
     onClose();

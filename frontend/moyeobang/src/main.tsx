@@ -7,6 +7,7 @@ import {RouterProvider, createRouter} from '@tanstack/react-router';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {LoadScript} from '@react-google-maps/api';
+import {FcmTokenProvider, useFcmTokenContext} from './contexts/FcmToken';
 
 const mapAPI = import.meta.env.VITE_GOOGLE_API_KEY;
 
@@ -15,7 +16,7 @@ const queryClient = new QueryClient();
 
 // Import the generated route tree
 import {routeTree} from './routeTree.gen'; // 라우트 트리 경로 확인
-import { AuthProvider } from './contexts/AuthContext';
+import {AuthProvider} from './contexts/AuthContext';
 
 // Create a new router instance
 const router = createRouter({routeTree});

@@ -10,6 +10,8 @@
 import {initializeApp} from 'firebase/app';
 import {getMessaging, getToken} from 'firebase/messaging';
 
+import {useFcmTokenContext} from '@/contexts/FcmToken';
+
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -75,6 +77,7 @@ function saveTokenInMemberEntity(token: string) {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+      // setFcmToken(token); // contextAPI에 token저장
       return response.json();
     })
     .then(data => console.log('Token saved:', data))
