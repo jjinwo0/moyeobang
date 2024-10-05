@@ -118,7 +118,7 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
+  const [pushNotification, setPushNotification] = useState<boolean>(true); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
 
   // //[todo] get으로 여행 목록 전체 조회하기
@@ -223,6 +223,7 @@ function Index() {
         endDate: trip.endDate,
         travelPlaceList: trip.travelPlaceList,
         travelImg: trip.travelImg,
+        participantsInfo: trip.participantsInfo,
       }));
 
       setCurrentTravelData(travelInfo[0]); // Zustand에 저장

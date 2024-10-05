@@ -2,15 +2,9 @@ import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 
 interface CurrentTravelState
-  extends Omit<
-    Travel,
-    'quizQuestion' | 'quizAnswer' | 'participantCount' | 'participantsInfo'
-  > {
+  extends Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantCount'> {
   setCurrentTravelData: (
-    data: Omit<
-      Travel,
-      'quizQuestion' | 'quizAnswer' | 'participantCount' | 'participantsInfo'
-    >
+    data: Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantCount'>
   ) => void;
 }
 
@@ -25,6 +19,7 @@ const useCurrentTravelStore = create<CurrentTravelState>()(
       startDate: '',
       endDate: '',
       travelPlaceList: [],
+      participantsInfo: [],
       setCurrentTravelData: ({
         travelId,
         travelName,
@@ -34,6 +29,7 @@ const useCurrentTravelStore = create<CurrentTravelState>()(
         travelPlaceList,
         accountId,
         accountNumber,
+        participantsInfo,
       }) =>
         set({
           travelId,
@@ -44,6 +40,7 @@ const useCurrentTravelStore = create<CurrentTravelState>()(
           travelPlaceList,
           accountId,
           accountNumber,
+          participantsInfo,
         }),
     }),
     {

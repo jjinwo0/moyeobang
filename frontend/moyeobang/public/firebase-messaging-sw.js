@@ -30,6 +30,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(messaging, payload => {
+  console.log(payload.notification); // 푸시알림 콘솔 확인용
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
