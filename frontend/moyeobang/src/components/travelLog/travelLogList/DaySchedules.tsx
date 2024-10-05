@@ -68,10 +68,11 @@ export default function DaySchedules({
     showMapSearch,
     handleShowPlusSelf,
   } = useTravelLogContext();
-  console.log('[*] dayNum', dayNum);
 
   const daySchedules = travelSchedules[dayNum - 1]?.daySchedules || [];
   console.log('[*] daySchedules', daySchedules);
+  console.log('[*] 이거 travelSchedules', travelSchedules);
+  
 
   const updateSequence = (dayNum: number, scheduleId: number, newSequence: number) => {
     setTravelSchedules((prevSchedules) => {

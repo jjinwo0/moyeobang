@@ -30,6 +30,7 @@ export default function PlusSelf() {
     scheduleDayNum,
     selectedMarker,
     travelSchedules,
+    setTravelSchedules,
   } = useTravelLogContext();
   const [AMPMSelection, setAMPMSelection] = useState<'AM' | 'PM'>('AM');
   const handleAMPMSelection = () => {
@@ -73,28 +74,6 @@ export default function PlusSelf() {
     setSelectedImage('');
   };
 
-  // const handleMakeScheduleLocation = (selectedMarker:ExtendedMarkerOptions) => {
-  //   if(selectedMarker) {
-  //   const scheduleLocation: ScheduleLocation = {
-  //     googlePlaceId: selectedMarker?.placeId || '',
-  //     title: selectedMarker?.title || '',
-  //     address: selectedMarker?.address || '',
-  //     latitude:
-  //       typeof selectedMarker?.position?.lat === 'function'
-  //         ? selectedMarker.position.lat()
-  //         : selectedMarker?.position?.lat || 0,
-  //     longitude:
-  //       typeof selectedMarker?.position?.lng === 'function'
-  //         ? selectedMarker.position.lng()
-  //         : selectedMarker?.position?.lng || 0,
-  //     category: selectedMarker?.types ? selectedMarker.types[0] : '',
-  //     };
-  //     return scheduleLocation;
-  //   } else {
-  //     return {googlePlaceId: '', title: '', address: '', latitude: 0, longitude: 0, category: ''};
-  //   }
-  // };
-
   const handleDelete = () => {
     // [todo] 삭제 로직 추가
     resetForm();
@@ -120,6 +99,40 @@ export default function PlusSelf() {
       console.log('성공');
       resetForm();
       handleShowPlusSelf();
+    },
+  });
+
+  /**
+   * 일정 수정 mutation 선언
+   */
+
+  const {mutate: putTravelSchedule} = useMutation({
+    mutationFn: ({
+      travelId,
+      scheduleId,
+      data,
+    }: {
+      travelId: Id;
+      scheduleId: Id;
+      data: PostTravelSchedule;
+    }) => moyeobang.putTravelSchedule(travelId, scheduleId, data),
+    onSuccess: async () => {
+      console.log('[*] 수정 성공');
+      await queryClient.invalidateQueries({
+        queryKey: ['travelSchedules'],
+        refetchType: 'all',
+      });
+      try {
+        const data = await queryClient.fetchQuery({
+          queryKey: ['travelSchedules'],
+          queryFn: () => moyeobang.getTravelSchedules(travelId),
+        });
+        console.log('[*] 수정 데이터', data.data.data.schedules);
+        // 최신 데이터로 Context 업데이트
+        setTravelSchedules(data.data.data.schedules);
+      } catch (error) {
+        console.error('Error fetching travel schedules:', error);
+      }
     },
   });
 
@@ -165,6 +178,11 @@ export default function PlusSelf() {
       // [todo] 저장 로직 추가
       if (scheduleEdit) {
         // 수정 모드
+        putTravelSchedule({
+          travelId,
+          scheduleId: scheduleEdit,
+          data: scheduleData,
+        });
       } else {
         // 추가 모드
         postTravelSchedule({travelId, scheduleData});

@@ -142,20 +142,6 @@ export default function PlusSelfSchedule({
     useTravelLogContext();
   const {travelId} = useTravelDetailStore();
 
-  // const {mutate: patchTravelScheduleCompletion} = useMutation({
-  //   mutationFn: (scheduleId: Id) =>
-  //     moyeobang.patchTravelScheduleCompletion(scheduleId),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({queryKey: ['travelSchedules']});
-  //     queryClient
-  //       .fetchQuery({queryKey: ['travelSchedules']})
-  //       .then((data: any) => {
-  //         console.log('[*] data', data);
-  //         // setTravelSchedules(data.data.data.schedules);
-  //       });
-  //   },
-  // });
-
   const {mutate: patchTravelScheduleCompletion} = useMutation({
     mutationFn: (scheduleId: Id) =>
       moyeobang.patchTravelScheduleCompletion(scheduleId),
