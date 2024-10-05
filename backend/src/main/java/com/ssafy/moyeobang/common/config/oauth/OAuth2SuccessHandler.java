@@ -30,7 +30,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final TokenManager tokenManager;
 
-    public static final String REDIRECT_PATH = "https://i11c102.p.ssafy.io/"; // todo: 수정 필요
+    public static final String REDIRECT_PATH = "https://j11c102.p.ssafy.io/"; // todo: 수정 필요
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(15);
 
