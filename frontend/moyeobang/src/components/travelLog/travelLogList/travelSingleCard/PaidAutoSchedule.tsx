@@ -60,12 +60,14 @@ export default function PaidAutoSchedule({
   dayNum,
   dragHandleProps,
 }: {
-  schedule: PaidAutoSchedule;
+  schedule: DaySchedule;
   scheduleNum: number;
   dayNum: number;
   dragHandleProps: any;
 }) {
   const getTimeFromSchedule = (scheduleTime: string) => {
+    console.log('[*] scheduleTime', scheduleTime);
+
     return scheduleTime.split('T')[1].slice(0, 5); // "T" 이후의 시간 부분에서 앞 5글자만 추출 ("HH:MM")
   };
 
@@ -75,7 +77,7 @@ export default function PaidAutoSchedule({
     transactionId: Id
   ) => {
     e.stopPropagation();
-    router.navigate({to: `/account/detail/${transactionId}`});
+    router.navigate({to: `/account/${transactionId}/detail`});
   };
 
   return (
@@ -93,19 +95,19 @@ export default function PaidAutoSchedule({
             color: colors.lightBlack,
           }}
         >
-          {getTimeFromSchedule(schedule.paymentTime)}
+          {getTimeFromSchedule(schedule.unmatchedTransaction?.paymentTime || '')}
         </span>
       </div>
       <div css={scheduleLetterLayout}>
         <div css={scheduleLetterStyle}>
           <div style={{fontSize: '24px'}}>
-            {scheduleNum}. {schedule.paymentName}
+            {scheduleNum}. {schedule.unmatchedTransaction?.paymentName}
           </div>
           <div css={oneLineStyle}>
             <span>결제 비용</span>{' '}
             <span style={{color: colors.fifth}}>
               {' '}
-              {schedule.totalPrice.toLocaleString()}원
+              {schedule.unmatchedTransaction?.totalPrice.toLocaleString()}원
             </span>
           </div>
           <div>
@@ -118,37 +120,15 @@ export default function PaidAutoSchedule({
                   alignItems: 'center',
                 }}
               >
-                <div>정산 참여자 : {schedule.participantsInfo.length}명</div>
+                <div>정산 참여자 : {schedule.unmatchedTransaction?.participantsInfo.length}명</div>
                 <Btn
                   buttonStyle={{size: 'sotiny', style: 'blue'}}
                   onClick={e => {
-                    handleDetailClick(e, schedule.transactionId);
+                    handleDetailClick(e, schedule.unmatchedTransaction?.transactionId || 0);
                   }}
                 >
                   상세보기
                 </Btn>
-              </div>
-              {/* [todo] 향후에는 zustand에서 participantsInfo[].length와 동일하다면 전체 프로필을 보여주고*/}
-              {/* 다른 경우에는 해당 인원의 프로필만 보여주기 */}
-              {/* <div>{schedule.matchedTransaction.participantsInfo.length}</div> */}
-              <div>
-                {/* {schedule.participantsInfo.map(
-                  (participant: ParticipantInfo, index: number) => (
-                    <img
-                      key={index}
-                      src={participant.profileImage}
-                      alt={`${participant.memberName}'s profile`}
-                      style={{
-                        width: '40px',
-                        height: '40px',
-                        marginTop: '5px',
-                        marginRight: '5px',
-                        borderRadius: '45px',
-                        border: `2px solid ${colors.third}`,
-                      }}
-                    />
-                  )
-                )} */}
               </div>
             </div>
           </div>

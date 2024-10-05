@@ -421,17 +421,12 @@ type PersonalCurrentBalance = number;
 type PersonalTotalAmount = number;
 type PersonalTotalSpent = number;
 type PersonalUsagePercentage = number;
-type ScheduleTitle = string;
 // type ScheduleLocation = string;
 type PredictedBudget = number;
-type Completion = string;
-type ScheduleTime = string;
 type TotalPrice = number;
 type PaymentTime = string;
 type Details = string;
-type Memo = string;
 type PaymentName = string;
-type SplitMethod = string;
 type Latitude = number;
 type Longitude = number;
 type AmountComparison = number;
@@ -521,6 +516,28 @@ interface ConsumptionByMember {
   participantInfo: ParticipantInfo;
   proportion: UsagePercentage;
   balance: ParticipantAmount;
+}
+
+interface QrData {
+  paymentRequestId: PaymentRequestId;
+  sourceAccountNumber: string;
+}
+
+// pos기
+interface PosPay {
+  placeId: string;
+  placeName: string;
+  placeAddress: Adress;
+  amount: Money;
+  latitude: Latitude;
+  longitude: Longitude;
+  targetAccountNumber: string;
+}
+
+interface PosOrderItem {
+  title: string;
+  amount: number;
+  quantity: number;
 }
 
 // Review 타입 정의

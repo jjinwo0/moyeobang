@@ -89,7 +89,7 @@ export default function PlusSelfSchedule({
   dragHandleProps,
   dayNum,
 }: {
-  schedule: PlusSelfSchedule;
+  schedule: DaySchedule;
   scheduleNum: number;
   dragHandleProps: any;
   dayNum: number;
@@ -98,7 +98,9 @@ export default function PlusSelfSchedule({
     return scheduleTime.split('T')[1].slice(0, 5); // "T" 이후의 시간 부분에서 앞 5글자만 추출 ("HH:MM")
   };
 
-  const [budget, setBudget] = useState<number | string>(schedule.budget); // 초기값을 schedule의 predictedBudget으로 설정
+  const [budget, setBudget] = useState<number | string>(
+    schedule.budget || ''
+  ); // 초기값을 schedule의 predictedBudget으로 설정
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -114,7 +116,7 @@ export default function PlusSelfSchedule({
   const handleBudgetBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.stopPropagation();
     if (budget === '') {
-      setBudget(schedule.budget);
+      setBudget(schedule.budget || '');
     }
     // [todo] 예산 수정하는 api 연결하기
     console.log('전송할 예산:', budget);
@@ -144,7 +146,7 @@ export default function PlusSelfSchedule({
         return {
           ...day,
           daySchedules: day.daySchedules.map(schedule => {
-            if (schedule.isSelfPlus && 'completion' in schedule) {
+            if ('completion' in schedule) {
               return {
                 ...schedule,
                 completion:
@@ -167,8 +169,7 @@ export default function PlusSelfSchedule({
   );
 
   const difference = schedule.matchedTransaction
-    ? schedule.budget - schedule.matchedTransaction.totalPrice
-    : 0;
+    ? (schedule.budget || 0) - schedule.matchedTransaction.totalPrice: 0;
   const differenceColor = difference < 0 ? colors.customRed : colors.customBlue;
 
   const handleInfoClick = (e: React.MouseEvent<HTMLImageElement>) => {
@@ -225,7 +226,7 @@ export default function PlusSelfSchedule({
         >
           {schedule.matchedTransaction?.paymentTime
             ? getTimeFromSchedule(schedule.matchedTransaction.paymentTime)
-            : getTimeFromSchedule(schedule.scheduleTime)}
+            : getTimeFromSchedule(schedule.scheduleTime || '')}
         </span>
       </div>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import {useLogin} from '@/hooks/useLogin';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import skyBackground from '@/assets/images/skyBackground.jpg';
@@ -49,9 +50,7 @@ const LoginStyle = css`
 `;
 
 export default function Login() {
-  const handleKakaoLogin = () => {};
-
-  const handleGoogleLogin = () => {};
+  const {handleLogin} = useLogin();
 
   return (
     <div css={LoginStyle}>
@@ -64,13 +63,13 @@ export default function Login() {
             src={kakaoLogin}
             alt="kakaoLogin"
             id="kakao-login"
-            onClick={handleKakaoLogin}
+            onClick={() => handleLogin('kakao')}
           />
           <img
             src={googleLogin}
             alt="googleLogin"
             id="google-login"
-            onClick={handleGoogleLogin}
+            onClick={() => handleLogin('google')}
           />
         </div>
       </div>

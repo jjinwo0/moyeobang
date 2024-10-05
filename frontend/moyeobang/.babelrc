@@ -1,9 +1,20 @@
+// {
+//   "presets": [
+//     "@emotion/babel-preset-css-prop",
+//     [
+//       "@babel/preset-react",
+//       {"runtime": "automatic", "importSource": "@emotion/react"}
+//     ]
+//   ],
+//   "plugins": ["@emotion/babel-plugin"]
+// }
+
 {
   "presets": [
     "@emotion/babel-preset-css-prop",
     [
       "@babel/preset-react",
-      {"runtime": "automatic", "importSource": "@emotion/react"}
+      { "runtime": "automatic", "importSource": "@emotion/react" }
     ]
   ],
   "plugins": ["@emotion/babel-plugin"]
