@@ -63,6 +63,20 @@ abstract class RestClientUtils {
         }
     }
 
+    public static JsonNode delete(int port, String uri) {
+        try {
+            String responseBody = restClient(port).delete()
+                    .uri(uri)
+                    .retrieve()
+                    .body(String.class);
+
+            return MAPPER.readTree(responseBody);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     private static RestClient restClient(int port) {
         return RestClient.builder()
                 .baseUrl("http://localhost:" + port)
