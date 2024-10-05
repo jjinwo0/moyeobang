@@ -1,5 +1,5 @@
 package com.ssafy.moyeobang.schedule.application.port.out;
 
 public interface DeleteTravelSchedulePort {
-    void deleteTravelSchedule(long travelId, long scheduleId);
+    void deleteTravelSchedule(long scheduleId);
 }

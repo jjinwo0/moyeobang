@@ -19,10 +19,10 @@ public class DeleteTravelScheduleController {
 
     private final DeleteTravelScheduleUseCase deleteTravelScheduleUseCase;
 
-    @DeleteMapping("{travelId}/schedule/{scheduleId}")
-    public ApiResult<Boolean> deleteTravelSchedule(@PathVariable("travelId") long travelId,
-                                                   @PathVariable("scheduleId") long scheduleId) {
-        deleteTravelScheduleUseCase.deleteTravelSchedule(travelId, scheduleId);
+    @DeleteMapping("/schedule/{scheduleId}")
+    public ApiResult<Boolean> deleteTravelSchedule(
+            @PathVariable("scheduleId") long scheduleId) {
+        deleteTravelScheduleUseCase.deleteTravelSchedule(scheduleId);
         return success(true);
     }
 

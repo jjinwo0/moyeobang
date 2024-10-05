@@ -13,7 +13,7 @@ public class DeleteTravelScheduleAdapter implements DeleteTravelSchedulePort {
 
 
     @Override
-    public void deleteTravelSchedule(long travelId, long scheduleId) {
-        scheduleRepository.deleteScheduleByTravelIdAndId(travelId, scheduleId);
+    public void deleteTravelSchedule(long scheduleId) {
+        scheduleRepository.deleteById(scheduleId);
     }
 }
