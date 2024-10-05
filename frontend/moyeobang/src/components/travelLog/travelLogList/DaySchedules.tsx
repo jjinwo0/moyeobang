@@ -70,9 +70,27 @@ export default function DaySchedules({
   } = useTravelLogContext();
   console.log('[*] dayNum', dayNum);
 
-  const daySchedules = travelSchedules[dayNum - 1]?.daySchedules ?? [];
+  const daySchedules = travelSchedules[dayNum - 1]?.daySchedules || [];
   console.log('[*] daySchedules', daySchedules);
 
+  const updateSequence = (dayNum: number, scheduleId: number, newSequence: number) => {
+    setTravelSchedules((prevSchedules) => {
+      const updatedSchedules = prevSchedules.map((daySchedule) => {
+        if (daySchedule.dayNum === dayNum) {
+          const updatedDaySchedules = daySchedule.daySchedules.map((schedule) => {
+            if (schedule.scheduleId === scheduleId) {
+              return { ...schedule, sequence: newSequence };
+            }
+            return schedule;
+          }).sort((a, b) => (a.sequence ?? 0) - (b.sequence ?? 0)); // sequence 값으로 정렬
+          return { ...daySchedule, daySchedules: updatedDaySchedules };
+        }
+        return daySchedule;
+      });
+      return updatedSchedules;
+    });
+  };
+  
   // onDragEnd 함수 추가
   const handleOnDragEnd = (result: any) => {
     const {source, destination} = result;
@@ -99,7 +117,11 @@ export default function DaySchedules({
 
     // 상태 업데이트
     setTravelSchedules(updatedTravelSchedules);
-    // [todo] 순서 변경된 travelSchedules api로 전달하기
+
+    // sequence 값을 업데이트
+    currentDaySchedules.forEach((schedule, index) => {
+      updateSequence(dayNum, schedule.scheduleId ?? 0, index + 1);
+    });
 
     console.log('드래그 시작 위치:', source.index);
     console.log('드래그 종료 위치:', destination.index);
@@ -112,7 +134,7 @@ export default function DaySchedules({
         <span css={dayDateStyle}>{date}</span>
       </div>
       <div>
-        {daySchedules.length > 0 ? (
+        {daySchedules && daySchedules.length > 0 ? (
           <DragDropContext onDragEnd={handleOnDragEnd}>
             {' '}
             {/* onDragEnd 추가 */}
@@ -120,10 +142,12 @@ export default function DaySchedules({
               {provided => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {daySchedules.map((schedule, index: number) => {
+                    console.log('[*] schedule', schedule);
+                    
                     return (
                       <Draggable
-                        key={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
-                        draggableId={`schedule-${'scheduleId' in schedule ? schedule.scheduleId : schedule.transactionId}`}
+                        key={`schedule-${schedule.scheduleId}`}
+                        draggableId={`schedule-${ schedule.scheduleId}`}
                         index={index}
                       >
                         {provided => (

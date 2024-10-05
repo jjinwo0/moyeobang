@@ -183,12 +183,31 @@ export default {
     ),
 
   /**
-   * 공금입금 요청
+   * 공금 입금 요청
    */
-  postRequsetDepositAccount: async (accountId: number, totalAmount: number) =>
+  postResquestDepositAccount: async (accountId: number, totalAmount: number) =>
     axios.post<MoyeobangResponse<ResponsePostDepositAccount>>(
       `/accounts/${accountId}/deposit/request`,
       {totalAmount},
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
+
+  /**
+   * 공금입금 api
+   */
+  postDepositAccount: async (
+    accountId: number,
+    memberId: number,
+    amount: number
+  ) =>
+    axios.post<MoyeobangResponse<ResponseDepositAccount>>(
+      `/accounts/${accountId}/deposit`,
+      {
+        memberId: memberId,
+        amount: amount,
+      },
       {
         headers: {'Content-Type': 'application/json'},
       }
@@ -245,40 +264,35 @@ export default {
     axios.delete<MoyeobangResponse<null>>('/auth/account'),
 
   /**
-   * 공금입금 api
+   * 여행 일정 추가
    */
-  postDepositAccount: async (
-    accountId: number,
-    memberId: number,
-    amount: number
-  ) =>
-    axios.post<MoyeobangResponse<ResponseDepositAccount>>(
-      `/accounts/${accountId}/deposit`,
-      {
-        memberId: memberId,
-        amount: amount,
-      },
+  postTravelSchedule: async (travelId: Id, data: PostTravelSchedule) =>
+    axios.post<MoyeobangResponse<null>>(`/travel/${travelId}/schedule`, data, {
+      headers: {'Content-Type': 'application/json'},
+    }),
+
+  /**
+   * 여행 일정 조회
+   */
+  getTravelSchedules: async (travelId: Id) =>
+    axios.get<MoyeobangResponse<GetTravelSchedules>>(
+      `travel/${travelId}/schedules`
+    ),
+
+  /**
+   * 여행 일정 수정
+   */
+  putTravelSchedule: async (
+    travelId: Id,
+    scheduleId: Id,
+    data: PostTravelSchedule
+  ) => {
+    axios.put<MoyeobangResponse<null>>(
+      `/travel/${travelId}/schedule/${scheduleId}`,
+      data,
       {
         headers: {'Content-Type': 'application/json'},
       }
-    ),
-  /**
- * 소비 카테고리 통계 비율 멤버별&전체 조회
- */
-  getComsuptionStaticByCategory: async (accountId: number, memberIds: number[]) =>
-    axios.get<MoyeobangResponse<ConsumptionByCategory[]>>(
-      `/accounts/${accountId}/tags`,
-      {
-        params: {
-          memberIds: memberIds.join(','),
-        },
-      }
-    ),
-  /**
-   * 멤버별 소비 비율 통계 조회
-   */
-  getComsuptionStaticByMembers: async (accountId: number) =>
-    axios.get<MoyeobangResponse<ConsumptionByMember[]>>(
-      `/accounts/${accountId}/withdraw-proportion`
-    ),
+    );
+  },
 };

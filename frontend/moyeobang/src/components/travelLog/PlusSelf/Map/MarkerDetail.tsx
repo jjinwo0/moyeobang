@@ -54,8 +54,7 @@ export default function MarkerDetail() {
   };
 
   const handleDetailClose = () => {
-    setSearchLocation(selectedMarker.title);
-    setScheduleName(selectedMarker.title);
+    setSearchLocation(selectedMarker?.title || '');
     handleShowMapSearch();
   };
 

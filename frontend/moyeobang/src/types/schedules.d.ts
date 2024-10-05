@@ -1,3 +1,19 @@
+type PlaceName = string;
+type PlaceCategory = string;
+type PlaceDescription = string;
+type PlaceOpenHours = string;
+type PlaceRating = number;
+type PlaceAaddress = string;
+type ScheduleTitle = string;
+type ScheduleTime = string;
+type Budget = number;
+type Completion = string;
+type Memo = string;
+type ScheduleImg = string;
+type SplitMethod = string;
+type Amount = number;
+type Sequence = number;
+
 // 구글 맵 장소 정보 타입
 interface PlaceDetails {
   placeName: PlaceName;
@@ -5,49 +21,43 @@ interface PlaceDetails {
   placeDescription: PlaceDescription;
   placeOpenHours: PlaceOpenHours;
   placeRating: PlaceRating;
-  placAaddress: PlacAaddress;
+  placeAaddress: PlaceAaddress;
 }
 
 // 여행 일정 조회
 // schedules 상세 타입 지정
-// MatchedTransaction 지정
-interface MatchedTransaction {
-  transactionId: Id;
-  paymentName: string;
-  totalPrice: number;
-  paymentTime: string;
-  splitMethod: SplitMethod;
-  participantsInfo: ParticipantsInfo[];
-}
-
 // Location type 지정
 interface ScheduleLocation {
-  googlePlaceId: string;
-  title: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  category: string;
+  googlePlaceId: string | null;
+  title: string | null;
+  address: string | null;
+  lat: number | null;
+  lng: number | null;
+  category: string | null;
 }
 
 // 1) 추가된 일정
-interface PlusSelfSchedule {
-  scheduleId: Id;
-  isSelfPlus: boolean;
-  scheduleTitle: ScheduleTitle;
-  scheduleLocation: ScheduleLocation;
-  scheduleTime: scheduleTime;
-  budget: Budget;
-  completion: Completion;
-  memo: Memo;
-  scheduleImg?: ScheduleImg;
-  matchedTransaction: MatchedTransaction | null;
+interface DaySchedule {
+  scheduleId: Id | null;
+  scheduleTitle: ScheduleTitle | null;
+  scheduleLocation: ScheduleLocation | null;
+  scheduleTime: ScheduleTime | null;
+  budget: Budget | null;
+  sequence: Sequence | null;
+  completion: Completion | null;
+  memo: Memo | null;
+  scheduleImg?: ScheduleImg | null;
+  matchedTransaction: Transaction | null;
+  unmatchedTransaction: Transaction | null;
 }
 
+type ParticipantsInfo = {
+  memberId: Id;
+};
+
 // 2) 결제된 일정 (일정은 추가가 되지 않았고 결제 정보로 보여지는 일정)
-interface PaidAutoSchedule {
+interface Transaction {
   transactionId: Id;
-  isSelfPlus: boolean;
   paymentName: PaymentName;
   latitude: Latitude;
   longitude: Longitude;
@@ -57,14 +67,14 @@ interface PaidAutoSchedule {
   participantsInfo: ParticipantsInfo[];
 }
 
-// 2. 실제 여행 일정 조회 data 타입 지정
-type TravelLog = DaySchedules[];
+// 실제 여행 일정 조회 data 타입 지정
+type TravelLog = Schedules[];
 
-// 1. schedule type 지정
-interface DaySchedules {
+// schedule type 지정
+interface Schedules {
   dayNum: number;
   dayDate: string;
-  daySchedules: (PlusSelfSchedule | PaidAutoSchedule)[];
+  daySchedules: DaySchedule[];
 }
 
 type ExtendedMarkerOptions = google.maps.MarkerOptions & {
@@ -75,12 +85,23 @@ type ExtendedMarkerOptions = google.maps.MarkerOptions & {
   types?: string[]; // `types` 속성 추가
 };
 
-// Location type 지정
-interface ScheduleLocation {
-  googlePlaceId: string;
-  title: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  category: string;
+
+//여행 일정 API 관련 타입
+/**
+ * 여행 일정 추가 data 타입
+ */
+interface PostTravelSchedule {
+  scheduleTitle: string;
+  scheduleLocation: ScheduleLocation;
+  scheduleTime: string;
+  memo: string;
+  image_url: string;
+}
+
+
+/**
+ * 여행 일정 조회 data 타입
+ */
+interface GetTravelSchedules {
+  schedules: Schedules[];
 }

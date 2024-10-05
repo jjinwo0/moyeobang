@@ -4,19 +4,11 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import {
-  GoogleMap,
-  useLoadScript,
-  Marker,
-  Library,
-} from '@react-google-maps/api';
+import {GoogleMap, Marker} from '@react-google-maps/api';
 import {useTravelLogContext} from '@/contexts/TravelLog';
 import MarkerDetail from './MarkerDetail';
 import {MapDetailLayout, MapSpaceStyle} from './ScheduleMapSearchStyle';
-import defaultMarkerIcon from '@/assets/icons/redDot.png';
 import typesKo from '@/assets/types_ko.json';
-
-const mapAPI = import.meta.env.VITE_GOOGLE_API_KEY;
 
 const containerStyle = (isMarkerSelected: boolean) => ({
   width: '100%',
@@ -25,14 +17,12 @@ const containerStyle = (isMarkerSelected: boolean) => ({
 
 const defaultCenter = {lat: 37.5665, lng: 126.978}; // 기본 중심: 서울
 
-const libraries: Library[] = ['places'];
-
-// 영어로 된 types들을 한국어로 변경하는 함수
+// Translate types from English to Korean
 const translateTypes = (types: string[]) => {
   return types.map(type => (typesKo as Record<string, string>)[type] || type);
 };
 
-// 마커 생성 함수
+// Create a marker from place result
 const createMarker = (
   result: google.maps.places.PlaceResult
 ): CustomMarker | null => {
@@ -46,43 +36,26 @@ const createMarker = (
       rating: result.rating,
       openingHours: result.opening_hours?.weekday_text || [],
       types: translateTypes(result.types || []),
-      photos: result.photos?.map(photo => photo.getUrl()) || [], // 사진 추가
+      photos: result.photos?.map(photo => photo.getUrl()) || [], // Add photos
     };
   }
   return null;
 };
 
-// PlusSelfGoogleMap 컴포넌트
+// PlusSelfGoogleMap component
 const PlusSelfGoogleMap = forwardRef(
   ({searchLocation}: {searchLocation: string | undefined}, ref) => {
     const [map, setMap] = useState<google.maps.Map | null>(null);
-    const [markers, setMarkers] = useState<CustomMarker[]>([]); // CustomMarker 사용
+    const [markers, setMarkers] = useState<CustomMarker[]>([]);
     const [isInteraction, setIsInteraction] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
-    const {selectedPlace} = useTravelLogContext();
-    const {showMapSearch, setShowMapSearch} = useTravelLogContext();
-    const {selectedMarker, setSelectedMarker} = useTravelLogContext();
+    const {selectedPlace, selectedMarker, setSelectedMarker, scheduleEdit} =
+      useTravelLogContext();
     const [defaultMarker, setDefaultMarker] = useState<google.maps.Icon | null>(
       null
     );
 
-    // Google Maps API 로드
-    const {isLoaded} = useLoadScript({
-      googleMapsApiKey: mapAPI,
-      libraries,
-      version: '3.47',
-    });
-
-    const loadMarkerLibrary = async () => {
-      if (isLoaded) {
-        const {Marker} = (await google.maps.importLibrary(
-          'marker'
-        )) as google.maps.MarkerLibrary;
-        return Marker;
-      }
-    };
-
-    // 부모에서 사용할 수 있는 메서드 제공 (지도 중심 변경)
+    // Provide a method for parents to change the map center
     useImperativeHandle(ref, () => ({
       setCenter: (lat: number, lng: number) => {
         if (map) {
@@ -97,10 +70,9 @@ const PlusSelfGoogleMap = forwardRef(
       }
     }, [searchLocation]);
 
-    // 마커 클릭 시 해당 마커 위치로 줌 인하는 함수
+    // Handle marker click and zoom to the clicked marker
     const handleMarkerClick = async (marker: CustomMarker) => {
       if (map) {
-        const Marker = await loadMarkerLibrary(); // Marker 라이브러리 로드
         setSelectedMarker(marker);
         map.panTo(marker.position);
         map.setZoom(15);
@@ -108,12 +80,9 @@ const PlusSelfGoogleMap = forwardRef(
     };
 
     const setBoundsFromSelectedPlaceAndSearch = async () => {
-      console.log('[*] setBoundsFromSelectedPlaceAndSearch');
       if (map) {
-        console.log('[*] map', map);
         const bounds = new window.google.maps.LatLngBounds();
         const service = new window.google.maps.places.PlacesService(map);
-        const Marker = await loadMarkerLibrary(); // Marker 라이브러리 로드
 
         if (!selectedPlace && searchLocation && searchLocation.trim() !== '') {
           const request = {
@@ -127,7 +96,7 @@ const PlusSelfGoogleMap = forwardRef(
               'formatted_address',
               'rating',
               'types',
-              'photos', // 사진 필드 추가
+              'photos',
             ],
           };
 
@@ -138,39 +107,51 @@ const PlusSelfGoogleMap = forwardRef(
                 if (marker) {
                   bounds.extend(marker.position);
 
-                  service.getDetails(
-                    {
-                      placeId: result.place_id ?? '',
-                      language: 'ko',
-                      fields: ['reviews', 'opening_hours', 'photos'], // 사진 필드 추가
-                    },
-                    (placeDetails, detailsStatus) => {
-                      if (detailsStatus === 'OK' && placeDetails) {
-                        marker.reviews =
-                          placeDetails.reviews?.map(review => ({
-                            authorName: review.author_name,
-                            authorProfilePhoto: review.profile_photo_url,
-                            reviewText: review.text,
-                            rating: review.rating,
-                          })) || [];
-                        marker.detailedOpeningHours =
-                          placeDetails.opening_hours?.weekday_text || [];
-                        marker.photos =
-                          placeDetails.photos?.map(photo => photo.getUrl()) ||
-                          []; // 사진 추가
+                  // Fetch detailed information about the place
+                  if (result.place_id) {
+                    service.getDetails(
+                      {
+                        placeId: result.place_id,
+                        language: 'ko',
+                        fields: ['reviews', 'opening_hours', 'photos'], // Fields for detailed info
+                      },
+                      (placeDetails, detailsStatus) => {
+                        if (detailsStatus === 'OK' && placeDetails) {
+                          marker.reviews =
+                            placeDetails.reviews?.map(review => ({
+                              authorName: review.author_name,
+                              authorProfilePhoto: review.profile_photo_url,
+                              reviewText: review.text,
+                              rating: review.rating,
+                            })) || [];
+                          marker.detailedOpeningHours =
+                            placeDetails.opening_hours?.weekday_text || [];
+                          marker.photos =
+                            placeDetails.photos?.map(photo => photo.getUrl()) ||
+                            [];
 
-                        setMarkers(prevMarkers =>
-                          prevMarkers.map(m =>
-                            m.placeId === marker.placeId ? {...m, ...marker} : m
-                          )
-                        );
+                          // Update the markers with detailed info
+                          setMarkers(prevMarkers =>
+                            prevMarkers.map(m =>
+                              m.placeId === marker.placeId
+                                ? {...m, ...marker}
+                                : m
+                            )
+                          );
+                        } else {
+                          console.error(
+                            'Error fetching place details:',
+                            detailsStatus
+                          );
+                        }
                       }
-                    }
-                  );
+                    );
+                  }
                 }
                 return marker;
               });
 
+              // Set the markers and adjust the map bounds
               setMarkers(
                 nearbyMarkers.filter(
                   marker => marker !== null
@@ -178,20 +159,17 @@ const PlusSelfGoogleMap = forwardRef(
               );
               map.fitBounds(bounds);
               setHasSearched(true);
+            } else {
+              console.error('Text search failed:', status);
             }
           });
         } else if (selectedPlace) {
-          console.log('[*]selectedPlace', selectedPlace);
-
           const geocoder = new window.google.maps.Geocoder();
-          console.log('[*] geocoder', geocoder);
           const searchQuery = searchLocation
             ? `${selectedPlace} ${searchLocation}`
             : selectedPlace;
-          console.log('[*] searchQuery', searchQuery);
+
           geocoder.geocode({address: selectedPlace}, (results, status) => {
-            console.log('results', results);
-            console.log('status', status);
             if (status === 'OK' && results && results[0]) {
               const viewport = results[0].geometry.viewport;
               const location = results[0].geometry.location;
@@ -213,7 +191,7 @@ const PlusSelfGoogleMap = forwardRef(
                     'formatted_address',
                     'rating',
                     'types',
-                    'photos', // 사진 필드 추가
+                    'photos',
                   ],
                 };
 
@@ -224,38 +202,47 @@ const PlusSelfGoogleMap = forwardRef(
                       if (marker) {
                         bounds.extend(marker.position);
 
-                        service.getDetails(
-                          {
-                            placeId: result.place_id ?? '',
-                            language: 'ko',
-                            fields: ['reviews', 'opening_hours', 'photos'], // 사진 필드 추가
-                          },
-                          (placeDetails, detailsStatus) => {
-                            if (detailsStatus === 'OK' && placeDetails) {
-                              marker.reviews =
-                                placeDetails.reviews?.map(review => ({
-                                  authorName: review.author_name,
-                                  authorProfilePhoto: review.profile_photo_url,
-                                  reviewText: review.text,
-                                  rating: review.rating,
-                                })) || [];
-                              marker.detailedOpeningHours =
-                                placeDetails.opening_hours?.weekday_text || [];
-                              marker.photos =
-                                placeDetails.photos?.map(photo =>
-                                  photo.getUrl()
-                                ) || []; // 사진 추가
+                        if (result.place_id) {
+                          service.getDetails(
+                            {
+                              placeId: result.place_id,
+                              language: 'ko',
+                              fields: ['reviews', 'opening_hours', 'photos'],
+                            },
+                            (placeDetails, detailsStatus) => {
+                              if (detailsStatus === 'OK' && placeDetails) {
+                                marker.reviews =
+                                  placeDetails.reviews?.map(review => ({
+                                    authorName: review.author_name,
+                                    authorProfilePhoto:
+                                      review.profile_photo_url,
+                                    reviewText: review.text,
+                                    rating: review.rating,
+                                  })) || [];
+                                marker.detailedOpeningHours =
+                                  placeDetails.opening_hours?.weekday_text ||
+                                  [];
+                                marker.photos =
+                                  placeDetails.photos?.map(photo =>
+                                    photo.getUrl()
+                                  ) || [];
 
-                              setMarkers(prevMarkers =>
-                                prevMarkers.map(m =>
-                                  m.placeId === marker.placeId
-                                    ? {...m, ...marker}
-                                    : m
-                                )
-                              );
+                                setMarkers(prevMarkers =>
+                                  prevMarkers.map(m =>
+                                    m.placeId === marker.placeId
+                                      ? {...m, ...marker}
+                                      : m
+                                  )
+                                );
+                              } else {
+                                console.error(
+                                  'Error fetching place details:',
+                                  detailsStatus
+                                );
+                              }
                             }
-                          }
-                        );
+                          );
+                        }
                       }
                       return marker;
                     });
@@ -265,95 +252,68 @@ const PlusSelfGoogleMap = forwardRef(
                         marker => marker !== null
                       ) as CustomMarker[]
                     );
-                    if (searchMarkers.length === 1) {
-                      map.setCenter(
-                        searchMarkers[0]?.position || defaultCenter
-                      );
-                      map.setZoom(15);
-                    } else {
-                      const padding = 0;
-                      map.fitBounds(bounds, padding);
-                    }
-
+                    map.fitBounds(bounds);
                     setHasSearched(true);
+                  } else {
+                    console.error('Text search failed:', status);
                   }
                 });
               } else {
                 map.fitBounds(bounds);
               }
+            } else {
+              console.error('Geocoding failed:', status);
             }
           });
         }
       }
     };
 
+    // Add event listeners for user interactions on the map
     useEffect(() => {
       if (map) {
-        map.addListener('zoom_changed', () => {
-          setIsInteraction(true);
-        });
-
-        map.addListener('dragend', () => {
-          setIsInteraction(true);
-        });
-
-        map.addListener('idle', () => {
-          setIsInteraction(false);
-        });
+        map.addListener('zoom_changed', () => setIsInteraction(true));
+        map.addListener('dragend', () => setIsInteraction(true));
+        map.addListener('idle', () => setIsInteraction(false));
       }
     }, [map]);
 
     useEffect(() => {
-      if (isLoaded && map && !isInteraction && !hasSearched) {
+      if (map && !isInteraction && !hasSearched) {
         setBoundsFromSelectedPlaceAndSearch();
       }
     }, [map, searchLocation, selectedPlace, isInteraction, hasSearched]);
 
-    const mapOptions = {
-      zoomControl: true,
-      scrollwheel: true,
-      disableDefaultUI: false,
-    };
-
-    useEffect(() => {
-      if (isLoaded) {
-        setDefaultMarker({
-          url: defaultMarkerIcon,
-          scaledSize: new google.maps.Size(20, 20),
-        });
-      }
-    }, [isLoaded]);
-
     return (
       <>
-        {isLoaded ? (
-          <div css={MapSpaceStyle}>
-            <GoogleMap
-              mapContainerStyle={containerStyle(!!selectedMarker)}
-              center={defaultCenter}
-              zoom={12}
-              onLoad={mapInstance => setMap(mapInstance)}
-              options={mapOptions}
-            >
-              {markers.map((marker, index) => (
-                <Marker
-                  key={index}
-                  position={marker.position}
-                  title={marker.title}
-                  onClick={() => handleMarkerClick(marker)}
-                  icon={selectedMarker === marker ? null : defaultMarker}
-                />
-              ))}
-            </GoogleMap>
-            {selectedMarker && showMapSearch && (
-              <div css={MapDetailLayout}>
-                <MarkerDetail />
-              </div>
-            )}
-          </div>
-        ) : (
-          <>로딩중...</>
-        )}
+        <div css={MapSpaceStyle}>
+          <GoogleMap
+            mapContainerStyle={containerStyle(!!selectedMarker)}
+            center={defaultCenter}
+            zoom={12}
+            onLoad={setMap}
+            options={{
+              zoomControl: true,
+              scrollwheel: true,
+              disableDefaultUI: false,
+            }}
+          >
+            {markers.map((marker, index) => (
+              <Marker
+                key={index}
+                position={marker.position}
+                title={marker.title}
+                onClick={() => handleMarkerClick(marker)}
+                icon={selectedMarker === marker ? null : defaultMarker}
+              />
+            ))}
+          </GoogleMap>
+          {selectedMarker && (
+            <div css={MapDetailLayout}>
+              <MarkerDetail />
+            </div>
+          )}
+        </div>
       </>
     );
   }
