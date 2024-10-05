@@ -32,11 +32,13 @@ const overlayStyle = css`
 `;
 
 const titleStyle = css`
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
     font-family: 'bold';
     font-size: 24px;
     color: ${colors.fifth};
-    text-align: center;
-
 `;
 
 const accountStyle = css`

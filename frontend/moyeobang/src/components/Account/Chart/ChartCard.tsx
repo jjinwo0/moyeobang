@@ -52,7 +52,7 @@ export default function ChartCard({title, data, money} : ChartCardProps) {
     return (
         <div css={cardLayoutStyle}>
             <div css={titleStyle} >{title}</div>
-            <div css={accountStyle} >{money}원</div>
+            <div css={accountStyle} >{money.toLocaleString()}원</div>
             <div css={chartContainerStyle}>
                 <HorizonBarGraph data={data}/>
             </div>
