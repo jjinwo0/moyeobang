@@ -5,7 +5,7 @@ import com.ssafy.moyeobang.schedule.application.port.in.CreateTravelScheduleComm
 import java.time.LocalDateTime;
 
 
-public record CreateTravelScheduleRequest(String scheduleTitle, LocationInfo location,
+public record CreateTravelScheduleRequest(String scheduleTitle, LocationInfo scheduleLocation,
                                           @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime scheduleTime,
                                           String memo, String image_url) {
 
@@ -13,7 +13,7 @@ public record CreateTravelScheduleRequest(String scheduleTitle, LocationInfo loc
         return new CreateTravelScheduleCommand(
                 travelId,
                 scheduleTitle,
-                location.toCommand(),
+                scheduleLocation.toCommand(),
                 scheduleTime,
                 memo,
                 image_url
