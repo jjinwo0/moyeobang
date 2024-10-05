@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScheduleJpaRepositoryInSchedule extends JpaRepository<ScheduleJpaEntity, Long> {
     Optional<List<ScheduleJpaEntity>> findByTravelId(Long scheduleId);
+
+    void deleteScheduleByTravelIdAndId(Long travelId, Long scheduleId);
 }
