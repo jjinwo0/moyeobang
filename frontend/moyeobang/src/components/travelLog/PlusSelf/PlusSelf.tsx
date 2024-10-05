@@ -130,6 +130,7 @@ export default function PlusSelf() {
         console.log('[*] 수정 데이터', data.data.data.schedules);
         // 최신 데이터로 Context 업데이트
         setTravelSchedules(data.data.data.schedules);
+        handleShowPlusSelf();
       } catch (error) {
         console.error('Error fetching travel schedules:', error);
       }
@@ -137,6 +138,9 @@ export default function PlusSelf() {
   });
 
   const handleSave = () => {
+    console.log('[*] 저장 버튼 클릭');
+    console.log('[*] 저장 버튼 클릭 selectedMarker', selectedMarker);
+
     // [todo] 저장 로직 추가
     if (selectedMarker) {
       const scheduleLocation: ScheduleLocation = {
@@ -174,9 +178,10 @@ export default function PlusSelf() {
         memo: memo || '',
         image_url: selectedImage || '',
       };
-      console.log('[*] scheduleData', scheduleData);
       // [todo] 저장 로직 추가
       if (scheduleEdit) {
+        console.log('[*] 수정 모드', scheduleData);
+
         // 수정 모드
         putTravelSchedule({
           travelId,

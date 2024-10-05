@@ -54,6 +54,7 @@ const PlusSelfGoogleMap = forwardRef(
     const [defaultMarker, setDefaultMarker] = useState<google.maps.Icon | null>(
       null
     );
+    const [showMarkerDetail, setShowMarkerDetail] = useState<boolean>(false);
 
 
     // Provide a method for parents to change the map center
@@ -78,6 +79,7 @@ const PlusSelfGoogleMap = forwardRef(
         map.panTo(marker.position);
         map.setZoom(15);
       }
+      setShowMarkerDetail(true);
     };
 
     const setBoundsFromSelectedPlaceAndSearch = async () => {
@@ -309,9 +311,9 @@ const PlusSelfGoogleMap = forwardRef(
               />
             ))}
           </GoogleMap>
-          {selectedMarker && (
+          {showMarkerDetail && (
             <div css={MapDetailLayout}>
-              <MarkerDetail />
+              <MarkerDetail setShowMarkerDetail={setShowMarkerDetail} />
             </div>
           )}
         </div>

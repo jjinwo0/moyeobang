@@ -12,7 +12,7 @@ import categoryIcon from '@/assets/icons/categoryIcon.png';
 import locationIcon from '@/assets/icons/locationIcon.png';
 import reviewIcon from '@/assets/icons/reviewIcon.png';
 
-export default function MarkerDetail() {
+export default function MarkerDetail({setShowMarkerDetail}: {setShowMarkerDetail: (show: boolean) => void}) {
   const {selectedMarker, setSelectedMarker} = useTravelLogContext();
   const {setSearchLocation, handleShowMapSearch, setScheduleName} =
     useTravelLogContext();
@@ -56,7 +56,7 @@ export default function MarkerDetail() {
   const handleDetailClose = () => {
     setSearchLocation(selectedMarker?.title || '');
     handleShowMapSearch();
-    setSelectedMarker(null);
+    setShowMarkerDetail(false);
   };
 
   return (
