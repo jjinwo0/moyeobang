@@ -223,6 +223,7 @@ function Index() {
         endDate: trip.endDate,
         travelPlaceList: trip.travelPlaceList,
         travelImg: trip.travelImg,
+        participantsInfo:trip.participantsInfo,
       }));
 
       setCurrentTravelData(travelInfo[0]); // Zustand에 저장

@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import refreshImage from '@/assets/icons/refresh.png';
 import { layoutStyle, textLayoutStyle, balance, time, refresh, place, allButtonStyle, allRefreshLayoutStyle, settleListLayoutStyle, nButtonStyle, buttonLayoutStyle } from "./settlePage";
 import FinalModal from "@/components/Account/FinalModal/FinalModal";
-import { profileData} from "@/data/data";
 import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -48,6 +47,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
     const [isOpenPresentModal, setIsOpenPresentModal] = useState<boolean>(false);
     const [presentMoney, setPresentMoney] = useState<number>(0);
     const {travelId} = useTravelDetailStore();
+    const {participantsInfo} = useTravelDetailStore();
     
     // 직접 정산 API
     const {mutate: postCustom } = useMutation({
@@ -78,21 +78,21 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         // 새로 들어온거 details=[] 여기에 default 1/n해주기
         if (!isUpdate) {
 
-            const initialSettle = profileData.map(member => {
+            const initialSettle = participantsInfo.map(member => {
                 return {
                     participantInfo : member,
-                    money :Math.floor(totalMoney/profileData.length),
+                    money :Math.floor(totalMoney/participantsInfo.length),
                     isChecked: true,
                     isDecided:false, // 초기 아무도 확정아님.
                 };
             })
             setSettleData(initialSettle);
-            setRemainMoney(totalMoney-Math.floor(totalMoney/profileData.length)*profileData.length);
+            setRemainMoney(totalMoney-Math.floor(totalMoney/participantsInfo.length)*participantsInfo.length);
         } 
         // 수정일 때 details있음.
         else if (details && details.length > 0) {
 
-            const initialSettle = profileData.map(member => {
+            const initialSettle = participantsInfo.map(member => {
                 const prevMember = details.find((detail) => detail.participant.memberId === member.memberId);
                 return {
                     participantInfo : member,
@@ -104,11 +104,11 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             setSettleData(initialSettle);
             setRemainMoney(0);
         }
-    }, [profileData, details, totalMoney, isUpdate])
+    }, [participantsInfo, details, totalMoney, isUpdate])
 
     // 모여방 남은 금액 선물하기
     useEffect(()=>{
-        if (remainMoney > 0 && remainMoney < profileData.length) {
+        if (remainMoney > 0 && remainMoney < participantsInfo.length) {
             setIsOpenPresentModal(true);
             setPresentMoney(remainMoney);
             setRemainMoney(0);

@@ -96,7 +96,6 @@ interface ResultByReceiptComponentProps {
 // isNew : True (post) 처음 | isNew : false (fetch) 수정
 export default function ResultByReceiptComponenet({data, isUpdate, onClose}:ResultByReceiptComponentProps) {
 
-  console.log('isUpdate', isUpdate)
   const [ updateDetails, setUpdateDetails] = useState<SettledItemByReceipt[]>([]);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
