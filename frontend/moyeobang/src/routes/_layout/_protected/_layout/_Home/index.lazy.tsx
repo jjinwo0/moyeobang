@@ -1,5 +1,5 @@
 import {createLazyFileRoute} from '@tanstack/react-router';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {css} from '@emotion/react';
 import TravelCard from '@/components/travelHome/TravelCard';
 import {colors} from '@/styles/colors';
@@ -15,80 +15,7 @@ import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import AllowNotification from '@/components/notification/AllowNotification';
-import querykeys from '@/util/querykeys';
-
-const data: Travel[] = [
-  {
-    travelId: 1,
-    travelName: '여행이름1',
-    travelImg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
-    participantsCount: 4,
-    startDate: '2024-09-10',
-    endDate: '2024-09-13',
-    travelPlaceList: ['제주도'],
-    quizQuestion: '김훈민의 발사이즈는?',
-    quizAnswer: '235',
-    accountId: 1,
-    accountNumber: '123456789123',
-    participantsInfo: [
-      {
-        memberId: 1,
-        memberName: '홍길동',
-        profileImage: 'https://example.com/images/honggildong.jpg',
-      },
-      {
-        memberId: 2,
-        memberName: '김철수',
-        profileImage: 'https://example.com/images/kimcheolsu.jpg',
-      },
-      {
-        memberId: 3,
-        memberName: '이영희',
-        profileImage: 'https://example.com/images/leeyounghee.jpg',
-      },
-      {
-        memberId: 4,
-        memberName: '박민수',
-        profileImage: 'https://example.com/images/parkminsu.jpg',
-      },
-    ],
-  },
-  {
-    travelId: 2,
-    travelName: '여행제목2',
-    travelImg: null,
-    participantsCount: 4,
-    startDate: '2023-09-01',
-    endDate: '2023-09-05',
-    travelPlaceList: ['춘천시', '함양군'],
-    quizQuestion: '김용수의 키는?',
-    quizAnswer: '155',
-    accountId: 1,
-    accountNumber: '123456789123',
-    participantsInfo: [
-      {
-        memberId: 1,
-        memberName: '홍길동',
-        profileImage: 'https://example.com/images/honggildong.jpg',
-      },
-      {
-        memberId: 2,
-        memberName: '김철수',
-        profileImage: 'https://example.com/images/kimcheolsu.jpg',
-      },
-      {
-        memberId: 3,
-        memberName: '이영희',
-        profileImage: 'https://example.com/images/leeyounghee.jpg',
-      },
-      {
-        memberId: 4,
-        memberName: '박민수',
-        profileImage: 'https://example.com/images/parkminsu.jpg',
-      },
-    ],
-  },
-];
+import useCurrentTravelStore from '@/store/useCurrentTravelStore';
 
 const memberName: MemberName = '진우바오';
 
@@ -104,6 +31,8 @@ const containerStyle = css`
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  /* height: 100%; */
 `;
 
 const descriptionStyle = css`
@@ -150,7 +79,7 @@ const profileImageStyle = css`
 `;
 
 const buttonStyle = css`
-  margin-top: 45px;
+  margin-top: 30px;
 `;
 
 const noTravelStyle = css`
@@ -158,6 +87,7 @@ const noTravelStyle = css`
   align-items: center; /* 세로축 정렬을 중앙으로 설정 */
   margin-top: 130px;
   margin-left: 5px;
+  margin-bottom: 100px;
 `;
 
 const noTravelTextStyle = css`
@@ -189,6 +119,7 @@ function Index() {
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
+  const {setCurrentTravelData} = useCurrentTravelStore();
 
   // //[todo] get으로 여행 목록 전체 조회하기
   // const {data: travelData} = useSuspenseQuery({
@@ -206,7 +137,7 @@ function Index() {
   });
   const data = travelData?.data.data;
 
-  // console.log(data);
+  console.log(data);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -270,11 +201,6 @@ function Index() {
     });
   };
 
-  const closeTravelSummary = () => {
-    setTravelSummaryModal(false);
-    router.navigate({to: `/travelLog`});
-  };
-
   const goSettingPage = () => {
     router.navigate({
       to: `/profile/${memberName}`,
@@ -284,6 +210,25 @@ function Index() {
   const closePush = () => {
     setPushNotification(false);
   };
+
+  useEffect(() => {
+    if (currentTrips.length > 0) {
+      // currentTrips 데이터 중 필요한 값들을 저장
+      const travelInfo = currentTrips.map(trip => ({
+        travelId: trip.travelId,
+        travelName: trip.travelName,
+        accountNumber: trip.accountNumber,
+        accountId: trip.accountId,
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        travelPlaceList: trip.travelPlaceList,
+        travelImg: trip.travelImg,
+        participantsInfo:trip.participantsInfo,
+      }));
+
+      setCurrentTravelData(travelInfo[0]); // Zustand에 저장
+    }
+  }, []);
 
   return (
     <>
@@ -339,9 +284,9 @@ function Index() {
 
           <div css={containerStyle}>
             {tripsToDisplay.length > 0 ? (
-              tripsToDisplay.map(item => (
+              tripsToDisplay.map((item, index) => (
                 <TravelCard
-                  key={item.travelId}
+                  key={`${item.travelId}-${index}`}
                   travelId={item.travelId}
                   travelName={item.travelName}
                   startDate={item.startDate}
@@ -353,6 +298,8 @@ function Index() {
                   onClick={() => clickTravelCard(item)}
                   activeTab={activeTab}
                   travelImg={item.travelImg}
+                  participantsInfo={item.participantsInfo}
+                  accountId={item.accountId}
                 />
               ))
             ) : (

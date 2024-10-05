@@ -5,6 +5,7 @@ import { useSwipeable } from "react-swipeable";
 import AccountCard from "../AccountCard/AccountCard";
 import ChartCard from "../Chart/ChartCard";
 import { isAccountBalanceByGroup } from "@/util/typeGaurd";
+import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 const sliderStyle= (activeCardIndex : number) => css`
     transform: translateX(-${activeCardIndex * 1}px);
@@ -74,46 +75,26 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
 
     return (
         <div {...swipeHandlers} css={sliderStyle(activeCardIndex)}>
-          {isAccountBalanceByGroup(account) ? (
             <>
               {activeCardIndex === 0 && (
                 <AccountCard
-                  travelName={'아기돼지 오형제'}
-                  travelAccountNumber={'333-333-3333'}
-                  currentBalance={account.currentBalance}
+                  currentBalance={isAccountBalanceByGroup(account) ? account.currentBalance : account.personalCurrentBalance}
+                  memberName={isAccountBalanceByGroup(account) ? undefined : account.simpleUserProfile.memberName}
                 />
               )}
               {activeCardIndex === 1 &&
               <ChartCard 
-                title={'전체 소비 금액'} 
-                money={Number(account.totalSpent)} 
+                title={isAccountBalanceByGroup(account) ? '전체 소비 금액' : `${account.simpleUserProfile.memberName} 소비 금액`} 
+                money={isAccountBalanceByGroup(account) ? Number(account.totalSpent) : account.personalTotalSpent} 
                 data={consumptionProportionByCategory} 
               />}
-              {activeCardIndex === 2 && consumptionProportionByMember &&
+              {activeCardIndex === 2 && isAccountBalanceByGroup(account) && consumptionProportionByMember &&
               <ChartCard 
                 title={'누적 입금 금액'}
                 money={Number(account.totalAmount)}
                 data={consumptionProportionByMember}
                 />}
             </>
-          ) : (
-            <>
-              {activeCardIndex === 0 && (
-                <AccountCard
-                  travelName={'아기돼지 오형제'}
-                  travelAccountNumber={'333-3333-3333'}
-                  currentBalance={account.personalCurrentBalance}
-                  memberName={account.simpleUserProfile.memberName}
-                />
-              )}
-              {activeCardIndex === 1 && 
-              <ChartCard
-              title={`${account.simpleUserProfile.memberName} 소비 금액`}
-              money={account.personalTotalSpent}
-              data={consumptionProportionByCategory}
-              />}
-            </>
-          )}
           <div css={dotsContainerStyle}>
             {dots.map((_, index) => (
               <div key={index} css={dotStyle(index === activeCardIndex)}></div>

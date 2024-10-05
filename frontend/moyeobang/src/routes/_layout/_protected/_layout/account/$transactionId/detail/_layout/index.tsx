@@ -11,6 +11,9 @@ import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import moyeobang from '@/services/moyeobang'
 import ResultByReceiptComponenet from '@/components/Account/SettleByReceipt/ResultByReceiptComponent'
+import useTravelDetailStore from '@/store/useTravelDetailStore'
+import { isSettledParticipantByCustom } from '@/util/typeGaurd'
+import Spinner from '@/components/Sipnner/Spinner'
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -64,10 +67,10 @@ export const Route = createFileRoute('/_layout/_protected/_layout/account/$trans
 })
 
 export default function TransactionDetail() {
-  // 임시 accountId
-  const accountId = 1;
+
   const { transactionId } = Route.useParams()
   const [ openUpdateByReceiptModal, setOpentUpdateByReceiptModal] = useState<boolean>(false);
+  const {accountId} = useTravelDetailStore();
 
   const {data} = useSuspenseQuery({
     queryKey: ['transactionDetail', accountId, transactionId],
@@ -75,7 +78,7 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
-  console.log('거래 상세 데이터', transactionDetailData) 
+  // console.log('detail 데이터', transactionDetailData) 
 
   function handleUpdateReceipt() {
     setOpentUpdateByReceiptModal(true);
@@ -85,18 +88,11 @@ export default function TransactionDetail() {
     setOpentUpdateByReceiptModal(false);
   }
 
-  // 타입 가드 함수
-  function isSettledParticipantByCustom(
-    details: SettledItemByReceipt[] | SettledParticipantByCustom[]
-  ): details is SettledParticipantByCustom[] {
-    return (details as SettledParticipantByCustom[])[0].participant !== undefined;
-  }
-
   return openUpdateByReceiptModal ? (
     <ResultByReceiptComponenet 
       data={transactionDetailData as TransactionDetailByReceipt} 
       onClose={handleClose}
-      isNew={false}
+      isUpdate={true}
       />
   ) : (
     <div css={layoutStyle}>
@@ -107,26 +103,8 @@ export default function TransactionDetail() {
         adress={transactionDetailData.address}
         acceptedNumber={transactionDetailData.acceptedNumber}
       />
-      {transactionDetailData.splitMethod === 'receipt' && 
+      {isSettledParticipantByCustom(transactionDetailData.details) ?
       (
-          <>
-            <div css={columnStyle}>
-              <div>상품명</div>
-              <div>수량</div>
-              <div>금액</div>
-            </div>
-            <div css={listStyle}>
-              {!isSettledParticipantByCustom(transactionDetailData.details) &&
-                transactionDetailData.details.map((detail, index) => (
-                <DetailCardByReceipt key={index} {...detail} />
-              ))}
-            </div>
-            <Btn buttonStyle={{ size: 'big', style: 'blue' }} onClick={handleUpdateReceipt}>
-              정산 수정하기
-            </Btn>
-          </>
-        )}
-      {transactionDetailData.splitMethod === 'custom' && (
         <>
           <div css={columnStyle}>
             <div>프로필</div>
@@ -134,8 +112,7 @@ export default function TransactionDetail() {
             <div>정산금액</div>
           </div>
           <div css={listStyle}>
-            {isSettledParticipantByCustom(transactionDetailData.details) &&
-              transactionDetailData.details.map((detail, index) => (
+            {transactionDetailData.details.map((detail, index) => (
                 <DetailCardByCustom
                   key={index}
                   {...detail.participant}
@@ -147,6 +124,22 @@ export default function TransactionDetail() {
             <Btn buttonStyle={{ size: 'big', style: 'blue' }}>정산 수정하기</Btn>
           </Link>
         </>
+        ) : (
+          <>
+            <div css={columnStyle}>
+              <div>상품명</div>
+              <div>수량</div>
+              <div>금액</div>
+            </div>
+            <div css={listStyle}>
+              {transactionDetailData.details.map((detail, index) => (
+                <DetailCardByReceipt key={index} {...detail} />
+              ))}
+            </div>
+            <Btn buttonStyle={{ size: 'big', style: 'blue' }} onClick={handleUpdateReceipt}>
+              정산 수정하기
+            </Btn>
+          </>
       )}
     </div>
   );

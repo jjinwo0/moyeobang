@@ -186,7 +186,7 @@ export default function MapSearch({cityName, onSelectCity}: MapSearchProps) {
     <div css={containerStyle}>
       {isLoading && (
         <div css={loadingSpinnerStyle}>
-          <img src={bangBang} alt="Loading..." />
+          <img src={bangBang} alt="" />
         </div>
       )}
       {error && <div>Error occurred!</div>}

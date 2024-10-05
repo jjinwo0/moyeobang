@@ -8,7 +8,6 @@ import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-q
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
 import useTravelDetailStore from "@/store/useTravelDetailStore";
-import { profileData } from "@/data/data";
 
 const layoutStyle = css`
     position: fixed;
@@ -50,15 +49,19 @@ const linkStyle = css`
 `;
 
 interface PayCompletedModalProps {
+    isHome:boolean;
+    travelId:Id;
+    accountId:AccountId;
     transactionId:TransactionId;
+    participants:ParticipantInfo[]
     onClose: VoidFunction;
 }
 
 // ! api 연결 후 transactionId 임시 제거하기
-export default function PayCompletedModal({transactionId, onClose} : PayCompletedModalProps) {
+export default function PayCompletedModal({isHome, travelId, accountId, transactionId, participants, onClose} : PayCompletedModalProps) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const {accountId, travelId} = useTravelDetailStore();
+    console.log('default정산 참가자',participants)
 
     // 닫기 누를시 이 데이터 이용해 정산해주기.
     const {data} = useSuspenseQuery({
@@ -76,16 +79,20 @@ export default function PayCompletedModal({transactionId, onClose} : PayComplete
             queryKey: ['transactionList', accountId], // 해당 계좌의 전체내역 업데이트
             refetchType: 'all',
         });
-        await navigate({to: `/account`});
+        if(isHome) {
+            navigate({to: '/'})
+        } else {
+            navigate({to: `/account`})
+        };
         onClose() // 모달이랑 QR창 닫기
         },
         });
 
     function handleSettleDefault() {
         // profileData 임시
-        const info = profileData.map((member) => {
+        const info = participants.map((member) => {
             // money = 전체금액/맴버수 내림값
-            return {memberId:member.memberId, money: Math.floor(transactionDetailData.money/profileData.length)}
+            return {memberId:member.memberId, money: Math.floor(transactionDetailData.money/participants.length)}
         })
         const sendData = {
             paymentName : transactionDetailData.paymentName,

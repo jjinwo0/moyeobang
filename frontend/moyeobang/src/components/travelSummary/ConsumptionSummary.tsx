@@ -4,11 +4,7 @@ import {BarChartComponent} from './BarChartComponent';
 import {PieChartComponent} from './PieChartComponent';
 import {colors} from '@/styles/colors';
 import ConsumptionRank from './ConsumptionRank';
-import restaurantIcon from '@/assets/icons/dish.webp';
-import coffeeIcon from '@/assets/icons/coffe.webp';
-import shoppingCartIcon from '@/assets/icons/shoppingCart.webp';
-import shoppingBagIcon from '@/assets/icons/shoppingBag.webp';
-import bangBang from '@/assets/icons/bangBang.png';
+import {getCategoryTag} from '@/util/getCategoryTags';
 
 const containerStyle = css`
   height: 100%;
@@ -101,19 +97,20 @@ const tagStyle = (index: number) => css`
 
 interface ConsumptionSummaryProps {
   travelData: TravelSummary;
+  categoryData: ConsumptionByCategory[];
+  memberData: ConsumptionByMember[];
+  totalMoney: number;
+  totalConsumption: number;
 }
 
 export default function ConsumptionSummary({
   travelData,
+  categoryData,
+  memberData,
+  totalMoney,
+  totalConsumption,
 }: ConsumptionSummaryProps) {
-  const {
-    totalAmount,
-    amountUsed,
-    amountComparison,
-    consumptionByCategory,
-    consumptionByMember,
-    consumptionTag,
-  } = travelData;
+  const {totalAmount, amountUsed, amountComparison} = travelData;
 
   // 금액 비교 함수
   const calAmountComparison = () => {
@@ -132,43 +129,14 @@ export default function ConsumptionSummary({
     );
   };
 
-  // 태그에 따른 아이콘 반환 함수
-  const getIconForTag = (tag: string) => {
-    switch (tag) {
-      case '맛집탐방 했나방':
-        return restaurantIcon;
-      case '카페인 중독인가방':
-        return coffeeIcon;
-      case '장바구니 가득 채웠나방':
-        return shoppingCartIcon;
-      case '맥시멀리스트인가방':
-        return shoppingBagIcon;
-      default:
-        return bangBang;
-    }
-  };
-
-  const handleMapTouch = (e: React.TouchEvent | React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault(); // prevent default behavior of the touch event
-  };
-
   return (
     <div css={containerStyle}>
-      {/* <div
-        css={mapStyle}
-        onTouchStart={handleMapTouch}
-        onTouchMove={handleMapTouch}
-        onMouseDown={handleMapTouch} // 마우스 드래그 이벤트 막기
-      >
-        <MapComponent locationList={locationList} />
-      </div> */}
       <div css={summaryContainerStyle}>
         <div css={summaryBoxStyle}>
           <h3>예산 현황</h3>
           <BarChartComponent
-            totalAmount={totalAmount}
-            amountUsed={amountUsed}
+            totalAmount={totalMoney}
+            amountUsed={totalConsumption}
           />
           <p>
             다른 여행보다 <br />
@@ -178,28 +146,28 @@ export default function ConsumptionSummary({
 
         <div css={pieChartStyle}>
           <h3>소비 카테고리</h3>
-          <PieChartComponent consumptionByCategory={consumptionByCategory} />
+          <PieChartComponent consumptionByCategory={categoryData} />
         </div>
       </div>
 
       <div css={tagsContainerStyle}>
         <div css={rankingBoxStyle}>
           <h3>소비 랭크</h3>
-          <ConsumptionRank consumptionByMember={consumptionByMember} />
+          <ConsumptionRank consumptionByMember={memberData} />
         </div>
 
         <div css={tagsBoxStyle}>
           <h3>소비 태그</h3>
           <ul>
-            {consumptionTag.map((tag, index) => (
-              <li key={index} css={tagStyle(index)}>
-                <img
-                  src={getIconForTag(tag)}
-                  style={{width: '24px', height: '24px'}}
-                />
-                {tag}
-              </li>
-            ))}
+            {categoryData.slice(0, 4).map((category, index) => {
+              const {icon, label} = getCategoryTag(category.categoryName);
+              return (
+                <li key={index} css={tagStyle(index)}>
+                  <img src={icon} style={{width: '24px', height: '24px'}} />
+                  {label}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

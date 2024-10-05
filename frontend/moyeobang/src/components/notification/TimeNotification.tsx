@@ -4,7 +4,7 @@ import exclamationMark from '@/assets/icons/exclamationMark.png';
 
 const containerStyle = css`
   width: 100%;
-  height: 90px;
+  height: 80px;
 `;
 
 const contentStyle = css`
@@ -36,19 +36,21 @@ const timeStyle = css`
 
 const travelName: string = '아기돼지오형제';
 
-export default function TimeNotification() {
+export default function TimeNotification({message}: {message: string}) {
+  const timestamp = new Date().toLocaleString();
   return (
     <div css={containerStyle}>
       <div css={contentStyle}>
         <img src={exclamationMark} alt="Notification Icon" />
         <div>
-          <p css={timeStyle}>2024.09.03 20:00</p>
-          <span css={textStyle}>하루를 마무리하는 현재</span>
+          <p css={timeStyle}>{timestamp}</p>
+          {/* <span css={textStyle}>하루를 마무리하는 현재</span>
           <span css={titleStyle}> {travelName}</span>
           <span css={textStyle}>
             에 300,000원 남아있어요!
             <br />
-          </span>
+          </span> */}
+          <div css={textStyle}>{message}</div>
         </div>
       </div>
     </div>

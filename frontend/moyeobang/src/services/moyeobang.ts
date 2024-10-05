@@ -1,5 +1,6 @@
 import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
+import { isSettledParticipantByCustom } from '@/util/typeGaurd'; // 정산 상세 details 타입 확인
 
 export default {
   // 모임 통장
@@ -32,7 +33,7 @@ export default {
   /**
    * 전체 결제 내역 상세 조회
    */
-  getTransactionDetail: async (accountId: number, transactionId?: number) =>
+  getTransactionDetail: async (accountId: number, transactionId: number) => 
     axios.get<MoyeobangResponse<TransactionDetailProps>>(
       `/accounts/${accountId}/transactions/${transactionId}`
     ),
@@ -52,19 +53,20 @@ export default {
       }
     ),
   /**
-   * 직접 정산 수정 fetch임 추후에
+   * 직접 정산 수정
    */
-  // putSettleByCustom: async (
-  //   transactionId: number,
-  //   data: PostTransactionDetailByCustom
-  // ) =>
-  //   axios.post<MoyeobangResponse<null>>(
-  //     `/travel/accounts/transactions/${transactionId}/settle/custom`,
-  //     data,
-  //     {
-  //       headers: {'Content-Type': 'application/json'},
-  //     }
-  //   ),
+  updateSettleByCustom: async (
+    transactionId: number,
+    travelId: number,
+    data: PostTransactionDetailByCustom
+  ) =>
+    axios.post<MoyeobangResponse<null>>(
+      `/travel/accounts/transactions/${transactionId}/settle/update/custom/${travelId}`,
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
   /**
    * 영수증 정산
    */
@@ -81,20 +83,20 @@ export default {
       }
     ),
   /**
-   * 영수증 정산 수정 fetch임 추후에
+   * 영수증 정산 수정
    */
-  // putSettleByReceipt: async (
-  //   transactionId: number,
-  //   data: TransactionDetailByReceipt
-  // ) =>
-  //   axios.post<MoyeobangResponse<null>>(
-  //     `/travel/accounts/transactions/${transactionId}/settle`,
-  //     data,
-  //     {
-  //       headers: {'Content-Type': 'application/json'},
-  //     }
-  //   ),
-
+  updateSettleByReceipt: async (
+    transactionId: number,
+    travelId: number,
+    data: PostTransactionDetailByReceipt
+  ) =>
+    axios.post<MoyeobangResponse<null>>(
+      `/travel/accounts/transactions/${transactionId}/settle/update/${travelId}`,
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
   /**
    * pos기 결제 요청
    */
@@ -215,12 +217,20 @@ export default {
    * 1원입금 요청 api
    */
   postDepositAccountOne: async (accountNumber: string, bankName: string) =>
-    axios.post<MoyeobangResponse<null>>(
+    axios.post<MoyeobangResponse<ResponseDepositOne>>(
       '/auth/account/verify/initiate',
       {accountNumber: accountNumber, bankName: bankName},
       {
         headers: {'Content-Type': 'application/json'},
       }
+    ),
+
+  /**
+   * 1원입금 인증 코드 알림 api
+   */
+  postVerifyNotification: async (memberId: number, transactionId: number) =>
+    axios.post<MoyeobangResponse<ResponseVerifyNotification>>(
+      `/notification/verify/${memberId}/${transactionId}`
     ),
 
   /**

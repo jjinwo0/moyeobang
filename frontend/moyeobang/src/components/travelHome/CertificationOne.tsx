@@ -78,6 +78,7 @@ export default function CertificationOne({
   const [accountNumber, setAccountNumber] = useState<string>(''); // 계좌번호 상태 추가
   const [verifyNumber, setVerifyNumber] = useState<string>(''); // 인증번호 상태 추가
   const [randomVerifyNumber, setRandomVerifyNumber] = useState<string>(''); // 랜덤한 인증번호 상태 추가
+  const [notificationKey, setNotificationKey] = useState<string>(''); // 1원입금 인증번호
 
   // 랜덤한 인증번호 생성 함수
   const generateRandomVerifyNumber = () => {
@@ -85,10 +86,13 @@ export default function CertificationOne({
     return randomNum.toString();
   };
 
+  //[todo]!주스탄드에서 멤버ID 가져오기!
+  const memberId: number = 4;
+
   const handleVerify = () => {
     if (accountNumber.length > 0) {
       // 계좌번호가 입력되어 있을 때만 실행
-      // postDepositAccountOne({accountNumber, bankName: '싸피뱅크'});
+      postDepositAccountOne({accountNumber, bankName: '싸피뱅크', memberId});
       //[todo] 지금은 여기에 있는데 추후에 바꿔야함
       setRandomVerifyNumber(generateRandomVerifyNumber()); // 랜덤한 인증번호 생성 후 상태 업데이트
       setTimeout(() => {
@@ -123,6 +127,7 @@ export default function CertificationOne({
     // postDepositAccountOneConfirm({accountNumber,authCode:verifyNumber})
     console.log('verifyNumber', verifyNumber);
 
+    // if (verifyNumber === notificationKey) {
     if (verifyNumber === randomVerifyNumber) {
       alert('인증에 성공하였습니다.');
       onVerify(); // 부모에게 인증 완료 알리기
@@ -131,22 +136,33 @@ export default function CertificationOne({
     }
   };
 
-  // //[todo] 1원입금 성공 시 싸피뱅크에서 입금 내역 조회
-  // const {mutate: postDepositAccountOne} = useMutation({
-  //   mutationFn: async({accountNumber, bankName}: {accountNumber: string, bankName: string}) => {
-  //     await moyeobang.postDepositAccountOne(accountNumber, bankName);
-  //   },
-  //   onSuccess: response => {
-  //     console.log('response', response);
-  //     const {status} = response as unknown as {status: string};
-  //     if(status === 'SUCCESS'){
-  //       console.log('1원입금 성공');
-  //       //[todo] 싸피뱅크에서 입금 내역 조회해야함
-  //     } else{
-  //       alert('1원입금 실패');
-  //     }
-  //   }
-  // })
+  //[todo] 1원입금 요청
+  const {mutate: postDepositAccountOne} = useMutation({
+    mutationFn: async ({
+      accountNumber,
+      bankName,
+    }: {
+      accountNumber: string;
+      bankName: string;
+      memberId: number;
+    }) => {
+      const response = await moyeobang.postDepositAccountOne(
+        accountNumber,
+        bankName
+      );
+      return response.data.data;
+    },
+    onSuccess: async response => {
+      const transactionId = response.transactionId;
+      if (transactionId) {
+        const notificationResponse = await moyeobang.postVerifyNotification(
+          memberId,
+          transactionId
+        );
+        setNotificationKey(notificationResponse.data.data.key);
+      }
+    },
+  });
 
   return (
     <>

@@ -2,6 +2,7 @@ import React from 'react';
 import {PieChart, Pie, Cell, Tooltip} from 'recharts';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
+import {getCategoryImageAndColor} from '@/util/chartCategoryList';
 
 const chartContainerStyle = css`
   width: 100%;
@@ -13,16 +14,24 @@ const pieStyle = css`
 `;
 
 interface PieChartProps {
-  consumptionByCategory: {categoryName: string; proportion: number}[];
+  consumptionByCategory: {
+    categoryName: string;
+    proportion: string;
+    balance: number;
+  }[];
 }
 
 export function PieChartComponent({consumptionByCategory}: PieChartProps) {
+  console.log(consumptionByCategory);
   const data = consumptionByCategory.map(category => ({
     name: category.categoryName,
-    value: category.proportion,
+    value:
+      typeof category.proportion === 'string'
+        ? parseFloat(category.proportion)
+        : category.proportion, // 문자열일 경우에만 parseFloat 적용
   }));
 
-  const COLORS = [colors.third, colors.second, colors.fifth, colors.first];
+  console.log(data);
 
   const renderCustomizedLabel = ({
     cx,
@@ -74,12 +83,15 @@ export function PieChartComponent({consumptionByCategory}: PieChartProps) {
             stroke="none" // 경계선 없애기
             cornerRadius={0} // 모서리 둥글지 않게 설정
           >
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
+            {data.map((entry, index) => {
+              const {color} = getCategoryImageAndColor(entry.name); // 카테고리별 색상 가져오기
+              return (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={color} // 카테고리별 색상 적용
+                />
+              );
+            })}
           </Pie>
           <Tooltip />
         </PieChart>
