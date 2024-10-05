@@ -42,13 +42,15 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     // <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <LoadScript googleMapsApiKey={mapAPI} libraries={libraries}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={true} />
-        {/* Devtools 추가 */}
-      </LoadScript>
-    </QueryClientProvider>
+    <FcmTokenProvider>
+      <QueryClientProvider client={queryClient}>
+        <LoadScript googleMapsApiKey={mapAPI} libraries={libraries}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={true} />
+          {/* Devtools 추가 */}
+        </LoadScript>
+      </QueryClientProvider>
+    </FcmTokenProvider>
     // {/* </StrictMode> */}
   );
 }
