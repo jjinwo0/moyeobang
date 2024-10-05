@@ -18,7 +18,7 @@ public class ScheduleRepositoryInScheduleImpl implements ScheduleRepositoryInSch
     public List<ScheduleInfo> findSchedulesByTravelId(Long travelId) {
         return queryFactory.select(scheduleInfo())
                 .from(scheduleJpaEntity)
-                .join(scheduleJpaEntity.withdraw, withdrawJpaEntity)
+                .leftJoin(scheduleJpaEntity.withdraw, withdrawJpaEntity)
                 .fetchJoin()
                 .where(scheduleJpaEntity.travel.id.eq(travelId))
                 .fetch();
