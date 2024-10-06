@@ -43,22 +43,22 @@ public class SettleService implements SettleUseCase {
         2. OrderHistory에 Member 정보와 Order 정보를 넣는다.
         3. MemberTravel의 개인 예산에 사용 금액을 update한다.
          */
-        int amount = calculateAmount(command.amount(), command.participants().size());
+//        int amount = calculateAmount(command.amount(), command.participants().size());
 
         Order order = createOrderPort.createOrder(
                 new OrderInfo(
                         command.title(),
-                        amount, // 서비스 로직에서 계산하는 것으로 수정
+                        command.amount(),
                         command.transactionId()
                 )
         );
 
         command.participants().stream().forEach(id -> {
             createMemberOrderHistoryPort
-                    .createMemberOrderHistory(amount, new MappingInfo(id, order.getId()));
+                    .createMemberOrderHistory(command.amount(), new MappingInfo(id, order.getId()));
 
             updateMemberTravelPort
-                    .decreaseMemberTravelAmount(amount, id, command.travelId());
+                    .decreaseMemberTravelAmount(command.amount(), id, command.travelId());
         });
 
         updateWithdrawPort.updateWithdrawToReceipt(command.transactionId());
@@ -97,29 +97,37 @@ public class SettleService implements SettleUseCase {
     }
 
     @Override
-    public boolean updateBalanceSettle(SettleCommand command) {
+    public boolean updateBalanceSettle(Long transactionId, Long travelId) {
 
-        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(command.transactionId());
-
-        int amount = calculateAmount(command.amount(), command.participants().size());
+        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(transactionId);
 
         findOrderList.forEach(
-                order -> rollbackOrder(order, amount, command.travelId()));
+                order -> rollbackOrder(order, order.getOrderInfo().amount(), travelId)
+        );
 
-        balanceSettle(command);
+//        findOrderList.forEach(
+//                order -> {
+//                    order.getMemberOrderHistories().forEach(
+//                            id -> {
+//                                MemberOrderHistory findHistory = loadMemberOrderHistoryPort.findById(id);
+//                                updateMemberTravelPort.addMemberTravelAmount(findHistory.getAmount(), findHistory.getMappingInfo().memberId(), travelId);
+//                                updateMemberOrderHistoryPort.deleteMemberOrderHistory(id);
+//                            }
+//                    );
+//                }
+//        );
 
         return true;
     }
 
     @Override
-    public boolean updateBalanceSettleInCustom(CustomSettleCommand command) {
+    public boolean updateBalanceSettleInCustom(Long transactionId, Long travelId) {
 
-        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(command.transactionId());
+        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(transactionId);
 
         findOrderList.forEach(
-                order -> rollbackOrder(order, command.money(), command.travelId()));
-
-        customBalanceSettle(command);
+                order -> rollbackOrder(order, order.getOrderInfo().amount(), travelId)
+        );
 
         return true;
     }

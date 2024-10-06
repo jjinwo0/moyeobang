@@ -6,7 +6,7 @@ public interface SettleUseCase {
 
     boolean customBalanceSettle(CustomSettleCommand command);
 
-    boolean updateBalanceSettle(SettleCommand command);
+    boolean updateBalanceSettle(Long transactionId, Long travelId);
 
-    boolean updateBalanceSettleInCustom(CustomSettleCommand command);
+    boolean updateBalanceSettleInCustom(Long transactionId, Long travelId);
 }
