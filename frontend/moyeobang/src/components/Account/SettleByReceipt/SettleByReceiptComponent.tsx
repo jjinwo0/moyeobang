@@ -124,6 +124,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
         queryKey: ['transactionDetail', data.transactionId], // detail에 바로 업데이트
         refetchType: 'all',
       });
+
       await navigate({to: `/account/${data.transactionId}/detail`});
       onClose();
     },
