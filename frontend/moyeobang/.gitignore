@@ -25,4 +25,3 @@ dist-ssr
 **/test.tsx
 
 .env
-.DS_Store

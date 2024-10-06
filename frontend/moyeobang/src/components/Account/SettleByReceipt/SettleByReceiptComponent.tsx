@@ -201,6 +201,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
         const memberIds = detail.participants.map((member) => member.memberId)
         return {
           ...detail,
+          orderItemPrice:Math.floor(detail.orderItemPrice/memberIds.length),
           participants : memberIds
         };
       });

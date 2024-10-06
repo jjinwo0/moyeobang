@@ -36,7 +36,7 @@ interface ResponsePostTravel {
 }
 
 interface ResponsePostAccount {
-  accountNumber: sourceAccountNumber;
+  accountNumber: SourceAccountNumber;
 }
 
 interface PostTravel {
@@ -53,7 +53,7 @@ interface Member {
   memberId: Id;
   memberName: MemberName;
   profileImage: ImgUrl;
-  accountNumber: sourceAccountNumber;
+  accountNumber: SourceAccountNumber;
 }
 
 interface SubmitQuiz {
@@ -72,5 +72,5 @@ interface ResponseGetProfile {
   memberName: MemberName;
   profileImage: ImgUrl;
   bankName: BankName;
-  accountNumber: sourceAccountNumber;
+  accountNumber: SourceAccountNumber;
 }

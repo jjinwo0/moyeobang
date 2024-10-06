@@ -31,7 +31,8 @@ const overlayStyle = css`
     background-color: rgba(255, 255, 255, 0.8);;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    justify-content:center;
+    gap: 25px;
     padding: 30px;
     z-index: 1;   
     border-radius: 10px; 
@@ -45,19 +46,8 @@ const titleStyle = css`
 
 const accountNumberStyle = css`
     font-family: 'semibold';
-    font-size: 15px;
-    color: ${colors.strongGray};
-`;
-
-const locationLayoutStyle = css`
-    display:flex;
-    flex-direction:row;
-    gap:5px;
-`;
-
-const locationStyle = css`
-    font-family: 'semibold';
     font-size: 16px;
+    color: ${colors.strongGray};
 `;
 
 const balanceStyle = css`
@@ -87,12 +77,9 @@ export default function PayCard({isHome} : PayCardProps) {
 
     const [isHidden, setIsHidden] = useState<boolean>(false);
     const {travelName} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    const {startDate} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    const {endDate} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    const {travelPlaceList} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
     const {accountId} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
     const {travelImg} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    // const {accountNumber} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
+    const {accountNumber} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
     
     // get 모임 통장 전체 잔액 
     const { data } = useSuspenseQuery({
@@ -111,17 +98,7 @@ export default function PayCard({isHome} : PayCardProps) {
         <div css={cardLayoutStyle(travelImg)}>
             <div css={overlayStyle}>
                 <div css={titleStyle}>{travelName}</div>
-                <div css={accountNumberStyle}>{startDate}~{endDate}</div>
-                {/* <div css={accountNumberStyle}>{accountNumber}</div> */}
-                <div css={locationLayoutStyle}>{travelPlaceList.map((place, index) => {
-
-                    if (index===travelPlaceList.length-1) {
-                        return <div key={index} css={locationStyle}>{place} 여행</div>
-                    } else {
-                        return <div key={index} css={locationStyle}>{place},</div>
-                    }
-                }
-                )}</div>
+                <div css={accountNumberStyle}>{accountNumber}</div>
                 <div css={balanceStyle}>
                     {isHidden ? '잔액 숨김': `${accountData.currentBalance.toLocaleString()}원`}
                     <button onClick={handleClick} css={buttonStyle}>{isHidden ? '보기' : '숨김'}</button>
