@@ -19,7 +19,7 @@ const defaultCenter = {lat: 37.5665, lng: 126.978}; // 기본 중심: 서울
 
 // Translate types from English to Korean
 const translateTypes = (types: string[]) => {
-  return types.map(type => (typesKo as Record<string, string>)[type] || type);
+  return types.map(type => (typesKo as Record<string, string>)[type] || '기타');
 };
 
 // Create a marker from place result

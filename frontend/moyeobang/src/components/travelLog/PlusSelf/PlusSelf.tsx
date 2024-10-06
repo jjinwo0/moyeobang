@@ -127,7 +127,6 @@ export default function PlusSelf() {
           queryKey: ['travelSchedules'],
           queryFn: () => moyeobang.getTravelSchedules(travelId),
         });
-        console.log('[*] 수정 데이터', data.data.data.schedules);
         // 최신 데이터로 Context 업데이트
         setTravelSchedules(data.data.data.schedules);
         handleShowPlusSelf();
