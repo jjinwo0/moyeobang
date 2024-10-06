@@ -15,6 +15,7 @@ import {colors} from '@/styles/colors';
 const chartContainerStyle = css`
   width: 100%;
   height: 160px; /* 차트 높이 낮추기 */
+  margin-top: 10px;
 `;
 
 // Emotion 스타일 정의
@@ -61,7 +62,7 @@ export function BarChartComponent({totalAmount, amountUsed}: BarChartProps) {
 
   return (
     <div css={chartContainerStyle}>
-      <ResponsiveContainer width="100%" height={160}>
+      <ResponsiveContainer width="100%" height={180}>
         <BarChart data={chartData}>
           {/* X축 */}
           <XAxis
