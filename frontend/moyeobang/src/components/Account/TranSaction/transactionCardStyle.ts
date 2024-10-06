@@ -48,8 +48,8 @@ export const locationStyle = css`
 
 export const carouselStyle = css`
     display:flex;
-    width: 150px;
-    justify-content: flex-end;
+    max-width: 150px;
+    justify-content: flex-start;
     flex-direction: row;
     gap: 5px;
     padding: 1px 0;
