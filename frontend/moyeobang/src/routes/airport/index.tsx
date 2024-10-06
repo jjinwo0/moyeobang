@@ -1,10 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React, { useState, useEffect} from 'react';
+import React, { useState} from 'react';
 import airportBackground from '@/assets/icons/airportBackground.png';
 import { css } from '@emotion/react';
 import { v4 as uuidv4 } from "uuid";
 import QrPayByOnline from '@/components/QrPayByOnline/QrPayByOnline';
-import { EventSourcePolyfill } from 'event-source-polyfill';
 
 const backgroundStyle=css`
     display:flex;
@@ -42,49 +41,6 @@ export const Route = createFileRoute('/airport/')({
 export default function AirportSite() {
 
     const [isQrModalOpen, setIsQrModalOpen] = useState<boolean>(false);
-    const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
-
-    const fetchSEE = () => {
-        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/pg/payment/connect?paymentRequestId=${airportData.paymentRequestId}`, {
-            // headers: {
-            //     Authorization: `Bearer ${token}`, 
-            // },
-        })
-
-        // EventSource.readyState()
-        eventSource.onopen = () => {
-            console.log('aiport sse open')
-        }
-
-        eventSource.addEventListener('connect', (event) => {
-
-            const messageEvent = event as MessageEvent<string>;
-            const connectMessage : ConnectMessage = messageEvent.data;
-            console.log('connect:', connectMessage);
-        });
-
-        eventSource.addEventListener('payment-success', (event) => {
-
-            const messageEvent = event as MessageEvent<string>;
-            const parsedData = JSON.parse(messageEvent.data);
-            console.log('payment-succes:', parsedData);
-        });
-
-        eventSource.onerror = (event) => {
-            
-        eventSource.close();
-            if (event) {
-                console.log('sse요청 error발생', event)
-            }
-
-            if (event.target.readyState === EventSource.CLOSED) {
-                console.log('see연결 종료')
-            }
-        };
-
-        // eventSource 상태에 저장
-        setEventSource(eventSource);
-    }
 
     function handleClick() {
         setIsQrModalOpen(true);
@@ -93,18 +49,6 @@ export default function AirportSite() {
     function handleClose() {
         setIsQrModalOpen(false)
     }
-
-    useEffect(() => {
-        fetchSEE();
-
-        // 컴포넌트 언마운트 시 SSE 연결 종료
-        return () => {
-            if (eventSource) {
-                eventSource.close(); // 언마운트시 종료
-                console.log('sse 연결 종료')
-            }
-        };
-    }, []);
 
     return (
         <div css={backgroundStyle}>
