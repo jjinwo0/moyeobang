@@ -28,10 +28,10 @@ public class CreateTravelScheduleController {
     @PostMapping("/{travelId}/schedule")
     public ApiResult<Boolean> createTravelSchedule(@PathVariable long travelId,
                                                    @RequestPart("data") CreateTravelScheduleRequest createTravelScheduleRequest,
-                                                   @RequestPart(value = "image", required = false) MultipartFile imageFile)
+                                                   @RequestPart(value = "image", required = false) MultipartFile scheduleImage)
             throws IOException {
 
-        CreateTravelScheduleCommand command = createTravelScheduleRequest.toCommand(travelId, imageFile);
+        CreateTravelScheduleCommand command = createTravelScheduleRequest.toCommand(travelId, scheduleImage);
         createTravelScheduleUseCase.createTravelSchedule(command);
         return success(true);
     }
