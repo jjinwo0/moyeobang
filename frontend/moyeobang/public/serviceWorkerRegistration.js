@@ -100,6 +100,14 @@ async function registerServiceWorker() {
         firebaseRegistration.scope
       );
 
+      // if (firebaseRegistration) {
+      //   firebaseRegistration.showNotification('Test Notification', {
+      //     body: 'This is a local test notification!',
+      //     icon: '/your-icon-url.png',
+      //     tag: 'test-notification',
+      //   });
+      // }
+
       // FCM 토큰 관련 코드 주석 처리
       /*
       if (!sessionStorage.getItem('fcmToken')) {

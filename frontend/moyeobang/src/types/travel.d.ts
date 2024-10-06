@@ -19,11 +19,13 @@ interface TravelSummary {
   totalAmount: TotalAmount;
   amountUsed: TotalComsumption;
   amountComparison: AmountComparison;
-  consumptionByCategory: ConsumptionCategory[];
+  consumptionByCategory: ConsumptionByCategory[];
   consumptionTag: ConsumptionTag[];
   consumptionByMember: ConsumptionByMember[];
   imgSummary: ImgSummary[];
 }
+
+type Question = string;
 
 // 퀴즈 관련
 interface Quiz {
