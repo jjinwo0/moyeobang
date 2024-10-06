@@ -4,6 +4,7 @@ import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
 import { useMutation } from "@tanstack/react-query";
 import moyeobang from "@/services/moyeobang";
+import FailByQrScan from "./QrScanFailModal";
 
 const storeData = [
     {
@@ -76,10 +77,11 @@ const textBoxStyle= css`
 
 interface QrScanProps {
     onMessage: (trasactionId:TransactionId) => void;
+    onError: VoidFunction;
     accountNumber:SourceAccountNumber;
 }
 
-export default function QrScan({onMessage, accountNumber}:QrScanProps) {
+export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) {
     
     const scanner = useRef<QrScanner>();
     const videoElement = useRef<HTMLVideoElement>(null);
@@ -95,6 +97,9 @@ export default function QrScan({onMessage, accountNumber}:QrScanProps) {
             onMessage(Number(response.data.data.transactionId))
             console.log('온라인 결제 성공!')
         },
+        onError: () => {
+            onError()
+        }
     });
 
     // 성공
@@ -122,11 +127,12 @@ export default function QrScan({onMessage, accountNumber}:QrScanProps) {
 
         } catch (error) {
             console.log('QR스캔 오류 발생', error)
+            onError();
         }
     }
 
-    function onScanFail(error: string | Error) {
-        console.log('QR스캔 실패:',error)
+    function onScanFail() {
+        //QR인식중
     }
 
     useEffect(()=>{
@@ -151,6 +157,7 @@ export default function QrScan({onMessage, accountNumber}:QrScanProps) {
             )
             .catch((error : Error) => {
                 if (error) {
+                    onError()
                     setQrOn(false);
                 }
             });
@@ -172,6 +179,14 @@ export default function QrScan({onMessage, accountNumber}:QrScanProps) {
             alert("카메라가 차단되었거나 접근할 수 없습니다.")
         }
     }, [qrOn])
+
+    // QR 스캐너 오류 후 다시 켜기
+    // useEffect(() => {
+    //     if (!qrOn) {
+    //         setQrOn(true);
+    //     // setTimeout(() => setQrOn(true), 1000); // 오류 발생 후 1초 뒤에 다시 QR 스캐너 켜기
+    //     }
+    // }, [qrOn]);
 
     return (
         <div css={qrReaderLayoutStyle}>
