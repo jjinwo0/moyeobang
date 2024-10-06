@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {css} from '@emotion/react';
 import HeaderWithXButton from '../../common/Header/HeaderWithXbutton';
 import {colors} from '@/styles/colors';
@@ -13,6 +13,7 @@ import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useTravelLogContext} from '@/contexts/TravelLog';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import {fi} from 'date-fns/locale';
 
 export default function PlusSelf() {
   const {travelPlaceList, travelId} = useTravelDetailStore();
@@ -38,7 +39,7 @@ export default function PlusSelf() {
   };
   const [hour, setHour] = useState<number | string>('');
   const [minute, setMinute] = useState<number | string>('');
-  const [selectedImage, setSelectedImage] = useState<string>('');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [memo, setMemo] = useState<string>('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dateTime, setDateTime] = useState<string>('');
@@ -46,12 +47,14 @@ export default function PlusSelf() {
   const [scheduleName, setScheduleName] = useState<string | undefined>(
     searchLocation
   );
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
 
   const handleAddImg = () => {
     // input[type="file"]을 클릭하는 로직 추가
     document.getElementById('imageInput')?.click();
   };
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -71,7 +74,7 @@ export default function PlusSelf() {
     setHour('');
     setMinute('');
     setMemo('');
-    setSelectedImage('');
+    setSelectedImage(null);
   };
 
   const handleDelete = () => {
@@ -89,7 +92,7 @@ export default function PlusSelf() {
       scheduleData,
     }: {
       travelId: Id;
-      scheduleData: PostTravelSchedule;
+      scheduleData: FormData;
     }) => moyeobang.postTravelSchedule(travelId, scheduleData),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -170,23 +173,32 @@ export default function PlusSelf() {
        * selectedImage
        */
 
-      const scheduleData: PostTravelSchedule = {
-        scheduleTitle: scheduleName || '',
-        scheduleLocation: scheduleLocation || '',
-        scheduleTime: dateTime || '',
-        memo: memo || '',
-        image_url: selectedImage || '',
-      };
+      const scheduleData = new FormData();
+      scheduleData.append('scheduleTitle', scheduleName || '');
+      scheduleData.append('scheduleLocation', JSON.stringify(scheduleLocation)); // ScheduleLocation을 문자열로 변환
+      scheduleData.append('scheduleTime', dateTime || '');
+      scheduleData.append('memo', memo || '');
+      scheduleData.append('scheduleImage', fileInputRef.current?.files?.[0] || '');
+      console.log('scheduleData:', Object.fromEntries(scheduleData.entries()));
+
+
+      // const scheduleData: PostTravelSchedule = {
+      //   scheduleTitle: scheduleName || '',
+      //   scheduleLocation: scheduleLocation || '',
+      //   scheduleTime: dateTime || '',
+      //   memo: memo || '',
+      //   scheduleImage: selectedImage || '',
+      // };
       // [todo] 저장 로직 추가
       if (scheduleEdit) {
         console.log('[*] 수정 모드', scheduleData);
 
         // 수정 모드
-        putTravelSchedule({
-          travelId,
-          scheduleId: scheduleEdit,
-          data: scheduleData,
-        });
+        // putTravelSchedule({
+        //   travelId,
+        //   scheduleId: scheduleEdit,
+        //   data: scheduleData,
+        // });
       } else {
         // 추가 모드
         postTravelSchedule({travelId, scheduleData});
@@ -383,6 +395,7 @@ export default function PlusSelf() {
               />
               <input
                 id="imageInput"
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 style={{display: 'none'}} // 파일 입력 창 숨김

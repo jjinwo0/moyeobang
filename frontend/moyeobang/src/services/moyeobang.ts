@@ -266,9 +266,9 @@ export default {
   /**
    * 여행 일정 추가
    */
-  postTravelSchedule: async (travelId: Id, data: PostTravelSchedule) =>
+  postTravelSchedule: async (travelId: Id, data: FormData) =>
     axios.post<MoyeobangResponse<null>>(`/travel/${travelId}/schedule`, data, {
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'multipart/form-data'},
     }),
 
   /**
