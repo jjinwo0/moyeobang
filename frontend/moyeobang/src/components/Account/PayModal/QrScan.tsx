@@ -4,7 +4,6 @@ import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
 import { useMutation } from "@tanstack/react-query";
 import moyeobang from "@/services/moyeobang";
-import FailByQrScan from "./QrScanFailModal";
 
 const storeData = [
     {
@@ -123,8 +122,7 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
                 // 성공적으로 스캔한 후 스캐너 중지
                 scanner?.current?.stop();
             }
-
-
+            
         } catch (error) {
             console.log('QR스캔 오류 발생', error)
             onError();
@@ -136,6 +134,7 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
     }
 
     useEffect(()=>{
+        console.log(3333, videoElement?.current, scanner.current)
         if ( videoElement?.current && !scanner.current ) {
             scanner.current = new QrScanner( 
                 videoElement?.current,
@@ -167,26 +166,23 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
         return () => {
             if (!videoElement.current) {
                 scanner?.current?.stop();
-
             }
         }
-
     }, [])
 
     // 브라우저에 카메라가 허용되지 않은 경우
-    useEffect(()=> {
-        if (!qrOn) {
-            alert("카메라가 차단되었거나 접근할 수 없습니다.")
-        }
-    }, [qrOn])
+    // useEffect(()=> {
+    //     if (!qrOn) {
+    //         alert("카메라가 차단되었거나 접근할 수 없습니다.")
+    //     }
+    // }, [qrOn])
 
     // QR 스캐너 오류 후 다시 켜기
-    // useEffect(() => {
-    //     if (!qrOn) {
-    //         setQrOn(true);
-    //     // setTimeout(() => setQrOn(true), 1000); // 오류 발생 후 1초 뒤에 다시 QR 스캐너 켜기
-    //     }
-    // }, [qrOn]);
+    useEffect(() => {
+        if (!qrOn) {
+            setTimeout(() => setQrOn(true), 0); // 오류 발생 후 1초 뒤에 다시 QR 스캐너 켜기
+        }
+    }, [qrOn]);
 
     return (
         <div css={qrReaderLayoutStyle}>
