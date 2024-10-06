@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -98,9 +101,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
                 .queryParam("accessToken", accessToken)
-                .queryParam("accessTokenExpireTime", accessTokenExpireTime)
+                .queryParam("accessTokenExpireTime", accessTokenExpireTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli())
                 .queryParam("refreshToken", refreshToken)
-                .queryParam("refreshTokenExpireTime", refreshTokenExpireTime)
+                .queryParam("refreshTokenExpireTime", refreshTokenExpireTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli())
                 .build()
                 .toUriString();
     }
