@@ -5,6 +5,7 @@ import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.settle.adapter.in.web.request.CustomSettleRequest;
+import com.ssafy.moyeobang.settle.adapter.in.web.request.OrderRequest;
 import com.ssafy.moyeobang.settle.adapter.in.web.request.SettleRequest;
 import com.ssafy.moyeobang.settle.application.port.in.CustomSettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleCommand;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @WebAdapter
 @RestController
@@ -66,8 +69,10 @@ public class SettleController {
                                            @PathVariable("travelId") Long travelId,
                                            @RequestBody SettleRequest request){
 
+        settleUseCase.updateBalanceSettle(transactionId, travelId);
+
         return success(request.details().stream()
-                .allMatch(item -> settleUseCase.updateBalanceSettle(
+                .allMatch(item -> settleUseCase.balanceSettle(
                         new SettleCommand(
                                 transactionId,
                                 travelId,
@@ -84,8 +89,10 @@ public class SettleController {
                                            @PathVariable("travelId") Long travelId,
                                            @RequestBody CustomSettleRequest request){
 
+        settleUseCase.updateBalanceSettleInCustom(transactionId, travelId);
+
         return success(request.info().stream()
-                .allMatch(info -> settleUseCase.updateBalanceSettleInCustom(
+                .allMatch(info -> settleUseCase.customBalanceSettle(
                         new CustomSettleCommand(
                                 transactionId,
                                 travelId,

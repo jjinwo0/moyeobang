@@ -85,10 +85,10 @@ class SettleServiceTest {
         verify(createOrderPort, times(1)).createOrder(any(OrderInfo.class));
 
         // createMemberOrderHistoryPort의 createMemberOrderHistory 메서드가 회원 별로 각 1번씩 총 3번 호출되는지 확인
-        verify(createMemberOrderHistoryPort, times(3)).createMemberOrderHistory(eq(3333), any());
+        verify(createMemberOrderHistoryPort, times(3)).createMemberOrderHistory(eq(10000), any());
 
         // updateMemberTravelPort decreaseMemberTravelAmount 메서드가 회원 별로 각 1번씩 총 3번 호출되는지 확인
-        verify(updateMemberTravelPort, times(3)).decreaseMemberTravelAmount(eq(3333), anyLong(), anyLong());
+        verify(updateMemberTravelPort, times(3)).decreaseMemberTravelAmount(eq(10000), anyLong(), anyLong());
 
         verify(updateWithdrawPort, times(1)).updateWithdrawToReceipt(anyLong());
 
@@ -122,9 +122,9 @@ class SettleServiceTest {
         ArgumentCaptor<Long> idCaptor = ArgumentCaptor.forClass(Long.class);
 
         // 호출되는 메서드 검증
-        verify(createMemberOrderHistoryPort, times(3)).createMemberOrderHistory(eq(3333), any());
+        verify(createMemberOrderHistoryPort, times(3)).createMemberOrderHistory(eq(10000), any());
         // 호출 시 참여하는 회원의 ID값 captor 적재
-        verify(updateMemberTravelPort, times(3)).decreaseMemberTravelAmount(eq(3333), idCaptor.capture(), anyLong());
+        verify(updateMemberTravelPort, times(3)).decreaseMemberTravelAmount(eq(10000), idCaptor.capture(), anyLong());
 
         verify(updateWithdrawPort, times(1)).updateWithdrawToReceipt(anyLong());
 
