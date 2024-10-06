@@ -45,14 +45,15 @@ export default function AirportSite() {
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
 
     const fetchSEE = () => {
-        const eventSource = new EventSourcePolyfill('https://j11c102.p.ssafy.io/pg/payment/connect'+`/payment/connect?paymentRequestId=${airportData.paymentRequestId}`, {
+        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/pg/payment/connect?paymentRequestId=${airportData.paymentRequestId}`, {
             // headers: {
             //     Authorization: `Bearer ${token}`, 
             // },
         })
 
+        // EventSource.readyState()
         eventSource.onopen = () => {
-            console.log('sse open')
+            console.log('aiport sse open')
         }
 
         eventSource.addEventListener('connect', (event) => {
@@ -63,7 +64,6 @@ export default function AirportSite() {
         });
 
         eventSource.addEventListener('payment-success', (event) => {
-            console.log('payment-success' , event)
 
             const messageEvent = event as MessageEvent<string>;
             const parsedData = JSON.parse(messageEvent.data);
@@ -100,7 +100,7 @@ export default function AirportSite() {
         // 컴포넌트 언마운트 시 SSE 연결 종료
         return () => {
             if (eventSource) {
-                eventSource.close();
+                eventSource.close(); // 언마운트시 종료
                 console.log('sse 연결 종료')
             }
         };
