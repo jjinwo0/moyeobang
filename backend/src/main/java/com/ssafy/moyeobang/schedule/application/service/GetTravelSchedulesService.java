@@ -13,8 +13,6 @@ import com.ssafy.moyeobang.schedule.application.domain.Schedule;
 import com.ssafy.moyeobang.schedule.application.domain.Transaction;
 import com.ssafy.moyeobang.schedule.application.port.in.GetTravelSchedulesUseCase;
 import com.ssafy.moyeobang.schedule.application.port.out.LoadTravelSchedulesPort;
-import com.ssafy.moyeobang.schedule.error.ErrorCode;
-import com.ssafy.moyeobang.schedule.error.ScheduleException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,7 +32,7 @@ public class GetTravelSchedulesService implements GetTravelSchedulesUseCase {
         List<Schedule> schedules = loadTravelSchedulesPort.loadSchedulesByTravelId(travelId);
 
         if (schedules.isEmpty()) {
-            throw new ScheduleException(ErrorCode.TRAVEL_SCHEDULE_NOT_FOUND);
+            return new TravelScheduleResponse(new ArrayList<>());
         }
 
         Map<LocalDate, List<Schedule>> schedulesByDate = schedules.stream()
