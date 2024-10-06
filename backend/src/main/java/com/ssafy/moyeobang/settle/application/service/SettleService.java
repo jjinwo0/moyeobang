@@ -97,29 +97,37 @@ public class SettleService implements SettleUseCase {
     }
 
     @Override
-    public boolean updateBalanceSettle(SettleCommand command) {
+    public boolean updateBalanceSettle(Long transactionId, Long travelId) {
 
-        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(command.transactionId());
-
-        int amount = calculateAmount(command.amount(), command.participants().size());
+        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(transactionId);
 
         findOrderList.forEach(
-                order -> rollbackOrder(order, amount, command.travelId()));
+                order -> rollbackOrder(order, order.getOrderInfo().amount(), travelId)
+        );
 
-        balanceSettle(command);
+//        findOrderList.forEach(
+//                order -> {
+//                    order.getMemberOrderHistories().forEach(
+//                            id -> {
+//                                MemberOrderHistory findHistory = loadMemberOrderHistoryPort.findById(id);
+//                                updateMemberTravelPort.addMemberTravelAmount(findHistory.getAmount(), findHistory.getMappingInfo().memberId(), travelId);
+//                                updateMemberOrderHistoryPort.deleteMemberOrderHistory(id);
+//                            }
+//                    );
+//                }
+//        );
 
         return true;
     }
 
     @Override
-    public boolean updateBalanceSettleInCustom(CustomSettleCommand command) {
+    public boolean updateBalanceSettleInCustom(Long transactionId, Long travelId) {
 
-        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(command.transactionId());
+        List<Order> findOrderList = findOrderPort.findOrderListByTransactionId(transactionId);
 
         findOrderList.forEach(
-                order -> rollbackOrder(order, command.money(), command.travelId()));
-
-        customBalanceSettle(command);
+                order -> rollbackOrder(order, order.getOrderInfo().amount(), travelId)
+        );
 
         return true;
     }

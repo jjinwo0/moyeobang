@@ -15,7 +15,7 @@ public class MemberOrderHistoryMapper {
 
         return MemberOrderHistory.of(
                 memberOrderHistoryEntity.getId(),
-                memberOrderHistoryEntity.getAmount(),
+                (int) memberOrderHistoryEntity.getAmount(),
                 new MappingInfo(
                         memberOrderHistoryEntity.getMember().getId(),
                         memberOrderHistoryEntity.getOrder().getId()

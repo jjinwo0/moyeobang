@@ -6,4 +6,6 @@ import java.util.List;
 public interface LoadMemberOrderHistoryPort {
 
     List<MemberOrderHistory> findByOrderId(Long orderId);
+
+    MemberOrderHistory findById(Long id);
 }

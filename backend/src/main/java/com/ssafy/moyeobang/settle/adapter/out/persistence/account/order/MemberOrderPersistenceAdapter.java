@@ -57,6 +57,15 @@ public class MemberOrderPersistenceAdapter implements CreateMemberOrderHistoryPo
     }
 
     @Override
+    public MemberOrderHistory findById(Long id) {
+
+        MemberOrderHistoryJpaEntity findEntity = memberOrderHistoryRepository.findById(id)
+                .orElseThrow(() -> new MemberOrderHistoryNotFoundException("[" + id + "] 해당하는 회원 별 결제 기록을 찾을 수 없습니다."));
+
+        return mapper.mapToDomain(findEntity);
+    }
+
+    @Override
     public void deleteMemberOrderHistory(Long id) {
 
         memberOrderHistoryRepository.findById(id)
