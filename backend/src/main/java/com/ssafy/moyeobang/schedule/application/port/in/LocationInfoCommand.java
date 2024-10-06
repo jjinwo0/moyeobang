@@ -13,8 +13,8 @@ public record LocationInfoCommand(@NotNull String googlePlaceId, @NotNull String
                 locationInfo.googlePlaceId(),
                 locationInfo.title(),
                 locationInfo.address(),
-                locationInfo.lat(),
-                locationInfo.lng(),
+                locationInfo.latitude(),
+                locationInfo.longitude(),
                 locationInfo.category()
         );
     }
