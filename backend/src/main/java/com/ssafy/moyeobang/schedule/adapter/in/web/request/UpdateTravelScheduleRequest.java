@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.moyeobang.schedule.application.port.in.UpdateTravelScheduleCommand;
 import java.time.LocalDateTime;
 
-public record UpdateTravelScheduleRequest(String scheduleTitle, LocationInfo location,
+public record UpdateTravelScheduleRequest(String scheduleTitle, LocationInfo scheduleLocation,
                                           @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime scheduleTime,
                                           String memo, String image_url) {
 
@@ -13,7 +13,7 @@ public record UpdateTravelScheduleRequest(String scheduleTitle, LocationInfo loc
                 travelId,
                 scheduleId,
                 scheduleTitle,
-                location.toCommand(),
+                scheduleLocation.toCommand(),
                 scheduleTime,
                 memo,
                 image_url
