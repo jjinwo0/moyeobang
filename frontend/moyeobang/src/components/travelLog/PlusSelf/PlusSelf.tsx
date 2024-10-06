@@ -47,6 +47,9 @@ export default function PlusSelf() {
   const [scheduleName, setScheduleName] = useState<string | undefined>(
     searchLocation
   );
+  const [scheduleLocation, setScheduleLocation] =
+    useState<ScheduleLocation | null>(null);
+  const [getSchedule, setGetSchedule] = useState<DaySchedule | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
 
@@ -109,7 +112,7 @@ export default function PlusSelf() {
    * 일정 수정 mutation 선언
    */
 
-  const {mutate: putTravelSchedule} = useMutation({
+  const {mutate: postChangeTravelSchedule} = useMutation({
     mutationFn: ({
       travelId,
       scheduleId,
@@ -118,7 +121,8 @@ export default function PlusSelf() {
       travelId: Id;
       scheduleId: Id;
       scheduleData: FormData;
-    }) => moyeobang.putTravelSchedule(travelId, scheduleId, scheduleData),
+    }) =>
+      moyeobang.postChangeTravelSchedule(travelId, scheduleId, scheduleData),
     onSuccess: async () => {
       console.log('[*] 수정 성공');
       await queryClient.invalidateQueries({
@@ -139,11 +143,27 @@ export default function PlusSelf() {
     },
   });
 
-  const handleSave = () => {
-    console.log('[*] 저장 버튼 클릭');
-    console.log('[*] 저장 버튼 클릭 selectedMarker', selectedMarker);
+  // const makeScheduleLocation = () => {
+  //   if (selectedMarker) {
+  //     const scheduleLocation: ScheduleLocation = {
+  //       googlePlaceId: selectedMarker?.placeId || '',
+  //       title: selectedMarker?.title || '',
+  //       address: selectedMarker?.address || '',
+  //       latitude:
+  //         typeof selectedMarker?.position?.lat === 'function'
+  //           ? selectedMarker.position.lat()
+  //           : selectedMarker?.position?.lat || 0,
+  //       longitude:
+  //         typeof selectedMarker?.position?.lng === 'function'
+  //           ? selectedMarker.position.lng()
+  //           : selectedMarker?.position?.lng || 0,
+  //       category: selectedMarker?.types ? selectedMarker.types[0] : '',
+  //     };
+  //     return scheduleLocation;
+  //   }
+  // };
 
-    // [todo] 저장 로직 추가
+  const makeScheduleLocation = () => {
     if (selectedMarker) {
       const scheduleLocation: ScheduleLocation = {
         googlePlaceId: selectedMarker?.placeId || '',
@@ -159,61 +179,69 @@ export default function PlusSelf() {
             : selectedMarker?.position?.lng || 0,
         category: selectedMarker?.types ? selectedMarker.types[0] : '',
       };
+      setScheduleLocation(scheduleLocation);
+    }
+  };
 
-      /**
-       * 1. 일정 장소
-       * selectedMarker
-       * 2. 일정 이름
-       * scheduleName
-       * 3. 일정 시간
-       * dateTime
-       * 4. 일정 메모
-       * memo
-       * 5. 일정 사진
-       * selectedImage
-       */
+  const handleSave = () => {
+    // [todo] 저장 로직 추가
+    makeScheduleLocation();
 
-      const scheduleData = new FormData();
-      // JSON 데이터는 Blob으로 변환하여 'data'로 전송
-      const jsonData = {
-        scheduleTitle: scheduleName || '',
-        scheduleLocation: scheduleLocation, // 이미 객체 형태이므로 그대로 사용
-        scheduleTime: dateTime || '',
-        memo: memo || '',
-      };
+    /**
+     * 1. 일정 장소
+     * selectedMarker
+     * 2. 일정 이름
+     * scheduleName
+     * 3. 일정 시간
+     * dateTime
+     * 4. 일정 메모
+     * memo
+     * 5. 일정 사진
+     * selectedImage
+     */
 
-      scheduleData.append(
-        'data',
-        new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
+    const scheduleData = new FormData();
+    // JSON 데이터는 Blob으로 변환하여 'data'로 전송
+    const jsonData = {
+      scheduleTitle: scheduleName || '',
+      scheduleLocation: scheduleLocation, // 이미 객체 형태이므로 그대로 사용
+      scheduleTime: dateTime || '',
+      memo: memo || '',
+    };
+
+    scheduleData.append(
+      'data',
+      new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
+    );
+
+    // 파일이 있을 때만 append
+    if (fileInputRef.current?.files?.[0]) {
+      scheduleData.append('image', fileInputRef.current.files[0]);
+    }
+
+    // const scheduleData: PostTravelSchedule = {
+    //   scheduleTitle: scheduleName || '',
+    //   scheduleLocation: scheduleLocation || '',
+    //   scheduleTime: dateTime || '',
+    //   memo: memo || '',
+    //   scheduleImage: selectedImage || '',
+    // };
+    // [todo] 저장 로직 추가
+    if (scheduleEdit) {
+      console.log(
+        '수정 모드 scheduleData:',
+        Object.fromEntries(scheduleData.entries())
       );
 
-      // 파일이 있을 때만 append
-      if (fileInputRef.current?.files?.[0]) {
-        scheduleData.append('image', fileInputRef.current.files[0]);
-      }
-      console.log('scheduleData:', Object.fromEntries(scheduleData.entries()));
-
-      // const scheduleData: PostTravelSchedule = {
-      //   scheduleTitle: scheduleName || '',
-      //   scheduleLocation: scheduleLocation || '',
-      //   scheduleTime: dateTime || '',
-      //   memo: memo || '',
-      //   scheduleImage: selectedImage || '',
-      // };
-      // [todo] 저장 로직 추가
-      if (scheduleEdit) {
-        console.log('[*] 수정 모드', scheduleData);
-
-        // 수정 모드
-        putTravelSchedule({
-          travelId,
-          scheduleId: scheduleEdit,
-          scheduleData,
-        });
-      } else {
-        // 추가 모드
-        postTravelSchedule({travelId, scheduleData});
-      }
+      // 수정 모드
+      postChangeTravelSchedule({
+        travelId,
+        scheduleId: scheduleEdit,
+        scheduleData,
+      });
+    } else {
+      // 추가 모드
+      postTravelSchedule({travelId, scheduleData});
     }
   };
 
@@ -253,11 +281,12 @@ export default function PlusSelf() {
           schedule =>
             isPlusSelfSchedule(schedule) && schedule.scheduleId === scheduleEdit
         );
-        console.log('[*] schedule', schedule);
+        setGetSchedule(schedule[0]);
+        console.log('[*] 가져온 getSchedule', schedule[0]);
         if (isPlusSelfSchedule(schedule[0])) {
           setScheduleName(schedule[0].scheduleTitle || '');
           setSearchLocation(schedule[0]?.scheduleLocation?.title || '');
-
+          setScheduleLocation(schedule[0]?.scheduleLocation);
           const [date, time] = schedule[0].scheduleTime?.split('T') || [];
           const [hour, minute] = time.split(':');
           const hourInt = parseInt(hour, 10);
@@ -372,12 +401,24 @@ export default function PlusSelf() {
               <TimeInput
                 label="시"
                 value={hour}
-                onChange={e => setHour(e.target.value)}
+                onChange={e => {
+                  const value = e.target.value;
+                  // 유효성 검사: 1부터 11까지의 숫자만 허용
+                  if (/^(1[0-2]|[1-9])?$/.test(value)) {
+                    setHour(value);
+                  }
+                }}
               />
               <TimeInput
                 label="분"
                 value={minute}
-                onChange={e => setMinute(e.target.value)}
+                onChange={e => {
+                  const value = e.target.value;
+                  // 유효성 검사: 0부터 59까지의 숫자만 허용
+                  if (/^(59|[0-5]?[0-9])?$/.test(value)) {
+                    setMinute(value);
+                  }
+                }}
               />
             </div>
           </div>

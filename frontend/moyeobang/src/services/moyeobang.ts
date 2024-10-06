@@ -282,8 +282,8 @@ export default {
   /**
    * 여행 일정 수정
    */
-  putTravelSchedule: async (travelId: Id, scheduleId: Id, data: FormData) => {
-    axios.put<MoyeobangResponse<null>>(
+  postChangeTravelSchedule: async (travelId: Id, scheduleId: Id, data: FormData) => {
+    axios.post<MoyeobangResponse<null>>(
       `/travel/${travelId}/schedule/${scheduleId}`,
       data,
       {
