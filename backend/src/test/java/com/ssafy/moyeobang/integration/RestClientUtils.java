@@ -5,8 +5,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.multipart.MultipartFile;
 
 abstract class RestClientUtils {
 
@@ -47,6 +52,33 @@ abstract class RestClientUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static JsonNode postWithMultipart(int port, String uri, Object jsonRequest, MultipartFile imageFile) {
+        try {
+            HttpHeaders jsonHeaders = new HttpHeaders();
+            jsonHeaders.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> jsonPart = new HttpEntity<>(jsonRequest, jsonHeaders);
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("data", jsonPart);
+
+            if (imageFile != null) {
+                body.add("image", imageFile.getResource());
+            }
+
+            String responseBody = restClient(port).post()
+                    .uri(uri)
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .body(body)
+                    .retrieve()
+                    .body(String.class);
+
+            return MAPPER.readTree(responseBody);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static JsonNode put(int port, String uri, Object request) {
         try {
