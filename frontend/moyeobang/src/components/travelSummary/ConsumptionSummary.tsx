@@ -138,10 +138,6 @@ export default function ConsumptionSummary({
             totalAmount={totalMoney}
             amountUsed={totalConsumption}
           />
-          <p>
-            다른 여행보다 <br />
-            {calAmountComparison()} 원 썼나방
-          </p>
         </div>
 
         <div css={pieChartStyle}>
