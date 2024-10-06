@@ -6,6 +6,7 @@ import certificationExample from '@/assets/icons/certificationExample.png';
 import SsafyBankNotification from '../notification/SsafyBankNotification';
 import {useMutation} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import {useConnectAccountContext} from '@/contexts/ConnectAccount';
 
 const containerStyle = css`
   display: flex;
@@ -79,6 +80,7 @@ export default function CertificationOne({
   const [verifyNumber, setVerifyNumber] = useState<string>(''); // 인증번호 상태 추가
   const [randomVerifyNumber, setRandomVerifyNumber] = useState<string>(''); // 랜덤한 인증번호 상태 추가
   const [notificationKey, setNotificationKey] = useState<string>(''); // 1원입금 인증번호
+  const {setConnectAccountNumber} = useConnectAccountContext();
 
   // 랜덤한 인증번호 생성 함수
   const generateRandomVerifyNumber = () => {
@@ -92,13 +94,14 @@ export default function CertificationOne({
   const handleVerify = () => {
     if (accountNumber.length > 0) {
       // 계좌번호가 입력되어 있을 때만 실행
-      postDepositAccountOne({accountNumber, bankName: '싸피뱅크', memberId});
+      // postDepositAccountOne({accountNumber, bankName: '싸피뱅크', memberId});
       //[todo] 지금은 여기에 있는데 추후에 바꿔야함
       setRandomVerifyNumber(generateRandomVerifyNumber()); // 랜덤한 인증번호 생성 후 상태 업데이트
       setTimeout(() => {
         setCertificationVisible(true); // 1.5초 후에 상태 변경
       }, 1500);
       setCheckButton(true);
+      setConnectAccountNumber(accountNumber);
     } else {
       alert('계좌번호를 입력해주세요');
     }

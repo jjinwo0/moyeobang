@@ -32,7 +32,7 @@ export default {
   /**
    * 전체 결제 내역 상세 조회
    */
-  getTransactionDetail: async (accountId: number, transactionId: number) => 
+  getTransactionDetail: async (accountId: number, transactionId: number) =>
     axios.get<MoyeobangResponse<TransactionDetailProps>>(
       `/accounts/${accountId}/transactions/${transactionId}`
     ),
@@ -312,4 +312,36 @@ export default {
       }
     );
   },
+  /**
+   * 소비 카테고리 통계 비율 멤버별&전체 조회
+   */
+  getComsuptionStaticByCategory: async (
+    accountId: number,
+    memberIds: number[]
+  ) =>
+    axios.get<MoyeobangResponse<ConsumptionByCategory[]>>(
+      `/accounts/${accountId}/tags`,
+      {
+        params: {
+          memberIds: memberIds.join(','),
+        },
+      }
+    ),
+  /**
+   * 멤버별 소비 비율 통계 조회
+   */
+  getComsuptionStaticByMembers: async (accountId: number) =>
+    axios.get<MoyeobangResponse<ConsumptionByMember[]>>(
+      `/accounts/${accountId}/withdraw-proportion`
+    ),
+
+  /**
+   * 개인 계좌 등록
+   */
+  postRegisterAccount: async (memberId: number, accountNumber: string) =>
+    axios.post<MoyeobangResponse<null>>(`/register/account/${memberId}`, {
+      params: {
+        accountNo: accountNumber,
+      },
+    }),
 };
