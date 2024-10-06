@@ -10,7 +10,7 @@ import com.ssafy.moyeobang.schedule.application.port.in.UpdateTravelScheduleUseC
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +24,7 @@ public class UpdateTravelScheduleController {
 
     private final UpdateTravelScheduleUseCase updateTravelScheduleUseCase;
 
-    @PutMapping("/{travelId}/schedule/{scheduleId}")
+    @PostMapping("/{travelId}/schedule/{scheduleId}")
     public ApiResult<Boolean> updateTravelSchedule(@PathVariable long travelId, @PathVariable long scheduleId,
                                                    @RequestPart("data") UpdateTravelScheduleRequest updateTravelScheduleRequest,
                                                    @RequestPart(value = "image", required = false) MultipartFile scheduleImage)

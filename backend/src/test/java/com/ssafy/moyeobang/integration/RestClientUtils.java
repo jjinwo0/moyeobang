@@ -80,21 +80,6 @@ abstract class RestClientUtils {
     }
 
 
-    public static JsonNode put(int port, String uri, Object request) {
-        try {
-            String responseBody = restClient(port).put()
-                    .uri(uri)
-                    .contentType(APPLICATION_JSON)
-                    .body(request)
-                    .retrieve()
-                    .body(String.class);
-
-            return MAPPER.readTree(responseBody);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static JsonNode patch(int port, String uri) {
         try {
             String responseBody = restClient(port).patch()
