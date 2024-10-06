@@ -69,3 +69,13 @@ self.addEventListener('fetch', event => {
   console.log('Service Worker에서 fetch 요청을 처리하고 있습니다.');
   event.respondWith(fetch(event.request));
 });
+
+// self.addEventListener('push', function (event) {
+//   const data = event.data.json();
+//   const options = {
+//     body: data.body,
+//     icon: '/your-icon-url.png',
+//   };
+
+//   event.waitUntil(self.registration.showNotification(data.title, options));
+// });
