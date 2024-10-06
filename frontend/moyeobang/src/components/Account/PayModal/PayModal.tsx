@@ -9,6 +9,7 @@ import PayCompletedModal from "./PayCompletedModal";
 import useCurrentTravelStore from "@/store/useCurrentTravelStore";
 import useTravelDetailStore from "@/store/useTravelDetailStore";
 import { useLocation } from "@tanstack/react-router";
+import QrScanFailModal from "./QrScanFailModal";
 
 const layoutStyle = css`
     margin-top: 50px;
@@ -31,6 +32,8 @@ export default function PayModal({onXClick} : QRPayProps) {
     const [ activeComponenet, setActiveComponent ] = useState<string>('left');
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [successTransactionId, setSuccessTransactionId] = useState<TransactionId | null>(null);
+    
+    const [openScanFailModal, setopenScanFailModal] = useState<boolean>(false);
 
 
     const location = useLocation();
@@ -60,8 +63,18 @@ export default function PayModal({onXClick} : QRPayProps) {
         onXClick();
     }
 
+    function handleScanError() {
+        setopenScanFailModal(true); // scan실패 컴포넌트 오픈
+    }
+
+    function handleRestart() {
+        setopenScanFailModal(false)
+        setActiveComponent('right')
+    }
+
     return (
         <>
+        {openScanFailModal && <QrScanFailModal onClose={onXClick} onRestart={handleRestart}/>}
         {openCompleteModal && successTransactionId &&
             <PayCompletedModal 
             isHome={isHome} 
@@ -92,6 +105,7 @@ export default function PayModal({onXClick} : QRPayProps) {
                 <QRScan 
                 onMessage={handleMessage}
                 accountNumber={accountNumber}
+                onError={handleScanError}
                 />  
             )
             }
