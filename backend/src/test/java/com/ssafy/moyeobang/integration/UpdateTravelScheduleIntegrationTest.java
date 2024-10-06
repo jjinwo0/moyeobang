@@ -1,6 +1,6 @@
 package com.ssafy.moyeobang.integration;
 
-import static com.ssafy.moyeobang.integration.RestClientUtils.put;
+import static com.ssafy.moyeobang.integration.RestClientUtils.postWithMultipart;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -59,15 +59,15 @@ public class UpdateTravelScheduleIntegrationTest extends IntegrationTestSupport 
                         "카페"
                 ),
                 LocalDateTime.of(2024, 11, 1, 10, 0),
-                "수정된 메모",
-                "https://example.com/updated_image.jpg"
+                "수정된 메모"
         );
 
         String jsonRequest = objectMapper.writeValueAsString(request);
 
         // When
-        JsonNode response = put(port, "/api/travel/" + travel.getId() + "/schedule/" + scheduleJpaEntity.getId(),
-                jsonRequest);
+        JsonNode response = postWithMultipart(port,
+                "/api/travel/" + travel.getId() + "/schedule/" + scheduleJpaEntity.getId(),
+                jsonRequest, null);
 
         // Then
         assertThat(response.path("status").asText()).isEqualTo("SUCCESS");
@@ -82,7 +82,6 @@ public class UpdateTravelScheduleIntegrationTest extends IntegrationTestSupport 
         assertThat(updatedSchedule.getLongitude()).isEqualTo(139.7454);
         assertThat(updatedSchedule.getGooglePlaceId()).isEqualTo("ChIJ1x9-lADvYjURbMl_CjjFXjg");
         assertThat(updatedSchedule.getMemo()).isEqualTo("수정된 메모");
-        assertThat(updatedSchedule.getImageUrl()).isEqualTo("https://example.com/updated_image.jpg");
     }
 
     private TravelJpaEntity createTravel() {
