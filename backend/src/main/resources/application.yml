@@ -93,4 +93,4 @@ logging:
 
 pg:
   api:
-    url: http://localhost:8082/pg/payment
+    url: https://j11c102.p.ssafy.io:8082/pg/payment
