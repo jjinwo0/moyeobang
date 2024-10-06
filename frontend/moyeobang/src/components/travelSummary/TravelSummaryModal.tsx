@@ -192,14 +192,14 @@ export default function TravelSummaryModal({
       },
     ], // 이미지&장소이름 8개 리스트
   };
-
+  console.log(TravelSchedulesData?.data.data.schedules);
   const locationList =
     TravelSchedulesData?.data.data.schedules
       .flatMap(schedule => schedule.daySchedules) // daySchedules 배열을 평탄화
       .filter(daySchedule => daySchedule.scheduleLocation) // scheduleLocation이 존재하는 것만 필터링
       .map(daySchedule => ({
-        lat: daySchedule.scheduleLocation?.lat ?? 0,
-        lng: daySchedule.scheduleLocation?.lng ?? 0,
+        lat: daySchedule.scheduleLocation?.latitude ?? 0,
+        lng: daySchedule.scheduleLocation?.longitude ?? 0,
       })) || [];
 
   const slides = [
