@@ -46,8 +46,7 @@ public class CreateTravelScheduleControllerTest extends WebAdapterTestSupport {
                         multipart("/api/travel/{travelId}/schedule", 1L)
                                 .file(new MockMultipartFile("data", "", "application/json",
                                         objectMapper.writeValueAsBytes(request)))
-                                .file(imageFile != null ? imageFile
-                                        : new MockMultipartFile("image", "", "application/octet-stream", new byte[0]))
+                                .file(new MockMultipartFile("image", "", "application/octet-stream", new byte[0]))
                                 .contentType("multipart/form-data")
                 )
                 .andExpect(status().isOk())
