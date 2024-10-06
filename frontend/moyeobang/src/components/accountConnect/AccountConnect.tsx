@@ -2,7 +2,6 @@ import React from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import AuthVerification from '../travelHome/AuthVerification';
-import {ConnectAccountProvider} from '@/contexts/ConnectAccount';
 
 const modalStyle = css`
   position: fixed;
@@ -47,9 +46,7 @@ export default function AccountConnect() {
             <span>계좌</span>
             <span css={titleBlue}>연결해방</span>
           </div>
-          <ConnectAccountProvider>
-            <AuthVerification isOnlyConnect={true} />
-          </ConnectAccountProvider>
+          <AuthVerification isOnlyConnect={true} />
         </div>
       </div>
     </>

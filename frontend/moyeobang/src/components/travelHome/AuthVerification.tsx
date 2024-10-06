@@ -119,14 +119,6 @@ export default function AuthVerification({
 
   const {connectAccountNumber} = useConnectAccountContext();
 
-  // useEffect(() => {
-  //   // formData가 제대로 전달되었는지 확인
-  //   console.log('Received FormData:');
-  //   for (let pair of formData.entries()) {
-  //     console.log(pair[0] + ': ' + pair[1]);
-  //   }
-  // }, [formData]);
-
   // 체크박스 클릭 시 이미지 토글
   const handleCheckToggle = (index: number) => {
     const updatedChecked = [...termsChecked];

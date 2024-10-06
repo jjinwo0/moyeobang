@@ -32,8 +32,24 @@ const containerStyle = css`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100%;
 
   /* height: 100%; */
+`;
+
+const containerListStyle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 320px;
+  overflow-y: auto;
+  // margin-top: 20px;
+  // padding-top: 10px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const descriptionStyle = css`
@@ -81,6 +97,8 @@ const profileImageStyle = css`
 
 const buttonStyle = css`
   margin-top: 30px;
+  padding-bottom: 10px;
+  background-color: white;
 `;
 
 const noTravelStyle = css`
@@ -285,35 +303,37 @@ function Index() {
 
           {/* 여행 카드 리스트 */}
 
-          <div css={containerStyle}>
-            {tripsToDisplay.length > 0 ? (
-              tripsToDisplay.map((item, index) => (
-                <TravelCard
-                  key={`${item.travelId}-${index}`}
-                  travelId={item.travelId}
-                  travelName={item.travelName}
-                  startDate={item.startDate}
-                  endDate={item.endDate}
-                  travelPlaceList={item.travelPlaceList}
-                  participantsCount={item.participantCount}
-                  quizQuestion={item.quizQuestion}
-                  quizAnswer={item.quizAnswer}
-                  onClick={() => clickTravelCard(item)}
-                  activeTab={activeTab}
-                  travelImg={item.travelImg}
-                  participantsInfo={item.participantsInfo}
-                  accountId={item.accountId}
-                />
-              ))
-            ) : (
-              <div css={noTravelStyle}>
-                <span css={noTravelTextStyle}>
-                  {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이
-                  없습니다
-                </span>
-                <img src={sadBangbang} css={sadIconStyle} />
-              </div>
-            )}
+          <div css={containerListStyle}>
+            <div>
+              {tripsToDisplay.length > 0 ? (
+                tripsToDisplay.map((item, index) => (
+                  <TravelCard
+                    key={`${item.travelId}-${index}`}
+                    travelId={item.travelId}
+                    travelName={item.travelName}
+                    startDate={item.startDate}
+                    endDate={item.endDate}
+                    travelPlaceList={item.travelPlaceList}
+                    participantsCount={item.participantCount}
+                    quizQuestion={item.quizQuestion}
+                    quizAnswer={item.quizAnswer}
+                    onClick={() => clickTravelCard(item)}
+                    activeTab={activeTab}
+                    travelImg={item.travelImg}
+                    participantsInfo={item.participantsInfo}
+                    accountId={item.accountId}
+                  />
+                ))
+              ) : (
+                <div css={noTravelStyle}>
+                  <span css={noTravelTextStyle}>
+                    {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이
+                    없습니다
+                  </span>
+                  <img src={sadBangbang} css={sadIconStyle} />
+                </div>
+              )}
+            </div>
           </div>
         </>
       )}
