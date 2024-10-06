@@ -128,7 +128,7 @@ import hearIcon from '@/assets/icons/heartIcon.webp';
 import Spinner from '@/components/Sipnner/Spinner';
 
 interface MapProps {
-  locationList: {latitude: number; longitude: number}[];
+  locationList: {lat: number; lng: number}[];
   travelPlaceList: string[];
 }
 
@@ -214,7 +214,7 @@ export default function MapComponent({
     locationList.forEach(location => {
       new google.maps.Marker({
         map,
-        position: {lat: location.latitude, lng: location.longitude},
+        position: {lat: location.lat, lng: location.lng},
         // icon: {
         //   path: google.maps.SymbolPath.CIRCLE, // 기본 마커 대신 원형 심볼
         //   fillColor: '#FF0000', // 마커 색상 (빨간색)
