@@ -29,7 +29,7 @@ public class PgApiClientInPayment {
 
             return true;
         } catch (Exception e) {
-            log.info(e.getMessage());
+            log.info("PG 서버와의 연결 중 오류 발생", e);
             return false;
         }
     }
