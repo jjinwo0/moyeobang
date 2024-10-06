@@ -35,7 +35,7 @@ const buttonLayoutStyle=css`
 
 const hotelQrData = {
     paymentRequestId: uuidv4(),
-    placeId: 'starbucks-1',
+    placeId: 'hotel-1',
     amount:519883
 }
 

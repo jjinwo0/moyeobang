@@ -32,22 +32,15 @@ interface ResultMessage {
 type ConnectMessage=string;
 
 interface QrPayProps {
-    onClose:VoidFunction;
+    onMessage: (transactionId: TransactionId) => void;
+    isHome:boolean;
+    accountNumber:SourceAccountNumber;
 }
 
-export default function QrPay({onClose}:QrPayProps) {
+export default function QrPay({onMessage, isHome, accountNumber}:QrPayProps) {
 
     const paymentRequestId = useRef<string>(uuidv4());
-    const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
-    const [resultMessage, setResultMessage] = useState<ResultMessage| null>(null);
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
-    const location = useLocation();
-    const isHome = location.pathname ==='/'
-    // home에서 연거면 현재 진행중인 여행. account에서 연거면 해당 여행
-    const {accountNumber}= isHome ? useCurrentTravelStore() : useTravelDetailStore(); // '0012280102000441'
-    const {accountId}= isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    const {travelId}= isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    const {participantsInfo}= isHome ? useCurrentTravelStore() : useTravelDetailStore();
 
     const data : QrData= {
         paymentRequestId: paymentRequestId.current,
@@ -80,8 +73,9 @@ export default function QrPay({onClose}:QrPayProps) {
             const messageEvent = event as MessageEvent<string>;
             const parsedData : ResultMessage = JSON.parse(messageEvent.data);
             console.log('payment-succes 응답 결과:', parsedData);
-            setResultMessage(parsedData);                                                                                           
-            setOpenCompleteModal(true);
+            onMessage(Number(parsedData.transactionId))
+            // setResultMessage(parsedData);                                                                                           
+            // setOpenCompleteModal(true);
         });
 
         eventSource.onerror = (event) => {
@@ -113,25 +107,13 @@ export default function QrPay({onClose}:QrPayProps) {
         };
     }, []);
 
-    // 정산완료후 닫기버튼! default 직접정산 1/n하기
-    function handleClose() {
-        setOpenCompleteModal(false);
-        onClose();
-    }
-
 
     return (
     <>
-        {openCompleteModal && resultMessage ? (
-            <PayCompletedModal isHome={isHome} travelId={travelId} accountId={accountId} transactionId={Number(resultMessage.transactionId)} participants={participantsInfo} onClose={handleClose}/>
-        ) : (
-            <>
-                <div css={qrContainerStyle}>
-                    <QRCode value={JSON.stringify(data)} css={QrCodeStyle} />
-                </div>
-                <PayCard isHome={isHome}/>
-            </>
-        )}
+        <div css={qrContainerStyle}>
+            <QRCode value={JSON.stringify(data)} css={QrCodeStyle} />
+        </div>
+        <PayCard isHome={isHome}/>
     </>
     )
 }

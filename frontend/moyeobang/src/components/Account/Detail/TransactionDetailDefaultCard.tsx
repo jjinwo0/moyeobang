@@ -19,7 +19,7 @@ const placeStyle = css`
 `;
 
 const layoutStyle = css`
-    padding-top:20px;
+    padding: 20px 5px 0 5px;
     display:flex;
     flex-direction:column;
     gap:22px;
