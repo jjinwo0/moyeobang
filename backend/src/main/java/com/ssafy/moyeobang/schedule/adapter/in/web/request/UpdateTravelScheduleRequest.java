@@ -2,13 +2,16 @@ package com.ssafy.moyeobang.schedule.adapter.in.web.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.moyeobang.schedule.application.port.in.UpdateTravelScheduleCommand;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import org.springframework.web.multipart.MultipartFile;
 
 public record UpdateTravelScheduleRequest(String scheduleTitle, LocationInfo scheduleLocation,
                                           @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime scheduleTime,
-                                          String memo, String image_url) {
+                                          String memo) {
 
-    public UpdateTravelScheduleCommand toCommand(long travelId, long scheduleId) {
+    public UpdateTravelScheduleCommand toCommand(long travelId, long scheduleId, MultipartFile imageFile)
+            throws IOException {
         return new UpdateTravelScheduleCommand(
                 travelId,
                 scheduleId,
@@ -16,7 +19,7 @@ public record UpdateTravelScheduleRequest(String scheduleTitle, LocationInfo sch
                 scheduleLocation.toCommand(),
                 scheduleTime,
                 memo,
-                image_url
+                imageFile
         );
     }
 }
