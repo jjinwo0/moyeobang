@@ -46,7 +46,6 @@ export default function AccountConnect() {
             <span>계좌</span>
             <span css={titleBlue}>연결해방</span>
           </div>
-
           <AuthVerification isOnlyConnect={true} />
         </div>
       </div>

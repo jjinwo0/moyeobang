@@ -308,6 +308,7 @@ export default function TravelCard({
       {travelSummaryModal && (
         <div>
           <TravelSummaryModal
+            travelId={travelId}
             travelName={travelName}
             startDate={formatDate(startDate)}
             endDate={formatDate(endDate)}

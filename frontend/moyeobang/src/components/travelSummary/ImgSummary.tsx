@@ -6,16 +6,11 @@ import airplaneIcon from '@/assets/icons/airplane.webp';
 import MessagePopup from '../common/messagePopup/MessagePopup';
 import React, {useState, useEffect, useRef} from 'react';
 
-interface TravelImage {
-  imgUrl: string; // 이미지 URL
-  locationName: string; // 장소 이름
-}
-
 interface ImgSummaryProps {
-  travelImg: TravelImage[]; // travelImg는 TravelImage 객체들의 배열
+  scheduleImg: {imgUrl: string; locationName: string}[];
 }
 
-export default function ImgSummary({travelImg}: ImgSummaryProps) {
+export default function ImgSummary({scheduleImg}: ImgSummaryProps) {
   const [message, setMessage] = useState<boolean>(false);
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +24,8 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
         setMessage(false); // popupRef 외부를 클릭하면 팝업 닫기
       }
     };
+
+    console.log(scheduleImg);
 
     // 전역 클릭 이벤트 등록
     document.addEventListener('mousedown', handleClickOutside);
@@ -62,7 +59,6 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
     top: -55px;
     font-family: 'semibold';
   `;
-
 
   const informationImgStyle = css`
     position: absolute;
@@ -144,7 +140,10 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
               <>
                 {/* <p css={firstLineStyle}>업로드한 사진 8개를</p>
                 <p>랜덤으로 보여줍니다.</p> */}
-                <p>업로드한 사진 8개를 <br />랜덤으로 보여줍니다.</p>
+                <p>
+                  업로드한 사진 8개를 <br />
+                  랜덤으로 보여줍니다.
+                </p>
               </>
             </MessagePopup>
           )}
@@ -157,9 +156,9 @@ export default function ImgSummary({travelImg}: ImgSummaryProps) {
         <img src={cloudIcon} css={cloudIconStyle} />
         <img src={airplaneIcon} css={airplaneIconStyle} />
         <div css={gridContainerStyle}>
-          {travelImg.map((item, index) => (
+          {scheduleImg.map((item, index) => (
             <div css={gridItemStyle} key={index}>
-              <img src={item.imgUrl} alt={item.locationName} css={imgStyle} />
+              <img src={item.imgUrl} alt={item} css={imgStyle} />
               <p css={placeNameStyle}>{item.locationName}</p>
             </div>
           ))}
