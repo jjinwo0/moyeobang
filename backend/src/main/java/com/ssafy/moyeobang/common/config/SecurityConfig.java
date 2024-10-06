@@ -50,10 +50,10 @@ public class SecurityConfig {
                         .requestMatchers("/**").permitAll()
                 )
                 .oauth2Login(
-                        auth -> auth.loginPage("/login")
+                        auth -> auth.loginPage("/api/login")
                                 .authorizationEndpoint(
                                         endpoint -> endpoint
-                                                .baseUri("api/oauth2/authorization")
+                                                .baseUri("/oauth2/authorization")
                                 )
                                 .userInfoEndpoint(
                                         endpoint -> endpoint.userService(oAuth2CustomService))
