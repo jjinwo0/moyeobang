@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/pg/payment")
 @RequiredArgsConstructor
 public class PaymentController {
@@ -31,6 +32,7 @@ public class PaymentController {
 
     @PostMapping("/confirm")
     public void confirm(@RequestBody PaymentConfirmRequest request) {
+        log.info("Received confirm request: {}", request);
         String paymentRequestId = request.paymentRequestId();
         String status = request.status();
         if(status.equals("SUCCESS")){
