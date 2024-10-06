@@ -17,7 +17,7 @@ public class OrderMapperInSettle {
                 orderEntity.getId(),
                 new OrderInfo(
                         orderEntity.getTitle(),
-                        orderEntity.getAmount(),
+                        (int) orderEntity.getAmount(),
                         orderEntity.getWithdraw().getId()
                 ),
                 orderEntity.getMemberOrderHistoryJpaEntities().stream()
