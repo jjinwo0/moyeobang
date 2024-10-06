@@ -14,7 +14,7 @@ import hamburgerBtn from '@/assets/icons/hamburgerButton.png';
 import informationBtn from '@/assets/icons/information.png';
 import MessagePopup from '@/components/common/messagePopup/MessagePopup';
 
-const scheduleCardLayout = css`
+const scheduleCardLayout = (scheduleImg: string) => css`
   width: 380px;
   display: flex;
   align-items: center;
@@ -24,7 +24,20 @@ const scheduleCardLayout = css`
     0 3px 3px rgba(0, 0, 0, 0.2),
     0 -3px 3px rgba(0, 0, 0, 0.2);
   padding: 5px 0;
-  background-color: white;
+  position: relative;
+  ::after {
+    content: '';
+    background-image: url(${scheduleImg});
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    border-radius: 10px;
+    z-index: -1;
+  }
 `;
 
 const checkBoxStyle = css`
@@ -35,7 +48,6 @@ const checkBoxStyle = css`
   width: 40px;
   height: 60px;
   margin: 5px;
-  background-color: ${colors.white};
   position: relative;
   z-index: 5;
 `;
@@ -213,7 +225,10 @@ export default function PlusSelfSchedule({
   };
 
   return (
-    <div css={scheduleCardLayout} onClick={handleClick}>
+    <div
+      css={scheduleCardLayout(schedule.scheduleImg || '')}
+      onClick={handleClick}
+    >
       {/* 체크리스트 완료 여부 */}
       <div css={checkBoxStyle}>
         <img

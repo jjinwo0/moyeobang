@@ -113,12 +113,12 @@ export default function PlusSelf() {
     mutationFn: ({
       travelId,
       scheduleId,
-      data,
+      scheduleData,
     }: {
       travelId: Id;
       scheduleId: Id;
-      data: PostTravelSchedule;
-    }) => moyeobang.putTravelSchedule(travelId, scheduleId, data),
+      scheduleData: FormData;
+    }) => moyeobang.putTravelSchedule(travelId, scheduleId, scheduleData),
     onSuccess: async () => {
       console.log('[*] 수정 성공');
       await queryClient.invalidateQueries({
@@ -149,11 +149,11 @@ export default function PlusSelf() {
         googlePlaceId: selectedMarker?.placeId || '',
         title: selectedMarker?.title || '',
         address: selectedMarker?.address || '',
-        lat:
+        latitude:
           typeof selectedMarker?.position?.lat === 'function'
             ? selectedMarker.position.lat()
             : selectedMarker?.position?.lat || 0,
-        lng:
+        longitude:
           typeof selectedMarker?.position?.lng === 'function'
             ? selectedMarker.position.lng()
             : selectedMarker?.position?.lng || 0,
@@ -174,13 +174,24 @@ export default function PlusSelf() {
        */
 
       const scheduleData = new FormData();
-      scheduleData.append('scheduleTitle', scheduleName || '');
-      scheduleData.append('scheduleLocation', JSON.stringify(scheduleLocation)); // ScheduleLocation을 문자열로 변환
-      scheduleData.append('scheduleTime', dateTime || '');
-      scheduleData.append('memo', memo || '');
-      scheduleData.append('scheduleImage', fileInputRef.current?.files?.[0] || '');
-      console.log('scheduleData:', Object.fromEntries(scheduleData.entries()));
+      // JSON 데이터는 Blob으로 변환하여 'data'로 전송
+      const jsonData = {
+        scheduleTitle: scheduleName || '',
+        scheduleLocation: scheduleLocation, // 이미 객체 형태이므로 그대로 사용
+        scheduleTime: dateTime || '',
+        memo: memo || '',
+      };
 
+      scheduleData.append(
+        'data',
+        new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
+      );
+
+      // 파일이 있을 때만 append
+      if (fileInputRef.current?.files?.[0]) {
+        scheduleData.append('image', fileInputRef.current.files[0]);
+      }
+      console.log('scheduleData:', Object.fromEntries(scheduleData.entries()));
 
       // const scheduleData: PostTravelSchedule = {
       //   scheduleTitle: scheduleName || '',
@@ -194,11 +205,11 @@ export default function PlusSelf() {
         console.log('[*] 수정 모드', scheduleData);
 
         // 수정 모드
-        // putTravelSchedule({
-        //   travelId,
-        //   scheduleId: scheduleEdit,
-        //   data: scheduleData,
-        // });
+        putTravelSchedule({
+          travelId,
+          scheduleId: scheduleEdit,
+          scheduleData,
+        });
       } else {
         // 추가 모드
         postTravelSchedule({travelId, scheduleData});

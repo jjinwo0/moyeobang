@@ -31,8 +31,8 @@ interface ScheduleLocation {
   googlePlaceId: string | null;
   title: string | null;
   address: string | null;
-  lat: number | null;
-  lng: number | null;
+  latitude: number | null;
+  longitude: number | null;
   category: string | null;
 }
 

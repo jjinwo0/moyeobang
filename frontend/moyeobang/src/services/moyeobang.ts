@@ -282,16 +282,12 @@ export default {
   /**
    * 여행 일정 수정
    */
-  putTravelSchedule: async (
-    travelId: Id,
-    scheduleId: Id,
-    data: PostTravelSchedule
-  ) => {
+  putTravelSchedule: async (travelId: Id, scheduleId: Id, data: FormData) => {
     axios.put<MoyeobangResponse<null>>(
       `/travel/${travelId}/schedule/${scheduleId}`,
       data,
       {
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'multipart/form-data'},
       }
     );
   },
@@ -301,6 +297,6 @@ export default {
    */
   patchTravelScheduleCompletion: async (scheduleId: Id) =>
     axios.patch<MoyeobangResponse<null>>(
-      `travel/schedule/${scheduleId}/complete`,
+      `travel/schedule/${scheduleId}/complete`
     ),
 };
