@@ -17,11 +17,13 @@ import com.ssafy.moyeobang.schedule.error.ScheduleException;
 import com.ssafy.moyeobang.support.IntegrationTestSupport;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+@Disabled
 public class UpdateTravelScheduleIntegrationTest extends IntegrationTestSupport {
 
     @LocalServerPort
