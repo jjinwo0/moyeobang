@@ -202,6 +202,14 @@ export default function TravelSummaryModal({
         lng: daySchedule.scheduleLocation?.longitude ?? 0,
       })) || [];
 
+  const imgSummary =
+    TravelSchedulesData?.data.data.schedules
+      .flatMap(schedule => schedule.daySchedules)
+      .filter(daySchedule => daySchedule.scheduleImg) // scheduleImg가 있는 항목만 필터링
+      .map(daySchedule => ({
+        imgUrl: daySchedule.scheduleImg, // scheduleImg 필드 추출
+        locationName: daySchedule.scheduleLocation?.title || 'Unknown Location', // scheduleLocation에서 장소 이름 추출
+      })) || [];
   const slides = [
     <ConsumptionSummary
       key="consumptionSummary"
@@ -211,7 +219,7 @@ export default function TravelSummaryModal({
       totalMoney={AccountMoneyData?.data.data.totalAmount}
       totalConsumption={AccountMoneyData?.data.data.totalSpent}
     />,
-    <ImgSummary key="imgSummary" travelImg={travelSummary.imgSummary} />,
+    <ImgSummary key="imgSummary" scheduleImg={imgSummary} />,
   ]; // 슬라이드에 표시할 컴포넌트들
 
   const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD (dddd)');
