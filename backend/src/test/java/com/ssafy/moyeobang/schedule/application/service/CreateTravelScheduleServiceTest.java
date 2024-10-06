@@ -6,11 +6,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.ssafy.moyeobang.schedule.application.domain.Location;
+import com.ssafy.moyeobang.schedule.application.domain.ScheduleImage;
 import com.ssafy.moyeobang.schedule.application.domain.TravelSchedule;
 import com.ssafy.moyeobang.schedule.application.port.in.CreateTravelScheduleCommand;
 import com.ssafy.moyeobang.schedule.application.port.in.LocationInfoCommand;
 import com.ssafy.moyeobang.schedule.application.port.out.CreateNewSchedulePort;
 import com.ssafy.moyeobang.schedule.application.port.out.LoadExistingSchedulesPort;
+import com.ssafy.moyeobang.schedule.application.port.out.UploadImagePort;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +22,10 @@ import org.junit.jupiter.api.Test;
 public class CreateTravelScheduleServiceTest {
     private final LoadExistingSchedulesPort loadExistingSchedulesPort = mock(LoadExistingSchedulesPort.class);
     private final CreateNewSchedulePort createNewSchedulePort = mock(CreateNewSchedulePort.class);
+    private final UploadImagePort uploadImagePort = mock(UploadImagePort.class);
 
     private final CreateTravelScheduleService createTravelScheduleService = new CreateTravelScheduleService(
-            loadExistingSchedulesPort, createNewSchedulePort);
+            loadExistingSchedulesPort, createNewSchedulePort, uploadImagePort);
 
     @DisplayName("새로운 스케줄이 마지막 시퀀스보다 1 증가된 값으로 생성된다.")
     @Test
@@ -33,9 +36,7 @@ public class CreateTravelScheduleServiceTest {
                 "진우바오와 함께하는 야구장",
                 new LocationInfoCommand("ChIJ1x9-lADvYjURbMl_CjjFXjg", "엔젤리너스 카페", "한국 광주 수완지구", 35.6586, 139.7454,
                         "카페"), LocalDateTime.of(2024, 10, 1, 10, 0),
-                "도쿄 타워 방문 스케줄",
-                "https://example.com/tokyo_tower.jpg"
-        );
+                "도쿄 타워 방문 스케줄", (ScheduleImage) null);
 
         List<TravelSchedule> existingSchedules = new ArrayList<>();
         existingSchedules.add(TravelSchedule.createNewSchedule(
@@ -70,7 +71,7 @@ public class CreateTravelScheduleServiceTest {
                         "카페"),
                 LocalDateTime.of(2024, 10, 1, 10, 0),
                 "도쿄 타워 방문 스케줄",
-                "https://example.com/tokyo_tower.jpg"
+                (ScheduleImage) null
         );
 
         when(loadExistingSchedulesPort.loadExistingSchedules(any(Long.class)))
