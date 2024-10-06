@@ -1,6 +1,6 @@
 package com.ssafy.moyeobang.integration;
 
-import static com.ssafy.moyeobang.integration.RestClientUtils.post;
+import static com.ssafy.moyeobang.integration.RestClientUtils.postWithMultipart;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,14 +67,13 @@ public class CreateTravelScheduleIntegrationTest extends IntegrationTestSupport 
                         "카페"
                 ),
                 LocalDateTime.of(2024, 10, 1, 10, 0),
-                "기대기대",
-                "https://example.com/tokyo_tower.jpg"
+                "기대기대"
         );
 
         String jsonRequest = objectMapper.writeValueAsString(request);
 
         // When
-        JsonNode response = post(port, "/api/travel/" + travel.getId() + "/schedule", jsonRequest);
+        JsonNode response = postWithMultipart(port, "/api/travel/" + travel.getId() + "/schedule", jsonRequest, null);
 
         // Then
         assertThat(response.path("status").asText()).isEqualTo("SUCCESS");
