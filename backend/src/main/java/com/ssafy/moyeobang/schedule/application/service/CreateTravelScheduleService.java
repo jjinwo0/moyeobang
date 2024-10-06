@@ -7,6 +7,7 @@ import com.ssafy.moyeobang.schedule.application.port.in.CreateTravelScheduleComm
 import com.ssafy.moyeobang.schedule.application.port.in.CreateTravelScheduleUseCase;
 import com.ssafy.moyeobang.schedule.application.port.out.CreateNewSchedulePort;
 import com.ssafy.moyeobang.schedule.application.port.out.LoadExistingSchedulesPort;
+import com.ssafy.moyeobang.schedule.application.port.out.UploadImagePort;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -16,11 +17,14 @@ public class CreateTravelScheduleService implements CreateTravelScheduleUseCase 
 
     private final LoadExistingSchedulesPort loadExistingSchedulesPort;
     private final CreateNewSchedulePort createNewSchedulePort;
+    private final UploadImagePort uploadImagePort;
 
     @Override
     public void createTravelSchedule(CreateTravelScheduleCommand command) {
         List<TravelSchedule> existingSchedules = loadExistingSchedulesPort.loadExistingSchedules(
                 command.travelId());
+
+        String imageUrl = uploadImagePort.uploadImage(command.scheduleImage());
 
         int lastSequence = existingSchedules.stream()
                 .mapToInt(TravelSchedule::getSequence)
@@ -38,7 +42,7 @@ public class CreateTravelScheduleService implements CreateTravelScheduleUseCase 
                 command.scheduleTitle(),
                 command.scheduleTime(),
                 0,
-                command.image_url(),
+                imageUrl,
                 command.memo(),
                 location,
                 lastSequence + 1
