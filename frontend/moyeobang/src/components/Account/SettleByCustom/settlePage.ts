@@ -15,22 +15,32 @@ export const textLayoutStyle = css`
     padding: 0 30px;
 `;
 
-export const place = css`
+export const placeStyle = css`
     font-family: 'semibold';
     font-size:24px;
+    color: ${colors.fifth};
 `;
 
-export const balance = css`
+export const balanceStyle = css`
+    display:flex;
+    flex-direction:column;
+    gap:15px;
     font-family:'semibold';
     font-size:18px;
 `;
 
-export const time = css`
+export const remainStyle=css`
+    span {
+        color:${colors.fifth};
+    }
+`;
+
+export const timeStyle = css`
     font-family: 'regular';
     font-size: 16px;
 `;
 
-export const refresh = css`
+export const refreshStyle = css`
     font-family:'semibold';
     font-size: 14px; 
     display: flex;

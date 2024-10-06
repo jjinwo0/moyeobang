@@ -3,7 +3,7 @@ import Btn from "@/components/common/btn/Btn"
 import SettleCard from "./SettleCardByCustom";
 import { useState, useEffect } from "react";
 import refreshImage from '@/assets/icons/refresh.png';
-import { layoutStyle, textLayoutStyle, balance, time, refresh, place, allButtonStyle, allRefreshLayoutStyle, settleListLayoutStyle, nButtonStyle, buttonLayoutStyle } from "./settlePage";
+import { layoutStyle, textLayoutStyle, balanceStyle, timeStyle, refreshStyle, placeStyle, remainStyle, allButtonStyle, allRefreshLayoutStyle, settleListLayoutStyle, nButtonStyle, buttonLayoutStyle } from "./settlePage";
 import FinalModal from "@/components/Account/FinalModal/FinalModal";
 import {format} from 'date-fns';
 import {ko} from 'date-fns/locale';
@@ -257,16 +257,19 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         }
         <div css={layoutStyle}>
             <div css={textLayoutStyle}>
-                <div css={place}>{paymentName}</div>
-                <div css={balance}>총 금액 : {totalMoney} 원 / 남은 금액 : {remainMoney} 원</div>
-                <div css={time}>{format(createdAt, 'yyyy-MM-dd HH:mm', {locale: ko})}</div>
+                <div css={placeStyle}>{paymentName}</div>
+                <div css={balanceStyle}>
+                    <div>총 금액 : {totalMoney} 원</div>
+                    <div css={remainStyle}>남은 금액 : <span>{remainMoney}</span> 원</div>
+                </div>
+                <div css={timeStyle}>{format(createdAt, 'yyyy-MM-dd HH:mm', {locale: ko})}</div>
                 <div css={allRefreshLayoutStyle}>
                 <div css={allButtonStyle(isAll)} onClick = {toggleAll}>
                     { isAll ? <button>전체 해제</button> : 
                     <button>전체 선택</button>
                     }
                 </div>
-                <div css={refresh}>초기화 
+                <div css={refreshStyle}>초기화 
                 <img 
                 onClick={handleRefresh}
                 src={refreshImage} 
