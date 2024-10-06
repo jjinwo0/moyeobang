@@ -38,7 +38,7 @@ public class OAuth2CustomService extends DefaultOAuth2UserService {
         } else if (registrationId.equals("google")) {
             response = new GoogleResponse(user.getAttributes());
         } else {
-            return null;
+            throw new OAuth2AuthenticationException("지원하지 않는 제공자입니다: " + registrationId);
         }
 
         Optional<MemberJpaEntity> findMember = memberRepository.findByEmail(response.getEmail());
