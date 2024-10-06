@@ -2,8 +2,6 @@ import React, { useRef, useEffect, useState } from "react"
 import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
-import PayCompletedModal from "./PayCompletedModal";
-import useTravelDetailStore from "@/store/useTravelDetailStore";
 import { useMutation } from "@tanstack/react-query";
 import moyeobang from "@/services/moyeobang";
 
@@ -117,6 +115,8 @@ export default function QrScan({onMessage, accountNumber}:QrScanProps) {
 
                 // 결제 데이터 API 요청!
                 postPaymentByOnline({data:payData})
+                // 성공적으로 스캔한 후 스캐너 중지
+                scanner?.current?.stop();
             }
 
 
@@ -168,7 +168,7 @@ export default function QrScan({onMessage, accountNumber}:QrScanProps) {
 
     // 브라우저에 카메라가 허용되지 않은 경우
     useEffect(()=> {
-        if ( !qrOn) {
+        if (!qrOn) {
             alert("카메라가 차단되었거나 접근할 수 없습니다.")
         }
     }, [qrOn])
