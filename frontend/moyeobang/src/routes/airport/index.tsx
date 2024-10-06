@@ -45,7 +45,7 @@ export default function AirportSite() {
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
 
     const fetchSEE = () => {
-        const eventSource = new EventSourcePolyfill('https://j11c102.p.ssafy.io/pg/payment/connect'+`/payment/connect?paymentRequestId=${airportData.paymentRequestId}`, {
+        const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/pg/payment/connect?paymentRequestId=${airportData.paymentRequestId}`, {
             // headers: {
             //     Authorization: `Bearer ${token}`, 
             // },
