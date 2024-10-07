@@ -5,7 +5,7 @@ import { css } from '@emotion/react'
 import TwoBtn from '@/components/common/btn/TwoBtn';
 import { useState } from 'react';
 import SettleByCustomComponent from '@/components/Account/SettleByCustom/SettleByCustomComponent';
-import SettleByReceiptComponent from '@/components/Account/SettleByReceipt/SettleByReceiptComponent';
+import ScanByReceiptComponent from '@/components/Account/SettleByReceipt/ScanByReceiptComponent';
 import { useSuspenseQuery } from "@tanstack/react-query";
 import moyeobang from '@/services/moyeobang';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
@@ -79,7 +79,7 @@ export default function Settle() {
             defaultActive={activeComponent}
           />
           { activeComponent === 'left' && 
-            <SettleByReceiptComponent 
+            <ScanByReceiptComponent 
               transactionId={Number(transactionId)}
               money={transactionDetailData.money}
               address={transactionDetailData.address}

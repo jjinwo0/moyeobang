@@ -2,8 +2,6 @@ import React, { useRef, useEffect, useState } from "react"
 import QrScanner from "qr-scanner"
 import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
-import PayCompletedModal from "./PayCompletedModal";
-import useTravelDetailStore from "@/store/useTravelDetailStore";
 import { useMutation } from "@tanstack/react-query";
 import moyeobang from "@/services/moyeobang";
 
@@ -45,11 +43,12 @@ const qrReaderLayoutStyle = css`
 const qrBoxStyle = css`
     width : 300px !important; 
     height: 300px !important; 
-    border: 2px solid ${colors.third};
+    border: 3px solid ${colors.third};
     border-radius: 15px;
     position: absolute;
     top: 25%;
     left: 12% !important;
+    z-index:99;
 `;
 
 const smallTextStyle = css`
@@ -76,27 +75,32 @@ const textBoxStyle= css`
     gap:20px;
 `;
 
-export default function QrScan() {
+interface QrScanProps {
+    onMessage: (trasactionId:TransactionId) => void;
+    onError: VoidFunction;
+    accountNumber:SourceAccountNumber;
+}
+
+export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) {
     
     const scanner = useRef<QrScanner>();
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
-    const {accountNumber} = useTravelDetailStore();
-    const [successMessage, setSuccessMessage] = useState<string>('');
-    const [transactionId, setTransactionId] = useState<TransactionId>();
+
+    // 결과 
+    // const [scannedResult, setScannedResult] = useState<OnlineQrData | null>(null);
 
     const {mutate: postPaymentByOnline } = useMutation({
         mutationFn: ({data} : {data: PaymentProps}) => moyeobang.postPayByOnline(data),
         onSuccess: async (response) => {
-            setSuccessMessage('success')
-            setTransactionId(response.data.data.transactionId)
-            console.log('결제 성공!')
+            onMessage(Number(response.data.data.transactionId))
+            console.log('온라인 결제 성공!')
         },
+        onError: () => {
+            onError()
+        }
     });
-
-    // 결과 
-    const [scannedResult, setScannedResult] = useState<OnlineQrData | null>(null);
 
     // 성공
     function onScanSuccuess( result : QrScanner.ScanResult ) {  
@@ -104,8 +108,7 @@ export default function QrScan() {
         try {
             if (result.data) {
                 const data = JSON.parse(result.data);
-                setScannedResult(data);
-                console.log('파싱된 QR 데이터', data)
+                // setScannedResult(data);
                 
                 const stores = storeData.filter((store) => store.placeId === data.placeId)
                 const payData : PaymentProps = { 
@@ -113,24 +116,28 @@ export default function QrScan() {
                     ...data,
                     sourceAccountNumber: accountNumber
                 }
-                console.log('post요청 데이터:', payData)
+                console.log('post요청 결제 데이터:', payData)
 
                 // 결제 데이터 API 요청!
                 postPaymentByOnline({data:payData})
+                // 성공적으로 스캔한 후 스캐너 중지
+                scanner?.current?.stop();
             }
-
-
+            
         } catch (error) {
             console.log('QR스캔 오류 발생', error)
+            onError();
         }
     }
 
-    function onScanFail(error: string | Error) {
-        console.log('QR스캔 실패:',error)
+    function onScanFail() {
+        // QR인식중
     }
 
     useEffect(()=>{
-        if ( videoElement?.current && !scanner.current ) {
+
+        if (videoElement.current) {
+
             scanner.current = new QrScanner( 
                 videoElement?.current,
                 onScanSuccuess,
@@ -151,6 +158,7 @@ export default function QrScan() {
             )
             .catch((error : Error) => {
                 if (error) {
+                    onError()
                     setQrOn(false);
                 }
             });
@@ -158,43 +166,28 @@ export default function QrScan() {
 
         // 언마운트시
         return () => {
+            console.log('언마운트냐')
             if (!videoElement.current) {
                 scanner?.current?.stop();
-
             }
         }
-
     }, [])
 
     // 브라우저에 카메라가 허용되지 않은 경우
     useEffect(()=> {
-        if ( !qrOn) {
+        if (!qrOn) {
             alert("카메라가 차단되었거나 접근할 수 없습니다.")
         }
     }, [qrOn])
 
-    function handleClose() {
-        setSuccessMessage('');
-    }
-
     return (
         <div css={qrReaderLayoutStyle}>
-            { !scannedResult && 
-                <>
                 <video ref={videoElement} ></video>
-                <div 
-                css={qrBoxStyle}
-                ref={qrBoxElement}>
-                </div>
+                <div css={qrBoxStyle} ref={qrBoxElement}/>
                 <div css={textBoxStyle}>
-                <div css={smallTextStyle}>오프라인 결제 • 해외결제 • 싸피페이</div>
-                <div css={bigTextStyle}><span css={englishStyle}>QR</span>코드를 스캔하세요</div>
+                    <div css={smallTextStyle}>오프라인 결제 • 해외결제 • 싸피페이</div>
+                    <div css={bigTextStyle}><span css={englishStyle}>QR</span>코드를 스캔하세요</div>
                 </div>
-                </>
-            }
-                { successMessage && transactionId && (
-                    <PayCompletedModal transactionId={transactionId} onClose={handleClose}/>
-                )}
         </div>
     ) 
 }     

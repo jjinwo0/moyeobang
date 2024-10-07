@@ -5,7 +5,7 @@ import { useSwipeable } from "react-swipeable";
 import AccountCard from "../AccountCard/AccountCard";
 import ChartCard from "../Chart/ChartCard";
 import { isAccountBalanceByGroup } from "@/util/typeGaurd";
-import useTravelDetailStore from "@/store/useTravelDetailStore";
+import { SwipeEventData } from "react-swipeable";
 
 const sliderStyle= (activeCardIndex : number) => css`
     transform: translateX(-${activeCardIndex * 1}px);
@@ -55,7 +55,7 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
         onChange(activeCardIndex)
     }, [activeCardIndex])
 
-    function handleSwipe(eventData : any) {
+    function handleSwipe(eventData:SwipeEventData) {
         if (eventData.dir==='Left') {
             // 왼쪽 스와이프 => 다음 카드로 이동
             setActiveCardIndex((preIndex) => Math.min(preIndex+1, dots.length-1));
@@ -79,6 +79,7 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
               {activeCardIndex === 0 && (
                 <AccountCard
                   currentBalance={isAccountBalanceByGroup(account) ? account.currentBalance : account.personalCurrentBalance}
+                  totalBalance={isAccountBalanceByGroup(account) ? account.totalAmount : account.personalTotalAmount}
                   memberName={isAccountBalanceByGroup(account) ? undefined : account.simpleUserProfile.memberName}
                 />
               )}
@@ -90,8 +91,8 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
               />}
               {activeCardIndex === 2 && isAccountBalanceByGroup(account) && consumptionProportionByMember &&
               <ChartCard 
-                title={'누적 입금 금액'}
-                money={Number(account.totalAmount)}
+                title={'전체 소비 금액'}
+                money={Number(account.totalSpent)}
                 data={consumptionProportionByMember}
                 />}
             </>

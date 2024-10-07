@@ -34,7 +34,7 @@ export const textContainerStyle = css`
 
 export const timeStyle = css`
     font-family: 'regular';
-    font-size: 12px;
+    font-size: 13px;
 `;
 
 export const locationStyle = css`
@@ -48,7 +48,7 @@ export const locationStyle = css`
 
 export const carouselStyle = css`
     display:flex;
-    width: 150px;
+    max-width: 150px;
     justify-content: flex-start;
     flex-direction: row;
     gap: 5px;

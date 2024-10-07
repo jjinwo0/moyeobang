@@ -9,7 +9,6 @@ import etc from '@/assets/icons/bangBang.png';
 
 // 색깔 넣어두기
 export const colorList = [
-    colors.gray, 
     colors.customGreenBlue, 
     colors.third, 
     colors.fourth, 
@@ -17,6 +16,7 @@ export const colorList = [
     colors.customBlue, 
     colors.second, 
     colors.first,
+    colors.gray, 
 ]
 
 
@@ -26,37 +26,37 @@ export function getCategoryImageAndColor(category: string) {
         case '숙박':
             return {
                 image: hotel,
-                color: colorList[1] 
+                color: colorList[0] 
             };
         case '항공':
             return {
                 image: airplane,
-                color: colorList[6]
+                color: colorList[5]
             };
         case '카페':
             return {
                 image: coffee,
-                color: colorList[4]
+                color: colorList[3]
             };
         case '식당':
             return {
                 image: restaurant,
-                color: colorList[3]
+                color: colorList[2]
             };
         case '쇼핑':
             return {
                 image: shopping,
-                color: colorList[5]
+                color: colorList[4]
             };
         case '액티비티':
             return {
                 image: activity,
-                color: colorList[2]
+                color: colorList[1]
             };
         default:
             return {
                 image: etc,
-                color: colorList[0]
+                color: colorList[6]
             };
     }
 }

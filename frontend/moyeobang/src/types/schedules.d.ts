@@ -85,7 +85,6 @@ type ExtendedMarkerOptions = google.maps.MarkerOptions & {
   types?: string[]; // `types` 속성 추가
 };
 
-
 //여행 일정 API 관련 타입
 /**
  * 여행 일정 추가 data 타입
@@ -97,7 +96,6 @@ interface PostTravelSchedule {
   memo: string;
   scheduleImage: string;
 }
-
 
 /**
  * 여행 일정 조회 data 타입

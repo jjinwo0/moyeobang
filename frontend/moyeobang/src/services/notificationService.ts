@@ -8,7 +8,7 @@
 // // https://firebase.google.com/docs/web/setup#available-libraries
 
 import {initializeApp} from 'firebase/app';
-import {getMessaging, getToken} from 'firebase/messaging';
+import {getMessaging, getToken, onMessage} from 'firebase/messaging';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -29,7 +29,9 @@ const messaging = getMessaging(app);
 
 // 여기 적은 건 예시일 뿐이므로 axios활용하면 됩니다. 예시 그대로 복붙하고 실제 사용할 값들은 수정한 것이라 스펙은 수정 안해도됩니다.)
 // 권한 요청 및 토큰 저장 로직
-export async function requestPermissionAndSaveToken() {
+export async function requestPermissionAndSaveToken(
+  setIsFcmToken: (tokenExists: boolean) => void
+) {
   // console.log('requestPermission');
   try {
     // // 서비스 워커가 준비될 때까지 기다리기
@@ -45,7 +47,7 @@ export async function requestPermissionAndSaveToken() {
       if (currentToken) {
         console.log('FCM Token:', currentToken);
         // 서버에 토큰 저장
-        saveTokenInMemberEntity(currentToken);
+        saveTokenInMemberEntity(currentToken, setIsFcmToken);
       } else {
         console.error('No registration token available.');
       }
@@ -63,7 +65,10 @@ export async function requestPermissionAndSaveToken() {
 const memberId: number = 4;
 
 // 서버에 FCM 토큰 저장 요청
-function saveTokenInMemberEntity(token: string) {
+function saveTokenInMemberEntity(
+  token: string,
+  setIsFcmToken: (tokenExists: boolean) => void
+) {
   fetch(`https://j11c102.p.ssafy.io/api/notification/agree/${memberId}`, {
     method: 'POST',
     headers: {
@@ -75,8 +80,28 @@ function saveTokenInMemberEntity(token: string) {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+      setIsFcmToken(true);
       return response.json();
     })
     .then(data => console.log('Token saved:', data))
     .catch(err => console.error('Error saving token:', err));
+}
+
+// 포그라운드에서 메시지 수신 및 알림 표시
+export function setupForegroundNotificationHandler() {
+  onMessage(messaging, payload => {
+    console.log('포그라운드 메시지 수신:', payload);
+
+    const notification = payload.notification;
+    if (notification && Notification.permission === 'granted') {
+      const {title, body, icon} = notification;
+      new Notification(title ?? '알림', {
+        body: body ?? '내용이 없습니다.',
+        icon: icon ?? '/default-icon.png', // 기본 아이콘 설정 (필요에 따라 경로 수정)
+        data: {
+          url: payload.fcmOptions?.link, // 알림 클릭 시 이동할 URL
+        },
+      });
+    }
+  });
 }

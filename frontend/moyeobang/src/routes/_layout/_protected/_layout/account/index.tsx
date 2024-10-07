@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createFileRoute } from '@tanstack/react-router'
 import { css } from '@emotion/react'
 import { useState } from "react";
@@ -138,7 +138,7 @@ export default function AccountMain() {
     queryFn: () => moyeobang.getComsuptionStaticByCategory(Number(accountId), selectedMember),
   });
 
-  // get 멤버별&전체 카테고리별 소비 비율 
+  // get 멤버별 소비 비율 
   const {data : DataByMembers} = useSuspenseQuery({
     queryKey: ['membersProportionList', accountId],
     queryFn: () => moyeobang.getComsuptionStaticByMembers(Number(accountId)),

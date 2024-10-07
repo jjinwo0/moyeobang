@@ -19,11 +19,13 @@ interface TravelSummary {
   totalAmount: TotalAmount;
   amountUsed: TotalComsumption;
   amountComparison: AmountComparison;
-  consumptionByCategory: ConsumptionCategory[];
+  consumptionByCategory: ConsumptionByCategory[];
   consumptionTag: ConsumptionTag[];
   consumptionByMember: ConsumptionByMember[];
   imgSummary: ImgSummary[];
 }
+
+type Question = string;
 
 // 퀴즈 관련
 interface Quiz {
@@ -36,7 +38,7 @@ interface ResponsePostTravel {
 }
 
 interface ResponsePostAccount {
-  accountNumber: sourceAccountNumber;
+  accountNumber: SourceAccountNumber;
 }
 
 interface PostTravel {
@@ -53,7 +55,7 @@ interface Member {
   memberId: Id;
   memberName: MemberName;
   profileImage: ImgUrl;
-  accountNumber: sourceAccountNumber;
+  accountNumber: SourceAccountNumber;
 }
 
 interface SubmitQuiz {
@@ -72,6 +74,6 @@ interface ResponseGetProfile {
   memberName: MemberName;
   profileImage: ImgUrl;
   bankName: BankName;
+  accountNumber: SourceAccountNumber;
   accountId: Id;
-  accountNumber: sourceAccountNumber;
 }

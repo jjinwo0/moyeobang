@@ -1,10 +1,11 @@
-import React from "react"
-import { css } from "@emotion/react"
-import { colors } from "@/styles/colors"
+import React from "react";
+import { css } from "@emotion/react";
+import { colors } from "@/styles/colors";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import moyeobang from "@/services/moyeobang"
-import useCurrentTravelStore from "@/store/useCurrentTravelStore"
+import moyeobang from "@/services/moyeobang";
+import useCurrentTravelStore from "@/store/useCurrentTravelStore";
 import useTravelDetailStore from "@/store/useTravelDetailStore";
+import { useState } from "react";
 
 const cardLayoutStyle = (travelImg:string) => css`
     width: 330px;
@@ -30,8 +31,9 @@ const overlayStyle = css`
     background-color: rgba(255, 255, 255, 0.8);;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    justify-content:center;
+    gap: 25px;
+    padding: 30px;
     z-index: 1;   
     border-radius: 10px; 
 `;
@@ -42,27 +44,30 @@ const titleStyle = css`
     color: ${colors.fifth};
 `;
 
-const timeStyle = css`
-    font-family: 'semibold';
-    font-size: 15px;
-    color: ${colors.gray};
-`;
-
-const locationLayoutStyle = css`
-    display:flex;
-    flex-direction:row;
-    gap:5px;
-`;
-
-const locationStyle = css`
+const accountNumberStyle = css`
     font-family: 'semibold';
     font-size: 16px;
+    color: ${colors.strongGray};
 `;
 
 const balanceStyle = css`
+    display:flex;
+    flex-direction:row;
+    justify-content:flex-end;
+    align-items:center;
+    gap:10px;
     font-family: 'semibold';
     font-size: 20px; 
-    text-align: right;
+`;
+
+const buttonStyle=css`
+    width:60px;
+    height:30px;
+    border-radius:50px;
+    font-family: 'regular';
+    font-size: 16px; 
+    border: solid 2px ${colors.gray};
+    color:${colors.strongGray};
 `;
 
 interface PayCardProps {
@@ -70,13 +75,11 @@ interface PayCardProps {
 }
 export default function PayCard({isHome} : PayCardProps) {
 
-    
+    const [isHidden, setIsHidden] = useState<boolean>(false);
     const {travelName} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    const {startDate} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    const {endDate} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
-    const {travelPlaceList} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
     const {accountId} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
     const {travelImg} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
+    const {accountNumber} = isHome ? useCurrentTravelStore() : useTravelDetailStore();
     
     // get 모임 통장 전체 잔액 
     const { data } = useSuspenseQuery({
@@ -86,22 +89,20 @@ export default function PayCard({isHome} : PayCardProps) {
 
     const accountData = data.data.data;
 
+    function handleClick() {
+        setIsHidden(!isHidden);
+    }
+
     return (
 
         <div css={cardLayoutStyle(travelImg)}>
             <div css={overlayStyle}>
-            <div css={titleStyle}>{travelName}</div>
-            <div css={timeStyle}>{startDate}~{endDate}</div>
-            <div css={locationLayoutStyle}>{travelPlaceList.map((place, index) => {
-
-                if (index===travelPlaceList.length-1) {
-                    return <div key={index} css={locationStyle}>{place}</div>
-                } else {
-                    return <div key={index} css={locationStyle}>{place},</div>
-                }
-            }
-            )}</div>
-            <div css={balanceStyle} >{accountData.currentBalance.toLocaleString()}원</div>
+                <div css={titleStyle}>{travelName}</div>
+                <div css={accountNumberStyle}>{accountNumber}</div>
+                <div css={balanceStyle}>
+                    {isHidden ? '잔액 숨김': `${accountData.currentBalance.toLocaleString()}원`}
+                    <button onClick={handleClick} css={buttonStyle}>{isHidden ? '보기' : '숨김'}</button>
+                </div>
             </div>
         </div>
     )

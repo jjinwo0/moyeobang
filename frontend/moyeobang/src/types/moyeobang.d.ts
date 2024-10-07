@@ -401,6 +401,7 @@
 // }
 
 type Id = number;
+type Place = string;
 type ProfileImage = string;
 type MemberName = string;
 type CreatedAt = string;
@@ -439,6 +440,7 @@ type LocationName = string;
 type CategoryName = string;
 type InvitationLink = string;
 type Nickname = string;
+type AccountNumber = string;
 
 // API 요청 응답 타입
 interface MoyeobangResponse<T> {
@@ -471,7 +473,7 @@ type OrderItemQuantity = number;
 type OrderItemPrice = number;
 type AcceptedNumber = string;
 type PaymentRequestId = string;
-type sourceAccountNumber = string;
+type SourceAccountNumber = string;
 type IsNew = boolean;
 type TotalConsumption = number;
 type TotalSpent = number;

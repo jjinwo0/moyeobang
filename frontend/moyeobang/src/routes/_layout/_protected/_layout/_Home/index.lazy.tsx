@@ -16,6 +16,7 @@ import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import AllowNotification from '@/components/notification/AllowNotification';
 import useCurrentTravelStore from '@/store/useCurrentTravelStore';
+import useFcmTStore from '@/store/useFcmStore';
 
 const memberName: MemberName = '진우바오';
 
@@ -31,8 +32,24 @@ const containerStyle = css`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100%;
 
   /* height: 100%; */
+`;
+
+const containerListStyle = (hasCurrentTrips: boolean) => css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: ${hasCurrentTrips ? '320px' : 'calc(100vh - 200px)'};
+  overflow-y: auto;
+  // margin-top: 20px;
+  // padding-top: 10px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const descriptionStyle = css`
@@ -80,6 +97,8 @@ const profileImageStyle = css`
 
 const buttonStyle = css`
   margin-top: 30px;
+  padding-bottom: 10px;
+  background-color: white;
 `;
 
 const noTravelStyle = css`
@@ -118,7 +137,9 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [pushNotification, setPushNotification] = useState<boolean>(false); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
+  const {isfcmToken} = useFcmTStore();
+  const [pushNotification, setPushNotification] =
+    useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
 
   // //[todo] get으로 여행 목록 전체 조회하기
@@ -223,7 +244,7 @@ function Index() {
         endDate: trip.endDate,
         travelPlaceList: trip.travelPlaceList,
         travelImg: trip.travelImg,
-        participantsInfo:trip.participantsInfo,
+        participantsInfo: trip.participantsInfo,
       }));
 
       setCurrentTravelData(travelInfo[0]); // Zustand에 저장
@@ -282,35 +303,37 @@ function Index() {
 
           {/* 여행 카드 리스트 */}
 
-          <div css={containerStyle}>
-            {tripsToDisplay.length > 0 ? (
-              tripsToDisplay.map((item, index) => (
-                <TravelCard
-                  key={`${item.travelId}-${index}`}
-                  travelId={item.travelId}
-                  travelName={item.travelName}
-                  startDate={item.startDate}
-                  endDate={item.endDate}
-                  travelPlaceList={item.travelPlaceList}
-                  participantsCount={item.participantCount}
-                  quizQuestion={item.quizQuestion}
-                  quizAnswer={item.quizAnswer}
-                  onClick={() => clickTravelCard(item)}
-                  activeTab={activeTab}
-                  travelImg={item.travelImg}
-                  participantsInfo={item.participantsInfo}
-                  accountId={item.accountId}
-                />
-              ))
-            ) : (
-              <div css={noTravelStyle}>
-                <span css={noTravelTextStyle}>
-                  {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이
-                  없습니다
-                </span>
-                <img src={sadBangbang} css={sadIconStyle} />
-              </div>
-            )}
+          <div css={containerListStyle(currentTrips.length > 0)}>
+            <div>
+              {tripsToDisplay.length > 0 ? (
+                tripsToDisplay.map((item, index) => (
+                  <TravelCard
+                    key={`${item.travelId}-${index}`}
+                    travelId={item.travelId}
+                    travelName={item.travelName}
+                    startDate={item.startDate}
+                    endDate={item.endDate}
+                    travelPlaceList={item.travelPlaceList}
+                    participantsCount={item.participantCount}
+                    quizQuestion={item.quizQuestion}
+                    quizAnswer={item.quizAnswer}
+                    onClick={() => clickTravelCard(item)}
+                    activeTab={activeTab}
+                    travelImg={item.travelImg}
+                    participantsInfo={item.participantsInfo}
+                    accountId={item.accountId}
+                  />
+                ))
+              ) : (
+                <div css={noTravelStyle}>
+                  <span css={noTravelTextStyle}>
+                    {activeTab === 'upcoming' ? '예정 여행' : '지난 여행'}이
+                    없습니다
+                  </span>
+                  <img src={sadBangbang} css={sadIconStyle} />
+                </div>
+              )}
+            </div>
           </div>
         </>
       )}

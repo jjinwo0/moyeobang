@@ -69,7 +69,7 @@ export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
   return (
     <div css={layoutStyle}> 
         <div css={titleStyle}>
-            {isConsumptionByMember(data[0]) ? '멤버별 입금 비율(100%기준)' : '카테고리별 소비 비율(100%기준)'}
+            {isConsumptionByMember(data[0]) ? '멤버별 소비 비율(100%기준)' : '카테고리별 소비 비율(100%기준)'}
         </div>
       <ResponsiveContainer css={RechartContainerStyle}> 
         <BarChart

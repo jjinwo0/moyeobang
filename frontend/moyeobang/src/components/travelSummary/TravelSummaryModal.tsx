@@ -13,144 +13,7 @@ import weekday from 'dayjs/plugin/weekday'; // 요일 계산을 위한 플러그
 import updateLocale from 'dayjs/plugin/updateLocale'; // 요일 출력 수정용 플러그인
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
-
-const travelSummary: TravelSummary = {
-  locationList: [
-    {
-      latitude: 33.43143,
-      longitude: 126.874237, // 여행 장소들 위도,경도
-    },
-    {
-      latitude: 33.48549374886766,
-      longitude: 126.48117326163943, // 여행 장소들 위도,경도
-    },
-    {
-      latitude: 33.3942945,
-      longitude: 126.2398813, // 여행 장소들 위도,경도
-    },
-    {
-      latitude: 33.5098305,
-      longitude: 126.5233913, // 여행 장소들 위도,경도
-    },
-  ],
-  totalAmount: 1000000, // 전체 예산
-  amountUsed: 950000, // 총 사용 금액(여행 끝나고)
-  amountComparison: 900000,
-  consumptionByCategory: [
-    {
-      categoryName: '액티비티',
-      proportion: 15.5,
-      balance: 80000,
-    },
-    {
-      categoryName: '식당, 카페',
-      proportion: 35,
-      balance: 121000,
-    },
-    {
-      categoryName: '할공, 호텔',
-      proportion: 25.5,
-      balance: 121000,
-    },
-    {
-      categoryName: '기타',
-      proportion: 15,
-      balance: 121000,
-    },
-  ],
-  consumptionTag: [
-    '맛집탐방 했나방',
-    '카페인 중독인가방',
-    '장바구니 가득 채웠나방',
-    '맥시멀리스트인가방',
-  ], // 소비 태그 (문구는 프론트에서 정하는건가...?)
-  consumptionByMember: [
-    {
-      categoryName: {
-        memberId: 1,
-        memberName: '두홍',
-        profileImage: bangBang,
-      },
-      proportion: 30,
-      balance: 300000,
-    },
-    {
-      categoryName: {
-        memberId: 2,
-        memberName: '가현',
-        profileImage: bangBang,
-      },
-      proportion: 20,
-      balance: 200000,
-    },
-    {
-      categoryName: {
-        memberId: 3,
-        memberName: '지연',
-        profileImage: bangBang,
-      },
-      proportion: 15,
-      balance: 150000,
-    },
-    {
-      categoryName: {
-        memberId: 4,
-        memberName: '두열',
-        profileImage: bangBang,
-      },
-      proportion: 15,
-      balance: 150000,
-    },
-    {
-      categoryName: {
-        memberId: 5,
-        memberName: '훈민',
-        profileImage: bangBang,
-      },
-      proportion: 10,
-      balance: 100000,
-    },
-    {
-      categoryName: {
-        memberId: 6,
-        memberName: '진우',
-        profileImage: bangBang,
-      },
-      proportion: 10,
-      balance: 100000,
-    },
-  ],
-  imgSummary: [
-    {
-      imgUrl: bangBang,
-      locationName: '제주공항',
-    },
-    {
-      imgUrl: bangBang,
-      locationName: '제주공항',
-    },
-    {
-      imgUrl: bangBang,
-      locationName: '제주공항',
-    },
-    {
-      imgUrl: bangBang,
-      locationName: '제주공항',
-    },
-    {
-      imgUrl: bangBang,
-      locationName: '제주공항',
-    },
-    {
-      imgUrl: bangBang,
-      locationName: '제주공항',
-    },
-    {
-      imgUrl: bangBang,
-      locationName: '제주공항',
-    },
-  ], // 이미지&장소이름 8개 리스트
-};
+import {last} from '@tanstack/react-router/dist/esm/utils';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -250,6 +113,7 @@ dayjs.updateLocale('ko', {
 });
 
 interface TravelSummaryProps {
+  travelId: number;
   travelName: string;
   startDate: string;
   endDate: string;
@@ -260,6 +124,7 @@ interface TravelSummaryProps {
 }
 
 export default function TravelSummaryModal({
+  travelId,
   travelName,
   startDate,
   endDate,
@@ -298,6 +163,53 @@ export default function TravelSummaryModal({
     queryFn: () => moyeobang.getAccountState(Number(accountId)),
   });
 
+  //여행 일정 조회
+  const {data: TravelSchedulesData} = useSuspenseQuery({
+    queryKey: ['travelSchedules', travelId],
+    queryFn: () => moyeobang.getTravelSchedules(travelId),
+  });
+
+  const travelSummary = {
+    locationList: [
+      {
+        latitude: 33.431441,
+        longitude: 126.874237, // 여행 장소들 위도,경도
+      },
+      {
+        latitude: 33.3434,
+        longitude: 126.874237, // 여행 장소들 위도,경도
+      },
+      {
+        latitude: 32.3433,
+        longitude: 126.874237, // 여행 장소들 위도,경도
+      },
+    ],
+
+    imgSummary: [
+      {
+        imgUrl: '',
+        locationName: '제주공항',
+      },
+    ], // 이미지&장소이름 8개 리스트
+  };
+  console.log(TravelSchedulesData?.data.data.schedules);
+  const locationList =
+    TravelSchedulesData?.data.data.schedules
+      .flatMap(schedule => schedule.daySchedules) // daySchedules 배열을 평탄화
+      .filter(daySchedule => daySchedule.scheduleLocation) // scheduleLocation이 존재하는 것만 필터링
+      .map(daySchedule => ({
+        lat: daySchedule.scheduleLocation?.latitude ?? 0,
+        lng: daySchedule.scheduleLocation?.longitude ?? 0,
+      })) || [];
+
+  const imgSummary =
+    TravelSchedulesData?.data.data.schedules
+      .flatMap(schedule => schedule.daySchedules)
+      .filter(daySchedule => daySchedule.scheduleImg) // scheduleImg가 있는 항목만 필터링
+      .map(daySchedule => ({
+        imgUrl: daySchedule.scheduleImg, // scheduleImg 필드 추출
+        locationName: daySchedule.scheduleLocation?.title || 'Unknown Location', // scheduleLocation에서 장소 이름 추출
+      })) || [];
   const slides = [
     <ConsumptionSummary
       key="consumptionSummary"
@@ -307,7 +219,7 @@ export default function TravelSummaryModal({
       totalMoney={AccountMoneyData?.data.data.totalAmount}
       totalConsumption={AccountMoneyData?.data.data.totalSpent}
     />,
-    <ImgSummary travelImg={travelSummary.imgSummary} />,
+    <ImgSummary key="imgSummary" scheduleImg={imgSummary} />,
   ]; // 슬라이드에 표시할 컴포넌트들
 
   const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD (dddd)');
@@ -345,7 +257,7 @@ export default function TravelSummaryModal({
         {currentSlide === 0 && (
           <div css={mapContainerStyle}>
             <MapComponent
-              locationList={travelSummary.locationList}
+              locationList={locationList}
               travelPlaceList={travelPlaceList}
             />
           </div>

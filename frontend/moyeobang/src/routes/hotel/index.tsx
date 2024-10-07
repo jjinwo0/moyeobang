@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { v4 as uuidv4 } from "uuid";
 import QrPayByOnline from '@/components/QrPayByOnline/QrPayByOnline'
 import hotelBackground from '@/assets/icons/hotelBackground.png'
-import { useState } from 'react';
+import { useState} from 'react';
 
 const backgroundStyle=css`
     display:flex;
@@ -35,7 +35,7 @@ const buttonLayoutStyle=css`
 
 const hotelQrData = {
     paymentRequestId: uuidv4(),
-    placeId: 'starbucks-1',
+    placeId: 'hotel-1',
     amount:519883
 }
 
