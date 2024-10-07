@@ -7,7 +7,7 @@ public class KakaoAttributes {
 
     private Long id;
 
-    private String connectedAt;
+    private String connected_at;
 
     private KakaoAccount kakaoAccount;
 
