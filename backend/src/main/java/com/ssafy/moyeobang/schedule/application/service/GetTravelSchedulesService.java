@@ -48,9 +48,10 @@ public class GetTravelSchedulesService implements GetTravelSchedulesUseCase {
         for (LocalDate date : sortedDates) {
             List<Schedule> daySchedules = schedulesByDate.get(date);
 
-            daySchedules.sort(Comparator.comparingInt(Schedule::getSequence));
+            //daySchedules.sort(Comparator.comparingInt(Schedule::getSequence));
 
             List<ScheduleResponse> scheduleDTOs = daySchedules.stream()
+                    .sorted(Comparator.comparingInt(Schedule::getSequence))
                     .map(this::mapScheduleToDTO)
                     .toList();
 
