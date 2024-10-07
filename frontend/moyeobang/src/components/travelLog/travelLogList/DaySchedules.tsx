@@ -72,26 +72,31 @@ export default function DaySchedules({
   const daySchedules = travelSchedules[dayNum - 1]?.daySchedules || [];
   console.log('[*] daySchedules', daySchedules);
   console.log('[*] 이거 travelSchedules', travelSchedules);
-  
 
-  const updateSequence = (dayNum: number, scheduleId: number, newSequence: number) => {
-    setTravelSchedules((prevSchedules) => {
-      const updatedSchedules = prevSchedules?.map((daySchedule) => {
+  const updateSequence = (
+    dayNum: number,
+    scheduleId: number,
+    newSequence: number
+  ) => {
+    setTravelSchedules(prevSchedules => {
+      const updatedSchedules = prevSchedules?.map(daySchedule => {
         if (daySchedule.dayNum === dayNum) {
-          const updatedDaySchedules = daySchedule.daySchedules.map((schedule) => {
-            if (schedule.scheduleId === scheduleId) {
-              return { ...schedule, sequence: newSequence };
-            }
-            return schedule;
-          }).sort((a, b) => (a.sequence ?? 0) - (b.sequence ?? 0)); // sequence 값으로 정렬
-          return { ...daySchedule, daySchedules: updatedDaySchedules };
+          const updatedDaySchedules = daySchedule.daySchedules
+            .map(schedule => {
+              if (schedule.scheduleId === scheduleId) {
+                return {...schedule, sequence: newSequence};
+              }
+              return schedule;
+            })
+            .sort((a, b) => (a.sequence ?? 0) - (b.sequence ?? 0)); // sequence 값으로 정렬
+          return {...daySchedule, daySchedules: updatedDaySchedules};
         }
         return daySchedule;
       });
       return updatedSchedules;
     });
   };
-  
+
   // onDragEnd 함수 추가
   const handleOnDragEnd = (result: any) => {
     const {source, destination} = result;
@@ -129,7 +134,7 @@ export default function DaySchedules({
   };
   return (
     <div style={{width: '390px', height: '100%', position: 'relative'}}>
-      {daySchedules.length > 0 && <span css={verticalLineStyle}></span>}
+      {/* {daySchedules.length > 0 && <span css={verticalLineStyle}></span>} */}
       <div css={travelDayTitleSytle}>
         <span css={dayIdStyle}> DAY {dayNum} </span>
         <span css={dayDateStyle}>{date}</span>
@@ -144,11 +149,11 @@ export default function DaySchedules({
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {daySchedules.map((schedule, index: number) => {
                     console.log('[*] schedule', schedule);
-                    
+
                     return (
                       <Draggable
                         key={`schedule-${schedule.scheduleId}`}
-                        draggableId={`schedule-${ schedule.scheduleId}`}
+                        draggableId={`schedule-${schedule.scheduleId}`}
                         index={index}
                       >
                         {provided => (

@@ -102,7 +102,7 @@ export default function PlusSelf() {
         queryKey: ['travelSchedules'],
         refetchType: 'all',
       });
-      console.log('성공');
+      // console.log('성공');
       resetForm();
       handleShowPlusSelf();
     },
@@ -125,21 +125,33 @@ export default function PlusSelf() {
       moyeobang.postChangeTravelSchedule(travelId, scheduleId, scheduleData),
     onSuccess: async () => {
       console.log('[*] 수정 성공');
-      await queryClient.invalidateQueries({
-        queryKey: ['travelSchedules'],
+      queryClient.invalidateQueries({
+        queryKey: ['travelSchedules', travelId],
         refetchType: 'all',
       });
+      resetForm();
+      handleShowPlusSelf();
+
+      // 일정 시간 후에 fetchQuery를 호출하여 최신 데이터를 가져옵니다.
+      // setTimeout(async () => {
       try {
         const data = await queryClient.fetchQuery({
           queryKey: ['travelSchedules'],
           queryFn: () => moyeobang.getTravelSchedules(travelId),
         });
+
         // 최신 데이터로 Context 업데이트
+        console.log(
+          '[*] 최신 데이터로 Context 업데이트',
+          data.data.data.schedules
+        );
+
         setTravelSchedules(data.data.data.schedules);
         handleShowPlusSelf();
       } catch (error) {
         console.error('Error fetching travel schedules:', error);
       }
+      // }, 2000); // 2초 후에 fetchQuery를 호출합니다. 필요에 따라 시간을 조정하세요.
     },
   });
 
@@ -167,10 +179,9 @@ export default function PlusSelf() {
 
   // };
 
-  const handleSave = () => {
-    // [todo] 저장 로직 추가
+  useEffect(() => {
     if (selectedMarker) {
-      const scheduleLocation: ScheduleLocation = {
+      const Location: ScheduleLocation = {
         googlePlaceId: selectedMarker?.placeId || '',
         title: selectedMarker?.title || '',
         address: selectedMarker?.address || '',
@@ -184,8 +195,14 @@ export default function PlusSelf() {
             : selectedMarker?.position?.lng || 0,
         category: selectedMarker?.types ? selectedMarker.types[0] : '',
       };
-      setScheduleLocation(scheduleLocation);
+      console.log('[*] 바뀜? Location', Location);
+
+      setScheduleLocation(Location);
     }
+  }, [selectedMarker]);
+
+  const handleSave = () => {
+    // [todo] 저장 로직 추가
 
     /**
      * 1. 일정 장소
@@ -218,6 +235,8 @@ export default function PlusSelf() {
     if (fileInputRef.current?.files?.[0]) {
       scheduleData.append('image', fileInputRef.current.files[0]);
     }
+
+    console.log('[*] scheduleData', Object.fromEntries(scheduleData.entries()));
 
     // const scheduleData: PostTravelSchedule = {
     //   scheduleTitle: scheduleName || '',
@@ -252,18 +271,24 @@ export default function PlusSelf() {
 
   // searchLocation이 변할 때마다 scheduleName을 업데이트
   useEffect(() => {
-    setScheduleName(searchLocation);
+    if (!scheduleEdit) {
+      setScheduleName(searchLocation);
+    }
   }, [searchLocation]);
 
   useEffect(() => {
     if (scheduleDayNum) {
       const date = travelDates[scheduleDayNum - 1].split(' ')[0]; // 요일 제거
       const hourInt = Number(hour);
-      const convertedHour = AMPMSelection === 'PM' && hourInt !== 12 ? hourInt + 12 : hourInt === 12 && AMPMSelection === 'AM' ? 0 : hourInt;
+      const convertedHour =
+        AMPMSelection === 'PM' && hourInt !== 12
+          ? hourInt + 12
+          : hourInt === 12 && AMPMSelection === 'AM'
+            ? 0
+            : hourInt;
       const time = `${String(convertedHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
       if (hour !== '' && minute !== '') {
         setDateTime(`${date}T${time}`);
-        console.log('[*] selected Marker', selectedMarker);
       }
     }
   }, [hour, minute, AMPMSelection, scheduleDayNum]);
@@ -286,6 +311,7 @@ export default function PlusSelf() {
         setGetSchedule(schedule[0]);
         console.log('[*] 가져온 getSchedule', schedule[0]);
         if (isPlusSelfSchedule(schedule[0])) {
+          console.log('[*] 가져온 scheduleName', schedule[0].scheduleTitle);
           setScheduleName(schedule[0].scheduleTitle || '');
           setSearchLocation(schedule[0]?.scheduleLocation?.title || '');
           setScheduleLocation(schedule[0]?.scheduleLocation);
@@ -302,6 +328,11 @@ export default function PlusSelf() {
       }
     }
   }, [scheduleEdit]);
+
+  useEffect(() => {
+    console.log('[*] 바뀌나 travelSchedules', travelSchedules);
+    console.log('[*] 바뀌나 scheduleName', scheduleName);
+  }, [travelSchedules, scheduleName]);
 
   return (
     <>
