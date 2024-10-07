@@ -139,6 +139,10 @@ public class ScheduleJpaEntity extends BaseEntity {
         this.sequence = newSequence;
     }
 
+    public void updateBudget(long newBudget) {
+        this.budget = (int) newBudget;
+    }
+
     public static void updateScheduleSequences(List<ScheduleJpaEntity> schedules,
                                                List<SchedulesSequenceCommand> sequenceCommands) {
         for (SchedulesSequenceCommand sequenceCommand : sequenceCommands) {
