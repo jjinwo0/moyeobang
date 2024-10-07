@@ -16,6 +16,7 @@ const layoutStyle=css`
     z-index:99999;
     font-family:'semibold';
     font-size:20px;
+    background-color:${colors.white};
 `;
 
 const imgContainerStyle=css`

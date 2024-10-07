@@ -34,7 +34,7 @@ export default function PayModal({onXClick} : QRPayProps) {
     const [successTransactionId, setSuccessTransactionId] = useState<TransactionId | null>(null);
     
     const [openScanFailModal, setopenScanFailModal] = useState<boolean>(false);
-
+    const [scanRestart, setScanRestart] = useState<boolean>(false);
 
     const location = useLocation();
     const isHome = location.pathname ==='/'
@@ -69,6 +69,7 @@ export default function PayModal({onXClick} : QRPayProps) {
 
     function handleRestart() {
         setopenScanFailModal(false)
+        setScanRestart(true);
         setActiveComponent('right')
     }
 
@@ -106,6 +107,7 @@ export default function PayModal({onXClick} : QRPayProps) {
                 onMessage={handleMessage}
                 accountNumber={accountNumber}
                 onError={handleScanError}
+                restart={scanRestart}
                 />  
             )
             }

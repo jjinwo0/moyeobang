@@ -93,7 +93,7 @@ export default function QrPay({onMessage, isHome, accountNumber}:QrPayProps) {
     
     useEffect(() => {
         fetchSEE();
-        console.log('paymentRequestId : ', paymentRequestId.current)
+
         // 컴포넌트 언마운트 시 SSE 연결 종료
         return () => {
             if (eventSource) {
