@@ -169,7 +169,7 @@ export default function AuthVerification({
           queryKey: ['travelList', memberId],
           refetchType: 'all',
         });
-      }, 1000); // 1초 (1000ms) 지연
+      }, 150); // 1초 (1000ms) 지연
       // travelId를 사용해 postAccount 호출
       // postAccount(travelId);
     },
@@ -211,7 +211,7 @@ export default function AuthVerification({
       console.log('여행 생성 호출');
 
       // onclose();
-      await router.navigate({to: '/'});
+      // await router.navigate({to: '/'});
       onClose();
     } else {
       alert('본인 인증 및 약관 동의를 모두 완료해야 합니다.');
