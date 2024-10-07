@@ -13,7 +13,6 @@ import moyeobang from '@/services/moyeobang'
 import ResultByReceiptComponenet from '@/components/Account/SettleByReceipt/SettleByReceiptComponent'
 import useTravelDetailStore from '@/store/useTravelDetailStore'
 import { isSettledParticipantByCustom } from '@/util/typeGaurd'
-import Spinner from '@/components/Sipnner/Spinner'
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -73,7 +72,7 @@ export default function TransactionDetail() {
   const {accountId} = useTravelDetailStore();
 
   const {data} = useSuspenseQuery({
-    queryKey: ['transactionDetail', accountId, transactionId],
+    queryKey: ['transactionDetail', accountId, Number(transactionId)],
     queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
   });
 
