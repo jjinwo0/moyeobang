@@ -5,8 +5,10 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 type AuthContextType = {
   accessToken: string | null;
+  refreshToken: string | null;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
-  handleLoginToken: (accessToken: string, refreshToken: string) => void;
+  setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
+  handleLoginToken: (accessToken: string, accessTokenExpireTime: string, refreshToken: string, refreshTokenExpireTime: string) => void;
   handleLogout: () => void;
   loginProvider: string | null;
   setLoginProvider: React.Dispatch<React.SetStateAction<string | null>>;
@@ -17,25 +19,28 @@ type AuthContextType = {
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loginProvider, setLoginProvider] = useState<string | null>(null);
+  const [accessTokenExpireTime, setAccessTokenExpireTime] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [refreshTokenExpireTime, setRefreshTokenExpireTime] = useState<string | null>(null);
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  const handleLoginToken = (accessToken: string, loginProvider: string) => {
+  const handleLoginToken = (accessToken: string, accessTokenExpireTime: string, refreshToken: string, refreshTokenExpireTime: string) => {
     setAccessToken(accessToken);
-    setLoginProvider(loginProvider);
+    setAccessTokenExpireTime(accessTokenExpireTime);
+    setRefreshToken(refreshToken);
+    setRefreshTokenExpireTime(refreshTokenExpireTime);
     setIsLogin(true);
-  };
-
-  const clearAccessToken = () => {
-    setAccessToken(null);
   };
 
   const navigate = useNavigate();
 
   const handleLogout = () => {
     setAccessToken(null);
+    setAccessTokenExpireTime(null);
+    setRefreshToken(null);
+    setRefreshTokenExpireTime(null);
     setLoginProvider(null);
     setIsLogin(false);
-    clearAccessToken();
     navigate({to: '/entrance'});
   };
 
