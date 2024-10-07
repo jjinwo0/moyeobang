@@ -49,6 +49,8 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
       value={{
         accessToken,
         setAccessToken,
+        refreshToken,
+        setRefreshToken,
         handleLoginToken,
         handleLogout,
         loginProvider,
