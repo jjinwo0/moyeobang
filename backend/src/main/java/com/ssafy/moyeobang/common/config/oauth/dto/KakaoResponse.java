@@ -48,7 +48,7 @@ public class KakaoResponse implements OAuth2Response {
     @Override
     public String getProfileImage() {
 
-        return kakaoAttributes.getKakaoAccount().getProfile().getProfile_image_url();
+        return kakaoAttributes.getKakaoAccount().getProfile().getThumbnailImageUrl();
     }
 
     private String hashString(String input) {
