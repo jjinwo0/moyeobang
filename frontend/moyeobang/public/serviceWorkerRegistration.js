@@ -59,23 +59,23 @@ async function registerServiceWorker() {
   }
 }
 
-// async function testLocalNotification() {
-//   if ('serviceWorker' in navigator) {
-//     const registration = await navigator.serviceWorker.ready;
-//     console.log('Service Worker 준비 완료:', registration);
+async function testLocalNotification() {
+  if ('serviceWorker' in navigator) {
+    const registration = await navigator.serviceWorker.ready;
+    console.log('Service Worker 준비 완료:', registration);
 
-//     // 푸시 알림 테스트 - 서버와 상관없이 프론트에서 푸시 알림 트리거
-//     registration.showNotification('테스트 알림', {
-//       body: '이것은 로컬에서 트리거된 푸시 알림입니다.',
-//       icon: '/your-icon-url.png', // 아이콘 경로를 설정하세요
-//       tag: 'test-notification', // 중복 방지 태그
-//     });
-//   }
-// }
+    // 푸시 알림 테스트 - 서버와 상관없이 프론트에서 푸시 알림 트리거
+    registration.showNotification('테스트 알림', {
+      body: '이것은 로컬에서 트리거된 푸시 알림입니다.',
+      icon: '/your-icon-url.png', // 아이콘 경로를 설정하세요
+      tag: 'test-notification', // 중복 방지 태그
+    });
+  }
+}
 
 // 서비스 워커 등록 함수 호출
-registerServiceWorker();
+// registerServiceWorker();
 
-// registerServiceWorker().then(() => {
-//   testLocalNotification();
-// });
+registerServiceWorker().then(() => {
+  testLocalNotification();
+});
