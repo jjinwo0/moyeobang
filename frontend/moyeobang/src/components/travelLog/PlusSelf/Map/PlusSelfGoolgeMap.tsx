@@ -306,7 +306,11 @@ const PlusSelfGoogleMap = forwardRef(
                 position={marker.position}
                 title={marker.title}
                 onClick={() => handleMarkerClick(marker)}
-                icon={selectedMarker === marker ? null : defaultMarker}
+                icon={
+                  selectedMarker === marker
+                    ? undefined
+                    : (defaultMarker ?? undefined)
+                }
               />
             ))}
           </GoogleMap>
