@@ -80,12 +80,6 @@ export default function PlusSelf() {
     setSelectedImage(null);
   };
 
-  const handleDelete = () => {
-    // [todo] 삭제 로직 추가
-    resetForm();
-    handleShowPlusSelf();
-  };
-
   /**
    * 일정 추가 mutation 선언
    */
@@ -155,29 +149,23 @@ export default function PlusSelf() {
     },
   });
 
-  // const makeScheduleLocation = () => {
-  //   if (selectedMarker) {
-  //     const scheduleLocation: ScheduleLocation = {
-  //       googlePlaceId: selectedMarker?.placeId || '',
-  //       title: selectedMarker?.title || '',
-  //       address: selectedMarker?.address || '',
-  //       latitude:
-  //         typeof selectedMarker?.position?.lat === 'function'
-  //           ? selectedMarker.position.lat()
-  //           : selectedMarker?.position?.lat || 0,
-  //       longitude:
-  //         typeof selectedMarker?.position?.lng === 'function'
-  //           ? selectedMarker.position.lng()
-  //           : selectedMarker?.position?.lng || 0,
-  //       category: selectedMarker?.types ? selectedMarker.types[0] : '',
-  //     };
-  //     return scheduleLocation;
-  //   }
-  // };
+  /**
+   * 일정 삭제 mutation 선언
+   */
+  const {mutate: deleteTravelSchedule} = useMutation({
+    mutationFn: ({scheduleId}: {scheduleId: Id}) =>
+      moyeobang.deleteTravelSchedule(scheduleId),
+    onSuccess: async () => {
+      console.log('[*] 삭제 성공');
+      await queryClient.invalidateQueries({
+        queryKey: ['travelSchedules', travelId],
+        refetchType: 'all',
+      });
+      resetForm();
+      handleShowPlusSelf();
+    },
+  });
 
-  // const makeScheduleLocation = () => {
-
-  // };
 
   useEffect(() => {
     if (selectedMarker) {
@@ -261,6 +249,15 @@ export default function PlusSelf() {
     } else {
       // 추가 모드
       postTravelSchedule({travelId, scheduleData});
+    }
+  };
+
+  const handleDelete = () => {
+    // [todo] 삭제 로직 추가
+    if (scheduleEdit) {
+      deleteTravelSchedule({scheduleId: scheduleEdit});
+      resetForm();
+      handleShowPlusSelf();
     }
   };
 

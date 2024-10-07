@@ -312,6 +312,15 @@ export default {
       }
     );
   },
+
+  /**
+   * 
+   * 여행 삭제
+   */
+  deleteTravelSchedule: async (scheduleId: Id) =>
+    axios.delete<MoyeobangResponse<null>>(`/travel/schedule/${scheduleId}`),
+
+
   /**
    * 개인 계좌 등록
    */
