@@ -1,5 +1,6 @@
 package com.ssafy.moyeobang.common.config.oauth.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -7,8 +8,7 @@ public class KakaoAttributes {
 
     private Long id;
 
-    private String connected_at;
-
+    @JsonProperty("kakao_account")
     private KakaoAccount kakaoAccount;
 
     @Data
@@ -23,7 +23,8 @@ public class KakaoAttributes {
 
             private String nickname;
 
-            private String profile_image_url;
+            @JsonProperty("thumbnail_image_url")
+            private String thumbnailImageUrl;
         }
     }
 }
