@@ -31,7 +31,7 @@ interface BankAuthProps {
 
 export default function BankAuth({onClose, onVerify}: BankAuthProps) {
   const [isBankConnected, setIsBankConnected] = useState<boolean>(false); // 상태 추가
-  const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 관리
+  const [,setIsVerified] = useState<boolean>(false); // 인증 상태 관리
 
   const handleBankIconClick = () => {
     setIsBankConnected(true); // 클릭 시 상태를 true로 변경하여 컴포넌트 전환

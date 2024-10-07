@@ -79,7 +79,7 @@ export default function CertificationOne({
   const [accountNumber, setAccountNumber] = useState<string>(''); // 계좌번호 상태 추가
   const [verifyNumber, setVerifyNumber] = useState<string>(''); // 인증번호 상태 추가
   const [randomVerifyNumber, setRandomVerifyNumber] = useState<string>(''); // 랜덤한 인증번호 상태 추가
-  const [notificationKey, setNotificationKey] = useState<string>(''); // 1원입금 인증번호
+  const [, setNotificationKey] = useState<string>(''); // 1원입금 인증번호
   const {setConnectAccountNumber} = useConnectAccountContext();
 
   // 랜덤한 인증번호 생성 함수

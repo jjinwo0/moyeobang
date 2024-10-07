@@ -18,11 +18,6 @@ const contentStyle = css`
   }
 `;
 
-const titleStyle = css`
-  font-family: 'semibold';
-  font-size: 18px;
-`;
-
 const textStyle = css`
   font-family: 'regular';
   font-size: 18px;

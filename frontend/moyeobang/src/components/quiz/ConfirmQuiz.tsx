@@ -3,8 +3,6 @@ import {css} from '@emotion/react';
 import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
 import clipboardIcon from '@/assets/icons/clipboardIcon.png';
-import {useSuspenseQuery} from '@tanstack/react-query';
-import moyeobang from '@/services/moyeobang';
 
 // const invitationLink: InvitationLink = 'https://yourapp.com/invite-link';
 

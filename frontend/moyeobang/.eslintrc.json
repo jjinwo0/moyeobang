@@ -28,6 +28,7 @@
   ],
   "rules": {
     // css 오류 무시
+    "no-unused-vars": ["off"],
     "react/no-unknown-property": ["error", {"ignore": ["css"]}],
     "prettier/prettier": "error", // Prettier 규칙 위반 시 오류 표시
     "react/react-in-jsx-scope": "off", // React 17+에서는 React import 필요 없음

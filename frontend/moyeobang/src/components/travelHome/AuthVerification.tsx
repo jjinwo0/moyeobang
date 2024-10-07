@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {css} from '@emotion/react';
 import blackBlankCheck from '@/assets/icons/blackBlankCheck.png';
 import blackCheck from '@/assets/icons/blueCheck.png';
@@ -92,7 +92,7 @@ const completeStyle = css`
   margin-right: 10px;
 `;
 
-const memberId: number = 4;
+// const memberId: number = 4;
 
 interface AuthVerificationProps {
   isOnlyConnect?: boolean;
