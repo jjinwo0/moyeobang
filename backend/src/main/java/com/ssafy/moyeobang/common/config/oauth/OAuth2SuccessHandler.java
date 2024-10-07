@@ -5,6 +5,7 @@ import com.ssafy.moyeobang.common.config.jwt.constant.TokenType;
 import com.ssafy.moyeobang.common.config.jwt.dto.TokenDetail;
 import com.ssafy.moyeobang.common.config.oauth.dto.CustomOAuth2User;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
+import com.ssafy.moyeobang.common.util.CookieUtils;
 import com.ssafy.moyeobang.notification.error.EntityNotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +14,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -31,8 +30,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final MemberRepositoryInOAuth memberRepository;
 
+    private final OAuth2AuthorizationRequestOnCookieRepository cookieRepository;
+
     private final TokenManager tokenManager;
 
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final String REDIRECT_PATH = "http://localhost:5173/entrance/success"; // todo: 수정 필요
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(15);
@@ -70,6 +72,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                         TokenType.REFRESH
                 );
 
+        addRefreshTokenToCookie(request, response, refreshTokenDetail.token());
+
         String targetUrl = getTargetUrl(
                 accessTokenDetail.token(),
                 accessTokenDetail.expireTime(),
@@ -101,10 +105,21 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
                 .queryParam("accessToken", accessToken)
-                .queryParam("accessTokenExpireTime", accessTokenExpireTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli())
+                .queryParam("accessTokenExpireTime",
+                        accessTokenExpireTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli())
                 .queryParam("refreshToken", refreshToken)
-                .queryParam("refreshTokenExpireTime", refreshTokenExpireTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli())
+                .queryParam("refreshTokenExpireTime",
+                        refreshTokenExpireTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli())
                 .build()
                 .toUriString();
+    }
+
+    // 생성된 리프레시 토큰을 쿠키에 저장
+    private void addRefreshTokenToCookie(HttpServletRequest request, HttpServletResponse response,
+                                         String refreshToken) {
+        int cookieMaxAge = (int) REFRESH_TOKEN_DURATION.toSeconds();
+
+        CookieUtils.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
+        CookieUtils.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, cookieMaxAge);
     }
 }
