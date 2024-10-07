@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {css} from '@emotion/react';
 import {
   useSuspenseQuery,
@@ -31,23 +31,40 @@ const plusStyle = css`
 
 export default function TravelLogMain() {
   const {travelId} = useTravelDetailStore();
-  const {travelDates, scheduleDayNum, travelSchedules, setTravelSchedules} =
-    useTravelLogContext();
-  const {showMapSearch, showPlusSelf, handleShowPlusSelf} =
-    useTravelLogContext();
+  const {
+    travelDates,
+    scheduleDayNum,
+    travelSchedules,
+    setTravelSchedules,
+    showMapSearch,
+    showPlusSelf,
+    handleShowPlusSelf,
+  } = useTravelLogContext();
+
+  const queryClient = useQueryClient();
 
   // [todo] 여행 일정 조회
-
-  const {data} = useSuspenseQuery({
+  const { data: travelSchedulesData } = useSuspenseQuery({
     queryKey: ['travelSchedules', travelId],
-    queryFn: () => moyeobang.getTravelSchedules(travelId),
+    queryFn: async () => {
+      const schedules = await moyeobang.getTravelSchedules(travelId);
+      console.log('[*] 여행 일정 조회 성공', schedules);
+      return schedules;
+    },
   });
-
-  const responseSchedules = data.data.data.schedules;
-  setTravelSchedules(responseSchedules);
-
-
-  // 지도 검색 모달
+  
+  // travelSchedulesData가 업데이트되면 상태를 설정
+  useEffect(() => {
+    if (travelSchedulesData) {
+      setTravelSchedules(travelSchedulesData.data.data.schedules);
+    }
+  }, [travelSchedulesData, setTravelSchedules]);
+  
+  // 상태가 업데이트된 후의 travelSchedules를 확인
+  useEffect(() => {
+    console.log('[*] 바뀌나 travelSchedules', travelSchedules);
+  }, [travelSchedules]);
+ 
 
   return (
     <>

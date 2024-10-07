@@ -7,6 +7,8 @@ import bangBang from '@/assets/icons/bangBang.png';
 import kakaoLogin from '@/assets/icons/kakaoLogin.png';
 import googleLogin from '@/assets/icons/googleLogin.png';
 
+const baseUrl = import.meta.env.VITE_BASEURL + '/api';
+
 const LoginStyle = css`
   width: 390px;
   height: 100vh;
@@ -59,12 +61,17 @@ export default function Login() {
         <div id="sky-blur-subtitle">모여방</div>
         <img src={bangBang} alt="bangBang" id="bang-bang" />
         <div id="login-buttons">
-          <img
-            src={kakaoLogin}
-            alt="kakaoLogin"
-            id="kakao-login"
-            onClick={() => handleLogin('kakao')}
-          />
+          {/* {baseUrl} */}
+          {/* {baseUrl && ( */}
+            {/* // <a href={`${baseUrl}/oauth2/authorization/kakao`}> */}
+              <img
+                src={kakaoLogin}
+                alt="kakaoLogin"
+                id="kakao-login"
+                onClick={() => handleLogin('kakao')}
+              />
+            {/* </a> */}
+          {/* )} */}
           <img
             src={googleLogin}
             alt="googleLogin"

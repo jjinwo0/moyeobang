@@ -12,12 +12,18 @@ import categoryIcon from '@/assets/icons/categoryIcon.png';
 import locationIcon from '@/assets/icons/locationIcon.png';
 import reviewIcon from '@/assets/icons/reviewIcon.png';
 
-export default function MarkerDetail() {
+export default function MarkerDetail({
+  setShowMarkerDetail,
+}: {
+  setShowMarkerDetail: (show: boolean) => void;
+}) {
   const {selectedMarker, setSelectedMarker} = useTravelLogContext();
   const {setSearchLocation, handleShowMapSearch, setScheduleName} =
     useTravelLogContext();
-  console.log('[*]marker 정보', selectedMarker);
 
+  useEffect(() => {
+    console.log('[*]야 임마 selectedMarker', selectedMarker);
+  });
   const [isExpanded, setIsExpanded] = useState(false);
   const MarkerDetailHeight = isExpanded ? '80vh' : '20vh';
 
@@ -56,6 +62,7 @@ export default function MarkerDetail() {
   const handleDetailClose = () => {
     setSearchLocation(selectedMarker?.title || '');
     handleShowMapSearch();
+    setShowMarkerDetail(false);
   };
 
   return (

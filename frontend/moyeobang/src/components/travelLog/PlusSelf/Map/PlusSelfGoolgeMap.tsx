@@ -19,7 +19,7 @@ const defaultCenter = {lat: 37.5665, lng: 126.978}; // 기본 중심: 서울
 
 // Translate types from English to Korean
 const translateTypes = (types: string[]) => {
-  return types.map(type => (typesKo as Record<string, string>)[type] || type);
+  return types.map(type => (typesKo as Record<string, string>)[type] || '기타');
 };
 
 // Create a marker from place result
@@ -49,11 +49,13 @@ const PlusSelfGoogleMap = forwardRef(
     const [markers, setMarkers] = useState<CustomMarker[]>([]);
     const [isInteraction, setIsInteraction] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
-    const {selectedPlace, selectedMarker, setSelectedMarker, scheduleEdit} =
+    const {selectedPlace, selectedMarker, setSelectedMarker, scheduleEdit, scheduleDayNum, travelSchedules} =
       useTravelLogContext();
     const [defaultMarker, setDefaultMarker] = useState<google.maps.Icon | null>(
       null
     );
+    const [showMarkerDetail, setShowMarkerDetail] = useState<boolean>(false);
+
 
     // Provide a method for parents to change the map center
     useImperativeHandle(ref, () => ({
@@ -77,6 +79,7 @@ const PlusSelfGoogleMap = forwardRef(
         map.panTo(marker.position);
         map.setZoom(15);
       }
+      setShowMarkerDetail(true);
     };
 
     const setBoundsFromSelectedPlaceAndSearch = async () => {
@@ -308,9 +311,9 @@ const PlusSelfGoogleMap = forwardRef(
               />
             ))}
           </GoogleMap>
-          {selectedMarker && (
+          {showMarkerDetail && (
             <div css={MapDetailLayout}>
-              <MarkerDetail />
+              <MarkerDetail setShowMarkerDetail={setShowMarkerDetail} />
             </div>
           )}
         </div>

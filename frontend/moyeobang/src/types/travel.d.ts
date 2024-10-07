@@ -75,4 +75,5 @@ interface ResponseGetProfile {
   profileImage: ImgUrl;
   bankName: BankName;
   accountNumber: SourceAccountNumber;
+  accountId: Id;
 }
