@@ -11,13 +11,28 @@ public class KakaoAttributes {
     @JsonProperty("connected_at")
     private String connectedAt;
 
+    private Properties properties;
+
     @JsonProperty("kakao_account")
     private KakaoAccount kakaoAccount;
+
+    @Data
+    public static class Properties {
+
+        private String nickname;
+
+        @JsonProperty("profile_image")
+        private String profileImage;
+
+        @JsonProperty("thumbnail_image")
+        private String thumbnailImage;
+    }
 
     @Data
     public static class KakaoAccount {
 
         private String email;
+
         private Profile profile;
 
         @Data
