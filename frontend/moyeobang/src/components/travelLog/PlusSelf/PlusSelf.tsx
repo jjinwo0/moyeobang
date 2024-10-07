@@ -131,7 +131,7 @@ export default function PlusSelf() {
           queryKey: ['travelSchedules', travelId],
           refetchType: 'all',
         });
-      }, 1500);
+      }, 2000);
       // resetForm();
       // handleShowPlusSelf();
 
