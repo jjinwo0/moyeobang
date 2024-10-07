@@ -163,7 +163,12 @@ export default function PlusSelf() {
   //   }
   // };
 
-  const makeScheduleLocation = () => {
+  // const makeScheduleLocation = () => {
+
+  // };
+
+  const handleSave = () => {
+    // [todo] 저장 로직 추가
     if (selectedMarker) {
       const scheduleLocation: ScheduleLocation = {
         googlePlaceId: selectedMarker?.placeId || '',
@@ -181,11 +186,6 @@ export default function PlusSelf() {
       };
       setScheduleLocation(scheduleLocation);
     }
-  };
-
-  const handleSave = () => {
-    // [todo] 저장 로직 추가
-    makeScheduleLocation();
 
     /**
      * 1. 일정 장소
@@ -258,7 +258,9 @@ export default function PlusSelf() {
   useEffect(() => {
     if (scheduleDayNum) {
       const date = travelDates[scheduleDayNum - 1].split(' ')[0]; // 요일 제거
-      const time = `${AMPMSelection === 'AM' ? String(hour).padStart(2, '0') : String(Number(hour) + 12).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+      const hourInt = Number(hour);
+      const convertedHour = AMPMSelection === 'PM' && hourInt !== 12 ? hourInt + 12 : hourInt === 12 && AMPMSelection === 'AM' ? 0 : hourInt;
+      const time = `${String(convertedHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
       if (hour !== '' && minute !== '') {
         setDateTime(`${date}T${time}`);
         console.log('[*] selected Marker', selectedMarker);
