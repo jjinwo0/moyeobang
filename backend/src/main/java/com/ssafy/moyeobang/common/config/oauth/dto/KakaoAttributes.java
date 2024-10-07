@@ -7,6 +7,8 @@ public class KakaoAttributes {
 
     private Long id;
 
+    private String connectedAt;
+
     private KakaoAccount kakaoAccount;
 
     @Data
