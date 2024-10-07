@@ -9,4 +9,6 @@ public interface ScheduleJpaRepositoryInSchedule extends JpaRepository<ScheduleJ
     Optional<List<ScheduleJpaEntity>> findByTravelId(Long scheduleId);
 
     void deleteById(Long id);
+
+    List<ScheduleJpaEntity> findAllByIdIn(List<Long> scheduleIds);
 }
