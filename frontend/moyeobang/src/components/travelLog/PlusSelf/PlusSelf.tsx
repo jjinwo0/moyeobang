@@ -106,19 +106,6 @@ export default function PlusSelf() {
       });
       resetForm();
       handleShowPlusSelf();
-
-      // console.log('성공');
-      // try {
-      //   const data = await queryClient.fetchQuery({
-      //     queryKey: ['travelSchedules', travelId],
-      //     queryFn: () => moyeobang.getTravelSchedules(travelId),
-      //   });
-      //   setTravelSchedules(data.data.data.schedules);
-      //   handleShowPlusSelf();
-      //   resetForm();
-      // } catch (error) {
-      //   console.error('Error fetching travel schedules:', error);
-      // }
     },
   });
 
@@ -139,33 +126,36 @@ export default function PlusSelf() {
       moyeobang.postChangeTravelSchedule(travelId, scheduleId, scheduleData),
     onSuccess: async () => {
       console.log('[*] 수정 성공');
-      queryClient.invalidateQueries({
-        queryKey: ['travelSchedules', travelId],
-        refetchType: 'all',
-      });
-      resetForm();
-      handleShowPlusSelf();
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ['travelSchedules', travelId],
+          refetchType: 'all',
+        });
+      }, 1500);
+      // resetForm();
+      // handleShowPlusSelf();
 
       // 일정 시간 후에 fetchQuery를 호출하여 최신 데이터를 가져옵니다.
       // setTimeout(async () => {
-      try {
-        const data = await queryClient.fetchQuery({
-          queryKey: ['travelSchedules'],
-          queryFn: () => moyeobang.getTravelSchedules(travelId),
-        });
+      //   try {
+      //     const data = await queryClient.fetchQuery({
+      //       queryKey: ['travelSchedules'],
+      //       queryFn: () => moyeobang.getTravelSchedules(travelId),
+      //     });
 
-        // 최신 데이터로 Context 업데이트
-        console.log(
-          '[*] 최신 데이터로 Context 업데이트',
-          data.data.data.schedules
-        );
+      //     // 최신 데이터로 Context 업데이트
+      //     console.log(
+      //       '[*] 최신 데이터로 Context 업데이트',
+      //       data.data.data.schedules
+      //     );
 
-        setTravelSchedules(data.data.data.schedules);
-        handleShowPlusSelf();
-      } catch (error) {
-        console.error('Error fetching travel schedules:', error);
-      }
-      // }, 2000); // 2초 후에 fetchQuery를 호출합니다. 필요에 따라 시간을 조정하세요.
+      // setTravelSchedules(data.data.data.schedules);
+      resetForm();
+      handleShowPlusSelf();
+      //   } catch (error) {
+      //     console.error('Error fetching travel schedules:', error);
+      //   }
+      // }, 500); // 2초 후에 fetchQuery를 호출합니다. 필요에 따라 시간을 조정하세요.
     },
   });
 
