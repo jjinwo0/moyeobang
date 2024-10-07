@@ -1,6 +1,5 @@
 package com.ssafy.moyeobang.common.config.oauth.dto;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.Role;
 import java.security.MessageDigest;
@@ -11,13 +10,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KakaoResponse implements OAuth2Response {
 
-    private final KakaoAttributes kakaoAttributes;
+    private final Map<String, Object> attributes;
+    private final Map<String, Object> kakaoAccount;
+    private final Map<String, Object> profile;
 
     public KakaoResponse(Map<String, Object> attributes) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        this.kakaoAttributes = objectMapper.convertValue(attributes, KakaoAttributes.class);
+        this.attributes = attributes;
 
-        log.debug("KakaoAttributes: {}", kakaoAttributes);
+        System.out.println("??들어오나");
+        System.out.println(attributes);
+
+        log.debug("attribute: {}", attributes.get("kakao_account"));
+        this.kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        this.profile = (Map<String, Object>) kakaoAccount.get("profile");
     }
 
     @Override
@@ -27,56 +32,57 @@ public class KakaoResponse implements OAuth2Response {
 
     @Override
     public Long getProviderId() {
-        return kakaoAttributes.getId();
+        return (Long) attributes.get("id");
     }
 
     @Override
     public String getEmail() {
-        return kakaoAttributes.getKakaoAccount().getEmail();
+        return kakaoAccount.get("email").toString();
     }
 
     @Override
     public String getNickname() {
-        return kakaoAttributes.getKakaoAccount().getProfile().getNickname();
+
+        return profile.get("nickname").toString();
     }
 
     @Override
     public String getProfileImage() {
-        return kakaoAttributes.getKakaoAccount().getProfile().getThumbnailImageUrl();
+
+        return profile.get("profile_image_url").toString();
+    }
+
+    public String makeNickname() {
+        String email = getEmail();
+        return hashString(email);
     }
 
     private String hashString(String input) {
+        MessageDigest digest = null;
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(input.getBytes());
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            return hexString.toString().substring(0, 10);
+            digest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error while hashing the input string", e);
+            throw new RuntimeException(e);
         }
+        byte[] hash = digest.digest(input.getBytes());
+        StringBuilder hexString = new StringBuilder();
+
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+
+        return hexString.toString().substring(0, 10);
     }
 
     @Override
     public MemberJpaEntity toEntity() {
-        String email = getEmail();
-        String nickname = getNickname();
-        String profile = getProfileImage();
-
-        if (email == null || nickname == null || profile == null) {
-            throw new IllegalArgumentException("Missing essential user information");
-        }
 
         return MemberJpaEntity.builder()
-                .email(email)
-                .username(nickname)
-                .profile(profile)
+                .email(getEmail())
+                .username(getNickname())
+                .profile(profile.get("profile_image_url").toString())
                 .role(Role.MEMBER)
                 .build();
     }
