@@ -121,6 +121,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         CookieUtils.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
         CookieUtils.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, cookieMaxAge);
-    }arAuthenticationAttributes(request);
     }
 }
