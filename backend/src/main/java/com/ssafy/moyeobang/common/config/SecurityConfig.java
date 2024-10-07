@@ -95,7 +95,7 @@ public class SecurityConfig {
 
         return new OAuth2SuccessHandler(
                 memberRepository,
-                oAuth2AuthorizationRequestOnCookieRepository,
+                oAuth2AuthorizationRequestOnCookieRepository(),
                 tokenManager
         );
     }
