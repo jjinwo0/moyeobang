@@ -38,8 +38,9 @@ public class OAuth2AuthorizationRequestOnCookieRepository implements
     @Override
     public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request,
                                                                  HttpServletResponse response) {
-
-        return this.loadAuthorizationRequest(request);
+        OAuth2AuthorizationRequest authorizationRequest = loadAuthorizationRequest(request);
+        removeAuthorizationRequestCookies(request, response); // 쿠키 삭제
+        return authorizationRequest; // 삭제된 요청 반환
     }
 
     public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
