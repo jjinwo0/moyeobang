@@ -33,7 +33,7 @@ public class ScheduleInfo {
     public ScheduleInfo(ScheduleJpaEntity schedule,
                         WithdrawJpaEntity withdraw) {
         this.scheduleId = schedule.getId();
-        this.scheduleTitle = schedule.getTitle();
+        this.scheduleTitle = schedule.getScheduleTitle();
         this.startDateTime = schedule.getStartDateTime();
         this.title = schedule.getTitle();
         this.address = schedule.getAddress();
