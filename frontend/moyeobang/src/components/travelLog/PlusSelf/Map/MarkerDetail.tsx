@@ -17,8 +17,13 @@ export default function MarkerDetail({
 }: {
   setShowMarkerDetail: (show: boolean) => void;
 }) {
-  const {selectedMarker, setSelectedMarker} = useTravelLogContext();
-  const {setSearchLocation, handleShowMapSearch} = useTravelLogContext();
+  const {
+    selectedMarker,
+    setSelectedMarker,
+    setScheduleName,
+    setSearchLocation,
+    handleShowMapSearch,
+  } = useTravelLogContext();
 
   useEffect(() => {
     console.log('[*]야 임마 selectedMarker', selectedMarker);
@@ -60,6 +65,7 @@ export default function MarkerDetail({
 
   const handleDetailClose = () => {
     setSearchLocation(selectedMarker?.title || '');
+    setScheduleName(selectedMarker?.title || '');
     handleShowMapSearch();
     setShowMarkerDetail(false);
   };

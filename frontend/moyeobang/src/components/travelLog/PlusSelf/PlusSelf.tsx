@@ -31,6 +31,8 @@ export default function PlusSelf() {
     scheduleDayNum,
     selectedMarker,
     travelSchedules,
+    scheduleName,
+    setScheduleName,
     setTravelSchedules,
   } = useTravelLogContext();
   const [AMPMSelection, setAMPMSelection] = useState<'AM' | 'PM'>('AM');
@@ -44,9 +46,9 @@ export default function PlusSelf() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dateTime, setDateTime] = useState<string>('');
   const toggleDropdown = () => setIsDropdownOpen(prev => !prev);
-  const [scheduleName, setScheduleName] = useState<string | undefined>(
-    searchLocation
-  );
+  // const [scheduleName, setScheduleName] = useState<string | undefined>(
+  //   searchLocation
+  // );
   const [scheduleLocation, setScheduleLocation] =
     useState<ScheduleLocation | null>(null);
   const [getSchedule, setGetSchedule] = useState<DaySchedule | null>(null);
@@ -99,12 +101,24 @@ export default function PlusSelf() {
     }) => moyeobang.postTravelSchedule(travelId, scheduleData),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['travelSchedules'],
+        queryKey: ['travelSchedules', travelId],
         refetchType: 'all',
       });
-      // console.log('성공');
       resetForm();
       handleShowPlusSelf();
+
+      // console.log('성공');
+      // try {
+      //   const data = await queryClient.fetchQuery({
+      //     queryKey: ['travelSchedules', travelId],
+      //     queryFn: () => moyeobang.getTravelSchedules(travelId),
+      //   });
+      //   setTravelSchedules(data.data.data.schedules);
+      //   handleShowPlusSelf();
+      //   resetForm();
+      // } catch (error) {
+      //   console.error('Error fetching travel schedules:', error);
+      // }
     },
   });
 
@@ -154,30 +168,6 @@ export default function PlusSelf() {
       // }, 2000); // 2초 후에 fetchQuery를 호출합니다. 필요에 따라 시간을 조정하세요.
     },
   });
-
-  // const makeScheduleLocation = () => {
-  //   if (selectedMarker) {
-  //     const scheduleLocation: ScheduleLocation = {
-  //       googlePlaceId: selectedMarker?.placeId || '',
-  //       title: selectedMarker?.title || '',
-  //       address: selectedMarker?.address || '',
-  //       latitude:
-  //         typeof selectedMarker?.position?.lat === 'function'
-  //           ? selectedMarker.position.lat()
-  //           : selectedMarker?.position?.lat || 0,
-  //       longitude:
-  //         typeof selectedMarker?.position?.lng === 'function'
-  //           ? selectedMarker.position.lng()
-  //           : selectedMarker?.position?.lng || 0,
-  //       category: selectedMarker?.types ? selectedMarker.types[0] : '',
-  //     };
-  //     return scheduleLocation;
-  //   }
-  // };
-
-  // const makeScheduleLocation = () => {
-
-  // };
 
   useEffect(() => {
     if (selectedMarker) {
@@ -236,16 +226,6 @@ export default function PlusSelf() {
       scheduleData.append('image', fileInputRef.current.files[0]);
     }
 
-    console.log('[*] scheduleData', Object.fromEntries(scheduleData.entries()));
-
-    // const scheduleData: PostTravelSchedule = {
-    //   scheduleTitle: scheduleName || '',
-    //   scheduleLocation: scheduleLocation || '',
-    //   scheduleTime: dateTime || '',
-    //   memo: memo || '',
-    //   scheduleImage: selectedImage || '',
-    // };
-    // [todo] 저장 로직 추가
     if (scheduleEdit) {
       console.log(
         '수정 모드 scheduleData:',
@@ -328,11 +308,6 @@ export default function PlusSelf() {
       }
     }
   }, [scheduleEdit]);
-
-  useEffect(() => {
-    console.log('[*] 바뀌나 travelSchedules', travelSchedules);
-    console.log('[*] 바뀌나 scheduleName', scheduleName);
-  }, [travelSchedules, scheduleName]);
 
   return (
     <>
