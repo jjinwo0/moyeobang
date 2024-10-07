@@ -2,6 +2,7 @@ package com.ssafy.moyeobang.common.config;
 
 import com.ssafy.moyeobang.common.config.jwt.TokenManager;
 import com.ssafy.moyeobang.common.config.oauth.MemberRepositoryInOAuth;
+import com.ssafy.moyeobang.common.config.oauth.OAuth2AuthorizationRequestOnCookieRepository;
 import com.ssafy.moyeobang.common.config.oauth.OAuth2CustomService;
 import com.ssafy.moyeobang.common.config.oauth.OAuth2SuccessHandler;
 import java.net.URLEncoder;
@@ -54,6 +55,8 @@ public class SecurityConfig {
                                 .authorizationEndpoint(
                                         endpoint -> endpoint
                                                 .baseUri("/api/oauth2/authorization")
+                                                .authorizationRequestRepository(
+                                                        oAuth2AuthorizationRequestOnCookieRepository())
                                 )
                                 .redirectionEndpoint(
                                         endpoint -> endpoint.
@@ -92,8 +95,14 @@ public class SecurityConfig {
 
         return new OAuth2SuccessHandler(
                 memberRepository,
+                oAuth2AuthorizationRequestOnCookieRepository,
                 tokenManager
         );
+    }
+
+    @Bean
+    public OAuth2AuthorizationRequestOnCookieRepository oAuth2AuthorizationRequestOnCookieRepository() {
+        return new OAuth2AuthorizationRequestOnCookieRepository();
     }
 
     private AuthenticationFailureHandler oAuth2FailureHandler() {
