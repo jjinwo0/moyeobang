@@ -23,7 +23,7 @@ export function getCategoryTag(categoryName: string) {
     case '쇼핑':
       return {
         icon: shoppingCartIcon,
-        label: '장바구니 가득 채웠나방',
+        label: '플렉스 좀 했나방',
       };
     case '숙박':
       return {
@@ -34,6 +34,11 @@ export function getCategoryTag(categoryName: string) {
       return {
         icon: airplaneIcon,
         label: '날개잃은 천사인가방',
+      };
+    case '액티비티':
+      return {
+        icon: activityIcon,
+        label: '날쌘돌이인가방',
       };
     default:
       return {

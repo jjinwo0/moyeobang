@@ -15,7 +15,7 @@ const containerStyle = css`
 
   h3 {
     font-family: 'semibold';
-    font-size: 15px;
+    font-size: 17px;
   }
 `;
 
@@ -90,7 +90,7 @@ const tagStyle = (index: number) => css`
   background-color: ${tagBackground[index % tagBackground.length]};
   border-radius: 5px;
   margin-bottom: 5px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: 'semibold';
   padding: 5px;
 `;
