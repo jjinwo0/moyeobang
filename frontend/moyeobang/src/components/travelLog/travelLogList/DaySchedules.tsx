@@ -64,9 +64,6 @@ export default function DaySchedules({
   const {
     travelSchedules,
     setTravelSchedules,
-    showPlusSelf,
-    showMapSearch,
-    handleShowPlusSelf,
   } = useTravelLogContext();
 
   const daySchedules = travelSchedules[dayNum - 1]?.daySchedules || [];
