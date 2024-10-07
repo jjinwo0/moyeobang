@@ -88,8 +88,8 @@ export default function PayModal({onXClick} : QRPayProps) {
         <HeaderWithXButton onXClick={onXClick} />
         <div css={layoutStyle}>
             <TwoBtn  
-            leftText = 'QR 결제'
-            rightText = 'QR 스캔'
+            leftText = {<><span>QR</span>&nbsp;결제</>}
+            rightText = {<><span>QR</span>&nbsp;인식</>}
             onLeftClick={handleLeft}
             onRightClick={handleRight}
             />
