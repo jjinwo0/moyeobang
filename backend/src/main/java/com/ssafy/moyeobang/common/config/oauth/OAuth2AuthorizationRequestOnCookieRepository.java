@@ -23,12 +23,27 @@ public class OAuth2AuthorizationRequestOnCookieRepository implements
     @Override
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
                                          HttpServletResponse response) {
+        // 인가 요청이 비어있으면 쿠키를 삭제하고 종료
+        if (authorizationRequest == null) {
+            removeAuthorizationRequest(request, response);
+            return;
+        }
 
+        // response에 인가 요청을 저장한다.
+        CookieUtils.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME,
+                CookieUtils.serialize(authorizationRequest), COOKIE_EXPIRE);
     }
 
+    // 인가 요청을 삭제한다. => 쿠키에서 현재 인가 요청 쿠키를 삭제한다.
     @Override
     public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request,
                                                                  HttpServletResponse response) {
-        return null;
+        OAuth2AuthorizationRequest authorizationRequest = loadAuthorizationRequest(request);
+        removeAuthorizationRequestCookies(request, response); // 쿠키 삭제
+        return authorizationRequest; // 삭제된 요청 반환
+    }
+
+    public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
+        CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
     }
 }
