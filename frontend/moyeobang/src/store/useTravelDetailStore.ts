@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {persist} from 'zustand/middleware';
+import {persist, PersistStorage} from 'zustand/middleware';
 
 interface TravelState
   extends Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantCount'> {
@@ -7,6 +7,20 @@ interface TravelState
     data: Omit<Travel, 'quizQuestion' | 'quizAnswer' | 'participantCount'>
   ) => void;
 }
+
+// Custom storage object for Zustand
+const localStoragePersist: PersistStorage<TravelState> = {
+  getItem: name => {
+    const storedValue = localStorage.getItem(name);
+    return storedValue ? JSON.parse(storedValue) : null;
+  },
+  setItem: (name, value) => {
+    localStorage.setItem(name, JSON.stringify(value));
+  },
+  removeItem: name => {
+    localStorage.removeItem(name);
+  },
+};
 
 const useTravelDetailStore = create<TravelState>()(
   persist(
@@ -44,9 +58,10 @@ const useTravelDetailStore = create<TravelState>()(
         }),
     }),
     {
-      name: 'travel-detail-store', // localStorage에 저장될 키 이름
-      getStorage: () => localStorage, // localStorage 사용
+      name: 'travel-detail-store', // Key name in localStorage
+      storage: localStoragePersist, // Use the custom storage object
     }
   )
 );
+
 export default useTravelDetailStore;
