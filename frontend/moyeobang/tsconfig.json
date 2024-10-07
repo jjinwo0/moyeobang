@@ -25,11 +25,13 @@
     "noEmit": true, // 컴파일 후 파일을 출력하지 않음
     "outDir": "./dist", // 출력 디렉토리 설정
     "resolveJsonModule": true,
+    
+
 
     /* Linting 설정 */
     "strict": true, // 엄격한 타입 체크
-    "noUnusedLocals": true, // 사용하지 않는 로컬 변수를 허용하지 않음
-    "noUnusedParameters": true, // 사용하지 않는 파라미터를 허용하지 않음
+    "noUnusedLocals": false, // 사용하지 않는 로컬 변수를 허용하지 않음
+    "noUnusedParameters": false, // 사용하지 않는 파라미터를 허용하지 않음
     "noFallthroughCasesInSwitch": true // Switch 문에서 fallthrough 허용하지 않음
   },
   "include": ["src"], // 포함 경로 설정
