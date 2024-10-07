@@ -112,6 +112,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {travelId} = useTravelDetailStore();
+  const {accountId} = useTravelDetailStore();
   const [canSettle, setCanSettle] = useState<boolean>(false);
   const [remianMoney, setRemainMoney] = useState<Money>(data.money);
 
@@ -120,12 +121,14 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
     mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByReceipt}) => 
       moyeobang.updateSettleByReceipt(transactionId, travelId, data),
     onSuccess: async () => {
+
       await queryClient.invalidateQueries({
-        queryKey: ['transactionDetail', data.transactionId], // detail에 바로 업데이트
-        refetchType: 'all',
+            queryKey: ['transactionDetail', accountId, data.transactionId], // detail에 바로 업데이트
+            refetchType: 'all',
       });
-      await navigate({to: `/account/${data.transactionId}/detail`});
+      await navigate({to: `/account/${data.transactionId.toString()}/detail`});
       onClose();
+
     },
   });
 
@@ -138,7 +141,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
         queryKey: ['transactionDetail', data.transactionId], // detail에 바로 업데이트
         refetchType: 'all',
       });
-      await navigate({to: `/account/${data.transactionId}/detail`});
+      await navigate({to: `/account/${data.transactionId.toString()}/detail`});
       onClose();
     },
   });
