@@ -18,13 +18,14 @@ public class KakaoAttributes {
     public static class KakaoAccount {
 
         private String email;
-
         private Profile profile;
 
         @Data
         public static class Profile {
-
             private String nickname;
+
+            @JsonProperty("profile_image_url")
+            private String profileImageUrl;
 
             @JsonProperty("thumbnail_image_url")
             private String thumbnailImageUrl;
