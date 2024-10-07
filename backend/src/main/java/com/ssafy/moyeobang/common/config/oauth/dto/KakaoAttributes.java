@@ -8,6 +8,9 @@ public class KakaoAttributes {
 
     private Long id;
 
+    @JsonProperty("connected_at")
+    private String connectedAt;
+
     @JsonProperty("kakao_account")
     private KakaoAccount kakaoAccount;
 
