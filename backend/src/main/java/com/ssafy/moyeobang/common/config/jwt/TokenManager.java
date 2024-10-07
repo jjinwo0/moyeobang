@@ -28,7 +28,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TokenManager {
 
-    private final JwtProperties properties;
     private final JwtProperties jwtProperties;
 
     public TokenDetail generateToken(MemberJpaEntity member, Duration expiry, TokenType tokenType) {
