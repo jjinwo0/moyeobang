@@ -37,12 +37,12 @@ const containerStyle = css`
   /* height: 100%; */
 `;
 
-const containerListStyle = css`
+const containerListStyle = (hasCurrentTrips: boolean) => css`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 320px;
+  height: ${hasCurrentTrips ? '320px' : 'calc(100vh - 200px)'};
   overflow-y: auto;
   // margin-top: 20px;
   // padding-top: 10px;
@@ -303,7 +303,7 @@ function Index() {
 
           {/* 여행 카드 리스트 */}
 
-          <div css={containerListStyle}>
+          <div css={containerListStyle(currentTrips.length > 0)}>
             <div>
               {tripsToDisplay.length > 0 ? (
                 tripsToDisplay.map((item, index) => (
