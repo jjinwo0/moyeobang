@@ -158,7 +158,7 @@ export default function ImgSummary({scheduleImg}: ImgSummaryProps) {
         <div css={gridContainerStyle}>
           {scheduleImg.map((item, index) => (
             <div css={gridItemStyle} key={index}>
-              <img src={item.imgUrl} alt={item} css={imgStyle} />
+              <img src={item.imgUrl} alt={item.locationName} css={imgStyle} />
               <p css={placeNameStyle}>{item.locationName}</p>
             </div>
           ))}

@@ -7,7 +7,7 @@ import useCurrentTravelStore from "@/store/useCurrentTravelStore";
 import useTravelDetailStore from "@/store/useTravelDetailStore";
 import { useState } from "react";
 
-const cardLayoutStyle = (travelImg:string) => css`
+const cardLayoutStyle = (travelImg:string|null) => css`
     width: 330px;
     height: 200px;
     margin-top: 90px;

@@ -1,9 +1,10 @@
-import type { InputHTMLAttributes } from "react"
 import { css } from '@emotion/react'
-import 'react'
+import React from 'react'
 
-type MemoInputProps = InputHTMLAttributes<HTMLInputElement> & {label: string};
-
+interface MemoInputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    label: string;
+}
 
 const memoContainerStyle = css`
     width: 330px;
@@ -31,7 +32,11 @@ export default function MemoInput({label, ...props} : MemoInputProps) {
     return (
         <label css={memoContainerStyle}>
             {label}
-            <textarea type="text" {...props} css={memoInputStyle}/>
+            <textarea
+                {...props as React.TextareaHTMLAttributes<HTMLTextAreaElement>}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => props.onChange?.(e)}
+                css={memoInputStyle}
+            />
         </label>
     )
 

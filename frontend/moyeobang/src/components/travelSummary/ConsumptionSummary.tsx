@@ -96,7 +96,6 @@ const tagStyle = (index: number) => css`
 `;
 
 interface ConsumptionSummaryProps {
-  travelData: TravelSummary;
   categoryData: ConsumptionByCategory[];
   memberData: ConsumptionByMember[];
   totalMoney: number;
@@ -104,30 +103,29 @@ interface ConsumptionSummaryProps {
 }
 
 export default function ConsumptionSummary({
-  travelData,
   categoryData,
   memberData,
   totalMoney,
   totalConsumption,
 }: ConsumptionSummaryProps) {
-  const {totalAmount, amountUsed, amountComparison} = travelData;
+  // const {totalAmount, amountUsed, amountComparison} = travelData;
 
-  // 금액 비교 함수
-  const calAmountComparison = () => {
-    const difference = amountUsed - amountComparison;
-    const isPositive = difference > 0;
-    const comparisonStyle = css`
-      color: ${isPositive ? colors.customRed : colors.customBlue};
-    `;
+  // // 금액 비교 함수
+  // const calAmountComparison = () => {
+  //   const difference = amountUsed - amountComparison;
+  //   const isPositive = difference > 0;
+  //   const comparisonStyle = css`
+  //     color: ${isPositive ? colors.customRed : colors.customBlue};
+  //   `;
 
-    return (
-      <span css={comparisonStyle}>
-        {isPositive
-          ? `+${difference.toLocaleString()}`
-          : `${difference.toLocaleString()}`}
-      </span>
-    );
-  };
+  //   return (
+  //     <span css={comparisonStyle}>
+  //       {isPositive
+  //         ? `+${difference.toLocaleString()}`
+  //         : `${difference.toLocaleString()}`}
+  //     </span>
+  //   );
+  // };
 
   return (
     <div css={containerStyle}>

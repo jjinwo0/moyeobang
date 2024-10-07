@@ -6,7 +6,7 @@ import informationImage from '@/assets/icons/information.png';
 import { useState } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 
-const cardLayoutStyle = (travelImg:string) =>  css`
+const cardLayoutStyle = (travelImg:string | null) =>  css`
     width: 330px;
     height: 200px;
     background-image: url(${travelImg});
@@ -118,7 +118,7 @@ export default function AccountCard({memberName, currentBalance, totalBalance} :
     const {travelImg} = useTravelDetailStore();
     const [isHover, setIsHover] = useState<boolean>(false);
 
-    const imgRef = useRef<HTMLDivElement>(null);
+    const imgRef = useRef<HTMLImageElement>(null);
     useOnClickOutside(imgRef, handleOutside)
 
     function handleOutside() {

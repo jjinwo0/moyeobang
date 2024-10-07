@@ -46,8 +46,10 @@ const proposal = css`
   width: 100%;
 `;
 
-type PublicDepositProps = AccountBalanceByGroup & {travelName: TravelName} & {
+type PublicDepositProps ={
   budget: number;
+  totalMoney: number;
+  travelName: string;
 };
 
 export default function PublicDeposit({

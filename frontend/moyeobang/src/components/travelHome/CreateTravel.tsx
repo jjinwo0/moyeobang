@@ -412,7 +412,7 @@ export default function CreateTravel({
 
               <div css={quizStyle}>
                 <QuizInput
-                  title={
+                  customTitle={
                     <span>
                       <span style={{color: 'red'}}>*</span> 초대퀴즈
                     </span>

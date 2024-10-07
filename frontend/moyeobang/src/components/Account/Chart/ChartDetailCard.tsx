@@ -14,7 +14,7 @@ const layoutStyle=css`
     padding:5px;
 `;
 
-const imageContainerStyle= (colorName:string) => css`
+const imageContainerStyle= (colorName:string | undefined) => css`
     width:70px;
     height:70px;
     border-radius:50%;
@@ -36,7 +36,7 @@ const imageContainerStyle= (colorName:string) => css`
     }
 `;
 
-const imageStyle= (isMember? :string) => css`
+const imageStyle= (isMember? :boolean) => css`
     border-radius: 50%;
     width: ${isMember ? '100%' : '80%'};
     height: ${isMember ? '100%' : '80%'};
@@ -88,7 +88,7 @@ export default function ChartDetailCard({profileImage, colorIndex, title, propor
 
     return (
         <div css={layoutStyle}>
-            <div css={ profileImage ? imageContainerStyle(colorList[colorIndex]) : imageContainerStyle(color)}>
+            <div css={ profileImage ? imageContainerStyle(colorList[colorIndex??0]) : imageContainerStyle(color)}>
                 <div id="imageBackgroundStyle">
                     {profileImage ? 
                     <img src={profileImage} alt={title} css={imageStyle(true)} /> : 

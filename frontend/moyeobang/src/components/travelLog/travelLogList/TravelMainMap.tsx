@@ -59,22 +59,13 @@ export default function TravelMainMap() {
       const schedules = travelSchedules[scheduleDayNum - 1]?.daySchedules ?? [];
       const newMarker = schedules
         .map(schedule => {
-          if ('scheduleId' in schedule) {
-            return {
-              lat: schedule.scheduleLocation.latitude,
-              lng: schedule.scheduleLocation.longitude,
-              googlePlaceId: schedule.scheduleLocation.googlePlaceId,
-              category: schedule.scheduleLocation.category,
-              name: schedule.scheduleLocation.title,
-            };
-          } else if ('transactionId' in schedule) {
-            return {
-              lat: schedule.latitude,
-              lng: schedule.longitude,
-              name: schedule.paymentName,
-            };
-          }
-          return null;
+          return {
+            lat: schedule.scheduleLocation?.latitude ?? 0,
+            lng: schedule.scheduleLocation?.longitude ?? 0,
+            googlePlaceId: schedule.scheduleLocation?.googlePlaceId ?? '',
+            category: schedule.scheduleLocation?.category ?? '',
+            name: schedule.scheduleLocation?.title ?? '',
+          };
         })
         .filter(marker => marker !== null);
       setMarkers(newMarker);

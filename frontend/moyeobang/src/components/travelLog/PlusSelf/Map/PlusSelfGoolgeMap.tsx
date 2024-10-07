@@ -49,13 +49,18 @@ const PlusSelfGoogleMap = forwardRef(
     const [markers, setMarkers] = useState<CustomMarker[]>([]);
     const [isInteraction, setIsInteraction] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
-    const {selectedPlace, selectedMarker, setSelectedMarker, scheduleEdit, scheduleDayNum, travelSchedules} =
-      useTravelLogContext();
+    const {
+      selectedPlace,
+      selectedMarker,
+      setSelectedMarker,
+      scheduleEdit,
+      scheduleDayNum,
+      travelSchedules,
+    } = useTravelLogContext();
     const [defaultMarker, setDefaultMarker] = useState<google.maps.Icon | null>(
       null
     );
     const [showMarkerDetail, setShowMarkerDetail] = useState<boolean>(false);
-
 
     // Provide a method for parents to change the map center
     useImperativeHandle(ref, () => ({
@@ -167,12 +172,14 @@ const PlusSelfGoogleMap = forwardRef(
             }
           });
         } else if (selectedPlace) {
+          const address =
+            typeof selectedPlace === 'string' ? selectedPlace : '';
           const geocoder = new window.google.maps.Geocoder();
           const searchQuery = searchLocation
             ? `${selectedPlace} ${searchLocation}`
             : selectedPlace;
 
-          geocoder.geocode({address: selectedPlace}, (results, status) => {
+          geocoder.geocode({address}, (results, status) => {
             if (status === 'OK' && results && results[0]) {
               const viewport = results[0].geometry.viewport;
               const location = results[0].geometry.location;
@@ -184,18 +191,10 @@ const PlusSelfGoogleMap = forwardRef(
               }
 
               if (searchLocation && searchLocation.trim() !== '') {
-                const request = {
-                  query: searchQuery,
+                const request: google.maps.places.TextSearchRequest = {
+                  query: typeof searchQuery === 'string' ? searchQuery : '',
                   bounds: bounds,
                   language: 'ko',
-                  fields: [
-                    'geometry',
-                    'name',
-                    'formatted_address',
-                    'rating',
-                    'types',
-                    'photos',
-                  ],
                 };
 
                 service.textSearch(request, (results, status) => {

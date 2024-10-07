@@ -71,7 +71,7 @@ export default function CalculatePopup() {
         )}
         {showModal === 'publicDeposit' && (
           <PublicDeposit
-            totalAmount={totalAmount}
+            totalMoney={totalAmount}
             travelName={travelName}
             budget={budget}
           ></PublicDeposit>

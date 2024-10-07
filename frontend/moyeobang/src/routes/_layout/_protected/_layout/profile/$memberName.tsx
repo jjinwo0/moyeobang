@@ -85,6 +85,7 @@ const data: ResponseGetProfile = {
   memberId: 1,
   memberName: '진우바오',
   profileImage: 'https://example.com/images.jpg',
+  accountId: 1,
   bankName: '싸피뱅크', // 일단 추가
   accountNumber: '123456789123', // 모여방과 연결된 계좌
 };
@@ -104,7 +105,7 @@ export default function profile() {
 
   const {
     params: {memberName}, // URL 파라미터에서 nickName 가져오기
-  } = useMatch('/_layout/_protected/_layout/profile/$memberName'); // 라우트와 매칭
+  } = useMatch({from:'/_layout/_protected/_layout/profile/$memberName'}); // 라우트와 매칭
 
   return (
     <>

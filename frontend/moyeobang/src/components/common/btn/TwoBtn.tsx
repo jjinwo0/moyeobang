@@ -51,7 +51,7 @@ export default function TwoBtn({
   onLeftClick,
   onRightClick,
   defaultActive = 'left',
-}) {
+}:BtnProps) {
   const [activeButton, setActiveButton] = useState<'left' | 'right'>(
     defaultActive
   ); // 기본값은 'left'

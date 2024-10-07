@@ -24,7 +24,7 @@ const checkStyle = css`
         height: 25px;
     }
 `;
-const inputStyle = (isDecided: boolean) =>  css`
+const inputStyle = (isDecided: boolean | undefined) =>  css`
     width: 80px;
     border:none;
     outline:none;

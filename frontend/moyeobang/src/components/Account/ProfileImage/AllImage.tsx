@@ -9,7 +9,7 @@ export default function AllImage({
     onClick 
     } : ProfileImageProps ) {
 
-const profileContainerStyle = (isSelected : boolean) => css`
+const profileContainerStyle = (isSelected : boolean | undefined) => css`
     flex-shrink: 0;
     display: flex;
     text-align:center;

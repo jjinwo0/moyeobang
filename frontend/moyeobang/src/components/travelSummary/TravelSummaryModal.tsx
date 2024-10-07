@@ -6,7 +6,6 @@ import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
 import ConsumptionSummary from './ConsumptionSummary';
 import ImgSummary from './ImgSummary';
 import MapComponent from './MapComponent'; // 지도 컴포넌트 임포트
-import bangBang from '@/assets/icons/bangBang.png';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko'; // 한국어 요일을 위해 한국어 로케일 임포트
 import weekday from 'dayjs/plugin/weekday'; // 요일 계산을 위한 플러그인
@@ -113,7 +112,7 @@ dayjs.updateLocale('ko', {
 });
 
 interface TravelSummaryProps {
-  travelId: number;
+  travelId?: number;
   travelName: string;
   startDate: string;
   endDate: string;
@@ -166,32 +165,10 @@ export default function TravelSummaryModal({
   //여행 일정 조회
   const {data: TravelSchedulesData} = useSuspenseQuery({
     queryKey: ['travelSchedules', travelId],
-    queryFn: () => moyeobang.getTravelSchedules(travelId),
+    queryFn: () => moyeobang.getTravelSchedules(Number(travelId)),
   });
 
-  const travelSummary = {
-    locationList: [
-      {
-        latitude: 33.431441,
-        longitude: 126.874237, // 여행 장소들 위도,경도
-      },
-      {
-        latitude: 33.3434,
-        longitude: 126.874237, // 여행 장소들 위도,경도
-      },
-      {
-        latitude: 32.3433,
-        longitude: 126.874237, // 여행 장소들 위도,경도
-      },
-    ],
 
-    imgSummary: [
-      {
-        imgUrl: '',
-        locationName: '제주공항',
-      },
-    ], // 이미지&장소이름 8개 리스트
-  };
   console.log(TravelSchedulesData?.data.data.schedules);
   const locationList =
     TravelSchedulesData?.data.data.schedules
@@ -207,13 +184,13 @@ export default function TravelSummaryModal({
       .flatMap(schedule => schedule.daySchedules)
       .filter(daySchedule => daySchedule.scheduleImg) // scheduleImg가 있는 항목만 필터링
       .map(daySchedule => ({
-        imgUrl: daySchedule.scheduleImg, // scheduleImg 필드 추출
+        imgUrl: daySchedule.scheduleImg || '', // scheduleImg 필드 추출
         locationName: daySchedule.scheduleLocation?.title || 'Unknown Location', // scheduleLocation에서 장소 이름 추출
       })) || [];
+
   const slides = [
     <ConsumptionSummary
       key="consumptionSummary"
-      travelData={travelSummary}
       categoryData={DataByCategory?.data.data || []}
       memberData={DataByMembers?.data.data || []}
       totalMoney={AccountMoneyData?.data.data.totalAmount}
@@ -231,7 +208,6 @@ export default function TravelSummaryModal({
       setCurrentSlide(prevSlide => (prevSlide + 1) % slideCount),
     onSwipedRight: () =>
       setCurrentSlide(prevSlide => (prevSlide - 1 + slideCount) % slideCount),
-    preventDefaultTouchmoveEvent: true,
     trackMouse: true, // 마우스도 지원
   });
   useEffect(() => {

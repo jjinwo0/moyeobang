@@ -83,6 +83,9 @@ type ExtendedMarkerOptions = google.maps.MarkerOptions & {
   address?: string;
   category?: string;
   types?: string[]; // `types` 속성 추가
+  rating?: number;
+  photos?: string[];
+  reviews?: Review[];
 };
 
 //여행 일정 API 관련 타입

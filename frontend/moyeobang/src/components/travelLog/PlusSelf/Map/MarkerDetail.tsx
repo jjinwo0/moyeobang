@@ -18,7 +18,7 @@ export default function MarkerDetail({
   setShowMarkerDetail: (show: boolean) => void;
 }) {
   const {selectedMarker, setSelectedMarker} = useTravelLogContext();
-  const {setSearchLocation, handleShowMapSearch, setScheduleName} =
+  const {setSearchLocation, handleShowMapSearch} =
     useTravelLogContext();
 
   useEffect(() => {
@@ -79,9 +79,9 @@ export default function MarkerDetail({
           </div>
           <div css={MarkerDetailStyle.MapDetailContentLayout}>
             <div css={MarkerDetailStyle.MapDetailHeader}>
-              <div id="title">{selectedMarker.title}</div>
+              <div id="title">{selectedMarker?.title}</div>
               <div id="rating">
-                {selectedMarker.rating} {renderStars(selectedMarker.rating)}
+                {selectedMarker?.rating} {renderStars(selectedMarker?.rating || 0)}
               </div>
             </div>
             <div css={MarkerDetailStyle.MapDetailContent}>
@@ -91,7 +91,7 @@ export default function MarkerDetail({
                   alt="categoryIcon"
                   style={{width: '15px', height: '15px'}}
                 />
-                {selectedMarker.types[0]}
+                {selectedMarker?.types?.[0]}
               </div>
               <div id="address">
                 <img
@@ -99,7 +99,7 @@ export default function MarkerDetail({
                   alt="locationIcon"
                   style={{width: '15px', height: '15px'}}
                 />
-                {selectedMarker.address}
+                {selectedMarker?.address}
               </div>
             </div>
           </div>
@@ -127,9 +127,9 @@ export default function MarkerDetail({
               />
             </div>
             <div css={MarkerDetailStyle.LongMapDetailHeader}>
-              <div id="title">{selectedMarker.title}</div>
+              <div id="title">{selectedMarker?.title}</div>
               <div id="rating">
-                {selectedMarker.rating} {renderStars(selectedMarker.rating)}
+                {selectedMarker?.rating} {renderStars(selectedMarker?.rating || 0)}
               </div>
             </div>
             <div css={MarkerDetailStyle.LongMapDetailContent}>
@@ -139,7 +139,7 @@ export default function MarkerDetail({
                   alt="categoryIcon"
                   style={{width: '20px', height: '20px'}}
                 />
-                {selectedMarker.types[0]}
+                {selectedMarker?.types?.[0]}
               </div>
               <div id="address">
                 <div style={{display: 'flex', alignItems: 'center'}}>
@@ -149,7 +149,7 @@ export default function MarkerDetail({
                     style={{width: '20px', height: '20px'}}
                   />
                 </div>
-                <div>{selectedMarker.address}</div>
+                <div>{selectedMarker?.address}</div>
               </div>
             </div>
           </div>
@@ -165,7 +165,7 @@ export default function MarkerDetail({
             </div>
             <div id="reviews">
               <div id="reviews-images">
-                {selectedMarker.photos.slice(0, 3).map((photo: string) => (
+                {selectedMarker?.photos?.slice(0, 3).map((photo: string) => (
                   <img
                     key={photo}
                     src={photo}
@@ -175,7 +175,7 @@ export default function MarkerDetail({
                 ))}
               </div>
               <div id="reviews-content">
-                {selectedMarker.reviews.map((review: Review) => (
+                {selectedMarker?.reviews?.map((review: Review) => (
                   <div key={review.authorName}>
                     <div id="reviews-content-header">
                       <div>{review.authorName}</div>

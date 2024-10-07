@@ -1,9 +1,9 @@
 import type {InputHTMLAttributes, ReactNode} from 'react';
 import {css} from '@emotion/react';
-import 'react';
+import React from 'react';
 
 type QuizInputProps = InputHTMLAttributes<HTMLInputElement> & {
-  title?: string | ReactNode; // Title is optional now
+  customTitle?: React.ReactNode | string; // Title is optional now
   label?: string;
 };
 
@@ -50,11 +50,11 @@ const quizInputStyle = css`
   }
 `;
 
-export default function QuizInput({title, label, ...props}: QuizInputProps) {
+export default function QuizInput({customTitle, label, ...props}: QuizInputProps) {
   return (
     <div css={containerStyle}>
       {/* Render the title only if it's provided */}
-      {title && <p css={titleStyle}>{title}</p>}
+      {customTitle && <p css={titleStyle}>{customTitle}</p>}
       <label css={inputContainerStyle}>
         <span css={labelStyle}>{label}</span>
         <input type="text" {...props} css={quizInputStyle} />

@@ -204,10 +204,7 @@ export default function CustomCalendar({
         })}
       </div>
       <div css={btnStyle}>
-        <Btn
-          buttonStyle={{style: 'blue', size: 'thinMiddle'}}
-          onClick={onClose}
-        >
+        <Btn buttonStyle={{style: 'blue', size: 'thinBig'}} onClick={onClose}>
           날짜 확인
         </Btn>
       </div>
