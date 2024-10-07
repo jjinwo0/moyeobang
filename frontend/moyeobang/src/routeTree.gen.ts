@@ -20,6 +20,7 @@ import { Route as AirportIndexImport } from './routes/airport/index'
 import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
+import { Route as LayoutEntranceSuccessIndexImport } from './routes/_layout/entrance/success/index'
 import { Route as LayoutProtectedLayoutTravelLogIndexImport } from './routes/_layout/_protected/_layout/travelLog/index'
 import { Route as LayoutProtectedLayoutAccountConnectIndexImport } from './routes/_layout/_protected/_layout/accountConnect/index'
 import { Route as LayoutProtectedLayoutAccountIndexImport } from './routes/_layout/_protected/_layout/account/index'
@@ -75,6 +76,13 @@ const LayoutProtectedLayoutRoute = LayoutProtectedLayoutImport.update({
   id: '/_layout',
   getParentRoute: () => LayoutProtectedRoute,
 } as any)
+
+const LayoutEntranceSuccessIndexRoute = LayoutEntranceSuccessIndexImport.update(
+  {
+    path: '/entrance/success/',
+    getParentRoute: () => LayoutRoute,
+  } as any,
+)
 
 const LayoutProtectedLayoutHomeIndexLazyRoute =
   LayoutProtectedLayoutHomeIndexLazyImport.update({
@@ -198,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/entrance'
       fullPath: '/entrance'
       preLoaderRoute: typeof LayoutEntranceIndexImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/entrance/success/': {
+      id: '/_layout/entrance/success/'
+      path: '/entrance/success'
+      fullPath: '/entrance/success'
+      preLoaderRoute: typeof LayoutEntranceSuccessIndexImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/_protected/_layout/profile/$memberName': {
@@ -365,11 +380,13 @@ const LayoutProtectedRouteWithChildren = LayoutProtectedRoute._addFileChildren(
 interface LayoutRouteChildren {
   LayoutProtectedRoute: typeof LayoutProtectedRouteWithChildren
   LayoutEntranceIndexRoute: typeof LayoutEntranceIndexRoute
+  LayoutEntranceSuccessIndexRoute: typeof LayoutEntranceSuccessIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutProtectedRoute: LayoutProtectedRouteWithChildren,
   LayoutEntranceIndexRoute: LayoutEntranceIndexRoute,
+  LayoutEntranceSuccessIndexRoute: LayoutEntranceSuccessIndexRoute,
 }
 
 const LayoutRouteWithChildren =
@@ -381,6 +398,7 @@ export interface FileRoutesByFullPath {
   '/hotel': typeof HotelIndexRoute
   '/pos': typeof PosIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
+  '/entrance/success': typeof LayoutEntranceSuccessIndexRoute
   '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
@@ -399,6 +417,7 @@ export interface FileRoutesByTo {
   '/hotel': typeof HotelIndexRoute
   '/pos': typeof PosIndexRoute
   '/entrance': typeof LayoutEntranceIndexRoute
+  '/entrance/success': typeof LayoutEntranceSuccessIndexRoute
   '/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
@@ -419,6 +438,7 @@ export interface FileRoutesById {
   '/pos/': typeof PosIndexRoute
   '/_layout/_protected/_layout': typeof LayoutProtectedLayoutRouteWithChildren
   '/_layout/entrance/': typeof LayoutEntranceIndexRoute
+  '/_layout/entrance/success/': typeof LayoutEntranceSuccessIndexRoute
   '/_layout/_protected/_layout/profile/$memberName': typeof LayoutProtectedLayoutProfileMemberNameRoute
   '/_layout/_protected/_layout/quiz/$travelId': typeof LayoutProtectedLayoutQuizTravelIdRoute
   '/_layout/_protected/_layout/account/': typeof LayoutProtectedLayoutAccountIndexRoute
@@ -440,6 +460,7 @@ export interface FileRouteTypes {
     | '/hotel'
     | '/pos'
     | '/entrance'
+    | '/entrance/success'
     | '/profile/$memberName'
     | '/quiz/$travelId'
     | '/account'
@@ -457,6 +478,7 @@ export interface FileRouteTypes {
     | '/hotel'
     | '/pos'
     | '/entrance'
+    | '/entrance/success'
     | '/profile/$memberName'
     | '/quiz/$travelId'
     | '/account'
@@ -475,6 +497,7 @@ export interface FileRouteTypes {
     | '/pos/'
     | '/_layout/_protected/_layout'
     | '/_layout/entrance/'
+    | '/_layout/entrance/success/'
     | '/_layout/_protected/_layout/profile/$memberName'
     | '/_layout/_protected/_layout/quiz/$travelId'
     | '/_layout/_protected/_layout/account/'
@@ -525,7 +548,8 @@ export const routeTree = rootRoute
       "filePath": "_layout.tsx",
       "children": [
         "/_layout/_protected",
-        "/_layout/entrance/"
+        "/_layout/entrance/",
+        "/_layout/entrance/success/"
       ]
     },
     "/_layout/_protected": {
@@ -561,6 +585,10 @@ export const routeTree = rootRoute
     },
     "/_layout/entrance/": {
       "filePath": "_layout/entrance/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/entrance/success/": {
+      "filePath": "_layout/entrance/success/index.tsx",
       "parent": "/_layout"
     },
     "/_layout/_protected/_layout/profile/$memberName": {

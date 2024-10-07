@@ -94,7 +94,7 @@ interface PostTravelSchedule {
   scheduleLocation: ScheduleLocation;
   scheduleTime: string;
   memo: string;
-  image_url: string;
+  scheduleImage: string;
 }
 
 /**
