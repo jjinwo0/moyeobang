@@ -21,5 +21,16 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'), // @를 src로 설정
     },
+    extensions: ['.js', '.jsx', '.ts', '.tsx'], // 확장자 인식
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://vu6tvl2vzm.apigw.ntruss.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+        secure: false, // HTTPS 검증 비활성화
+      },
+    },
   },
 });
