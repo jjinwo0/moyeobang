@@ -82,12 +82,6 @@ export default function PlusSelf() {
     setSelectedImage(null);
   };
 
-  const handleDelete = () => {
-    // [todo] 삭제 로직 추가
-    resetForm();
-    handleShowPlusSelf();
-  };
-
   /**
    * 일정 추가 mutation 선언
    */
@@ -159,6 +153,27 @@ export default function PlusSelf() {
     },
   });
 
+<<<<<<< HEAD
+=======
+  /**
+   * 일정 삭제 mutation 선언
+   */
+  const {mutate: deleteTravelSchedule} = useMutation({
+    mutationFn: ({scheduleId}: {scheduleId: Id}) =>
+      moyeobang.deleteTravelSchedule(scheduleId),
+    onSuccess: async () => {
+      console.log('[*] 삭제 성공');
+      await queryClient.invalidateQueries({
+        queryKey: ['travelSchedules', travelId],
+        refetchType: 'all',
+      });
+      resetForm();
+      handleShowPlusSelf();
+    },
+  });
+
+
+>>>>>>> master
   useEffect(() => {
     if (selectedMarker) {
       const Location: ScheduleLocation = {
@@ -231,6 +246,15 @@ export default function PlusSelf() {
     } else {
       // 추가 모드
       postTravelSchedule({travelId, scheduleData});
+    }
+  };
+
+  const handleDelete = () => {
+    // [todo] 삭제 로직 추가
+    if (scheduleEdit) {
+      deleteTravelSchedule({scheduleId: scheduleEdit});
+      resetForm();
+      handleShowPlusSelf();
     }
   };
 

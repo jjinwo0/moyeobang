@@ -1,0 +1,11 @@
+[[get-transaction-history-custom]]
+=== 결제 내역 상세 조회 (커스텀 정산)
+
+==== HTTP Request
+
+include::{snippets}/get-transaction-history-custom/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-transaction-history-custom/http-response.adoc[]
+include::{snippets}/get-transaction-history-custom/response-fields.adoc[]
