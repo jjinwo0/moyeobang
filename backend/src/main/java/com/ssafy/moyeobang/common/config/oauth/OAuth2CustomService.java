@@ -8,18 +8,19 @@ import com.ssafy.moyeobang.common.config.oauth.dto.OAuth2UserDto;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2CustomService extends DefaultOAuth2UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(OAuth2CustomService.class);
     private final MemberRepositoryInOAuth memberRepository;
 
     @Override
