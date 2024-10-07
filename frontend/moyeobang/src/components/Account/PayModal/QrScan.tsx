@@ -77,10 +77,11 @@ const textBoxStyle= css`
 interface QrScanProps {
     onMessage: (trasactionId:TransactionId) => void;
     onError: VoidFunction;
+    restart:boolean
     accountNumber:SourceAccountNumber;
 }
 
-export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) {
+export default function QrScan({onMessage, onError, restart, accountNumber}:QrScanProps) {
     
     const scanner = useRef<QrScanner>();
     const videoElement = useRef<HTMLVideoElement>(null);
@@ -111,7 +112,7 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
                     ...data,
                     sourceAccountNumber: accountNumber
                 }
-                console.log('post요청 결제 데이터:', payData)
+                // console.log('post요청 결제 데이터:', payData)
 
                 // 결제 데이터 API 요청!
                 postPaymentByOnline({data:payData})
@@ -131,44 +132,46 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
 
     useEffect(()=>{
 
-        if (videoElement.current) {
-            console.log('비디오 확인', videoElement.current)
-            scanner.current = new QrScanner( 
-                videoElement?.current,
-                onScanSuccuess,
-                {
-                    onDecodeError : onScanFail,
-                    preferredCamera : "environment", // 후면지향
-                    maxScansPerSecond:3, // 1초당 2번
-                    highlightScanRegion : true, // ? 알아보기
-                    highlightCodeOutline : true, // QR주변 윤곽선 생성
-                    overlay : qrBoxElement?.current || undefined,
-                }
-            );
+        const initScanner = () => {
+            if (videoElement.current) {
+                console.log('비디오 확인', videoElement.current)
+                scanner.current = new QrScanner( 
+                    videoElement?.current,
+                    onScanSuccuess,
+                    {
+                        onDecodeError : onScanFail,
+                        preferredCamera : "environment", // 후면지향
+                        maxScansPerSecond:3, // 1초당 2번
+                        highlightScanRegion : true, // ? 알아보기
+                        highlightCodeOutline : true, // QR주변 윤곽선 생성
+                        overlay : qrBoxElement?.current || undefined,
+                    }
+                );
 
-            //QR스캐너 시작
-            scanner?.current?.start()
-            .then(() => 
-                setQrOn(true)
-            )
-            .catch((error : Error) => {
-                if (error) {
-                    onError()
-                    setQrOn(false);
-                }
-            });
-        }
-
-    
-
-        // 언마운트시
-        return () => {
-            console.log('언마운트냐')
-            if (!videoElement.current) {
-                scanner?.current?.stop();
+                //QR스캐너 시작
+                scanner?.current?.start()
+                .then(() => 
+                    setQrOn(true)
+                )
+                .catch((error : Error) => {
+                    if (error) {
+                        onError()
+                        setQrOn(false);
+                    }
+                });
             }
         }
-    }, [qrOn])
+
+        initScanner();
+        
+        // 언마운트시
+        return () => {
+            if (scanner.current) {
+                console.log('언마운트냐')
+                scanner.current.destroy(); //스캐너 완전히 해제
+            }
+        }
+    }, [restart])
 
     // 브라우저에 카메라가 허용되지 않은 경우
     useEffect(()=> {
