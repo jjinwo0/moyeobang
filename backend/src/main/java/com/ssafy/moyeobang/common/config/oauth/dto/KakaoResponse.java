@@ -14,7 +14,6 @@ public class KakaoResponse implements OAuth2Response {
     private final KakaoAttributes kakaoAttributes;
 
     public KakaoResponse(Map<String, Object> attributes) {
-
         ObjectMapper objectMapper = new ObjectMapper();
         this.kakaoAttributes = objectMapper.convertValue(attributes, KakaoAttributes.class);
 
@@ -23,31 +22,26 @@ public class KakaoResponse implements OAuth2Response {
 
     @Override
     public String getProvider() {
-
         return "kakao";
     }
 
     @Override
     public Long getProviderId() {
-
         return kakaoAttributes.getId();
     }
 
     @Override
     public String getEmail() {
-
         return kakaoAttributes.getKakaoAccount().getEmail();
     }
 
     @Override
     public String getNickname() {
-
         return kakaoAttributes.getKakaoAccount().getProfile().getNickname();
     }
 
     @Override
     public String getProfileImage() {
-
         return kakaoAttributes.getKakaoAccount().getProfile().getThumbnailImageUrl();
     }
 
@@ -65,16 +59,19 @@ public class KakaoResponse implements OAuth2Response {
             }
             return hexString.toString().substring(0, 10);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while hashing the input string", e);
         }
     }
 
     @Override
     public MemberJpaEntity toEntity() {
-
         String email = getEmail();
         String nickname = getNickname();
         String profile = getProfileImage();
+
+        if (email == null || nickname == null || profile == null) {
+            throw new IllegalArgumentException("Missing essential user information");
+        }
 
         return MemberJpaEntity.builder()
                 .email(email)
