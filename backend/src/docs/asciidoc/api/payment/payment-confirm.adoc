@@ -1,0 +1,12 @@
+[[payment-confirm]]
+=== 오프라인 결제
+
+==== HTTP Request
+
+include::{snippets}/payment-confirm/http-request.adoc[]
+include::{snippets}/payment-confirm/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/payment-confirm/http-response.adoc[]
+include::{snippets}/payment-confirm/response-fields.adoc[]

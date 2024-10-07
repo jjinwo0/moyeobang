@@ -1,16 +1,14 @@
 import axios from 'axios';
-import {useAuthContext} from '@/contexts/AuthContext';
-import {getCookie} from '@/util/cookie';
+import { useAuthContext } from '@/contexts/AuthContext';
 
-function createAxiosLogin() {
+// axios 인스턴스를 반환하는 함수
+function useAxiosLogin() {
   const {
     accessToken,
     setAccessToken,
+    refreshToken,
     handleLogout,
     loginProvider,
-    setLoginProvider,
-    isLogin,
-    setIsLogin,
   } = useAuthContext();
 
   const axiosLogin = axios.create({
@@ -18,6 +16,8 @@ function createAxiosLogin() {
     responseType: 'json',
     timeout: 4000,
   });
+
+  // 요청 인터셉터 설정
   axiosLogin.interceptors.request.use(
     async config => {
       if (accessToken) {
@@ -30,31 +30,33 @@ function createAxiosLogin() {
     }
   );
 
+  // 응답 인터셉터 설정
   axiosLogin.interceptors.response.use(
-    response => {
-      console.log('[*] response', response);
-
-      return response;
-    },
+    response => response,
     async error => {
-      // 원래 로그인 요청
       const originalRequest = error.config;
-      if (error.response.status === 401 && !originalRequest._retry) {
+
+      if (error.response && error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
-        const refreshToken = getCookie('refreshToken');
-        console.log('[*] refreshToken', refreshToken);
+
+        if (!refreshToken) {
+          console.error('No refresh token available');
+          handleLogout();
+          return Promise.reject(error);
+        }
 
         try {
-          let response; // 초기화
+          let response;
           if (loginProvider === 'google') {
             response = await axiosLogin.get(`/oauth2/authorization/google`, {
-              params: {refreshToken},
+              params: { refreshToken },
             });
           } else if (loginProvider === 'kakao') {
             response = await axiosLogin.get(`/oauth2/authorization/kakao`, {
-              params: {refreshToken},
+              params: { refreshToken },
             });
           }
+
           if (response) {
             const newAccessToken = response.data.accessToken;
             setAccessToken(newAccessToken);
@@ -63,14 +65,15 @@ function createAxiosLogin() {
             return axiosLogin(originalRequest);
           }
         } catch (refreshError) {
-          // 리프레시 토큰 만료
-          console.log('Failed to refresh access token:', refreshError);
+          console.error('Failed to refresh access token:', refreshError);
           handleLogout();
         }
-        return Promise.reject(error);
       }
+      return Promise.reject(error);
     }
   );
+
   return axiosLogin;
 }
-export default createAxiosLogin;
+
+export default useAxiosLogin;

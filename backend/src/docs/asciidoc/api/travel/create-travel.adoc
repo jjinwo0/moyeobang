@@ -1,0 +1,12 @@
+[[create-travel]]
+=== 여행 생성
+
+==== HTTP Request
+
+include::{snippets}/create-travel/http-request.adoc[]
+include::{snippets}/create-travel/request-parts.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/create-travel/http-response.adoc[]
+include::{snippets}/create-travel/response-fields.adoc[]

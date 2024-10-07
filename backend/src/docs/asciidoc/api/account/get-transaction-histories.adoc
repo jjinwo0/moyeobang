@@ -1,0 +1,12 @@
+[[get-transaction-histories]]
+=== 결제 내역 전체 조회
+
+==== HTTP Request
+
+include::{snippets}/get-transaction-histories/http-request.adoc[]
+include::{snippets}/get-transaction-histories/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-transaction-histories/http-response.adoc[]
+include::{snippets}/get-transaction-histories/response-fields.adoc[]
