@@ -3,6 +3,7 @@ package com.ssafy.moyeobang.common.persistenceentity.schedule;
 import com.ssafy.moyeobang.common.persistenceentity.BaseEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
+import com.ssafy.moyeobang.schedule.application.port.in.SchedulesSequenceCommand;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -131,6 +133,20 @@ public class ScheduleJpaEntity extends BaseEntity {
         this.isMatchedTransaction = true;
         this.complete = ScheduleStatus.COMPLETE;
         this.withdraw = withdraw;
+    }
+
+    public void updateSequence(int newSequence) {
+        this.sequence = newSequence;
+    }
+
+    public static void updateScheduleSequences(List<ScheduleJpaEntity> schedules,
+                                               List<SchedulesSequenceCommand> sequenceCommands) {
+        for (SchedulesSequenceCommand sequenceCommand : sequenceCommands) {
+            schedules.stream()
+                    .filter(schedule -> schedule.getId().equals(Long.parseLong(sequenceCommand.scheduleId())))
+                    .findFirst()
+                    .ifPresent(schedule -> schedule.updateSequence(sequenceCommand.sequence()));
+        }
     }
 
 }
