@@ -44,27 +44,27 @@ export default function TravelLogMain() {
   const queryClient = useQueryClient();
 
   // [todo] 여행 일정 조회
-  const { data: travelSchedulesData } = useSuspenseQuery({
+  const {data: travelSchedulesData} = useSuspenseQuery({
     queryKey: ['travelSchedules', travelId],
     queryFn: async () => {
       const schedules = await moyeobang.getTravelSchedules(travelId);
       console.log('[*] 여행 일정 조회 성공', schedules);
       return schedules;
     },
+    staleTime: 0, // 캐시를 새로고침할 때마다 무효화
   });
-  
+
   // travelSchedulesData가 업데이트되면 상태를 설정
   useEffect(() => {
     if (travelSchedulesData) {
       setTravelSchedules(travelSchedulesData.data.data.schedules);
     }
   }, [travelSchedulesData, setTravelSchedules]);
-  
+
   // 상태가 업데이트된 후의 travelSchedules를 확인
   useEffect(() => {
     console.log('[*] 바뀌나 travelSchedules', travelSchedules);
   }, [travelSchedules]);
- 
 
   return (
     <>

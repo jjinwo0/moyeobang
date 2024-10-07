@@ -144,6 +144,12 @@ export const inputImgWrapper = css`
   position: relative;
   width: 220px;
   height: 50px;
+  #imgCancelBtn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
 `;
 
 export const LocationInputStyle = css`

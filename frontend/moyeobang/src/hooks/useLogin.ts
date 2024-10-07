@@ -4,32 +4,10 @@ import createAxiosLogin from '@/util/axiosLogin';
 const baseUrl = import.meta.env.VITE_BASEURL + '/api';
 
 export const useLogin = () => {
-  const {handleLoginToken} = useAuthContext();
-  const axiosLogin = createAxiosLogin();
-
-  // 로그인 요청 함수
-  //   const handleLogin = async (provider: string) => {
-
-  //     try {
-  //       const response = await axiosLogin.get(
-  //         `/oauth2/authorization/${provider}`
-  //       );
-  //       console.log('[*] response', response);
-  //       const accessToken = response.data.accessToken;
-  //       handleLoginToken(accessToken, provider);
-  //       return response.data;
-  //     } catch (error) {
-  //       console.error(error);
-  //       throw error;
-  //     }
-  //   };
-
-  //   return {handleLogin};
-  // };
-
+  const {setLoginProvider} = useAuthContext();
   const handleLogin = (provider: string) => {
-    window.location.href = `${baseUrl}/oauth2/authorization/${provider}`;
-
+    setLoginProvider(provider);
+    window.location.href = `${baseUrl}/oauth2/authorization/${provider}`;  
   };
   return {handleLogin};
 };

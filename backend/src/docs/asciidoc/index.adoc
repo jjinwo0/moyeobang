@@ -1,0 +1,39 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::[]
+= MOYEOBANG REST API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[account-API]]
+== Account API
+
+include::api/account/send-money.adoc[]
+include::api/account/get-account-balance.adoc[]
+include::api/account/get-account-member-balance.adoc[]
+include::api/account/get-transaction-histories.adoc[]
+include::api/account/get-transaction-history-receipt.adoc[]
+include::api/account/get-transaction-history-custom.adoc[]
+
+[[payment-API]]
+== Confirm Payment API
+
+include::api/payment/payment-confirm.adoc[]
+
+== Sse Connect API
+
+include::api/payment/sse-connect.adoc[]
+
+[[travel-API]]
+== Travel API
+
+include::api/travel/create-travel.adoc[]
+include::api/travel/get-travels.adoc[]
+include::api/travel/update-travel.adoc[]
+include::api/travel/get-travel-quiz-question.adoc[]
+include::api/travel/check-travel-quiz-answer.adoc[]
+include::api/travel/leave-travel.adoc[]

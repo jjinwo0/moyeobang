@@ -1,0 +1,12 @@
+[[participate-travel]]
+=== 여행 참여
+
+==== HTTP Request
+
+include::{snippets}/participate-travel/http-request.adoc[]
+include::{snippets}/participate-travel/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/participate-travel/http-response.adoc[]
+include::{snippets}/participate-travel/response-fields.adoc[]

@@ -1,5 +1,7 @@
 import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
+import { AxiosInstance } from 'axios';
+
 
 export default {
   // 모임 통장
@@ -312,6 +314,15 @@ export default {
       }
     );
   },
+
+  /**
+   * 
+   * 여행 삭제
+   */
+  deleteTravelSchedule: async (scheduleId: Id) =>
+    axios.delete<MoyeobangResponse<null>>(`/travel/schedule/${scheduleId}`),
+
+
   /**
    * 개인 계좌 등록
    */
@@ -329,4 +340,13 @@ export default {
     axios.patch<MoyeobangResponse<null>>(
       `/travel/schedule/${scheduleId}/complete`
     ),
+
+  /**
+   * 내 정보 조회
+   */
+
+  getMyInfo: async (axiosLogin: AxiosInstance) =>{
+    const response = await axiosLogin.get('/user/me/info');
+    return response.data;
+  },
 };

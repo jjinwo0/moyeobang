@@ -41,9 +41,8 @@ const router = createRouter({
 });
 
 // Library 타입을 정의합니다.
-type Library = "places" | "geometry" | "drawing" | "visualization";
-const libraries: Library[] = ["places", "geometry", "drawing", "visualization"];
-
+type Library = 'places' | 'geometry' | 'drawing' | 'visualization';
+const libraries: Library[] = ['places', 'geometry', 'drawing', 'visualization'];
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -68,4 +67,3 @@ if (!rootElement.innerHTML) {
     // {/* </StrictMode> */}
   );
 }
-

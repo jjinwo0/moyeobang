@@ -43,17 +43,24 @@ export default function Header() {
         <HeaderWithAlarmAndQR
           onAlarmClick={handleAlarmClick}
           onQRClick={handleQRClick}
-          isBack={pathname==='/account' || pathname==='/travelLog'}
+          isBack={pathname === '/account' || pathname === '/travelLog'}
         />
       )}
+
       <div css={layoutStyle}>
         {/* QR 모달이 열리면 PayModal만 렌더링하고 Outlet은 렌더링하지 않음 */}
         <>
-        {isQROpen ? accountId===0 ? <NotTravelModal onClickOutside={handleQRClick}/> : <PayModal onXClick={handleQRClick}/> : undefined}
+          {isQROpen ? (
+            accountId === 0 ? (
+              <NotTravelModal onClickOutside={handleQRClick} />
+            ) : (
+              <PayModal onXClick={handleQRClick} />
+            )
+          ) : undefined}
         </>
 
         {/* Alarm 모달이 열리면 NotificationModal만 렌더링하고 Outlet은 렌더링하지 않음 */}
-        {isAlarmOpen && <NotificationModal onClose={handleAlarmClick}/>}
+        {isAlarmOpen && <NotificationModal onClose={handleAlarmClick} />}
 
         {/* QR 또는 Alarm 모달이 열리지 않았을 때만 Outlet 렌더링 */}
         {!isQROpen && !isAlarmOpen && <Outlet />}
