@@ -14,7 +14,8 @@ import { isAccountBalanceByGroup } from '@/util/typeGaurd';
 import CardSlider from '@/components/Account/CardSlider/CardSlider';
 import ChartDetailCard from '@/components/Account/Chart/ChartDetailCard';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
-import sadBangBang from '@/assets/icons/sadBangbang.png'
+import sadBangBang from '@/assets/icons/sadBangbang.png';
+import { useMemo } from 'react';
 
 export const Route = createFileRoute('/_layout/_protected/_layout/account/')({
   component: AccountMain
@@ -154,7 +155,9 @@ export default function AccountMain() {
     return Number(b.proportion)-Number(a.proportion)
   });
 
-  const transactionListData = transactionData.data.data;
+  const transactionListData = useMemo(() => {
+    return transactionData.data.data.slice().reverse();
+  },[transactionData]);
 
   const accountData = selectedMember.length > 1 
     ? accountDataByGroup?.data.data 
@@ -215,7 +218,7 @@ export default function AccountMain() {
         <>
         {index===0 && <div css={transactionListStyle}>
           { transactionListData.length >0 ? 
-            transactionListData.reverse().map((tran, index) => 
+            transactionListData.map((tran, index) => 
                 <TransactionCard key={index} {...tran} /> 
             )
           : 
