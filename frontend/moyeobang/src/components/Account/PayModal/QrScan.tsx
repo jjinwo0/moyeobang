@@ -53,17 +53,16 @@ const qrBoxStyle = css`
 
 const smallTextStyle = css`
     font-family: 'regular';
-    font-size:15px;
+    font-size:16px;
 `;
 
 const bigTextStyle = css`
     font-family: 'semibold';
     font-size:24px;
-`;
-
-const englishStyle = css`
-    font-family: 'english';
-    font-size:32px;
+    span {
+        font-family: 'english';
+        font-size:28px;
+    }
 `;
 
 const textBoxStyle= css`
@@ -88,9 +87,6 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
 
-    // 결과 
-    // const [scannedResult, setScannedResult] = useState<OnlineQrData | null>(null);
-
     const {mutate: postPaymentByOnline } = useMutation({
         mutationFn: ({data} : {data: PaymentProps}) => moyeobang.postPayByOnline(data),
         onSuccess: async (response) => {
@@ -108,7 +104,6 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
         try {
             if (result.data) {
                 const data = JSON.parse(result.data);
-                // setScannedResult(data);
                 
                 const stores = storeData.filter((store) => store.placeId === data.placeId)
                 const payData : PaymentProps = { 
@@ -137,7 +132,7 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
     useEffect(()=>{
 
         if (videoElement.current) {
-
+            console.log('비디오 확인', videoElement.current)
             scanner.current = new QrScanner( 
                 videoElement?.current,
                 onScanSuccuess,
@@ -164,6 +159,8 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
             });
         }
 
+    
+
         // 언마운트시
         return () => {
             console.log('언마운트냐')
@@ -171,7 +168,7 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
                 scanner?.current?.stop();
             }
         }
-    }, [])
+    }, [qrOn])
 
     // 브라우저에 카메라가 허용되지 않은 경우
     useEffect(()=> {
@@ -186,7 +183,7 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
                 <div css={qrBoxStyle} ref={qrBoxElement}/>
                 <div css={textBoxStyle}>
                     <div css={smallTextStyle}>오프라인 결제 • 해외결제 • 싸피페이</div>
-                    <div css={bigTextStyle}><span css={englishStyle}>QR</span>코드를 스캔하세요</div>
+                    <div css={bigTextStyle}><span>QR</span>코드를 스캔하세요</div>
                 </div>
         </div>
     ) 
