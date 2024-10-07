@@ -33,6 +33,10 @@ pg:
   api:
     url: http://localhost:8082/pg/payment
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 ---
 spring:
   config:
