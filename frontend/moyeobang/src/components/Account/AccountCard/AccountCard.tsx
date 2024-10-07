@@ -132,7 +132,6 @@ export default function AccountCard({memberName, currentBalance, totalBalance} :
     }
 
     const leftPosition = 37+(currentBalance.toString().length * 2.4); 
-    console.log(88080, leftPosition)
     
     return (
 

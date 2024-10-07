@@ -6,10 +6,6 @@ import { colors } from "@/styles/colors";
 import { v4 as uuidv4 } from "uuid";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { useEffect, useState } from "react";
-import PayCompletedModal from "./PayCompletedModal";
-import useCurrentTravelStore from "@/store/useCurrentTravelStore";
-import useTravelDetailStore from "@/store/useTravelDetailStore";
-import { useLocation } from "@tanstack/react-router";
 
 const qrContainerStyle = css`
     width: 200px;

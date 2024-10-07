@@ -48,6 +48,7 @@ const qrBoxStyle = css`
     position: absolute;
     top: 25%;
     left: 12% !important;
+    z-index:99;
 `;
 
 const smallTextStyle = css`
@@ -115,7 +116,7 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
                     ...data,
                     sourceAccountNumber: accountNumber
                 }
-                console.log('post요청 데이터:', payData)
+                console.log('post요청 결제 데이터:', payData)
 
                 // 결제 데이터 API 요청!
                 postPaymentByOnline({data:payData})
@@ -130,12 +131,13 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
     }
 
     function onScanFail() {
-        //QR인식중
+        // QR인식중
     }
 
     useEffect(()=>{
-        console.log(3333, videoElement?.current, scanner.current)
-        if ( videoElement?.current && !scanner.current ) {
+
+        if (videoElement.current) {
+
             scanner.current = new QrScanner( 
                 videoElement?.current,
                 onScanSuccuess,
@@ -164,6 +166,7 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
 
         // 언마운트시
         return () => {
+            console.log('언마운트냐')
             if (!videoElement.current) {
                 scanner?.current?.stop();
             }
@@ -171,24 +174,16 @@ export default function QrScan({onMessage, onError, accountNumber}:QrScanProps) 
     }, [])
 
     // 브라우저에 카메라가 허용되지 않은 경우
-    // useEffect(()=> {
-    //     if (!qrOn) {
-    //         alert("카메라가 차단되었거나 접근할 수 없습니다.")
-    //     }
-    // }, [qrOn])
-
-    // QR 스캐너 오류 후 다시 켜기
-    useEffect(() => {
+    useEffect(()=> {
         if (!qrOn) {
-            setTimeout(() => setQrOn(true), 0); // 오류 발생 후 1초 뒤에 다시 QR 스캐너 켜기
+            alert("카메라가 차단되었거나 접근할 수 없습니다.")
         }
-    }, [qrOn]);
+    }, [qrOn])
 
     return (
         <div css={qrReaderLayoutStyle}>
                 <video ref={videoElement} ></video>
-                <div css={qrBoxStyle} ref={qrBoxElement}>
-                </div>
+                <div css={qrBoxStyle} ref={qrBoxElement}/>
                 <div css={textBoxStyle}>
                     <div css={smallTextStyle}>오프라인 결제 • 해외결제 • 싸피페이</div>
                     <div css={bigTextStyle}><span css={englishStyle}>QR</span>코드를 스캔하세요</div>
