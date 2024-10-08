@@ -55,7 +55,6 @@ interface ExitTravelProps {
   travelId: number;
 }
 
-const {memberId} = useMyInfo();
 // const memberId = 4;
 
 export default function ExitTravel({
@@ -63,6 +62,7 @@ export default function ExitTravel({
   onClose,
   travelId,
 }: ExitTravelProps) {
+  const {memberId} = useMyInfo();
   //[todo] 여행 삭제 api 연결
   const queryClient = useQueryClient();
   const {mutate: leaveTravel} = useMutation({
