@@ -123,13 +123,13 @@ function LoginSuccess() {
     if (myInfoData) {
       const myInfo = myInfoData;
       console.log('myInfo', myInfo);
+      setMemberId(myInfo.memberId);
+      setMemberName(myInfo.memberName);
+      setProfileImage(myInfo.profileImage);
+      setBankName(myInfo.bankName);
+      setAccountNumber(myInfo.accountNumber);
       // 계좌 정보가 없으면 계좌 등록 페이지로 이동
       if (myInfo.accountId) {
-        setMemberId(myInfo.memberId);
-        setMemberName(myInfo.memberName);
-        setProfileImage(myInfo.profileImage);
-        setBankName(myInfo.bankName);
-        setAccountNumber(myInfo.accountNumber);
         setAccountId(myInfo.accountId);
         navigate({to: '/'});
       } else {
