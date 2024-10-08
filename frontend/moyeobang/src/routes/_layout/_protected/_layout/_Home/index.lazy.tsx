@@ -17,6 +17,7 @@ import moyeobang from '@/services/moyeobang';
 import AllowNotification from '@/components/notification/AllowNotification';
 import useCurrentTravelStore from '@/store/useCurrentTravelStore';
 import useFcmTStore from '@/store/useFcmStore';
+import useMyInfo from '@/store/useMyInfoStore';
 
 const memberName: MemberName = '진우바오';
 
@@ -131,7 +132,8 @@ const plusStyle = css`
 `;
 
 //[todo] 멤버 아이디 주스탄드에서 꺼내오기!!!
-const memberId: number = 4;
+// const memberId: number = 4;
+const {memberId} = useMyInfo();
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
