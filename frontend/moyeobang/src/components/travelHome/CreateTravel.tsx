@@ -31,6 +31,7 @@ import {css} from '@emotion/react';
 import moyeobang from '@/services/moyeobang';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import defaultImage from '@/assets/images/defaultSky.jpg';
+import useMyInfo from '@/store/useMyInfoStore';
 
 interface CreateTravelProps {
   onClose: () => void; // 모달을 닫는 함수
@@ -49,7 +50,8 @@ interface CreateTravelProps {
 }
 
 //[todo] 로그인 후 회원 아이디 받아오기
-const memberId = 4;
+// const memberId = 4;
+const {memberId} = useMyInfo();
 
 const colseButtonStyle = css`
   color: red;

@@ -8,6 +8,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import useMyInfo from '@/store/useMyInfoStore';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -53,7 +54,8 @@ interface ExitTravelProps {
   onClose: () => void;
   travelId: number;
 }
-const memberId = 4;
+
+const {memberId} = useMyInfo();
 
 export default function ExitTravel({
   travelTitle,
