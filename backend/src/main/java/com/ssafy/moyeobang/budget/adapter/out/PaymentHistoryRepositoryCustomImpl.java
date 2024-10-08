@@ -1,9 +1,12 @@
 package com.ssafy.moyeobang.budget.adapter.out;
 
+import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.data.elasticsearch.core.query.Criteria.where;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.Criteria;
@@ -24,9 +27,15 @@ public class PaymentHistoryRepositoryCustomImpl implements PaymentHistoryReposit
     }
 
     private CriteriaQuery combinedQuery(String placeName, List<Member> members) {
-        return new CriteriaQuery(wherePlaceNameIs(placeName)
+        return new CriteriaQuery(combinedCond(placeName, members))
+                .addSort(Sort.by(DESC, "_score"))
+                .setPageable(Pageable.ofSize(100));
+    }
+
+    private Criteria combinedCond(String placeName, List<Member> members) {
+        return wherePlaceNameIs(placeName)
                 .and(whereMemberCountIs(members.size()))
-                .and(whereMembersIs(members)));
+                .and(whereMembersIs(members));
     }
 
     private Criteria wherePlaceNameIs(String placeName) {
