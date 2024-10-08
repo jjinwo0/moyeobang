@@ -195,7 +195,7 @@ const spinnerImageStyle = css`
 
 function LoginSuccess() {
   const [myInfoData, setMyInfoData] = useState<MyInfo>();
-  const [getAccessToken, setGetAccessToken] = useState<string>('');
+  // const [getAccessToken, setGetAccessToken] = useState<string>('');
   const {
     setMemberId,
     setMemberName,
@@ -210,7 +210,7 @@ function LoginSuccess() {
   // location 객체에서 쿼리 문자열을 가져옴
   const searchParams = new URLSearchParams(location.search);
   const accessToken = searchParams.get('accessToken');
-  setGetAccessToken(accessToken || '');
+  // setGetAccessToken(accessToken || '');
 
   const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
   const getRefreshToken = searchParams.get('refreshToken');
@@ -222,8 +222,8 @@ function LoginSuccess() {
   console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
 
   useEffect(() => {
-    if (getAccessToken) {
-      localStorage.setItem('accessToken', getAccessToken);
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', getRefreshToken || '');
       localStorage.setItem(
         'refreshTokenExpireTime',
@@ -234,7 +234,7 @@ function LoginSuccess() {
         accessTokenExpireTime || ''
       );
     }
-  }, [getAccessToken]);
+  }, [accessToken]);
 
   // useEffect(() => {
   //   if (getAccessToken) {
