@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from '@emotion/react';
 import LineInput from '../common/Inputs/LineInput';
 import Btn from '../common/btn/Btn';
@@ -155,11 +155,16 @@ export default function CertificationOne({
         accountNumber,
         bankName
       );
+      console.log('[*처음response]', response);
       return response.data.data;
     },
     onSuccess: async response => {
+      console.log('[*response]', response);
+      console.log('[*]1원입금 성공');
       const transactionId = response.transactionId;
+      console.log('[*]transactionId', transactionId);
       if (transactionId) {
+        console.log(111111);
         const notificationResponse = await moyeobang.postVerifyNotification(
           memberId,
           transactionId
@@ -168,6 +173,10 @@ export default function CertificationOne({
       }
     },
   });
+
+  useEffect(() => {
+    console.log('[*notificationkey]', notificationKey);
+  }, [notificationKey]);
 
   return (
     <>
