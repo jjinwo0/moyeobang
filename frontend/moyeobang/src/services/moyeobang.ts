@@ -1,6 +1,6 @@
 import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
-import {AxiosInstance} from 'axios';
+import axiosLogin from '@/util/axiosLogin';
 
 export default {
   // 모임 통장
@@ -346,8 +346,7 @@ export default {
    * 내 정보 조회
    */
 
-  getMyInfo: async (axiosLogin: AxiosInstance) => {
-    const response = await axiosLogin.get('/user/me/profile');
-    return response.data;
+  getMyInfo: async () => {
+    axiosLogin.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
   },
 };
