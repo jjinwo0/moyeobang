@@ -132,8 +132,8 @@ const plusStyle = css`
 `;
 
 //[todo] 멤버 아이디 주스탄드에서 꺼내오기!!!
-// const memberId: number = 4;
-const {memberId} = useMyInfo();
+const memberId: number = 4;
+// const {memberId, memberName} = useMyInfo();
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
