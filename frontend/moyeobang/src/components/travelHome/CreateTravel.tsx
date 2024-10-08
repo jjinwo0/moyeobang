@@ -51,7 +51,6 @@ interface CreateTravelProps {
 
 //[todo] 로그인 후 회원 아이디 받아오기
 // const memberId = 4;
-const {memberId} = useMyInfo();
 
 const colseButtonStyle = css`
   color: red;
@@ -100,6 +99,8 @@ export default function CreateTravel({
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState<FormData>(new FormData());
+
+  const {memberId} = useMyInfo();
 
   // 수정과 생성을 구분하여 처리
   const handleNextClick = async () => {
