@@ -352,14 +352,8 @@ export default {
   //   return axiosInstance.get('/user/me/profile');
   // },
   getMyInfo: async () => {
-    try {
-      const axiosInstance = axiosLogin(); // 훅 호출
-      console.log('getMyInfo 호출');
-      const response = await axiosInstance.get('/user/me/profile');
-      return response;
-    } catch (error) {
-      console.error('getMyInfo 호출 실패:', error);
-      throw error; // 필요에 따라 에러를 다시 던질 수 있습니다.
-    }
+    return axiosLogin.get<MoyeobangResponse<ResponseGetProfile>>(
+      '/user/me/profile'
+    );
   },
 };
