@@ -133,7 +133,7 @@ function LoginSuccess() {
         setAccountId(myInfo.accountId);
         navigate({to: '/'});
       } else {
-        navigate({to: '/accountConnect'});
+        navigate({to: '/entrance/success/allowNoti'});
       }
     }
   }, [myInfoData]);
