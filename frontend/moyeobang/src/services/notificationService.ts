@@ -92,6 +92,8 @@ export function setupForegroundNotificationHandler() {
   onMessage(messaging, payload => {
     console.log('포그라운드 메시지 수신:', payload);
 
+    console.log('메세지', payload.notification);
+
     const notification = payload.notification;
     if (notification && Notification.permission === 'granted') {
       const {title, body, icon} = notification;
