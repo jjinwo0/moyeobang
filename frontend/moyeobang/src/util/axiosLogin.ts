@@ -3,8 +3,6 @@ import {useNavigate} from '@tanstack/react-router';
 import {getCookie, removeCookie, setCookie} from './cookie';
 // axios 인스턴스를 반환하는 함수
 
-const navigate = useNavigate();
-
 const axiosLogin = axios.create({
   baseURL: import.meta.env.VITE_BASEURL + '/api',
   headers: {'Content-Type': 'application/json'},
@@ -64,7 +62,7 @@ axiosLogin.interceptors.response.use(
         console.error('Failed to refresh access token:', refreshError);
         removeCookie('accessToken');
         removeCookie('refreshToken');
-        navigate({to: '/entrance'});
+        window.location.href = '/entrance';
       }
     }
     return Promise.reject(error);
