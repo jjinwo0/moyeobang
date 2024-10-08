@@ -25,7 +25,7 @@ export function getCategoryTag(categoryName: string) {
     case '쇼핑':
       return {
         icon: shoppingCartIcon,
-        label: '장바구니 가득 채웠나방',
+        label: '플렉스 좀 했나방',
       };
     case '숙박':
       return {
