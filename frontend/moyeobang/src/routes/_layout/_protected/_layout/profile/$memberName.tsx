@@ -1,5 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router';
 import {css} from '@emotion/react';
+import {logout} from '@/util/cookie';
+import useMyInfo from '@/store/useMyInfoStore';
 import HeaderWithBackButton from '@/components/common/Header/HeaderWithBackButton';
 import skyBackground from '@/assets/images/skyBackground.jpg';
 import bangBang from '@/assets/icons/bangBang.png';
@@ -7,7 +9,7 @@ import {colors} from '@/styles/colors';
 import React from 'react';
 import SettingBox from '@/components/travelHome/SettingBox';
 // import {useLocation} from '@tanstack/react-router';
-import {useMatch} from '@tanstack/react-router';
+import {useMatch, useNavigate} from '@tanstack/react-router';
 import BackButton from '@/components/common/Header/ButtonIcon/BackButton';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
@@ -93,19 +95,28 @@ const data: ResponseGetProfile = {
 export default function profile() {
   // useMatch를 사용해 URL 파라미터로 전달된 nickName 가져오기
 
-  // //[todo] 프로필 조회 api 연결 필요(로그인 했을 때 바로 이 api 사용..?)
-  // const {data: UserProfile} = useSuspenseQuery({
-  //   queryKey: ['userInfo'],
-  //   queryFn: () => moyeobang.getMyProfile(),
-  // });
-
-  // const data = UserProfile?.data.data;
-
-  // console.log(data);
 
   const {
     params: {memberName}, // URL 파라미터에서 nickName 가져오기
   } = useMatch({from:'/_layout/_protected/_layout/profile/$memberName'}); // 라우트와 매칭
+
+  const navigate = useNavigate();
+
+  const {setMemberId, setMemberName, setAccountId, setAccountNumber, setBankName, setProfileImage} = useMyInfo();
+  const handleLogout = () => {
+    console.log('로그아웃');
+    // 로그아웃 시 모든 상태 초기화
+    // 쿠키 삭제
+    logout();
+    // 상태 초기화
+    setMemberId(0);
+    setMemberName('');
+    setAccountId(0);
+    setAccountNumber('');
+    setBankName('');
+    setProfileImage('');
+    navigate({to: '/entrance'});
+  };
 
   return (
     <>
@@ -124,7 +135,7 @@ export default function profile() {
             description="12345678123"
             updateButton="수정하기 >"
           />
-          <SettingBox title="로그아웃" />
+          <SettingBox title="로그아웃" onClick={handleLogout} />
         </div>
         <div css={blurStyle}></div>
       </div>
