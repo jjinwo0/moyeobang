@@ -9,5 +9,6 @@ public record SettleCommand(@NotNull Long transactionId,
                             @NotNull Long travelId,
                             @NotNull String title,
                             @Positive Integer amount,
+                            @Positive Integer quantity,
                             @NotNull @Size(min = 1) List<Long> participants) {
 }

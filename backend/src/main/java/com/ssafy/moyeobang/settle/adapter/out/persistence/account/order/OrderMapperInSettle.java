@@ -18,6 +18,7 @@ public class OrderMapperInSettle {
                 new OrderInfo(
                         orderEntity.getTitle(),
                         (int) orderEntity.getAmount(),
+                        orderEntity.getQuantity(),
                         orderEntity.getWithdraw().getId()
                 ),
                 orderEntity.getMemberOrderHistoryJpaEntities().stream()
@@ -31,6 +32,7 @@ public class OrderMapperInSettle {
         return OrderJpaEntity.builder()
                 .title(order.getOrderInfo().title())
                 .amount(order.getOrderInfo().amount())
+                .quantity(order.getOrderInfo().quantity())
                 .withdraw(withdrawEntity)
                 .build();
     }
@@ -40,6 +42,7 @@ public class OrderMapperInSettle {
         return OrderJpaEntity.builder()
                 .title(orderInfo.title())
                 .amount(orderInfo.amount())
+                .quantity(orderInfo.quantity())
                 .withdraw(withdrawEntity)
                 .build();
     }
