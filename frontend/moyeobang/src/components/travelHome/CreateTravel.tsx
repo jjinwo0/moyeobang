@@ -67,6 +67,8 @@ export default function CreateTravel({
   isEditMode = false, // 기본값은 false로 설정 (생성 모드)
   initialData = {}, // 기본값을 빈 객체로 설정하여 생성 모드에서 문제가 없도록 처리
 }: CreateTravelProps) {
+const {memberId} = useMyInfo();
+
   const {closeModal} = useModalStore();
   const [cityInput, setCityInput] = useState<string>(''); // 선택된 도시 이름
   const [isMapSearchVisible, setMapSearchVisible] = useState<boolean>(false); // MapSearch 표시 여부
