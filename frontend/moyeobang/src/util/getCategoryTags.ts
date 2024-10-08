@@ -9,6 +9,8 @@ import activityIcon from '@/assets/icons/amusementpark.png';
 
 // 태그에 따른 아이콘을 반환하는 함수
 export function getCategoryTag(categoryName: string) {
+
+
   switch (categoryName) {
     case '식당':
       return {
