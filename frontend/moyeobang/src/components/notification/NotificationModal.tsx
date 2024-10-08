@@ -44,44 +44,44 @@ const emptyMessageStyle = css`
 export default function NotificationModal({onClose}: {onClose: () => void}) {
   const [notifications, setNotifications] = useState<NotificationData[]>([]); // 알림 저장 상태
 
-  //푸시알림테스트
-  const FCM_SERVER_KEY =
-    'BFg_yRn7AVZukoSqRrEcdS-OA-5O8xtZFRad4q7Y7ZteODNuCTrgTbAnp588LN94b6UzY-TZ7jSvnwdSCRDQxNU'; // Firebase 콘솔에서 가져온 서버 키
-  const DEVICE_TOKEN =
-    'fN1Br2JC3HKeA1EqvcKXd3:APA91bEkT7afk4-55crPuuJbkFEqqJw4Ce2FA4v4bWKK3QwPglgrIO5qzbj3JnlzFsEJd03-a6GZMMhVD3e9mjA1g7VpGKLjY-fhdbTBM3p_dHfWzuUnTHTz4inH1DeoC1fVXkuLElRi'; // 수신할 디바이스의 FCM 토큰
+  // //푸시알림테스트
+  // const FCM_SERVER_KEY =
+  //   'BFg_yRn7AVZukoSqRrEcdS-OA-5O8xtZFRad4q7Y7ZteODNuCTrgTbAnp588LN94b6UzY-TZ7jSvnwdSCRDQxNU'; // Firebase 콘솔에서 가져온 서버 키
+  // const DEVICE_TOKEN =
+  //   'fN1Br2JC3HKeA1EqvcKXd3:APA91bEkT7afk4-55crPuuJbkFEqqJw4Ce2FA4v4bWKK3QwPglgrIO5qzbj3JnlzFsEJd03-a6GZMMhVD3e9mjA1g7VpGKLjY-fhdbTBM3p_dHfWzuUnTHTz4inH1DeoC1fVXkuLElRi'; // 수신할 디바이스의 FCM 토큰
 
-  const sendPushNotification = async () => {
-    const payload = {
-      to: DEVICE_TOKEN,
-      notification: {
-        title: '잔액 알림',
-        body: 'This is a test push notification from React.',
-      },
-      data: {
-        url: 'https://example.com',
-      },
-    };
+  // const sendPushNotification = async () => {
+  //   const payload = {
+  //     to: DEVICE_TOKEN,
+  //     notification: {
+  //       title: '잔액 알림',
+  //       body: 'This is a test push notification from React.',
+  //     },
+  //     data: {
+  //       url: 'https://example.com',
+  //     },
+  //   };
 
-    try {
-      const response = await axios.post(
-        'https://fcm.googleapis.com/fcm/send',
-        payload,
-        {
-          headers: {
-            Authorization: `key=${FCM_SERVER_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('Push notification sent:', response.data);
-    } catch (error) {
-      console.error('Error sending push notification:', error.response?.data);
-    }
-  };
+  //   try {
+  //     const response = await axios.post(
+  //       'https://fcm.googleapis.com/fcm/send',
+  //       payload,
+  //       {
+  //         headers: {
+  //           Authorization: `key=${FCM_SERVER_KEY}`,
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     );
+  //     console.log('Push notification sent:', response.data);
+  //   } catch (error) {
+  //     console.error('Error sending push notification:', error.response?.data);
+  //   }
+  // };
 
-  useEffect(() => {
-    sendPushNotification();
-  }, []);
+  // useEffect(() => {
+  //   sendPushNotification();
+  // }, []);
 
   // 로컬 스토리지에서 알림을 불러오는 함수
   useEffect(() => {
