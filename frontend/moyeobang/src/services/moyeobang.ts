@@ -1,6 +1,5 @@
-import axios from '@/util/axios';
+import axios from '@/util/axios'
 import axios8081 from '@/util/axios8081';
-import axiosLogin from '@/util/axiosLogin';
 
 export default {
   // 모임 통장
@@ -238,7 +237,7 @@ export default {
    * 1원입금 요청 api
    */
   postDepositAccountOne: async (accountNumber: string, bankName: string) =>
-    axiosLogin.post<MoyeobangResponse<ResponseDepositOne>>(
+    axios.post<MoyeobangResponse<ResponseDepositOne>>(
       '/auth/account/verify/initiate',
       {accountNumber: accountNumber, bankName: bankName},
       {
@@ -250,7 +249,7 @@ export default {
    * 1원입금 인증 코드 알림 api
    */
   postVerifyNotification: async (memberId: number, transactionId: number) =>
-    axiosLogin.post<MoyeobangResponse<ResponseVerifyNotification>>(
+    axios.post<MoyeobangResponse<ResponseVerifyNotification>>(
       `/notification/verify/${memberId}/${transactionId}`
     ),
 
@@ -261,7 +260,7 @@ export default {
     accountNumber: string,
     authCode: string
   ) =>
-    axiosLogin.post<MoyeobangResponse<null>>(
+    axios.post<MoyeobangResponse<null>>(
       '/auth/account/verify/confirm',
       {
         accountNumber: accountNumber,
@@ -347,12 +346,12 @@ export default {
    */
 
   // getMyInfo: async () => {
-  //   const axiosInstance = axiosLogin(); // 훅 호출
+  //   const axiosInstance = axios(); // 훅 호출
   //   console.log('getMyInfo 호출');
   //   return axiosInstance.get('/user/me/profile');
   // },
   getMyInfo: async () => {
     console.log('getMyInfo 호출');
-    axiosLogin.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
+    axios.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
   },
 };
