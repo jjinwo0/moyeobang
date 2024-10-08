@@ -13,9 +13,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     const accessToken = getCookie('accessToken');
-    console.log(' 여긴 오나 ? accessToken', accessToken);
     if (accessToken) {
-      console.log('accessToken', accessToken);
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
