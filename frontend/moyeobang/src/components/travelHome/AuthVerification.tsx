@@ -118,8 +118,8 @@ export default function AuthVerification({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 추가
 
-  // const {memberId} = useMyInfo();
-  const memberId = 4;
+  const {memberId} = useMyInfo();
+  // const memberId = 4;
 
   const {connectAccountNumber} = useConnectAccountContext();
 
