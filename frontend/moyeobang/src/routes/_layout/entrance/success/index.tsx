@@ -233,6 +233,10 @@ function LoginSuccess() {
         'accessTokenExpireTime',
         accessTokenExpireTime || ''
       );
+      axiosLogin.get('/user/me/profile').then(res => {
+        console.log('myInfoData', res);
+        setMyInfoData(res.data.data);
+      });
     }
   }, [accessToken]);
 
