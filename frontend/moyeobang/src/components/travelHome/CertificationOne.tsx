@@ -7,6 +7,7 @@ import SsafyBankNotification from '../notification/SsafyBankNotification';
 import {useMutation} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import {useConnectAccountContext} from '@/contexts/ConnectAccount';
+import useMyInfo from '@/store/useMyInfoStore';
 
 const containerStyle = css`
   display: flex;
@@ -89,7 +90,8 @@ export default function CertificationOne({
   };
 
   //[todo]!주스탄드에서 멤버ID 가져오기!
-  const memberId: number = 4;
+  // const memberId: number = 4;
+  const {memberId} = useMyInfo();
 
   const handleVerify = () => {
     if (accountNumber.length > 0) {
