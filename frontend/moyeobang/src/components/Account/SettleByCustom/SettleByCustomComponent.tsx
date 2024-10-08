@@ -149,10 +149,12 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             acceptedNumber: acceptedNumber,
         }
 
-        console.log('직접 정산 POST 데이터',spendData)
+        // console.log('직접 정산 POST 데이터',spendData)
         if (isUpdate) {
+            console.log('업데이트')
             updateCustom({transactionId, travelId,  data:spendData})
         } else {
+            console.log('처음 post')
             postCustom({transactionId, travelId,  data:spendData})
         }
         setIsOpenFinalModal(false);

@@ -70,10 +70,10 @@ export const Route = createFileRoute(
 
 export default function TransactionDetail() {
   const {transactionId} = Route.useParams();
-  const [openUpdateByReceiptModal, setOpentUpdateByReceiptModal] =
-    useState<boolean>(false);
+  const [openUpdateByReceiptModal, setOpentUpdateByReceiptModal] = useState<boolean>(false);
   const {accountId} = useTravelDetailStore();
-  // const {noShow} = Route.useSearch({from:`/account/${transactionId}/detail`});
+  const {fromMain} : {fromMain:boolean} = Route.useSearch();
+  const isFromMain = fromMain ? true : false
 
   // 영수증 정산 후 남은 금액 선물
   const [openPresentModal, setOpenPresentModal] = useState<boolean>(false);
@@ -121,7 +121,7 @@ export default function TransactionDetail() {
 
   useEffect(() => {
     // [todo] noshow 추가
-    if (presentMoney > 0) {
+    if (presentMoney > 0 && !isFromMain) {
       setReceiptPresentMoney(presentMoney);
       setOpenPresentModal(true);
     }
@@ -160,7 +160,7 @@ export default function TransactionDetail() {
           </div>
           <Link
             to={`/account/${transactionId}/settle`}
-            search={{method: 'custom'}}
+            search={{method: 'custom', isUpdate:true}}
             css={LinkStyle}
           >
             <Btn buttonStyle={{size: 'big', style: 'blue'}}>정산 수정하기</Btn>
