@@ -76,9 +76,7 @@
 
 // 다시 sessionStorage로 시도, 성공 버전
 import axios from 'axios';
-import useAuthLogin from '@/store/useAuthLoginStore';
-
-axios 인스턴스를 반환하는 함수
+// axios 인스턴스를 반환하는 함수
 
 const axiosLogin = axios.create({
   baseURL: import.meta.env.VITE_BASEURL + '/api',
