@@ -142,7 +142,6 @@ function Index() {
   // const [pushNotification, setPushNotification] =
   //   useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
-  const {memberId} = useMyInfo();
 
   const {memberId, memberName} = useMyInfo();
 

@@ -102,7 +102,6 @@ const {memberId} = useMyInfo();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState<FormData>(new FormData());
 
-  const {memberId} = useMyInfo();
 
   // 수정과 생성을 구분하여 처리
   const handleNextClick = async () => {
