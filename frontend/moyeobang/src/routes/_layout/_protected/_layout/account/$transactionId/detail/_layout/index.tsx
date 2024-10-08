@@ -13,6 +13,7 @@ import moyeobang from '@/services/moyeobang'
 import ResultByReceiptComponenet from '@/components/Account/SettleByReceipt/SettleByReceiptComponent'
 import useTravelDetailStore from '@/store/useTravelDetailStore'
 import { isSettledParticipantByCustom } from '@/util/typeGaurd'
+import PresentMoneyModal from '@/components/Account/PresentMoneyModal/PresentMoneyModal'
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -71,6 +72,9 @@ export default function TransactionDetail() {
   const [ openUpdateByReceiptModal, setOpentUpdateByReceiptModal] = useState<boolean>(false);
   const {accountId} = useTravelDetailStore();
 
+  const [openPresentModal, setOpenPresentModal] = useState<boolean>(false);
+  const [updateReceiptPresentMoney, setUpdateReceiptPresentMoney] = useState<number>(0);
+
   const {data} = useSuspenseQuery({
     queryKey: ['transactionDetail', accountId, Number(transactionId)],
     queryFn: () => moyeobang.getTransactionDetail(accountId, Number(transactionId)),
@@ -87,12 +91,25 @@ export default function TransactionDetail() {
     setOpentUpdateByReceiptModal(false);
   }
 
+  function handleOpenPresentModal(remainMoney:number) {
+    
+    if (remainMoney>0) {
+      setUpdateReceiptPresentMoney(remainMoney)
+      setOpenPresentModal(true)
+    }
+  }
+
+  function handleClosePresentModal() {
+    setOpenPresentModal(false);
+  }
+
   return openUpdateByReceiptModal ? (
     <ResultByReceiptComponenet 
       data={transactionDetailData as TransactionDetailByReceipt} 
       onClose={handleClose}
       isUpdate={true}
-      />
+      setPostReceiptRemainMoney={handleOpenPresentModal}
+    />
   ) : (
     <div css={layoutStyle}>
       <TransactionDetailDefaultCard
@@ -102,6 +119,12 @@ export default function TransactionDetail() {
         adress={transactionDetailData.address}
         acceptedNumber={transactionDetailData.acceptedNumber}
       />
+      {openPresentModal && 
+      <PresentMoneyModal 
+      remainMoney={updateReceiptPresentMoney} 
+      onClose={handleClosePresentModal}
+      />
+      }
       {isSettledParticipantByCustom(transactionDetailData.details) ?
       (
         <>

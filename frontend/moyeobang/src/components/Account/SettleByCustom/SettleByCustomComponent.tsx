@@ -10,7 +10,7 @@ import {ko} from 'date-fns/locale';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
-import Confetti from "../Confetti/Confetti";
+import PresentMoneyModal from "../PresentMoneyModal/PresentMoneyModal";
 import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 export interface CustomSettle {
@@ -246,7 +246,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
 
     return (
         <>
-        { isOpenPresentModal && <Confetti remainMoney={presentMoney} onClose={handleClosePresentModal}/>}
+        { isOpenPresentModal && <PresentMoneyModal remainMoney={presentMoney} onClose={handleClosePresentModal}/>}
         { isOpenFinalModal && 
             <FinalModal 
             onClickOutside={handleClickOutside} 
