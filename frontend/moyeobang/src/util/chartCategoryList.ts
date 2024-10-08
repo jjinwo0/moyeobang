@@ -1,7 +1,7 @@
 import { colors } from "@/styles/colors";
 import activity from '@/assets/icons/amusementpark.png';
 import airplane from '@/assets/icons/airplane.webp';
-import coffee from '@/assets/icons/coffe.webp';
+import coffee from '@/assets/icons/coffee.webp';
 import restaurant from '@/assets/icons/restaurant.webp';
 import shopping from '@/assets/icons/shoppingBag.webp';
 import hotel from '@/assets/icons/hotel.webp';

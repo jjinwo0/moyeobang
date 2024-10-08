@@ -1,5 +1,5 @@
 import restaurantIcon from '@/assets/icons/dish.webp';
-import coffeeIcon from '@/assets/icons/coffe.webp';
+import coffeeIcon from '@/assets/icons/coffee.webp';
 import shoppingCartIcon from '@/assets/icons/shoppingCart.webp';
 import shoppingBagIcon from '@/assets/icons/shoppingBag.webp';
 import bangBang from '@/assets/icons/bangBang.png';
@@ -28,12 +28,17 @@ export function getCategoryTag(categoryName: string) {
     case '숙박':
       return {
         icon: hotelIcon,
-        label: '수면 테라피 했나방',
+        label: '수면테라피 했나방',
       };
     case '항공':
       return {
         icon: airplaneIcon,
         label: '날개잃은 천사인가방',
+      };
+    case '액티비티':
+      return {
+        icon: activityIcon,
+        label: '날쌘돌이인가방',
       };
     default:
       return {

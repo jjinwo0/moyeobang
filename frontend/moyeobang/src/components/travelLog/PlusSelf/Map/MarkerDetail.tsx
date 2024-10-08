@@ -17,9 +17,13 @@ export default function MarkerDetail({
 }: {
   setShowMarkerDetail: (show: boolean) => void;
 }) {
-  const {selectedMarker, setSelectedMarker} = useTravelLogContext();
-  const {setSearchLocation, handleShowMapSearch} =
-    useTravelLogContext();
+  const {
+    selectedMarker,
+    setSelectedMarker,
+    setScheduleName,
+    setSearchLocation,
+    handleShowMapSearch,
+  } = useTravelLogContext();
 
   useEffect(() => {
     console.log('[*]야 임마 selectedMarker', selectedMarker);
@@ -61,6 +65,7 @@ export default function MarkerDetail({
 
   const handleDetailClose = () => {
     setSearchLocation(selectedMarker?.title || '');
+    setScheduleName(selectedMarker?.title || '');
     handleShowMapSearch();
     setShowMarkerDetail(false);
   };
@@ -81,7 +86,13 @@ export default function MarkerDetail({
             <div css={MarkerDetailStyle.MapDetailHeader}>
               <div id="title">{selectedMarker?.title}</div>
               <div id="rating">
-                {selectedMarker?.rating} {renderStars(selectedMarker?.rating || 0)}
+                {selectedMarker?.rating && selectedMarker.rating > 0 ? (
+                  <>
+                    {selectedMarker.rating} {renderStars(selectedMarker.rating)}
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
             <div css={MarkerDetailStyle.MapDetailContent}>
@@ -129,7 +140,13 @@ export default function MarkerDetail({
             <div css={MarkerDetailStyle.LongMapDetailHeader}>
               <div id="title">{selectedMarker?.title}</div>
               <div id="rating">
-                {selectedMarker?.rating} {renderStars(selectedMarker?.rating || 0)}
+                {selectedMarker?.rating && selectedMarker.rating > 0 ? (
+                  <>
+                    {selectedMarker.rating} {renderStars(selectedMarker.rating)}
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
             <div css={MarkerDetailStyle.LongMapDetailContent}>
@@ -165,14 +182,16 @@ export default function MarkerDetail({
             </div>
             <div id="reviews">
               <div id="reviews-images">
-                {selectedMarker?.photos?.slice(0, 3).map((photo: string) => (
-                  <img
-                    key={photo}
-                    src={photo}
-                    alt="reviewImage"
-                    style={{width: '100px', height: '100px'}}
-                  />
-                ))}
+                {selectedMarker?.photos
+                  ?.slice(0, 3)
+                  .map((photo: string) => (
+                    <img
+                      key={photo}
+                      src={photo}
+                      alt="reviewImage"
+                      style={{width: '100px', height: '100px'}}
+                    />
+                  ))}
               </div>
               <div id="reviews-content">
                 {selectedMarker?.reviews?.map((review: Review) => (
