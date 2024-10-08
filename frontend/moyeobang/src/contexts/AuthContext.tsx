@@ -8,7 +8,12 @@ type AuthContextType = {
   refreshToken: string | null;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
   setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
-  handleLoginToken: (accessToken: string, accessTokenExpireTime: string, refreshToken: string, refreshTokenExpireTime: string) => void;
+  handleLoginToken: (
+    accessToken: string,
+    accessTokenExpireTime: string,
+    refreshToken: string,
+    refreshTokenExpireTime: string
+  ) => void;
   handleLogout: () => void;
   loginProvider: string | null;
   setLoginProvider: React.Dispatch<React.SetStateAction<string | null>>;
@@ -19,12 +24,21 @@ type AuthContextType = {
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loginProvider, setLoginProvider] = useState<string | null>(null);
-  const [accessTokenExpireTime, setAccessTokenExpireTime] = useState<string | null>(null);
+  const [accessTokenExpireTime, setAccessTokenExpireTime] = useState<
+    string | null
+  >(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
-  const [refreshTokenExpireTime, setRefreshTokenExpireTime] = useState<string | null>(null);
+  const [refreshTokenExpireTime, setRefreshTokenExpireTime] = useState<
+    string | null
+  >(null);
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  const handleLoginToken = (accessToken: string, accessTokenExpireTime: string, refreshToken: string, refreshTokenExpireTime: string) => {
+  const handleLoginToken = (
+    accessToken: string,
+    accessTokenExpireTime: string,
+    refreshToken: string,
+    refreshTokenExpireTime: string
+  ) => {
     setAccessToken(accessToken);
     setAccessTokenExpireTime(accessTokenExpireTime);
     setRefreshToken(refreshToken);
