@@ -14,9 +14,8 @@ import com.ssafy.moyeobang.settle.application.port.in.SettleCommand;
 import com.ssafy.moyeobang.settle.application.port.out.CreateMemberOrderHistoryPort;
 import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
 import com.ssafy.moyeobang.settle.application.port.out.UpdateMemberTravelPort;
-import java.util.List;
-
 import com.ssafy.moyeobang.settle.application.port.out.UpdateWithdrawPort;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,6 +54,7 @@ class SettleServiceTest {
                 100L,
                 "testTransaction",
                 10000,
+                3,
                 List.of(1L, 2L, 3L)
         );
     }
@@ -69,6 +69,7 @@ class SettleServiceTest {
                 new OrderInfo(
                         "testOrder", // 주문 정보
                         10000, // 주문 가격
+                        3,
                         100L // 거래 내역 ID
                 ),
                 List.of(1L, 2L, 3L) // 소비 참여자 ID
@@ -106,6 +107,7 @@ class SettleServiceTest {
                 new OrderInfo(
                         "testOrder", // 주문 정보
                         10000, // 주문 가격
+                        1,
                         100L // 거래 내역 ID
                 ),
                 List.of(1L, 2L, 3L) // 소비 참여자 ID
