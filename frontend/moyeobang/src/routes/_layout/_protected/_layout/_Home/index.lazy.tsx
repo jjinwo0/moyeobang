@@ -133,7 +133,6 @@ const plusStyle = css`
 
 //[todo] 멤버 아이디 주스탄드에서 꺼내오기!!!
 // const memberId: number = 4;
-const {memberId} = useMyInfo();
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
@@ -143,6 +142,7 @@ function Index() {
   // const [pushNotification, setPushNotification] =
   //   useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
+  const {memberId} = useMyInfo();
 
   const {data: travelData} = useSuspenseQuery({
     queryKey: ['travelList', memberId],
