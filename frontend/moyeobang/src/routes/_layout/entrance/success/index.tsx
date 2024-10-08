@@ -55,7 +55,7 @@ const spinnerImageStyle = css`
 `;
 
 function LoginSuccess() {
-  const [myInfoData, setMyInfoData] = useState<ResponseGetProfile>();
+  const [myInfoData, setMyInfoData] = useState<MyInfo>();
   const navigate = useNavigate();
   const location = useLocation();
   // location 객체에서 쿼리 문자열을 가져옴
@@ -123,9 +123,9 @@ function LoginSuccess() {
     if (myInfoData) {
       const myInfo = myInfoData;
       console.log('myInfo', myInfo);
-      setMemberId(myInfo.memberId);
-      setMemberName(myInfo.memberName);
-      setProfileImage(myInfo.profileImage);
+      setMemberId(myInfo.id);
+      setMemberName(myInfo.name);
+      setProfileImage(myInfo.image);
       setBankName(myInfo.bankName);
       setAccountNumber(myInfo.accountNumber);
       // 계좌 정보가 없으면 계좌 등록 페이지로 이동
