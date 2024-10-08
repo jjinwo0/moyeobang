@@ -210,7 +210,7 @@ function LoginSuccess() {
   // location 객체에서 쿼리 문자열을 가져옴
   const searchParams = new URLSearchParams(location.search);
   const accessToken = searchParams.get('accessToken');
-  setGetAccessToken(accessToken || '');
+  // setGetAccessToken(accessToken || '');
 
   const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
   const getRefreshToken = searchParams.get('refreshToken');
