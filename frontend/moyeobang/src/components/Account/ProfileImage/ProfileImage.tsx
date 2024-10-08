@@ -15,7 +15,7 @@ export default function ProfileImage({
         profileImage,
         isSelected,
         onClick,
-        px=85
+        px=80
         } : ProfileImageProps ) {
 
     const profileContainerStyle = (px:number) => css`
