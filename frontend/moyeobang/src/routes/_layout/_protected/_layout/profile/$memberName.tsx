@@ -95,14 +95,21 @@ const data: ResponseGetProfile = {
 export default function profile() {
   // useMatch를 사용해 URL 파라미터로 전달된 nickName 가져오기
 
-
   const {
     params: {memberName}, // URL 파라미터에서 nickName 가져오기
-  } = useMatch({from:'/_layout/_protected/_layout/profile/$memberName'}); // 라우트와 매칭
+  } = useMatch({from: '/_layout/_protected/_layout/profile/$memberName'}); // 라우트와 매칭
 
   const navigate = useNavigate();
 
-  const {setMemberId, setMemberName, setAccountId, setAccountNumber, setBankName, setProfileImage} = useMyInfo();
+  const {
+    setMemberId,
+    setMemberName,
+    setAccountId,
+    setAccountNumber,
+    setBankName,
+    setProfileImage,
+    accountNumber,
+  } = useMyInfo();
   const handleLogout = () => {
     console.log('로그아웃');
     // 로그아웃 시 모든 상태 초기화
@@ -132,7 +139,7 @@ export default function profile() {
           <SettingBox title="정보수정" />
           <SettingBox
             title="연결계좌"
-            description="12345678123"
+            description={accountNumber}
             updateButton="수정하기 >"
           />
           <SettingBox title="로그아웃" onClick={handleLogout} />

@@ -37,6 +37,7 @@ type BoxProps = {
   title: string;
   description?: string;
   updateButton?: string;
+  onClick?: () => void;
 };
 
 export default function SettingBox({
