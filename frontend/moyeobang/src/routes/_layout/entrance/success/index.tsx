@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from '@emotion/react';
 import {
   createFileRoute,
@@ -13,6 +13,7 @@ import moyeobang from '@/services/moyeobang';
 import useAxiosLogin from '@/util/axiosLogin';
 import useAuthLogin from '@/store/useAuthLoginStore';
 import useMyInfo from '@/store/useMyInfoStore';
+import axiosLogin from '@/util/axiosLogin';
 
 export const Route = createFileRoute('/_layout/entrance/success/')({
   component: LoginSuccess,
@@ -54,6 +55,7 @@ const spinnerImageStyle = css`
 `;
 
 function LoginSuccess() {
+  const [myInfoData, setMyInfoData] = useState<ResponseGetProfile>();
   const navigate = useNavigate();
   const location = useLocation();
   // location 객체에서 쿼리 문자열을 가져옴
@@ -79,13 +81,13 @@ function LoginSuccess() {
   /**
    * 내 정보 조회
    */
-  const {data: myInfoData} = useQuery({
-    queryKey: [],
-    queryFn: () => moyeobang.getMyInfo(),
-    enabled:
-      !!localStorage.getItem('accessToken') &&
-      !!localStorage.getItem('refreshToken'),
-  });
+  // const {data: myInfoData} = useQuery({
+  //   queryKey: [],
+  //   queryFn: () => moyeobang.getMyInfo(),
+  //   enabled:
+  //     !!localStorage.getItem('accessToken') &&
+  //     !!localStorage.getItem('refreshToken'),
+  // });
 
   useEffect(() => {
     if (getAccessToken && getRefreshToken) {
@@ -99,7 +101,10 @@ function LoginSuccess() {
         'refreshTokenExpireTime',
         refreshTokenExpireTime || ''
       );
-      console.log('빌드 2');
+      axiosLogin.get('/user/me/profile').then(res => {
+        console.log('myInfoData', res);
+        setMyInfoData(res.data.data);
+      });
 
       // 로그인 성공시 토큰 저장
       // setAccessToken(getAccessToken);
@@ -115,23 +120,21 @@ function LoginSuccess() {
   ]);
 
   useEffect(() => {
-    console.log('myInfoData', myInfoData);
-
     if (myInfoData) {
       const myInfo = myInfoData;
       console.log('myInfo', myInfo);
-      //   // 계좌 정보가 없으면 계좌 등록 페이지로 이동
-      //   if (myInfo.accountId) {
-      //     setMemberId(myInfo.memberId);
-      //     setMemberName(myInfo.memberName);
-      //     setProfileImage(myInfo.profileImage);
-      //     setBankName(myInfo.bankName);
-      //     setAccountNumber(myInfo.accountNumber);
-      //     setAccountId(myInfo.accountId);
-      //     navigate({to: '/'});
-      //   } else {
-      //     navigate({to: '/accountConnect'});
-      //   }
+      // 계좌 정보가 없으면 계좌 등록 페이지로 이동
+      if (myInfo.accountId) {
+        setMemberId(myInfo.memberId);
+        setMemberName(myInfo.memberName);
+        setProfileImage(myInfo.profileImage);
+        setBankName(myInfo.bankName);
+        setAccountNumber(myInfo.accountNumber);
+        setAccountId(myInfo.accountId);
+        navigate({to: '/'});
+      } else {
+        navigate({to: '/accountConnect'});
+      }
     }
   }, [myInfoData]);
 
