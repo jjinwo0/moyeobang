@@ -64,7 +64,7 @@ instance.interceptors.response.use(
       } catch (refreshError) {
         console.error('Failed to refresh access token:', refreshError);
         removeCookie('accessToken');
-        removeCookie('refreshToken');
+        removeCookie('refresh-token');
         window.location.href = '/entrance';
       }
     }
