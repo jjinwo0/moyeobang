@@ -16,7 +16,6 @@ const queryClient = new QueryClient();
 
 // Import the generated route tree
 import {routeTree} from './routeTree.gen'; // 라우트 트리 경로 확인
-import {AuthProvider} from './contexts/AuthContext';
 
 // Create a new router instance
 const router = createRouter({
