@@ -5,7 +5,7 @@ import useAuthLogin from '@/store/useAuthLoginStore';
 
 const axiosLogin = axios.create({
   baseURL: import.meta.env.VITE_BASEURL + '/api',
-  responseType: 'json',
+  headers: {'Content-Type': 'application/json'},
   timeout: 4000,
 });
 
