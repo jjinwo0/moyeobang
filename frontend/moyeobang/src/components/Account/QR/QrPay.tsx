@@ -75,7 +75,6 @@ export default function QrPay({onMessage, isHome, accountNumber}:QrPayProps) {
         });
 
         eventSource.onerror = (event) => {
-            
             eventSource.close();
             if (event) {
                 console.log('sse요청 error발생', event)

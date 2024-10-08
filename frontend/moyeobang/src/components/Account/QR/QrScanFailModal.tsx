@@ -71,11 +71,13 @@ export default function FailModalByQrScan({onClose, onRestart, errorName}:FailBy
     return(
         <div css={layoutStyle}>
             {errorName==='noBalance' ? 
-            <div>
-                계좌에 잔액이 부족합니다.
-            </div>: 
             <>
-            <div css={titleStyle}><span>QR</span>스캔에 실패했습니다.</div>
+            <div css={titleStyle}>계좌에 잔액이 부족해요</div>
+            <div css={textStyle}>공금을 입금해주세요</div>
+            </>
+            : 
+            <>
+            <div css={titleStyle}><span>QR</span>스캔에 실패했어요</div>
             <div css={textStyle}><span>QR</span>을 다시 촬영해주세요</div>
             </>
             }

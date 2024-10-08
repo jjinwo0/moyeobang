@@ -35,6 +35,8 @@ export default function PayModal({onXClick} : QRPayProps) {
     
     const [openScanFailModal, setopenScanFailModal] = useState<boolean>(false);
     const [scanRestart, setScanRestart] = useState<boolean>(false);
+    const [failName, setfailName] = useState<string>('');
+
 
     const location = useLocation();
     const isHome = location.pathname ==='/'
@@ -63,19 +65,24 @@ export default function PayModal({onXClick} : QRPayProps) {
         onXClick();
     }
 
-    function handleScanError() {
+    function handleScanError(errorMessage:string) {
+        if (errorMessage==='여행 계좌에 잔액이 부족합니다.') {
+            setfailName('noBalance')
+        } else {
+            setfailName('scanError')
+        }
         setopenScanFailModal(true); // scan실패 컴포넌트 오픈
     }
 
     function handleRestart() {
         setopenScanFailModal(false)
-        setScanRestart(true);
+        setScanRestart(!scanRestart);
         setActiveComponent('right')
     }
 
     return (
         <>
-        {openScanFailModal && <QrScanFailModal onClose={onXClick} onRestart={handleRestart} errorName={'errorName'}/>}
+        {openScanFailModal && <QrScanFailModal onClose={onXClick} onRestart={handleRestart} errorName={failName}/>}
         {openCompleteModal && successTransactionId &&
             <PayCompletedModal 
             isHome={isHome} 

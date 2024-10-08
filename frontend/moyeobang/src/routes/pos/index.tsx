@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import Btn from '@/components/common/btn/Btn';
 import QrScanByPos from '@/components/QrByPos/QrScanByPos';
 import ResultByPos from '@/components/QrByPos/ResultByPos';
+import SuccessModalByPos from '@/components/QrByPos/SuccessModalByPos';
 
 const starbucks: PosPay = {
     placeId : 'starbucks-12',
@@ -128,6 +129,7 @@ export default function Pos() {
   // 신규 const targetAccountNumber '0018418012115489'
 
   const [isOpenQrModal, setIsOpenQrModal] = useState<boolean>(false)
+  const [ openSuccessModal, setOpenSuccessModal] = useState<boolean>(false);
   const [data, setData] = useState<PosPay>() // requestId, 결제자 계좌 아이디 없는 data 즉 결제기 데이터
   const [isOpenResultModal, setIsOpenResultModal] = useState<boolean>(false);
   const [resultData, setResultData] = useState<PaymentProps>(); // 결제 최종 데이터 
@@ -156,10 +158,21 @@ export default function Pos() {
     setIsOpenQrModal(true)
   }
 
+  function handleSuccess(isSuccess:boolean) {
+    if (isSuccess) {
+      setOpenSuccessModal(true);
+    }
+  }
+
+  function handleCloseSuccessModal() {
+    setOpenSuccessModal(false);
+  }
+
   return (
     <div css={layoutStyle}>
+      {openSuccessModal && <SuccessModalByPos onClickOutside={handleCloseSuccessModal} />}
       {isOpenQrModal && data && <QrScanByPos onClose={handleQrClose} paymentData={data} onResult={handleResult}/> }
-      {isOpenResultModal && resultData && <ResultByPos {...resultData} onClickOutside={handleOnClickOutside}/>}
+      {isOpenResultModal && resultData && <ResultByPos {...resultData} onClickOutside={handleOnClickOutside} setIsSuccess={handleSuccess}/>}
       { !isOpenQrModal && !isOpenResultModal &&
         <>
         <div css={storeLayoutStyle}>

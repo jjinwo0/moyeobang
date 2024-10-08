@@ -36,6 +36,7 @@ const containerLayoutStyle=css`
 
 type ResultByPos = PaymentProps & PropsWithChildren<HTMLAttributes<HTMLDivElement>> & {
     onClickOutside: VoidFunction;
+    setIsSuccess:(isSuccess:boolean)=>void;
 }
 
 export default function ResultByPos({
@@ -50,6 +51,7 @@ export default function ResultByPos({
     targetAccountNumber,
     tag,
     onClickOutside,
+    setIsSuccess,
     }:ResultByPos) {
 
     const modalRef = useRef<HTMLDivElement>(null);
@@ -60,7 +62,12 @@ export default function ResultByPos({
     mutationFn: ({data} : {data: PaymentProps}) => moyeobang.postPayByPos(data),
     onSuccess: async () => {
         console.log('결제 성공!')
+        setIsSuccess(true);
+        onClickOutside();
     },
+    onError: async () => {
+        console.log('결제 실패')
+    }
   });
     
     function handleSettle() {

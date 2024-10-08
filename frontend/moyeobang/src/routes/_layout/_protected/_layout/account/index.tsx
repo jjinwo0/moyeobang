@@ -87,17 +87,18 @@ const chartListStyle=css`
 `;
 
 const emptyTransactionStyle=css`
-  padding-top:100px;
+  padding-top:65px;
   width:100%;
   height:100%;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:10px;
+  font-family:'medium';
+  font-size:20px;
   img {
-    width:100px;
-    height:100px;
+    width:150px;
+    height:150px;
   }
 `;
 export default function AccountMain() {
@@ -224,7 +225,7 @@ export default function AccountMain() {
           : 
             <div css={emptyTransactionStyle}>
               <img src={sadBangBang} alt="" />
-              아직 결제내역이 없어요
+              아직 결제내역이 없습니다
             </div>
             }
           </div>
