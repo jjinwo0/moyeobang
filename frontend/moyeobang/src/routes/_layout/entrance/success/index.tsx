@@ -110,6 +110,8 @@ function LoginSuccess() {
   ]);
 
   useEffect(() => {
+    console.log('myInfoData', myInfoData);
+    
     if (myInfoData) {
       const myInfo = myInfoData.data.data;
       console.log('myInfo', myInfo);
@@ -126,7 +128,7 @@ function LoginSuccess() {
         navigate({to: '/accountConnect'});
       }
     }
-  }, [myInfoData, navigate]);
+  }, [myInfoData]);
 
   // 모든 쿼리 파라미터를 가져오기
   return (

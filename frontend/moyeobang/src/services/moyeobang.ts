@@ -346,8 +346,20 @@ export default {
    * 내 정보 조회
    */
 
+  // getMyInfo: async () => {
+  //   const axiosInstance = axiosLogin(); // 훅 호출
+  //   console.log('getMyInfo 호출');
+  //   return axiosInstance.get('/user/me/profile');
+  // },
   getMyInfo: async () => {
-    const axiosInstance = axiosLogin(); // 훅 호출
-    return axiosInstance.get('/user/me/profile');
+    try {
+      const axiosInstance = axiosLogin(); // 훅 호출
+      console.log('getMyInfo 호출');
+      const response = await axiosInstance.get('/user/me/profile');
+      return response;
+    } catch (error) {
+      console.error('getMyInfo 호출 실패:', error);
+      throw error; // 필요에 따라 에러를 다시 던질 수 있습니다.
+    }
   },
 };
