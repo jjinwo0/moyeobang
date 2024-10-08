@@ -14,7 +14,7 @@ const layoutStyle = css`
     gap: 10px;
     font-family: 'medium';
     font-size: 20px;
-    padding: 10px 30px;
+    padding: 10px 25px;
 `;
 
 const checkStyle = css`
@@ -22,6 +22,16 @@ const checkStyle = css`
         width: 25px;
         height: 25px;
     }
+`;
+
+const nameStyle=css`
+    width:80px;
+    padding-left:10px;
+`;
+
+const inputContainerStyle=css`
+    width:140px;
+
 `;
 const inputStyle = (isDecided: boolean | undefined) =>  css`
     width: 80px;
@@ -104,19 +114,17 @@ export default function SettleCardByCustom({
             }
             </div>
             <ProfileImage profileImage={profileImage} isSelected={isChecked}/>
-            <div>{memberName}</div>
-            <div>
-                <div>
-                    <input 
-                    css={inputStyle(isDecided)}
-                    type="text" 
-                    value={money}
-                    onChange={handleChange}
-                    disabled={!isChecked}
-                    readOnly={isDecided}
-                    />
-                    <span>원</span>
-                </div> 
+            <div css={nameStyle}>{memberName}</div>
+            <div css={inputContainerStyle}>
+                <input 
+                css={inputStyle(isDecided)}
+                type="text" 
+                value={money}
+                onChange={handleChange}
+                disabled={!isChecked}
+                readOnly={isDecided}
+                />
+                <span>원</span>
             </div>
         </div>
     )
