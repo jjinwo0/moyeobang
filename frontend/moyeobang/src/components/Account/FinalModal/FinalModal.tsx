@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useEffect } from "react";
 import type {HTMLAttributes, PropsWithChildren} from "react";
 import {useRef, useState} from "react";
 import Backdrop from "./Backdrop/Backdrop";
@@ -67,6 +67,9 @@ const listLayoutStyle = (isExpanded: boolean) => css`
     overflow-y:auto;
     margin: 10px 0;
 
+    &::-webkit-scrollbar {
+        display: none; 
+    }
 `;
 
 const fixedButtonStyle = css`
@@ -83,7 +86,7 @@ const fixedButtonStyle = css`
 `;
 
 type FinalModalProps = PropsWithChildren<HTMLAttributes<HTMLDivElement>> & {
-    onClickOutside: VoidFunction;
+    onClickOutside: (isOutside : boolean) => void;
     onClick: VoidFunction;
     confirmData: CustomSettle[];
     totalMoney: Money;
@@ -92,14 +95,34 @@ type FinalModalProps = PropsWithChildren<HTMLAttributes<HTMLDivElement>> & {
 export default function FinalModal({onClickOutside, onClick, confirmData, totalMoney} : FinalModalProps) {
 
     const modalRef = useRef<HTMLDivElement>(null);
-    useOnClickOutside(modalRef, onClickOutside);
+
 
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
+    const [canDetectClickOutside, setCanDetectClickOutside] = useState<boolean>(false);
 
     function handlePointerDown() {
         setIsExpanded(!isExpanded);
+        if (isExpanded) {
+            // 커졌다가 작아지면
+            setCanDetectClickOutside(false);
+        }
     }
-    
+
+    useOnClickOutside(modalRef, () => onClickOutside(canDetectClickOutside));
+
+    useEffect(()=>{
+
+        // 백드롭 눌리면 안됨. 지연시켜야함.
+        if (!canDetectClickOutside) {
+
+            const timeoutId = setTimeout(()=>{
+                setCanDetectClickOutside(true);
+            }, 200)
+
+            return () => clearTimeout(timeoutId);
+        }
+    },[canDetectClickOutside])
+
 
     return (
         <Backdrop>
@@ -110,7 +133,7 @@ export default function FinalModal({onClickOutside, onClick, confirmData, totalM
                 <div css={textStyle}>
                     <div css={titleStyle}>최종확인</div>
                     <div css={amountStyle}>총 {totalMoney} 원</div>
-                    <div css={countStyle}>인원 {confirmData.length} 명</div>
+                    <div css={countStyle}>정산 인원 {confirmData.length} 명</div>
                 </div>
                 <div css={listLayoutStyle(isExpanded)}>
                 { confirmData.map((user, index) => (

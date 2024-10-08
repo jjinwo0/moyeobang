@@ -20,7 +20,7 @@ const dotsContainerStyle=css`
   align-items:center;
   gap:5px;
   position:absolute;
-  bottom:10px;
+  bottom:7px;
   z-index:9999;
 `;
 
@@ -85,7 +85,8 @@ export default function CardSlider({dots, account, consumptionProportionByCatego
               )}
               {activeCardIndex === 1 &&
               <ChartCard 
-                title={isAccountBalanceByGroup(account) ? '전체 소비 금액' : `${account.simpleUserProfile.memberName} 소비 금액`} 
+                title={'전체 소비 금액'} 
+                memberName={isAccountBalanceByGroup(account) ? undefined : account.simpleUserProfile.memberName}
                 money={isAccountBalanceByGroup(account) ? Number(account.totalSpent) : account.personalTotalSpent} 
                 data={consumptionProportionByCategory} 
               />}

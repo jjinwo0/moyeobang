@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { css } from '@emotion/react'
 import TransactionDetailDefaultCard from '@/components/Account/Detail/TransactionDetailDefaultCard'
 import Btn from '@/components/common/btn/Btn'
@@ -13,6 +13,7 @@ import moyeobang from '@/services/moyeobang'
 import ResultByReceiptComponenet from '@/components/Account/SettleByReceipt/SettleByReceiptComponent'
 import useTravelDetailStore from '@/store/useTravelDetailStore'
 import { isSettledParticipantByCustom } from '@/util/typeGaurd'
+import PresentMoneyModal from '@/components/Account/PresentMoneyModal/PresentMoneyModal'
 
 const layoutStyle = css`
   margin-top: 50px;
@@ -70,6 +71,11 @@ export default function TransactionDetail() {
   const { transactionId } = Route.useParams()
   const [ openUpdateByReceiptModal, setOpentUpdateByReceiptModal] = useState<boolean>(false);
   const {accountId} = useTravelDetailStore();
+  const {noShow} = Route.useSearch();
+
+  // 영수증 정산 후 남은 금액 선물 
+  const [openPresentModal, setOpenPresentModal] = useState<boolean>(false);
+  const [ReceiptPresentMoney, setReceiptPresentMoney] = useState<number>(0);
 
   const {data} = useSuspenseQuery({
     queryKey: ['transactionDetail', accountId, Number(transactionId)],
@@ -77,7 +83,13 @@ export default function TransactionDetail() {
   });
 
   const transactionDetailData = data.data.data;
-  // console.log('detail 데이터', transactionDetailData) 
+
+  // 영수증 정산 후 남은 금액 선물 함수
+  const calculateRemainMoney = (details : SettledItemByReceipt[], totalMoney:Money) => {
+    return details.reduce((remaining, detail) => remaining - detail.orderItemPrice, totalMoney);
+  }
+
+  const presentMoney = isSettledParticipantByCustom(transactionDetailData.details) ? 0 : calculateRemainMoney(transactionDetailData.details, transactionDetailData.money);
 
   function handleUpdateReceipt() {
     setOpentUpdateByReceiptModal(true);
@@ -87,12 +99,23 @@ export default function TransactionDetail() {
     setOpentUpdateByReceiptModal(false);
   }
 
+  function handleClosePresentModal() {
+    setOpenPresentModal(false);
+  }
+
+  useEffect(()=>{
+    if (presentMoney>0 && !noShow) {
+      setReceiptPresentMoney(presentMoney);
+      setOpenPresentModal(true)
+    }
+  }, [presentMoney, openUpdateByReceiptModal])
+
   return openUpdateByReceiptModal ? (
     <ResultByReceiptComponenet 
       data={transactionDetailData as TransactionDetailByReceipt} 
       onClose={handleClose}
       isUpdate={true}
-      />
+    />
   ) : (
     <div css={layoutStyle}>
       <TransactionDetailDefaultCard
@@ -125,6 +148,12 @@ export default function TransactionDetail() {
         </>
         ) : (
           <>
+            {openPresentModal && 
+            <PresentMoneyModal 
+            remainMoney={ReceiptPresentMoney} 
+            onClose={handleClosePresentModal}
+            />
+            }
             <div css={columnStyle}>
               <div>상품명</div>
               <div>수량</div>
