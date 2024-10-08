@@ -248,7 +248,7 @@ export default function ScanByReceiptComponent({transactionId, money, paymentNam
                 </div>
             </>
         )}
-        {error && <FailByReceipt onClose={handleFailClose} />}
+        {error && <FailByReceipt onClose={handleFailClose} transactionId={transactionId}/>}
         </div>
     )
 }

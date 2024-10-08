@@ -97,9 +97,8 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
         },
         onError: (error) => {
             if (error instanceof AxiosError) {
-                console.log('0000,' , error.response?.data?.error?.message)
-                onError(error.response?.data?.error?.message)
                 
+                onError(error.response?.data?.error?.message)
             } else {
                 onError('온라인 결제 실패')
             }
@@ -148,7 +147,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
                     {
                         onDecodeError : onScanFail,
                         preferredCamera : "environment", // 후면지향
-                        maxScansPerSecond:3, // 1초당 2번
+                        maxScansPerSecond:3, // 1초당 3번
                         highlightScanRegion : true, // ? 알아보기
                         // highlightCodeOutline : true, // QR주변 윤곽선 생성
                         overlay : qrBoxElement?.current || undefined,
