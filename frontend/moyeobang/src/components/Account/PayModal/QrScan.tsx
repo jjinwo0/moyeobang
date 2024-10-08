@@ -87,6 +87,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
+    const [noBalanceMessage, setNoBlananceMessage] = useState<string>('');
 
     const {mutate: postPaymentByOnline } = useMutation({
         mutationFn: ({data} : {data: PaymentProps}) => moyeobang.postPayByOnline(data),
@@ -94,8 +95,12 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
             onMessage(Number(response.data.data.transactionId))
             console.log('온라인 결제 성공!')
         },
-        onError: () => {
-            onError()
+        onError: (error) => {
+            if (error.message === '여행 계좌에 잔액이 부족합니다.') {
+                setNoBlananceMessage(error.message)
+            } else {
+                onError()
+            }
         }
     });
 
@@ -134,7 +139,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
 
         const initScanner = () => {
             if (videoElement.current) {
-                console.log('비디오 확인', videoElement.current)
+                
                 scanner.current = new QrScanner( 
                     videoElement?.current,
                     onScanSuccuess,
@@ -167,7 +172,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
         // 언마운트시
         return () => {
             if (scanner.current) {
-                console.log('언마운트냐')
+                
                 scanner.current.destroy(); //스캐너 완전히 해제
             }
         }

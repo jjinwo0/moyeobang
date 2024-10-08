@@ -102,12 +102,11 @@ interface ResultByReceiptComponentProps {
   data:TransactionDetailByReceipt;
   isUpdate:boolean;
   onClose:VoidFunction;
-  setPostReceiptRemainMoney:(postRemainMoney:number) =>void;
 }
 
 // 영수증 인식 결과
 // isNew : True (post) 처음 | isNew : false (fetch) 수정
-export default function SettleByReceiptComponenet({data, isUpdate, onClose, setPostReceiptRemainMoney}:ResultByReceiptComponentProps) {
+export default function SettleByReceiptComponenet({data, isUpdate, onClose}:ResultByReceiptComponentProps) {
 
   const [ updateDetails, setUpdateDetails] = useState<SettledItemByReceipt[]>([]);
   const navigate = useNavigate();
@@ -223,8 +222,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose, setP
       splitMethod:'receipt',
     }
 
-    setPostReceiptRemainMoney(postCurrentMoney); // 내림후 남은 돈
-
+    
     if ( isUpdate ) {
       updateSettleByReceipt({transactionId: data.transactionId, travelId:travelId, data : updatedReceipt})
     } else {

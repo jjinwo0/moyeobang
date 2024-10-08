@@ -236,8 +236,10 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         }
     };
 
-    function handleClickOutside() {
-        setIsOpenFinalModal(false);
+    function handleClickOutside(canDectect:boolean) {
+        if (canDectect) {
+            setIsOpenFinalModal(false);
+        }
     }
 
     function handleClosePresentModal() {
@@ -291,11 +293,11 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     />
                 ))}
             </div>
-            <div css={nButtonStyle}>
-                남은 금액 1/N 해방
-                <button onClick={handleDivide}>1/N</button>
-            </div>
             <div css={buttonLayoutStyle}>
+                <div css={nButtonStyle}>
+                    남은 금액 1/N 해방
+                    <button onClick={handleDivide}>1/N</button>
+                </div>
                 { canSettle ? (
                     <Btn 
                     buttonStyle={{ size:'big', style:'blue'}}
