@@ -90,7 +90,7 @@ export const TravelLogProvider = ({children}: {children: React.ReactNode}) => {
     setShowMapSearch(!showMapSearch);
   };
 
-  const [scheduleName, setScheduleName] = useState<string | undefined>();
+  const [scheduleName, setScheduleName] = useState<string | undefined>(searchLocation);
 
   // scheduleDayNum 실제 day를 알 수 있다.
   // scheduleDayNum-1을 하면 인덱스를 알 수 있다.

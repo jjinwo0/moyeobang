@@ -53,7 +53,6 @@ const LoginStyle = css`
 
 export default function Login() {
   const {handleLogin} = useLogin();
-
   return (
     <div css={LoginStyle}>
       <div id="sky-blur">
