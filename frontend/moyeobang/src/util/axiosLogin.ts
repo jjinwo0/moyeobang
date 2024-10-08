@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthLogin from '@/store/useAuthLoginStore';
 
 // axios 인스턴스를 반환하는 함수
-async function useAxiosLogin() {
+function useAxiosLogin() {
   const {
     accessToken,
     refreshToken,
@@ -11,11 +11,14 @@ async function useAxiosLogin() {
     loginProvider,
     setLoginProvider,
   } = useAuthLogin();
+
   const axiosLogin = axios.create({
     baseURL: import.meta.env.VITE_BASEURL + '/api',
     responseType: 'json',
     timeout: 4000,
   });
+
+  
 
   // 요청 인터셉터 설정
   axiosLogin.interceptors.request.use(
