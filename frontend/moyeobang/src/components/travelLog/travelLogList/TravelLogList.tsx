@@ -10,7 +10,7 @@ import DaySchedules from './DaySchedules';
 import PlusSelf from '@/components/travelLog/PlusSelf/PlusSelf';
 import ScheduleMapSearch from '@/components/travelLog/PlusSelf/Map/ScheduleMapSearch';
 import sadBangBang from '@/assets/icons/sadBangbang.png';
-import bangBang from '@/assets/icons/bangbang.png';
+import bangBang from '@/assets/icons/bangBang.png';
 
 // travelLogListLayout을 390px 너비로 가로 스크롤 없이 설정
 const travelLogListLayout = css`
@@ -153,10 +153,7 @@ export default function TravelLogList() {
 
   return (
     <div css={travelLogListLayout}>
-      <div
-      css={travelLogLayout}
-        {...handlers}
-      >
+      <div css={travelLogLayout} {...handlers}>
         {travelDays > 0 &&
           travelDates.map((date, index) => {
             console.log('[*] date', date);
