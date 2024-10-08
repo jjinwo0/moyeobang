@@ -585,7 +585,7 @@ interface ResponseDepositAccount {
 
 //1원입금 요청 응답
 interface ResponseDepositOne {
-  data: number;
+  transactionId: number;
 }
 
 //1원입금 알림 요청 응답
