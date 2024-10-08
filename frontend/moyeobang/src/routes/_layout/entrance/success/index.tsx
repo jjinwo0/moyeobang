@@ -12,7 +12,7 @@ import bangBang from '@/assets/icons/bangBang.png';
 import useMyInfo from '@/store/useMyInfoStore';
 import axiosLogin from '@/util/axiosLogin';
 import {getCookie, setCookie} from '@/util/cookie';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import {useQuery, useSuspenseQuery} from '@tanstack/react-query';
 
 export const Route = createFileRoute('/_layout/entrance/success/')({
   component: LoginSuccess,
@@ -67,12 +67,12 @@ function LoginSuccess() {
   const location = useLocation();
   // location 객체에서 쿼리 문자열을 가져옴
 
-  const {data:myInfoResponse, refetch} = useQuery({
-    queryKey:[],
-    queryFn:()=>axiosLogin.get('/user/me/profile'),
-    refetchOnWindowFocus:false,
-    enabled:false
-  })
+  const {data: myInfoResponse, refetch} = useQuery({
+    queryKey: [],
+    queryFn: () => axiosLogin.get('/user/me/profile'),
+    refetchOnWindowFocus: false,
+    enabled: false,
+  });
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -95,20 +95,16 @@ function LoginSuccess() {
       // });
     }
 
-    if (refreshToken) {
-      setCookie('refreshToken', refreshToken);
-      console.log('refreshToken', getCookie('refreshToken'));
-    }
-
-
+    // if (refreshToken) {
+    //   setCookie('refreshToken', refreshToken);
+    //   console.log('refreshToken', getCookie('refreshToken'));
+    // }
   }, [location.search]);
-
-
 
   useEffect(() => {
     if (myInfoResponse) {
       console.log('myInfo', myInfoResponse);
-      const myInfo = myInfoResponse?.data.data
+      const myInfo = myInfoResponse?.data.data;
       setMemberId(myInfo.id);
       setMemberName(myInfo.name);
       setProfileImage(myInfo.image);
@@ -349,7 +345,6 @@ function LoginSuccess() {
 //   const accessToken = searchParams.get('accessToken');
 //   setGetAccessToken(accessToken || '');
 
-
 //   const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
 //   const getRefreshToken = searchParams.get('refreshToken');
 //   const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
@@ -379,7 +374,6 @@ function LoginSuccess() {
 //   //     });
 //   //   }
 //   // }, [getAccessToken]);
-
 
 //   useEffect(() => {
 //     if (myInfoData) {
