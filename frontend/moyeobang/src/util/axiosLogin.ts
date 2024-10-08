@@ -18,15 +18,18 @@ function useAxiosLogin() {
     timeout: 4000,
   });
 
-  
-
   // 요청 인터셉터 설정
   axiosLogin.interceptors.request.use(
     async config => {
+      console.log('accessToken', accessToken);
+      
       if (accessToken) {
         console.log('로그인 헤더 넣기', accessToken);
 
-        config.headers.Authorization = `Bearer ${accessToken}`;
+        //  config.headers.setAuthorization(`Bearer ${accessToken}`);
+        // config.headers.Authorization = `Bearer ${accessToken}`;
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+
         console.log('로그인 헤더 넣기', config.headers.Authorization);
       }
       return config;
