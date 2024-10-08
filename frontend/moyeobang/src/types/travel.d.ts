@@ -77,3 +77,12 @@ interface ResponseGetProfile {
   accountNumber: SourceAccountNumber;
   accountId: Id;
 }
+
+interface MyInfo {
+  id: Id;
+  name: MemberName;
+  image: ImgUrl;
+  bankName: BankName;
+  accountNumber: SourceAccountNumber;
+  accountId: Id;
+}

@@ -1,6 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from '@emotion/react';
-import {createFileRoute, useNavigate, useLocation} from '@tanstack/react-router';
+import {
+  createFileRoute,
+  useNavigate,
+  useLocation,
+} from '@tanstack/react-router';
 import {useQueryClient, useQuery} from '@tanstack/react-query';
 import {colors} from '@/styles/colors';
 import bangBang from '@/assets/icons/bangBang.png';
@@ -9,6 +13,7 @@ import moyeobang from '@/services/moyeobang';
 import useAxiosLogin from '@/util/axiosLogin';
 import useAuthLogin from '@/store/useAuthLoginStore';
 import useMyInfo from '@/store/useMyInfoStore';
+import axiosLogin from '@/util/axiosLogin';
 
 export const Route = createFileRoute('/_layout/entrance/success/')({
   component: LoginSuccess,
@@ -50,8 +55,8 @@ const spinnerImageStyle = css`
 `;
 
 function LoginSuccess() {
+  const [myInfoData, setMyInfoData] = useState<MyInfo>();
   const navigate = useNavigate();
-  const axiosLogin = useAxiosLogin();
   const location = useLocation();
   // location 객체에서 쿼리 문자열을 가져옴
   const searchParams = new URLSearchParams(location.search);
@@ -65,15 +70,6 @@ function LoginSuccess() {
   console.log('Refresh Token:', getRefreshToken);
   console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
 
- 
-  const {
-    accessToken,
-    refreshToken,
-    setAccessToken,
-    setRefreshToken,
-    setAccessTokenExpireTime,
-    setRefreshTokenExpireTime,
-  } = useAuthLogin();
   const {
     setMemberId,
     setMemberName,
@@ -85,45 +81,62 @@ function LoginSuccess() {
   /**
    * 내 정보 조회
    */
-  const {data: myInfoData} = useQuery({
-    queryKey: [],
-    queryFn: () => moyeobang.getMyInfo(axiosLogin),
-    enabled: !!accessToken && !!refreshToken,
-  });
+  // const {data: myInfoData} = useQuery({
+  //   queryKey: [],
+  //   queryFn: () => moyeobang.getMyInfo(),
+  //   enabled:
+  //     !!localStorage.getItem('accessToken') &&
+  //     !!localStorage.getItem('refreshToken'),
+  // });
 
   useEffect(() => {
     if (getAccessToken && getRefreshToken) {
+      localStorage.setItem('accessToken', getAccessToken);
+      localStorage.setItem('refreshToken', getRefreshToken);
+      localStorage.setItem(
+        'accessTokenExpireTime',
+        accessTokenExpireTime || ''
+      );
+      localStorage.setItem(
+        'refreshTokenExpireTime',
+        refreshTokenExpireTime || ''
+      );
+      axiosLogin.get('/user/me/profile').then(res => {
+        console.log('myInfoData', res);
+        setMyInfoData(res.data.data);
+      });
+
       // 로그인 성공시 토큰 저장
-      setAccessToken(getAccessToken);
-      setRefreshToken(getRefreshToken);
-      setAccessTokenExpireTime(accessTokenExpireTime || '');
-      setRefreshTokenExpireTime(refreshTokenExpireTime || '');
+      // setAccessToken(getAccessToken);
+      // setRefreshToken(getRefreshToken);
+      // setAccessTokenExpireTime(accessTokenExpireTime || '');
+      // setRefreshTokenExpireTime(refreshTokenExpireTime || '');
     }
   }, [
-    accessToken,
-    accessTokenExpireTime,
-    refreshToken,
-    refreshTokenExpireTime,
+    localStorage.getItem('accessToken'),
+    localStorage.getItem('accessTokenExpireTime'),
+    localStorage.getItem('refreshToken'),
+    localStorage.getItem('refreshTokenExpireTime'),
   ]);
 
   useEffect(() => {
     if (myInfoData) {
-      const myInfo = myInfoData.data;
+      const myInfo = myInfoData;
       console.log('myInfo', myInfo);
+      setMemberId(myInfo.id);
+      setMemberName(myInfo.name);
+      setProfileImage(myInfo.image);
+      setBankName(myInfo.bankName);
+      setAccountNumber(myInfo.accountNumber);
       // 계좌 정보가 없으면 계좌 등록 페이지로 이동
       if (myInfo.accountId) {
-        setMemberId(myInfo.memberId);
-        setMemberName(myInfo.memberName);
-        setProfileImage(myInfo.profileImage);
-        setBankName(myInfo.bankName);
-        setAccountNumber(myInfo.accountNumber);
         setAccountId(myInfo.accountId);
         navigate({to: '/'});
       } else {
         navigate({to: '/accountConnect'});
       }
     }
-  }, [myInfoData, navigate]);
+  }, [myInfoData]);
 
   // 모든 쿼리 파라미터를 가져오기
   return (
