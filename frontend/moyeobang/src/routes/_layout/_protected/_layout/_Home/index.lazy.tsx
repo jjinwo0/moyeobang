@@ -19,7 +19,7 @@ import useCurrentTravelStore from '@/store/useCurrentTravelStore';
 import useFcmTStore from '@/store/useFcmStore';
 import useMyInfo from '@/store/useMyInfoStore';
 
-const memberName: MemberName = '진우바오';
+// const memberName: MemberName = '진우바오';
 
 const memberData: Member = {
   memberId: 1,
@@ -132,8 +132,8 @@ const plusStyle = css`
 `;
 
 //[todo] 멤버 아이디 주스탄드에서 꺼내오기!!!
-const memberId: number = 4;
-// const {memberId, memberName} = useMyInfo();
+// const memberId: number = 4;
+const {memberId, memberName} = useMyInfo();
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();

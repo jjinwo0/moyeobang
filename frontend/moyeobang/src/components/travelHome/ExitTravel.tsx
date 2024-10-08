@@ -55,8 +55,8 @@ interface ExitTravelProps {
   travelId: number;
 }
 
-// const {memberId} = useMyInfo();
-const memberId = 4;
+const {memberId} = useMyInfo();
+// const memberId = 4;
 
 export default function ExitTravel({
   travelTitle,
