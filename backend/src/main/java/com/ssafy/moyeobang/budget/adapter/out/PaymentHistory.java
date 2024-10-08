@@ -18,7 +18,8 @@ public class PaymentHistory {
     private String id;
 
     private List<Member> member;
-    private int totalPrice;
+    private Long memberCount;
+    private Long totalPrice;
     private Map<String, Long> orderHistory;
     private String placeName;
 }

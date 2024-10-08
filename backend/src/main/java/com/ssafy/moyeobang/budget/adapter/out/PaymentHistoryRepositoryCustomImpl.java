@@ -29,7 +29,7 @@ public class PaymentHistoryRepositoryCustomImpl implements PaymentHistoryReposit
     private CriteriaQuery combinedQuery(String placeName, List<Member> members) {
         return new CriteriaQuery(combinedCond(placeName, members))
                 .addSort(Sort.by(DESC, "_score"))
-                .setPageable(Pageable.ofSize(100));
+                .setPageable(Pageable.ofSize(10));
     }
 
     private Criteria combinedCond(String placeName, List<Member> members) {
@@ -43,7 +43,7 @@ public class PaymentHistoryRepositoryCustomImpl implements PaymentHistoryReposit
     }
 
     private Criteria whereMemberCountIs(int memberCount) {
-        return where("member.size").is(memberCount);
+        return where("memberCount").is(memberCount);
     }
 
     private Criteria whereMembersIs(List<Member> members) {

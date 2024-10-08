@@ -1,4 +1,4 @@
 package com.ssafy.moyeobang.budget.application.domain;
 
-public class Budget {
+public record Budget(long max, long min) {
 }
