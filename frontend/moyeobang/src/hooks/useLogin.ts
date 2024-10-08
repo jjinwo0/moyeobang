@@ -1,5 +1,4 @@
 import {useAuthContext} from '@/contexts/AuthContext';
-import createAxiosLogin from '@/util/axiosLogin';
 
 const baseUrl = import.meta.env.VITE_BASEURL + '/api';
 

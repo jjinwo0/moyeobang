@@ -6,14 +6,15 @@ import {
   useNavigate,
   useSearch,
 } from '@tanstack/react-router';
+import {useQueryClient, useQuery} from '@tanstack/react-query';
 import {colors} from '@/styles/colors';
 import bangBang from '@/assets/icons/bangBang.png';
 import {z} from 'zod';
-import {useAuthContext} from '@/contexts/AuthContext';
 import axiosLogin from '@/util/axiosLogin';
-import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import useAxiosLogin from '@/util/axiosLogin';
+import useAuthLogin from '@/store/useAuthLoginStore';
+import useMyInfo from '@/store/useMyInfoStore';
 
 export const Route = createFileRoute('/_layout/entrance/success/')({
   component: LoginSuccess,
@@ -55,51 +56,51 @@ const spinnerImageStyle = css`
 `;
 
 function LoginSuccess() {
-  const {handleLoginToken} = useAuthContext();
   const navigate = useNavigate();
+  const axiosLogin = useAxiosLogin();
   const {
-    accessToken,
+    getAccessToken,
     accessTokenExpireTime,
-    refreshToken,
+    getRefreshToken,
     refreshTokenExpireTime,
   }: {
-    accessToken: string;
+    getAccessToken: string;
     accessTokenExpireTime: string;
-    refreshToken: string;
+    getRefreshToken: string;
     refreshTokenExpireTime: string;
   } = Route.useSearch();
-
+  const {
+    accessToken,
+    refreshToken,
+    setAccessToken,
+    setRefreshToken,
+    setAccessTokenExpireTime,
+    setRefreshTokenExpireTime,
+  } = useAuthLogin();
+  const {
+    setMemberId,
+    setMemberName,
+    setProfileImage,
+    setBankName,
+    setAccountNumber,
+    setAccountId,
+  } = useMyInfo();
   /**
    * 내 정보 조회
    */
+  const {data: myInfoData} = useQuery({
+    queryKey: [],
+    queryFn: () => moyeobang.getMyInfo(axiosLogin),
+    enabled: !!accessToken && !!refreshToken,
+  });
 
   useEffect(() => {
-    if (accessToken && refreshToken) {
+    if (getAccessToken && getRefreshToken) {
       // 로그인 성공시 토큰 저장
-      handleLoginToken(
-        accessToken,
-        accessTokenExpireTime,
-        refreshToken,
-        refreshTokenExpireTime
-      );
-      // 내 정보 조회
-      const axiosLogin = useAxiosLogin();
-      const {data} = useSuspenseQuery({
-        queryKey: ['myInfo'],
-        queryFn: () => moyeobang.getMyInfo(axiosLogin),
-      });
-      const myInfo = data.data;
-      console.log('myInfo', myInfo);
-      // 계좌 정보가 없으면 계좌 등록 페이지로 이동
-      if (myInfo.accountId) {
-        navigate({to: '/'});
-      } else {
-        // [todo] 계좌 정보가 없으면 계좌 등록 페이지로 이동
-        navigate({to: '/entrance'});
-      }
-    } else {
-      // 로그인 실패시 로그인 페이지로 이동
-      navigate({to: '/entrance'});
+      setAccessToken(getAccessToken);
+      setRefreshToken(getRefreshToken);
+      setAccessTokenExpireTime(accessTokenExpireTime);
+      setRefreshTokenExpireTime(refreshTokenExpireTime);
     }
   }, [
     accessToken,
@@ -107,6 +108,25 @@ function LoginSuccess() {
     refreshToken,
     refreshTokenExpireTime,
   ]);
+
+  useEffect(() => {
+    if (myInfoData) {
+      const myInfo = myInfoData.data;
+      console.log('myInfo', myInfo);
+      // 계좌 정보가 없으면 계좌 등록 페이지로 이동
+      if (myInfo.accountId) {
+        setMemberId(myInfo.memberId);
+        setMemberName(myInfo.memberName);
+        setProfileImage(myInfo.profileImage);
+        setBankName(myInfo.bankName);
+        setAccountNumber(myInfo.accountNumber);
+        setAccountId(myInfo.accountId);
+        navigate({to: '/'});
+      } else {
+        navigate({to: '/accountConnect'});
+      }
+    }
+  }, [myInfoData, navigate]);
 
   // 모든 쿼리 파라미터를 가져오기
   return (
