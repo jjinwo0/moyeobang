@@ -161,13 +161,13 @@ export default function CertificationOne({
     onSuccess: async response => {
       console.log('[*response]', response);
       console.log('[*]1원입금 성공');
-      const transactionId = response.data;
+      const transactionId = response;
       console.log('[*]transactionId', transactionId);
       if (transactionId) {
         console.log(111111);
         const notificationResponse = await moyeobang.postVerifyNotification(
           memberId,
-          transactionId
+          Number(transactionId)
         );
         setNotificationKey(notificationResponse.data.data.key);
       }
