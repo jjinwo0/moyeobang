@@ -17,8 +17,6 @@ axiosLogin.interceptors.request.use(
     if (accessToken) {
       console.log('로그인 헤더 넣기', accessToken);
 
-      //  config.headers.setAuthorization(`Bearer ${accessToken}`);
-      // config.headers.Authorization = `Bearer ${accessToken}`;
       config.headers['Authorization'] = `Bearer ${accessToken}`;
 
       console.log('로그인 헤더 넣기', config.headers.Authorization);
