@@ -161,7 +161,7 @@ export default function CertificationOne({
     onSuccess: async response => {
       console.log('[*response]', response);
       console.log('[*]1원입금 성공');
-      const transactionId = response.transactionId;
+      const transactionId = response.data;
       console.log('[*]transactionId', transactionId);
       if (transactionId) {
         console.log(111111);
