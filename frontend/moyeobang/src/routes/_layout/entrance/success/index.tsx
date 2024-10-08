@@ -1,6 +1,10 @@
 import React, {useEffect} from 'react';
 import {css} from '@emotion/react';
-import {createFileRoute, useNavigate, useLocation} from '@tanstack/react-router';
+import {
+  createFileRoute,
+  useNavigate,
+  useLocation,
+} from '@tanstack/react-router';
 import {useQueryClient, useQuery} from '@tanstack/react-query';
 import {colors} from '@/styles/colors';
 import bangBang from '@/assets/icons/bangBang.png';
@@ -65,7 +69,6 @@ function LoginSuccess() {
   console.log('Refresh Token:', getRefreshToken);
   console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
 
- 
   const {
     accessToken,
     refreshToken,
@@ -108,20 +111,20 @@ function LoginSuccess() {
 
   useEffect(() => {
     if (myInfoData) {
-      const myInfo = myInfoData;
+      const myInfo = myInfoData.data.data;
       console.log('myInfo', myInfo);
       // 계좌 정보가 없으면 계좌 등록 페이지로 이동
-    //   if (myInfo.accountId) {
-    //     setMemberId(myInfo.memberId);
-    //     setMemberName(myInfo.memberName);
-    //     setProfileImage(myInfo.profileImage);
-    //     setBankName(myInfo.bankName);
-    //     setAccountNumber(myInfo.accountNumber);
-    //     setAccountId(myInfo.accountId);
-    //     navigate({to: '/'});
-    //   } else {
-    //     navigate({to: '/accountConnect'});
-    //   }
+      if (myInfo.accountId) {
+        setMemberId(myInfo.memberId);
+        setMemberName(myInfo.memberName);
+        setProfileImage(myInfo.profileImage);
+        setBankName(myInfo.bankName);
+        setAccountNumber(myInfo.accountNumber);
+        setAccountId(myInfo.accountId);
+        navigate({to: '/'});
+      } else {
+        navigate({to: '/accountConnect'});
+      }
     }
   }, [myInfoData, navigate]);
 

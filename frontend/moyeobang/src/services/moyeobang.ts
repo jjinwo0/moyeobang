@@ -347,9 +347,7 @@ export default {
    */
 
   getMyInfo: async () => {
-    const axiosInstance = await axiosLogin();
-    axiosInstance.get<MoyeobangResponse<ResponseGetProfile>>(
-      '/user/me/profile'
-    );
+    const axiosInstance = axiosLogin(); // 훅 호출
+    return axiosInstance.get('/user/me/profile');
   },
 };
