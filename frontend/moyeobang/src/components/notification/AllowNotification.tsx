@@ -2,7 +2,7 @@ import React from 'react';
 import {css} from '@emotion/react';
 import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
-import {requestPermissionAndSaveToken} from '@/services/notificationService';
+import requestPermissionAndSaveToken from '@/services/notificationService';
 import useFcmStore from '@/store/useFcmStore';
 import {useRouter} from '@tanstack/react-router';
 

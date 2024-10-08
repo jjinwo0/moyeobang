@@ -152,7 +152,7 @@ import useAxiosLogin from '@/util/axiosLogin';
 import useAuthLogin from '@/store/useAuthLoginStore';
 import useMyInfo from '@/store/useMyInfoStore';
 import axiosLogin from '@/util/axiosLogin';
-import { getCookie, setCookie } from '@/util/cookie';
+import {getCookie, setCookie} from '@/util/cookie';
 
 export const Route = createFileRoute('/_layout/entrance/success/')({
   component: LoginSuccess,
@@ -212,7 +212,6 @@ function LoginSuccess() {
   const accessToken = searchParams.get('accessToken');
   setGetAccessToken(accessToken || '');
 
-
   const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
   const getRefreshToken = searchParams.get('refreshToken');
   const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
@@ -226,8 +225,14 @@ function LoginSuccess() {
     if (getAccessToken) {
       localStorage.setItem('accessToken', getAccessToken);
       localStorage.setItem('refreshToken', getRefreshToken || '');
-      localStorage.setItem('refreshTokenExpireTime', refreshTokenExpireTime || '');
-      localStorage.setItem('accessTokenExpireTime', accessTokenExpireTime || '');
+      localStorage.setItem(
+        'refreshTokenExpireTime',
+        refreshTokenExpireTime || ''
+      );
+      localStorage.setItem(
+        'accessTokenExpireTime',
+        accessTokenExpireTime || ''
+      );
     }
   }, [getAccessToken]);
 
@@ -242,7 +247,6 @@ function LoginSuccess() {
   //     });
   //   }
   // }, [getAccessToken]);
-
 
   useEffect(() => {
     if (myInfoData) {

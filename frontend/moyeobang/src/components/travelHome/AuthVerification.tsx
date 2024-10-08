@@ -119,6 +119,7 @@ export default function AuthVerification({
   const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 추가
 
   const {memberId} = useMyInfo();
+  // const memberId = 4;
 
   const {connectAccountNumber} = useConnectAccountContext();
 
