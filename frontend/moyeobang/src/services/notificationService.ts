@@ -36,18 +36,22 @@ export default async function requestPermissionAndSaveToken(
   setIsFcmToken: (tokenExists: boolean) => void,
   memberId: number
 ) {
-  // console.log('requestPermission');
+  console.log('requestPermission');
   try {
     // // 서비스 워커가 준비될 때까지 기다리기
     // const registration = await navigator.serviceWorker.ready;
     // console.log('Service Worker 준비 완료:', registration);
 
     const permission = await Notification.requestPermission();
+    console.log('permission', permission);
     if (permission === 'granted') {
+      console.log('granted');
+
       const currentToken = await getToken(messaging, {
         vapidKey:
           'BFg_yRn7AVZukoSqRrEcdS-OA-5O8xtZFRad4q7Y7ZteODNuCTrgTbAnp588LN94b6UzY-TZ7jSvnwdSCRDQxNU',
       });
+      console.log('currentToken', currentToken);
       if (currentToken) {
         console.log('FCM Token:', currentToken);
         // 서버에 토큰 저장
