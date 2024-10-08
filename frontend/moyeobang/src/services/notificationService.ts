@@ -28,12 +28,12 @@ const app = initializeApp(firebaseConfig);
 // Firebase Messaging 초기화
 const messaging = getMessaging(app);
 
-// const {memberId} = useMyInfo();
-const memberId: number = 4;
+const {memberId} = useMyInfo();
+// const memberId: number = 4;
 
 // 여기 적은 건 예시일 뿐이므로 axios활용하면 됩니다. 예시 그대로 복붙하고 실제 사용할 값들은 수정한 것이라 스펙은 수정 안해도됩니다.)
 // 권한 요청 및 토큰 저장 로직
-export async function requestPermissionAndSaveToken(
+export default async function requestPermissionAndSaveToken(
   setIsFcmToken: (tokenExists: boolean) => void
 ) {
   // console.log('requestPermission');
