@@ -10,7 +10,10 @@ import MarkerDetail from './MarkerDetail';
 import {MapDetailLayout, MapSpaceStyle} from './ScheduleMapSearchStyle';
 import typesKo from '@/assets/types_ko.json';
 
-
+const containerStyle = (isMarkerSelected: boolean) => ({
+  width: '100%',
+  height: isMarkerSelected ? '90vh' : '100vh',
+});
 
 const defaultCenter = {lat: 37.5665, lng: 126.978}; // 기본 중심: 서울
 
@@ -58,11 +61,6 @@ const PlusSelfGoogleMap = forwardRef(
       null
     );
     const [showMarkerDetail, setShowMarkerDetail] = useState<boolean>(false);
-
-    const containerStyle = (showMarkerDetail: boolean) => ({
-      width: '100%',
-      height: showMarkerDetail ? '90vh' : '100vh',
-    });
 
     // Provide a method for parents to change the map center
     useImperativeHandle(ref, () => ({
@@ -292,7 +290,7 @@ const PlusSelfGoogleMap = forwardRef(
       <>
         <div css={MapSpaceStyle}>
           <GoogleMap
-            mapContainerStyle={containerStyle(showMarkerDetail)}
+            mapContainerStyle={containerStyle(!!selectedMarker)}
             center={defaultCenter}
             zoom={12}
             onLoad={setMap}
@@ -308,11 +306,7 @@ const PlusSelfGoogleMap = forwardRef(
                 position={marker.position}
                 title={marker.title}
                 onClick={() => handleMarkerClick(marker)}
-                icon={
-                  selectedMarker === marker
-                    ? undefined
-                    : (defaultMarker ?? undefined)
-                }
+                icon={selectedMarker === marker ? undefined : (defaultMarker ?? undefined)}
               />
             ))}
           </GoogleMap>
