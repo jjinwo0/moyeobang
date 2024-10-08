@@ -1,16 +1,10 @@
 import React, {useEffect} from 'react';
 import {css} from '@emotion/react';
-import {
-  createFileRoute,
-  useMatch,
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router';
+import {createFileRoute, useNavigate, useLocation} from '@tanstack/react-router';
 import {useQueryClient, useQuery} from '@tanstack/react-query';
 import {colors} from '@/styles/colors';
 import bangBang from '@/assets/icons/bangBang.png';
 import {z} from 'zod';
-import axiosLogin from '@/util/axiosLogin';
 import moyeobang from '@/services/moyeobang';
 import useAxiosLogin from '@/util/axiosLogin';
 import useAuthLogin from '@/store/useAuthLoginStore';
@@ -58,17 +52,20 @@ const spinnerImageStyle = css`
 function LoginSuccess() {
   const navigate = useNavigate();
   const axiosLogin = useAxiosLogin();
-  const {
-    getAccessToken,
-    accessTokenExpireTime,
-    getRefreshToken,
-    refreshTokenExpireTime,
-  }: {
-    getAccessToken: string;
-    accessTokenExpireTime: string;
-    getRefreshToken: string;
-    refreshTokenExpireTime: string;
-  } = Route.useSearch();
+  const location = useLocation();
+  // location 객체에서 쿼리 문자열을 가져옴
+  const searchParams = new URLSearchParams(location.search);
+  const getAccessToken = searchParams.get('accessToken');
+  const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
+  const getRefreshToken = searchParams.get('refreshToken');
+  const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
+
+  console.log('Access Token:', getAccessToken);
+  console.log('Access Token Expire Time:', accessTokenExpireTime);
+  console.log('Refresh Token:', getRefreshToken);
+  console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
+
+ 
   const {
     accessToken,
     refreshToken,
@@ -99,8 +96,8 @@ function LoginSuccess() {
       // 로그인 성공시 토큰 저장
       setAccessToken(getAccessToken);
       setRefreshToken(getRefreshToken);
-      setAccessTokenExpireTime(accessTokenExpireTime);
-      setRefreshTokenExpireTime(refreshTokenExpireTime);
+      setAccessTokenExpireTime(accessTokenExpireTime || '');
+      setRefreshTokenExpireTime(refreshTokenExpireTime || '');
     }
   }, [
     accessToken,
