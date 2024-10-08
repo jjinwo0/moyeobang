@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -34,8 +35,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final TokenManager tokenManager;
 
+    @Value("${spring.security.oauth2.client.redirect-path}")
+    public String redirectPath;
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
-    public static final String REDIRECT_PATH = "https://j11c102.p.ssafy.io/entrance/success"; // todo: 수정 필요
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(15);
 
@@ -72,9 +74,22 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                         TokenType.REFRESH
                 );
 
+        // 요청이 localhost에서 왔는지 확인
+        String serverName = request.getServerName();
+        String finalRedirectPath = redirectPath;
+
+        if ("localhost".equals(serverName)) {
+
+            finalRedirectPath = "http://localhost:5173/entrance/success";
+            log.info("localhost 요청 감지: 로컬 리다이렉트 경로 변경");
+        } else {
+            log.info("리다이렉트 경로: {}", finalRedirectPath);
+        }
+
         addRefreshTokenToCookie(request, response, refreshTokenDetail.token());
 
         String targetUrl = getTargetUrl(
+                finalRedirectPath,  // 최종 경로 전달
                 accessTokenDetail.token(),
                 accessTokenDetail.expireTime(),
                 refreshTokenDetail.token(),
@@ -98,12 +113,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         super.clearAuthenticationAttributes(request);
     }
 
-    private String getTargetUrl(String accessToken,
+    private String getTargetUrl(String path,
+                                String accessToken,
                                 LocalDateTime accessTokenExpireTime,
                                 String refreshToken,
                                 LocalDateTime refreshTokenExpireTime) {
 
-        return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
+        return UriComponentsBuilder.fromUriString(path)
                 .queryParam("accessToken", accessToken)
                 .queryParam("accessTokenExpireTime",
                         accessTokenExpireTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli())
