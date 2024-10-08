@@ -347,6 +347,9 @@ export default {
    */
 
   getMyInfo: async () => {
-    axiosLogin.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
+    const axiosInstance = await axiosLogin();
+    axiosInstance.get<MoyeobangResponse<ResponseGetProfile>>(
+      '/user/me/profile'
+    );
   },
 };
