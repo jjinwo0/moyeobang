@@ -1,7 +1,6 @@
 import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
-import { AxiosInstance } from 'axios';
-
+import {AxiosInstance} from 'axios';
 
 export default {
   // 모임 통장
@@ -117,9 +116,12 @@ export default {
       }
     ),
   /**
-  * 소비 카테고리 통계 비율 멤버별&전체 조회
-  */
-  getComsuptionStaticByCategory: async (accountId: number, memberIds: number[]) =>
+   * 소비 카테고리 통계 비율 멤버별&전체 조회
+   */
+  getComsuptionStaticByCategory: async (
+    accountId: number,
+    memberIds: number[]
+  ) =>
     axios.get<MoyeobangResponse<ConsumptionByCategory[]>>(
       `/accounts/${accountId}/tags`,
       {
@@ -316,12 +318,11 @@ export default {
   },
 
   /**
-   * 
+   *
    * 여행 삭제
    */
   deleteTravelSchedule: async (scheduleId: Id) =>
     axios.delete<MoyeobangResponse<null>>(`/travel/schedule/${scheduleId}`),
-
 
   /**
    * 개인 계좌 등록
@@ -345,8 +346,8 @@ export default {
    * 내 정보 조회
    */
 
-  getMyInfo: async (axiosLogin: AxiosInstance) =>{
-    const response = await axiosLogin.get('/user/me/info');
+  getMyInfo: async (axiosLogin: AxiosInstance) => {
+    const response = await axiosLogin.get('/user/me/profile');
     return response.data;
   },
 };
