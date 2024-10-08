@@ -50,8 +50,8 @@ interface CreateTravelProps {
 }
 
 //[todo] 로그인 후 회원 아이디 받아오기
-// const memberId = 4;
-const {memberId} = useMyInfo();
+const memberId = 4;
+// const {memberId} = useMyInfo();
 
 const colseButtonStyle = css`
   color: red;
