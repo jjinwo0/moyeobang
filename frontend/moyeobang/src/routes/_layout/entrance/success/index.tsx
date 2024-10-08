@@ -118,20 +118,20 @@ function LoginSuccess() {
     console.log('myInfoData', myInfoData);
 
     if (myInfoData) {
-      const myInfo = myInfoData.data.data;
+      const myInfo = myInfoData;
       console.log('myInfo', myInfo);
-      // 계좌 정보가 없으면 계좌 등록 페이지로 이동
-      if (myInfo.accountId) {
-        setMemberId(myInfo.memberId);
-        setMemberName(myInfo.memberName);
-        setProfileImage(myInfo.profileImage);
-        setBankName(myInfo.bankName);
-        setAccountNumber(myInfo.accountNumber);
-        setAccountId(myInfo.accountId);
-        navigate({to: '/'});
-      } else {
-        navigate({to: '/accountConnect'});
-      }
+      //   // 계좌 정보가 없으면 계좌 등록 페이지로 이동
+      //   if (myInfo.accountId) {
+      //     setMemberId(myInfo.memberId);
+      //     setMemberName(myInfo.memberName);
+      //     setProfileImage(myInfo.profileImage);
+      //     setBankName(myInfo.bankName);
+      //     setAccountNumber(myInfo.accountNumber);
+      //     setAccountId(myInfo.accountId);
+      //     navigate({to: '/'});
+      //   } else {
+      //     navigate({to: '/accountConnect'});
+      //   }
     }
   }, [myInfoData]);
 
