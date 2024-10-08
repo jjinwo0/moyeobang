@@ -21,8 +21,12 @@ export function getCookie(name: string): string | null {
  * @param value 쿠키 값
  * @param maxAge 쿠키 만료 시간
  */
-export function setCookie(name: string, value: string, maxAge: number) {
-  document.cookie = `${name}=${value}; path=/; max-age=${maxAge}`;
+export function setCookie(name: string, value: string, maxAge?: number) { // 수정: maxAge를 선택적 매개변수로 변경
+  let cookieString = `${name}=${value}; path=/;`;
+  if (maxAge) { // maxAge가 제공된 경우에만 추가
+    cookieString += ` max-age=${maxAge}`;
+  }
+  document.cookie = cookieString;
 }
 
 /**
