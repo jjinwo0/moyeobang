@@ -8,8 +8,14 @@ import com.ssafy.moyeobang.settle.application.domain.order.Order.OrderInfo;
 import com.ssafy.moyeobang.settle.application.port.in.CustomSettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleUseCase;
-import com.ssafy.moyeobang.settle.application.port.out.*;
-
+import com.ssafy.moyeobang.settle.application.port.out.CreateMemberOrderHistoryPort;
+import com.ssafy.moyeobang.settle.application.port.out.CreateOrderPort;
+import com.ssafy.moyeobang.settle.application.port.out.FindOrderPort;
+import com.ssafy.moyeobang.settle.application.port.out.LoadMemberOrderHistoryPort;
+import com.ssafy.moyeobang.settle.application.port.out.UpdateMemberOrderHistoryPort;
+import com.ssafy.moyeobang.settle.application.port.out.UpdateMemberTravelPort;
+import com.ssafy.moyeobang.settle.application.port.out.UpdateOrderPort;
+import com.ssafy.moyeobang.settle.application.port.out.UpdateWithdrawPort;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +55,7 @@ public class SettleService implements SettleUseCase {
                 new OrderInfo(
                         command.title(),
                         command.amount(),
+                        command.quantity(),
                         command.transactionId()
                 )
         );
@@ -74,6 +81,7 @@ public class SettleService implements SettleUseCase {
                 new OrderInfo(
                         command.title(),
                         command.money(),
+                        1,
                         command.transactionId()
                 )
         );

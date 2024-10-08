@@ -5,7 +5,6 @@ import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.settle.adapter.in.web.request.CustomSettleRequest;
-import com.ssafy.moyeobang.settle.adapter.in.web.request.OrderRequest;
 import com.ssafy.moyeobang.settle.adapter.in.web.request.SettleRequest;
 import com.ssafy.moyeobang.settle.application.port.in.CustomSettleCommand;
 import com.ssafy.moyeobang.settle.application.port.in.SettleCommand;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @WebAdapter
 @RestController
@@ -40,6 +37,7 @@ public class SettleController {
                                 travelId,
                                 item.orderItemTitle(),
                                 item.orderItemPrice(),
+                                item.orderItemQuantity(),
                                 item.participants()
                         ))
                 )
@@ -67,7 +65,7 @@ public class SettleController {
     @PostMapping("/{transactionId}/settle/update/{travelId}")
     public ApiResult<Boolean> updateSettle(@PathVariable("transactionId") Long transactionId,
                                            @PathVariable("travelId") Long travelId,
-                                           @RequestBody SettleRequest request){
+                                           @RequestBody SettleRequest request) {
 
         settleUseCase.updateBalanceSettle(transactionId, travelId);
 
@@ -78,6 +76,7 @@ public class SettleController {
                                 travelId,
                                 item.orderItemTitle(),
                                 item.orderItemPrice(),
+                                item.orderItemQuantity(),
                                 item.participants()
                         ))
                 )
@@ -86,8 +85,8 @@ public class SettleController {
 
     @PostMapping("/{transactionId}/settle/update/custom/{travelId}")
     public ApiResult<Boolean> updateCustomSettle(@PathVariable("transactionId") Long transactionId,
-                                           @PathVariable("travelId") Long travelId,
-                                           @RequestBody CustomSettleRequest request){
+                                                 @PathVariable("travelId") Long travelId,
+                                                 @RequestBody CustomSettleRequest request) {
 
         settleUseCase.updateBalanceSettleInCustom(transactionId, travelId);
 
