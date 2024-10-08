@@ -36,3 +36,11 @@ export function setCookie(name: string, value: string, maxAge?: number) { // 수
 export function removeCookie(name: string) {
   document.cookie = `${name}=; path=/; max-age=0`;
 }
+
+/**
+ * 로그아웃
+ */
+export function logout() {
+  removeCookie('accessToken');
+  removeCookie('refresh-token');
+}
