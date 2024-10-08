@@ -1,5 +1,6 @@
 import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
+import axiosLogin from '@/util/axiosLogin';
 
 export default {
   // 모임 통장
@@ -115,9 +116,12 @@ export default {
       }
     ),
   /**
-  * 소비 카테고리 통계 비율 멤버별&전체 조회
-  */
-  getComsuptionStaticByCategory: async (accountId: number, memberIds: number[]) =>
+   * 소비 카테고리 통계 비율 멤버별&전체 조회
+   */
+  getComsuptionStaticByCategory: async (
+    accountId: number,
+    memberIds: number[]
+  ) =>
     axios.get<MoyeobangResponse<ConsumptionByCategory[]>>(
       `/accounts/${accountId}/tags`,
       {
@@ -312,6 +316,14 @@ export default {
       }
     );
   },
+
+  /**
+   *
+   * 여행 삭제
+   */
+  deleteTravelSchedule: async (scheduleId: Id) =>
+    axios.delete<MoyeobangResponse<null>>(`/travel/schedule/${scheduleId}`),
+
   /**
    * 개인 계좌 등록
    */
@@ -329,4 +341,18 @@ export default {
     axios.patch<MoyeobangResponse<null>>(
       `/travel/schedule/${scheduleId}/complete`
     ),
+
+  /**
+   * 내 정보 조회
+   */
+
+  // getMyInfo: async () => {
+  //   const axiosInstance = axiosLogin(); // 훅 호출
+  //   console.log('getMyInfo 호출');
+  //   return axiosInstance.get('/user/me/profile');
+  // },
+  getMyInfo: async () => {
+    console.log('getMyInfo 호출');
+    axiosLogin.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
+  },
 };

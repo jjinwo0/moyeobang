@@ -1,5 +1,5 @@
 import restaurantIcon from '@/assets/icons/dish.webp';
-import coffeeIcon from '@/assets/icons/coffe.webp';
+import coffeeIcon from '@/assets/icons/coffee.webp';
 import shoppingCartIcon from '@/assets/icons/shoppingCart.webp';
 import shoppingBagIcon from '@/assets/icons/shoppingBag.webp';
 import bangBang from '@/assets/icons/bangBang.png';
@@ -9,6 +9,8 @@ import activityIcon from '@/assets/icons/amusementpark.png';
 
 // 태그에 따른 아이콘을 반환하는 함수
 export function getCategoryTag(categoryName: string) {
+
+
   switch (categoryName) {
     case '식당':
       return {
@@ -28,7 +30,7 @@ export function getCategoryTag(categoryName: string) {
     case '숙박':
       return {
         icon: hotelIcon,
-        label: '수면 테라피 했나방',
+        label: '수면테라피 했나방',
       };
     case '항공':
       return {

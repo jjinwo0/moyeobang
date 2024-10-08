@@ -6,6 +6,7 @@ import moyeobang from '@/services/moyeobang';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {useTravelLogContext} from '@/contexts/TravelLog';
+import {getCategoryTag} from '@/util/getCategoryTags';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import Btn from '@/components/common/btn/Btn';
 import blueBlankCheck from '@/assets/icons/blueBlankCheck.png';
@@ -95,6 +96,15 @@ const budgetInputStyle = css`
   &:focus {
     border-color: ${colors.second};
     outline: none;
+  }
+`;
+
+const scheduleTitleStyle = css`
+  font-family: 'semibold';
+  font-size: 24px;
+  img {
+    width: 30px;
+    height: 30px;
   }
 `;
 
@@ -254,8 +264,14 @@ export default function PlusSelfSchedule({
       <div css={scheduleLetterLayout}>
         <div css={scheduleLetterStyle}>
           {/* 일정 이름 */}
-          <div style={{fontFamily: 'semibold', fontSize: '24px'}}>
-            {scheduleNum}. {schedule.scheduleTitle} <img src="" alt="" />
+          <div css={scheduleTitleStyle}>
+            {scheduleNum}. {schedule.scheduleTitle}{' '}
+            <img
+              src={
+                getCategoryTag(schedule.scheduleLocation?.category || '').icon
+              }
+              alt="category"
+            />
           </div>
 
           {/* 메모 */}

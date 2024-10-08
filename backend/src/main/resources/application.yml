@@ -1,6 +1,8 @@
 spring:
   profiles:
     default: local
+  config:
+    import: classpath:secret/application-secret.yml
 
   datasource:
     url: jdbc:h2:mem:~/MoYeoBangApplication
@@ -10,7 +12,30 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
 
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAVVZON63HMZBYSHXO
+      secretKey: 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
+    s3:
+      bucket: moyeobang-ssafy
+
+pg:
+  api:
+    url: http://localhost:8082/pg/payment
+
+logging:
+  level:
+    org.springframework.security: DEBUG
 
 ---
 spring:
@@ -49,3 +74,33 @@ spring:
   sql:
     init:
       mode: never
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: deploy
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  datasource:
+    url: jdbc:mysql://j11c102.p.ssafy.io:3306/moyeobang?serverTimezone=UTC&characterEncoding=UTF-8
+    username: c102
+    password: 123456789
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    root: info
+
+pg:
+  api:
+    url: https://j11c102.p.ssafy.io/pg/payment
+
