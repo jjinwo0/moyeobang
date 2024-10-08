@@ -32,6 +32,7 @@ public class OrderMapperInSettle {
         return OrderJpaEntity.builder()
                 .title(order.getOrderInfo().title())
                 .amount(order.getOrderInfo().amount())
+                .quantity(order.getOrderInfo().quantity())
                 .withdraw(withdrawEntity)
                 .build();
     }
