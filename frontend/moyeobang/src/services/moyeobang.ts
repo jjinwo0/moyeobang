@@ -352,8 +352,7 @@ export default {
   //   return axiosInstance.get('/user/me/profile');
   // },
   getMyInfo: async () => {
-    return axiosLogin.get<MoyeobangResponse<ResponseGetProfile>>(
-      '/user/me/profile'
-    );
+    console.log('getMyInfo 호출');
+    axiosLogin.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
   },
 };
