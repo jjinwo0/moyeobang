@@ -10,6 +10,8 @@ interface AuthLoginState {
   refreshTokenExpireTime: string;
   setAccessTokenExpireTime: (accessTokenExpireTime: string) => void;
   setRefreshTokenExpireTime: (refreshTokenExpireTime: string) => void;
+  loginProvider: string;
+  setLoginProvider: (loginProvider: string) => void;
 }
 
 const localStoragePersist: PersistStorage<AuthLoginState> = {
@@ -32,12 +34,14 @@ const useAuthLogin = create<AuthLoginState>()(
       refreshToken: '',
       accessTokenExpireTime: '',
       refreshTokenExpireTime: '',
+      loginProvider: '',
       setAccessToken: accessToken => set({accessToken}),
       setRefreshToken: refreshToken => set({refreshToken}),
       setAccessTokenExpireTime: accessTokenExpireTime =>
         set({accessTokenExpireTime}),
       setRefreshTokenExpireTime: refreshTokenExpireTime =>
         set({refreshTokenExpireTime}),
+      setLoginProvider: loginProvider => set({loginProvider}),
     }),
     {
       name: 'auth-login-store',
