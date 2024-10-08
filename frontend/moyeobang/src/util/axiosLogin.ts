@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthLogin from '@/store/useAuthLoginStore';
 
 // axios 인스턴스를 반환하는 함수
-function useAxiosLogin() {
+async function useAxiosLogin() {
   const {
     accessToken,
     refreshToken,
