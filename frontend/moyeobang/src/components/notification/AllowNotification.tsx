@@ -4,6 +4,7 @@ import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
 import {requestPermissionAndSaveToken} from '@/services/notificationService';
 import useFcmStore from '@/store/useFcmStore';
+import {useRouter} from '@tanstack/react-router';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -53,11 +54,7 @@ const buttonContainerStyle = css`
   width: 100%;
 `;
 
-interface AllowNotificationProps {
-  onClose: () => void;
-}
-
-export default function AllowNotification({onClose}: AllowNotificationProps) {
+export default function AllowNotification() {
   // const handleAllowClick = async () => {
   //   // 서비스 워커가 준비된 후에 권한 요청 및 FCM 토큰 생성
   //   if (navigator.serviceWorker) {
@@ -69,14 +66,14 @@ export default function AllowNotification({onClose}: AllowNotificationProps) {
   //   }
   //   onClose();
   // };
-
+  const router = useRouter();
   const {setIsFcmToken} = useFcmStore();
   const handleAllowClick = async () => {
-    onClose();
     // console.log('승인');
     try {
       // "승인" 버튼 클릭 시 푸시 알림 권한을 요청하고 FCM 토큰을 받아옴
       await requestPermissionAndSaveToken(setIsFcmToken);
+      router.navigate({to: '/accountConnect'});
       console.log('Notification permission granted and token saved.');
     } catch (error) {
       console.error('Error requesting permission or saving token:', error);
@@ -94,9 +91,7 @@ export default function AllowNotification({onClose}: AllowNotificationProps) {
           구성할 수 있습니다.
         </p>
         <div css={buttonContainerStyle}>
-          <Btn buttonStyle={{style: 'red', size: 'middle'}} onClick={onClose}>
-            허용 안함
-          </Btn>
+          <Btn buttonStyle={{style: 'red', size: 'middle'}}>허용 안함</Btn>
           <Btn
             buttonStyle={{style: 'blue', size: 'middle'}}
             onClick={handleAllowClick}
