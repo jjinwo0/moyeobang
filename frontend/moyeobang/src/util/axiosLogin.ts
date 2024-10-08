@@ -1,16 +1,16 @@
 import axios from 'axios';
-import { useAuthContext } from '@/contexts/AuthContext';
+import useAuthLogin from '@/store/useAuthLoginStore';
 
 // axios 인스턴스를 반환하는 함수
 function useAxiosLogin() {
   const {
     accessToken,
-    setAccessToken,
     refreshToken,
-    handleLogout,
+    setAccessToken,
+    setRefreshToken,
     loginProvider,
-  } = useAuthContext();
-
+    setLoginProvider,
+  } = useAuthLogin();
   const axiosLogin = axios.create({
     baseURL: import.meta.env.VITE_BASEURL + '/api',
     responseType: 'json',
@@ -36,12 +36,18 @@ function useAxiosLogin() {
     async error => {
       const originalRequest = error.config;
 
-      if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      if (
+        error.response &&
+        error.response.status === 401 &&
+        !originalRequest._retry
+      ) {
         originalRequest._retry = true;
 
         if (!refreshToken) {
           console.error('No refresh token available');
-          handleLogout();
+          setAccessToken('');
+          setRefreshToken('');
+          setLoginProvider('');
           return Promise.reject(error);
         }
 
@@ -49,11 +55,11 @@ function useAxiosLogin() {
           let response;
           if (loginProvider === 'google') {
             response = await axiosLogin.get(`/oauth2/authorization/google`, {
-              params: { refreshToken },
+              params: {refreshToken},
             });
           } else if (loginProvider === 'kakao') {
             response = await axiosLogin.get(`/oauth2/authorization/kakao`, {
-              params: { refreshToken },
+              params: {refreshToken},
             });
           }
 
@@ -66,7 +72,9 @@ function useAxiosLogin() {
           }
         } catch (refreshError) {
           console.error('Failed to refresh access token:', refreshError);
-          handleLogout();
+          setAccessToken('');
+          setRefreshToken('');
+          setLoginProvider('');
         }
       }
       return Promise.reject(error);
