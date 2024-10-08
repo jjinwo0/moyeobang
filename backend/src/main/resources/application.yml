@@ -21,6 +21,9 @@ spring:
       host: 127.0.0.1
       port: 6379
 
+  elasticsearch:
+    uris: localhost:9200
+
 cloud:
   aws:
     credentials:
