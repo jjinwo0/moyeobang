@@ -75,26 +75,35 @@ function LoginSuccess() {
   setGetAccessToken(accessToken || '');
 
 
-  // const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
-  // const getRefreshToken = searchParams.get('refreshToken');
-  // const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
+  const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
+  const getRefreshToken = searchParams.get('refreshToken');
+  const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
 
   console.log('Access Token:', accessToken);
-  // console.log('Access Token Expire Time:', accessTokenExpireTime);
-  // console.log('Refresh Token:', getRefreshToken);
-  // console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
+  console.log('Access Token Expire Time:', accessTokenExpireTime);
+  console.log('Refresh Token:', getRefreshToken);
+  console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
 
   useEffect(() => {
     if (getAccessToken) {
-      // 15분(900초) 동안 유효한 쿠키 설정
-      setCookie('accessToken', getAccessToken, 900);
-      console.log('accessToken', getCookie('accessToken'));
-      axiosLogin.get('/user/me/profile').then(res => {
-        console.log('myInfoData', res);
-        setMyInfoData(res.data.data);
-      });
+      localStorage.setItem('accessToken', getAccessToken);
+      localStorage.setItem('refreshToken', getRefreshToken || '');
+      localStorage.setItem('refreshTokenExpireTime', refreshTokenExpireTime || '');
+      localStorage.setItem('accessTokenExpireTime', accessTokenExpireTime || '');
     }
   }, [getAccessToken]);
+
+  // useEffect(() => {
+  //   if (getAccessToken) {
+  //     // 15분(900초) 동안 유효한 쿠키 설정
+  //     setCookie('accessToken', getAccessToken, 900);
+  //     console.log('accessToken', getCookie('accessToken'));
+  //     axiosLogin.get('/user/me/profile').then(res => {
+  //       console.log('myInfoData', res);
+  //       setMyInfoData(res.data.data);
+  //     });
+  //   }
+  // }, [getAccessToken]);
 
 
   useEffect(() => {
