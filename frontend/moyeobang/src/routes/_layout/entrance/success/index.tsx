@@ -55,7 +55,6 @@ const spinnerImageStyle = css`
 
 function LoginSuccess() {
   const navigate = useNavigate();
-  const axiosLogin = useAxiosLogin();
   const location = useLocation();
   // location 객체에서 쿼리 문자열을 가져옴
   const searchParams = new URLSearchParams(location.search);
