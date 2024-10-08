@@ -56,8 +56,9 @@ const buttonLayoutStyle=css`
 interface FailByQrScanProps {
     onClose: VoidFunction;
     onRestart:VoidFunction
+    errorName:string;
 }
-export default function FailModalByQrScan({onClose, onRestart}:FailByQrScanProps) {
+export default function FailModalByQrScan({onClose, onRestart, errorName}:FailByQrScanProps) {
 
     function handleRestart() {
         onRestart()
@@ -69,13 +70,20 @@ export default function FailModalByQrScan({onClose, onRestart}:FailByQrScanProps
 
     return(
         <div css={layoutStyle}>
+            {errorName==='noBalance' ? 
+            <div>
+                계좌에 잔액이 부족합니다.
+            </div>: 
+            <>
             <div css={titleStyle}><span>QR</span>스캔에 실패했습니다.</div>
             <div css={textStyle}><span>QR</span>을 다시 촬영해주세요</div>
+            </>
+            }
 
             <img src={sadBangBang} alt="" />
 
             <div css={buttonLayoutStyle}>
-                <Btn buttonStyle={{style:'blue', size:'big'}} onClick={handleRestart}>다시 촬영하기</Btn>
+                { errorName!=='noBalance' && <Btn buttonStyle={{style:'blue', size:'big'}} onClick={handleRestart}>다시 촬영하기</Btn>}
                 <Btn buttonStyle={{style:'gray', size:'big'}} onClick={handleClose}>닫기</Btn>
             </div>
         
