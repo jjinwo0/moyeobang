@@ -122,9 +122,13 @@ public class TokenManager {
 
     // 토큰을 분석하면서 claims을 빼낸다.
     public Claims getClaims(String token) {
+        // "Bearer " 접두사 제거
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);  // "Bearer " 부분을 제거
+        }
 
         return Jwts.parser()
-                .setSigningKey(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8)) // 서명 검증
+                .setSigningKey(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8))  // 서명 검증
                 .parseClaimsJws(token)
                 .getBody();
     }
