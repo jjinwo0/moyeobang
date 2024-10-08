@@ -70,14 +70,6 @@ function LoginSuccess() {
   console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
 
   const {
-    accessToken,
-    refreshToken,
-    setAccessToken,
-    setRefreshToken,
-    setAccessTokenExpireTime,
-    setRefreshTokenExpireTime,
-  } = useAuthLogin();
-  const {
     setMemberId,
     setMemberName,
     setProfileImage,
@@ -91,27 +83,39 @@ function LoginSuccess() {
   const {data: myInfoData} = useQuery({
     queryKey: [],
     queryFn: () => moyeobang.getMyInfo(),
-    enabled: !!accessToken && !!refreshToken,
+    enabled:
+      !!localStorage.getItem('accessToken') &&
+      !!localStorage.getItem('refreshToken'),
   });
 
   useEffect(() => {
     if (getAccessToken && getRefreshToken) {
+      localStorage.setItem('accessToken', getAccessToken);
+      localStorage.setItem('refreshToken', getRefreshToken);
+      localStorage.setItem(
+        'accessTokenExpireTime',
+        accessTokenExpireTime || ''
+      );
+      localStorage.setItem(
+        'refreshTokenExpireTime',
+        refreshTokenExpireTime || ''
+      );
       // 로그인 성공시 토큰 저장
-      setAccessToken(getAccessToken);
-      setRefreshToken(getRefreshToken);
-      setAccessTokenExpireTime(accessTokenExpireTime || '');
-      setRefreshTokenExpireTime(refreshTokenExpireTime || '');
+      // setAccessToken(getAccessToken);
+      // setRefreshToken(getRefreshToken);
+      // setAccessTokenExpireTime(accessTokenExpireTime || '');
+      // setRefreshTokenExpireTime(refreshTokenExpireTime || '');
     }
   }, [
-    accessToken,
-    accessTokenExpireTime,
-    refreshToken,
-    refreshTokenExpireTime,
+    localStorage.getItem('accessToken'),
+    localStorage.getItem('accessTokenExpireTime'),
+    localStorage.getItem('refreshToken'),
+    localStorage.getItem('refreshTokenExpireTime'),
   ]);
 
   useEffect(() => {
     console.log('myInfoData', myInfoData);
-    
+
     if (myInfoData) {
       const myInfo = myInfoData.data.data;
       console.log('myInfo', myInfo);
