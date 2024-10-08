@@ -121,14 +121,14 @@ export default function PlusSelf() {
       moyeobang.postChangeTravelSchedule(travelId, scheduleId, scheduleData),
     onSuccess: async () => {
       console.log('[*] 수정 성공');
-      setTimeout(async() => {
-      await queryClient.invalidateQueries({
-        queryKey: ['travelSchedules', travelId],
-        refetchType: 'all',
-      });
-      resetForm();
-      handleShowPlusSelf();
-      navigate({to: '/travelLog'});
+      setTimeout(async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ['travelSchedules', travelId],
+          refetchType: 'all',
+        });
+        resetForm();
+        handleShowPlusSelf();
+        navigate({to: '/travelLog'});
       }, 1000);
     },
   });
@@ -355,20 +355,22 @@ export default function PlusSelf() {
                   placeholder="여행 장소 검색"
                   onChange={e => handleSearchLocation(e)}
                 />
-                <img
-                  src={searchImg}
-                  alt="검색 버튼 이미지"
-                  css={PlusSelfStyle.searchImgStyle}
-                  onClick={handleShowMapSearch}
-                />
-                {selectedImage && (
-                  <button
-                    id="imgCancelBtn"
-                    onClick={() => setSelectedImage(null)}
-                  >
-                    이미지 취소
-                  </button>
-                )}
+                <div css={PlusSelfStyle.searchImgWrapper}>
+                  <img
+                    src={searchImg}
+                    alt="검색 버튼 이미지"
+                    css={PlusSelfStyle.searchImgStyle}
+                    onClick={handleShowMapSearch}
+                  />
+                  {selectedImage && (
+                    <button
+                      id="imgCancelBtn"
+                      onClick={() => setSelectedImage(null)}
+                    >
+                      이미지 취소
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

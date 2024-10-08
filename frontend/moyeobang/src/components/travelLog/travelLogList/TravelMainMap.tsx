@@ -134,6 +134,7 @@ export default function TravelMainMap() {
         }
         map.fitBounds(bounds); // 모든 마커를 포함하는 경계로 설정
       } else if (placeCoords.length > 0) {
+        console.log('[*] placeCoords', placeCoords);
         const bounds = new window.google.maps.LatLngBounds();
         placeCoords.forEach(coord => {
           bounds.extend({lat: coord.lat, lng: coord.lng});
