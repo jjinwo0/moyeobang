@@ -143,7 +143,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
                         preferredCamera : "environment", // 후면지향
                         maxScansPerSecond:3, // 1초당 2번
                         highlightScanRegion : true, // ? 알아보기
-                        highlightCodeOutline : true, // QR주변 윤곽선 생성
+                        // highlightCodeOutline : true, // QR주변 윤곽선 생성
                         overlay : qrBoxElement?.current || undefined,
                     }
                 );
