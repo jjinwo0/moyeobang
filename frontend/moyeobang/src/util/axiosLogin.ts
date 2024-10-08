@@ -76,6 +76,7 @@
 
 // 다시 sessionStorage로 시도, 성공 버전
 import axios from 'axios';
+import {getCookie, removeCookie, setCookie} from './cookie';
 // axios 인스턴스를 반환하는 함수
 
 const axiosLogin = axios.create({
@@ -90,11 +91,7 @@ axiosLogin.interceptors.request.use(
     const accessToken = localStorage.getItem('accessToken');
 
     if (accessToken) {
-      console.log('로그인 헤더 넣기', accessToken);
-
       config.headers['Authorization'] = `Bearer ${accessToken}`;
-
-      console.log('로그인 헤더 넣기', config.headers.Authorization);
     }
     return config;
   },
@@ -108,9 +105,7 @@ axiosLogin.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
-    const refreshToken = localStorage.getItem('refreshToken');
-    const loginProvider = localStorage.getItem('loginProvider');
-
+    const refreshToken = getCookie('refreshToken');
     if (
       error.response &&
       error.response.status === 401 &&
@@ -125,18 +120,13 @@ axiosLogin.interceptors.response.use(
       }
 
       try {
-        let response;
-        if (loginProvider === 'google') {
-          response = await axiosLogin.get(`/oauth2/authorization/google`, {
-            params: {refreshToken},
-          });
-        } else if (loginProvider === 'kakao') {
-          response = await axiosLogin.get(`/oauth2/authorization/kakao`, {
-            params: {refreshToken},
-          });
-        }
+        const refreshToken = localStorage.getItem('refreshToken');
+        const response = await axiosLogin.get(`/reissue/token`, {
+          headers: {Authorization: refreshToken},
+        });
 
         if (response) {
+          console.log('response', response);
           const newAccessToken = response.data.accessToken;
           localStorage.setItem('accessToken', newAccessToken);
 
@@ -147,7 +137,7 @@ axiosLogin.interceptors.response.use(
         console.error('Failed to refresh access token:', refreshError);
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        localStorage.removeItem('loginProvider');
+        window.location.href = '/entrance';
       }
     }
     return Promise.reject(error);

@@ -152,6 +152,7 @@ import useAxiosLogin from '@/util/axiosLogin';
 import useAuthLogin from '@/store/useAuthLoginStore';
 import useMyInfo from '@/store/useMyInfoStore';
 import axiosLogin from '@/util/axiosLogin';
+import { getCookie, setCookie } from '@/util/cookie';
 
 export const Route = createFileRoute('/_layout/entrance/success/')({
   component: LoginSuccess,
@@ -194,20 +195,7 @@ const spinnerImageStyle = css`
 
 function LoginSuccess() {
   const [myInfoData, setMyInfoData] = useState<MyInfo>();
-  const navigate = useNavigate();
-  const location = useLocation();
-  // location 객체에서 쿼리 문자열을 가져옴
-  const searchParams = new URLSearchParams(location.search);
-  const getAccessToken = searchParams.get('accessToken');
-  const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
-  const getRefreshToken = searchParams.get('refreshToken');
-  const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
-
-  console.log('Access Token:', getAccessToken);
-  console.log('Access Token Expire Time:', accessTokenExpireTime);
-  console.log('Refresh Token:', getRefreshToken);
-  console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
-
+  const [getAccessToken, setGetAccessToken] = useState<string>('');
   const {
     setMemberId,
     setMemberName,
@@ -216,46 +204,45 @@ function LoginSuccess() {
     setAccountNumber,
     setAccountId,
   } = useMyInfo();
-  /**
-   * 내 정보 조회
-   */
-  // const {data: myInfoData} = useQuery({
-  //   queryKey: [],
-  //   queryFn: () => moyeobang.getMyInfo(),
-  //   enabled:
-  //     !!localStorage.getItem('accessToken') &&
-  //     !!localStorage.getItem('refreshToken'),
-  // });
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  // location 객체에서 쿼리 문자열을 가져옴
+  const searchParams = new URLSearchParams(location.search);
+  const accessToken = searchParams.get('accessToken');
+  setGetAccessToken(accessToken || '');
+
+
+  const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
+  const getRefreshToken = searchParams.get('refreshToken');
+  const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
+
+  console.log('Access Token:', accessToken);
+  console.log('Access Token Expire Time:', accessTokenExpireTime);
+  console.log('Refresh Token:', getRefreshToken);
+  console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
 
   useEffect(() => {
-    if (getAccessToken && getRefreshToken) {
+    if (getAccessToken) {
       localStorage.setItem('accessToken', getAccessToken);
-      localStorage.setItem('refreshToken', getRefreshToken);
-      localStorage.setItem(
-        'accessTokenExpireTime',
-        accessTokenExpireTime || ''
-      );
-      localStorage.setItem(
-        'refreshTokenExpireTime',
-        refreshTokenExpireTime || ''
-      );
-      axiosLogin.get('/user/me/profile').then(res => {
-        console.log('myInfoData', res);
-        setMyInfoData(res.data.data);
-      });
-
-      // 로그인 성공시 토큰 저장
-      // setAccessToken(getAccessToken);
-      // setRefreshToken(getRefreshToken);
-      // setAccessTokenExpireTime(accessTokenExpireTime || '');
-      // setRefreshTokenExpireTime(refreshTokenExpireTime || '');
+      localStorage.setItem('refreshToken', getRefreshToken || '');
+      localStorage.setItem('refreshTokenExpireTime', refreshTokenExpireTime || '');
+      localStorage.setItem('accessTokenExpireTime', accessTokenExpireTime || '');
     }
-  }, [
-    localStorage.getItem('accessToken'),
-    localStorage.getItem('accessTokenExpireTime'),
-    localStorage.getItem('refreshToken'),
-    localStorage.getItem('refreshTokenExpireTime'),
-  ]);
+  }, [getAccessToken]);
+
+  // useEffect(() => {
+  //   if (getAccessToken) {
+  //     // 15분(900초) 동안 유효한 쿠키 설정
+  //     setCookie('accessToken', getAccessToken, 900);
+  //     console.log('accessToken', getCookie('accessToken'));
+  //     axiosLogin.get('/user/me/profile').then(res => {
+  //       console.log('myInfoData', res);
+  //       setMyInfoData(res.data.data);
+  //     });
+  //   }
+  // }, [getAccessToken]);
+
 
   useEffect(() => {
     if (myInfoData) {
