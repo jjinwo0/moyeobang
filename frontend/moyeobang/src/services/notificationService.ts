@@ -9,6 +9,7 @@
 
 import {initializeApp} from 'firebase/app';
 import {getMessaging, getToken, onMessage} from 'firebase/messaging';
+import useMyInfo from '@/store/useMyInfoStore';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -26,6 +27,8 @@ const app = initializeApp(firebaseConfig);
 
 // Firebase Messaging 초기화
 const messaging = getMessaging(app);
+
+const {memberId} = useMyInfo();
 
 // 여기 적은 건 예시일 뿐이므로 axios활용하면 됩니다. 예시 그대로 복붙하고 실제 사용할 값들은 수정한 것이라 스펙은 수정 안해도됩니다.)
 // 권한 요청 및 토큰 저장 로직
@@ -62,7 +65,7 @@ export async function requestPermissionAndSaveToken(
   }
 }
 
-const memberId: number = 4;
+// const memberId: number = 4;
 
 // 서버에 FCM 토큰 저장 요청
 function saveTokenInMemberEntity(
