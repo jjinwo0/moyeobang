@@ -14,7 +14,7 @@ import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
-import AllowNotification from '@/components/notification/AllowNotification';
+// import AllowNotification from '@/components/notification/AllowNotification';
 import useCurrentTravelStore from '@/store/useCurrentTravelStore';
 import useFcmTStore from '@/store/useFcmStore';
 import useMyInfo from '@/store/useMyInfoStore';
@@ -139,9 +139,9 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const {isfcmToken} = useFcmTStore();
-  const [pushNotification, setPushNotification] =
-    useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
+  // const {isfcmToken} = useFcmTStore();
+  // const [pushNotification, setPushNotification] =
+  //   useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
 
   const {data: travelData} = useSuspenseQuery({
@@ -223,9 +223,9 @@ function Index() {
     });
   };
 
-  const closePush = () => {
-    setPushNotification(false);
-  };
+  // const closePush = () => {
+  //   setPushNotification(false);
+  // };
 
   useEffect(() => {
     if (currentTrips.length > 0) {
@@ -259,7 +259,7 @@ function Index() {
         <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
       </div>
 
-      {pushNotification && <AllowNotification onClose={closePush} />}
+      {/* {pushNotification && <AllowNotification onClose={closePush} />} */}
 
       {noTripsAvailable ? (
         <NoTravel />

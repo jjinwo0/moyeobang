@@ -10,7 +10,7 @@ import {ko} from 'date-fns/locale';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
-import Confetti from "../Confetti/Confetti";
+import PresentMoneyModal from "../PresentMoneyModal/PresentMoneyModal";
 import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 export interface CustomSettle {
@@ -236,8 +236,10 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         }
     };
 
-    function handleClickOutside() {
-        setIsOpenFinalModal(false);
+    function handleClickOutside(canDectect:boolean) {
+        if (canDectect) {
+            setIsOpenFinalModal(false);
+        }
     }
 
     function handleClosePresentModal() {
@@ -246,7 +248,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
 
     return (
         <>
-        { isOpenPresentModal && <Confetti remainMoney={presentMoney} onClose={handleClosePresentModal}/>}
+        { isOpenPresentModal && <PresentMoneyModal remainMoney={presentMoney} onClose={handleClosePresentModal}/>}
         { isOpenFinalModal && 
             <FinalModal 
             onClickOutside={handleClickOutside} 
@@ -291,11 +293,11 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     />
                 ))}
             </div>
-            <div css={nButtonStyle}>
-                남은 금액 1/N 해방
-                <button onClick={handleDivide}>1/N</button>
-            </div>
             <div css={buttonLayoutStyle}>
+                <div css={nButtonStyle}>
+                    남은 금액 1/N 해방
+                    <button onClick={handleDivide}>1/N</button>
+                </div>
                 { canSettle ? (
                     <Btn 
                     buttonStyle={{ size:'big', style:'blue'}}
