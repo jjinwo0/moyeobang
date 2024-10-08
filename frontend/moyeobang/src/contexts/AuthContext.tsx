@@ -19,7 +19,6 @@ type AuthContextType = {
   setLoginProvider: React.Dispatch<React.SetStateAction<string | null>>;
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-  showme:string
 };
 
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
@@ -72,7 +71,6 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         setLoginProvider,
         isLogin,
         setIsLogin,
-        showme,
       }}
     >
       {children}
