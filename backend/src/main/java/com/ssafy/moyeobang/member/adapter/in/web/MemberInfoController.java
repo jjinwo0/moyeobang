@@ -30,7 +30,7 @@ public class MemberInfoController {
      * @return
      */
     @GetMapping("/user/me/profile")
-    public ApiResult<?> getMemberInfo(@RequestHeader String authorization) {
+    public ApiResult<?> getMemberInfo(@RequestHeader("Authorization") String authorization) {
 
         MemberInfo findMemberProfile = memberInfoUseCase.getMemberInfo(authorization);
 
