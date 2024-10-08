@@ -21,7 +21,10 @@ async function useAxiosLogin() {
   axiosLogin.interceptors.request.use(
     async config => {
       if (accessToken) {
+        console.log('로그인 헤더 넣기', accessToken);
+
         config.headers.Authorization = `Bearer ${accessToken}`;
+        console.log('로그인 헤더 넣기', config.headers.Authorization);
       }
       return config;
     },
