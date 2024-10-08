@@ -42,7 +42,7 @@ const containerListStyle = (hasCurrentTrips: boolean) => css`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: ${hasCurrentTrips ? '320px' : 'calc(100vh - 200px)'};
+  height: ${hasCurrentTrips ? '320px' : 'calc(100vh - 320px)'};
   overflow-y: auto;
   // margin-top: 20px;
   // padding-top: 10px;
