@@ -16,10 +16,11 @@ instance.interceptors.request.use(
     const refreshToken = getCookie('refresh_token');
     console.log('[*] 요청 인터셉터 설정', refreshToken);
     console.log(
-      ' 여긴 오나 ? accessToken, refreshToken',
+      '[*] accessToken',
       accessToken,
-      refreshToken
     );
+    console.log('[*] refreshToken', getCookie('refresh_token'));
+    
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
