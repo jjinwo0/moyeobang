@@ -5,6 +5,7 @@ import Btn from '@/components/common/btn/Btn';
 import QrScanByPos from '@/components/QrByPos/QrScanByPos';
 import ResultByPos from '@/components/QrByPos/ResultByPos';
 import SuccessModalByPos from '@/components/QrByPos/SuccessModalByPos';
+import FailModalByPos from '@/components/QrByPos/FailModalByPos';
 
 const starbucks: PosPay = {
     placeId : 'starbucks-12',
@@ -132,6 +133,7 @@ export default function Pos() {
   const [ openSuccessModal, setOpenSuccessModal] = useState<boolean>(false);
   const [data, setData] = useState<PosPay>() // requestId, 결제자 계좌 아이디 없는 data 즉 결제기 데이터
   const [isOpenResultModal, setIsOpenResultModal] = useState<boolean>(false);
+  const [openFailModal, setOpenFailModal] = useState<boolean>(false);
   const [resultData, setResultData] = useState<PaymentProps>(); // 결제 최종 데이터 
 
 
@@ -161,6 +163,8 @@ export default function Pos() {
   function handleSuccess(isSuccess:boolean) {
     if (isSuccess) {
       setOpenSuccessModal(true);
+    } else {
+      setOpenFailModal(true)
     }
   }
 
@@ -168,11 +172,16 @@ export default function Pos() {
     setOpenSuccessModal(false);
   }
 
+  function handleCloseFailModal() {
+    setOpenFailModal(false);
+  }
+
   return (
     <div css={layoutStyle}>
       {openSuccessModal && <SuccessModalByPos onClickOutside={handleCloseSuccessModal} />}
       {isOpenQrModal && data && <QrScanByPos onClose={handleQrClose} paymentData={data} onResult={handleResult}/> }
       {isOpenResultModal && resultData && <ResultByPos {...resultData} onClickOutside={handleOnClickOutside} setIsSuccess={handleSuccess}/>}
+      {openFailModal && <FailModalByPos onClickOutside={handleCloseFailModal} />}
       { !isOpenQrModal && !isOpenResultModal &&
         <>
         <div css={storeLayoutStyle}>

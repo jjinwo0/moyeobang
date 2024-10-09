@@ -7,6 +7,7 @@ import type {HTMLAttributes, PropsWithChildren} from "react";
 import { useMutation } from "@tanstack/react-query";
 import moyeobang from "@/services/moyeobang";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
+import { AxiosError } from "axios";
 
 const containerLayoutStyle=css`
     position:absolute;
@@ -65,7 +66,15 @@ export default function ResultByPos({
         setIsSuccess(true);
         onClickOutside();
     },
-    onError: async () => {
+    onError: async (error:AxiosError )=> {
+
+        if (error.response?.data) {
+        const errorMessage = (error.response.data as { error: string }).error;
+        console.log(errorMessage); // 'Payment failed.'
+        if (errorMessage==='Payment failed.') {
+            setIsSuccess(false)
+        }
+        }
         console.log('결제 실패')
     }
   });
