@@ -57,7 +57,7 @@ const balanceStyle = css`
     align-items:center;
     gap:10px;
     font-family: 'semibold';
-    font-size: 20px; 
+    font-size: 16px; 
 `;
 
 const buttonStyle=css`
@@ -73,6 +73,7 @@ const buttonStyle=css`
 interface PayCardProps {
     isHome:boolean;
 }
+
 export default function PayCard({isHome} : PayCardProps) {
 
     const [isHidden, setIsHidden] = useState<boolean>(false);
