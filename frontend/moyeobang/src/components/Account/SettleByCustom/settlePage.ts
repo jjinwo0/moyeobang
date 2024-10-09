@@ -108,6 +108,9 @@ export const nButtonStyle = css`
     background-color:${colors.white};
 
     button {
+        display:flex;
+        justify-content:center;
+        align-items:center;
         font-family: 'semibold';
         font-size: 16px;
         width: 45px;

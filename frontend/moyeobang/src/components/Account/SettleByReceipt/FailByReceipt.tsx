@@ -12,6 +12,8 @@ const layoutStyle=css`
     flex-direction:column;
     justify-content:center;
     align-items:center;
+    width:100%;
+    height:100%;
     z-index:9999;
     background-color:${colors.white};
 
@@ -71,7 +73,6 @@ export default function FailByReceipt({onClose, transactionId}:FailByReceiptProp
                 <Btn buttonStyle={{style:'blue', size:'big'}} onClick={handleRestart}>다시 촬영하기</Btn>
                 <Btn buttonStyle={{style:'gray', size:'big'}} onClick={handleClose}>닫기</Btn>
             </div>
-        
         </div>
     )
 }
