@@ -118,7 +118,7 @@ export default function PayModal({onXClick} : QRPayProps) {
                 onError={handlePayError}
                 isHome={isHome}
                 accountNumber={accountNumber}
-                restart={scanRestart}
+                isActive={activeComponenet==='left'}
                 />
             ) :
             (
