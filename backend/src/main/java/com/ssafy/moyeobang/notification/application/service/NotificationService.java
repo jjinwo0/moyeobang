@@ -133,8 +133,12 @@ public class NotificationService implements NotificationUseCase {
         // 2. 계좌 확인
         String findAccountNo = memberPort.findAccountNoById(memberId);
 
+        log.info("@@@@@ findAccountNo: {}", findAccountNo);
+
         // 3. transaction의 정보 확인
-        String findKey = transactionInfoPort.getKey(findMember.getToken(), findAccountNo, transactionId);
+        String findKey = transactionInfoPort.getKey(findMember.getMemberKey(), findAccountNo, transactionId);
+
+        log.info("@@@@@ findKey: {}", findKey);
 
         return findKey;
     }

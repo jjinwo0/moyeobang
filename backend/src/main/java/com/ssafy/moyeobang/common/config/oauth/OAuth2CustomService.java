@@ -100,7 +100,8 @@ public class OAuth2CustomService extends DefaultOAuth2UserService {
         return new OAuth2UserDto(
                 member.getEmail(),
                 member.getUsername(),
-                member.getRole()
+                member.getRole(),
+                member.getMemberKey()
         );
     }
 }
