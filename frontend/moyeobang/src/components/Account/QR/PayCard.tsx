@@ -57,15 +57,15 @@ const balanceStyle = css`
     align-items:center;
     gap:10px;
     font-family: 'semibold';
-    font-size: 10px; 
+    font-size: 16px; 
 `;
 
 const buttonStyle=css`
     width:60px;
     height:30px;
     border-radius:50px;
-    font-family: 'regular';
-    font-size: 16px; 
+    font-family: 'medium';
+    font-size: 12px; 
     border: solid 2px ${colors.gray};
     color:${colors.strongGray};
 `;
