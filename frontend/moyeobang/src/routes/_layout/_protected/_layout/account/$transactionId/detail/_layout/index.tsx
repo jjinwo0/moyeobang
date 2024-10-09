@@ -22,6 +22,10 @@ const layoutStyle = css`
   gap: 20px;
   padding: 10px 30px;
   height: 100%;
+  #updateButton {
+    position: fixed;
+    bottom: 30px;
+  }
 `;
 
 const LinkStyle = css`
@@ -60,14 +64,6 @@ const listStyle = css`
   ::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const buttonStyle=css`
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  position:fixed;
-  bottom:30px;
 `;
 
 export const Route = createFileRoute(
@@ -166,15 +162,13 @@ export default function TransactionDetail() {
               />
             ))}
           </div>
-          <div css={buttonStyle}>
-            <Link
-              to={`/account/${transactionId}/settle`}
-              search={{method: 'custom', isUpdate:true}}
-              css={LinkStyle}
-            >
-              <Btn buttonStyle={{size: 'big', style: 'blue'}}>정산 수정하기</Btn>
-            </Link>
-          </div>
+          <Link
+            to={`/account/${transactionId}/settle`}
+            search={{method: 'custom', isUpdate:true}}
+            css={LinkStyle}
+          >
+            <Btn buttonStyle={{size: 'big', style: 'blue'}}>정산 수정하기</Btn>
+          </Link>
         </>
       ) : (
         <>
@@ -194,14 +188,13 @@ export default function TransactionDetail() {
               <DetailCardByReceipt key={index} {...detail} />
             ))}
           </div>
-          <div css={buttonStyle}>
             <Btn
+              id='updateButton'
               buttonStyle={{size: 'big', style: 'blue'}}
               onClick={handleUpdateReceipt}
             >
               정산 수정하기
             </Btn>
-          </div>
         </>
       )}
     </div>
