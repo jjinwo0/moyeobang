@@ -33,13 +33,13 @@ public class CreateNewScheduleAdapter implements CreateNewSchedulePort, LoadExis
 
     @Transactional
     @Override
-    public void saveNewSchedule(TravelSchedule travelSchedule) {
+    public long saveNewSchedule(TravelSchedule travelSchedule) {
         TravelJpaEntity travelJpaEntity = travelRepositoryInSchedule.findById(travelSchedule.getTravelId())
                 .orElseThrow(() -> new ScheduleException(
                         ErrorCode.TRAVEL_NOT_FOUND));
 
         ScheduleJpaEntity scheduleJpaEntity = createSchedule(travelSchedule, travelJpaEntity);
-        scheduleJpaRepository.save(scheduleJpaEntity);
+        return scheduleJpaRepository.save(scheduleJpaEntity).getId();
     }
 
 

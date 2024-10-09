@@ -77,7 +77,8 @@ public class PaymentService implements PaymentUseCase {
             }
         }
         ssePort.sendPaymentSuccess(command.paymentRequestId(), paymentResult);
-        updateScheduleTransactionPort.createUnmatchingScheduleTransaction(paymentResult.transactionId(), maxSequence);
+        updateScheduleTransactionPort.createUnmatchingScheduleTransaction(paymentResult.transactionId(),
+                maxSequence + 1);
         return true;
     }
 
