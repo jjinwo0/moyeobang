@@ -113,7 +113,7 @@ export default function SettleCardByCustom({
             <img src={blankCheck} alt="blank" />
             }
             </div>
-            <ProfileImage profileImage={profileImage} isSelected={isChecked}/>
+            <ProfileImage px={70} profileImage={profileImage} isSelected={isChecked}/>
             <div css={nameStyle}>{memberName}</div>
             <div css={inputContainerStyle}>
                 <input 

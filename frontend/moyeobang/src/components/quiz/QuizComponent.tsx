@@ -117,7 +117,7 @@ export default function QuizComponent({
   const [confirmModal, setConfirmModal] = useState(false);
 
   //[todo] memberId 주스탄드에서 꺼내기!!
-  const memberId: number = 1;
+  const memberId: number = 6;
   // const {memberId} = useMyInfo();
 
   // [todo] 퀴즈 제출 api 연결

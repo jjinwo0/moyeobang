@@ -15,8 +15,8 @@ const profileContainerStyle = (isSelected : boolean | undefined) => css`
     text-align:center;
     align-items:center;
     justify-content:center;
-    width: 80px;
-    height: 80px;
+    width: 85px;
+    height: 85px;
     padding: 3px;
     box-sizing: border-box;
     border-radius: 50%;
