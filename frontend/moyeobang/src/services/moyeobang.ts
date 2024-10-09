@@ -205,10 +205,17 @@ export default {
   /**
    * 공금 입금 요청
    */
-  postResquestDepositAccount: async (travelId: number, totalAmount: number) =>
+  postResquestDepositAccount: async (
+    travelId: number,
+    title: string,
+    amount: number
+  ) =>
     axios.post<MoyeobangResponse<ResponsePostDepositAccount>>(
       `/travel/accounts/deposit/request/${travelId}`,
-      {totalAmount},
+      {
+        title: title,
+        amount: amount,
+      },
       {
         headers: {'Content-Type': 'application/json'},
       }
