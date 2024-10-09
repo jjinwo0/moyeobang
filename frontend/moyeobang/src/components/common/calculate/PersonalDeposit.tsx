@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {useMutation} from '@tanstack/react-query';
+import useMyInfo from '@/store/useMyInfoStore';
 import moyeobang from '@/services/moyeobang';
 import React, {useState} from 'react';
 import Btn from '../btn/Btn';
@@ -47,6 +48,7 @@ export default function PersonalDeposit({
 }) {
   const [value, setValue] = useState<number | string>(0);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
+  const {memberId, accountId} = useMyInfo();
   const handleFocus = () => {
     if (!focused) {
       setValue(''); // 처음 클릭 시 입력 필드의 값을 비움
@@ -74,6 +76,11 @@ export default function PersonalDeposit({
 
   const handleOnclick = () => {
     // api로 개인 입금 시키기
+    postDepositAccount({
+      accountId: accountId,
+      memberId: memberId,
+      amount: Number(value),
+    });
 
     setValue(0);
   };

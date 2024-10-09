@@ -95,6 +95,9 @@ spring:
     username: c102
     password: 123456789
 
+  elasticsearch:
+    uris: http://j11c102.p.ssafy.io:9200
+
   jpa:
     hibernate:
       ddl-auto: none
