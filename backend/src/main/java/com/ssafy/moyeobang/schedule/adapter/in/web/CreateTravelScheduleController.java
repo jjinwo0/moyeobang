@@ -5,6 +5,7 @@ import static com.ssafy.moyeobang.common.util.ApiUtils.success;
 import com.ssafy.moyeobang.common.annotation.WebAdapter;
 import com.ssafy.moyeobang.common.util.ApiUtils.ApiResult;
 import com.ssafy.moyeobang.schedule.adapter.in.web.request.CreateTravelScheduleRequest;
+import com.ssafy.moyeobang.schedule.adapter.in.web.response.CreateTravelScheduleResponse;
 import com.ssafy.moyeobang.schedule.application.port.in.CreateTravelScheduleCommand;
 import com.ssafy.moyeobang.schedule.application.port.in.CreateTravelScheduleUseCase;
 import java.io.IOException;
@@ -26,13 +27,14 @@ public class CreateTravelScheduleController {
     private final CreateTravelScheduleUseCase createTravelScheduleUseCase;
 
     @PostMapping("/{travelId}/schedule")
-    public ApiResult<Boolean> createTravelSchedule(@PathVariable long travelId,
-                                                   @RequestPart("data") CreateTravelScheduleRequest createTravelScheduleRequest,
-                                                   @RequestPart(value = "image", required = false) MultipartFile scheduleImage)
+    public ApiResult<CreateTravelScheduleResponse> createTravelSchedule(@PathVariable long travelId,
+                                                                        @RequestPart("data") CreateTravelScheduleRequest createTravelScheduleRequest,
+                                                                        @RequestPart(value = "image", required = false) MultipartFile scheduleImage)
             throws IOException {
 
         CreateTravelScheduleCommand command = createTravelScheduleRequest.toCommand(travelId, scheduleImage);
-        createTravelScheduleUseCase.createTravelSchedule(command);
-        return success(true);
+        CreateTravelScheduleResponse scheduleId = new CreateTravelScheduleResponse(
+                createTravelScheduleUseCase.createTravelSchedule(command));
+        return success(scheduleId);
     }
 }
