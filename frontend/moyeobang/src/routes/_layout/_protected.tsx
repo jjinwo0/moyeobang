@@ -18,8 +18,9 @@ function Protected() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated()) {
-      navigate({to: '/', replace: true});
+    const isLogin = isAuthenticated();
+    if (!isLogin) {
+      navigate({to: '/entrance', replace: true});
     }
   }, [navigate]);
 
