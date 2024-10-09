@@ -1,5 +1,8 @@
 package com.ssafy.moyeobang.account.adapter.out;
 
+import static com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType.CUSTOM;
+import static com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType.ETC;
+
 import com.ssafy.moyeobang.account.adapter.out.bank.BankApiClient;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.MemberAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
@@ -20,11 +23,15 @@ import com.ssafy.moyeobang.account.error.TravelNotFoundException;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.With;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -110,6 +117,25 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
         );
     }
 
+    @Override
+    public void refundMoney(String sourceAccountNumber, String targetAccountNumber, Money money) {
+        TravelAccountJpaEntity travelAccount = getTravelAccount(sourceAccountNumber);
+        MemberAccountJpaEntity memberAccount = getMemberAccount(targetAccountNumber);
+
+        TravelAccount account = loadTravelAccount(travelAccount.getId());
+        Money balance = account.getBalance();
+
+        WithdrawJpaEntity withdraw = createWithdraw(travelAccount, memberAccount, money, balance);
+        withdrawRepository.save(withdraw);
+
+        bankApiClient.sendMoney(
+                travelAccount.getTravel().getTravelKey(),
+                memberAccount.getAccountNumber(),
+                travelAccount.getAccountNumber(),
+                money.getAmount()
+        );
+    }
+
     private TravelAccountJpaEntity createTravelAccount(String accountNumber, TravelJpaEntity travel) {
         return TravelAccountJpaEntity.builder()
                 .accountNumber(accountNumber)
@@ -124,6 +150,21 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
                 .amount(money.getAmount())
                 .travelAccount(travelAccount)
                 .member(memberAccount.getMember())
+                .build();
+    }
+
+    private WithdrawJpaEntity createWithdraw(TravelAccountJpaEntity travelAccount,
+                                             MemberAccountJpaEntity memberAccount,
+                                             Money money,
+                                             Money balance) {
+        return WithdrawJpaEntity.builder()
+                .title("여행 종료 환불")
+                .amount(money.getAmount())
+                .balanceSnapshot(balance.getAmount() - money.getAmount())
+                .targetAccountNumber(memberAccount.getAccountNumber())
+                .withdrawType(ETC)
+                .settleType(CUSTOM)
+                .travelAccount(travelAccount)
                 .build();
     }
 

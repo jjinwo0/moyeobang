@@ -5,4 +5,6 @@ import com.ssafy.moyeobang.account.application.domain.Money;
 public interface SendMoneyPort {
 
     void sendMoney(String sourceAccountNumber, String targetAccountNumber, Money money);
+
+    void refundMoney(String sourceAccountNumber, String targetAccountNumber, Money money);
 }
