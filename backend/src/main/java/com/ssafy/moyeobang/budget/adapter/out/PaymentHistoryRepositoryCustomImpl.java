@@ -29,7 +29,7 @@ public class PaymentHistoryRepositoryCustomImpl implements PaymentHistoryReposit
     private CriteriaQuery combinedQuery(String placeName, List<Member> members) {
         return new CriteriaQuery(combinedCond(placeName, members))
                 .addSort(Sort.by(DESC, "_score"))
-                .setPageable(Pageable.ofSize(10));
+                .setPageable(Pageable.ofSize(100));
     }
 
     private Criteria combinedCond(String placeName, List<Member> members) {
