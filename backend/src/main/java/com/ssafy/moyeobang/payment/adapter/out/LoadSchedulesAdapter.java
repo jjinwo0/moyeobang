@@ -54,6 +54,7 @@ public class LoadSchedulesAdapter implements LoadSchedulesPort, UpdateScheduleTr
         }
 
         ScheduleJpaEntity scheduleJpaEntity = ScheduleJpaEntity.builder()
+                .travel(withdrawJpaEntity.getTravelAccount().getTravel())
                 .startDateTime(withdrawJpaEntity.getCreatedAt())
                 .complete(ScheduleStatus.COMPLETE)
                 .latitude(withdrawJpaEntity.getLatitude())
