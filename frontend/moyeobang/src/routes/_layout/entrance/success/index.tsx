@@ -96,12 +96,8 @@ function LoginSuccess() {
       setBankName(myInfo.bankName);
       setAccountNumber(myInfo.accountNumber);
       // 계좌 정보가 없으면 계좌 등록 페이지로 이동
-      if (myInfo.accountId) {
-        setAccountId(myInfo.accountId);
-        navigate({to: '/'});
-      } else {
-        navigate({to: '/entrance/success/allowNoti'});
-      }
+
+      navigate({to: '/'});
     }
   }, [myInfoResponse]);
 
