@@ -149,7 +149,7 @@ export default {
    * 여행 목록 전체 조회
    */
   getTravelList: async (memberId: number) =>
-    axios.get<MoyeobangResponse<Travel>>('/travels', {
+    axios.get<MoyeobangResponse<Travel[]>>('/travels', {
       params: {
         memberId: memberId,
       },
