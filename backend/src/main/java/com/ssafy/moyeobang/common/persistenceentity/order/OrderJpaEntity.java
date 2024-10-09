@@ -40,6 +40,8 @@ public class OrderJpaEntity extends BaseEntity {
 
     private long amount;
 
+    private int quantity;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "withdraw_id")
     private WithdrawJpaEntity withdraw;
@@ -48,9 +50,10 @@ public class OrderJpaEntity extends BaseEntity {
     private List<MemberOrderHistoryJpaEntity> memberOrderHistoryJpaEntities = new ArrayList<>();
 
     @Builder
-    public OrderJpaEntity(String title, long amount, WithdrawJpaEntity withdraw) {
+    public OrderJpaEntity(String title, long amount, int quantity, WithdrawJpaEntity withdraw) {
         this.title = title;
         this.amount = amount;
+        this.quantity = quantity;
         this.withdraw = withdraw;
     }
 

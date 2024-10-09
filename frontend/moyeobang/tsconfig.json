@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src", // 경로 기본 설정
+    "paths": {
+      "@/*": ["*"]
+    }, // 경로 별칭 설정
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types",
+      "@emotion/react/types/css-prop"
+    ], // 타입 루트 경로 설정
+    "jsx": "react-jsx", // JSX 처리
+    "jsxImportSource": "@emotion/react", // Emotion에서 JSX 처리
+    "target": "ES2020", // ES2020 타겟
+    "useDefineForClassFields": true, // 클래스 필드 사용 설정
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // 라이브러리 설정
+    "module": "ESNext", // ESNext 모듈 시스템 설정
+    "skipLibCheck": false, // 모든 타입 정의 파일 검사
+    "esModuleInterop": true, // ESModule과 CommonJS 호환성 끔
+    "moduleResolution": "Node", // Node 방식의 모듈 해석
+    "allowSyntheticDefaultImports": true, // 기본 import 허용
+    "allowImportingTsExtensions": true, // .ts 확장자 import 허용
+    "isolatedModules": true, // 각 모듈을 독립적으로 처리
+    "moduleDetection": "force", // 강제 모듈 탐지
+    "noEmit": true, // 컴파일 후 파일을 출력하지 않음
+    "outDir": "./dist", // 출력 디렉토리 설정
+    "resolveJsonModule": true,
+
+    /* Linting 설정 */
+    "strict": true, // 엄격한 타입 체크
+    "noUnusedLocals": false, // 사용하지 않는 로컬 변수를 허용하지 않음
+    "noUnusedParameters": false, // 사용하지 않는 파라미터를 허용하지 않음
+    "noFallthroughCasesInSwitch": true // Switch 문에서 fallthrough 허용하지 않음
+  },
+  "include": ["src"], // 포함 경로 설정
+  "exclude": ["node_modules", "dist"] // 제외 경로 설정
+}

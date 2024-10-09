@@ -1,10 +1,9 @@
 package com.ssafy.moyeobang.settle.application.domain.order;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,5 +20,6 @@ public class Order {
         return new Order(id, info, memberOrderHistories);
     }
 
-    public record OrderInfo(String title, Integer amount, Long transactionId) {}
+    public record OrderInfo(String title, Integer amount, Integer quantity, Long transactionId) {
+    }
 }
