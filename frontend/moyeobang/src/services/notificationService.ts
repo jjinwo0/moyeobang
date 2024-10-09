@@ -104,6 +104,14 @@ export function setupForegroundNotificationHandler() {
 
     console.log('메세지', payload.data);
 
+    // 로컬 스토리지에서 기존 알림 불러오기
+    const storedNotifications = JSON.parse(
+      localStorage.getItem('notifications') || '[]'
+    );
+
+    // 로컬 스토리지에 저장
+    localStorage.setItem('notifications', JSON.stringify(storedNotifications));
+
     const notification = payload.data;
     if (notification && Notification.permission === 'granted') {
       const {title, content, icon} = notification;
