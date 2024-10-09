@@ -4,10 +4,12 @@ import Btn from '../btn/Btn';
 import {bluefont, colors} from '@/styles/colors';
 import {css} from '@emotion/react';
 import moyeobang from '@/services/moyeobang';
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 // import useMyInfo from '@/store/useMyInfoStore';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import useMyInfo from '@/store/useMyInfoStore';
+
 
 const basicLayout = css`
   display: flex;
@@ -65,6 +67,9 @@ export default function PublicDeposit({
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
   const {travelId} = useTravelDetailStore();
   const {accountId} = useTravelDetailStore();
+  const {memberId}=useMyInfo();
+
+  const queryClient = useQueryClient();
 
   // get 모임 통장 전체 잔액 
   const { data } = useSuspenseQuery({
@@ -86,6 +91,23 @@ export default function PublicDeposit({
     }) => {
       return moyeobang.postResquestDepositAccount(travelId, title, amount);
     },
+    onSuccess: async () => {
+
+    await queryClient.invalidateQueries({
+          queryKey: ['transactionList', accountId], 
+          refetchType: 'all',
+      });
+
+    await queryClient.invalidateQueries({
+          queryKey: ['accountByGroup', accountId], 
+          refetchType: 'all',
+      });
+
+    await queryClient.invalidateQueries({
+          queryKey: ['accountByMemberId', accountId, memberId], 
+          refetchType: 'all',
+      });
+    }
   });
 
   const handleFocus = () => {
