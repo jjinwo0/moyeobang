@@ -13,9 +13,12 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     const accessToken = getCookie('accessToken');
-    console.log(' 여긴 오나 ? accessToken', accessToken);
+    console.log(
+      ' 여긴 오나 ? accessToken, refreshToken',
+      accessToken,
+      getCookie('refresh-token')
+    );
     if (accessToken) {
-      console.log('accessToken', accessToken);
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
@@ -38,10 +41,9 @@ instance.interceptors.response.use(
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry
-      
     ) {
       console.log('[*] 재시도 중');
-      
+
       originalRequest._retry = true;
 
       if (!refreshToken) {
