@@ -13,7 +13,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     const accessToken = getCookie('accessToken');
-    const refreshToken = getCookie('refresh-token');
+    const refreshToken = getCookie('refresh_token');
     console.log('[*] 요청 인터셉터 설정', refreshToken);
     console.log(
       ' 여긴 오나 ? accessToken, refreshToken',
@@ -37,7 +37,7 @@ instance.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
     console.log('[*] 응답 인터셉터 설정');
-    const refreshToken = getCookie('refresh-token');
+    const refreshToken = getCookie('refresh_token');
     console.log('refreshToken', refreshToken);
 
     if (
@@ -57,7 +57,7 @@ instance.interceptors.response.use(
       }
 
       try {
-        const refreshToken = getCookie('refresh-token');
+        const refreshToken = getCookie('refresh_token');
         console.log('[*] refreshToken 통해 accessToken 재발급', refreshToken);
         const response = await instance.post(`/reissue/token`, {
           headers: {Authorization: `Bearer ${refreshToken}`},
@@ -75,7 +75,7 @@ instance.interceptors.response.use(
       } catch (refreshError) {
         console.error('Failed to refresh access token:', refreshError);
         removeCookie('accessToken');
-        removeCookie('refresh-token');
+        removeCookie('refresh_token');
         window.location.href = '/entrance';
       }
     }
