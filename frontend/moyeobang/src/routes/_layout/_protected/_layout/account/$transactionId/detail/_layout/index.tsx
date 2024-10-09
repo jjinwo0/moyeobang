@@ -62,6 +62,15 @@ const listStyle = css`
   }
 `;
 
+const buttonStyle=css`
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+  position:fixed;
+  bottom:30px;
+`;
+
 export const Route = createFileRoute(
   '/_layout/_protected/_layout/account/$transactionId/detail/_layout/'
 )({
@@ -158,13 +167,15 @@ export default function TransactionDetail() {
               />
             ))}
           </div>
-          <Link
-            to={`/account/${transactionId}/settle`}
-            search={{method: 'custom', isUpdate:true}}
-            css={LinkStyle}
-          >
-            <Btn buttonStyle={{size: 'big', style: 'blue'}}>정산 수정하기</Btn>
-          </Link>
+          <div css={buttonStyle}>
+            <Link
+              to={`/account/${transactionId}/settle`}
+              search={{method: 'custom', isUpdate:true}}
+              css={LinkStyle}
+            >
+              <Btn buttonStyle={{size: 'big', style: 'blue'}}>정산 수정하기</Btn>
+            </Link>
+          </div>
         </>
       ) : (
         <>
@@ -184,12 +195,14 @@ export default function TransactionDetail() {
               <DetailCardByReceipt key={index} {...detail} />
             ))}
           </div>
-          <Btn
-            buttonStyle={{size: 'big', style: 'blue'}}
-            onClick={handleUpdateReceipt}
-          >
-            정산 수정하기
-          </Btn>
+          <div css={buttonStyle}>
+            <Btn
+              buttonStyle={{size: 'big', style: 'blue'}}
+              onClick={handleUpdateReceipt}
+            >
+              정산 수정하기
+            </Btn>
+          </div>
         </>
       )}
     </div>
