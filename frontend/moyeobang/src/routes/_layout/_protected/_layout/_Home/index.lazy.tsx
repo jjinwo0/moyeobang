@@ -18,6 +18,7 @@ import moyeobang from '@/services/moyeobang';
 import useCurrentTravelStore from '@/store/useCurrentTravelStore';
 import useFcmTStore from '@/store/useFcmStore';
 import useMyInfo from '@/store/useMyInfoStore';
+import {includes} from 'lodash';
 
 // const memberName: MemberName = '진우바오';
 
@@ -143,7 +144,7 @@ function Index() {
   //   useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
 
-  const {memberId, memberName} = useMyInfo();
+  const {memberId, memberName, profileImage} = useMyInfo();
 
   const {data: travelData} = useSuspenseQuery({
     queryKey: ['travelList', memberId],
@@ -257,7 +258,15 @@ function Index() {
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
         </div>
-        <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
+        <img
+          src={
+            !profileImage || profileImage.includes('default_profile')
+              ? bangbang
+              : profileImage
+          }
+          css={profileImageStyle}
+          onClick={goSettingPage}
+        />
       </div>
 
       {/* {pushNotification && <AllowNotification onClose={closePush} />} */}
