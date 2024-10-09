@@ -224,18 +224,7 @@ export default function PlusSelfSchedule({
           사용했나방
         </div>
       );
-    } else {
-      message = (
-        <div>
-          여기서는 N명이서 평균 <br />
-          <span style={{color: colors.customBlue}}>
-            {schedule.budget}원
-          </span>{' '}
-          사용했나방
-        </div>
-      );
     }
-
     setPopupMessage(message);
     setShowPopup(prev => !prev);
   };
