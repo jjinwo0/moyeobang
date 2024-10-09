@@ -147,7 +147,7 @@ export default function NotificationModal({onClose}: {onClose: () => void}) {
           amount={200000}
         />
       );
-    } else if (notification.title.includes('여행 공금 입금 요청')) {
+    } else if (notification.content.includes('입금을 요청했어요.')) {
       return <HurryNotification key={index} message={notification.content} />;
     } else if (notification.title.includes('잔액 알림')) {
       return <TimeNotification key={index} message={notification.content} />;
