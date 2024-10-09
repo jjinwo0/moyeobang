@@ -1,10 +1,13 @@
 package com.ssafy.moyeobang.common.config.oauth;
 
+import com.ssafy.moyeobang.common.config.oauth.bank.CommonBankApiClient;
+import com.ssafy.moyeobang.common.config.oauth.bank.MemberAccountRepository;
 import com.ssafy.moyeobang.common.config.oauth.dto.CustomOAuth2User;
 import com.ssafy.moyeobang.common.config.oauth.dto.GoogleResponse;
 import com.ssafy.moyeobang.common.config.oauth.dto.KakaoResponse;
 import com.ssafy.moyeobang.common.config.oauth.dto.OAuth2Response;
 import com.ssafy.moyeobang.common.config.oauth.dto.OAuth2UserDto;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,8 @@ public class OAuth2CustomService extends DefaultOAuth2UserService {
 
     private static final Logger log = LoggerFactory.getLogger(OAuth2CustomService.class);
     private final MemberRepositoryInOAuth memberRepository;
+    private final MemberAccountRepository memberAccountRepository;
+    private final CommonBankApiClient bankApiClient;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -52,7 +57,21 @@ public class OAuth2CustomService extends DefaultOAuth2UserService {
 
             MemberJpaEntity createMember = response.toEntity();
 
+            String createMemberKey = bankApiClient.createMemberKey();
+
+            createMember.updateMemberKey(createMemberKey);
+
             memberRepository.save(createMember);
+
+            String accountNumber = bankApiClient.createAccount(createMember.getMemberKey());
+
+            MemberAccountJpaEntity createMemberAccount = MemberAccountJpaEntity.builder()
+                    .bankName("싸피뱅크")
+                    .accountNumber(accountNumber)
+                    .member(createMember)
+                    .build();
+
+            memberAccountRepository.save(createMemberAccount);
 
             OAuth2UserDto oAuth2User = toOAuth2UserDto(createMember);
 
@@ -76,7 +95,8 @@ public class OAuth2CustomService extends DefaultOAuth2UserService {
         return new OAuth2UserDto(
                 member.getEmail(),
                 member.getUsername(),
-                member.getRole()
+                member.getRole(),
+                member.getMemberKey()
         );
     }
 }
