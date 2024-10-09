@@ -107,8 +107,11 @@ export default function PlusSelf() {
       const scheduleId = response.data.data.scheduleId;
       console.log('[*shedule]', response.data);
       console.log('[*sheduleId]', scheduleId);
-      setScheduleId(scheduleId);
-      refetch();
+      if (scheduleId) {
+        setScheduleId(scheduleId);
+        refetch();
+      }
+
       resetForm();
       handleShowPlusSelf();
     },
