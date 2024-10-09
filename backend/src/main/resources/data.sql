@@ -70,9 +70,9 @@ VALUES ('카페 결제', 5000, 100000, '9993274339436066', 37.7749, -122.4194, '
        ('식당 결제', 15000, 85000, '9997097385463465', 37.5665, 126.9780, 'ChIJ9TPcRgWuEmsRZtZQk5E_7Pc', '이태원 식당',
         '서울시 용산구 이태원 식당', 'REQ1002', 'RESTAURANT', 'CUSTOM', 2, now());
 
-INSERT INTO orders (title, amount, withdraw_id)
-VALUES ('카페 주문', 5000, 1),
-       ('식당 주문', 15000, 2);
+INSERT INTO orders (title, amount, withdraw_id, quantity)
+VALUES ('카페 주문', 5000, 1, 1),
+       ('식당 주문', 15000, 2, 1);
 
 INSERT INTO member_order_history (amount, member_id, order_id)
 VALUES (2500, 1, 1),
@@ -96,9 +96,9 @@ VALUES ('헬스장 결제', 30000, 70000, '9991234567890123', 37.1234, 127.5678,
        ('영화관 결제', 20000, 80000, '9999876543210987', 37.9876, 126.5432,
         'ChIJK2t_tDeuEmsRUsoxz5678frY4', '롯데시네마', '서울시 서초구 롯데시네마', 'REQ1004', 'ACTIVITY', 'CUSTOM', 2, now());
 
-INSERT INTO orders (title, amount, withdraw_id)
-VALUES ('헬스장 주문', 30000, 3),
-       ('영화관 주문', 20000, 4);
+INSERT INTO orders (title, amount, withdraw_id, quantity)
+VALUES ('헬스장 주문', 30000, 3, 1),
+       ('영화관 주문', 20000, 4, 1);
 
 INSERT INTO member_order_history (amount, member_id, order_id)
 VALUES (15000, 3, 3),
