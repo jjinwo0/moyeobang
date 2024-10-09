@@ -151,7 +151,7 @@ export default function FinalModal({onClickOutside, onClick, confirmData, totalM
                     <Btn 
                     buttonStyle={{size:'big', style:'blue'}}
                     onClick={onClick}
-                    >확인</Btn>
+                    >확인 완료</Btn>
                 </div>
             </div>
         </Backdrop>

@@ -149,10 +149,12 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             acceptedNumber: acceptedNumber,
         }
 
-        console.log('직접 정산 POST 데이터',spendData)
+        // console.log('직접 정산 POST 데이터',spendData)
         if (isUpdate) {
+            console.log('업데이트')
             updateCustom({transactionId, travelId,  data:spendData})
         } else {
+            console.log('처음 post')
             postCustom({transactionId, travelId,  data:spendData})
         }
         setIsOpenFinalModal(false);
@@ -302,12 +304,12 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     <Btn 
                     buttonStyle={{ size:'big', style:'blue'}}
                     onClick={handleConfirm}
-                    >{ isUpdate ? '수정 완료' : '정산하기'}
+                    >{ isUpdate ? '수정하기' : '정산하기'}
                     </Btn> 
                 ) : ( 
                     <Btn 
                     buttonStyle={{ size:'big', style:'gray'}}
-                    >{ isUpdate ? '수정 완료' : '정산하기'}
+                    >{ isUpdate ? '수정하기' : '정산하기'}
                     </Btn>
                 )
                 }

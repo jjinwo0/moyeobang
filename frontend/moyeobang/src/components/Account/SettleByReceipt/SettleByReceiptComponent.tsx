@@ -301,7 +301,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
           ))}
        </div>
       <div css={buttonContainerStyle}>
-        <Link to={`/account/${data.transactionId}/settle`} search={{ method: isUpdate ? 'custom' : '' }} css={linkStyle}>
+        <Link to={`/account/${data.transactionId}/settle`} search={{ method:'receipt', isUpdate:true }} css={linkStyle}>
           <Btn buttonStyle={{size:'big', style:'greenBlue'}} onClick={handleRestart}>영수증 다시 찍기</Btn>
         </Link>
         { isUpdate ? 

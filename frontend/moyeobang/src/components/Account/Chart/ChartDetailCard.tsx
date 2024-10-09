@@ -100,7 +100,7 @@ export default function ChartDetailCard({profileImage, colorIndex, title, propor
                     {title}
                 </div>
                 <div css={percentStyle}> 
-                    {proportion}%
+                    {proportion==='NaN' ? '0.0' : proportion}%
                 </div>
             </div>
             <div css={moneyStyle}>
