@@ -303,9 +303,13 @@ export default {
    * 여행 일정 추가
    */
   postTravelSchedule: async (travelId: Id, data: FormData) =>
-    axios.post<MoyeobangResponse<null>>(`/travel/${travelId}/schedule`, data, {
-      headers: {'Content-Type': 'multipart/form-data'},
-    }),
+    axios.post<MoyeobangResponse<ResponsePostTravelSchedule>>(
+      `/travel/${travelId}/schedule`,
+      data,
+      {
+        headers: {'Content-Type': 'multipart/form-data'},
+      }
+    ),
 
   /**
    * 여행 일정 조회
