@@ -346,6 +346,14 @@ export default function PlusSelf() {
                 )}
               </div>
               <div css={PlusSelfStyle.inputImgWrapper}>
+                {selectedImage && (
+                  <button
+                    id="imgCancelBtn"
+                    onClick={() => setSelectedImage(null)}
+                  >
+                    이미지 취소
+                  </button>
+                )}
                 <input
                   type="text"
                   name=""
@@ -355,22 +363,12 @@ export default function PlusSelf() {
                   placeholder="여행 장소 검색"
                   onChange={e => handleSearchLocation(e)}
                 />
-                <div css={PlusSelfStyle.searchImgWrapper}>
-                  <img
-                    src={searchImg}
-                    alt="검색 버튼 이미지"
-                    css={PlusSelfStyle.searchImgStyle}
-                    onClick={handleShowMapSearch}
-                  />
-                  {selectedImage && (
-                    <button
-                      id="imgCancelBtn"
-                      onClick={() => setSelectedImage(null)}
-                    >
-                      이미지 취소
-                    </button>
-                  )}
-                </div>
+                <img
+                  src={searchImg}
+                  alt="검색 버튼 이미지"
+                  css={PlusSelfStyle.searchImgStyle}
+                  onClick={handleShowMapSearch}
+                />
               </div>
             </div>
           </div>

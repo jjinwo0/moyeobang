@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { css, keyframes } from '@emotion/react';
+import React, {useState, useEffect} from 'react';
+import {css, keyframes} from '@emotion/react';
 import ssafyIcon from '@/assets/icons/ssafyLogo.jpg';
-import { colors } from '@/styles/colors';
+import {colors} from '@/styles/colors';
 
 const slideOut = keyframes`
   from {
@@ -98,15 +98,15 @@ export default function SsafyBankNotification({
     setCurrentY(null);
   };
 
-    // 자동으로 3초 후에 슬라이드 아웃되도록 설정
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setIsSlidingOut(true);
-        setTimeout(() => setCertificationVisible(false), 300);
-      }, 3000); // 3초 후 슬라이드 아웃
-  
-      return () => clearTimeout(timer); // 컴포넌트가 언마운트될 때 타이머 제거
-    }, []);
+  // 자동으로 3초 후에 슬라이드 아웃되도록 설정
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsSlidingOut(true);
+      setTimeout(() => setCertificationVisible(false), 300);
+    }, 5000); // 3초 후 슬라이드 아웃
+
+    return () => clearTimeout(timer); // 컴포넌트가 언마운트될 때 타이머 제거
+  }, []);
 
   useEffect(() => {
     if (startY !== null) {
@@ -124,7 +124,16 @@ export default function SsafyBankNotification({
   }, [startY, currentY]);
 
   return (
-    <div css={[modalStyle, isSlidingOut && css`animation: ${slideOut} 0.3s ease-out forwards;`]} onTouchStart={handleTouchStart}>
+    <div
+      css={[
+        modalStyle,
+        isSlidingOut &&
+          css`
+            animation: ${slideOut} 0.3s ease-out forwards;
+          `,
+      ]}
+      onTouchStart={handleTouchStart}
+    >
       <div css={titleStyle}>
         <img src={ssafyIcon} alt="ssafyIcon" />
         <p id="title">싸피뱅크 입금 알림</p>

@@ -137,13 +137,26 @@ export default function PlusSelfSchedule({
     setBudget(''); // 클릭 시 값 비우기
   };
 
+  const {mutate: postChangeScheduleBudget} = useMutation({
+    mutationFn: ({scheduleId, budget}: {scheduleId: Id; budget: number}) =>
+      moyeobang.postChangeScheduleBudget(scheduleId, budget),
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ['travelSchedules']});
+    },
+  });
   const handleBudgetBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.stopPropagation();
     if (budget === '') {
       setBudget(schedule.budget || '');
     }
     // [todo] 예산 수정하는 api 연결하기
-    console.log('전송할 예산:', budget);
+    if (typeof budget === 'number' && typeof schedule.scheduleId === 'number') {
+      postChangeScheduleBudget({
+        scheduleId: schedule.scheduleId,
+        budget: budget,
+      });
+      console.log('전송할 예산:', budget);
+    }
   };
 
   const handleBudgetClick = (e: React.MouseEvent<HTMLInputElement>) => {
