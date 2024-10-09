@@ -142,18 +142,17 @@ export default function TravelLogList() {
       });
     },
   });
-  useEffect(()=>{
+  useEffect(() => {
     const newTotalBudget = travelSchedules.reduce((total, schedule) => {
       const dayBudget = schedule.daySchedules.reduce((sum, daySchedule) => {
-          return sum + (daySchedule.budget ?? 0);
+        return sum + (daySchedule.budget ?? 0);
       }, 0);
       return total + dayBudget;
-  }, 0);
+    }, 0);
 
-    setTotalBudget(newTotalBudget)
+    setTotalBudget(newTotalBudget);
     console.log(totalBudget);
-    
-  },[travelSchedules])
+  }, [travelSchedules]);
 
   const travelDays = travelDates.length;
 
@@ -194,7 +193,7 @@ export default function TravelLogList() {
                 <div id="total-budget-info-text">
                   <div>{travelDates.length}일 전체 예산</div>
                   <div style={{color: colors.fifth}}>
-                    {totalBudget.toLocaleString()}원
+                    {totalBudget ? totalBudget.toLocaleString() : ''}원
                   </div>
                 </div>
                 <img src={bangBang} alt="bangBang" />
