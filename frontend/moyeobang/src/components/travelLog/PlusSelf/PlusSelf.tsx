@@ -109,7 +109,9 @@ export default function PlusSelf() {
       console.log('[*sheduleId]', scheduleId);
       if (scheduleId) {
         setScheduleId(scheduleId);
-        refetch();
+        setTimeout(() => {
+          refetch();
+        }, 0); // 상태가 업데이트된 후에 refetch가 실행되도록 비동기 처리
       }
 
       resetForm();
