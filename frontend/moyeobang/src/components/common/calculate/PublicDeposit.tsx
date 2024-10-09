@@ -6,6 +6,7 @@ import {css} from '@emotion/react';
 import moyeobang from '@/services/moyeobang';
 import {useMutation} from '@tanstack/react-query';
 import useMyInfo from '@/store/useMyInfoStore';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 const basicLayout = css`
   display: flex;
@@ -62,7 +63,7 @@ export default function PublicDeposit({
 }: PublicDepositProps) {
   const [value, setValue] = useState<string | number>(budget);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
-  const {accountId} = useMyInfo();
+  const {accountId} = useTravelDetailStore();
   const {mutate: postResquestDepositAccount} = useMutation({
     mutationFn: ({
       accountId,
