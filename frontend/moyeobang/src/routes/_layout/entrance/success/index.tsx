@@ -81,7 +81,7 @@ function LoginSuccess() {
     const refreshToken = searchParams.get('refreshToken');
     const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
     if (accessToken) {
-      setCookie('accessToken', accessToken, 900);
+      setCookie('accessToken', accessToken);
       refetch();
     }
   }, [location.search]);
