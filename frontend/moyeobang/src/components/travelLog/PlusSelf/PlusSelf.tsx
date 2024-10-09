@@ -11,10 +11,11 @@ import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import searchImg from '@/assets/icons/Search.png';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useTravelLogContext} from '@/contexts/TravelLog';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQueryClient, useQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import {useNavigate} from '@tanstack/react-router';
 import {fi} from 'date-fns/locale';
+import querykeys from '@/util/querykeys';
 
 export default function PlusSelf() {
   const {travelPlaceList, travelId} = useTravelDetailStore();
@@ -54,6 +55,7 @@ export default function PlusSelf() {
     useState<ScheduleLocation | null>(null);
   const [getSchedule, setGetSchedule] = useState<DaySchedule | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [scheduleId, setScheduleId] = useState<number | null>(null);
   const queryClient = useQueryClient();
 
   const handleAddImg = () => {
@@ -87,18 +89,23 @@ export default function PlusSelf() {
    * 일정 추가 mutation 선언
    */
   const {mutate: postTravelSchedule} = useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       travelId,
       scheduleData,
     }: {
       travelId: Id;
       scheduleData: FormData;
-    }) => moyeobang.postTravelSchedule(travelId, scheduleData),
-    onSuccess: async () => {
+    }) => {
+      return await moyeobang.postTravelSchedule(travelId, scheduleData);
+    },
+    onSuccess: async response => {
       await queryClient.invalidateQueries({
         queryKey: ['travelSchedules', travelId],
         refetchType: 'all',
       });
+
+      const scheduleId = response.data.data.scheduleId;
+      setScheduleId(scheduleId);
       resetForm();
       handleShowPlusSelf();
     },
@@ -150,6 +157,27 @@ export default function PlusSelf() {
       handleShowPlusSelf();
     },
   });
+
+  /**
+   * 일정별 예산 예측 조회
+   */
+  const {data: budgetData, isSuccess} = useQuery({
+    queryKey: ['budget', scheduleId],
+    queryFn: () => moyeobang.getBudget(scheduleId!),
+    enabled: !!scheduleId,
+  });
+
+  // budgetData가 성공적으로 가져와졌을 때 travelSchedules 쿼리를 무효화
+  useEffect(() => {
+    if (isSuccess && budgetData) {
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ['travelSchedules', travelId],
+          refetchType: 'all',
+        });
+      }, 2000);
+    }
+  }, [isSuccess, budgetData, queryClient, travelId]);
 
   useEffect(() => {
     if (selectedMarker) {
