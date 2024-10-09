@@ -196,14 +196,13 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
 
   // 데이터 전송
   function handleSubmit() {
-    let postCurrentMoney= data.money;
 
     // 회원 아이디만 넣은 details
     const updatedDetail = updateDetails
     ?.filter(detail => detail.orderItemPrice>0)
     .map((detail) => {
         const memberIds = detail.participants.map((member) => member.memberId)
-        postCurrentMoney -= Math.floor(detail.orderItemPrice/memberIds.length)*(memberIds.length)
+
         return {
           ...detail,
           orderItemPrice:Math.floor(detail.orderItemPrice/memberIds.length),
