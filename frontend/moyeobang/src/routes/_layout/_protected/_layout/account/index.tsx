@@ -146,8 +146,8 @@ export default function AccountMain() {
     queryFn: () => moyeobang.getComsuptionStaticByMembers(Number(accountId)),
   });
 
-  console.log('소비카테고리', DataByCategory.data.data)
-  console.log('멤버별소비비율', DataByMembers.data.data)
+  // console.log('소비카테고리', DataByCategory.data.data)
+  // console.log('멤버별소비비율', DataByMembers.data.data)
   const sortedproportionDataByMembers = DataByMembers.data.data.sort((a,b) => {
     return Number(b.proportion)-Number(a.proportion)
   });

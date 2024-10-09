@@ -29,7 +29,7 @@ interface QRPayProps {
 }
 
 export default function PayModal({onXClick} : QRPayProps) {
-    const [ activeComponenet, setActiveComponent ] = useState<string>('left');
+    const [activeComponenet, setActiveComponent ] = useState<string>('left');
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [successTransactionId, setSuccessTransactionId] = useState<TransactionId | null>(null);
     
@@ -74,10 +74,16 @@ export default function PayModal({onXClick} : QRPayProps) {
         setopenScanFailModal(true); // scan실패 컴포넌트 오픈
     }
 
-    function handleRestart() {
+    function handleRestart(active:string) {
         setopenScanFailModal(false)
         setScanRestart(!scanRestart);
-        setActiveComponent('right')
+        setActiveComponent(active)
+    }
+
+    function handlePayError(errorName:string) {
+        console.log('121212',errorName);
+        setfailName(errorName);
+        setopenScanFailModal(true);
     }
 
     return (
@@ -100,20 +106,23 @@ export default function PayModal({onXClick} : QRPayProps) {
             rightText = {<><span>QR</span>&nbsp;인식</>}
             onLeftClick={handleLeft}
             onRightClick={handleRight}
+            defaultActive={activeComponenet==='left' ? 'left' : 'right'}
             />
             {activeComponenet==='left' ? 
             (
                 <QrPay 
                 onMessage={handleMessage}
+                onError={handlePayError}
                 isHome={isHome}
                 accountNumber={accountNumber}
+                restart={scanRestart}
                 />
             ) :
             (
                 <QRScan 
                 onMessage={handleMessage}
-                accountNumber={accountNumber}
                 onError={handleScanError}
+                accountNumber={accountNumber}
                 restart={scanRestart}
                 />  
             )

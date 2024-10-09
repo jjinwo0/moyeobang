@@ -55,16 +55,18 @@ function transformChart(data : (ConsumptionProportionByCategory[] | ConsumptionP
 
 interface HorizonBarGraphProps {
   data?: ConsumptionProportionByCategory[] | ConsumptionProportionByMember[];
+  isEmpty:boolean;
 }
 
 interface ChartDataProps {
   [key:string] : number | string;
 }
 
-export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
+export default function HorizonBarGraph({data = [], isEmpty}: HorizonBarGraphProps) {
 
   // 차트만들 데이터로 변환.
   const chartData :ChartDataProps[]  = transformChart(data)
+
 
   // 0인 순간 마지막 인덱스
   const keys = Object.keys(chartData[0]).filter((key) => key != 'name');
@@ -74,7 +76,7 @@ export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
   return (
     <div css={layoutStyle}> 
         <div css={titleStyle}>
-            {chartData.length===1 ? 
+            {isEmpty ? 
               '' :
               isConsumptionByMember(data[0]) 
               ? '멤버별 소비 비율(100%기준)' : 
@@ -82,7 +84,7 @@ export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
             }
         </div>
       <ResponsiveContainer css={RechartContainerStyle}> 
-       { chartData.length===1 ? 
+       {isEmpty ? 
         <div css={emptyChartStyle}>
           {'소비하면 그래프를 보여줄게요!'}
         </div>
