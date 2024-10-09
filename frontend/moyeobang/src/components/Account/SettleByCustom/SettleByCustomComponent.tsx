@@ -10,7 +10,7 @@ import {ko} from 'date-fns/locale';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
-import Confetti from "../Confetti/Confetti";
+import PresentMoneyModal from "../PresentMoneyModal/PresentMoneyModal";
 import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 export interface CustomSettle {
@@ -149,10 +149,12 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
             acceptedNumber: acceptedNumber,
         }
 
-        console.log('직접 정산 POST 데이터',spendData)
+        // console.log('직접 정산 POST 데이터',spendData)
         if (isUpdate) {
+            console.log('업데이트')
             updateCustom({transactionId, travelId,  data:spendData})
         } else {
+            console.log('처음 post')
             postCustom({transactionId, travelId,  data:spendData})
         }
         setIsOpenFinalModal(false);
@@ -236,8 +238,10 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
         }
     };
 
-    function handleClickOutside() {
-        setIsOpenFinalModal(false);
+    function handleClickOutside(canDectect:boolean) {
+        if (canDectect) {
+            setIsOpenFinalModal(false);
+        }
     }
 
     function handleClosePresentModal() {
@@ -246,7 +250,7 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
 
     return (
         <>
-        { isOpenPresentModal && <Confetti remainMoney={presentMoney} onClose={handleClosePresentModal}/>}
+        { isOpenPresentModal && <PresentMoneyModal remainMoney={presentMoney} onClose={handleClosePresentModal}/>}
         { isOpenFinalModal && 
             <FinalModal 
             onClickOutside={handleClickOutside} 
@@ -291,21 +295,21 @@ export default function SettleByCustomComponent({transactionId, totalMoney, paym
                     />
                 ))}
             </div>
-            <div css={nButtonStyle}>
-                남은 금액 1/N 해방
-                <button onClick={handleDivide}>1/N</button>
-            </div>
             <div css={buttonLayoutStyle}>
+                <div css={nButtonStyle}>
+                    남은 금액 1/N 해방
+                    <button onClick={handleDivide}>1/N</button>
+                </div>
                 { canSettle ? (
                     <Btn 
                     buttonStyle={{ size:'big', style:'blue'}}
                     onClick={handleConfirm}
-                    >{ isUpdate ? '수정 완료' : '정산하기'}
+                    >{ isUpdate ? '수정하기' : '정산하기'}
                     </Btn> 
                 ) : ( 
                     <Btn 
                     buttonStyle={{ size:'big', style:'gray'}}
-                    >{ isUpdate ? '수정 완료' : '정산하기'}
+                    >{ isUpdate ? '수정하기' : '정산하기'}
                     </Btn>
                 )
                 }

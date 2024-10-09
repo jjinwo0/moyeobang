@@ -30,14 +30,14 @@ export default function Settle() {
 
   const {transactionId} : {transactionId:TransactionId} = Route.useParams(); 
   const {history} = useRouter()
-  const {method} :{method:SplitMethod} = Route.useSearch();
+  const {method, isUpdate} :{method:SplitMethod, isUpdate:boolean} = Route.useSearch();
+  console.log('isUpdate', isUpdate)
   const {accountId} = useTravelDetailStore();
   
   const [activeComponent, setActiveComponent] = useState<'left' | 'right'>(
     method === 'custom' ? 'right' : 'left'
     );
   
-  const isUpdate : boolean = method==='custom'
   
   // 정산 내역 상세 조회 get API
   const {data} = useSuspenseQuery({
@@ -86,7 +86,7 @@ export default function Settle() {
               paymentName={transactionDetailData.paymentName}
               createdAt={transactionDetailData.createdAt}
               acceptedNumber={transactionDetailData.acceptedNumber}
-              isUpdate={isUpdate} // method있으면 수정 | 없으면 새로 생성
+              isUpdate={isUpdate} // true 수정 | false 새로 생성
             />
           }
           { activeComponent === 'right' &&
@@ -97,7 +97,7 @@ export default function Settle() {
               totalMoney={transactionDetailData.money}
               details={isSettledParticipantByCustom(transactionDetailData.details) ? transactionDetailData.details : []} 
               acceptedNumber={transactionDetailData.acceptedNumber}
-              isUpdate={isUpdate} // method있으면 수정 | 없으면 새로 생성
+              isUpdate={isUpdate} // true 수정 | false 새로 생성
             />
           }
         </div>

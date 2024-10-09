@@ -11,10 +11,11 @@ import addTravelPhoto from '@/assets/icons/addTravelPhoto.png';
 import searchImg from '@/assets/icons/Search.png';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useTravelLogContext} from '@/contexts/TravelLog';
-import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQueryClient, useQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import {useNavigate} from '@tanstack/react-router';
 import {fi} from 'date-fns/locale';
+import querykeys from '@/util/querykeys';
 
 export default function PlusSelf() {
   const {travelPlaceList, travelId} = useTravelDetailStore();
@@ -54,6 +55,7 @@ export default function PlusSelf() {
     useState<ScheduleLocation | null>(null);
   const [getSchedule, setGetSchedule] = useState<DaySchedule | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [scheduleId, setScheduleId] = useState<number | null>(null);
   const queryClient = useQueryClient();
 
   const handleAddImg = () => {
@@ -87,18 +89,27 @@ export default function PlusSelf() {
    * 일정 추가 mutation 선언
    */
   const {mutate: postTravelSchedule} = useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       travelId,
       scheduleData,
     }: {
       travelId: Id;
       scheduleData: FormData;
-    }) => moyeobang.postTravelSchedule(travelId, scheduleData),
-    onSuccess: async () => {
+    }) => {
+      return await moyeobang.postTravelSchedule(travelId, scheduleData);
+    },
+    onSuccess: async response => {
       await queryClient.invalidateQueries({
         queryKey: ['travelSchedules', travelId],
         refetchType: 'all',
       });
+
+      const responseScheduleId = response.data.data.scheduleId;
+      console.log('[*shedule]', response.data);
+      console.log('[*sheduleId]', responseScheduleId);
+      if (responseScheduleId) {
+        setScheduleId(responseScheduleId);
+      }
       resetForm();
       handleShowPlusSelf();
     },
@@ -121,14 +132,14 @@ export default function PlusSelf() {
       moyeobang.postChangeTravelSchedule(travelId, scheduleId, scheduleData),
     onSuccess: async () => {
       console.log('[*] 수정 성공');
-      setTimeout(async() => {
-      await queryClient.invalidateQueries({
-        queryKey: ['travelSchedules', travelId],
-        refetchType: 'all',
-      });
-      resetForm();
-      handleShowPlusSelf();
-      navigate({to: '/travelLog'});
+      setTimeout(async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ['travelSchedules', travelId],
+          refetchType: 'all',
+        });
+        resetForm();
+        handleShowPlusSelf();
+        navigate({to: '/travelLog'});
       }, 1000);
     },
   });
@@ -150,6 +161,37 @@ export default function PlusSelf() {
       handleShowPlusSelf();
     },
   });
+
+  /**
+   * 일정별 예산 예측 조회
+   */
+  const {
+    data: budgetData,
+    isSuccess,
+    refetch,
+  } = useQuery({
+    queryKey: ['budget', scheduleId],
+    queryFn: () => moyeobang.getBudget(scheduleId!),
+    refetchOnWindowFocus: false,
+    enabled: false, // 쿼리가 자동으로 실행되지 않도록 설정
+  });
+
+  useEffect(() => {
+    if (scheduleId) {
+      refetch();
+    }
+  }, [scheduleId]);
+  // budgetData가 성공적으로 가져와졌을 때 travelSchedules 쿼리를 무효화
+  useEffect(() => {
+    if (isSuccess && budgetData) {
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ['travelSchedules', travelId],
+          refetchType: 'all',
+        });
+      }, 2000);
+    }
+  }, [isSuccess, budgetData, queryClient, travelId]);
 
   useEffect(() => {
     if (selectedMarker) {
@@ -346,6 +388,14 @@ export default function PlusSelf() {
                 )}
               </div>
               <div css={PlusSelfStyle.inputImgWrapper}>
+                {selectedImage && (
+                  <button
+                    id="imgCancelBtn"
+                    onClick={() => setSelectedImage(null)}
+                  >
+                    이미지 취소
+                  </button>
+                )}
                 <input
                   type="text"
                   name=""
@@ -361,14 +411,6 @@ export default function PlusSelf() {
                   css={PlusSelfStyle.searchImgStyle}
                   onClick={handleShowMapSearch}
                 />
-                {selectedImage && (
-                  <button
-                    id="imgCancelBtn"
-                    onClick={() => setSelectedImage(null)}
-                  >
-                    이미지 취소
-                  </button>
-                )}
               </div>
             </div>
           </div>

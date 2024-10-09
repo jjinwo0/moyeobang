@@ -62,7 +62,7 @@ export const allButtonStyle = (isAll: boolean) => css`
     border-radius: 15px;
     border: solid 2px ${colors.fourth};
     color: ${ isAll ? colors.fourth : colors.white};
-
+    }
 `;
 
 export const allRefreshLayoutStyle = css`
@@ -72,9 +72,8 @@ export const allRefreshLayoutStyle = css`
 
 `;
 export const settleListLayoutStyle = css`
-    /* margin: 10px 0; */
     width:100%;
-    height: 450px;
+    height: 420px;
     display:flex;
     flex-direction: column;
     overflow-y: auto;
@@ -85,15 +84,18 @@ export const settleListLayoutStyle = css`
 `;
 
 export const buttonLayoutStyle = css`
-    padding-top:10px;
     width:100%;
+    position:fixed;
+    bottom:30px;
     display:flex;
     flex-direction: column;
+    gap:10px;
     justify-content:center;
     align-items:center;
 `;
 
 export const nButtonStyle = css`
+    width:100%;
     display: flex;
     flex-direction: row;
     justify-content: right;
@@ -102,8 +104,8 @@ export const nButtonStyle = css`
     font-family: 'medium';
     font-size: 20px;
     color: ${colors.third};
-    padding-right: 20px;
-    padding-top: 10px;
+    padding-right: 65px;
+    background-color:${colors.white};
 
     button {
         font-family: 'semibold';

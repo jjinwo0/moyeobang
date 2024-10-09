@@ -44,13 +44,14 @@ const buttonLayoutStyle=css`
 
 interface FailByReceiptProps {
     onClose: VoidFunction;
+    transactionId:TransactionId;
 }
-export default function FailByReceipt({onClose}:FailByReceiptProps) {
+export default function FailByReceipt({onClose, transactionId}:FailByReceiptProps) {
 
-    const navigate = useNavigate({from:'/account/$transactionId/settle'});
+    const navigate = useNavigate({from:`/account/${transactionId.toString()}/settle`});
 
     function handleRestart() {
-        navigate({to:'/account/$transactionId/settle'})
+        // 실패 모달만 닫아주면됨.
         onClose()
     }
 

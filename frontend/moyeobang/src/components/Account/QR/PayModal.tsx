@@ -29,12 +29,14 @@ interface QRPayProps {
 }
 
 export default function PayModal({onXClick} : QRPayProps) {
-    const [ activeComponenet, setActiveComponent ] = useState<string>('left');
+    const [activeComponenet, setActiveComponent ] = useState<string>('left');
     const [openCompleteModal, setOpenCompleteModal] = useState<boolean>(false);
     const [successTransactionId, setSuccessTransactionId] = useState<TransactionId | null>(null);
     
     const [openScanFailModal, setopenScanFailModal] = useState<boolean>(false);
     const [scanRestart, setScanRestart] = useState<boolean>(false);
+    const [failName, setfailName] = useState<string>('');
+
 
     const location = useLocation();
     const isHome = location.pathname ==='/'
@@ -63,19 +65,31 @@ export default function PayModal({onXClick} : QRPayProps) {
         onXClick();
     }
 
-    function handleScanError() {
+    function handleScanError(errorMessage:string) {
+        if (errorMessage==='여행 계좌에 잔액이 부족합니다.') {
+            setfailName('noBalance')
+        } else {
+            setfailName('scanError')
+        }
         setopenScanFailModal(true); // scan실패 컴포넌트 오픈
     }
 
-    function handleRestart() {
+    function handleRestart(active:string) {
         setopenScanFailModal(false)
-        setScanRestart(true);
-        setActiveComponent('right')
+        setScanRestart(!scanRestart);
+        setActiveComponent(active)
+    }
+
+    function handlePayError(errorMessage:string) {
+        if (errorMessage === 'Payment failed') {
+            setfailName('noBalance')
+            setopenScanFailModal(true);
+        }
     }
 
     return (
         <>
-        {openScanFailModal && <QrScanFailModal onClose={onXClick} onRestart={handleRestart}/>}
+        {openScanFailModal && <QrScanFailModal onClose={onXClick} onRestart={handleRestart} errorName={failName}/>}
         {openCompleteModal && successTransactionId &&
             <PayCompletedModal 
             isHome={isHome} 
@@ -93,20 +107,23 @@ export default function PayModal({onXClick} : QRPayProps) {
             rightText = {<><span>QR</span>&nbsp;인식</>}
             onLeftClick={handleLeft}
             onRightClick={handleRight}
+            defaultActive={activeComponenet==='left' ? 'left' : 'right'}
             />
             {activeComponenet==='left' ? 
             (
                 <QrPay 
                 onMessage={handleMessage}
+                onError={handlePayError}
                 isHome={isHome}
                 accountNumber={accountNumber}
+                isActive={activeComponenet==='left'}
                 />
             ) :
             (
                 <QRScan 
                 onMessage={handleMessage}
-                accountNumber={accountNumber}
                 onError={handleScanError}
+                accountNumber={accountNumber}
                 restart={scanRestart}
                 />  
             )

@@ -82,7 +82,7 @@ const bangbangStyle=css`
     
 `;
 
-export default function Confetti({remainMoney, onClose} : ConfettiProps) {
+export default function PresentMoneyModal({remainMoney, onClose} : ConfettiProps) {
 
     const jsConfetti = new JSConfetti();
 

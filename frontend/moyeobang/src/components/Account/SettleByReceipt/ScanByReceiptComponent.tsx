@@ -31,7 +31,7 @@ const cameraStyle = css`
     // 웹캠
     video {
         width:390px;
-        height:600px;
+        height:550px;
         object-fit: cover;
         z-index:1;
     }
@@ -193,6 +193,8 @@ export default function ScanByReceiptComponent({transactionId, money, paymentNam
                     setIsLoading(false);
                     setOpenResultModal(true);
                 }
+            } else {
+                setError('영수증 인식 오류 발생')
             }
 
         } catch (error) {
@@ -248,7 +250,7 @@ export default function ScanByReceiptComponent({transactionId, money, paymentNam
                 </div>
             </>
         )}
-        {error && <FailByReceipt onClose={handleFailClose} />}
+        {error && <FailByReceipt onClose={handleFailClose} transactionId={transactionId}/>}
         </div>
     )
 }

@@ -67,7 +67,7 @@ const middleContainerStyle=css`
   box-sizing:border-box;
   width:100%;
   max-width: 100%;
-  height:515px;
+  height:480px;
   gap:20px;
   overflow-y:auto;
   padding-bottom: 20px;
@@ -196,12 +196,14 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
 
   // 데이터 전송
   function handleSubmit() {
+    let postCurrentMoney= data.money;
 
     // 회원 아이디만 넣은 details
     const updatedDetail = updateDetails
     ?.filter(detail => detail.orderItemPrice>0)
     .map((detail) => {
         const memberIds = detail.participants.map((member) => member.memberId)
+        postCurrentMoney -= Math.floor(detail.orderItemPrice/memberIds.length)*(memberIds.length)
         return {
           ...detail,
           orderItemPrice:Math.floor(detail.orderItemPrice/memberIds.length),
@@ -220,6 +222,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
       splitMethod:'receipt',
     }
 
+    
     if ( isUpdate ) {
       updateSettleByReceipt({transactionId: data.transactionId, travelId:travelId, data : updatedReceipt})
     } else {
@@ -239,23 +242,34 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
 
   // 초기 데이터 설정
   useEffect(()=>{
-    let totalMoney = data.money;
-    
-    const updateDetails = data.details.map((detail) => {
 
-      if (totalMoney >= detail.orderItemPrice) {
-        totalMoney -= detail.orderItemPrice;
-        return detail;
-      } else {
-        // 영수증 금액이 남은 금액 넘는 순간 나머지 0처리
-        const remainMoney = totalMoney;
-        totalMoney = 0;
-        return {...detail, orderItemPrice:remainMoney}
-      }
-    });
-    setUpdateDetails(updateDetails) // 총금액에 맡게 금액 조정
-    setRemainMoney(totalMoney) // 남은 금액
-  }, [data])
+    if (!isUpdate) {
+      // 영수증 인식 후 데이터 
+      let totalMoney = data.money;
+      
+      const updateDetails = data.details.map((detail) => {
+  
+        if (totalMoney >= detail.orderItemPrice) {
+          totalMoney -= detail.orderItemPrice;
+          return detail;
+        } else {
+          // 영수증 금액이 남은 금액 넘는 순간 나머지 0처리
+          const remainMoney = totalMoney;
+          totalMoney = 0;
+          return {...detail, orderItemPrice:remainMoney}
+        }
+      });
+      setUpdateDetails(updateDetails) 
+      setRemainMoney(totalMoney) 
+    } else {
+      // 업데이트일때 십의자리까지 반올림
+      const updateDetails = data.details.map((detail) => {
+        return {...detail, orderItemPrice:Math.ceil(detail.orderItemPrice/10)*10};
+      })
+      setUpdateDetails(updateDetails);
+      setRemainMoney(0);
+    }
+  }, [data, isUpdate])
 
   return (
     <div css={layoutStyle}>
@@ -287,7 +301,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
           ))}
        </div>
       <div css={buttonContainerStyle}>
-        <Link to={`/account/${data.transactionId}/settle`} search={{ method: isUpdate ? 'custom' : '' }} css={linkStyle}>
+        <Link to={`/account/${data.transactionId}/settle`} search={{ method:'receipt', isUpdate:true }} css={linkStyle}>
           <Btn buttonStyle={{size:'big', style:'greenBlue'}} onClick={handleRestart}>영수증 다시 찍기</Btn>
         </Link>
         { isUpdate ? 

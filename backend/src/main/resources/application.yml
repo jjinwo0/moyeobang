@@ -21,6 +21,9 @@ spring:
       host: 127.0.0.1
       port: 6379
 
+  elasticsearch:
+    uris: localhost:9200
+
 cloud:
   aws:
     credentials:
@@ -91,6 +94,9 @@ spring:
     url: jdbc:mysql://j11c102.p.ssafy.io:3306/moyeobang?serverTimezone=UTC&characterEncoding=UTF-8
     username: c102
     password: 123456789
+
+  elasticsearch:
+    uris: http://j11c102.p.ssafy.io:9200
 
   jpa:
     hibernate:

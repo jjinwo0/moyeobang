@@ -19,37 +19,37 @@ export default function ProfileImage({
         } : ProfileImageProps ) {
 
     const profileContainerStyle = (px:number) => css`
-    flex-shrink: 0;
-    display: flex;
-    text-align:center;
-    align-items:center;
-    justify-content:center;
-    width: ${px}px;
-    height: ${px}px;
-    padding: 3px;
-    box-sizing: border-box;
-    border-radius: 50%;
-    background-color : ${isSelected ? colors.fourth : colors.white };
+        flex-shrink: 0;
+        display: flex;
+        text-align:center;
+        align-items:center;
+        justify-content:center;
+        width: ${px}px;
+        height: ${px}px;
+        padding: 3px;
+        box-sizing: border-box;
+        border-radius: 50%;
+        background-color : ${isSelected ? colors.fourth : colors.white };
      `;
 
     const profileStyle = css`
-    font-family: 'semiBold';
-    font-size: 24px;;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    color: blue;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 3px solid white;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
-    object-fit: cover;         
-    object-position: center;
+        font-family: 'semiBold';
+        font-size: 24px;;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        color: blue;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-sizing: border-box;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+        object-fit: cover;         
+        object-position: center;
     `; 
 
 

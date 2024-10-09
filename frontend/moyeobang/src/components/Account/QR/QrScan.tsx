@@ -4,6 +4,7 @@ import { css } from "@emotion/react"
 import { colors } from "@/styles/colors";
 import { useMutation } from "@tanstack/react-query";
 import moyeobang from "@/services/moyeobang";
+import { AxiosError } from "axios";
 
 const storeData = [
     {
@@ -35,7 +36,7 @@ const qrReaderLayoutStyle = css`
     position : relative; 
     video { 
     width : 100% ; 
-    height : 600px; 
+    height : 550px; 
     object-fit : cover; 
     } 
 `;
@@ -76,7 +77,7 @@ const textBoxStyle= css`
 
 interface QrScanProps {
     onMessage: (trasactionId:TransactionId) => void;
-    onError: VoidFunction;
+    onError: (errorMessage:string) => void;
     restart:boolean
     accountNumber:SourceAccountNumber;
 }
@@ -94,8 +95,13 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
             onMessage(Number(response.data.data.transactionId))
             console.log('온라인 결제 성공!')
         },
-        onError: () => {
-            onError()
+        onError: (error) => {
+            if (error instanceof AxiosError) {
+
+                onError(error.response?.data?.error?.message)
+            } else {
+                onError('온라인 결제 실패')
+            }
         }
     });
 
@@ -122,7 +128,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
             
         } catch (error) {
             console.log('QR스캔 오류 발생', error)
-            onError();
+            onError('QR스캔 오류 발생');
         }
     }
 
@@ -134,16 +140,16 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
 
         const initScanner = () => {
             if (videoElement.current) {
-                console.log('비디오 확인', videoElement.current)
+                
                 scanner.current = new QrScanner( 
                     videoElement?.current,
                     onScanSuccuess,
                     {
                         onDecodeError : onScanFail,
                         preferredCamera : "environment", // 후면지향
-                        maxScansPerSecond:3, // 1초당 2번
+                        maxScansPerSecond:3, // 1초당 3번
                         highlightScanRegion : true, // ? 알아보기
-                        highlightCodeOutline : true, // QR주변 윤곽선 생성
+                        // highlightCodeOutline : true, // QR주변 윤곽선 생성
                         overlay : qrBoxElement?.current || undefined,
                     }
                 );
@@ -155,7 +161,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
                 )
                 .catch((error : Error) => {
                     if (error) {
-                        onError()
+                        onError('QR 스캔 실패')
                         setQrOn(false);
                     }
                 });
@@ -167,7 +173,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
         // 언마운트시
         return () => {
             if (scanner.current) {
-                console.log('언마운트냐')
+                
                 scanner.current.destroy(); //스캐너 완전히 해제
             }
         }

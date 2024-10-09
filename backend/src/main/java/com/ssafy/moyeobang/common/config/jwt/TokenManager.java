@@ -5,9 +5,12 @@ import com.ssafy.moyeobang.common.config.jwt.dto.TokenDetail;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.Role;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -81,20 +84,28 @@ public class TokenManager {
     // JWT 토큰 유효성 검증메서드
     public boolean validToken(String token) {
         try {
-
-            log.info("validate token password: {}", jwtProperties.getSecret());
+            // "Bearer " 접두사 제거
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);  // "Bearer " 부분을 제거
+            }
 
             Jwts.parser()
-                    .setSigningKey(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8)) // 서명 검증
-                    .parseClaimsJws(token); // 클레임이란 받아온 정보(토큰)를 jwt 페이로드에 넣는 것이다.
-
-            log.info("secret key: {}", jwtProperties.getSecret());
+                    .setSigningKey(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8))  // 서명 검증
+                    .parseClaimsJws(token);  // 유효성 검사 및 서명 검증
 
             return true;
+        } catch (ExpiredJwtException e) {
+            log.info("Token has expired: {}", e.getMessage());
+        } catch (SignatureException e) {
+            log.info("Invalid JWT signature: {}", e.getMessage());
+        } catch (MalformedJwtException e) {
+            log.info("Invalid JWT token format: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.info("JWT token is empty or has invalid arguments: {}", e.getMessage());
         } catch (Exception e) {
-            log.info("failed to validate token: {}", e.getMessage());
-            return false;
+            log.info("Failed to validate token: {}", e.getMessage());
         }
+        return false;
     }
 
     public Authentication getAuthentication(String token) {
@@ -122,9 +133,17 @@ public class TokenManager {
 
     // 토큰을 분석하면서 claims을 빼낸다.
     public Claims getClaims(String token) {
+        // "Bearer " 접두사 제거
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);  // "Bearer " 부분을 제거
+        }
+
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);  // "Bearer " 부분을 제거
+        }
 
         return Jwts.parser()
-                .setSigningKey(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8)) // 서명 검증
+                .setSigningKey(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8))  // 서명 검증
                 .parseClaimsJws(token)
                 .getBody();
     }

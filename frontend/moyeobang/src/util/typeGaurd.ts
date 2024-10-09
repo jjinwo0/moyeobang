@@ -13,7 +13,7 @@ export function isConsumptionByMember(
     consumptionData: ConsumptionProportionByCategory | ConsumptionProportionByMember
     ): consumptionData is ConsumptionProportionByMember {
 
-    return (consumptionData as ConsumptionProportionByMember).participantInfo !== undefined;
+    return consumptionData && (consumptionData as ConsumptionProportionByMember).participantInfo !== undefined;
 }
 
 // 정산 상세 조회 details타입 확인 직접 정산 vs 영수증정산

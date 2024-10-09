@@ -9,6 +9,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
 import {useConnectAccountContext} from '@/contexts/ConnectAccount';
 import {useRouter} from '@tanstack/react-router';
+import useMyInfo from '@/store/useMyInfoStore';
 
 // 스타일 정의
 
@@ -117,6 +118,9 @@ export default function AuthVerification({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false); // 인증 상태 추가
 
+  const {memberId} = useMyInfo();
+  // const memberId = 4;
+
   const {connectAccountNumber} = useConnectAccountContext();
 
   // 체크박스 클릭 시 이미지 토글
@@ -218,7 +222,7 @@ export default function AuthVerification({
     }
   };
 
-  const memberId: number = 4;
+  // const memberId: number = 4;
 
   const handleConnect = () => {
     // console.log('계좌번호!!', connectAccountNumber);

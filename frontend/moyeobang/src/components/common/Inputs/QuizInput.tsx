@@ -10,6 +10,7 @@ type QuizInputProps = InputHTMLAttributes<HTMLInputElement> & {
 const containerStyle = css`
   box-sizing: border-box;
   width: 326px;
+  max-width: 326px;
   display: flex;
   flex-direction: column; /* Stack elements vertically */
   /* margin-right: 10px; */
@@ -50,7 +51,11 @@ const quizInputStyle = css`
   }
 `;
 
-export default function QuizInput({customTitle, label, ...props}: QuizInputProps) {
+export default function QuizInput({
+  customTitle,
+  label,
+  ...props
+}: QuizInputProps) {
   return (
     <div css={containerStyle}>
       {/* Render the title only if it's provided */}

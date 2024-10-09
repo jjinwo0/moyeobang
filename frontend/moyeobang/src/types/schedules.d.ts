@@ -106,3 +106,17 @@ interface PostTravelSchedule {
 interface GetTravelSchedules {
   schedules: Schedules[];
 }
+
+/**
+ * 일정별 예측 예산 조회 response
+ */
+interface ResponseGetBudget {
+  predicted_budget: number;
+}
+
+/**
+ * 여행 일정 생성 post response
+ */
+interface ResponsePostTravelSchedule {
+  scheduleId: number;
+}

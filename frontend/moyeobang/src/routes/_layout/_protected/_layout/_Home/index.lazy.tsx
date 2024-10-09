@@ -17,8 +17,10 @@ import moyeobang from '@/services/moyeobang';
 import AllowNotification from '@/components/notification/AllowNotification';
 import useCurrentTravelStore from '@/store/useCurrentTravelStore';
 import useFcmTStore from '@/store/useFcmStore';
+import useMyInfo from '@/store/useMyInfoStore';
+import {includes} from 'lodash';
 
-const memberName: MemberName = '진우바오';
+// const memberName: MemberName = '진우바오';
 
 const memberData: Member = {
   memberId: 1,
@@ -42,7 +44,7 @@ const containerListStyle = (hasCurrentTrips: boolean) => css`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: ${hasCurrentTrips ? '320px' : 'calc(100vh - 200px)'};
+  height: ${hasCurrentTrips ? '320px' : 'calc(100vh - 320px)'};
   overflow-y: auto;
   // margin-top: 20px;
   // padding-top: 10px;
@@ -131,7 +133,7 @@ const plusStyle = css`
 `;
 
 //[todo] 멤버 아이디 주스탄드에서 꺼내오기!!!
-const memberId: number = 4;
+// const memberId: number = 4;
 
 function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
@@ -142,12 +144,7 @@ function Index() {
     useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
 
-  // //[todo] get으로 여행 목록 전체 조회하기
-  // const {data: travelData} = useSuspenseQuery({
-  //   queryKey: [querykeys.TRAVELLIST],
-  //   //memberId는 쥬스탄드에서 꺼내쓰기!
-  //   queryFn: () => moyeobang.getTravelList(4), // [*todo]일단은 4번 회원 데이터 조회
-  // });
+  const {memberId, memberName, profileImage} = useMyInfo();
 
   const {data: travelData} = useSuspenseQuery({
     queryKey: ['travelList', memberId],
@@ -158,7 +155,7 @@ function Index() {
   });
   const data = travelData?.data.data;
 
-  console.log(data);
+  // console.log(data);
 
   // 날짜에서 시간 부분을 제거하는 함수
   const normalizeDate = (date: Date) => {
@@ -261,7 +258,15 @@ function Index() {
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
         </div>
-        <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
+        <img
+          src={
+            !profileImage || profileImage.includes('default_profile')
+              ? bangbang
+              : profileImage
+          }
+          css={profileImageStyle}
+          onClick={goSettingPage}
+        />
       </div>
 
       {pushNotification && <AllowNotification onClose={closePush} />}
