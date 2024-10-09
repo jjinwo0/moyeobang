@@ -24,11 +24,11 @@ function AllowNoti() {
     }
   }, [isfcmToken, accountId, navigate]);
 
-  // isfcmToken이 false일 경우 AllowNotification 컴포넌트 렌더링
-  if (!isfcmToken) {
-    return <AllowNotification />;
-  }
+  // // isfcmToken이 false일 경우 AllowNotification 컴포넌트 렌더링
+  // if (!isfcmToken) {
+  //   return <AllowNotification onClose={}/>;
+  // }
 
-  // isfcmToken이 true지만 accountId가 없을 경우 다른 로직을 추가할 수 있음
-  return <AllowNotification />;
+  // // isfcmToken이 true지만 accountId가 없을 경우 다른 로직을 추가할 수 있음
+  // return <AllowNotification />;
 }

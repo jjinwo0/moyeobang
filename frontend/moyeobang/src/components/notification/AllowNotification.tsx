@@ -55,7 +55,11 @@ const buttonContainerStyle = css`
   width: 100%;
 `;
 
-export default function AllowNotification() {
+interface AllowNotificationProps {
+  onClose: () => void;
+}
+
+export default function AllowNotification({onClose}: AllowNotificationProps) {
   // const handleAllowClick = async () => {
   //   // 서비스 워커가 준비된 후에 권한 요청 및 FCM 토큰 생성
   //   if (navigator.serviceWorker) {
