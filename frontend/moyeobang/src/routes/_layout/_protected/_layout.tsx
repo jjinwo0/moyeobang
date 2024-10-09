@@ -3,10 +3,10 @@ import HeaderWithAlarmAndQR from '@/components/common/Header/HeaderWithAlarmAndQ
 import React from 'react';
 import {css} from '@emotion/react';
 import {useState} from 'react';
-import PayModal from '@/components/Account/PayModal/PayModal';
+import PayModal from '@/components/Account/QR/PayModal';
 import NotificationModal from '@/components/notification/NotificationModal';
 import useCurrentTravelStore from '@/store/useCurrentTravelStore';
-import NotTravelModal from '@/components/Account/PayModal/NotTravelModal';
+import NotTravelModal from '@/components/Account/QR/NotTravelModal';
 
 export const Route = createFileRoute('/_layout/_protected/_layout')({
   component: Header,

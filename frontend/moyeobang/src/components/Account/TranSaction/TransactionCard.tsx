@@ -29,7 +29,7 @@ export default function TransactionCard({
     return(
         <Link 
         to={transactionType==='입금' ? undefined : `/account/${transactionId}/detail`}
-        search={{noShow:true}}
+        search={{fromMain:true}}
         css={layoutStyle}>
             <div css={upContainerStyle}>
                 <div css={textContainerStyle} >
