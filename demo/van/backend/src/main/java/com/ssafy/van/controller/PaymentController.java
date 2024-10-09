@@ -29,6 +29,10 @@ public class PaymentController {
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(mainServiceUrl, paymentRequest, String.class);
             ApiResult responseData = objectMapper.readValue(response.getBody(), ApiResult.class);
+            log.info("Response body received from main service: {}", response.getBody());
+            if ("SUCCESS".equals(responseData.getStatus()) && Boolean.FALSE.equals(responseData.getData())) {
+                throw new IllegalStateException("Payment confirmation failed.");
+            }
             ApiResult apiResult = new ApiResult("SUCCESS", responseData, null);
             return ResponseEntity.ok(apiResult);
         } catch (Exception e) {
