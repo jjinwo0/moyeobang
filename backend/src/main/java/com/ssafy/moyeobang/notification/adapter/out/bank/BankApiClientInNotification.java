@@ -23,7 +23,7 @@ public class BankApiClientInNotification {
 
         return post("/demandDeposit/inquireTransactionHistory", request)
                 .path("REC")
-                .path("transactionMemo")
+                .path("transactionSummary")
                 .asText();
     }
 }
