@@ -7,6 +7,7 @@ import com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import com.ssafy.moyeobang.payment.adapter.out.bank.BankApiClientInPayment;
+import com.ssafy.moyeobang.payment.adapter.out.persistence.paymentHistory.PaymentHistoryRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.travelaccount.TravelAccountRepositoryInPayment;
 import com.ssafy.moyeobang.payment.adapter.out.persistence.withdraw.WithdrawRepositoryInPayment;
 import com.ssafy.moyeobang.payment.application.domain.Money;
@@ -18,6 +19,7 @@ import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import com.ssafy.moyeobang.payment.application.port.out.ProcessPaymentPort;
 import com.ssafy.moyeobang.payment.error.ErrorCode;
 import com.ssafy.moyeobang.payment.error.PaymentException;
+import java.util.HashMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
 
     private final TravelAccountRepositoryInPayment travelAccountRepository;
     private final WithdrawRepositoryInPayment withdrawRepository;
+    private final PaymentHistoryRepositoryInPayment paymentHistoryRepository;
 
     @Override
     public String createAccount(String memberKey) {
@@ -81,6 +84,23 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
         WithdrawJpaEntity withdraw = createPaymentWithdraw(travelAccountEntity, store,
                 Money.subtract(travelAccount.getBalance(), paymentRequestMoney).getAmount(), paymentRequestMoney,
                 paymentRequestId, store.getStoreAccountNumber(), store.getTag());
+
+        List<Member> members = memberTravels.stream()
+                .map(memberTravel -> new Member(
+                        memberTravel.getMember().getGender().name(),
+                        memberTravel.getMember().getAge()))
+                .toList();
+
+        PaymentHistory paymentHistory = new PaymentHistory(
+                null,
+                members,
+                (long) members.size(),
+                paymentRequestMoney.getAmount(),
+                new HashMap<>(),
+                store.getStoreName()
+        );
+
+        paymentHistoryRepository.save(paymentHistory);
 
         WithdrawJpaEntity savedWithdraw = withdrawRepository.save(withdraw);
         log.info("ProcessPayment Saved withdraw: {}", savedWithdraw);
