@@ -16,19 +16,6 @@ interface MyInfoState {
   setAccountId: (accountId: Id) => void;
 }
 
-const localStoragePersist: PersistStorage<MyInfoState> = {
-  getItem: name => {
-    const storedValue = localStorage.getItem(name);
-    return storedValue ? JSON.parse(storedValue) : null;
-  },
-  setItem: (name, value) => {
-    localStorage.setItem(name, JSON.stringify(value));
-  },
-  removeItem: name => {
-    localStorage.removeItem(name);
-  },
-};
-
 const useMyInfo = create<MyInfoState>()(
   persist(
     set => ({
@@ -47,7 +34,6 @@ const useMyInfo = create<MyInfoState>()(
     }),
     {
       name: 'myInfo',
-      storage: localStoragePersist,
     }
   )
 );

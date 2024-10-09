@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @WebAdapter
 @RestController
 @RequiredArgsConstructor
-public class GetAccountMemberController {
+public class GetAccountMemberBalanceController {
 
     private final GetAccountMemberBalanceQuery getAccountMemberBalanceQuery;
 

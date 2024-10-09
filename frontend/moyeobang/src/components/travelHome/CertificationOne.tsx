@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from '@emotion/react';
 import LineInput from '../common/Inputs/LineInput';
 import Btn from '../common/btn/Btn';
@@ -77,11 +77,15 @@ export default function CertificationOne({
   const [isCertificationVisible, setCertificationVisible] =
     useState<boolean>(false);
   const [checkButton, setCheckButton] = useState<boolean>(false);
-  const [accountNumber, setAccountNumber] = useState<string>(''); // 계좌번호 상태 추가
+  // const [accountNumber, setAccountNumber] = useState<string>(''); // 계좌번호 상태 추가
   const [verifyNumber, setVerifyNumber] = useState<string>(''); // 인증번호 상태 추가
   const [randomVerifyNumber, setRandomVerifyNumber] = useState<string>(''); // 랜덤한 인증번호 상태 추가
   const [notificationKey, setNotificationKey] = useState<string>(''); // 1원입금 인증번호
   const {setConnectAccountNumber} = useConnectAccountContext();
+  const {memberId, accountNumber: storedAccountNumber} = useMyInfo(); // Zustand에서 accountNumber 가져오기
+  const [accountNumber, setAccountNumber] = useState<string>(
+    storedAccountNumber || ''
+  ); // 초기 값 설정
 
   // 랜덤한 인증번호 생성 함수
   const generateRandomVerifyNumber = () => {
@@ -91,17 +95,16 @@ export default function CertificationOne({
 
   //[todo]!주스탄드에서 멤버ID 가져오기!
   // const memberId: number = 4;
-  const {memberId} = useMyInfo();
 
   const handleVerify = () => {
     if (accountNumber.length > 0) {
       // 계좌번호가 입력되어 있을 때만 실행
-      // postDepositAccountOne({accountNumber, bankName: '싸피뱅크', memberId});
-      //[todo] 지금은 여기에 있는데 추후에 바꿔야함
-      setRandomVerifyNumber(generateRandomVerifyNumber()); // 랜덤한 인증번호 생성 후 상태 업데이트
-      setTimeout(() => {
-        setCertificationVisible(true); // 1.5초 후에 상태 변경
-      }, 1500);
+      postDepositAccountOne({accountNumber, bankName: '싸피뱅크', memberId});
+      // //[todo] 지금은 여기에 있는데 추후에 바꿔야함
+      // setRandomVerifyNumber(generateRandomVerifyNumber()); // 랜덤한 인증번호 생성 후 상태 업데이트
+      // setTimeout(() => {
+      //   setCertificationVisible(true); // 1.5초 후에 상태 변경
+      // }, 1500);
       setCheckButton(true);
       setConnectAccountNumber(accountNumber);
     } else {
@@ -129,11 +132,11 @@ export default function CertificationOne({
 
   const handleCertification = () => {
     // //[todo] 1원 입금 확인 api 연결
-    // postDepositAccountOneConfirm({accountNumber, authCode: verifyNumber});
+    postDepositAccountOneConfirm({accountNumber, authCode: verifyNumber});
     console.log('verifyNumber', verifyNumber);
 
-    // if (verifyNumber === notificationKey) {
-    if (verifyNumber === randomVerifyNumber) {
+    if (verifyNumber === notificationKey) {
+      // if (verifyNumber === randomVerifyNumber) {
       alert('인증에 성공하였습니다.');
       onVerify(); // 부모에게 인증 완료 알리기
     } else {
@@ -155,19 +158,28 @@ export default function CertificationOne({
         accountNumber,
         bankName
       );
+      console.log('[*처음response]', response);
       return response.data.data;
     },
     onSuccess: async response => {
-      const transactionId = response.transactionId;
+      console.log('[*response]', response);
+      console.log('[*]1원입금 성공');
+      const transactionId = response;
+      console.log('[*]transactionId', transactionId);
       if (transactionId) {
+        console.log(111111);
         const notificationResponse = await moyeobang.postVerifyNotification(
           memberId,
-          transactionId
+          Number(transactionId)
         );
         setNotificationKey(notificationResponse.data.data.key);
       }
     },
   });
+
+  useEffect(() => {
+    console.log('[*notificationkey]', notificationKey);
+  }, [notificationKey]);
 
   return (
     <>

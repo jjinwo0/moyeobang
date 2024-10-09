@@ -2,9 +2,10 @@ import React from 'react';
 import {css} from '@emotion/react';
 import Btn from '../common/btn/Btn';
 import {colors} from '@/styles/colors';
-import {requestPermissionAndSaveToken} from '@/services/notificationService';
+import requestPermissionAndSaveToken from '@/services/notificationService';
 import useFcmStore from '@/store/useFcmStore';
 import {useRouter} from '@tanstack/react-router';
+import useMyInfo from '@/store/useMyInfoStore';
 
 const modalOverlayStyle = css`
   position: fixed;
@@ -54,7 +55,11 @@ const buttonContainerStyle = css`
   width: 100%;
 `;
 
-export default function AllowNotification() {
+interface AllowNotificationProps {
+  onClose: () => void;
+}
+
+export default function AllowNotification({onClose}: AllowNotificationProps) {
   // const handleAllowClick = async () => {
   //   // 서비스 워커가 준비된 후에 권한 요청 및 FCM 토큰 생성
   //   if (navigator.serviceWorker) {
@@ -68,12 +73,15 @@ export default function AllowNotification() {
   // };
   const router = useRouter();
   const {setIsFcmToken} = useFcmStore();
+  const {memberId} = useMyInfo();
   const handleAllowClick = async () => {
     // console.log('승인');
     try {
       // "승인" 버튼 클릭 시 푸시 알림 권한을 요청하고 FCM 토큰을 받아옴
-      await requestPermissionAndSaveToken(setIsFcmToken);
-      router.navigate({to: '/accountConnect'});
+      console.log(memberId);
+      await requestPermissionAndSaveToken(setIsFcmToken, memberId);
+      // router.navigate({to: '/accountConnect'});
+      onClose();
       console.log('Notification permission granted and token saved.');
     } catch (error) {
       console.error('Error requesting permission or saving token:', error);

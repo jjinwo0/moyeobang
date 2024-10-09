@@ -50,8 +50,7 @@ interface CreateTravelProps {
 }
 
 //[todo] 로그인 후 회원 아이디 받아오기
-const memberId = 4;
-// const {memberId} = useMyInfo();
+// const memberId = 4;
 
 const colseButtonStyle = css`
   color: red;
@@ -68,6 +67,8 @@ export default function CreateTravel({
   isEditMode = false, // 기본값은 false로 설정 (생성 모드)
   initialData = {}, // 기본값을 빈 객체로 설정하여 생성 모드에서 문제가 없도록 처리
 }: CreateTravelProps) {
+const {memberId} = useMyInfo();
+
   const {closeModal} = useModalStore();
   const [cityInput, setCityInput] = useState<string>(''); // 선택된 도시 이름
   const [isMapSearchVisible, setMapSearchVisible] = useState<boolean>(false); // MapSearch 표시 여부
@@ -100,6 +101,7 @@ export default function CreateTravel({
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState<FormData>(new FormData());
+
 
   // 수정과 생성을 구분하여 처리
   const handleNextClick = async () => {

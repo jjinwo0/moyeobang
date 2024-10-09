@@ -30,11 +30,11 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(messaging, payload => {
-  console.log(payload.notification); // 푸시알림 콘솔 확인용
-  const notificationTitle = payload.notification.title;
+  console.log(payload.data); // 푸시알림 콘솔 확인용
+  const notificationTitle = payload.data.title;
   const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon,
+    body: payload.data.content,
+    icon: payload.data.icon,
     data: {
       url: payload.fcmOptions.link, // 알림 클릭시 이동할 URL
     },
@@ -70,52 +70,52 @@ self.addEventListener('fetch', event => {
   event.respondWith(fetch(event.request));
 });
 
-self.addEventListener('push', function (event) {
-  let data;
+// self.addEventListener('push', function (event) {
+//   let data;
 
-  try {
-    // JSON 형식으로 파싱 시도
-    data = event.data.json();
-    console.log('JSON으로 파싱된 데이터:', data);
-  } catch (error) {
-    console.warn(
-      '푸시 데이터가 문자열 형식으로 수신되었습니다. 문자열을 JSON으로 파싱합니다.'
-    );
-    try {
-      // 문자열로 수신된 경우 수동으로 JSON 파싱
-      data = JSON.parse(event.data.text());
-      console.log('수동으로 파싱된 데이터:', data);
-    } catch (parseError) {
-      console.error('푸시 데이터 파싱 오류:', parseError);
-      return; // 파싱 실패 시 종료
-    }
-  }
+//   try {
+//     // JSON 형식으로 파싱 시도
+//     data = event.data.json();
+//     console.log('JSON으로 파싱된 데이터:', data);
+//   } catch (error) {
+//     console.warn(
+//       '푸시 데이터가 문자열 형식으로 수신되었습니다. 문자열을 JSON으로 파싱합니다.'
+//     );
+//     try {
+//       // 문자열로 수신된 경우 수동으로 JSON 파싱
+//       data = JSON.parse(event.data.text());
+//       console.log('수동으로 파싱된 데이터:', data);
+//     } catch (parseError) {
+//       console.error('푸시 데이터 파싱 오류:', parseError);
+//       return; // 파싱 실패 시 종료
+//     }
+//   }
 
-  // 데이터가 객체인지 확인
-  if (typeof data !== 'object') {
-    console.error('푸시 데이터가 객체가 아닙니다:', data);
-    return;
-  }
+//   // 데이터가 객체인지 확인
+//   if (typeof data !== 'object') {
+//     console.error('푸시 데이터가 객체가 아닙니다:', data);
+//     return;
+//   }
 
-  const title = data.title || '기본 타이틀';
-  const options = {
-    body: data.body || '기본 메시지 내용입니다.',
-    icon: data.icon || '/default-icon.png',
-    data: {
-      url: data.url || '/', // URL이 없다면 기본값 설정
-    },
-  };
+//   const title = data.title || '기본 타이틀';
+//   const options = {
+//     body: data.body || '기본 메시지 내용입니다.',
+//     icon: data.icon || '/default-icon.png',
+//     data: {
+//       url: data.url || '/', // URL이 없다면 기본값 설정
+//     },
+//   };
 
-  console.log('알림 제목:', title);
-  console.log('알림 옵션:', options);
+//   console.log('알림 제목:', title);
+//   console.log('알림 옵션:', options);
 
-  // 알림 표시
-  try {
-    event.waitUntil(self.registration.showNotification(title, options));
-  } catch (notificationError) {
-    console.error('알림 표시 오류:', notificationError);
-  }
-});
+//   // 알림 표시
+//   try {
+//     event.waitUntil(self.registration.showNotification(title, options));
+//   } catch (notificationError) {
+//     console.error('알림 표시 오류:', notificationError);
+//   }
+// });
 
 // 알림 클릭 시 이벤트 처리
 self.addEventListener('notificationclick', event => {
