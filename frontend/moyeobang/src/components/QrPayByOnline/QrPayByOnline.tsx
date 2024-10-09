@@ -7,6 +7,7 @@ import { colors } from "@/styles/colors";
 import { useState } from "react";
 import { useEffect } from "react";
 import { EventSourcePolyfill } from "event-source-polyfill";
+import { getCookie } from "@/util/cookie";
 
 const qrContainerStyle=css`
     border-radius:5px;
@@ -58,19 +59,19 @@ interface QrPayByOnlineProps {
 
 export default function QrPayByOnline({qrData, onClickOutside} : QrPayByOnlineProps) {
 
-    console.log('QR 데이터 확인', qrData)
+    // console.log('QR 데이터 확인', qrData)
 
     const modalRef = useRef<HTMLDivElement>(null)
     useOnClickOutside(modalRef, onClickOutside)
 
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
-
+    const token = getCookie('accessToken');
 
     const fetchSEE = () => {
         const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/pg/payment/connect?paymentRequestId=${qrData.paymentRequestId}`, {
-            // headers: {
-            //     Authorization: `Bearer ${token}`, 
-            // },
+            headers: {
+                Authorization: `Bearer ${token}`, 
+            },
         })
 
         // EventSource.readyState()

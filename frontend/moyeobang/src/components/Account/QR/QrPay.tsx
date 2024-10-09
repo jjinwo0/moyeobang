@@ -6,6 +6,7 @@ import { colors } from "@/styles/colors";
 import { v4 as uuidv4 } from "uuid";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { useEffect, useState } from "react";
+import { getCookie } from "@/util/cookie";
 
 const qrContainerStyle = css`
     width: 200px;
@@ -39,6 +40,7 @@ interface QrPayProps {
 export default function QrPay({onMessage, onError, isHome, accountNumber, restart}:QrPayProps) {
 
     const paymentRequestId = useRef<string>(uuidv4());
+    const token = getCookie('accessToken');
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
 
     const data : QrData= {
@@ -49,9 +51,9 @@ export default function QrPay({onMessage, onError, isHome, accountNumber, restar
     // new EventSource(url, options)
     const fetchSEE = () => {
         const eventSource = new EventSourcePolyfill(import.meta.env.VITE_BASEURL+`/api/payment/connect?paymentRequestId=${paymentRequestId.current}`, {
-            // headers: {
-            //     Authorization: `Bearer ${token}`, 
-            // },
+            headers: {
+                Authorization: `Bearer ${token}`, 
+            },
         });
 
         eventSource.onopen = () => {
