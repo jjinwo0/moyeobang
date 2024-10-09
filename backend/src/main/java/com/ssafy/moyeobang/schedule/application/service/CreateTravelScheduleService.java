@@ -20,7 +20,7 @@ public class CreateTravelScheduleService implements CreateTravelScheduleUseCase 
     private final UploadImagePort uploadImagePort;
 
     @Override
-    public void createTravelSchedule(CreateTravelScheduleCommand command) {
+    public long createTravelSchedule(CreateTravelScheduleCommand command) {
         List<TravelSchedule> existingSchedules = loadExistingSchedulesPort.loadExistingSchedules(
                 command.travelId());
 
@@ -36,7 +36,6 @@ public class CreateTravelScheduleService implements CreateTravelScheduleUseCase 
                 command.scheduleLocation().lat(), command.scheduleLocation().lng(),
                 command.scheduleLocation().category());
 
-        // TODO : 예산 예측 로직 필요
         TravelSchedule newSchedule = TravelSchedule.createNewSchedule(
                 command.travelId(),
                 command.scheduleTitle(),
@@ -48,6 +47,6 @@ public class CreateTravelScheduleService implements CreateTravelScheduleUseCase 
                 lastSequence + 1
         );
 
-        createNewSchedulePort.saveNewSchedule(newSchedule);
+        return createNewSchedulePort.saveNewSchedule(newSchedule);
     }
 }
