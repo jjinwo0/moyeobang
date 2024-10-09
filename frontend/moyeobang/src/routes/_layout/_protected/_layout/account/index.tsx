@@ -6,7 +6,6 @@ import Navbar from "@/components/common/navBar/Navbar";
 import ProfileImage from "@/components/Account/ProfileImage/ProfileImage";
 import AllImage from "@/components/Account/ProfileImage/AllImage";
 import TransactionCard from '@/components/Account/TranSaction/TransactionCard';
-import { profileData} from "@/data/data";
 import moyeobang from '@/services/moyeobang';
 import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
 import Spinner from '@/components/Sipnner/Spinner';
@@ -87,28 +86,30 @@ const chartListStyle=css`
 `;
 
 const emptyTransactionStyle=css`
-  padding-top:100px;
+  padding-top:65px;
   width:100%;
   height:100%;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:10px;
+  font-family:'medium';
+  font-size:20px;
   img {
-    width:100px;
-    height:100px;
+    width:150px;
+    height:150px;
   }
 `;
 export default function AccountMain() {
 
-  const allList = profileData.map((member) => member.memberId)
-  type SelectedMember = MemberId[]; 
-  const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
   const [index, setIndex] = useState<number>(0);
   const {accountId} = useTravelDetailStore();
   const {participantsInfo} = useTravelDetailStore();
-
+  const allList = participantsInfo.map((member) => member.memberId)
+  const [isAll, setIsAll]=useState<boolean>(true);
+  type SelectedMember = MemberId[]; 
+  const [ selectedMember , setSelectedMember ] = useState<SelectedMember>(allList) // default 전체임
+  
   // get 모임 통장 거래 전체 리스트
   const {data : transactionData} = useSuspenseQuery({
     queryKey: ['transactionList', accountId, selectedMember],
@@ -119,7 +120,7 @@ export default function AccountMain() {
   const { data :accountDataByGroup } = useQuery({
     queryKey: ['accoutByGroup', accountId],
     queryFn: () => moyeobang.getAccountState(accountId),
-    enabled: selectedMember.length>1 // 전체
+    enabled: isAll // 전체
   });
 
   //get 모임 통장 개인별 잔액
@@ -159,7 +160,7 @@ export default function AccountMain() {
     return transactionData.data.data.slice().reverse();
   },[transactionData]);
 
-  const accountData = selectedMember.length > 1 
+  const accountData = isAll
     ? accountDataByGroup?.data.data 
     : accountDataByMember?.data.data;
 
@@ -170,10 +171,12 @@ export default function AccountMain() {
   function onMemberClick(memberId : MemberId | null) {
     if (memberId) {
         // 해당 memberId get요청
+        setIsAll(false);
         setSelectedMember([memberId])
     } else {
         // 전체 조회
-        const allList = profileData.map((member) => member.memberId)
+        const allList = participantsInfo.map((member) => member.memberId)
+        setIsAll(true);
         setSelectedMember(allList)
     }
   }  
@@ -187,14 +190,14 @@ export default function AccountMain() {
     <div css={layoutStyle}>
         <div css={profileListStyle} >
           <AllImage
-          isSelected={selectedMember.length>1}
+          isSelected={isAll}
           onClick={() => onMemberClick(null)}
           />
         { participantsInfo.map((profile, index) => (
             <ProfileImage 
             key={index} 
             {...profile} 
-            isSelected={selectedMember.length!==1 ? false : selectedMember.includes(profile.memberId) } 
+            isSelected={isAll? false : selectedMember.includes(profile.memberId) } 
             onClick={() => onMemberClick(profile.memberId)} />
         ))}
         </div>
@@ -224,15 +227,27 @@ export default function AccountMain() {
           : 
             <div css={emptyTransactionStyle}>
               <img src={sadBangBang} alt="" />
-              아직 결제내역이 없어요
+              아직 결제내역이 없습니다
             </div>
             }
           </div>
         }
         {index===1 && <div css={chartListStyle}>
-          {sortedproportionDataByCategory.map((category, index) => 
-          <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
-          )}
+          { sortedproportionDataByCategory.length>0 ? 
+            sortedproportionDataByCategory.map((category, index) => 
+            <ChartDetailCard 
+              key={index} 
+              title={category.categoryName} 
+              proportion={category.proportion} 
+              balance={category.balance}
+              />
+          )
+          : 
+            <div css={emptyTransactionStyle}>
+              <img src={sadBangBang} alt="" />
+                아직 결제내역이 없습니다
+            </div>
+        }
         </div>
         }
         {index==2 && <div css={chartListStyle}>

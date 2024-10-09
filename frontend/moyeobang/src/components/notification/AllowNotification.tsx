@@ -55,7 +55,11 @@ const buttonContainerStyle = css`
   width: 100%;
 `;
 
-export default function AllowNotification() {
+interface AllowNotificationProps {
+  onClose: () => void;
+}
+
+export default function AllowNotification({onClose}: AllowNotificationProps) {
   // const handleAllowClick = async () => {
   //   // 서비스 워커가 준비된 후에 권한 요청 및 FCM 토큰 생성
   //   if (navigator.serviceWorker) {
@@ -76,7 +80,8 @@ export default function AllowNotification() {
       // "승인" 버튼 클릭 시 푸시 알림 권한을 요청하고 FCM 토큰을 받아옴
       console.log(memberId);
       await requestPermissionAndSaveToken(setIsFcmToken, memberId);
-      router.navigate({to: '/accountConnect'});
+      // router.navigate({to: '/accountConnect'});
+      onClose();
       console.log('Notification permission granted and token saved.');
     } catch (error) {
       console.error('Error requesting permission or saving token:', error);

@@ -42,5 +42,5 @@ export function removeCookie(name: string) {
  */
 export function logout() {
   removeCookie('accessToken');
-  removeCookie('refresh-token');
+  removeCookie('refresh_token');
 }

@@ -151,8 +151,6 @@ export default function NotificationModal({onClose}: {onClose: () => void}) {
       return <HurryNotification key={index} message={notification.content} />;
     } else if (notification.title.includes('잔액 알림')) {
       return <TimeNotification key={index} message={notification.content} />;
-    } else {
-      return <div key={index}>알 수 없는 알림입니다.</div>;
     }
   };
 

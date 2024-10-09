@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {useSwipeable} from 'react-swipeable';
@@ -117,9 +117,10 @@ export default function TravelLogList() {
     setSearchLocation,
     handleSearchLocation,
     travelDates,
+    travelSchedules,
   } = useTravelLogContext();
 
-  const [totalBudget, setTotalBudget] = useState<number>(50000);
+  const [totalBudget, setTotalBudget] = useState<number>();
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -141,6 +142,17 @@ export default function TravelLogList() {
       });
     },
   });
+  useEffect(() => {
+    const newTotalBudget = travelSchedules.reduce((total, schedule) => {
+      const dayBudget = schedule.daySchedules.reduce((sum, daySchedule) => {
+        return sum + (daySchedule.budget ?? 0);
+      }, 0);
+      return total + dayBudget;
+    }, 0);
+
+    setTotalBudget(newTotalBudget);
+    console.log(totalBudget);
+  }, [travelSchedules]);
 
   const travelDays = travelDates.length;
 
@@ -181,7 +193,7 @@ export default function TravelLogList() {
                 <div id="total-budget-info-text">
                   <div>{travelDates.length}일 전체 예산</div>
                   <div style={{color: colors.fifth}}>
-                    {totalBudget.toLocaleString()}원
+                    {totalBudget ? totalBudget.toLocaleString() : ''}원
                   </div>
                 </div>
                 <img src={bangBang} alt="bangBang" />

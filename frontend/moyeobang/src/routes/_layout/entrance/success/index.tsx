@@ -81,7 +81,7 @@ function LoginSuccess() {
     const refreshToken = searchParams.get('refreshToken');
     const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
     if (accessToken) {
-      setCookie('accessToken', accessToken, 900);
+      setCookie('accessToken', accessToken);
       refetch();
     }
   }, [location.search]);
@@ -96,12 +96,8 @@ function LoginSuccess() {
       setBankName(myInfo.bankName);
       setAccountNumber(myInfo.accountNumber);
       // 계좌 정보가 없으면 계좌 등록 페이지로 이동
-      if (myInfo.accountId) {
-        setAccountId(myInfo.accountId);
-        navigate({to: '/'});
-      } else {
-        navigate({to: '/entrance/success/allowNoti'});
-      }
+      setAccountId(myInfo.accountId);
+      navigate({to: '/'});
     }
   }, [myInfoResponse]);
 

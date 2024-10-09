@@ -20,8 +20,7 @@ public class GetBudgetService implements GetBudgetQuery {
         Budget budget = loadBudgetPort.loadBudget(scheduleId);
 
         return new GetBudgetResponse(
-                budget.max(),
-                budget.min()
+                budget.amount()
         );
     }
 }

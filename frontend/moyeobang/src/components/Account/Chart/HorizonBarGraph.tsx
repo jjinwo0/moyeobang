@@ -22,6 +22,15 @@ const RechartContainerStyle=css`
   }
 `;
 
+const emptyChartStyle=css`
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:${colors.strongGray};
+`;
+
 const layoutStyle=css`
   width:100%;
   height:60px;
@@ -30,14 +39,10 @@ const layoutStyle=css`
 // 차트에 쓰일 데이터로 변환
 function transformChart(data : (ConsumptionProportionByCategory[] | ConsumptionProportionByMember[])) {
 
-  // const sortedData = [...data].sort((a,b) => {
-  //   const aValue = isConsumptionByMember
-  // })
-
   const transformedData = data.reduce((acc, item) => {
 
     if (isConsumptionByMember(item)) {
-      acc[item.participantInfo.memberName] = Number(item.proportion);
+      acc[item.participantInfo.memberName] = item.proportion==='NaN' ? 0.0 : Number(item.proportion);
     } else {
       acc[item.categoryName] = Number(item.proportion);
     }
@@ -50,16 +55,18 @@ function transformChart(data : (ConsumptionProportionByCategory[] | ConsumptionP
 
 interface HorizonBarGraphProps {
   data?: ConsumptionProportionByCategory[] | ConsumptionProportionByMember[];
+  isEmpty:boolean;
 }
 
 interface ChartDataProps {
   [key:string] : number | string;
 }
 
-export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
+export default function HorizonBarGraph({data = [], isEmpty}: HorizonBarGraphProps) {
 
   // 차트만들 데이터로 변환.
   const chartData :ChartDataProps[]  = transformChart(data)
+
 
   // 0인 순간 마지막 인덱스
   const keys = Object.keys(chartData[0]).filter((key) => key != 'name');
@@ -69,10 +76,20 @@ export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
   return (
     <div css={layoutStyle}> 
         <div css={titleStyle}>
-            {isConsumptionByMember(data[0]) ? '멤버별 소비 비율(100%기준)' : '카테고리별 소비 비율(100%기준)'}
+            {isEmpty ? 
+              '' :
+              isConsumptionByMember(data[0]) 
+              ? '멤버별 소비 비율(100%기준)' : 
+              '카테고리별 소비 비율(100%기준)'
+            }
         </div>
       <ResponsiveContainer css={RechartContainerStyle}> 
-        <BarChart
+       {isEmpty ? 
+        <div css={emptyChartStyle}>
+          {'소비하면 그래프를 보여줄게요!'}
+        </div>
+       :
+      <BarChart
         layout="vertical"
           data={chartData}
           margin={{
@@ -111,7 +128,7 @@ export default function HorizonBarGraph({data = []}: HorizonBarGraphProps) {
               radius={ arr.length===1 ? [20, 20, 20, 20] : index===0 ? [20, 0, 0, 20] : index===endIndex-1 ? [0, 20, 20, 0] : undefined} 
               />
             ))}
-        </BarChart>
+        </BarChart>}
       </ResponsiveContainer>
     </div>
   );

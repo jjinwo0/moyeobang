@@ -9,6 +9,8 @@ import com.ssafy.moyeobang.notification.adapter.in.web.request.NotificationPaylo
 import com.ssafy.moyeobang.notification.adapter.in.web.response.VerifyKey;
 import com.ssafy.moyeobang.notification.application.port.in.NotificationUseCase;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class NotificationController {
 
+    private static final Logger log = LoggerFactory.getLogger(NotificationController.class);
     private final NotificationUseCase notificationUseCase;
 
     @PostMapping("/api/travel/accounts/deposit/request/{travelId}")
@@ -66,6 +69,8 @@ public class NotificationController {
     @PostMapping("/api/notification/verify/{memberId}/{transactionid}")
     public ApiResult<VerifyKey> getVerifyKey(@PathVariable("memberId") Long memberId,
                                              @PathVariable("transactionid") Long transactionid) {
+
+        log.info("@@@@@ memberId={}, transactionid={}", memberId, transactionid);
 
         String findKey = notificationUseCase.getTransactionInfo(memberId, transactionid);
 

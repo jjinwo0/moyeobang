@@ -1,4 +1,4 @@
-import axios from '@/util/axios'
+import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
 
 export default {
@@ -137,6 +137,15 @@ export default {
       `/accounts/${accountId}/withdraw-proportion`
     ),
   /**
+   * 여행 종료 환불
+   */
+  postRefundAccount: async (accountId: number) =>
+    axios.post<MoyeobangResponse<null>>(`/accounts/${accountId}/refund`, {
+      params: {
+        accountId: accountId,
+      },
+    }),
+  /**
    * 여행 목록 전체 조회
    */
   getTravelList: async (memberId: number) =>
@@ -205,10 +214,17 @@ export default {
   /**
    * 공금 입금 요청
    */
-  postResquestDepositAccount: async (accountId: number, totalAmount: number) =>
+  postResquestDepositAccount: async (
+    travelId: number,
+    title: string,
+    amount: number
+  ) =>
     axios.post<MoyeobangResponse<ResponsePostDepositAccount>>(
-      `/accounts/${accountId}/deposit/request`,
-      {totalAmount},
+      `/travel/accounts/deposit/request/${travelId}`,
+      {
+        title: title,
+        amount: amount,
+      },
       {
         headers: {'Content-Type': 'application/json'},
       }
@@ -223,7 +239,7 @@ export default {
     amount: number
   ) =>
     axios.post<MoyeobangResponse<ResponseDepositAccount>>(
-      `/accounts/${accountId}/deposit`,
+      `/accounts/${accountId}/send`,
       {
         memberId: memberId,
         amount: amount,

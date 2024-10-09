@@ -71,7 +71,6 @@ export default function QrScanByPos({onClose, paymentData, onResult } : QrScanBy
     const videoElement = useRef<HTMLVideoElement>(null);
     const qrBoxElement = useRef<HTMLDivElement>(null);
     const [qrOn, setQrOn] = useState<boolean>(true);
-    // const [openResultModal, setOpenResultModal] = useState<boolean>(false);
 
     // 결과 
     const [scannedResult, setScannedResult] = useState<QrData | null>();
@@ -91,7 +90,6 @@ export default function QrScanByPos({onClose, paymentData, onResult } : QrScanBy
                 onResult(payData); // 상위로 데이터 보내기
                 onClose() // QR스캔 닫기
             }
-            // setOpenResultModal(true) // 결제 모달 열기
 
         } catch (error) {
             console.log(error)
@@ -161,11 +159,6 @@ export default function QrScanByPos({onClose, paymentData, onResult } : QrScanBy
                 </div>
                 </>
             }
-                {/* { openResultModal && resultData &&(
-                    <p css={resultStyle}>
-                       <ResultByPos {...resultData} />
-                    </p>
-                )} */}
         </div>
     ) 
 }     

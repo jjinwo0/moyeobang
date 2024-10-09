@@ -5,7 +5,8 @@ import {bluefont, colors} from '@/styles/colors';
 import {css} from '@emotion/react';
 import moyeobang from '@/services/moyeobang';
 import {useMutation} from '@tanstack/react-query';
-import useMyInfo from '@/store/useMyInfoStore';
+// import useMyInfo from '@/store/useMyInfoStore';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 const basicLayout = css`
   display: flex;
@@ -62,16 +63,18 @@ export default function PublicDeposit({
 }: PublicDepositProps) {
   const [value, setValue] = useState<string | number>(budget);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
-  const {accountId} = useMyInfo();
+  const {travelId} = useTravelDetailStore();
   const {mutate: postResquestDepositAccount} = useMutation({
     mutationFn: ({
-      accountId,
-      totalAmount,
+      travelId,
+      title,
+      amount,
     }: {
-      accountId: Id;
-      totalAmount: number;
+      travelId: Id;
+      title: string;
+      amount: number;
     }) => {
-      return moyeobang.postResquestDepositAccount(accountId, totalAmount);
+      return moyeobang.postResquestDepositAccount(travelId, title, amount);
     },
   });
 
@@ -88,7 +91,7 @@ export default function PublicDeposit({
 
   const handleOnclick = () => {
     // 공금 요청 알림 보내기
-    postResquestDepositAccount({accountId, totalAmount: Number(value)});
+    postResquestDepositAccount({travelId, title: travelName, amount});
     setValue(0);
     setFocused(false); // 다시 초기화
   };
