@@ -137,6 +137,15 @@ export default {
       `/accounts/${accountId}/withdraw-proportion`
     ),
   /**
+   * 여행 종료 환불
+   */
+  postRefundAccount: async (accountId: number) =>
+    axios.post<MoyeobangResponse<null>>(`/accounts/${accountId}/refund`, {
+      params: {
+        accountId: accountId,
+      },
+    }),
+  /**
    * 여행 목록 전체 조회
    */
   getTravelList: async (memberId: number) =>

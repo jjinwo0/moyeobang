@@ -36,7 +36,7 @@ const buttonLayoutStyle=css`
 const hotelQrData = {
     paymentRequestId: uuidv4(),
     placeId: 'hotel-1',
-    amount:519883
+    amount:519800
 }
 
 export const Route = createFileRoute('/hotel/')({
