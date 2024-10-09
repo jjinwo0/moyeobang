@@ -97,7 +97,7 @@ const emptyTransactionStyle=css`
   gap:10px;
   img {
     width:100px;
-    hegith:100px;
+    height:100px;
   }
 `;
 export default function AccountMain() {

@@ -1,81 +1,3 @@
-// import React, {useState, useEffect} from 'react';
-// import PublicRequest from './PublicRequest'; // 기존 컴포넌트
-// import HurryNotification from './HurryNotification'; // 새로운 알림 컴포넌트
-// import TimeNotification from './TimeNotification'; // 새로운 알림 컴포넌트
-// import {css} from '@emotion/react';
-// import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
-
-// interface NotificationData {
-//   title: string;
-//   content: string;
-//   action?: string; // 알림의 유형을 구분할 필드
-// }
-
-// const layoutStyle = css`
-//   margin-top: 50px;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100vh;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   z-index: 100;
-// `;
-
-// export default function NotificationModal({onClose}: {onClose: () => void}) {
-//   const [notificationData, setNotificationData] =
-//     useState<NotificationData | null>(null);
-
-//   // 푸시 알림 처리
-//   useEffect(() => {
-//     const handlePushNotification = (event: MessageEvent) => {
-//       console.log('Notification received:', event.data);
-//       const {title, content, action} = event.data.data; // 푸시 알림 데이터 추출
-//       setNotificationData({title, content, action});
-//     };
-
-//     window.addEventListener('message', handlePushNotification as EventListener);
-
-//     return () => {
-//       window.removeEventListener(
-//         'message',
-//         handlePushNotification as EventListener
-//       );
-//     };
-//   }, []);
-
-//   // 알림 유형에 따라 컴포넌트 렌더링
-//   const renderNotificationComponent = () => {
-//     if (!notificationData) return null;
-
-//     // action 또는 title을 기반으로 알림 유형을 구분하여 렌더링
-//     if (notificationData.action === 'deposit_request') {
-//       return (
-//         <PublicRequest
-//           message={notificationData.content}
-//           accountId={1234}
-//           amount={200000}
-//         />
-//       );
-//     } else if (notificationData.title.includes('여행 공금 입금 요청')) {
-//       return <HurryNotification message={notificationData.content} />;
-//     } else if (notificationData.title.includes('잔액 알림')) {
-//       return <TimeNotification message={notificationData.content} />;
-//     } else {
-//       return <div>알 수 없는 알림입니다.</div>;
-//     }
-//   };
-
-//   return (
-//     <div css={layoutStyle}>
-//       <HeaderWithXButton onXClick={onClose} />
-//       {renderNotificationComponent()}
-//     </div>
-//   );
-// }
-
 import React, {useState, useEffect} from 'react';
 import PublicRequest from './PublicRequest'; // 기존 컴포넌트
 import HurryNotification from './HurryNotification'; // 새로운 알림 컴포넌트
@@ -83,7 +5,7 @@ import TimeNotification from './TimeNotification'; // 새로운 알림 컴포넌
 import {css} from '@emotion/react';
 import HeaderWithXButton from '../common/Header/HeaderWithXbutton';
 import sadBangbang from '@/assets/icons/sadBangbang.png';
-import sky from '@/assets/images/skyBackground.jpg';
+import axios from 'axios';
 
 interface NotificationData {
   title: string;
@@ -121,6 +43,45 @@ const emptyMessageStyle = css`
 
 export default function NotificationModal({onClose}: {onClose: () => void}) {
   const [notifications, setNotifications] = useState<NotificationData[]>([]); // 알림 저장 상태
+
+  // //푸시알림테스트
+  // const FCM_SERVER_KEY =
+  //   'BFg_yRn7AVZukoSqRrEcdS-OA-5O8xtZFRad4q7Y7ZteODNuCTrgTbAnp588LN94b6UzY-TZ7jSvnwdSCRDQxNU'; // Firebase 콘솔에서 가져온 서버 키
+  // const DEVICE_TOKEN =
+  //   'fN1Br2JC3HKeA1EqvcKXd3:APA91bEkT7afk4-55crPuuJbkFEqqJw4Ce2FA4v4bWKK3QwPglgrIO5qzbj3JnlzFsEJd03-a6GZMMhVD3e9mjA1g7VpGKLjY-fhdbTBM3p_dHfWzuUnTHTz4inH1DeoC1fVXkuLElRi'; // 수신할 디바이스의 FCM 토큰
+
+  // const sendPushNotification = async () => {
+  //   const payload = {
+  //     to: DEVICE_TOKEN,
+  //     notification: {
+  //       title: '잔액 알림',
+  //       body: 'This is a test push notification from React.',
+  //     },
+  //     data: {
+  //       url: 'https://example.com',
+  //     },
+  //   };
+
+  //   try {
+  //     const response = await axios.post(
+  //       'https://fcm.googleapis.com/fcm/send',
+  //       payload,
+  //       {
+  //         headers: {
+  //           Authorization: `key=${FCM_SERVER_KEY}`,
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     );
+  //     console.log('Push notification sent:', response.data);
+  //   } catch (error) {
+  //     console.error('Error sending push notification:', error.response?.data);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   sendPushNotification();
+  // }, []);
 
   // 로컬 스토리지에서 알림을 불러오는 함수
   useEffect(() => {

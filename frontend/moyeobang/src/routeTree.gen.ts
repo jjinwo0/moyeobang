@@ -21,6 +21,7 @@ import { Route as LayoutProtectedImport } from './routes/_layout/_protected'
 import { Route as LayoutEntranceIndexImport } from './routes/_layout/entrance/index'
 import { Route as LayoutProtectedLayoutImport } from './routes/_layout/_protected/_layout'
 import { Route as LayoutEntranceSuccessIndexImport } from './routes/_layout/entrance/success/index'
+import { Route as LayoutEntranceSuccessAllowNotiIndexImport } from './routes/_layout/entrance/success/allowNoti/index'
 import { Route as LayoutProtectedLayoutTravelLogIndexImport } from './routes/_layout/_protected/_layout/travelLog/index'
 import { Route as LayoutProtectedLayoutAccountConnectIndexImport } from './routes/_layout/_protected/_layout/accountConnect/index'
 import { Route as LayoutProtectedLayoutAccountIndexImport } from './routes/_layout/_protected/_layout/account/index'
@@ -93,6 +94,12 @@ const LayoutProtectedLayoutHomeIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+
+const LayoutEntranceSuccessAllowNotiIndexRoute =
+  LayoutEntranceSuccessAllowNotiIndexImport.update({
+    path: '/entrance/success/allowNoti/',
+    getParentRoute: () => LayoutRoute,
+  } as any)
 
 const LayoutProtectedLayoutTravelLogIndexRoute =
   LayoutProtectedLayoutTravelLogIndexImport.update({
@@ -250,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProtectedLayoutTravelLogIndexImport
       parentRoute: typeof LayoutProtectedLayoutImport
     }
+    '/_layout/entrance/success/allowNoti/': {
+      id: '/_layout/entrance/success/allowNoti/'
+      path: '/entrance/success/allowNoti'
+      fullPath: '/entrance/success/allowNoti'
+      preLoaderRoute: typeof LayoutEntranceSuccessAllowNotiIndexImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/_protected/_layout/_Home/': {
       id: '/_layout/_protected/_layout/_Home/'
       path: '/'
@@ -381,12 +395,15 @@ interface LayoutRouteChildren {
   LayoutProtectedRoute: typeof LayoutProtectedRouteWithChildren
   LayoutEntranceIndexRoute: typeof LayoutEntranceIndexRoute
   LayoutEntranceSuccessIndexRoute: typeof LayoutEntranceSuccessIndexRoute
+  LayoutEntranceSuccessAllowNotiIndexRoute: typeof LayoutEntranceSuccessAllowNotiIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutProtectedRoute: LayoutProtectedRouteWithChildren,
   LayoutEntranceIndexRoute: LayoutEntranceIndexRoute,
   LayoutEntranceSuccessIndexRoute: LayoutEntranceSuccessIndexRoute,
+  LayoutEntranceSuccessAllowNotiIndexRoute:
+    LayoutEntranceSuccessAllowNotiIndexRoute,
 }
 
 const LayoutRouteWithChildren =
@@ -404,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/accountConnect': typeof LayoutProtectedLayoutAccountConnectIndexRoute
   '/travelLog': typeof LayoutProtectedLayoutTravelLogIndexRoute
+  '/entrance/success/allowNoti': typeof LayoutEntranceSuccessAllowNotiIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
   '/account/$transactionId/detail': typeof LayoutProtectedLayoutAccountTransactionIdDetailLayoutRouteWithChildren
@@ -423,6 +441,7 @@ export interface FileRoutesByTo {
   '/account': typeof LayoutProtectedLayoutAccountIndexRoute
   '/accountConnect': typeof LayoutProtectedLayoutAccountConnectIndexRoute
   '/travelLog': typeof LayoutProtectedLayoutTravelLogIndexRoute
+  '/entrance/success/allowNoti': typeof LayoutEntranceSuccessAllowNotiIndexRoute
   '/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
   '/account/$transactionId/detail': typeof LayoutProtectedLayoutAccountTransactionIdDetailLayoutIndexRoute
@@ -444,6 +463,7 @@ export interface FileRoutesById {
   '/_layout/_protected/_layout/account/': typeof LayoutProtectedLayoutAccountIndexRoute
   '/_layout/_protected/_layout/accountConnect/': typeof LayoutProtectedLayoutAccountConnectIndexRoute
   '/_layout/_protected/_layout/travelLog/': typeof LayoutProtectedLayoutTravelLogIndexRoute
+  '/_layout/entrance/success/allowNoti/': typeof LayoutEntranceSuccessAllowNotiIndexRoute
   '/_layout/_protected/_layout/_Home/': typeof LayoutProtectedLayoutHomeIndexLazyRoute
   '/_layout/_protected/_layout/quiz/invite/$travelId': typeof LayoutProtectedLayoutQuizInviteTravelIdRoute
   '/_layout/_protected/_layout/account/$transactionId/detail': typeof LayoutProtectedLayoutAccountTransactionIdDetailRouteWithChildren
@@ -466,6 +486,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/accountConnect'
     | '/travelLog'
+    | '/entrance/success/allowNoti'
     | '/'
     | '/quiz/invite/$travelId'
     | '/account/$transactionId/detail'
@@ -484,6 +505,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/accountConnect'
     | '/travelLog'
+    | '/entrance/success/allowNoti'
     | '/'
     | '/quiz/invite/$travelId'
     | '/account/$transactionId/detail'
@@ -503,6 +525,7 @@ export interface FileRouteTypes {
     | '/_layout/_protected/_layout/account/'
     | '/_layout/_protected/_layout/accountConnect/'
     | '/_layout/_protected/_layout/travelLog/'
+    | '/_layout/entrance/success/allowNoti/'
     | '/_layout/_protected/_layout/_Home/'
     | '/_layout/_protected/_layout/quiz/invite/$travelId'
     | '/_layout/_protected/_layout/account/$transactionId/detail'
@@ -549,7 +572,8 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/_protected",
         "/_layout/entrance/",
-        "/_layout/entrance/success/"
+        "/_layout/entrance/success/",
+        "/_layout/entrance/success/allowNoti/"
       ]
     },
     "/_layout/_protected": {
@@ -610,6 +634,10 @@ export const routeTree = rootRoute
     "/_layout/_protected/_layout/travelLog/": {
       "filePath": "_layout/_protected/_layout/travelLog/index.tsx",
       "parent": "/_layout/_protected/_layout"
+    },
+    "/_layout/entrance/success/allowNoti/": {
+      "filePath": "_layout/entrance/success/allowNoti/index.tsx",
+      "parent": "/_layout"
     },
     "/_layout/_protected/_layout/_Home/": {
       "filePath": "_layout/_protected/_layout/_Home/index.lazy.tsx",

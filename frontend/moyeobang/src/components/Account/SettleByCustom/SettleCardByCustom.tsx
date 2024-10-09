@@ -2,7 +2,6 @@ import React from "react";
 import blankCheck from '@/assets/icons/blueBlankCheck.png';
 import check from '@/assets/icons/blueCheck.png';
 import type {ChangeEvent} from 'react';
-import { useState } from "react";
 import { css } from "@emotion/react";
 import ProfileImage from "../ProfileImage/ProfileImage";
 import { colors } from "@/styles/colors";

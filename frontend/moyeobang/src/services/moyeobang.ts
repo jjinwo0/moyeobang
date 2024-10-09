@@ -1,6 +1,5 @@
-import axios from '@/util/axios';
+import axios from '@/util/axios'
 import axios8081 from '@/util/axios8081';
-import axiosLogin from '@/util/axiosLogin';
 
 export default {
   // 모임 통장
@@ -347,12 +346,12 @@ export default {
    */
 
   // getMyInfo: async () => {
-  //   const axiosInstance = axiosLogin(); // 훅 호출
+  //   const axiosInstance = axios(); // 훅 호출
   //   console.log('getMyInfo 호출');
   //   return axiosInstance.get('/user/me/profile');
   // },
   getMyInfo: async () => {
     console.log('getMyInfo 호출');
-    axiosLogin.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
+    axios.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
   },
 };
