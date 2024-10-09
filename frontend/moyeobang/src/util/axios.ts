@@ -13,14 +13,20 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     const accessToken = getCookie('accessToken');
-    console.log(' 여긴 오나 ? accessToken', accessToken);
+    const refreshToken = getCookie('refresh-token');
+    console.log('[*] 요청 인터셉터 설정', refreshToken);
+    console.log(
+      ' 여긴 오나 ? accessToken, refreshToken',
+      accessToken,
+      refreshToken
+    );
     if (accessToken) {
-      console.log('accessToken', accessToken);
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
   },
   error => {
+    console.log('[*] 요청 인터셉터 설정 에러', error);
     return Promise.reject(error);
   }
 );
@@ -30,6 +36,7 @@ instance.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
+    console.log('[*] 응답 인터셉터 설정');
     const refreshToken = getCookie('refresh-token');
     console.log('refreshToken', refreshToken);
 
@@ -38,17 +45,21 @@ instance.interceptors.response.use(
       error.response.status === 401 &&
       !originalRequest._retry
     ) {
+      console.log('[*] 재시도 중');
+
       originalRequest._retry = true;
 
       if (!refreshToken) {
         console.error('No refresh token available');
-
+        console.log('[*] 리프레시 토큰 없음, 로그인 페이지로 이동');
+        window.location.href = '/entrance';
         return Promise.reject(error);
       }
 
       try {
         const refreshToken = getCookie('refresh-token');
-        const response = await instance.get(`/reissue/token`, {
+        console.log('[*] refreshToken 통해 accessToken 재발급', refreshToken);
+        const response = await instance.post(`/reissue/token`, {
           headers: {Authorization: `Bearer ${refreshToken}`},
         });
 
@@ -64,7 +75,7 @@ instance.interceptors.response.use(
       } catch (refreshError) {
         console.error('Failed to refresh access token:', refreshError);
         removeCookie('accessToken');
-        removeCookie('refreshToken');
+        removeCookie('refresh-token');
         window.location.href = '/entrance';
       }
     }
@@ -73,7 +84,6 @@ instance.interceptors.response.use(
 );
 
 export default instance;
-
 // 다시 sessionStorage로 시도, 성공 버전
 // import axios from 'axios';
 // import {getCookie, removeCookie, setCookie} from './cookie';

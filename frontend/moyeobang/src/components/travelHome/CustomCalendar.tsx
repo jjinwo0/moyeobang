@@ -11,13 +11,18 @@ interface CustomCalendarProps {
   selectedRange: {start: string | null; end: string | null};
 }
 
+const containerStyle = css`
+  max-width: 300px;
+  width: 100%;
+`;
+
 const calendarContainerStyle = css`
   position: absolute;
   top: 100%;
-  left: 0;
+  left: -10px;
   margin-top: 8px;
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 8px;
   border-radius: 8px;
   background-color: white;
   z-index: 1001;
@@ -152,61 +157,64 @@ export default function CustomCalendar({
   }
 
   return (
-    <div css={calendarContainerStyle}>
-      <div css={headerStyle}>
-        <img src={oneArrow} onClick={handlePrevMonth} css={prevStyle} />
-        <div>{currentMonth.format('YYYY년 MM월')}</div>
-        <img src={oneArrow} onClick={handleNextMonth} css={nextStyle} />
-      </div>
-      <div css={daysStyle}>
-        {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
-          <div
-            key={day}
-            css={[
-              dayCellStyle,
-              index === 0 && sundayStyle, // 일요일 스타일 적용
-              index === 6 && saturdayStyle, // 토요일 스타일 적용
-            ]}
-          >
-            {day}
-          </div>
-        ))}
-        {days.map((day, index) => {
-          const isStart = selection.start && day.isSame(selection.start, 'day');
-          const isEnd = selection.end && day.isSame(selection.end, 'day');
-          const isMiddle =
-            selection.start &&
-            selection.end &&
-            day.isAfter(selection.start, 'day') &&
-            day.isBefore(selection.end, 'day');
-
-          const isOutsideCurrentMonth = !day.isSame(currentMonth, 'month'); // 현재 월에 속하지 않는 날짜 체크
-          const isSunday = day.day() === 0; // 일요일
-          const isSaturday = day.day() === 6; // 토요일
-
-          return (
+    <div css={containerStyle}>
+      <div css={calendarContainerStyle}>
+        <div css={headerStyle}>
+          <img src={oneArrow} onClick={handlePrevMonth} css={prevStyle} />
+          <div>{currentMonth.format('YYYY년 MM월')}</div>
+          <img src={oneArrow} onClick={handleNextMonth} css={nextStyle} />
+        </div>
+        <div css={daysStyle}>
+          {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
             <div
-              key={day.format('YYYY-MM-DD')}
+              key={day}
               css={[
-                dayFontStyle,
-                isOutsideCurrentMonth && outsideCurrentMonthStyle, // 현재 월이 아닌 날짜 회색 스타일 적용
-                isSunday && sundayStyle, // 일요일 스타일
-                isSaturday && saturdayStyle, // 토요일 스타일
-                isStart && selectedStartDayStyle,
-                isEnd && selectedEndDayStyle,
-                isMiddle && middleDayStyle,
+                dayCellStyle,
+                index === 0 && sundayStyle, // 일요일 스타일 적용
+                index === 6 && saturdayStyle, // 토요일 스타일 적용
               ]}
-              onClick={() => handleDayClick(day)}
             >
-              {day.date()}
+              {day}
             </div>
-          );
-        })}
-      </div>
-      <div css={btnStyle}>
-        <Btn buttonStyle={{style: 'blue', size: 'thinBig'}} onClick={onClose}>
-          날짜 확인
-        </Btn>
+          ))}
+          {days.map((day, index) => {
+            const isStart =
+              selection.start && day.isSame(selection.start, 'day');
+            const isEnd = selection.end && day.isSame(selection.end, 'day');
+            const isMiddle =
+              selection.start &&
+              selection.end &&
+              day.isAfter(selection.start, 'day') &&
+              day.isBefore(selection.end, 'day');
+
+            const isOutsideCurrentMonth = !day.isSame(currentMonth, 'month'); // 현재 월에 속하지 않는 날짜 체크
+            const isSunday = day.day() === 0; // 일요일
+            const isSaturday = day.day() === 6; // 토요일
+
+            return (
+              <div
+                key={day.format('YYYY-MM-DD')}
+                css={[
+                  dayFontStyle,
+                  isOutsideCurrentMonth && outsideCurrentMonthStyle, // 현재 월이 아닌 날짜 회색 스타일 적용
+                  isSunday && sundayStyle, // 일요일 스타일
+                  isSaturday && saturdayStyle, // 토요일 스타일
+                  isStart && selectedStartDayStyle,
+                  isEnd && selectedEndDayStyle,
+                  isMiddle && middleDayStyle,
+                ]}
+                onClick={() => handleDayClick(day)}
+              >
+                {day.date()}
+              </div>
+            );
+          })}
+        </div>
+        <div css={btnStyle}>
+          <Btn buttonStyle={{style: 'blue', size: 'thinBig'}} onClick={onClose}>
+            날짜 확인
+          </Btn>
+        </div>
       </div>
     </div>
   );

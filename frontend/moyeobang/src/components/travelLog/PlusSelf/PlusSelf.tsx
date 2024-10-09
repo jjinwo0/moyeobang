@@ -121,14 +121,14 @@ export default function PlusSelf() {
       moyeobang.postChangeTravelSchedule(travelId, scheduleId, scheduleData),
     onSuccess: async () => {
       console.log('[*] 수정 성공');
-      setTimeout(async() => {
-      await queryClient.invalidateQueries({
-        queryKey: ['travelSchedules', travelId],
-        refetchType: 'all',
-      });
-      resetForm();
-      handleShowPlusSelf();
-      navigate({to: '/travelLog'});
+      setTimeout(async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ['travelSchedules', travelId],
+          refetchType: 'all',
+        });
+        resetForm();
+        handleShowPlusSelf();
+        navigate({to: '/travelLog'});
       }, 1000);
     },
   });
@@ -346,6 +346,14 @@ export default function PlusSelf() {
                 )}
               </div>
               <div css={PlusSelfStyle.inputImgWrapper}>
+                {selectedImage && (
+                  <button
+                    id="imgCancelBtn"
+                    onClick={() => setSelectedImage(null)}
+                  >
+                    이미지 취소
+                  </button>
+                )}
                 <input
                   type="text"
                   name=""
@@ -361,14 +369,6 @@ export default function PlusSelf() {
                   css={PlusSelfStyle.searchImgStyle}
                   onClick={handleShowMapSearch}
                 />
-                {selectedImage && (
-                  <button
-                    id="imgCancelBtn"
-                    onClick={() => setSelectedImage(null)}
-                  >
-                    이미지 취소
-                  </button>
-                )}
               </div>
             </div>
           </div>

@@ -99,7 +99,10 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
         MemberAccountJpaEntity memberAccount = getMemberAccount(sourceAccountNumber);
         TravelAccountJpaEntity travelAccount = getTravelAccount(targetAccountNumber);
 
-        DepositJpaEntity deposit = createDeposit(travelAccount, memberAccount, money);
+        TravelAccount account = loadTravelAccount(travelAccount.getId());
+        Money balance = account.getBalance();
+
+        DepositJpaEntity deposit = createDeposit(travelAccount, memberAccount, money, balance);
         depositRepository.save(deposit);
 
         bankApiClient.sendMoney(
@@ -119,9 +122,11 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
 
     private DepositJpaEntity createDeposit(TravelAccountJpaEntity travelAccount,
                                            MemberAccountJpaEntity memberAccount,
-                                           Money money) {
+                                           Money money,
+                                           Money balance) {
         return DepositJpaEntity.builder()
                 .amount(money.getAmount())
+                .balanceSnapshot(balance.getAmount() + money.getAmount())
                 .travelAccount(travelAccount)
                 .member(memberAccount.getMember())
                 .build();
