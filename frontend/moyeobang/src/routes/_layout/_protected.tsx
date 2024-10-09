@@ -1,5 +1,5 @@
 import {createFileRoute, Outlet, useNavigate} from '@tanstack/react-router';
-import {getCookie} from '@/uti, useNavigatel/cookie';
+import {getCookie} from '@/util/cookie';
 import React, {useEffect} from 'react';
 
 // 로그인 된 사용자 아닐시 entrance로 이동
