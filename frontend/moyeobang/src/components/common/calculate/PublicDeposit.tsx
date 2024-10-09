@@ -91,7 +91,11 @@ export default function PublicDeposit({
 
   const handleOnclick = () => {
     // 공금 요청 알림 보내기
-    postResquestDepositAccount({travelId, title: travelName, amount});
+    postResquestDepositAccount({
+      travelId,
+      title: travelName,
+      amount: Number(value),
+    });
     setValue(0);
     setFocused(false); // 다시 초기화
   };
