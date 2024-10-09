@@ -303,9 +303,13 @@ export default {
    * 여행 일정 추가
    */
   postTravelSchedule: async (travelId: Id, data: FormData) =>
-    axios.post<MoyeobangResponse<null>>(`/travel/${travelId}/schedule`, data, {
-      headers: {'Content-Type': 'multipart/form-data'},
-    }),
+    axios.post<MoyeobangResponse<ResponsePostTravelSchedule>>(
+      `/travel/${travelId}/schedule`,
+      data,
+      {
+        headers: {'Content-Type': 'multipart/form-data'},
+      }
+    ),
 
   /**
    * 여행 일정 조회
@@ -339,18 +343,20 @@ export default {
   deleteTravelSchedule: async (scheduleId: Id) =>
     axios.delete<MoyeobangResponse<null>>(`/travel/schedule/${scheduleId}`),
 
-
   /**
    * 일정 예산 수정
-   * @param scheduleId 
-   * @param budget 
-   * @returns 
+   * @param scheduleId
+   * @param budget
+   * @returns
    */
-  postChangeScheduleBudget : async(scheduleId: Id, budget: number) =>
-    axios.post<MoyeobangResponse<null>>(`/travel/schedule/${scheduleId}/budget`,{budget}, {
-      headers: {'Content-Type': 'application/json'},
-    }),
-
+  postChangeScheduleBudget: async (scheduleId: Id, budget: number) =>
+    axios.post<MoyeobangResponse<null>>(
+      `/travel/schedule/${scheduleId}/budget`,
+      {budget},
+      {
+        headers: {'Content-Type': 'application/json'},
+      }
+    ),
 
   /**
    * 개인 계좌 등록
@@ -376,5 +382,14 @@ export default {
   getMyInfo: async () => {
     console.log('getMyInfo 호출');
     axios.get<MoyeobangResponse<ResponseGetProfile>>('/user/me/profile');
+  },
+
+  /**
+   * 일정별 예측 예산 조회
+   */
+  getBudget: async (scheduleId: number) => {
+    axios.get<MoyeobangResponse<ResponseGetBudget>>(
+      `/travel/schedule/${scheduleId}/budget`
+    );
   },
 };
