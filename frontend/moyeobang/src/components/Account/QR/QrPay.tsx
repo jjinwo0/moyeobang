@@ -84,7 +84,7 @@ export default function QrPay({onMessage, onError, isHome, accountNumber, isActi
 
             const messageEvent = event as MessageEvent<string>;
             const errorMessage : ErrorMessage = messageEvent.data;
-            console.log(errorMessage) // 'Payment failed'
+            // console.log(errorMessage) // 'Payment failed'
             onError(errorMessage)
 
         });

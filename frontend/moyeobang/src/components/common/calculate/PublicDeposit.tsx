@@ -72,7 +72,7 @@ export default function PublicDeposit({
     queryFn: () => moyeobang.getAccountState(accountId),
   });
 
-  const totalSpent = data.data.data.totalSpent;// 누적 입금 금액
+  const totalSpent = data.data.data.totalAmount;// 누적 입금 금액
 
   const {mutate: postResquestDepositAccount} = useMutation({
     mutationFn: ({
