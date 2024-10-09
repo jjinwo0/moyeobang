@@ -214,3 +214,22 @@ export const dropdownContentStyle = css`
   flex-direction: column;
   gap: 5px;
 `;
+
+export const searchImgWrapper = css`
+  position: relative;
+  img {
+    position: absolute;
+    right: 16px;
+    top: 70%;
+    width: 25px;
+    height: 25px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+`;
