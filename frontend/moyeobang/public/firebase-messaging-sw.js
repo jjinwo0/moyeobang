@@ -30,11 +30,11 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(messaging, payload => {
-  console.log(payload.notification); // 푸시알림 콘솔 확인용
-  const notificationTitle = payload.notification.title;
+  console.log(payload.data); // 푸시알림 콘솔 확인용
+  const notificationTitle = payload.data.title;
   const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon,
+    body: payload.data.content,
+    icon: payload.data.icon,
     data: {
       url: payload.fcmOptions.link, // 알림 클릭시 이동할 URL
     },

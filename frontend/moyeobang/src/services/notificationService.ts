@@ -36,18 +36,22 @@ export default async function requestPermissionAndSaveToken(
   setIsFcmToken: (tokenExists: boolean) => void,
   memberId: number
 ) {
-  // console.log('requestPermission');
+  console.log('requestPermission');
   try {
     // // 서비스 워커가 준비될 때까지 기다리기
     // const registration = await navigator.serviceWorker.ready;
     // console.log('Service Worker 준비 완료:', registration);
 
     const permission = await Notification.requestPermission();
+    console.log('permission', permission);
     if (permission === 'granted') {
+      console.log('granted');
+
       const currentToken = await getToken(messaging, {
         vapidKey:
           'BFg_yRn7AVZukoSqRrEcdS-OA-5O8xtZFRad4q7Y7ZteODNuCTrgTbAnp588LN94b6UzY-TZ7jSvnwdSCRDQxNU',
       });
+      console.log('currentToken', currentToken);
       if (currentToken) {
         console.log('FCM Token:', currentToken);
         // 서버에 토큰 저장
@@ -98,14 +102,14 @@ export function setupForegroundNotificationHandler() {
   onMessage(messaging, payload => {
     console.log('포그라운드 메시지 수신:', payload);
 
-    console.log('메세지', payload.notification);
+    console.log('메세지', payload.data);
 
-    const notification = payload.notification;
+    const notification = payload.data;
     if (notification && Notification.permission === 'granted') {
-      const {title, body, icon} = notification;
+      const {title, content, icon} = notification;
       new Notification(title ?? '알림', {
-        body: body ?? '내용이 없습니다.',
-        icon: icon ?? '/default-icon.png', // 기본 아이콘 설정 (필요에 따라 경로 수정)
+        body: content ?? '내용이 없습니다.',
+        icon: icon ?? '/assets/images/bangBang.png', // 기본 아이콘 설정 (필요에 따라 경로 수정)
         data: {
           url: payload.fcmOptions?.link, // 알림 클릭 시 이동할 URL
         },

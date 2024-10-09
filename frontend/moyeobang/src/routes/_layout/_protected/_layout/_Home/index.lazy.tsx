@@ -14,10 +14,11 @@ import useTravelDetailStore from '@/store/useTravelDetailStore';
 import {useRouter} from '@tanstack/react-router';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
-// import AllowNotification from '@/components/notification/AllowNotification';
+import AllowNotification from '@/components/notification/AllowNotification';
 import useCurrentTravelStore from '@/store/useCurrentTravelStore';
 import useFcmTStore from '@/store/useFcmStore';
 import useMyInfo from '@/store/useMyInfoStore';
+import {includes} from 'lodash';
 
 // const memberName: MemberName = '진우바오';
 
@@ -138,12 +139,12 @@ function Index() {
   const {isModalOpen, openModal, closeModal} = useModalStore();
   const {setTravelData} = useTravelDetailStore();
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  // const {isfcmToken} = useFcmTStore();
-  // const [pushNotification, setPushNotification] =
-  //   useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
+  const {isfcmToken} = useFcmTStore();
+  const [pushNotification, setPushNotification] =
+    useState<boolean>(!isfcmToken); // [todo]추후 수정해야함.... 승인 허용 했는지 함수 로직 필요
   const {setCurrentTravelData} = useCurrentTravelStore();
 
-  const {memberId, memberName} = useMyInfo();
+  const {memberId, memberName, profileImage} = useMyInfo();
 
   const {data: travelData} = useSuspenseQuery({
     queryKey: ['travelList', memberId],
@@ -224,9 +225,9 @@ function Index() {
     });
   };
 
-  // const closePush = () => {
-  //   setPushNotification(false);
-  // };
+  const closePush = () => {
+    setPushNotification(false);
+  };
 
   useEffect(() => {
     if (currentTrips.length > 0) {
@@ -257,10 +258,18 @@ function Index() {
             여행기록<span css={textBlueStyle}>모여방</span>
           </span>
         </div>
-        <img src={bangbang} css={profileImageStyle} onClick={goSettingPage} />
+        <img
+          src={
+            !profileImage || profileImage.includes('default_profile')
+              ? bangbang
+              : profileImage
+          }
+          css={profileImageStyle}
+          onClick={goSettingPage}
+        />
       </div>
 
-      {/* {pushNotification && <AllowNotification onClose={closePush} />} */}
+      {pushNotification && <AllowNotification onClose={closePush} />}
 
       {noTripsAvailable ? (
         <NoTravel />

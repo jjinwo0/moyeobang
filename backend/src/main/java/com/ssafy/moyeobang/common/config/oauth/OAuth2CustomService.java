@@ -10,6 +10,8 @@ import com.ssafy.moyeobang.common.config.oauth.dto.OAuth2UserDto;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import java.util.Optional;
+
+import com.ssafy.moyeobang.notification.error.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +93,9 @@ public class OAuth2CustomService extends DefaultOAuth2UserService {
     }
 
     private OAuth2UserDto toOAuth2UserDto(MemberJpaEntity member) {
+
+//        MemberAccountJpaEntity memberAccount = memberAccountRepository.findByMemberId(member.getId())
+//                .orElseThrow(() -> new EntityNotFoundException("[" + member.getId() + "] 해당하는 회원의 계좌 정보가 없습니다."));
 
         return new OAuth2UserDto(
                 member.getEmail(),

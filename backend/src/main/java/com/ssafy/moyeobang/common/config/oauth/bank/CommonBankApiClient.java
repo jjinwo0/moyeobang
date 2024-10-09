@@ -1,9 +1,5 @@
 package com.ssafy.moyeobang.common.config.oauth.bank;
 
-import com.ssafy.moyeobang.account.adapter.out.bank.request.CreateAccountRequest;
-import com.ssafy.moyeobang.account.adapter.out.bank.request.CreateTeamKeyRequest;
-import com.ssafy.moyeobang.account.adapter.out.bank.request.GetBalanceRequest;
-import com.ssafy.moyeobang.account.adapter.out.bank.request.SendMoneyRequest;
 import com.ssafy.moyeobang.common.config.oauth.bank.request.CreateAccountRequestInCommon;
 import com.ssafy.moyeobang.common.config.oauth.bank.request.CreateTeamKeyRequestCommon;
 import lombok.RequiredArgsConstructor;

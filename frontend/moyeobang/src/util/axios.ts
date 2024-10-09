@@ -144,7 +144,6 @@
 
 // // export default instance;
 
-
 // 쿠키로 시도
 import axios from 'axios';
 import {getCookie, removeCookie, setCookie} from './cookie';
@@ -160,14 +159,18 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     const accessToken = getCookie('accessToken');
-    console.log(' 여긴 오나 ? accessToken', accessToken);
+    const refreshToken = getCookie('refresh_token');
+    console.log('[*] 요청 인터셉터 설정', refreshToken);
+    console.log('[*] accessToken', accessToken);
+    console.log('[*] refreshToken', getCookie('refresh_token'));
+
     if (accessToken) {
-      console.log('accessToken', accessToken);
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
   },
   error => {
+    console.log('[*] 요청 인터셉터 설정 에러', error);
     return Promise.reject(error);
   }
 );
@@ -177,17 +180,17 @@ instance.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
-    const refreshToken = getCookie('refresh-token');
+    console.log('[*] 응답 인터셉터 설정');
+    const refreshToken = getCookie('refresh_token');
     console.log('refreshToken', refreshToken);
 
     if (
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry
-      
     ) {
       console.log('[*] 재시도 중');
-      
+
       originalRequest._retry = true;
 
       if (!refreshToken) {
@@ -198,7 +201,7 @@ instance.interceptors.response.use(
       }
 
       try {
-        const refreshToken = getCookie('refresh-token');
+        const refreshToken = getCookie('refresh_token');
         console.log('[*] refreshToken 통해 accessToken 재발급', refreshToken);
         const response = await instance.post(`/reissue/token`, {
           headers: {Authorization: `Bearer ${refreshToken}`},
@@ -216,7 +219,7 @@ instance.interceptors.response.use(
       } catch (refreshError) {
         console.error('Failed to refresh access token:', refreshError);
         removeCookie('accessToken');
-        removeCookie('refresh-token');
+        removeCookie('refresh_token');
         window.location.href = '/entrance';
       }
     }

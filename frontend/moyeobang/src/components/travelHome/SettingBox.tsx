@@ -37,15 +37,18 @@ type BoxProps = {
   title: string;
   description?: string;
   updateButton?: string;
+  onClick?: () => void;
 };
 
 export default function SettingBox({
   title,
   description,
   updateButton,
+  onClick,
+  
 }: BoxProps) {
   return (
-    <div css={boxStyle}>
+    <div css={boxStyle} onClick={onClick}>
       <p css={tilteStyle}>{title}</p>
       {description && <p css={descriptionStyle}>{description}</p>}
       {updateButton && <p css={textStyle}>{updateButton}</p>}
