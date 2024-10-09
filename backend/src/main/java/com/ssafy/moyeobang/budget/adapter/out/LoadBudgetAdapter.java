@@ -8,9 +8,6 @@ import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity
 import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import java.util.List;
-import java.util.LongSummaryStatistics;
-import java.util.OptionalDouble;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -39,6 +36,8 @@ public class LoadBudgetAdapter implements LoadBudgetPort {
                 .mapToLong(PaymentHistory::getTotalPrice)
                 .average()
                 .orElse(((100 + (long) (Math.random() * 100)) * members.size()) * 100);
+
+        schedule.updateBudget(budget);
 
         return new Budget(budget);
     }

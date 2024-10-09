@@ -1,6 +1,7 @@
 package com.ssafy.moyeobang.payment.adapter.out;
 
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberTravelJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType;
@@ -21,6 +22,7 @@ import com.ssafy.moyeobang.payment.error.ErrorCode;
 import com.ssafy.moyeobang.payment.error.PaymentException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,9 +88,15 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
                 paymentRequestId, store.getStoreAccountNumber(), store.getTag());
 
         List<Member> members = memberTravels.stream()
-                .map(memberTravel -> new Member(
-                        memberTravel.getMember().getGender().name(),
-                        memberTravel.getMember().getAge()))
+                .map(memberTravel -> {
+                    MemberJpaEntity member = memberTravel.getMember();
+                    String gender = Optional.ofNullable(member.getGender())
+                            .map(Enum::name)
+                            .orElse("MALE");
+                    int age = Optional.of(member.getAge())
+                            .orElse(0);
+                    return new Member(gender, age);
+                })
                 .toList();
 
         PaymentHistory paymentHistory = new PaymentHistory(
