@@ -36,7 +36,7 @@ const qrReaderLayoutStyle = css`
     position : relative; 
     video { 
     width : 100% ; 
-    height : 600px; 
+    height : 550px; 
     object-fit : cover; 
     } 
 `;
@@ -97,7 +97,7 @@ export default function QrScan({onMessage, onError, restart, accountNumber}:QrSc
         },
         onError: (error) => {
             if (error instanceof AxiosError) {
-                
+
                 onError(error.response?.data?.error?.message)
             } else {
                 onError('온라인 결제 실패')
