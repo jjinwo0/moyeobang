@@ -13,7 +13,7 @@ export const Route = createRootRoute({
     return (
         <ConnectAccountProvider>
           <Outlet />
-          <TanStackRouterDevtools />
+          {/* <TanStackRouterDevtools /> */}
         </ConnectAccountProvider>
     );
   },
