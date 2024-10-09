@@ -1,4 +1,4 @@
-import axios from '@/util/axios'
+import axios from '@/util/axios';
 import axios8081 from '@/util/axios8081';
 
 export default {
@@ -205,9 +205,9 @@ export default {
   /**
    * 공금 입금 요청
    */
-  postResquestDepositAccount: async (accountId: number, totalAmount: number) =>
+  postResquestDepositAccount: async (travelId: number, totalAmount: number) =>
     axios.post<MoyeobangResponse<ResponsePostDepositAccount>>(
-      `/accounts/${accountId}/deposit/request`,
+      `/travel/accounts/deposit/request/${travelId}`,
       {totalAmount},
       {
         headers: {'Content-Type': 'application/json'},
