@@ -126,7 +126,7 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
                                            Money balance) {
         return DepositJpaEntity.builder()
                 .amount(money.getAmount())
-                .balanceSnapshot(balance.getAmount())
+                .balanceSnapshot(balance.getAmount() + money.getAmount())
                 .travelAccount(travelAccount)
                 .member(memberAccount.getMember())
                 .build();
