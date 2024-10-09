@@ -146,8 +146,8 @@ export default function AccountMain() {
     queryFn: () => moyeobang.getComsuptionStaticByMembers(Number(accountId)),
   });
 
-  // console.log('소비카테고리', DataByCategory.data.data)
-  // console.log('멤버별소비비율', DataByMembers.data.data)
+  console.log('소비카테고리', DataByCategory.data.data)
+  console.log('멤버별소비비율', DataByMembers.data.data)
   const sortedproportionDataByMembers = DataByMembers.data.data.sort((a,b) => {
     return Number(b.proportion)-Number(a.proportion)
   });
@@ -233,9 +233,21 @@ export default function AccountMain() {
           </div>
         }
         {index===1 && <div css={chartListStyle}>
-          {sortedproportionDataByCategory.map((category, index) => 
-          <ChartDetailCard key={index} title={category.categoryName} proportion={category.proportion} balance={category.balance}/>
-          )}
+          { sortedproportionDataByCategory.length>0 ? 
+            sortedproportionDataByCategory.map((category, index) => 
+            <ChartDetailCard 
+              key={index} 
+              title={category.categoryName} 
+              proportion={category.proportion} 
+              balance={category.balance}
+              />
+          )
+          : 
+            <div css={emptyTransactionStyle}>
+              <img src={sadBangBang} alt="" />
+                아직 결제내역이 없습니다
+            </div>
+        }
         </div>
         }
         {index==2 && <div css={chartListStyle}>
