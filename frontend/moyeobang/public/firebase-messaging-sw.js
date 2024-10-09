@@ -30,7 +30,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(messaging, payload => {
-  console.log(payload.data); // 푸시알림 콘솔 확인용
+  console.log('[백그라운드 알림]', payload.data); // 푸시알림 콘솔 확인용
   const notificationTitle = payload.data.title;
   const notificationOptions = {
     body: payload.data.content,
@@ -119,12 +119,12 @@ self.addEventListener('push', function (event) {
   }
 
   // 데이터가 유효한지 확인하고 알림을 표시
-  const title = payload.title;
+  const title = payload.data.title;
   const options = {
-    body: payload.content,
-    icon: payload.icon,
+    body: payload.data.content,
+    icon: payload.data.icon,
     data: {
-      url: payload.url,
+      url: payload.data.url,
     },
   };
 
