@@ -58,7 +58,7 @@ const messageStyle = css`
     z-index: 0;
   }
 `;
-const totalAmount: TotalAmount = 1000;
+// const totalAmount: TotalAmount = 1000;
 // const travelName: TravelName = '아기돼지오형제';
 const budget: number = 100000;
 
@@ -73,7 +73,6 @@ export default function CalculatePopup() {
         )}
         {showModal === 'publicDeposit' && (
           <PublicDeposit
-            totalMoney={totalAmount}
             travelName={travelName}
             budget={budget}
           ></PublicDeposit>

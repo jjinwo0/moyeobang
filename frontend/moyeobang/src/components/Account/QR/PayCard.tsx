@@ -57,7 +57,7 @@ const balanceStyle = css`
     align-items:center;
     gap:10px;
     font-family: 'semibold';
-    font-size: 16px; 
+    font-size: 10px; 
 `;
 
 const buttonStyle=css`
