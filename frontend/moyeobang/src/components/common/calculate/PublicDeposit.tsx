@@ -7,6 +7,7 @@ import moyeobang from '@/services/moyeobang';
 import {useMutation} from '@tanstack/react-query';
 // import useMyInfo from '@/store/useMyInfoStore';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 const basicLayout = css`
   display: flex;
@@ -52,18 +53,27 @@ const proposal = css`
 
 type PublicDepositProps = {
   budget: number;
-  totalMoney: number;
   travelName: string;
 };
 
 export default function PublicDeposit({
-  totalMoney,
   travelName,
   budget,
 }: PublicDepositProps) {
+
   const [value, setValue] = useState<string | number>(budget);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
   const {travelId} = useTravelDetailStore();
+  const {accountId} = useTravelDetailStore();
+
+  // get 모임 통장 전체 잔액 
+  const { data } = useSuspenseQuery({
+    queryKey: ['accoutByGroup', accountId],
+    queryFn: () => moyeobang.getAccountState(accountId),
+  });
+
+  const totalSpent = data.data.data.totalSpent;// 누적 입금 금액
+
   const {mutate: postResquestDepositAccount} = useMutation({
     mutationFn: ({
       travelId,
@@ -104,7 +114,7 @@ export default function PublicDeposit({
     <div css={basicLayout}>
       <div css={accumulatedMoneyLayout}>
         <span>현재 누적 입금 금액</span>
-        <span css={bluefont}>{totalMoney}원</span>
+        <span css={bluefont}>{totalSpent}원</span>
       </div>
       <div>{travelName} 을/를 위해</div>
       <div css={proposal}>
