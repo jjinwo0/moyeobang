@@ -156,7 +156,7 @@ export default function PlusSelfSchedule({
     transactionId: Id
   ) => {
     e.stopPropagation();
-    router.navigate({to: `/account/detail/${transactionId}`});
+    router.navigate({to: `/account/${transactionId}/detail`});
   };
 
   // [todo] 완료 여부

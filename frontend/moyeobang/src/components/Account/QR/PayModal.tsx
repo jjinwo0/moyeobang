@@ -81,8 +81,11 @@ export default function PayModal({onXClick} : QRPayProps) {
     }
 
     function handlePayError(errorName:string) {
-        console.log('121212',errorName);
-        setfailName(errorName);
+        if (errorName === 'Payment failed') {
+            setfailName('noBalance')
+        } else {
+            setfailName(errorName);
+        }
         setopenScanFailModal(true);
     }
 
