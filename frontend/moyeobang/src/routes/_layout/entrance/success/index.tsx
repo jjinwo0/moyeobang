@@ -80,14 +80,8 @@ function LoginSuccess() {
     const accessTokenExpireTime = searchParams.get('accessTokenExpireTime');
     const refreshToken = searchParams.get('refreshToken');
     const refreshTokenExpireTime = searchParams.get('refreshTokenExpireTime');
-    console.log('Access Token:', accessToken);
-    console.log('Access Token Expire Time:', accessTokenExpireTime);
-    console.log('Refresh Token:', refreshToken);
-    console.log('Refresh Token Expire Time:', refreshTokenExpireTime);
-
     if (accessToken) {
       setCookie('accessToken', accessToken, 900);
-      console.log('accessToken', getCookie('accessToken'));
       refetch();
     }
   }, [location.search]);
@@ -102,12 +96,8 @@ function LoginSuccess() {
       setBankName(myInfo.bankName);
       setAccountNumber(myInfo.accountNumber);
       // 계좌 정보가 없으면 계좌 등록 페이지로 이동
-      if (myInfo.accountId) {
-        setAccountId(myInfo.accountId);
-        navigate({to: '/'});
-      } else {
-        navigate({to: '/entrance/success/allowNoti'});
-      }
+
+      navigate({to: '/'});
     }
   }, [myInfoResponse]);
 
