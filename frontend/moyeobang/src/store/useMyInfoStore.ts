@@ -19,7 +19,7 @@ interface MyInfoState {
 const useMyInfo = create<MyInfoState>()(
   persist(
     set => ({
-      memberId: 0,
+      memberId: 5,
       memberName: '',
       profileImage: '',
       bankName: '',
