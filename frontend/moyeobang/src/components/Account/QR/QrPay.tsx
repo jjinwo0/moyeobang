@@ -34,10 +34,10 @@ interface QrPayProps {
     onError: (errorMessage:string) => void;
     isHome:boolean;
     accountNumber:SourceAccountNumber;
-    restart:boolean;
+    isActive:boolean;
 }
 
-export default function QrPay({onMessage, onError, isHome, accountNumber, restart}:QrPayProps) {
+export default function QrPay({onMessage, onError, isHome, accountNumber, isActive}:QrPayProps) {
 
     const paymentRequestId = useRef<string>(uuidv4());
     const token = getCookie('accessToken');
@@ -90,16 +90,19 @@ export default function QrPay({onMessage, onError, isHome, accountNumber, restar
         });
 
         eventSource.onerror = (event) => {
-            eventSource.close();
-            if (event) {
-                console.log('sse요청 error발생', event)
-                onError('sse 오류')
-            }
+            
+            console.log('sse요청 error발생', event)
 
             if (event.target.readyState === EventSource.CLOSED) {
-                console.log('see연결 종료')
-                onError('sseTimeOver')
+                console.log('see연결 재연결 시도')
+
+                setTimeout(() => {
+                    fetchSEE(); // 현재 연결 종료 후 재시도
+                }, 1000);
+            } else {
+                onError('sse 오류')
             }
+                eventSource.close(); // 현재 연결 종료
         };
 
         // eventSource 상태에 저장
@@ -108,7 +111,9 @@ export default function QrPay({onMessage, onError, isHome, accountNumber, restar
 
     
     useEffect(() => {
-        fetchSEE();
+        if (isActive) {
+            fetchSEE();
+        }
 
         // 컴포넌트 언마운트 시 SSE 연결 종료
         return () => {
@@ -117,7 +122,7 @@ export default function QrPay({onMessage, onError, isHome, accountNumber, restar
                 console.log('sse 연결 종료')
             }
         };
-    }, [restart]);
+    }, [isActive]);
 
 
     return (

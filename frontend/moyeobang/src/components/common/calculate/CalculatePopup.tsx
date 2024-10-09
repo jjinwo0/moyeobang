@@ -5,6 +5,7 @@ import {colors} from '@/styles/colors';
 import CalculateBtn from './CalculateBtn';
 import PublicDeposit from './PublicDeposit';
 import PersonalDeposit from './PersonalDeposit';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 const messageStyle = css`
   display: flex;
@@ -58,10 +59,11 @@ const messageStyle = css`
   }
 `;
 const totalAmount: TotalAmount = 1000;
-const travelName: TravelName = '아기돼지오형제';
+// const travelName: TravelName = '아기돼지오형제';
 const budget: number = 100000;
 
 export default function CalculatePopup() {
+  const {travelName} = useTravelDetailStore();
   const [showModal, setShowModal] = useState('calculateBtn');
   return (
     <>

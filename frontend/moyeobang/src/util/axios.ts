@@ -183,7 +183,7 @@ instance.interceptors.response.use(
     console.log('[*] 응답 인터셉터 설정');
     const refreshToken = getCookie('refresh_token');
     console.log('refreshToken', refreshToken);
-    console.log('error', error);
+    console.log('[*] 응답 인터셉터 error', error);
 
     if (
       error.response &&

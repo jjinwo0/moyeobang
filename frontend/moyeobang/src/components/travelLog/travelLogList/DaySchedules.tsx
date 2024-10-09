@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {css} from '@emotion/react';
 import {colors} from '@/styles/colors';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
@@ -61,10 +61,13 @@ export default function DaySchedules({
   dayNum: number;
   date: string;
 }) {
-  const {
-    travelSchedules,
-    setTravelSchedules,
-  } = useTravelLogContext();
+
+  interface ChangeSequence {
+    scheduleId: number;
+    sequence: number;
+  }
+  const {travelSchedules, setTravelSchedules} = useTravelLogContext();
+  const [changeSequence, setChangeSequence] = useState<ChangeSequence[]>([]);
 
   const daySchedules = travelSchedules[dayNum - 1]?.daySchedules || [];
   console.log('[*] daySchedules', daySchedules);
@@ -75,12 +78,17 @@ export default function DaySchedules({
     scheduleId: number,
     newSequence: number
   ) => {
+    let changeSequences: {scheduleId: number; sequence: number}[] = [];
     setTravelSchedules(prevSchedules => {
       const updatedSchedules = prevSchedules?.map(daySchedule => {
         if (daySchedule.dayNum === dayNum) {
           const updatedDaySchedules = daySchedule.daySchedules
             .map(schedule => {
               if (schedule.scheduleId === scheduleId) {
+                changeSequences.push({
+                  scheduleId: schedule.scheduleId,
+                  sequence: newSequence,
+                }); // 배열에 추가
                 return {...schedule, sequence: newSequence};
               }
               return schedule;
@@ -93,6 +101,10 @@ export default function DaySchedules({
       return updatedSchedules;
     });
   };
+
+  useEffect(() => {
+    console.log('[*] changeSequence', changeSequence);
+  }, [changeSequence]);
 
   // onDragEnd 함수 추가
   const handleOnDragEnd = (result: any) => {
