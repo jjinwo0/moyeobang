@@ -9,6 +9,7 @@ import com.ssafy.moyeobang.common.persistenceentity.schedule.ScheduleJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import java.util.List;
 import java.util.LongSummaryStatistics;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
@@ -34,17 +35,11 @@ public class LoadBudgetAdapter implements LoadBudgetPort {
                 .map(member -> new Member(member.getGender().name(), member.getAge()))
                 .toList();
 
-        LongSummaryStatistics stats = paymentHistoryRepository.findBy(schedule.getTitle(), members).stream()
-                .map(PaymentHistory::getTotalPrice)
-                .collect(Collectors.summarizingLong(Long::longValue));
+        long budget = (long) paymentHistoryRepository.findBy(schedule.getTitle(), members).stream()
+                .mapToLong(PaymentHistory::getTotalPrice)
+                .average()
+                .orElse(((100 + (long) (Math.random() * 100)) * members.size()) * 100);
 
-        if (stats.getCount() == 0) {
-            long max = 150 + (long) (Math.random() * 30);
-            long min = 120 + (long) (Math.random() * 30);
-
-            return new Budget(max * members.size() * 100, min * members.size() * 100);
-        }
-
-        return new Budget(stats.getMax(), stats.getMin());
+        return new Budget(budget);
     }
 }
