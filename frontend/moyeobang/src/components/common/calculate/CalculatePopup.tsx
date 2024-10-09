@@ -5,6 +5,7 @@ import {colors} from '@/styles/colors';
 import CalculateBtn from './CalculateBtn';
 import PublicDeposit from './PublicDeposit';
 import PersonalDeposit from './PersonalDeposit';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 const messageStyle = css`
   display: flex;
@@ -57,11 +58,12 @@ const messageStyle = css`
     z-index: 0;
   }
 `;
-const totalAmount: TotalAmount = 1000;
-const travelName: TravelName = '아기돼지오형제';
+// const totalAmount: TotalAmount = 1000;
+// const travelName: TravelName = '아기돼지오형제';
 const budget: number = 100000;
 
 export default function CalculatePopup() {
+  const {travelName} = useTravelDetailStore();
   const [showModal, setShowModal] = useState('calculateBtn');
   return (
     <>
@@ -71,7 +73,6 @@ export default function CalculatePopup() {
         )}
         {showModal === 'publicDeposit' && (
           <PublicDeposit
-            totalMoney={totalAmount}
             travelName={travelName}
             budget={budget}
           ></PublicDeposit>

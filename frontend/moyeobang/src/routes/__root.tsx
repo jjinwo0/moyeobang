@@ -11,10 +11,10 @@ export const Route = createRootRoute({
     }, []);
 
     return (
-      <ConnectAccountProvider>
-        <Outlet />
-        <TanStackRouterDevtools />
-      </ConnectAccountProvider>
+        <ConnectAccountProvider>
+          <Outlet />
+          <TanStackRouterDevtools />
+        </ConnectAccountProvider>
     );
   },
 });

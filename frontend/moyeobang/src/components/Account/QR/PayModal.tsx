@@ -80,13 +80,11 @@ export default function PayModal({onXClick} : QRPayProps) {
         setActiveComponent(active)
     }
 
-    function handlePayError(errorName:string) {
-        if (errorName === 'Payment failed') {
+    function handlePayError(errorMessage:string) {
+        if (errorMessage === 'Payment failed') {
             setfailName('noBalance')
-        } else {
-            setfailName(errorName);
+            setopenScanFailModal(true);
         }
-        setopenScanFailModal(true);
     }
 
     return (
@@ -118,7 +116,7 @@ export default function PayModal({onXClick} : QRPayProps) {
                 onError={handlePayError}
                 isHome={isHome}
                 accountNumber={accountNumber}
-                restart={scanRestart}
+                isActive={activeComponenet==='left'}
                 />
             ) :
             (
