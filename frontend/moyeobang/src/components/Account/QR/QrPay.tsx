@@ -26,14 +26,17 @@ interface ResultMessage {
 }
 
 type ConnectMessage=string;
+type ErrorMessage=string;
 
 interface QrPayProps {
     onMessage: (transactionId: TransactionId) => void;
+    onError: (errorMessage:string) => void;
     isHome:boolean;
     accountNumber:SourceAccountNumber;
+    restart:boolean;
 }
 
-export default function QrPay({onMessage, isHome, accountNumber}:QrPayProps) {
+export default function QrPay({onMessage, onError, isHome, accountNumber, restart}:QrPayProps) {
 
     const paymentRequestId = useRef<string>(uuidv4());
     const [eventSource, setEventSource] = useState<EventSourcePolyfill | null>(null);
@@ -74,15 +77,26 @@ export default function QrPay({onMessage, isHome, accountNumber}:QrPayProps) {
             // setOpenCompleteModal(true);
         });
 
+        eventSource.addEventListener('payment-failed', (event) => {
+            console.log('payment-failed' , event)
+
+            const messageEvent = event as MessageEvent<string>;
+            const errorMessage : ErrorMessage = messageEvent.data;
+            console.log(errorMessage) // 'Payment failed'
+            onError(errorMessage)
+
+        });
+
         eventSource.onerror = (event) => {
-            
             eventSource.close();
             if (event) {
                 console.log('sse요청 error발생', event)
+                onError('sse 오류')
             }
 
             if (event.target.readyState === EventSource.CLOSED) {
                 console.log('see연결 종료')
+                onError('sseTimeOver')
             }
         };
 
@@ -101,7 +115,7 @@ export default function QrPay({onMessage, isHome, accountNumber}:QrPayProps) {
                 console.log('sse 연결 종료')
             }
         };
-    }, []);
+    }, [restart]);
 
 
     return (

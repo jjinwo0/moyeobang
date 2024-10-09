@@ -55,13 +55,17 @@ const buttonLayoutStyle=css`
 
 interface FailByQrScanProps {
     onClose: VoidFunction;
-    onRestart:VoidFunction
+    onRestart:(active:string) => void;
     errorName:string;
 }
 export default function FailModalByQrScan({onClose, onRestart, errorName}:FailByQrScanProps) {
 
     function handleRestart() {
-        onRestart()
+        if (errorName==='sseTimeOver') {
+            onRestart('left');
+        } else {
+            onRestart('right');
+        }
     }
 
     function handleClose() {
@@ -71,11 +75,18 @@ export default function FailModalByQrScan({onClose, onRestart, errorName}:FailBy
     return(
         <div css={layoutStyle}>
             {errorName==='noBalance' ? 
-            <div>
-                계좌에 잔액이 부족합니다.
-            </div>: 
             <>
-            <div css={titleStyle}><span>QR</span>스캔에 실패했습니다.</div>
+            <div css={titleStyle}>계좌에 잔액이 부족해요</div>
+            <div css={textStyle}>공금을 입금해주세요</div>
+            </>
+            : errorName==='sseTimeOver' ? 
+            <>
+            <div css={titleStyle}><span>QR</span>이 만료되었어요</div>
+            <div css={textStyle}><span>QR</span>을 다시 띄워주세요</div>
+            </>
+            :
+            <>
+            <div css={titleStyle}><span>QR</span>스캔에 실패했어요</div>
             <div css={textStyle}><span>QR</span>을 다시 촬영해주세요</div>
             </>
             }
