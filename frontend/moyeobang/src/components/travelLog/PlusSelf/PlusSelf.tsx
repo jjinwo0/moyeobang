@@ -104,16 +104,12 @@ export default function PlusSelf() {
         refetchType: 'all',
       });
 
-      const scheduleId = response.data.data.scheduleId;
+      const responseScheduleId = response.data.data.scheduleId;
       console.log('[*shedule]', response.data);
-      console.log('[*sheduleId]', scheduleId);
-      if (scheduleId) {
-        setScheduleId(scheduleId);
-        setTimeout(() => {
-          refetch();
-        }, 0); // 상태가 업데이트된 후에 refetch가 실행되도록 비동기 처리
+      console.log('[*sheduleId]', responseScheduleId);
+      if (responseScheduleId) {
+        setScheduleId(responseScheduleId);
       }
-
       resetForm();
       handleShowPlusSelf();
     },
@@ -180,6 +176,11 @@ export default function PlusSelf() {
     enabled: false, // 쿼리가 자동으로 실행되지 않도록 설정
   });
 
+  useEffect(() => {
+    if (scheduleId) {
+      refetch();
+    }
+  }, [scheduleId]);
   // budgetData가 성공적으로 가져와졌을 때 travelSchedules 쿼리를 무효화
   useEffect(() => {
     if (isSuccess && budgetData) {
