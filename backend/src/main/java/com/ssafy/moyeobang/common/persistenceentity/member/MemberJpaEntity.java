@@ -75,5 +75,10 @@ public class MemberJpaEntity extends BaseEntity {
 
         this.FCMToken = token;
     }
+
+    public void updateMemberKey(String memberKey) {
+
+        this.memberKey = memberKey;
+    }
 }
 
