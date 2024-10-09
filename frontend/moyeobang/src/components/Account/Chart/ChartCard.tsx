@@ -61,7 +61,7 @@ export default function ChartCard({title, memberName, data, money} : ChartCardPr
             <div css={memberName ? titleStyle(true) : titleStyle(false)} >{title}</div>
             <div css={accountStyle} >{money.toLocaleString()}원</div>
             <div css={chartContainerStyle}>
-                <HorizonBarGraph data={data}/>
+                <HorizonBarGraph data={data} isEmpty={money===0}/>
             </div>
         </div>
     )

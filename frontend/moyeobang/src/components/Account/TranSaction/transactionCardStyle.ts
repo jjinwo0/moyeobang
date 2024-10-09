@@ -51,7 +51,7 @@ export const carouselStyle = css`
     max-width: 150px;
     justify-content: flex-start;
     flex-direction: row;
-    gap: 5px;
+    gap: 3px;
     padding: 1px 0;
 
     overflow-x: auto;
@@ -59,7 +59,6 @@ export const carouselStyle = css`
     &::-webkit-scrollbar {
     display: none;
     }
-
 `;
 
 
