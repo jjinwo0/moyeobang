@@ -67,12 +67,14 @@ export default function PublicDeposit({
   const {mutate: postResquestDepositAccount} = useMutation({
     mutationFn: ({
       travelId,
-      totalAmount,
+      title,
+      amount,
     }: {
       travelId: Id;
-      totalAmount: number;
+      title: string;
+      amount: number;
     }) => {
-      return moyeobang.postResquestDepositAccount(travelId, totalAmount);
+      return moyeobang.postResquestDepositAccount(travelId, title, amount);
     },
   });
 
@@ -89,7 +91,7 @@ export default function PublicDeposit({
 
   const handleOnclick = () => {
     // 공금 요청 알림 보내기
-    postResquestDepositAccount({travelId, totalAmount: Number(value)});
+    postResquestDepositAccount({travelId, title: travelName, amount});
     setValue(0);
     setFocused(false); // 다시 초기화
   };
