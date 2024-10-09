@@ -6,6 +6,7 @@ import React, {useState} from 'react';
 import Btn from '../btn/Btn';
 import {bluefont, colors} from '@/styles/colors';
 import {css} from '@emotion/react';
+import useTravelDetailStore from '@/store/useTravelDetailStore';
 
 const basicLayout = css`
   display: flex;
@@ -48,7 +49,8 @@ export default function PersonalDeposit({
 }) {
   const [value, setValue] = useState<number | string>(0);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
-  const {memberId, accountId} = useMyInfo();
+  const {memberId} = useMyInfo();
+  const {accountId} = useTravelDetailStore();
   const handleFocus = () => {
     if (!focused) {
       setValue(''); // 처음 클릭 시 입력 필드의 값을 비움

@@ -223,7 +223,7 @@ export default {
     amount: number
   ) =>
     axios.post<MoyeobangResponse<ResponseDepositAccount>>(
-      `/accounts/${accountId}/deposit`,
+      `/accounts/${accountId}/send`,
       {
         memberId: memberId,
         amount: amount,
