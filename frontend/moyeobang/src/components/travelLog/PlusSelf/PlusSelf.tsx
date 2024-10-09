@@ -108,6 +108,7 @@ export default function PlusSelf() {
       console.log('[*shedule]', response.data);
       console.log('[*sheduleId]', scheduleId);
       setScheduleId(scheduleId);
+      refetch();
       resetForm();
       handleShowPlusSelf();
     },
@@ -163,10 +164,15 @@ export default function PlusSelf() {
   /**
    * 일정별 예산 예측 조회
    */
-  const {data: budgetData, isSuccess} = useQuery({
+  const {
+    data: budgetData,
+    isSuccess,
+    refetch,
+  } = useQuery({
     queryKey: ['budget', scheduleId],
     queryFn: () => moyeobang.getBudget(scheduleId!),
-    enabled: !!scheduleId,
+    refetchOnWindowFocus: false,
+    enabled: false, // 쿼리가 자동으로 실행되지 않도록 설정
   });
 
   // budgetData가 성공적으로 가져와졌을 때 travelSchedules 쿼리를 무효화
