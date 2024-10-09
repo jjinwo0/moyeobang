@@ -13,10 +13,12 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     const accessToken = getCookie('accessToken');
+    const refreshToken = getCookie('refresh-token');
+    console.log('[*] 요청 인터셉터 설정', refreshToken);
     console.log(
       ' 여긴 오나 ? accessToken, refreshToken',
       accessToken,
-      getCookie('refresh-token')
+      refreshToken
     );
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -24,6 +26,7 @@ instance.interceptors.request.use(
     return config;
   },
   error => {
+    console.log('[*] 요청 인터셉터 설정 에러', error);
     return Promise.reject(error);
   }
 );
