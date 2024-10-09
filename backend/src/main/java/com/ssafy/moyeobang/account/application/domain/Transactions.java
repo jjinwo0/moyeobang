@@ -4,12 +4,15 @@ import static com.ssafy.moyeobang.account.application.domain.TransactionType.DEP
 import static com.ssafy.moyeobang.account.application.domain.TransactionType.WITHDRAWAL;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.reducing;
+import static java.util.stream.Collectors.toMap;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -69,12 +72,23 @@ public class Transactions {
     }
 
     public Map<WithdrawTag, Money> getWithdrawTagStatistics(Set<Member> members) {
-        return getTransactionsRelatedTo(members).stream()
+        return members.stream()
+                .map(this::getWithdrawTagStatistics)
+                .map(Map::entrySet)
+                .flatMap(Set::stream)
+                .collect(groupingBy(
+                        Entry::getKey,
+                        reducing(Money.ZERO, Entry::getValue, Money::add)
+                ));
+    }
+
+    private Map<WithdrawTag, Money> getWithdrawTagStatistics(Member member) {
+        return getTransactionsRelatedTo(Set.of(member)).stream()
                 .filter(transaction -> WITHDRAWAL.equals(transaction.getType()))
                 .map(Withdrawal.class::cast)
                 .collect(groupingBy(
                         Withdrawal::getTag,
-                        reducing(Money.ZERO, Withdrawal::getMoney, Money::add))
+                        reducing(Money.ZERO, withdraw -> withdraw.getSettleAmountFor(member), Money::add))
                 );
     }
 }
