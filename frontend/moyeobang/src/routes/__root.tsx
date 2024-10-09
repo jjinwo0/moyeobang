@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {createRootRoute, Outlet} from '@tanstack/react-router';
-import {TanStackRouterDevtools} from '@tanstack/router-devtools';
+// import {TanStackRouterDevtools} from '@tanstack/router-devtools';
 import {ConnectAccountProvider} from '@/contexts/ConnectAccount';
 import {setupForegroundNotificationHandler} from '@/services/notificationService';
 
