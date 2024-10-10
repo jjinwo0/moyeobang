@@ -5,7 +5,7 @@ import com.ssafy.moyeobang.account.application.domain.Travel;
 import com.ssafy.moyeobang.account.application.port.out.LoadTravelPort;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.error.exception.EntityNotFoundException;
-import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -19,9 +19,9 @@ public class LoadTravelAdapterInAccount implements LoadTravelPort {
     @Override
     public Travel findById(Long id) {
 
-        TravelJpaEntity findEntity = travelAccountRepository.findTravelById(id)
+        TravelAccountJpaEntity findEntity = travelAccountRepository.findTravelById(id)
                 .orElseThrow(() -> new EntityNotFoundException("[" + id + "] 해당하는 계좌에 연결된 여행 정보를 찾을 수 없습니다."));
 
-        return mapper.mapToDomain(findEntity);
+        return mapper.mapToDomain(findEntity.getTravel());
     }
 }
