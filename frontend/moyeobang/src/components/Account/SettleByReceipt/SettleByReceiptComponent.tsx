@@ -67,10 +67,10 @@ const middleContainerStyle=css`
   box-sizing:border-box;
   width:100%;
   max-width: 100%;
-  height:480px;
+  height:460px;
   gap:20px;
   overflow-y:auto;
-  padding-bottom: 20px;
+  padding-bottom: 40px;
 
   &::-webkit-scrollbar {
         display: none;
