@@ -219,8 +219,8 @@ instance.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error('Failed to refresh access token:', refreshError);
-        sessionStorage.clear()
-        localStorage.clear()
+        // sessionStorage.clear()
+        // localStorage.clear()
         logout()
         window.location.href = '/entrance';
       }
