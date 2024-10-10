@@ -53,7 +53,7 @@ const buttonContainerStyle = css`
   display: flex;
   justify-content: space-around;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 interface AllowNotificationProps {

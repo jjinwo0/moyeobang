@@ -89,7 +89,7 @@ const buttonStyle = css`
   display: flex;
   justify-content: flex-end;
   margin-top: 5px;
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 const closeButtonStyle = css`
