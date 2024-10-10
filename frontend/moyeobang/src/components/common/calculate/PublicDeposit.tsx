@@ -44,11 +44,13 @@ const proposal = css`
 type PublicDepositProps = {
   budget: number;
   travelName: string;
+  showModal:(step:string)=>void
 };
 
 export default function PublicDeposit({
   travelName,
   budget,
+  setshowModal
 }: PublicDepositProps) {
   const [value, setValue] = useState<number>(budget);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
@@ -97,6 +99,7 @@ export default function PublicDeposit({
         amount: Number(value),
       });
       setValue(0);
+      setshowModal('')
       setFocused(false); // 다시 초기화
     }
   };
