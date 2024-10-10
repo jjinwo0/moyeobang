@@ -187,10 +187,10 @@ instance.interceptors.response.use(
 
     if (
       error.response &&
-      // error.response.status === 401 &&
+      error.response.status === 401 &&
       !originalRequest._retry
     ) {
-      console.log('[*] 재시도 중');
+      console.log('[*] 재시도 중', error.response);
 
       originalRequest._retry = true;
 
