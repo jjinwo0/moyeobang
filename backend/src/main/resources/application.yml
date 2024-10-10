@@ -16,6 +16,12 @@ spring:
       hibernate:
         default_batch_fetch_size: 100
 
+  batch:
+    job:
+      false
+    jdbc:
+      initialize-schema: always
+
   data:
     redis:
       host: 127.0.0.1
@@ -51,6 +57,12 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true
+
+  batch:
+    job:
+      false
+    jdbc:
+      initialize-schema: always
 
   h2:
     console:
@@ -91,6 +103,12 @@ spring:
     url: jdbc:mysql://j11c102.p.ssafy.io:3306/moyeobang?serverTimezone=UTC&characterEncoding=UTF-8
     username: c102
     password: 123456789
+
+  batch:
+    job:
+      false
+    jdbc:
+      initialize-schema: always
 
   elasticsearch:
     uris: http://j11c102.p.ssafy.io:9200
