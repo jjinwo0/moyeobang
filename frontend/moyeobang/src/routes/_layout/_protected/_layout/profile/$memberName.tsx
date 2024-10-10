@@ -116,12 +116,8 @@ export default function profile() {
     // 쿠키 삭제
     logout();
     // 상태 초기화
-    setMemberId(0);
-    setMemberName('');
-    setAccountId(0);
-    setAccountNumber('');
-    setBankName('');
-    setProfileImage('');
+    localStorage.clear();
+    sessionStorage.clear();
     navigate({to: '/entrance'});
   };
 
