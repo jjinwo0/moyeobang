@@ -61,7 +61,7 @@ const messageStyle = css`
 // const totalAmount: TotalAmount = 1000;
 // const travelName: TravelName = '아기돼지오형제';
 
-export default function CalculatePopup(onCalClick:()=>void) {
+export default function CalculatePopup({onCalClick}:{onCalClick:()=>void}) {
   const {travelName} = useTravelDetailStore();
   const [showModal, setShowModal] = useState('calculateBtn');
   return (
