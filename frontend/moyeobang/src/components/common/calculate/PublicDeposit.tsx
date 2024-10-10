@@ -42,17 +42,15 @@ const proposal = css`
 `;
 
 type PublicDepositProps = {
-  budget: number;
   travelName: string;
-  setShowModal:(step:string)=>void
+  onCalClick: () => void;
 };
 
 export default function PublicDeposit({
   travelName,
-  budget,
-  setShowModal
+  onCalClick,
 }: PublicDepositProps) {
-  const [value, setValue] = useState<number>(budget);
+  const [value, setValue] = useState<number>(0);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
   const {travelId} = useTravelDetailStore();
 
@@ -98,8 +96,8 @@ export default function PublicDeposit({
         title: travelName,
         amount: Number(value),
       });
+      onCalClick();
       setValue(0);
-      setShowModal('')
       setFocused(false); // 다시 초기화
     }
   };
@@ -107,7 +105,7 @@ export default function PublicDeposit({
   return (
     <div css={basicLayout}>
       <div>
-        <span style={{color: colors.fourth, fontFamily: 'semibold'}}>
+        <span style={{color: colors.fifth, fontFamily: 'semibold'}}>
           {travelName}
         </span>{' '}
         을/를 위해
