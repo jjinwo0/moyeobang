@@ -50,7 +50,7 @@ export default function PublicDeposit({
   travelName,
   budget,
 }: PublicDepositProps) {
-  const [value, setValue] = useState<string | number>(budget);
+  const [value, setValue] = useState<number>(budget);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
   const {travelId} = useTravelDetailStore();
 
@@ -70,24 +70,35 @@ export default function PublicDeposit({
 
   const handleFocus = () => {
     if (!focused) {
-      setValue(''); // 처음 클릭 시 입력 필드의 값을 비움
+      setValue(0); // 처음 클릭 시 입력 필드의 값을 비움
       setFocused(true); // 입력 필드가 클릭되었음을 표시
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value); // 사용자가 입력한 값을 업데이트
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event?.target.value;
+
+    if (newValue === '') {
+      setValue(0);
+    } else {
+      const numericValue = parseFloat(newValue);
+      if (!isNaN(numericValue)) {
+        setValue(numericValue); // 사용자가 입력한 값을 업데이트
+      }
+    }
   };
 
   const handleOnclick = () => {
-    // 공금 요청 알림 보내기
-    postResquestDepositAccount({
-      travelId,
-      title: travelName,
-      amount: Number(value),
-    });
-    setValue(0);
-    setFocused(false); // 다시 초기화
+    // 공금 요청 알림 보내기 0보다 커야만.
+    if (value > 0) {
+      postResquestDepositAccount({
+        travelId,
+        title: travelName,
+        amount: Number(value),
+      });
+      setValue(0);
+      setFocused(false); // 다시 초기화
+    }
   };
 
   return (

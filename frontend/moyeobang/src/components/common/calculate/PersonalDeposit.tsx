@@ -7,6 +7,7 @@ import Btn from '../btn/Btn';
 import {bluefont, colors} from '@/styles/colors';
 import {css} from '@emotion/react';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const basicLayout = css`
   display: flex;
@@ -47,19 +48,33 @@ export default function PersonalDeposit({
 }: {
   travelName: TravelName;
 }) {
-  const [value, setValue] = useState<number | string>(0);
+  const [value, setValue] = useState<number>(0);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
   const {memberId} = useMyInfo();
   const {accountId} = useTravelDetailStore();
+  const queryClient = useQueryClient();
+
+
   const handleFocus = () => {
     if (!focused) {
-      setValue(''); // 처음 클릭 시 입력 필드의 값을 비움
+      setValue(0); // 처음 클릭 시 입력 필드의 값을 비움
       setFocused(true); // 입력 필드가 클릭되었음을 표시
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value); // 사용자가 입력한 값을 업데이트
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const newValue = event.target.value;
+
+    if (newValue==='') {
+      setValue(0);
+    }
+
+    const numericValue=parseFloat(newValue);
+
+    if (!isNaN(numericValue)) {
+      setValue(numericValue); // 숫자일때만 사용자가 입력한 값을 업데이트
+    }
   };
 
   const {mutate: postDepositAccount} = useMutation({
@@ -74,17 +89,36 @@ export default function PersonalDeposit({
     }) => {
       return moyeobang.postDepositAccount(accountId, memberId, amount);
     },
+    onSuccess: async () => {
+
+    await queryClient.invalidateQueries({
+          queryKey: ['transactionList', accountId], 
+          refetchType: 'all',
+      });
+
+    await queryClient.invalidateQueries({
+          queryKey: ['accountByGroup', accountId], 
+          refetchType: 'all',
+      });
+
+    await queryClient.invalidateQueries({
+          queryKey: ['accountByMemberId', accountId, memberId], 
+          refetchType: 'all',
+      });
+    }
   });
 
   const handleOnclick = () => {
     // api로 개인 입금 시키기
-    postDepositAccount({
-      accountId: accountId,
-      memberId: memberId,
-      amount: Number(value),
-    });
-
-    setValue(0);
+    if (value>0) {
+      postDepositAccount({
+        accountId: accountId,
+        memberId: memberId,
+        amount: Number(value),
+      });
+  
+      setValue(0);
+    }
   };
 
   return (
