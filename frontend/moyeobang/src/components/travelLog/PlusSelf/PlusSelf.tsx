@@ -16,6 +16,7 @@ import moyeobang from '@/services/moyeobang';
 import {useNavigate} from '@tanstack/react-router';
 import {fi} from 'date-fns/locale';
 import querykeys from '@/util/querykeys';
+import axios from 'axios';
 
 export default function PlusSelf() {
   const {travelPlaceList, travelId} = useTravelDetailStore();
@@ -107,8 +108,20 @@ export default function PlusSelf() {
       const responseScheduleId = response.data.data.scheduleId;
       console.log('[*shedule]', response.data);
       console.log('[*sheduleId]', responseScheduleId);
-      if (responseScheduleId) {
-        setScheduleId(responseScheduleId);
+      try {
+        const budgetData = await queryClient.fetchQuery({
+          queryKey: ['budget', responseScheduleId],
+          queryFn: async () => {
+            const result = await moyeobang.getBudget(responseScheduleId);
+            return result.data; // 데이터를 반환
+          },
+        });
+
+        if (budgetData) {
+          console.log('Budget Data:', budgetData);
+        }
+      } catch (error) {
+        console.error('Error fetching budget data:', error);
       }
       resetForm();
       handleShowPlusSelf();
@@ -165,33 +178,33 @@ export default function PlusSelf() {
   /**
    * 일정별 예산 예측 조회
    */
-  const {
-    data: budgetData,
-    isSuccess,
-    refetch,
-  } = useQuery({
-    queryKey: ['budget', scheduleId],
-    queryFn: () => moyeobang.getBudget(scheduleId!),
-    refetchOnWindowFocus: false,
-    enabled: false, // 쿼리가 자동으로 실행되지 않도록 설정
-  });
+  // const {
+  //   data: budgetData,
+  //   isSuccess,
+  //   refetch,
+  // } = useQuery({
+  //   queryKey: ['budget', scheduleId],
+  //   queryFn: () => moyeobang.getBudget(scheduleId!),
+  //   refetchOnWindowFocus: false,
+  //   enabled: false, // 쿼리가 자동으로 실행되지 않도록 설정
+  // });
 
-  useEffect(() => {
-    if (scheduleId) {
-      refetch();
-    }
-  }, [scheduleId]);
-  // budgetData가 성공적으로 가져와졌을 때 travelSchedules 쿼리를 무효화
-  useEffect(() => {
-    if (isSuccess && budgetData) {
-      setTimeout(() => {
-        queryClient.invalidateQueries({
-          queryKey: ['travelSchedules', travelId],
-          refetchType: 'all',
-        });
-      }, 2000);
-    }
-  }, [isSuccess, budgetData, queryClient, travelId]);
+  // useEffect(() => {
+  //   if (scheduleId) {
+  //     refetch();
+  //   }
+  // }, [scheduleId]);
+  // // budgetData가 성공적으로 가져와졌을 때 travelSchedules 쿼리를 무효화
+  // useEffect(() => {
+  //   if (isSuccess && budgetData) {
+  //     setTimeout(() => {
+  //       queryClient.invalidateQueries({
+  //         queryKey: ['travelSchedules', travelId],
+  //         refetchType: 'all',
+  //       });
+  //     }, 2000);
+  //   }
+  // }, [isSuccess, budgetData, queryClient, travelId]);
 
   useEffect(() => {
     if (selectedMarker) {
