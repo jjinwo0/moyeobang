@@ -70,7 +70,7 @@ const middleContainerStyle=css`
   height:470px;
   gap:20px;
   overflow-y:auto;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 
   &::-webkit-scrollbar {
         display: none;
