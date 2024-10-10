@@ -22,6 +22,8 @@ public class RefundMoneyService implements RefundMoneyUseCase {
         TravelAccount account = loadAccountPort.loadTravelAccount(accountId);
 
         account.getMembers().getMembers().values()
+                .stream()
+                .filter(member -> account.getWithdrawAmountFor(member).isPositive())
                 .forEach(member -> refund(account, member));
     }
 

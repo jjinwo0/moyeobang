@@ -36,6 +36,10 @@ public class Money {
         return this.amount.compareTo(BigInteger.ZERO) >= 0;
     }
 
+    public boolean isPositive() {
+        return this.amount.compareTo(BigInteger.ZERO) > 0;
+    }
+
     public long getAmount() {
         return amount.longValue();
     }
