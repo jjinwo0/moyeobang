@@ -32,7 +32,7 @@ public class TokenAdapter implements CreateAccessTokenPort {
         MemberJpaEntity findMember = memberRepository.findById(findMemberId)
                 .orElseThrow(() -> new EntityNotFoundException("[" + findMemberId + "] 해당하는 회원 정보가 없습니다."));
 
-        TokenDetail createAccessToken = tokenManager.generateToken(findMember, Duration.ofMinutes(15),
+        TokenDetail createAccessToken = tokenManager.generateToken(findMember, Duration.ofHours(24),
                 TokenType.ACCESS);
 
         return tokenMapper.mapToDomain(createAccessToken);
