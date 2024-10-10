@@ -6,6 +6,7 @@ import searchImg from '@/assets/icons/Search.png';
 type LocationInputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string | ReactNode;
   onClick: () => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void; // 엔터치면 검색
 };
 
 const locationInputWrapperStyle = css`
@@ -50,12 +51,18 @@ const searchImgStyle = css`
 export default function LocationInput({
   label,
   onClick,
+  onKeyDown,
   ...props
 }: LocationInputProps) {
   return (
     <label css={locationInputWrapperStyle}>
       {label && <span style={{height: '20px'}}>{label}</span>}
-      <input type="text" {...props} css={locationInputStyle} />
+      <input
+        type="text"
+        {...props}
+        css={locationInputStyle}
+        onKeyDown={onKeyDown}
+      />
       <img
         src={searchImg}
         css={searchImgStyle}

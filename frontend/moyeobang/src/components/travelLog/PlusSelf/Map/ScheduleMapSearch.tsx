@@ -19,6 +19,12 @@ export default function ScheduleMapSearch() {
     // 검색어를 상태에 반영하여 `PlusSelfGoogleMap`으로 전달
     setSearchLocation(searchMap);
   };
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      searchLocationHandler()
+    }
+  };
+
 
   return (
     <>
@@ -30,6 +36,7 @@ export default function ScheduleMapSearch() {
             value={searchMap || ''} // 검색어 상태를 사용
             placeholder="여행 장소 검색"
             onChange={e => setSearchMap(e.target.value)} // 입력된 검색어를 업데이트
+            onKeyDown={handleEnter}
             css={ScheduleMapSearchStyle.LocationInputStyle}
           />
           <img

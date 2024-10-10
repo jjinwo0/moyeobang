@@ -188,18 +188,17 @@ export default function CreateTravel({
         newform.append('backgroundImage', file);
       }
       //[todo] 여행 수정 시 이미 이미지 파일 있는데 파일 선택 안했을 경우 다시 넘겨주기
-      // else if (initialData.selectedImage) {
-      //   //이미 여행에 이미지가 있을 경우 그 이미지 url을 다시 blob으로 변환해서 전송
-      //   const existingImageBlob = await fetch(initialData.selectedImage).then(
-      //     res => res.blob()
-      //   );
-      //   newform.append(
-      //     'backgroundImage',
-      //     existingImageBlob,
-      //     initialData.selectedImage
-      //   );
-      // }
-      else {
+      else if (initialData.selectedImage) {
+        //이미 여행에 이미지가 있을 경우 그 이미지 url을 다시 blob으로 변환해서 전송
+        const existingImageBlob = await fetch(initialData.selectedImage).then(
+          res => res.blob()
+        );
+        newform.append(
+          'backgroundImage',
+          existingImageBlob,
+          initialData.selectedImage
+        );
+      } else {
         // 파일이 없을 경우 defaultImage를 Blob으로 변환 후 추가
         const response = await fetch(defaultImage);
         const blob = await response.blob();
@@ -310,6 +309,12 @@ export default function CreateTravel({
     }
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleCitySearchClick();
+    }
+  };
+
   // 태그 삭제
   const handleDeleteTag = (place: string) => {
     setTravelPlaceList(travelPlaceList.filter(item => item !== place));
@@ -388,6 +393,7 @@ export default function CreateTravel({
                   // } // 쉼표로 구분하여 배열로 변환
                   onChange={handleCityInputChange}
                   onClick={handleCitySearchClick} // 검색 아이콘 클릭 시 검색 실행
+                  onKeyDown={handleKeyPress}
                   placeholder="여행 장소를 검색하세요"
                 />
 
