@@ -99,7 +99,7 @@ export default function Settle() {
               details={isSettledParticipantByCustom(transactionDetailData.details) ? transactionDetailData.details : []} 
               acceptedNumber={transactionDetailData.acceptedNumber}
               isUpdate={isUpdate} // true 수정 | false 새로 생성
-              fromReceipt={method==='receipt'&&isUpdate}
+              fromUpdateReceipt={method==='receipt'&&isUpdate}
             />
           }
         </div>
