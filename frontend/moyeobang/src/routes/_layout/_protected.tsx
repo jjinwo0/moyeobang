@@ -17,12 +17,13 @@ export const Route = createFileRoute('/_layout/_protected')({
 function Protected() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const isLogin = isAuthenticated();
-    if (!isLogin) {
-      navigate({to: '/entrance', replace: true});
-    }
-  }, [navigate]);
+  // [todo] 주석 풀기
+  // useEffect(() => {
+  //   const isLogin = isAuthenticated();
+  //   if (!isLogin) {
+  //     navigate({to: '/entrance', replace: true});
+  //   }
+  // }, [navigate]);
 
   return <Outlet />;
 }
