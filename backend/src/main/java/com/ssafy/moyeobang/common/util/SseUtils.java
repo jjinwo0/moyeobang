@@ -95,7 +95,7 @@ public class SseUtils {
                 log.error("Failed to send ping for transactionId: {}", transactionId, e);
                 emitters.remove(transactionId);
             }
-        }, 1, 1, TimeUnit.MINUTES);
+        }, 10, 10, TimeUnit.SECONDS);
     }
 
     public void sendPing(String transactionId) {
