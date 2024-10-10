@@ -23,7 +23,7 @@ public class RefundMoneyService implements RefundMoneyUseCase {
 
         account.getMembers().getMembers().values()
                 .stream()
-                .filter(member -> account.getWithdrawAmountFor(member).isPositive())
+                .filter(member -> account.getBalanceFor(member).isPositive())
                 .forEach(member -> refund(account, member));
     }
 
