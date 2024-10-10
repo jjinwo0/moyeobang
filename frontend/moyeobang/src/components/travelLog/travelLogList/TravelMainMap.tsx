@@ -28,30 +28,30 @@ export default function TravelMainMap() {
     null
   );
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [placeCoords, setPlaceCoords] = useState<markerInfo[]>([]);
+  const [placeCoords, setPlaceCoords] = useState<placeListViewPort[]>([]);
   const [selectedMarker, setSelectedMarker] = useState<markerInfo | null>(null);
   const [selectedMarkerInfo, setSelectedMarkerInfo] =
     useState<Pick<markerInfo, 'name' | 'category'>>();
 
   // 현재 위치 가져오기
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          console.log('[*] position', position);
-          setCurrentLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
-        error => {
-          console.error('Error getting current position:', error);
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       position => {
+  //         console.log('[*] position', position);
+  //         setCurrentLocation({
+  //           lat: position.coords.latitude,
+  //           lng: position.coords.longitude,
+  //         });
+  //       },
+  //       error => {
+  //         console.error('Error getting current position:', error);
+  //       }
+  //     );
+  //   } else {
+  //     console.error('Geolocation is not supported by this browser.');
+  //   }
+  // }, []);
 
   // 마커 생성 및 스케줄 변경 시 마커 업데이트
   useEffect(() => {
@@ -73,17 +73,65 @@ export default function TravelMainMap() {
   }, [scheduleDayNum, travelSchedules]);
 
   // Geocoding API를 사용하여 주소를 위도와 경도로 변환
+  // useEffect(() => {
+  //   if (travelPlaceList.length > 0) {
+  //     const geocoder = new window.google.maps.Geocoder();
+  //     const promises = travelPlaceList.map(place => {
+  //       return new Promise<markerInfo>((resolve, reject) => {
+  //         geocoder.geocode({address: place}, (results, status) => {
+  //           if (status === 'OK' && results?.[0]) {
+  //             const location = results[0].geometry.location;
+  //             resolve({
+  //               lat: location.lat(),
+  //               lng: location.lng(),
+  //             });
+  //           } else {
+  //             reject(
+  //               'Geocode was not successful for the following reason: ' + status
+  //             );
+  //           }
+  //         });
+  //       });
+  //     });
+
+  //     Promise.all(promises)
+  //       .then(results => {
+  //         setPlaceCoords(results);
+  //       })
+  //       .catch(error => {
+  //         console.error(error);
+  //       });
+  //   }
+  // }, [travelPlaceList]);
+  interface placeListViewPort {
+    viewport: {
+      south: number;
+      west: number;
+      east: number;
+      north: number;
+    } | null;
+  }
   useEffect(() => {
     if (travelPlaceList.length > 0) {
       const geocoder = new window.google.maps.Geocoder();
       const promises = travelPlaceList.map(place => {
-        return new Promise<markerInfo>((resolve, reject) => {
+        return new Promise<placeListViewPort>((resolve, reject) => {
           geocoder.geocode({address: place}, (results, status) => {
             if (status === 'OK' && results?.[0]) {
-              const location = results[0].geometry.location;
+              // const location = results[0].geometry.location;
+              const viewport = results[0].geometry.viewport; // viewport 가져오기
+
               resolve({
-                lat: location.lat(),
-                lng: location.lng(),
+                // lat: location.lat(),
+                // lng: location.lng(),
+                viewport: viewport
+                  ? {
+                      north: viewport.getNorthEast().lat(),
+                      east: viewport.getNorthEast().lng(),
+                      south: viewport.getSouthWest().lat(),
+                      west: viewport.getSouthWest().lng(),
+                    }
+                  : null,
               });
             } else {
               reject(
@@ -134,13 +182,46 @@ export default function TravelMainMap() {
         }
         map.fitBounds(bounds); // 모든 마커를 포함하는 경계로 설정
       } else if (placeCoords.length > 0) {
-        console.log("[*]",placeCoords);
-        
+        console.log('[*]', placeCoords);
+
         const bounds = new window.google.maps.LatLngBounds();
         placeCoords.forEach(coord => {
-          bounds.extend({lat: coord.lat, lng: coord.lng});
+          if (coord.viewport) {
+            // viewport의 북동쪽과 남서쪽 경계를 정확히 가져옴
+
+            if (coord.viewport) {
+              // viewport의 경계 값을 사용해 bounds 확장
+              const northeast = {
+                lat: Number(coord.viewport.north),
+                lng: Number(coord.viewport.east),
+              };
+              const southwest = {
+                lat: Number(coord.viewport.south),
+                lng: Number(coord.viewport.west),
+              };
+
+              // 북동쪽과 남서쪽 좌표를 bounds에 추가
+              bounds.extend(northeast);
+              bounds.extend(southwest);
+            }
+          }
         });
-        map.fitBounds(bounds); // 모든 장소를 포함하는 경계로 설정
+        // placeCoords.forEach(coord => {
+        //   if (coord.viewport) {
+        //     // viewport의 북동쪽과 남서쪽 경계를 확장
+        //     bounds.extend(coord.viewport.north);
+        //     bounds.extend(coord.viewport.southwest);
+        //   } else {
+        //     // viewport가 없을 경우 lat/lng로 확장
+        //     bounds.extend({lat: coord.lat, lng: coord.lng});
+        //   }
+        // });
+
+        // const bounds = new window.google.maps.LatLngBounds();
+        // placeCoords.forEach(coord => {
+        //   bounds.extend({lat: coord.lat, lng: coord.lng});
+        // });
+        map.fitBounds(bounds, {top: 50, bottom: 100, left: 50, right: 50}); // 모든 장소를 포함하는 경계로 설정
       } else {
         // 마커가 없고 placeCoords도 없을 때 기본 중심을 서울로 설정
         map.setCenter(defaultCenter);
