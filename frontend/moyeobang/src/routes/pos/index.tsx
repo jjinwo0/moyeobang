@@ -34,41 +34,41 @@ const abebeBakery: PosPay = {
     placeName: '아베베베이커리',
     placeAddress: '제주 제주시 동문로6길 4 동문시장 12번 게이트 옆',
     amount: 34000,
-    latitude:34.5,
-    longitude:90.2,
+    latitude: 33.512635,
+    longitude: 126.5288514,
     targetAccountNumber: '0018418012115489',
     tag:'CAFE'
   }
 
-const surfing: PosPay = {
-    placeId : 'surfing-112',
-    placeName: '제주서핑스쿨',
-    placeAddress: '제주 서귀포시 중문관광로 192 1층 제주서핑스쿨 제주해양레저',
-    amount: 66000,
-    latitude:33.2584491,
-    longitude:126.4131125,
+const art: PosPay = {
+    placeId : 'art-112',
+    placeName: '도토리캐리커쳐 제주점',
+    placeAddress: '제주 제주시 애월읍 애월로 11 1동 1층',
+    amount: 40000,
+    latitude:33.5042779,
+    longitude:126.519838,
+    targetAccountNumber: '0018418012115489',
+    tag:'ETC'
+  }
+
+const circus: PosPay = {
+    placeId : 'circus-12',
+    placeName: '제주아트서커스',
+    placeAddress: '제주 서귀포시 안덕면 동광로 214',
+    amount: 44000,
+    latitude: 33.3143407,
+    longitude: 126.3447396,
     targetAccountNumber: '0018418012115489',
     tag:'ACTIVITY'
   }
 
-const suksungdo: PosPay = {
-    placeId : 'suksungdo-12',
-    placeName: '숙성도 제주본점',
-    placeAddress: '제주 제주시 제원길 30 2, 3층',
-    amount: 82000,
-    latitude:33.5423994,
-    longitude:126.6712053,
-    targetAccountNumber: '0018418012115489',
-    tag:'RESTAURANT'
-  }
-
-const farm: PosPay = {
-    placeId : 'farm-10',
-    placeName: '제주양떼목장',
-    placeAddress: '제주 제주시 애월읍 도치돌길 289-13',
+const garden: PosPay = {
+    placeId : 'garden-10',
+    placeName: '카멜리아 힐',
+    placeAddress: '제주 서귀포시 안덕면 병악로 166',
     amount: 50000,
-    latitude:33.411167,
-    longitude:126.3653,
+    latitude:33.2898049,
+    longitude:126.3682983,
     targetAccountNumber: '0018418012115489',
     tag:'ACTIVITY'
   }
@@ -188,9 +188,9 @@ export default function Pos() {
           <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(starbucks)}>스타벅스 제주중문점</Btn>
           <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(kurosiro)}>자매국수</Btn>
           <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(abebeBakery)}>아베베베이커리</Btn>
-          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(surfing)}>제주서핑스쿨</Btn>
-          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(suksungdo)}>숙성도 제주본점</Btn>
-          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(farm)}>제주양떼목장</Btn>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(art)}>도토리캐리커쳐 제주점</Btn>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(circus)}>제주 아트 서커스</Btn>
+          <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(garden)}>카멜리아 힐</Btn>
           <Btn buttonStyle={{size:'big', style:'red'}} onClick={() => handleOpen(shop)}>제주소품샵 올망</Btn>
         </div>
           <Btn
