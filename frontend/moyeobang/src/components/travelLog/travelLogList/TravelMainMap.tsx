@@ -180,7 +180,7 @@ export default function TravelMainMap() {
         if (currentLocation) {
           bounds.extend({lat: currentLocation.lat, lng: currentLocation.lng});
         }
-        map.fitBounds(bounds, {top: 50, bottom: 100, left: 50, right: 50}); // 모든 마커를 포함하는 경계로 설정
+        map.fitBounds(bounds); // 모든 마커를 포함하는 경계로 설정
       } else if (placeCoords.length > 0) {
         console.log('[*]', placeCoords);
 
@@ -221,7 +221,7 @@ export default function TravelMainMap() {
         // placeCoords.forEach(coord => {
         //   bounds.extend({lat: coord.lat, lng: coord.lng});
         // });
-        map.fitBounds(bounds); // 모든 장소를 포함하는 경계로 설정
+        map.fitBounds(bounds, {top: 50, bottom: 100, left: 50, right: 50}); // 모든 장소를 포함하는 경계로 설정
       } else {
         // 마커가 없고 placeCoords도 없을 때 기본 중심을 서울로 설정
         map.setCenter(defaultCenter);
