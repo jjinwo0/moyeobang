@@ -29,7 +29,11 @@ public class LoadBudgetAdapter implements LoadBudgetPort {
                 .toList();
 
         List<Member> members = memberJpaEntities.stream()
-                .map(member -> new Member(member.getGender().name(), member.getAge()))
+                .map(member -> {
+                    String gender = (member.getGender() != null) ? member.getGender().name() : "MALE";
+                    int age = (member.getAge() != 0) ? member.getAge() : 20;
+                    return new Member(gender, age);
+                })
                 .toList();
 
         long budget = (long) paymentHistoryRepository.findBy(schedule.getTitle(), members).stream()
