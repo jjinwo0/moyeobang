@@ -146,7 +146,7 @@
 
 // 쿠키로 시도
 import axios from 'axios';
-import {getCookie, removeCookie, setCookie} from './cookie';
+import {getCookie, removeCookie, setCookie, logout} from './cookie';
 // axios 인스턴스를 반환하는 함수
 
 const instance = axios.create({
@@ -187,7 +187,7 @@ instance.interceptors.response.use(
 
     if (
       error.response &&
-      error.response.status === 401 &&
+      // error.response.status === 401 &&
       !originalRequest._retry
     ) {
       console.log('[*] 재시도 중');
@@ -219,8 +219,9 @@ instance.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error('Failed to refresh access token:', refreshError);
-        removeCookie('accessToken');
-        removeCookie('refresh_token');
+        sessionStorage.clear()
+        localStorage.clear()
+        logout()
         window.location.href = '/entrance';
       }
     }
