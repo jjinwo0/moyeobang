@@ -114,7 +114,7 @@ export default function SettleByReceiptComponenet({data, isUpdate, onClose}:Resu
   const {travelId} = useTravelDetailStore();
   const {accountId} = useTravelDetailStore();
   const [canSettle, setCanSettle] = useState<boolean>(false);
-  const [remianMoney, setRemainMoney] = useState<Money>(data.money);
+  const [remianMoney, setRemainMoney] = useState<Money>(data.money);  
 
   // 영수증 정산 update API
   const {mutate: updateSettleByReceipt } = useMutation({
