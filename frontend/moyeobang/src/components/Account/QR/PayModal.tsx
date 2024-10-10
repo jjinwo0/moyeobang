@@ -93,7 +93,6 @@ export default function PayModal({onXClick} : QRPayProps) {
         {openScanFailModal && <QrScanFailModal onClose={onXClick} onRestart={handleRestart} errorName={failName}/>}
         {openCompleteModal && successTransactionId &&
             <PayCompletedModal 
-            isHome={isHome} 
             travelId={travelId} 
             accountId={accountId} 
             transactionId={Number(successTransactionId)} 
