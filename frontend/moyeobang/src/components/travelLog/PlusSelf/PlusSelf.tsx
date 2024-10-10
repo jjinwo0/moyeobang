@@ -119,6 +119,10 @@ export default function PlusSelf() {
 
         if (budgetData) {
           console.log('Budget Data:', budgetData);
+          await queryClient.invalidateQueries({
+            queryKey: ['travelSchedules', travelId],
+            refetchType: 'all',
+          });
         }
       } catch (error) {
         console.error('Error fetching budget data:', error);
@@ -175,37 +179,6 @@ export default function PlusSelf() {
     },
   });
 
-  /**
-   * 일정별 예산 예측 조회
-   */
-  // const {
-  //   data: budgetData,
-  //   isSuccess,
-  //   refetch,
-  // } = useQuery({
-  //   queryKey: ['budget', scheduleId],
-  //   queryFn: () => moyeobang.getBudget(scheduleId!),
-  //   refetchOnWindowFocus: false,
-  //   enabled: false, // 쿼리가 자동으로 실행되지 않도록 설정
-  // });
-
-  // useEffect(() => {
-  //   if (scheduleId) {
-  //     refetch();
-  //   }
-  // }, [scheduleId]);
-  // // budgetData가 성공적으로 가져와졌을 때 travelSchedules 쿼리를 무효화
-  // useEffect(() => {
-  //   if (isSuccess && budgetData) {
-  //     setTimeout(() => {
-  //       queryClient.invalidateQueries({
-  //         queryKey: ['travelSchedules', travelId],
-  //         refetchType: 'all',
-  //       });
-  //     }, 2000);
-  //   }
-  // }, [isSuccess, budgetData, queryClient, travelId]);
-
   useEffect(() => {
     if (selectedMarker) {
       const Location: ScheduleLocation = {
@@ -255,11 +228,6 @@ export default function PlusSelf() {
       'data',
       new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
     );
-
-    // 파일이 있을 때만 append
-    // if (fileInputRef.current?.files?.[0]) {
-    //   scheduleData.append('image', fileInputRef.current.files[0]);
-    // }
 
     // 파일이 있을 때만 append
     if (selectedImage) {
@@ -360,6 +328,12 @@ export default function PlusSelf() {
     }
   }, [scheduleEdit]);
 
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleShowMapSearch();
+    }
+  };
+
   return (
     <>
       <div>
@@ -409,6 +383,7 @@ export default function PlusSelf() {
                   css={PlusSelfStyle.LocationInputStyle}
                   placeholder="여행 장소 검색"
                   onChange={e => handleSearchLocation(e)}
+                  onKeyDown={handleEnter}
                 />
                 <img
                   src={searchImg}
