@@ -144,7 +144,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {showModal && <CalculatePopup></CalculatePopup>}
+      {showModal && <CalculatePopup onCalClick={onCalClick}></CalculatePopup>}
     </>
   );
 }

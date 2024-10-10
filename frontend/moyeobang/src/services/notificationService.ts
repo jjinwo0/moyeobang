@@ -106,14 +106,21 @@ export function setupForegroundNotificationHandler() {
 
     // 로컬 스토리지에서 기존 알림 불러오기
     const storedNotifications = JSON.parse(
-      localStorage.getItem('notifications') || '[]'
+      sessionStorage.getItem('notifications') || '[]'
     );
 
-    // 로컬 스토리지에 저장
-    localStorage.setItem('notifications', JSON.stringify(storedNotifications));
-
     const notification = payload.data;
+
     if (notification && Notification.permission === 'granted') {
+      // 새 알림을 기존 알림 배열에 추가
+      storedNotifications.push(notification);
+
+      // 세션 스토리지에 저장
+      sessionStorage.setItem(
+        'notifications',
+        JSON.stringify(storedNotifications)
+      );
+
       const {title, content, icon} = notification;
       new Notification(title ?? '알림', {
         body: content ?? '내용이 없습니다.',

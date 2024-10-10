@@ -7,7 +7,7 @@ import Btn from '../btn/Btn';
 import {bluefont, colors} from '@/styles/colors';
 import {css} from '@emotion/react';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
-import { useQueryClient } from '@tanstack/react-query';
+import {useQueryClient} from '@tanstack/react-query';
 
 const basicLayout = css`
   display: flex;
@@ -45,17 +45,16 @@ const proposal = css`
 
 export default function PersonalDeposit({
   travelName,
-  setShowModal
+  onCalClick,
 }: {
   travelName: TravelName;
-  setShowModal : (step:string)=>void
+  onCalClick: ()=>void;
 }) {
   const [value, setValue] = useState<number>(0);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
   const {memberId} = useMyInfo();
   const {accountId} = useTravelDetailStore();
   const queryClient = useQueryClient();
-
 
   const handleFocus = () => {
     if (!focused) {
@@ -65,14 +64,13 @@ export default function PersonalDeposit({
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-
     const newValue = event.target.value;
 
-    if (newValue==='') {
+    if (newValue === '') {
       setValue(0);
     }
 
-    const numericValue=parseFloat(newValue);
+    const numericValue = parseFloat(newValue);
 
     if (!isNaN(numericValue)) {
       setValue(numericValue); // 숫자일때만 사용자가 입력한 값을 업데이트
@@ -108,25 +106,25 @@ export default function PersonalDeposit({
           queryKey: ['accountByMemberId', accountId, memberId], 
           refetchType: 'all',
       });
-    }
+    },
   });
 
   const handleOnclick = () => {
     // api로 개인 입금 시키기
-    if (value>0) {
+    if (value > 0) {
       postDepositAccount({
         accountId: accountId,
         memberId: memberId,
         amount: Number(value),
       });
-      setShowModal('')
       setValue(0);
+      onCalClick()
     }
   };
 
   return (
     <div css={basicLayout}>
-      <div>{travelName} 을/를 위해</div>
+      <div><span style={{fontFamily:'semibold', color:colors.fifth}}>{travelName}</span> 을/를 위해</div>
       <div css={proposal}>
         <input
           css={moneyInputStyle}
