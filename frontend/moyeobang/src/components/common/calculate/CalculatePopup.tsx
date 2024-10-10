@@ -60,11 +60,10 @@ const messageStyle = css`
 `;
 // const totalAmount: TotalAmount = 1000;
 // const travelName: TravelName = '아기돼지오형제';
-const budget: number = 100000;
 
-export default function CalculatePopup() {
+export default function CalculatePopup(onCalClick:()=>void) {
   const {travelName} = useTravelDetailStore();
-  const [showModal, setShowModal] = useState<string>('calculateBtn');
+  const [showModal, setShowModal] = useState('calculateBtn');
   return (
     <>
       <div css={messageStyle}>
@@ -74,12 +73,11 @@ export default function CalculatePopup() {
         {showModal === 'publicDeposit' && (
           <PublicDeposit
             travelName={travelName}
-            budget={budget}
-            setShowModal={setShowModal}
+            onCalClick={onCalClick}
           ></PublicDeposit>
         )}
         {showModal === 'personalDeposit' && (
-          <PersonalDeposit travelName={travelName} setShowModal={setShowModal}></PersonalDeposit>
+          <PersonalDeposit travelName={travelName} onCalClick={onCalClick}></PersonalDeposit>
         )}
       </div>
     </>
