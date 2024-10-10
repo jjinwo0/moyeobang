@@ -13,6 +13,7 @@ import {useMatch, useNavigate} from '@tanstack/react-router';
 import BackButton from '@/components/common/Header/ButtonIcon/BackButton';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import moyeobang from '@/services/moyeobang';
+import ProfileImage from '@/components/Account/ProfileImage/ProfileImage';
 
 export const Route = createFileRoute(
   '/_layout/_protected/_layout/profile/$memberName'
@@ -42,11 +43,11 @@ const contentStyle = css`
   z-index: 2;
 `;
 
-const profileStyle = css`
+const profileStyle = (profileImage: string | null) => css`
   width: 130px;
   height: 130px;
   background-color: white;
-  background-image: url(${bangBang});
+  background-image: url(${profileImage ? profileImage : bangBang});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -109,6 +110,7 @@ export default function profile() {
     setBankName,
     setProfileImage,
     accountNumber,
+    profileImage,
   } = useMyInfo();
   const handleLogout = () => {
     console.log('로그아웃');
@@ -133,7 +135,7 @@ export default function profile() {
           {/* <HeaderWithBackButton /> */}
         </div>
         <div css={contentStyle}>
-          <div css={profileStyle}></div>
+          <div css={profileStyle(profileImage)}></div>
           <p css={nicknameStyle}>{memberName}</p>
           {/* Render multiple Box components */}
           <SettingBox title="정보수정" />
