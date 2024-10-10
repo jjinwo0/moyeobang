@@ -26,7 +26,7 @@ public class RefundBatchScheduler {
     private final LoadTravelPort loadTravelPort;
     private final TaskScheduler taskScheduler;
 
-    @Bean
+    @Bean(name = "refundJobRegistryBeanPostProcessor")
     public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor() {
         JobRegistryBeanPostProcessor jobProcessor = new JobRegistryBeanPostProcessor();
         jobProcessor.setJobRegistry(jobRegistry);
