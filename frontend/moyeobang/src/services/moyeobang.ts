@@ -388,7 +388,7 @@ export default {
    * 일정별 예측 예산 조회
    */
   getBudget: async (scheduleId: number) => {
-    axios.get<MoyeobangResponse<ResponseGetBudget>>(
+    return  axios.get<MoyeobangResponse<ResponseGetBudget>>(
       `/travel/schedule/${scheduleId}/budget`
     );
   },

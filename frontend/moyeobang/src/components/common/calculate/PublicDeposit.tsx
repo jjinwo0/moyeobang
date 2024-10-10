@@ -1,13 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React, {useState} from 'react';
 import Btn from '../btn/Btn';
-import {bluefont, colors} from '@/styles/colors';
+import {colors} from '@/styles/colors';
 import {css} from '@emotion/react';
 import moyeobang from '@/services/moyeobang';
 import {useMutation} from '@tanstack/react-query';
-// import useMyInfo from '@/store/useMyInfoStore';
 import useTravelDetailStore from '@/store/useTravelDetailStore';
-import { useSuspenseQuery } from '@tanstack/react-query';
 
 const basicLayout = css`
   display: flex;
@@ -16,14 +14,6 @@ const basicLayout = css`
   justify-content: center;
   align-items: center;
   font-size: 18px;
-`;
-
-const accumulatedMoneyLayout = css`
-  display: flex;
-  gap: 10px;
-  font-family: 'semibold';
-  font-size: 18px;
-  margin-bottom: 10px;
 `;
 
 const moneyInputStyle = css`
@@ -60,19 +50,9 @@ export default function PublicDeposit({
   travelName,
   budget,
 }: PublicDepositProps) {
-
   const [value, setValue] = useState<string | number>(budget);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
   const {travelId} = useTravelDetailStore();
-  const {accountId} = useTravelDetailStore();
-
-  // get 모임 통장 전체 잔액 
-  const { data } = useSuspenseQuery({
-    queryKey: ['accoutByGroup', accountId],
-    queryFn: () => moyeobang.getAccountState(accountId),
-  });
-
-  const totalSpent = data.data.data.totalAmount;// 누적 입금 금액
 
   const {mutate: postResquestDepositAccount} = useMutation({
     mutationFn: ({
@@ -112,11 +92,12 @@ export default function PublicDeposit({
 
   return (
     <div css={basicLayout}>
-      <div css={accumulatedMoneyLayout}>
-        <span>현재 누적 입금 금액</span>
-        <span css={bluefont}>{totalSpent}원</span>
+      <div>
+        <span style={{color: colors.fourth, fontFamily: 'semibold'}}>
+          {travelName}
+        </span>{' '}
+        을/를 위해
       </div>
-      <div>{travelName} 을/를 위해</div>
       <div css={proposal}>
         <input
           css={moneyInputStyle}
