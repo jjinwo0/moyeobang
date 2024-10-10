@@ -18,7 +18,7 @@ spring:
 
   batch:
     job:
-      false
+      enabled: false
     jdbc:
       initialize-schema: always
 
@@ -60,7 +60,7 @@ spring:
 
   batch:
     job:
-      false
+      enabled: false
     jdbc:
       initialize-schema: always
 
@@ -106,7 +106,7 @@ spring:
 
   batch:
     job:
-      false
+      enabled: false
     jdbc:
       initialize-schema: always
 
