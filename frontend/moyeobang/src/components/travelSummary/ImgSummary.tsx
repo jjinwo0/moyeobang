@@ -36,96 +36,6 @@
 //     };
 //   }, []);
 
-//   const containerStyle = css`
-//     width: 100%;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//   `;
-
-//   const boxStyle = css`
-//     width: 98%;
-//     height: 582px;
-//     background-color: rgba(135, 224, 255, 0.3);
-//     margin: 40px 0;
-//     border-radius: 15px;
-//     position: relative;
-//     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-//   `;
-
-//   const popUpStyle = css`
-//     position: absolute;
-//     right: -15px;
-//     top: -55px;
-//     font-family: 'semibold';
-//   `;
-
-//   const informationImgStyle = css`
-//     position: absolute;
-//     top: 10px;
-//     right: 10px;
-//     width: 24px;
-//     height: 24px;
-//   `;
-
-//   const cloudIconStyle = css`
-//     width: 60px;
-//     position: absolute;
-//     top: 60px;
-//     left: 20px;
-//   `;
-
-//   const roadImgStyle = css`
-//     margin-top: 75px;
-//     width: 250px;
-//     position: absolute;
-//     bottom: 80px;
-//     left: 50%;
-//     transform: translateX(-50%);
-//     z-index: 1;
-//   `;
-
-//   const airplaneIconStyle = css`
-//     position: absolute;
-//     bottom: 30px;
-//     right: 20px;
-//     width: 90px;
-//   `;
-
-//   const gridContainerStyle = css`
-//     position: absolute;
-//     top: 40px; /* roadImg 위로 이미지 위치 조정 */
-//     left: 38%;
-//     transform: translateX(-50%);
-//     display: grid;
-//     grid-template-columns: repeat(2, 1fr); /* 두 개의 열로 구성 */
-//     gap: 20px;
-//     width: 75px;
-//     z-index: 2;
-//   `;
-
-//   const gridItemStyle = css`
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     justify-content: center;
-//     text-align: center;
-//   `;
-
-//   const imgStyle = css`
-//     width: 80px;
-//     height: 80px;
-//     border-radius: 10px;
-//     object-fit: cover;
-//     margin-bottom: 5px;
-//   `;
-
-//   const placeNameStyle = css`
-//     font-family: 'semibold';
-//     font-size: 13px;
-//     color: #333;
-//   `;
-
 //   const handleInformation = () => {
 //     setMessage(!message);
 //   };
@@ -181,6 +91,96 @@ interface ImgSummaryProps {
   scheduleImg: {imgUrl: string; locationName: string}[];
 }
 
+const containerStyle = css`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const boxStyle = css`
+  width: 98%;
+  height: 582px;
+  background-color: rgba(135, 224, 255, 0.3);
+  margin: 40px 0;
+  border-radius: 15px;
+  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+`;
+
+const popUpStyle = css`
+  position: absolute;
+  right: -15px;
+  top: -55px;
+  font-family: 'semibold';
+`;
+
+const informationImgStyle = css`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+`;
+
+const cloudIconStyle = css`
+  width: 60px;
+  position: absolute;
+  top: 60px;
+  left: 20px;
+`;
+
+const roadImgStyle = css`
+  margin-top: 75px;
+  width: 250px;
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+`;
+
+const airplaneIconStyle = css`
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+  width: 90px;
+`;
+
+const gridContainerStyle = css`
+  position: absolute;
+  top: 40px; /* roadImg 위로 이미지 위치 조정 */
+  left: 38%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 두 개의 열로 구성 */
+  gap: 20px;
+  width: 75px;
+  z-index: 2;
+`;
+
+const gridItemStyle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+`;
+
+const imgStyle = css`
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 5px;
+`;
+
+const placeNameStyle = css`
+  font-family: 'semibold';
+  font-size: 13px;
+  color: #333;
+`;
+
 export default function ImgSummary({scheduleImg}: ImgSummaryProps) {
   const [message, setMessage] = useState<boolean>(false);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -218,15 +218,6 @@ export default function ImgSummary({scheduleImg}: ImgSummaryProps) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  const containerStyle = css`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  `;
-
-  // ... (style definitions remain the same)
 
   const handleInformation = () => {
     setMessage(!message);
