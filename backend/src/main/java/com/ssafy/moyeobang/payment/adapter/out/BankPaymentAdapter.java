@@ -93,8 +93,10 @@ public class BankPaymentAdapter implements LoadTravelAccountPort, ProcessPayment
                     String gender = Optional.ofNullable(member.getGender())
                             .map(Enum::name)
                             .orElse("MALE");
-                    int age = Optional.of(member.getAge())
-                            .orElse(0);
+                    int age = member.getAge();
+                    if (age == 0) {
+                        age = 20;
+                    }
                     return new Member(gender, age);
                 })
                 .toList();

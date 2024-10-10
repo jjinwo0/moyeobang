@@ -7,7 +7,9 @@ import com.ssafy.moyeobang.account.adapter.out.bank.BankApiClient;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.MemberAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.account.TravelAccountRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.deposit.DepositRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberOrderHistoryRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.member.MemberRepositoryInAccount;
+import com.ssafy.moyeobang.account.adapter.out.persistence.order.OrderRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.travel.TravelRepositoryInAccount;
 import com.ssafy.moyeobang.account.adapter.out.persistence.withdraw.WithdrawRepositoryInAccount;
 import com.ssafy.moyeobang.account.application.domain.MemberAccount;
@@ -23,15 +25,13 @@ import com.ssafy.moyeobang.account.error.TravelNotFoundException;
 import com.ssafy.moyeobang.common.annotation.PersistenceAdapter;
 import com.ssafy.moyeobang.common.persistenceentity.deposit.DepositJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.member.MemberAccountJpaEntity;
+import com.ssafy.moyeobang.common.persistenceentity.member.MemberOrderHistoryJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.order.OrderJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelAccountJpaEntity;
 import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
-import com.ssafy.moyeobang.common.persistenceentity.withdraw.SettleType;
 import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawJpaEntity;
-import com.ssafy.moyeobang.common.persistenceentity.withdraw.WithdrawType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.With;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -48,6 +48,9 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
 
     private final DepositRepositoryInAccount depositRepository;
     private final WithdrawRepositoryInAccount withdrawRepository;
+
+    private final OrderRepositoryInAccount orderRepository;
+    private final MemberOrderHistoryRepositoryInAccount memberOrderHistoryRepository;
 
     @Override
     public Long createAccount(Long travelId) {
@@ -131,12 +134,35 @@ public class BankAccountAdapter implements CreateAccountPort, LoadAccountPort, S
         WithdrawJpaEntity withdraw = createWithdraw(travelAccount, memberAccount, money, balance);
         withdrawRepository.save(withdraw);
 
+        OrderJpaEntity order = createOrder(money, withdraw);
+        orderRepository.save(order);
+
+        MemberOrderHistoryJpaEntity memberOrderHistory = createMemberOrderHistory(money, memberAccount, order);
+        memberOrderHistoryRepository.save(memberOrderHistory);
+        
         bankApiClient.sendMoney(
                 travelAccount.getTravel().getTravelKey(),
                 memberAccount.getAccountNumber(),
                 travelAccount.getAccountNumber(),
                 money.getAmount()
         );
+    }
+
+    private MemberOrderHistoryJpaEntity createMemberOrderHistory(Money money, MemberAccountJpaEntity memberAccount, OrderJpaEntity order) {
+        return MemberOrderHistoryJpaEntity.builder()
+                .amount(money.getAmount())
+                .member(memberAccount.getMember())
+                .order(order)
+                .build();
+    }
+
+    private OrderJpaEntity createOrder(Money money, WithdrawJpaEntity withdraw) {
+        return OrderJpaEntity.builder()
+                .title("여행 종료 환불")
+                .amount(money.getAmount())
+                .quantity(1)
+                .withdraw(withdraw)
+                .build();
     }
 
     private TravelAccountJpaEntity createTravelAccount(String accountNumber, TravelJpaEntity travel) {
