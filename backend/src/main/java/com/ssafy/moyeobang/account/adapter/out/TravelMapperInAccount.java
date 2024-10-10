@@ -5,7 +5,7 @@ import com.ssafy.moyeobang.common.persistenceentity.travel.TravelJpaEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TravelMapper {
+public class TravelMapperInAccount {
 
     public Travel mapToDomain(final TravelJpaEntity entity) {
 

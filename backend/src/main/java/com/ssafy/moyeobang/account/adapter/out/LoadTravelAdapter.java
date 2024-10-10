@@ -14,7 +14,7 @@ public class LoadTravelAdapter implements LoadTravelPort {
 
     private final TravelAccountRepositoryInAccount travelAccountRepository;
 
-    private final TravelMapper mapper;
+    private final TravelMapperInAccount mapper;
 
     @Override
     public Travel findById(Long id) {
