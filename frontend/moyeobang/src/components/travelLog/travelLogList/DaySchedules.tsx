@@ -29,14 +29,12 @@ const dayDateStyle = css`
   line-height: 1;
 `;
 
-// [todo] 이게 왜 안보이지? 1일차만 보이고 나머지에서 안 보임
-const verticalLineStyle = css`
-  border-left: 2px solid ${colors.lightGray};
-  height: 100%;
-  position: absolute;
-  left: 28px;
-  margin-top: 60px;
-  z-index: 5; /* 낮은 값으로 설정 */
+const scheduleScrollStyle = css`
+  overflow-y: auto;
+  height: 345px;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const noScheduleStyle = css`
@@ -61,7 +59,6 @@ export default function DaySchedules({
   dayNum: number;
   date: string;
 }) {
-
   interface ChangeSequence {
     scheduleId: number;
     sequence: number;
@@ -78,7 +75,7 @@ export default function DaySchedules({
     scheduleId: number,
     newSequence: number
   ) => {
-    let changeSequences: {scheduleId: number; sequence: number}[] = [];
+    const changeSequences: {scheduleId: number; sequence: number}[] = [];
     setTravelSchedules(prevSchedules => {
       const updatedSchedules = prevSchedules?.map(daySchedule => {
         if (daySchedule.dayNum === dayNum) {
@@ -148,7 +145,7 @@ export default function DaySchedules({
         <span css={dayIdStyle}> DAY {dayNum} </span>
         <span css={dayDateStyle}>{date}</span>
       </div>
-      <div>
+      <div css={scheduleScrollStyle}>
         {daySchedules && daySchedules.length > 0 ? (
           <DragDropContext onDragEnd={handleOnDragEnd}>
             {' '}
