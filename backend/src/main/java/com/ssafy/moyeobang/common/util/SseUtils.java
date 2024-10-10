@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseUtils {
 
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Map<String, ScheduledFuture<?>> scheduledFutures = new ConcurrentHashMap<>();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 
@@ -27,16 +29,17 @@ public class SseUtils {
             return false;
         }
 
-        schedulePing(transactionId);
+        ScheduledFuture<?> future = schedulePing(transactionId);
+        scheduledFutures.put(transactionId, future);
 
         emitter.onCompletion(() -> {
             emitter.complete();
-            this.emitters.remove(transactionId);
+            cleanup(transactionId);
         });
 
         emitter.onTimeout(() -> {
             emitter.complete();
-            this.emitters.remove(transactionId);
+            cleanup(transactionId);
         });
 
         return true;
@@ -87,8 +90,8 @@ public class SseUtils {
         sendEventMsg(transactionId, "connect", "connected!");
     }
 
-    private void schedulePing(String transactionId) {
-        scheduler.scheduleAtFixedRate(() -> {
+    private ScheduledFuture<?> schedulePing(String transactionId) {
+        return scheduler.scheduleAtFixedRate(() -> {
             try {
                 sendPing(transactionId);
             } catch (Exception e) {
@@ -96,6 +99,14 @@ public class SseUtils {
                 emitters.remove(transactionId);
             }
         }, 10, 10, TimeUnit.SECONDS);
+    }
+
+    private void cleanup(String transactionId) {
+        emitters.remove(transactionId);
+        ScheduledFuture<?> future = scheduledFutures.remove(transactionId);
+        if (future != null) {
+            future.cancel(true);
+        }
     }
 
     public void sendPing(String transactionId) {
