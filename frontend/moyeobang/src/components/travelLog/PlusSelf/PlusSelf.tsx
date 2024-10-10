@@ -401,14 +401,6 @@ export default function PlusSelf() {
                 )}
               </div>
               <div css={PlusSelfStyle.inputImgWrapper}>
-                {selectedImage && (
-                  <button
-                    id="imgCancelBtn"
-                    onClick={() => setSelectedImage(null)}
-                  >
-                    이미지 취소
-                  </button>
-                )}
                 <input
                   type="text"
                   name=""
@@ -503,6 +495,14 @@ export default function PlusSelf() {
           <div css={PlusSelfStyle.imgLayout}>
             <div css={PlusSelfStyle.imgLabelStyle}>사진</div>
             <div>
+              {selectedImage && (
+                <button
+                  id="imgCancelBtn"
+                  onClick={() => setSelectedImage(null)}
+                >
+                  X
+                </button>
+              )}
               <img
                 src={selectedImage ? selectedImage : addTravelPhoto}
                 alt="이미지 추가"
