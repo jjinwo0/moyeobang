@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class LoadTravelAdapter implements LoadTravelPort {
+public class LoadTravelAdapterInAccount implements LoadTravelPort {
 
     private final TravelAccountRepositoryInAccount travelAccountRepository;
 
