@@ -11,6 +11,6 @@ public interface TravelAccountRepositoryInAccount extends JpaRepository<TravelAc
 
     Optional<TravelAccountJpaEntity> findByAccountNumber(String accountNumber);
 
-    @Query("select ta.travel from TravelAccountJpaEntity ta join fetch ta.travel where ta.id = :id")
+    @Query("select ta.travel from TravelAccountJpaEntity ta join fetch ta.travel t where ta.id = :id")
     Optional<TravelJpaEntity> findTravelById(@Param("id") Long id);
 }
