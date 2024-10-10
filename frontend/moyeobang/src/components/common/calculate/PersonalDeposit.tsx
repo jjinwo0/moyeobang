@@ -45,10 +45,10 @@ const proposal = css`
 
 export default function PersonalDeposit({
   travelName,
-  setshowModal
+  setShowModal
 }: {
   travelName: TravelName;
-  setshowModal : (step:string)=>void
+  setShowModal : (step:string)=>void
 }) {
   const [value, setValue] = useState<number>(0);
   const [focused, setFocused] = useState<boolean>(false); // 입력 필드가 클릭됐는지 여부를 추적
@@ -118,7 +118,7 @@ export default function PersonalDeposit({
         memberId: memberId,
         amount: Number(value),
       });
-      setshowModal('')
+      setShowModal('')
       setValue(0);
     }
   };
