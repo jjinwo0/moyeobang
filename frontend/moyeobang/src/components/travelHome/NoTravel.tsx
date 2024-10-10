@@ -14,13 +14,13 @@ const noTravelContainerStyle = css`
 const noTravelMessageStyle = css`
   font-family: 'semibold';
   font-size: 30px;
-  color: ${colors.lightBlack};
+  color: ${colors.black};
 `;
 
 const textStyle = css`
   font-family: 'semibold';
   font-size: 24px;
-  color: ${colors.lightBlack};
+  color: ${colors.black};
 `;
 
 const sadIconStyle = css`
