@@ -90,16 +90,17 @@ export default function PersonalDeposit({
       return moyeobang.postDepositAccount(accountId, memberId, amount);
     },
     onSuccess: async () => {
+      
+    await queryClient.invalidateQueries({
+          queryKey: ['accountByGroup', accountId], 
+          refetchType: 'all',
+      });
 
     await queryClient.invalidateQueries({
           queryKey: ['transactionList', accountId], 
           refetchType: 'all',
       });
 
-    await queryClient.invalidateQueries({
-          queryKey: ['accountByGroup', accountId], 
-          refetchType: 'all',
-      });
 
     await queryClient.invalidateQueries({
           queryKey: ['accountByMemberId', accountId, memberId], 
