@@ -56,6 +56,7 @@ export default function PayModal({onXClick} : QRPayProps) {
 
     function handleMessage(trasactionId:TransactionId) {
         setSuccessTransactionId(trasactionId);
+        // 받자마자 1/n해버릴까
         setOpenCompleteModal(true);
     }
 

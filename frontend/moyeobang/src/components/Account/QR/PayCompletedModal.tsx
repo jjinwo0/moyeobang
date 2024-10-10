@@ -7,7 +7,7 @@ import { Link } from "@tanstack/react-router";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
-import useTravelDetailStore from "@/store/useTravelDetailStore";
+import { useEffect } from "react";
 
 const layoutStyle = css`
     position: fixed;
@@ -61,7 +61,7 @@ interface PayCompletedModalProps {
 export default function PayCompletedModal({isHome, travelId, accountId, transactionId, participants, onClose} : PayCompletedModalProps) {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    console.log('default정산 참가자',participants)
+    // console.log('default정산 참가자',participants)
 
     // 닫기 누를시 이 데이터 이용해 정산해주기.
     const {data} = useSuspenseQuery({
@@ -88,21 +88,37 @@ export default function PayCompletedModal({isHome, travelId, accountId, transact
         },
         });
 
-    function handleSettleDefault() {
-        // profileData 임시
-        const info = participants.map((member) => {
-            // money = 전체금액/맴버수 내림값
-            return {memberId:member.memberId, money: Math.floor(transactionDetailData.money/participants.length)}
-        })
-        const sendData = {
+    function createDefaultSettleData() {
+        const info = participants.map((member) => (
+            {
+                // money = 전체금액/맴버수 내림값
+                memberId:member.memberId, 
+                money: Math.floor(transactionDetailData.money/participants.length)
+            }
+        ))
+
+        return {
             paymentName : transactionDetailData.paymentName,
             money : transactionDetailData.money,
             info : info,
             splitMethod:'custom',
             acceptedNumber:transactionDetailData.acceptedNumber,
-        }
+        };
+    };
+
+    function handleSettleDefault() {
+
+        const sendData = createDefaultSettleData();
         settleByDefault({transactionId:transactionId, travelId:travelId, data:sendData})
     }
+
+    useEffect(()=>{
+        // 언마운트 되어버려도 1/n default로 되어야함.
+        return () => {
+            const sendData = createDefaultSettleData();
+            settleByDefault({transactionId:transactionId, travelId:travelId, data:sendData})
+        }
+    }, [])
 
     return (
         <div css={layoutStyle}>
