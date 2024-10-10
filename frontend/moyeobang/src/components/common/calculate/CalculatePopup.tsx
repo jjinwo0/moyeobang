@@ -64,7 +64,7 @@ const budget: number = 100000;
 
 export default function CalculatePopup() {
   const {travelName} = useTravelDetailStore();
-  const [showModal, setShowModal] = useState('calculateBtn');
+  const [showModal, setShowModal] = useState<string>('calculateBtn');
   return (
     <>
       <div css={messageStyle}>
@@ -75,10 +75,11 @@ export default function CalculatePopup() {
           <PublicDeposit
             travelName={travelName}
             budget={budget}
+            setshowModal={setshowModal}
           ></PublicDeposit>
         )}
         {showModal === 'personalDeposit' && (
-          <PersonalDeposit travelName={travelName}></PersonalDeposit>
+          <PersonalDeposit travelName={travelName} setshowModal={setshowModal}></PersonalDeposit>
         )}
       </div>
     </>
