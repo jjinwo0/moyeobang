@@ -4,6 +4,9 @@ import com.ssafy.moyeobang.payment.application.port.out.PaymentResult;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,12 +18,16 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseUtils {
 
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
 
     public boolean add(String transactionId, SseEmitter emitter) {
         SseEmitter previousEmitter = this.emitters.put(transactionId, emitter);
         if (previousEmitter != null) {
             return false;
         }
+
+        schedulePing(transactionId);
 
         emitter.onCompletion(() -> {
             emitter.complete();
@@ -78,5 +85,31 @@ public class SseUtils {
 
     public void sendConnectedMessage(String transactionId) {
         sendEventMsg(transactionId, "connect", "connected!");
+    }
+
+    private void schedulePing(String transactionId) {
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                sendPing(transactionId);
+            } catch (Exception e) {
+                log.error("Failed to send ping for transactionId: {}", transactionId, e);
+                emitters.remove(transactionId);
+            }
+        }, 10, 10, TimeUnit.SECONDS);
+    }
+
+    public void sendPing(String transactionId) {
+        SseEmitter emitter = emitters.get(transactionId);
+        if (emitter != null) {
+            try {
+                emitter.send(SseEmitter.event()
+                        .name("ping")
+                        .data("ping"));
+                log.info("Ping sent to transactionId: {}", transactionId);
+            } catch (IOException e) {
+                log.error("Failed to send ping event", e);
+                emitters.remove(transactionId);
+            }
+        }
     }
 }
