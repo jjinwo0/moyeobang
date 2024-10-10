@@ -4,7 +4,6 @@ import com.ssafy.moyeobang.account.application.domain.Member;
 import com.ssafy.moyeobang.account.application.domain.TravelAccount;
 import com.ssafy.moyeobang.account.application.port.in.RefundMoneyUseCase;
 import com.ssafy.moyeobang.account.application.port.out.LoadAccountPort;
-import com.ssafy.moyeobang.account.application.port.out.LoadTravelPort;
 import com.ssafy.moyeobang.account.application.port.out.SendMoneyPort;
 import com.ssafy.moyeobang.common.annotation.UseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class RefundMoneyService implements RefundMoneyUseCase {
 
     private final LoadAccountPort loadAccountPort;
-    private final LoadTravelPort loadTravelPort;
     private final SendMoneyPort sendMoneyPort;
 
     @Override
