@@ -83,6 +83,17 @@ export const imgLayout = css`
   flex-direction: column;
   width: 320px;
   /* align-items: center; */
+  #imgCancelBtn {
+    position: absolute;
+    bottom: 235px;
+    left: 135px;
+    color: ${colors.customRed};
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 18px;
+    font-family: 'semibold';
+  }
 `;
 
 export const imgLabelStyle = css`
@@ -144,12 +155,6 @@ export const inputImgWrapper = css`
   position: relative;
   width: 220px;
   height: 50px;
-  #imgCancelBtn {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    cursor: pointer;
-  }
 `;
 
 export const LocationInputStyle = css`

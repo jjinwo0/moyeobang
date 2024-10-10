@@ -67,7 +67,7 @@ export default function CreateTravel({
   isEditMode = false, // 기본값은 false로 설정 (생성 모드)
   initialData = {}, // 기본값을 빈 객체로 설정하여 생성 모드에서 문제가 없도록 처리
 }: CreateTravelProps) {
-const {memberId} = useMyInfo();
+  const {memberId} = useMyInfo();
 
   const {closeModal} = useModalStore();
   const [cityInput, setCityInput] = useState<string>(''); // 선택된 도시 이름
@@ -101,7 +101,6 @@ const {memberId} = useMyInfo();
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState<FormData>(new FormData());
-
 
   // 수정과 생성을 구분하여 처리
   const handleNextClick = async () => {
@@ -424,13 +423,13 @@ const {memberId} = useMyInfo();
                   label="Q"
                   value={quizQuestion}
                   onChange={e => setQuizQuestion(e.target.value)}
-                  placeholder="김훈민의 별명은?"
+                  placeholder="초대 퀴즈를 작성해방"
                 />
                 <QuizInput
                   label="A"
                   value={quizAnswer}
                   onChange={e => setQuizAnswer(e.target.value)}
-                  placeholder="김훈민"
+                  placeholder="초대 퀴즈 정답을 적어방"
                 />
               </div>
 
