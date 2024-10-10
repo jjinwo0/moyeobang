@@ -119,10 +119,12 @@ export default function PlusSelf() {
 
         if (budgetData) {
           console.log('Budget Data:', budgetData);
-          await queryClient.invalidateQueries({
-            queryKey: ['travelSchedules', travelId],
-            refetchType: 'all',
-          });
+          setTimeout(async() => {
+            await queryClient.invalidateQueries({
+              queryKey: ['travelSchedules', travelId],
+              refetchType: 'all',
+            });
+          }, 2000);
         }
       } catch (error) {
         console.error('Error fetching budget data:', error);
