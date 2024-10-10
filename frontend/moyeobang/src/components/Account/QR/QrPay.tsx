@@ -91,7 +91,7 @@ export default function QrPay({onMessage, onError, isHome, accountNumber, isActi
 
         eventSource.onerror = (event) => {
             
-            console.log('sse요청 error발생', event)
+            // console.log('sse요청 error발생', event)
 
             if (event.target.readyState === EventSource.CLOSED) {
                 console.log('see연결 재연결 시도')

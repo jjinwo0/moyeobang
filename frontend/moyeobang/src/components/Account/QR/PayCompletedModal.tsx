@@ -5,9 +5,7 @@ import React from "react";
 import { colors } from "@/styles/colors";
 import { Link } from "@tanstack/react-router";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import moyeobang from "@/services/moyeobang";
-import useTravelDetailStore from "@/store/useTravelDetailStore";
 
 const layoutStyle = css`
     position: fixed;
@@ -49,7 +47,6 @@ const linkStyle = css`
 `;
 
 interface PayCompletedModalProps {
-    isHome:boolean;
     travelId:Id;
     accountId:AccountId;
     transactionId:TransactionId;
@@ -58,10 +55,9 @@ interface PayCompletedModalProps {
 }
 
 // ! api 연결 후 transactionId 임시 제거하기
-export default function PayCompletedModal({isHome, travelId, accountId, transactionId, participants, onClose} : PayCompletedModalProps) {
+export default function PayCompletedModal({travelId, accountId, transactionId, participants, onClose} : PayCompletedModalProps) {
+    
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
-    console.log('default정산 참가자',participants)
 
     // 닫기 누를시 이 데이터 이용해 정산해주기.
     const {data} = useSuspenseQuery({
@@ -71,7 +67,7 @@ export default function PayCompletedModal({isHome, travelId, accountId, transact
 
     const transactionDetailData = data.data.data;
 
-    // default 정산하기(직접 정산 API)
+    // 닫기 누를 때 => default 정산하기(직접 정산 API)
     const {mutate: settleByDefault } = useMutation({
         mutationFn: ({transactionId, travelId, data} : {transactionId: TransactionId, travelId:Id, data: PostTransactionDetailByCustom}) => moyeobang.postSettleByCustom(transactionId, travelId, data),
         onSuccess: async () => {
@@ -79,30 +75,45 @@ export default function PayCompletedModal({isHome, travelId, accountId, transact
             queryKey: ['transactionList', accountId], // 해당 계좌의 전체내역 업데이트
             refetchType: 'all',
         });
-        if(isHome) {
-            navigate({to: '/'})
-        } else {
-            navigate({to: `/account`})
-        };
+
         onClose() // 모달이랑 QR창 닫기
-        },
+
+        }
+
         });
 
-    function handleSettleDefault() {
-        // profileData 임시
-        const info = participants.map((member) => {
-            // money = 전체금액/맴버수 내림값
-            return {memberId:member.memberId, money: Math.floor(transactionDetailData.money/participants.length)}
-        })
-        const sendData = {
+    function createDefaultSettleData() {
+        const info = participants.map((member) => (
+            {
+                // money = 전체금액/맴버수 내림값
+                memberId:member.memberId, 
+                money: Math.floor(transactionDetailData.money/participants.length)
+            }
+        ))
+
+        return {
             paymentName : transactionDetailData.paymentName,
             money : transactionDetailData.money,
             info : info,
             splitMethod:'custom',
             acceptedNumber:transactionDetailData.acceptedNumber,
-        }
+        };
+    };
+
+    function handleSettleDefault() {
+
+        const sendData = createDefaultSettleData();
         settleByDefault({transactionId:transactionId, travelId:travelId, data:sendData})
     }
+
+    // useEffect(()=>{
+    //     // 언마운트 되어버려도 1/n default로 되어야함.
+    //     return () => {
+    //         setIsUnmount(true);
+    //         const sendData = createDefaultSettleData();
+    //         settleByDefault({transactionId:transactionId, travelId:travelId, data:sendData})
+    //     }
+    // }, [])
 
     return (
         <div css={layoutStyle}>
