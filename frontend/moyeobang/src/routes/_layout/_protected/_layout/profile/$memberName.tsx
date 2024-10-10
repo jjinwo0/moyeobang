@@ -52,7 +52,6 @@ const profileStyle = (profileImage: string | null) => css`
   background-position: center;
   background-repeat: no-repeat;
   display: flex;
-  // border: solid 2px black;
   border-radius: 50%;
   font-family: 'bold';
   font-size: 32px;
