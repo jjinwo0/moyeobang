@@ -75,11 +75,11 @@ export default function CalculatePopup() {
           <PublicDeposit
             travelName={travelName}
             budget={budget}
-            setshowModal={setshowModal}
+            setShowModal={setShowModal}
           ></PublicDeposit>
         )}
         {showModal === 'personalDeposit' && (
-          <PersonalDeposit travelName={travelName} setshowModal={setshowModal}></PersonalDeposit>
+          <PersonalDeposit travelName={travelName} setShowModal={setShowModal}></PersonalDeposit>
         )}
       </div>
     </>
